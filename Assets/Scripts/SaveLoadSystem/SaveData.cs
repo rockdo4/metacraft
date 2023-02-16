@@ -30,6 +30,11 @@ public class SaveDataV01 : SaveData
         this.rot = rot;
     }
 
+    public Dictionary<int, int> GetDictionary()
+    {
+        return Utils.ListToDictionary(keys, values);
+    }
+
     public override string GetJson(bool prettyPrint = false)
     {
         return JsonUtility.ToJson(this, prettyPrint);

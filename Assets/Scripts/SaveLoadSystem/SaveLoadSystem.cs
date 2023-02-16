@@ -47,7 +47,8 @@ public class SaveLoadSystem : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.L))
         {
-            Logger.Debug(LoadToJson(selectIndex).GetJson(true));
+            temp = LoadToJson(selectIndex);
+            Logger.Debug(temp.GetJson(true));
         }
 
         if (Input.GetKeyDown(KeyCode.Semicolon))
@@ -68,6 +69,11 @@ public class SaveLoadSystem : MonoBehaviour
             if (selectIndex > 0)
                 selectIndex--;
             Logger.Debug($"{selectIndex:00}");
+        }
+
+        if (Input.GetKeyDown(KeyCode.M))
+        {
+            var tempDict = (temp as SaveDataV01).GetDictionary();
         }
     }
 
