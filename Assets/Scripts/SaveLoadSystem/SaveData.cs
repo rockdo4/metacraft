@@ -1,67 +1,37 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 [Serializable]
 public abstract class SaveData
 {
     public int version = 0;
 
-    public abstract SaveData VersionDown();
-    public abstract SaveData VersionUp();
+    public abstract string GetJson(bool prettyPrint);
 }
 
-public class SaveDataV1 : SaveData
+public class SaveDataV01 : SaveData
 {
-    public SaveDataV1()
+    public SaveDataV01()
     {
         version = 1;
     }
 
-    public Dictionary<int, int> range;
+    public List<int> keys;
+    public List<int> values;
+    public Vector3 pos;
+    public Quaternion rot;
 
-    public override SaveData VersionDown()
+    public void SetMembers(List<int> keys, List<int> values, Vector3 pos, Quaternion rot)
     {
-        throw new System.NotImplementedException();
+        this.keys = keys;
+        this.values = values;
+        this.pos = pos;
+        this.rot = rot;
     }
 
-    public override SaveData VersionUp()
+    public override string GetJson(bool prettyPrint = false)
     {
-        throw new System.NotImplementedException();
+        return JsonUtility.ToJson(this, prettyPrint);
     }
 }
-
-//public class SaveDataV3 : SaveDataV2
-//{
-//    public SaveDataV3()
-//    {
-//        version = 3;
-//    }
-
-//    public override SaveData VersionDown()
-//    {
-//        throw new System.NotImplementedException();
-//    }
-
-//    public override SaveData VersionUp()
-//    {
-//        throw new System.NotImplementedException();
-//    }
-//}
-
-//public class SaveDataV2 : SaveDataV1
-//{
-//    public SaveDataV2()
-//    {
-//        version = 2;
-//    }
-
-//    public override SaveData VersionDown()
-//    {
-//        throw new System.NotImplementedException();
-//    }
-
-//    public override SaveData VersionUp()
-//    {
-//        throw new System.NotImplementedException();
-//    }
-//}
