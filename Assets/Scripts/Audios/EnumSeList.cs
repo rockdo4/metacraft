@@ -1,13 +1,7 @@
-
-using UnityEngine;
-
-public class EnumSeList
+public enum SeList
 {
-    enum SeList
-    {
-        None = -1,
-        Test1,
-        Test2,
-        TotalCount,
-    }
+    None = -1,
+    Test1,
+    Test2,
+    TotalCount,
 }
