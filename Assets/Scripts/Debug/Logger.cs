@@ -1,21 +1,31 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using UnityEngine;
+
 public static class Logger
 {
-    [Conditional("UNITY_EDITOR")]
-    public static void Debug(string logMsg)
+    [Conditional("EnableLogger")]
+    public static void Debug(object logMsg)
     {
         UnityEngine.Debug.Log(logMsg);
     }
-    [Conditional("UNITY_EDITOR")]
-    public static void Debug(int logMsg)
+
+    [Conditional("EnableLogger")]
+    public static void Debug(object message, Object context)
     {
-        UnityEngine.Debug.Log(logMsg);
+        UnityEngine.Debug.Log(message, context);
     }
-    [Conditional("UNITY_EDITOR")]
-    public static void Debug(float logMsg)
+
+    [Conditional("EnableLogger")]
+    public static void Error(object message)
     {
-        UnityEngine.Debug.Log(logMsg);
+        UnityEngine.Debug.LogError(message);    
+    }
+
+    [Conditional("EnableLogger")]
+    public static void Error(object message, Object context)
+    {
+        UnityEngine.Debug.LogError(message, context);
     }
 }
