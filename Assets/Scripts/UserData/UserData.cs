@@ -1,18 +1,19 @@
 using System;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 [Serializable]
 struct UserData
 {
-    [SerializeField] string nickName;
-    [SerializeField] string id;
+    [SerializeField] private string nickName;
+    [SerializeField] private string id;
 
-    [SerializeField] string lastLoginTime;
+    [SerializeField] private string lastLoginTime;
 
-    [SerializeField] int level;
-    [SerializeField] int exp;
-    [SerializeField] int money;
-    [SerializeField] int stamina;
+    [SerializeField] private int level;
+    [SerializeField] private int exp;
+    [SerializeField] private int money;
+    [SerializeField] private int stamina;
 
     public string LastLoginTime { get { return lastLoginTime; } }
     public int Level { get { return level; } }
@@ -70,6 +71,17 @@ struct UserData
 
     public void Login()
     {
-        lastLoginTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+        lastLoginTime = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss"); //일단은 이렇게 쓰지만, 가비지가 생기므로 Format문자열 만들기.
+    }
+
+    public void Init(string newName ,string newId)
+    {
+        nickName = newName;
+        id = newId;
+        level = 1;
+        money = 0;
+        exp = 0;
+        stamina = 100;
+        Login();
     }
 }

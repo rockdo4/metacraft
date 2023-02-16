@@ -7,34 +7,35 @@ using UnityEngine;
 public class UserDataTest : MonoBehaviour
 {
     [SerializeField]
-    UserData data; //저장하려는 데이터
+    private UserData data; //저장하려는 데이터
 
-    string folderPath = @"C:/TeamProject/Json/"; //유저 정보 저장 경로
-    string userId = "userData.json";
-    string userPath; //위에 두 변서 Combine 하여 사용
+    readonly string folderPath = @"C:/TeamProject/Json/"; //유저 정보 저장 경로
+    private string userId = "userData.json";
+    private string userPath; //위에 두 변서 Combine 하여 사용
 
     [SerializeField]
-    Dictionary<int, int> levelExpTable = new Dictionary<int, int>(); //레벨별 경험치
-    int maxLevel; // levelExpTable의 키중에 최대값
+    private Dictionary<int, int> levelExpTable = new Dictionary<int, int>(); //레벨별 경험치
+    private int maxLevel; // levelExpTable의 키중에 최대값
 
-    float lastSaveTime;
-    float saveInterval = 3f;
+    private float lastSaveTime;
+    private float saveInterval = 3f;
 
     private void Awake()
     {
         userPath = Path.Combine(folderPath, userId);
         LoadGameDataTest();
-        Load();
+        LoadData();
     }
 
-    [ContextMenu("Save")]
-    public void Save()
+    [ContextMenu("SaveData")]
+    public void SaveData()
     {
+        
         File.WriteAllText(userPath, JsonUtility.ToJson(data));
     }
 
     [ContextMenu("Load")]
-    public void Load()
+    public void LoadData()
     {
         if (File.Exists(userPath))
         {
@@ -43,20 +44,25 @@ public class UserDataTest : MonoBehaviour
         }
         else
         {
-            Logger.Debug("Not Data");
+            Logger.Debug("Not Find Data. Make new userData");
+
+            data = new UserData();
+            data.Init("user_0001","0001"); //임시 이름, 아이디로 생성. 나중에 매개변수를 중복체크같은 작업이 이루어진 데이터 전달
+            File.WriteAllText(userPath, JsonUtility.ToJson(data));
+
         }
     }
 
     public void AddMoneyTest(int value)
     {
         data.AddMoney(value);
-        Save();
+        SaveData();
     }
 
     public void UseMoneyTest()
     {
         data.UseMoney(10);
-        Save();
+        SaveData();
     }
 
     public void AddExpTest()
@@ -64,10 +70,10 @@ public class UserDataTest : MonoBehaviour
         if (data.AddExp(100, levelExpTable[data.Level], data.Level == maxLevel))
             Logger.Debug("Level Up");
 
-        Save();
+        SaveData();
     }
 
-    public void LoadGameDataTest()
+    private void LoadGameDataTest()
     {
         lastSaveTime = 0f;
 
@@ -80,19 +86,19 @@ public class UserDataTest : MonoBehaviour
         maxLevel = levelExpTable.Keys.Max();
     }
 
-    public void AutoSave()
+    private void AutoSave()
     {
         lastSaveTime += Time.deltaTime;
         if (lastSaveTime > saveInterval)
         {
             lastSaveTime = 0;
-            Save();
+            SaveData();
         }
     }
 
     private void OnApplicationQuit()
     {
-        Save();
+        SaveData();
     }
 
     public void Update()
