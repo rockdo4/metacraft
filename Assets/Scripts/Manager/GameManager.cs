@@ -9,13 +9,21 @@ public class GameManager : Singleton<GameManager>
     private void Update()
     {
 #if UNITY_ANDROID
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape)) // Navigator Back Button
         {
             // 종료하시겠습니까 팝업 띄우기 or 그냥 종료하기
             
             Application.Quit();
         }
 #endif
+        if (Input.GetKeyDown(KeyCode.Home)) // Navigator Home Button
+        {
+            // 홈버튼
+        }
+        if (Input.GetKeyDown(KeyCode.Menu)) // Navigator Menu Button
+        {
+            // 메뉴 버튼
+        }
     }
 
     private void OnApplicationQuit()
