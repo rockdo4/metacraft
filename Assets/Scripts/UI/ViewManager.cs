@@ -1,6 +1,9 @@
 using System.Collections.Generic;
-public class ViewManager : Singleton<ViewManager>
+using UnityEngine;
+public class ViewManager : MonoBehaviour
 {
+    public static ViewManager Instance { get; private set; }
+
     public View startingView;
 
     private View currentView;
@@ -8,11 +11,14 @@ public class ViewManager : Singleton<ViewManager>
     public List<View> views = new ();
 
     private readonly Stack<View> history = new ();
+
+    private void Awake() => Instance = this; 
+   
     private void Start()
     {   
         foreach (var view in views)
         {
-            view.Initialize();
+            view.Init();
             view.Hide();
         }
 
@@ -32,33 +38,53 @@ public class ViewManager : Singleton<ViewManager>
         }
         return null;
     }
-    public static void Show<T>(bool remember = true) where T : View
+    public static void Show(int index, bool remember = true)
     {
-        T viewToDisplay = null;  
-        var length = Instance.views.Count;    
+        if (index >= Instance.views.Count)
+            return;
 
-        for (int i = 0; i < length; ++i)
+        var viewToDisplay = Instance.views[index];
+
+        if(Instance.currentView != null)
         {
-            if (Instance.views[i] is T tView)
+            if(remember)
             {
-                viewToDisplay = tView;
-                break;
+                Instance.history.Push(Instance.currentView);
             }
-            if (i == length - 1)
-                return;
+            Instance.currentView.Hide();
         }
-
-        if (Instance.currentView != null && remember)
-        {
-            Instance.history.Push(Instance.currentView);
-        }
-
-        Instance.currentView?.Hide();
 
         viewToDisplay.Show();
 
         Instance.currentView = viewToDisplay;
     }
+    //public static void Show<T>(bool remember = true) where T : View
+    //{
+    //    T viewToDisplay = null;  
+    //    var length = Instance.views.Count;    
+
+    //    for (int i = 0; i < length; ++i)
+    //    {
+    //        if (Instance.views[i] is T tView)
+    //        {
+    //            viewToDisplay = tView;
+    //            break;
+    //        }
+    //        if (i == length - 1)
+    //            return;
+    //    }
+
+    //    if (Instance.currentView != null && remember)
+    //    {
+    //        Instance.history.Push(Instance.currentView);
+    //    }
+
+    //    Instance.currentView?.Hide();
+
+    //    viewToDisplay.Show();
+
+    //    Instance.currentView = viewToDisplay;
+    //}
     public static void Show(View view, bool remember = true)
     {
         if (Instance.currentView != null)
@@ -80,3 +106,4 @@ public class ViewManager : Singleton<ViewManager>
         }
     }
 }
+
