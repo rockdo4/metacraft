@@ -7,7 +7,7 @@ public class CanvasPixelToUIKitSize : MonoBehaviour
 
     private void Awake()
     {
-        canvasScaler= GetComponent<CanvasScaler>();
+        canvasScaler = GetComponent<CanvasScaler>();
         Resize();
     }
     private void Resize()

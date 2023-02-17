@@ -3,11 +3,11 @@ public class ViewManager : Singleton<ViewManager>
 {
     public View startingView;
 
-    public List<View> views = new List<View>();
-
     private View currentView;
 
-    private readonly Stack<View> history = new Stack<View>();
+    public List<View> views = new ();
+
+    private readonly Stack<View> history = new ();
     private void Start()
     {   
         foreach (var view in views)
@@ -46,7 +46,7 @@ public class ViewManager : Singleton<ViewManager>
             }
             if (i == length - 1)
                 return;
-        } 
+        }
 
         if (Instance.currentView != null && remember)
         {

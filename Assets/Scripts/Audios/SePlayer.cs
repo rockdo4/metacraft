@@ -12,6 +12,7 @@ public class SePlayer : MonoBehaviour
     [SerializeField]
     private int maxPlayCount = 30;
     public int MaxPlayCount { get; }
+    public Transform Track { get; set; }
 
     private AudioSource audioSource;
     private AudioClip audioClip;
@@ -22,7 +23,12 @@ public class SePlayer : MonoBehaviour
         audioClip = audioSource.clip;
         lifeTime = audioClip.length;
     }
-    //private 
+    private void Update()
+    {
+        //transform.position = Track.position;
+    }
+    private void CheckLifeTime()
+    {
 
-
+    }
 }
