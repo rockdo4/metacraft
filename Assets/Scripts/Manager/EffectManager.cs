@@ -1,4 +1,3 @@
-using Chapter.Singleton;
 using System.Collections.Generic;
 using UnityEngine;
 
