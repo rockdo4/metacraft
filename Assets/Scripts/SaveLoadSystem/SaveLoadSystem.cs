@@ -74,6 +74,10 @@ public class SaveLoadSystem : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.M))
         {
             var tempDict = (temp as SaveDataV01).GetDictionary();
+            foreach (var elem in tempDict)
+            {
+                Logger.Debug($"{elem.Key}: {elem.Value}");
+            }
         }
     }
 
