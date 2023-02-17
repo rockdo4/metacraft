@@ -136,4 +136,9 @@ public class SaveLoadSystem : MonoBehaviour
     {
         return $"{Application.dataPath}/Tables/Saves/{MakeFileName(curIdx)}";
     }
+
+    public void SaveSequence()
+    {
+        // TODO
+    }
 }
