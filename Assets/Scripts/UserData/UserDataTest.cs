@@ -30,7 +30,6 @@ public class UserDataTest : MonoBehaviour
     [ContextMenu("SaveData")]
     public void SaveData()
     {
-        
         File.WriteAllText(userPath, JsonUtility.ToJson(data));
     }
 
@@ -41,6 +40,7 @@ public class UserDataTest : MonoBehaviour
         {
             data = JsonUtility.FromJson<UserData>(File.ReadAllText(userPath));
             data.Login();
+            SaveData(); //처음 불러오고 한번 저장. 로그인 시간 기록
         }
         else
         {
@@ -48,7 +48,7 @@ public class UserDataTest : MonoBehaviour
 
             data = new UserData();
             data.Init("user_0001","0001"); //임시 이름, 아이디로 생성. 나중에 매개변수를 중복체크같은 작업이 이루어진 데이터 전달
-            File.WriteAllText(userPath, JsonUtility.ToJson(data));
+            File.WriteAllText(userPath, JsonUtility.ToJson(data, true));
 
         }
     }
@@ -88,12 +88,12 @@ public class UserDataTest : MonoBehaviour
 
     private void AutoSave()
     {
-        lastSaveTime += Time.deltaTime;
-        if (lastSaveTime > saveInterval)
+        if (Time.time - lastSaveTime > saveInterval)
         {
-            lastSaveTime = 0;
+            lastSaveTime = Time.time;
             SaveData();
         }
+
     }
 
     private void OnApplicationQuit()
