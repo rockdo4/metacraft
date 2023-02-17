@@ -1,3 +1,0 @@
-기능별로 폴더 관리
-
-예시: Ui, Charactor, Enemy ...
