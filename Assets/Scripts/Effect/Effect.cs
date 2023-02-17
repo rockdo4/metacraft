@@ -1,23 +1,30 @@
 using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 
 public class Effect : MonoBehaviour
 {
-    public EffectData data;
     private ParticleSystem particle;
+    public EffectData data;
     public Transform startPos;              // 이펙트 시작 지점
     public Transform endPos;                // 이펙트 종료 지점
     // 종료 지점 추가한 이유
     // 목표한테 이동하는 이펙트 생길 수도 있을거 같아서 미리 추가
     // 당장은 None으로 놔도 됩니다
 
-    void Awake()
+    public void Awake()
     {
-        particle = data.particle;
+        var dataParticle = data.particle.GetComponent<ParticleSystem>();
+
+        gameObject.AddComponent<ParticleSystem>();
+        particle = GetComponent<ParticleSystem>();
+        particle = dataParticle;
+
         gameObject.SetActive(false);
     }
 
-    // 풀에 담을 용도인 메서드
+    // 풀에 담을 용도
     // effectName은 없어도 되면 삭제할 예정 (보기 편하려고 추가)
     public Effect CreateEffect(Transform parentsObject, string effectName)
     {
@@ -37,36 +44,39 @@ public class Effect : MonoBehaviour
         this.endPos = endPos;
     }
 
-    // 풀 안의 이펙트들마다 특정 상황에 각각 속성들을 변경해서 쓸 수 있도록 하기 위해 추가
-    // 필요 없을 시 제거해도 됨
+    // 각각 속성들 변경해서 쓸 수 있도록 하기 위해 추가
     public void SetAllData
-        (ParticleSystem particle, float startDelay, float duration, float effectSize)
+        (float startDelay, float duration, float effectSize)
     {
-        this.particle = particle;
         data.startDelay = startDelay;
         data.duration = duration;
         data.effectSize = effectSize;
     }
 
-    private void OnEnable()
+    public void StartEffect()
     {
+        gameObject.SetActive(true);
         StartCoroutine(CoEffectRoutine());
     }
 
     IEnumerator CoEffectRoutine()
     {
-        if (data.startDelay > 0f)
-            yield return new WaitForSeconds(data.startDelay);
-        gameObject.SetActive(true);
+        var startDelay = data.startDelay;
+        var duration = data.duration;
+
+        if (startDelay > 0f)
+            yield return new WaitForSeconds(startDelay);
+
         particle.Play();
 
-        var duration = data.duration;
-        while (duration >= 0f)
+        while (duration > 0f)
         {
             duration -= Time.deltaTime;
-            yield return 0;
+            yield return null;
         }
+
         particle.Stop();
         gameObject.SetActive(false);
     }
+    // 파티클 자체의 지속시간으로 멈추게 변경될 수도 있음
 }

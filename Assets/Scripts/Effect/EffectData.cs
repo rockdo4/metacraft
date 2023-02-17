@@ -4,8 +4,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Effect", menuName = "Effect/EffectData")]
 public class EffectData : ScriptableObject
 {
-    public ParticleSystem particle;
+    public GameObject particle;
     public float startDelay;        // 이펙트 시작 전 딜레이
     public float duration;          // 지속시간
     public float effectSize;        // 이펙트 크기
+    public float timeScale;         // 재생 속도
 }

@@ -34,7 +34,7 @@ public class EffectManager : Singleton<EffectManager>
         // index = 뽑고 싶은 이펙트가 저장된 풀의 번호
         effectIndex = index;
         // effectPool의 [풀 번호][이펙트인덱스[번호]] 활성화
-        effectPool[effectIndex][effectPoolIndex[effectIndex]].gameObject.SetActive(true);
+        effectPool[effectIndex][effectPoolIndex[effectIndex]].StartEffect();
 
         // index가 프리펩의 최대 개수를 넘어가면 0으로 초기화
         if (effectPoolIndex[effectIndex] < effectPool[effectIndex].Count - 1)
