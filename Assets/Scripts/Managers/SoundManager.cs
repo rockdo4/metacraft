@@ -16,17 +16,17 @@ public class SoundManager : Singleton<SoundManager>
     [Range(-80, 0)]
     public float se = 0;
     
-    private static List<(SePlayer prefab, LinkedList<SePlayer> use, LinkedList<SePlayer> unUse)> sePlayerPools;
-    public List<SePlayer> prefabsFromInspector;
+    private static List<(LinkedList<SePlayer> use, LinkedList<SePlayer> unUse)> sePlayerPools;    
+  
+    public List<SePlayer> prefabs;
     
     //싱글톤 상속받았으니 awake 구현할때 조심    
     private void Start()
     {
-        sePlayerPools =
-            new List<(SePlayer prefab, LinkedList<SePlayer> use, LinkedList<SePlayer> unUse)>((int)SeList.TotalCount);
-            
+        sePlayerPools = new ((int)SeList.TotalCount);
+        prefabs.Sort((a, b) => ((int)a.ClipName).CompareTo((int)b.ClipName));
         CheckAllSEPrefabSetted();
-        SetSePlayerPools();
+        InitSePlayerPoolsSetting();
     }
     private void Update()
     {        
@@ -41,18 +41,18 @@ public class SoundManager : Singleton<SoundManager>
     }
     private void CheckAllSEPrefabSetted()
     {
-        if (prefabsFromInspector.Count > (int)SeList.TotalCount)
+        if (prefabs.Count > (int)SeList.TotalCount)
         {
             Logger.Error("프레펩 수가 실제 SE숫자보다 많습니다");            
         }
-        LinkedList<int> list = new LinkedList<int>();
+        LinkedList<int> list = new();
         for (int i = 0; i < (int)SeList.TotalCount; ++i)
         {
             list.AddLast(i);
         }
-        for (int i = 0; i < prefabsFromInspector.Count; ++i)
+        for (int i = 0; i < prefabs.Count; ++i)
         {
-            list.Remove((int)prefabsFromInspector[i].ClipName);
+            list.Remove((int)prefabs[i].ClipName);
         }
         if(list.Count != 0)
         {
@@ -62,20 +62,30 @@ public class SoundManager : Singleton<SoundManager>
             }
         }
     }
-    private void SetSePlayerPools()
-    {
-        prefabsFromInspector.Sort((a, b) => ((int)a.ClipName).CompareTo((int)b.ClipName));
-
-        for(int i = 0; i < sePlayerPools.Count; i++)
+    private void InitSePlayerPoolsSetting()
+    {        
+        for (int i = 0; i < sePlayerPools.Capacity; i++)
         {
-
-        }     
+            sePlayerPools.Add((new(), new()));
+        }        
     }
-    public void PlaySE(SeList clipName)
+    public void PlaySE(SeList clipName, Transform transform)
     {
-        if(sePlayerPools[(int)clipName].use.Count == 0)
-        {
+        var index = (int)clipName;
 
+        if (sePlayerPools[index].use.Count >= prefabs[index].MaxPlayCount)
+            return;
+
+        if (sePlayerPools[index].unUse.Count == 0)
+        {
+            sePlayerPools[index].use.AddLast(Instantiate(prefabs[index]));
         }
+        else
+        {
+            sePlayerPools[index].use.AddLast(sePlayerPools[index].unUse.Last);
+            sePlayerPools[index].unUse.RemoveLast();
+        }
+
+        
     }
 }

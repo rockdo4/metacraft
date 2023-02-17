@@ -18,9 +18,11 @@ public class SePlayer : MonoBehaviour
     private float lifeTime;
     private void Start()
     {
-        audioSource = GetComponent<AudioSource>();
-        audioSource.playOnAwake = false;
+        audioSource = GetComponent<AudioSource>();        
         audioClip = audioSource.clip;
         lifeTime = audioClip.length;
     }
+    //private 
+
+
 }
