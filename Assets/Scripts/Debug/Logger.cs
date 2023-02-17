@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using UnityEngine;
+
 public static class Logger
 {
     [Conditional("EnableLogger")]
