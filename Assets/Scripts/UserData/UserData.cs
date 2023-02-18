@@ -12,7 +12,7 @@ struct UserData
     [SerializeField] private int level;
     [SerializeField] private int exp;
     [SerializeField] private int money;
-    [SerializeField] private int stamina;
+    //[SerializeField] private int stamina;
 
     public string LastLoginTime { get { return lastLoginTime; } }
     public int Level { get { return level; } }
@@ -80,7 +80,7 @@ struct UserData
         level = 1;
         money = 0;
         exp = 0;
-        stamina = 100;
+        //stamina = 100;
         Login();
     }
 }

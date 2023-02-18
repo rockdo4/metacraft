@@ -1,10 +1,24 @@
+using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
-    private SceneIndex currentScene = SceneIndex.Title;
-    private SaveLoadSystem sls;
+    public SceneIndex currentScene = SceneIndex.Title;
+    //private readonly SaveLoadSystem sls;
+    private readonly string heroTableLocalPath = "/Tables/HeroTable.json";
+
+    private string MakeFullPath(string localPath)
+    {
+        return $"{Application.dataPath}{localPath}";
+    }
+
+    public override void Awake()
+    {
+        string str = File.ReadAllText(MakeFullPath(heroTableLocalPath));
+        //string jsonFromFile = JsonUtility.FromJson<string>(str);
+        Logger.Debug(str);
+    }
 
     private void Update()
     {
@@ -29,7 +43,7 @@ public class GameManager : Singleton<GameManager>
     private void OnApplicationQuit()
     {
         // 종료시 자동 저장할 수 있게 함
-        sls.SaveSequence();
+        // sls.SaveSequence();
     }
 
     public void LoadScene(int sceneIdx)
