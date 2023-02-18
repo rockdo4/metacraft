@@ -26,7 +26,7 @@ public class BuffList : MonoBehaviour
         var popUpBuff = Instantiate(buffPopUpPref, popUpBuffTr);
 
         viewBuff.popUpBuff = popUpBuff;
-        viewBuff.duration = 3f;
+        viewBuff.duration = 3000f;
 
         buffList.Add(viewBuff); 
 
@@ -35,6 +35,7 @@ public class BuffList : MonoBehaviour
 
     public void OnClickPopUp()
     {
-        popUp.SetActive(true);
+        if(!popUp.activeSelf)
+            popUp.SetActive(true);
     }
 }
