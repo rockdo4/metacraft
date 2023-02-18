@@ -26,7 +26,7 @@ public class BuffList : MonoBehaviour
         var popUpBuff = Instantiate(buffPopUpPref, popUpBuffTr);
 
         viewBuff.popUpBuff = popUpBuff;
-        viewBuff.duration = 3000f;
+        viewBuff.duration = 3f;
 
         buffList.Add(viewBuff); 
 
