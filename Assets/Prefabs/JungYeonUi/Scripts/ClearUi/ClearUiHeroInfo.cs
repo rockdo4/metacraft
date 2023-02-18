@@ -5,9 +5,8 @@ using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ClearHero : MonoBehaviour
+public class ClearUiHeroInfo : MonoBehaviour
 {
-    public Image image;
     public TextMeshProUGUI level;
     public TextMeshProUGUI getExp;
     public Image exp;
@@ -19,7 +18,7 @@ public class ClearHero : MonoBehaviour
     private int lastExp = 0; //연산 후 남은 exp
     private bool isMove = false;
 
-    private Dictionary<int, int> ExpTable = new Dictionary<int, int>();
+    private Dictionary<int, int> ExpTable = new();
 
     private void Awake()
     {
