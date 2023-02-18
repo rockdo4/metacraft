@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -5,19 +6,29 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
-    //private readonly SaveLoadSystem sls;
-    private readonly string heroTableLocalPath = "/Tables/HeroTable.json";
+    public List<Dictionary<string, object>> filePathList;
+    public List<CharacterData> characters = new ();
 
-    private string MakeFullPath(string localPath)
+    private void InitCharacterTable()
     {
-        return $"{Application.dataPath}{localPath}";
+        FilePathList index = FilePathList.CharacterList;
+
+        List<Dictionary<string, object>> characterTableList = CSVReader.ReadByPath(GetFilePathByIndex(index));
+
+        foreach (var item in characterTableList)
+        {
+            string path = $"{Application.dataPath}/{filePathList[(int)index]["Path"]}/{item["Name"]}.json";
+            string test = File.ReadAllText(path);
+            CharacterData character = JsonUtility.FromJson<CharacterData>(test);
+            characters.Add(character);
+            character.PrintState();
+        }
     }
 
     public override void Awake()
     {
-        string str = File.ReadAllText(MakeFullPath(heroTableLocalPath));
-        //string jsonFromFile = JsonUtility.FromJson<string>(str);
-        Logger.Debug(str);
+        filePathList = CSVReader.ReadByPath(GetTableRootPath());
+        InitCharacterTable();
     }
 
     private void Update()
@@ -40,15 +51,32 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    private void OnApplicationQuit()
-    {
-        // 종료시 자동 저장할 수 있게 함
-        // sls.SaveSequence();
-    }
+    //private readonly SaveLoadSystem sls;
+    //private void OnApplicationQuit()
+    //{
+    //    // 종료시 자동 저장할 수 있게 함
+    //    // sls.SaveSequence();
+    //}
 
     public void LoadScene(int sceneIdx)
     {
         SceneManager.LoadScene(sceneIdx);
         currentScene = (SceneIndex)sceneIdx;
+    }
+
+    private string GetTableRootPath()
+    {
+        return $"{Application.dataPath}/Tables/PathList.csv";
+    }
+
+    public string GetFilePathByIndex(FilePathList index)
+    {
+        if (index == FilePathList.None || index == FilePathList.Count)
+        {
+            Logger.Error("Check File Index");
+            return string.Empty;
+        }
+        int i = (int)index;
+        return $"{Application.dataPath}/{filePathList[i]["Path"]}/{filePathList[i]["File"]}.{filePathList[i]["Extension"]}";
     }
 }
