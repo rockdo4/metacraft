@@ -4,15 +4,9 @@ using UnityEngine;
 
 public class UItestCode : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+    public void TestCode()
     {
-        
+        Logger.Debug("Clicked");
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }

@@ -1,39 +1,43 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
+
 public class PopUpManager : MonoBehaviour
 {
     public static PopUpManager Instance { get; private set; }    
     public GameObject popupHolder;
-    public GameObject[] popUpsInCanvas;
+    public GameObject[] popUpsInHierarchy; 
 
     public GameObject[] prefabs;
-    private bool[] isInstaced;
+    private bool[] isInstanced;
 
     public GameObject interactablePanel;
     public GameObject noneInteractablePanel;
     
+    public Color interactablePanelColor;
+    public Color noneInteractablePanelColor;
     private void Awake()
     {
         Instance = this;
-        isInstaced = new bool[prefabs.Length];
+        isInstanced = new bool[prefabs.Length];
         popupHolder.transform.SetAsLastSibling();
+        interactablePanel.GetComponent<RawImage>().color = interactablePanelColor;
+        noneInteractablePanel.GetComponent<RawImage>().color = noneInteractablePanelColor;
+
     }
-    public void Show(int index)
+    public void ShowAtPopupHolder(int index)
     {
         popupHolder.SetActive(true);
         HidePopups();
-        popUpsInCanvas[index].SetActive(true);        
+        popUpsInHierarchy[index].SetActive(true);        
     }
     public void ShowPrefab(int index)
     {
         popupHolder.SetActive(true);
         HidePopups();
-        if (!isInstaced[index])
+        if (!isInstanced[index])
         {
             prefabs[index] = Instantiate(prefabs[index], popupHolder.transform);
-            isInstaced[index] = true;
+            isInstanced[index] = true;
         }
         prefabs[index].SetActive(true);        
     }
@@ -43,14 +47,14 @@ public class PopUpManager : MonoBehaviour
         interactablePanel.SetActive(interactable);
         noneInteractablePanel.SetActive(!interactable);
     }
-    public void HidePanel()
+    private void HidePanel()
     {
         interactablePanel.SetActive(false);
         noneInteractablePanel.SetActive(false);
     }
     private void HidePopups()
     {
-        foreach(var popup in popUpsInCanvas)
+        foreach(var popup in popUpsInHierarchy)
         {
             popup.gameObject.SetActive(false);
         }
