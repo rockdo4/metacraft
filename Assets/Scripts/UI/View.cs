@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 public class View : MonoBehaviour
 {   
     //public virtual void Init() => button?.onClick.AddListener(() => ViewManager.Show(index));
