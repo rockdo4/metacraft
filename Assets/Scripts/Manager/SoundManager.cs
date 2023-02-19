@@ -22,7 +22,7 @@ public class SoundManager : Singleton<SoundManager>
     //싱글톤 상속받았으니 awake 구현할때 조심    
     private void Start()
     {
-        sePlayerPools = new ((int)SeList.TotalCount);
+        sePlayerPools = new (prefabs.Count);
         prefabs.Sort((a, b) => ((int)a.ClipName).CompareTo((int)b.ClipName));
         CheckAllSEplayerSetted();
         InitSetting();
@@ -44,18 +44,18 @@ public class SoundManager : Singleton<SoundManager>
         {
             Logger.Error("프레펩 수가 실제 SE숫자보다 많습니다");            
         }
-        LinkedList<int> list = new();
+        LinkedList<int> unUsdedIndex = new();
         for (int i = 0; i < (int)SeList.TotalCount; ++i)
         {
-            list.AddLast(i);
+            unUsdedIndex.AddLast(i);
         }
         for (int i = 0; i < prefabs.Count; ++i)
         {
-            list.Remove((int)prefabs[i].ClipName);
+            unUsdedIndex.Remove((int)prefabs[i].ClipName);
         }
-        if(list.Count != 0)
+        if(unUsdedIndex.Count != 0)
         {
-            foreach(var num in list)
+            foreach(var num in unUsdedIndex)
             {
                 Logger.Error($"{num + 1}번 SE사운드가 포함되지 않았습니다. SeList를 참조하세요");
             }
@@ -75,25 +75,23 @@ public class SoundManager : Singleton<SoundManager>
         if (sePlayerPools[index].use.Count >= Instance.prefabs[index].MaxPlayCount)
             return;
 
-        SePlayer se;
+        SePlayer sePlayer;
 
-        if (sePlayerPools[index].unUse.Count == 0)
+        if(sePlayerPools[index].unUse.Count > 0)
         {
-            se = Instantiate(Instance.prefabs[index], Instance.transform);
-            se.SetPool(sePlayerPools[index]);
-
-            sePlayerPools[index].use.Enqueue(se);            
+            sePlayer = sePlayerPools[index].unUse.Dequeue();
         }
         else
         {
-            se = sePlayerPools[index].unUse.Dequeue();
-            sePlayerPools[index].use.Enqueue(se);            
+            sePlayer = Instantiate(Instance.prefabs[index], Instance.transform);
+            sePlayer.SetPool(sePlayerPools[index]);
         }
 
-        se.PlaySE();
+        sePlayerPools[index].use.Enqueue(sePlayer);
+        sePlayer.PlaySE();
     }
     public static void PlaySE(SeList clipName, Transform transform)
     {
 
-    }
+    } 
 }
