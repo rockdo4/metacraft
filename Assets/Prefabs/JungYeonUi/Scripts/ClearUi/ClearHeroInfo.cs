@@ -3,7 +3,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class HeroExp : MonoBehaviour
+public class ClearHeroInfo : MonoBehaviour
 {
     public TextMeshProUGUI level;
     public TextMeshProUGUI getExp;

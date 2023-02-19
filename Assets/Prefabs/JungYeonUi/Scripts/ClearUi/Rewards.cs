@@ -8,15 +8,13 @@ public class Rewards : MonoBehaviour
 
     public Transform rewardTr;
     public GameObject rewardPref;
-
-    private void Update()
+    public void SetReawrd(int n)
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            StartCoroutine(SetReward());
-        }
+        count = n;
+        StartCoroutine(CoSetReward());
     }
-    public IEnumerator SetReward()
+
+    public IEnumerator CoSetReward()
     {
         while(count != 0)
         {

@@ -486,7 +486,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1083336054153132836
 RectTransform:
   m_ObjectHideFlags: 0
@@ -784,8 +784,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 2627750738483922926}
-          m_TargetAssemblyTypeName: BuffList, Assembly-CSharp
+        - m_Target: {fileID: 5095432709778420783}
+          m_TargetAssemblyTypeName: BattleHero, Assembly-CSharp
           m_MethodName: OnClickPopUp
           m_Mode: 1
           m_Arguments:
@@ -932,9 +932,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 5470180096343849315}
-        m_TargetAssemblyTypeName: HeroSkill, Assembly-CSharp
-        m_MethodName: OnClickSkill
+      - m_Target: {fileID: 5095432709778420783}
+        m_TargetAssemblyTypeName: BattleHero, Assembly-CSharp
+        m_MethodName: OnClickHeroSkill
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

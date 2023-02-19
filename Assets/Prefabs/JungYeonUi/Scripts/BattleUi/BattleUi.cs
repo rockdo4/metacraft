@@ -13,4 +13,7 @@ public class BattleUi : MonoBehaviour
     {
         Instantiate(battleMenu, transform);
     }
+
+    public void SetEnemyCount(int c) => stageEnemy.Count = c;
+    public void Hero(BattleHero hero) => Instantiate(hero, herosTr);
 }

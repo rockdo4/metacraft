@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,6 +19,8 @@ public class HeroSkill : MonoBehaviour
     private float coolDown = 3f;
     private float coolDownTimer = 3f;
 
+    public Action effect;
+
     private void FixedUpdate()
     {
         CoolDownUpdate();
@@ -36,6 +39,7 @@ public class HeroSkill : MonoBehaviour
     {
         if (IsCoolDown)
         {
+            effect();
             CoolDownFill = 1;
             coolDownTimer = coolDown;
         }

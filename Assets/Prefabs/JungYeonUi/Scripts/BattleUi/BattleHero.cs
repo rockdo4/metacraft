@@ -7,11 +7,12 @@ public class BattleHero : MonoBehaviour
 
     [SerializeField]
     private BuffList viewBuffList;
-    public List<HeroBuff> buffList = new List<HeroBuff>();
+    public List<HeroBuff> buffList = new();
 
     private void Awake()
     {
         viewBuffList.SetList(ref buffList);
+        heroSkill.effect = SkillEffect; //테스트용
     }
 
     [ContextMenu("Test/AddBuff")]
@@ -20,4 +21,10 @@ public class BattleHero : MonoBehaviour
         viewBuffList.AddBuff();
     }
 
+    public void OnClickHeroSkill() => heroSkill.OnClickSkill();
+    public void SkillEffect()
+    {
+        viewBuffList.AddBuff();
+    }
+    public void OnClickPopUp() => viewBuffList.OnClickPopUp();
 }

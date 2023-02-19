@@ -21,8 +21,4 @@ public class StageEnemy : MonoBehaviour
     [ContextMenu("Test/AddEnemy")]
     public int AddEnemy() => ++Count;
 
-    private void Awake()
-    {
-        Count = 10;
-    }
 }
