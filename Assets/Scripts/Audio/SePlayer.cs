@@ -10,7 +10,7 @@ public class SePlayer : MonoBehaviour
     [SerializeField]
     private int maxPlayCount = 30;
     public int MaxPlayCount { get { return maxPlayCount; } }
-
+    
     private Queue<SePlayer> use;
     private Queue<SePlayer> unUse;
 
@@ -37,15 +37,15 @@ public class SePlayer : MonoBehaviour
         if(timer < 0)
         {
             timer = lifeTime;
-            unUse.Enqueue(use.Dequeue());
+            unUse.Enqueue(use.Dequeue());            
             gameObject.SetActive(false);
         }
         timer -= Time.deltaTime;
     }
-    public void SetPool(Queue<SePlayer> use, Queue<SePlayer> unUse)
+    public void SetPool((Queue<SePlayer> use, Queue<SePlayer> unuse) pool)
     {
-        this.use = use;
-        this.unUse = unUse;
+        use = pool.use;
+        unUse = pool.unuse;       
     }
     public void PlaySE()
     {
