@@ -1,11 +1,9 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class ClearUiHeroInfo : MonoBehaviour
+public class HeroExp : MonoBehaviour
 {
     public TextMeshProUGUI level;
     public TextMeshProUGUI getExp;
@@ -82,10 +80,10 @@ public class ClearUiHeroInfo : MonoBehaviour
     public int testGetExp;
     private void Update()
     {
-        if (Input.GetMouseButtonDown(0))
-        {
-            Clear(testGetExp);
-        }
+        //if (Input.GetMouseButtonDown(0))
+        //{
+        //    Clear(testGetExp);
+        //}
 
         if(isMove)
         {
