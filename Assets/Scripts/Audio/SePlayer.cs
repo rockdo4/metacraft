@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,33 +15,25 @@ public class SePlayer : MonoBehaviour
     private Queue<SePlayer> use;
     private Queue<SePlayer> unUse;
 
-    private AudioSource audioSource;
-    private AudioClip audioClip;
-    private float lifeTime;
-    private float timer;
-    
+    private AudioSource audioSource; 
+
     private void Awake()
     {
         TryGetComponent(out audioSource);        
-        audioSource.clip ??= Resources.Load<AudioClip>($"SEtest/{clipName}");        
-
-        audioClip = audioSource.clip;        
-        lifeTime = audioClip.length;
-        timer = lifeTime;
+        audioSource.clip ??= Resources.Load<AudioClip>($"SEtest/{clipName}");    
     }
     protected virtual void Update()
-    {
-        CheckLifeTime();
+    {        
+        CheckIsPlay();
     }
-    private void CheckLifeTime()
+
+    private void CheckIsPlay()
     {
-        if(timer < 0)
+        if(!audioSource.isPlaying)
         {
-            timer = lifeTime;
-            unUse.Enqueue(use.Dequeue());            
+            unUse.Enqueue(use.Dequeue());
             gameObject.SetActive(false);
         }
-        timer -= Time.deltaTime;
     }
     public void SetPool((Queue<SePlayer> use, Queue<SePlayer> unuse) pool)
     {

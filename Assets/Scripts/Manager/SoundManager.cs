@@ -15,7 +15,7 @@ public class SoundManager : Singleton<SoundManager>
     [Range(-80, 0)]
     public float se = 0;
         
-    private static List<(Queue<SePlayer> use, Queue<SePlayer> unUse)> sePlayerPools;    
+    private static List<(Queue<SePlayer> use, Queue<SePlayer> unUse)> sePlayerPools;
   
     public List<SePlayer> prefabs;
     
@@ -24,8 +24,8 @@ public class SoundManager : Singleton<SoundManager>
     {
         sePlayerPools = new ((int)SeList.TotalCount);
         prefabs.Sort((a, b) => ((int)a.ClipName).CompareTo((int)b.ClipName));
-        CheckAllSEsetted();
-        InitSEplayerPoolsSetting();
+        CheckAllSEplayerSetted();
+        InitSetting();
     }
     private void Update()
     {        
@@ -38,7 +38,7 @@ public class SoundManager : Singleton<SoundManager>
         mixer.SetFloat(nameof(bgm), bgm);
         mixer.SetFloat(nameof(se), se);
     }
-    private void CheckAllSEsetted()
+    private void CheckAllSEplayerSetted()
     {
         if (prefabs.Count > (int)SeList.TotalCount)
         {
@@ -61,7 +61,7 @@ public class SoundManager : Singleton<SoundManager>
             }
         }
     }
-    private void InitSEplayerPoolsSetting()
+    private void InitSetting()
     {        
         for (int i = 0; i < sePlayerPools.Capacity; i++)
         {
