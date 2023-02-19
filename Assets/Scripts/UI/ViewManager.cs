@@ -29,19 +29,13 @@ public class ViewManager : MonoBehaviour
             return;
 
         var viewToDisplay = Instance.views[index];
-        if (Instance.currentView != null)
-        {       
-            Instance.currentView.Hide();
-        }
+        Instance.currentView?.Hide();
         viewToDisplay.Show();
         Instance.currentView = viewToDisplay;
     }
     public static void Show(View view)
     {
-        if (Instance.currentView != null)
-        {
-            Instance.currentView.Hide();    
-        }
+        Instance.currentView?.Hide();
         view.Show();
         Instance.currentView = view;
     }
