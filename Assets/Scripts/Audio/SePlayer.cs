@@ -1,34 +1,58 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Audio;
 
 public class SePlayer : MonoBehaviour
 {
     [SerializeField]
     private SeList clipName;
-    public SeList ClipName { get; }
+    public SeList ClipName { get { return clipName; } }
 
     [SerializeField]
     private int maxPlayCount = 30;
-    public int MaxPlayCount { get; }
-    public Transform Track { get; set; }
+    public int MaxPlayCount { get { return maxPlayCount; } }
+
+    private Queue<SePlayer> use;
+    private Queue<SePlayer> unUse;
 
     private AudioSource audioSource;
     private AudioClip audioClip;
     private float lifeTime;
-    private void Start()
+    private float timer;
+    
+    private void Awake()
     {
-        audioSource = GetComponent<AudioSource>();        
-        audioClip = audioSource.clip;
+        TryGetComponent(out audioSource);        
+        audioSource.clip ??= Resources.Load<AudioClip>($"SEtest/{clipName}");        
+
+        audioClip = audioSource.clip;        
         lifeTime = audioClip.length;
+        timer = lifeTime;
     }
-    private void Update()
+    protected virtual void Update()
     {
-        //transform.position = Track.position;
+        CheckLifeTime();
     }
     private void CheckLifeTime()
     {
-
+        if(timer < 0)
+        {
+            timer = lifeTime;
+            unUse.Enqueue(use.Dequeue());
+            gameObject.SetActive(false);
+        }
+        timer -= Time.deltaTime;
+    }
+    public void SetPool(Queue<SePlayer> use, Queue<SePlayer> unUse)
+    {
+        this.use = use;
+        this.unUse = unUse;
+    }
+    public void PlaySE()
+    {
+        if(!gameObject.activeSelf)
+        {
+            gameObject.SetActive(true);
+        }
+        audioSource.Play();
     }
 }

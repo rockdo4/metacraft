@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -15,8 +14,8 @@ public class SoundManager : Singleton<SoundManager>
 
     [Range(-80, 0)]
     public float se = 0;
-    
-    private static List<(LinkedList<SePlayer> use, LinkedList<SePlayer> unUse)> sePlayerPools;    
+        
+    private static List<(Queue<SePlayer> use, Queue<SePlayer> unUse)> sePlayerPools;    
   
     public List<SePlayer> prefabs;
     
@@ -25,8 +24,8 @@ public class SoundManager : Singleton<SoundManager>
     {
         sePlayerPools = new ((int)SeList.TotalCount);
         prefabs.Sort((a, b) => ((int)a.ClipName).CompareTo((int)b.ClipName));
-        CheckAllSEPrefabSetted();
-        InitSePlayerPoolsSetting();
+        CheckAllSEprefabSetted();
+        InitSEplayerPoolsSetting();
     }
     private void Update()
     {        
@@ -39,7 +38,7 @@ public class SoundManager : Singleton<SoundManager>
         mixer.SetFloat(nameof(bgm), bgm);
         mixer.SetFloat(nameof(se), se);
     }
-    private void CheckAllSEPrefabSetted()
+    private void CheckAllSEprefabSetted()
     {
         if (prefabs.Count > (int)SeList.TotalCount)
         {
@@ -58,34 +57,43 @@ public class SoundManager : Singleton<SoundManager>
         {
             foreach(var num in list)
             {
-                Logger.Error($"{num}번 SE사운드가 포함되지 않았습니다. SeList를 참조하세요");
+                Logger.Error($"{num + 1}번 SE사운드가 포함되지 않았습니다. SeList를 참조하세요");
             }
         }
     }
-    private void InitSePlayerPoolsSetting()
+    private void InitSEplayerPoolsSetting()
     {        
         for (int i = 0; i < sePlayerPools.Capacity; i++)
         {
             sePlayerPools.Add((new(), new()));
         }        
     }
-    public void PlaySE(SeList clipName, Transform transform)
+    public static void PlaySE(SeList clipName)
     {
         var index = (int)clipName;
 
-        if (sePlayerPools[index].use.Count >= prefabs[index].MaxPlayCount)
+        if (sePlayerPools[index].use.Count >= Instance.prefabs[index].MaxPlayCount)
             return;
+
+        SePlayer se;
 
         if (sePlayerPools[index].unUse.Count == 0)
         {
-            sePlayerPools[index].use.AddLast(Instantiate(prefabs[index]));
+            se = Instantiate(Instance.prefabs[index], Instance.transform);
+            se.SetPool(sePlayerPools[index].use, sePlayerPools[index].unUse);
+
+            sePlayerPools[index].use.Enqueue(se);            
         }
         else
         {
-            sePlayerPools[index].use.AddLast(sePlayerPools[index].unUse.Last);
-            sePlayerPools[index].unUse.RemoveLast();
+            se = sePlayerPools[index].unUse.Dequeue();
+            sePlayerPools[index].use.Enqueue(se);            
         }
 
-        
+        se.PlaySE();
+    }
+    public static void PlaySE(SeList clipName, Transform transform)
+    {
+
     }
 }
