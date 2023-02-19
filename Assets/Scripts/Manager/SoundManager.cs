@@ -51,7 +51,11 @@ public class SoundManager : Singleton<SoundManager>
         }
         for (int i = 0; i < prefabs.Count; ++i)
         {
-            unUsdedIndex.Remove((int)prefabs[i].ClipName);
+            int num = (int)prefabs[i].ClipName;
+            if (!unUsdedIndex.Remove(num))
+            {
+                Logger.Error($"{num + 1}번 SE사운드가 중복 포함돼 있습니다. SeList를 참조하세요");
+            }
         }
         if(unUsdedIndex.Count != 0)
         {
