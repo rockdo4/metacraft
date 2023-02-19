@@ -15,20 +15,23 @@ public class GameManager : Singleton<GameManager>
 
         List<Dictionary<string, object>> characterTableList = CSVReader.ReadByPath(GetFilePathByIndex(index));
 
+        int count = 0;
         foreach (var item in characterTableList)
         {
             string path = $"{Application.dataPath}/{filePathList[(int)index]["Path"]}/{item["Name"]}.json";
             string test = File.ReadAllText(path);
-            CharacterData character = JsonUtility.FromJson<CharacterData>(test);
-            characters.Add(character);
-            character.PrintState();
+            characters.Add(JsonUtility.FromJson<CharacterData>(test));
+            characters[count].PrintState();
+            count++;
         }
     }
 
     public override void Awake()
     {
+        base.Awake();
         filePathList = CSVReader.ReadByPath(GetTableRootPath());
         InitCharacterTable();
+        Debug.Log("2");
     }
 
     private void Update()
