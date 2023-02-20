@@ -4,5 +4,8 @@ using UnityEngine;
 
 public class TestCode : MonoBehaviour
 {
-
+    public void OnTest()
+    {
+        Logger.Debug(1);
+    }
 }

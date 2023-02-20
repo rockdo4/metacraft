@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Audio;
 
@@ -15,18 +14,18 @@ public class SoundManager : Singleton<SoundManager>
 
     [Range(-80, 0)]
     public float se = 0;
-    
-    private static List<(LinkedList<SePlayer> use, LinkedList<SePlayer> unUse)> sePlayerPools;    
+        
+    private static List<(Queue<SePlayer> use, Queue<SePlayer> unUse)> sePlayerPools;
   
     public List<SePlayer> prefabs;
     
     //싱글톤 상속받았으니 awake 구현할때 조심    
     private void Start()
     {
-        sePlayerPools = new ((int)SeList.TotalCount);
+        sePlayerPools = new (prefabs.Count);
         prefabs.Sort((a, b) => ((int)a.ClipName).CompareTo((int)b.ClipName));
-        CheckAllSEPrefabSetted();
-        InitSePlayerPoolsSetting();
+        CheckAllSEplayerSetted();
+        InitSetting();
     }
     private void Update()
     {        
@@ -39,53 +38,64 @@ public class SoundManager : Singleton<SoundManager>
         mixer.SetFloat(nameof(bgm), bgm);
         mixer.SetFloat(nameof(se), se);
     }
-    private void CheckAllSEPrefabSetted()
+    private void CheckAllSEplayerSetted()
     {
         if (prefabs.Count > (int)SeList.TotalCount)
         {
             Logger.Error("프레펩 수가 실제 SE숫자보다 많습니다");            
         }
-        LinkedList<int> list = new();
+        LinkedList<int> unUsdedIndex = new();
         for (int i = 0; i < (int)SeList.TotalCount; ++i)
         {
-            list.AddLast(i);
+            unUsdedIndex.AddLast(i);
         }
         for (int i = 0; i < prefabs.Count; ++i)
         {
-            list.Remove((int)prefabs[i].ClipName);
-        }
-        if(list.Count != 0)
-        {
-            foreach(var num in list)
+            int num = (int)prefabs[i].ClipName;
+            if (!unUsdedIndex.Remove(num))
             {
-                Logger.Error($"{num}번 SE사운드가 포함되지 않았습니다. SeList를 참조하세요");
+                Logger.Error($"{num + 1}번 SE사운드가 중복 포함돼 있습니다. SeList를 참조하세요");
+            }
+        }
+        if(unUsdedIndex.Count != 0)
+        {
+            foreach(var num in unUsdedIndex)
+            {
+                Logger.Error($"{num + 1}번 SE사운드가 포함되지 않았습니다. SeList를 참조하세요");
             }
         }
     }
-    private void InitSePlayerPoolsSetting()
+    private void InitSetting()
     {        
         for (int i = 0; i < sePlayerPools.Capacity; i++)
         {
             sePlayerPools.Add((new(), new()));
         }        
     }
-    public void PlaySE(SeList clipName, Transform transform)
+    public static void PlaySE(SeList clipName)
     {
         var index = (int)clipName;
 
-        if (sePlayerPools[index].use.Count >= prefabs[index].MaxPlayCount)
+        if (sePlayerPools[index].use.Count >= Instance.prefabs[index].MaxPlayCount)
             return;
 
-        if (sePlayerPools[index].unUse.Count == 0)
+        SePlayer sePlayer;
+
+        if(sePlayerPools[index].unUse.Count > 0)
         {
-            sePlayerPools[index].use.AddLast(Instantiate(prefabs[index]));
+            sePlayer = sePlayerPools[index].unUse.Dequeue();
         }
         else
         {
-            sePlayerPools[index].use.AddLast(sePlayerPools[index].unUse.Last);
-            sePlayerPools[index].unUse.RemoveLast();
+            sePlayer = Instantiate(Instance.prefabs[index], Instance.transform);
+            sePlayer.SetPool(sePlayerPools[index]);
         }
 
-        
+        sePlayerPools[index].use.Enqueue(sePlayer);
+        sePlayer.PlaySE();
     }
+    public static void PlaySE(SeList clipName, Transform transform)
+    {
+
+    } 
 }
