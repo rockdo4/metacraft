@@ -13,7 +13,8 @@ public class HeroInfo : MonoBehaviour
     public Image portrait;
 
     private CharacterData baseData;
-    AsyncOperationHandle handle;
+    private AsyncOperationHandle handle;
+    private bool loadFlag = false;
 
     public void SetData(CharacterData data)
     {
@@ -27,11 +28,14 @@ public class HeroInfo : MonoBehaviour
             {
                 handle = obj;
                 portrait.sprite = obj.Result;
+                loadFlag = true;
             };
     }
 
     private void OnDisable()
     {
-        Addressables.Release(handle);
+        if (loadFlag)
+            Addressables.Release(handle);
+        loadFlag = false;
     }
 }
