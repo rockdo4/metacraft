@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class BuffList : MonoBehaviour
 {
-    private readonly int maxViewBuffCount = 3;
+    // private readonly int maxViewBuffCount = 3;
 
     public HeroBuff buffPref;
     public GameObject buffPopUpPref;
