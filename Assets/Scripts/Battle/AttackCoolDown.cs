@@ -1,8 +1,10 @@
 using System;
 using UnityEngine;
 
-public class HeroAttack : MonoBehaviour
+public class AttackCoolDown : MonoBehaviour
 {
+    public FindTarget target;
+
     public bool IsCoolDown {
         get {
             return coolDownTimer <= 0;
@@ -30,8 +32,9 @@ public class HeroAttack : MonoBehaviour
         if (coolDownTimer > 0)
         {
             coolDownTimer -= Time.deltaTime;
+            coolDownTimer = Mathf.Max(0, coolDownTimer);
         }
-        else
+        else if(target.IsTarget)
         {
             coolDownTimer = coolDown;
             effect();
