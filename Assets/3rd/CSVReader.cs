@@ -1,8 +1,7 @@
 using UnityEngine;
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using System.IO;
 
 public class CSVReader
 {
@@ -10,13 +9,24 @@ public class CSVReader
     static string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
     static char[] TRIM_CHARS = { '\"' };
 
+    // New. Use File Path
+    public static List<Dictionary<string, object>> ReadByPath(string path)
+    {
+        string str = File.ReadAllText(path);
+        return SplitTokens(str);
+    }
+
+    // Legacy. Use Resource folder
     public static List<Dictionary<string, object>> Read(string file)
     {
-        var list = new List<Dictionary<string, object>>();
         TextAsset data = Resources.Load(file) as TextAsset;
+        return SplitTokens(data.text);
+    }
 
-        var lines = Regex.Split(data.text, LINE_SPLIT_RE);
-
+    private static List<Dictionary<string, object>> SplitTokens(string data)
+    {
+        var list = new List<Dictionary<string, object>>();
+        var lines = Regex.Split(data, LINE_SPLIT_RE);
         if (lines.Length <= 1) return list;
 
         var header = Regex.Split(lines[0], SPLIT_RE);
