@@ -75,11 +75,6 @@ public class ClearHeroInfo : MonoBehaviour
     public int testGetExp;
     private void Update()
     {
-        //if (Input.GetMouseButtonDown(0))
-        //{
-        //    Clear(testGetExp);
-        //}
-
         if (isMove)
         {
             exp.fillAmount += Time.deltaTime;

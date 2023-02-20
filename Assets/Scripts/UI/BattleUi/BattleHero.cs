@@ -16,7 +16,6 @@ public class BattleHero : MonoBehaviour
     {
         viewBuffList.SetList(ref buffList);
 
-
         //Test
         SetData(SetTestData());
     }
@@ -58,7 +57,7 @@ public class BattleHero : MonoBehaviour
         testData.level = 1; 
         testData.type = "TEST";
         testData.cooldown = 1;
-        testData.skillCooldown = 3;
+        testData.skillCooldown = 0.3f;
         testData.exp = 0;
         testData.attackEvent = Attack;
         testData.skillEvent = Skill;
@@ -77,7 +76,6 @@ public class BattleHero : MonoBehaviour
         AddBuff();
         Logger.Debug("Skill Test");
         charactorData.PrintBattleInfo();
-
     }
     public void Passive()
     {

@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class BuffList : MonoBehaviour
 {
@@ -17,8 +18,17 @@ public class BuffList : MonoBehaviour
     [SerializeField]
     public GameObject popUp;
 
+    public Image plusImage;
+
     public void SetList(ref List<HeroBuff> heroBuffs) => this.buffList = heroBuffs;
 
+    public void DelBuff()
+    {
+        if(buffList.Count <= 3)
+        {
+            plusImage.gameObject.SetActive(false);
+        }
+    }
     public void AddBuff()
     {
         var viewBuff = Instantiate(buffPref, viewBuffTr);   //캐릭터 좌측의 리스트에 버프 추가하고, 팝업에도 추가
@@ -29,7 +39,14 @@ public class BuffList : MonoBehaviour
 
         buffList.Add(viewBuff); 
 
-        viewBuff.OnEnd = () => buffList.Remove(viewBuff);
+        viewBuff.OnEnd += () => buffList.Remove(viewBuff);
+        viewBuff.OnEnd += DelBuff;
+
+
+        if (buffList.Count >= 3)
+        {
+            plusImage.gameObject.SetActive(true);
+        }
     }
 
     public void OnClickPopUp()

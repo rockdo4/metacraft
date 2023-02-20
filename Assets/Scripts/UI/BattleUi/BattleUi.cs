@@ -14,4 +14,5 @@ public class BattleUi : MonoBehaviour
         Instantiate(battleMenu, transform);
     }
 
+
 }
