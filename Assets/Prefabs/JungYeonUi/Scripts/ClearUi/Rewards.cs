@@ -16,7 +16,7 @@ public class Rewards : MonoBehaviour
 
     public IEnumerator CoSetReward()
     {
-        while(count != 0)
+        while (count != 0)
         {
             Instantiate(rewardPref, rewardTr);
             count--;
