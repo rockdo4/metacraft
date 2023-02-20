@@ -1,7 +1,5 @@
 using System.Collections;
-using Unity.VisualScripting;
 using UnityEngine;
-using static UnityEngine.ParticleSystem;
 
 public class Effect : MonoBehaviour
 {
@@ -15,11 +13,11 @@ public class Effect : MonoBehaviour
 
     public void Awake()
     {
-        var dataParticle = data.particle.GetComponent<ParticleSystem>();
+        //var dataParticle = data.particle.GetComponent<ParticleSystem>();
 
-        gameObject.AddComponent<ParticleSystem>();
-        particle = GetComponent<ParticleSystem>();
-        particle = dataParticle;
+        //gameObject.AddComponent<ParticleSystem>();
+        //particle = GetComponent<ParticleSystem>();
+        //particle = dataParticle;
 
         gameObject.SetActive(false);
     }
@@ -30,6 +28,10 @@ public class Effect : MonoBehaviour
     {
         var effect = Instantiate(this, startPos.position, Quaternion.identity, parentsObject);
         effect.name = effectName;
+
+        var particleData = Instantiate(data.particle, effect.gameObject.transform);
+        particle = particleData.GetComponent<ParticleSystem>();
+
         return effect;
     }
 
@@ -67,6 +69,12 @@ public class Effect : MonoBehaviour
         if (startDelay > 0f)
             yield return new WaitForSeconds(startDelay);
 
+        if (particle == null)
+        {
+            Debug.LogError("particle is null");
+            yield break;
+        }
+
         particle.Play();
 
         while (duration > 0f)
@@ -76,6 +84,7 @@ public class Effect : MonoBehaviour
         }
 
         particle.Stop();
+
         gameObject.SetActive(false);
     }
     // 파티클 자체의 지속시간으로 멈추게 변경될 수도 있음
