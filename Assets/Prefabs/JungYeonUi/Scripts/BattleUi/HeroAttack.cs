@@ -1,16 +1,8 @@
 using System;
 using UnityEngine;
-using UnityEngine.UI;
 
-public class HeroSkill : MonoBehaviour
+public class HeroAttack : MonoBehaviour
 {
-    [SerializeField]
-    private Image skillCoolDownImage;
-    private float CoolDownFill {
-        set {
-            skillCoolDownImage.fillAmount = value;
-        }
-    }
     public bool IsCoolDown {
         get {
             return coolDownTimer <= 0;
@@ -28,7 +20,6 @@ public class HeroSkill : MonoBehaviour
         this.effect = effect;
     }
 
-
     private void FixedUpdate()
     {
         CoolDownUpdate();
@@ -40,7 +31,6 @@ public class HeroSkill : MonoBehaviour
         {
             coolDownTimer -= Time.deltaTime;
             coolDownTimer = Mathf.Max(coolDownTimer, 0);
-            CoolDownFill = coolDownTimer / coolDown;
         }
     }
     public void OnClickSkill()
@@ -48,7 +38,6 @@ public class HeroSkill : MonoBehaviour
         if (IsCoolDown)
         {
             effect();
-            CoolDownFill = 1;
             coolDownTimer = coolDown;
         }
     }
