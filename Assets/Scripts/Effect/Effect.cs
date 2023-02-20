@@ -1,9 +1,10 @@
+using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
 
 public class Effect : MonoBehaviour
 {
-    private ParticleSystem particle;
+    public List<ParticleSystem> particles;
     public EffectData data;
     public Transform startPos;              // 이펙트 시작 지점
     public Transform endPos;                // 이펙트 종료 지점
@@ -13,26 +14,7 @@ public class Effect : MonoBehaviour
 
     public void Awake()
     {
-        //var dataParticle = data.particle.GetComponent<ParticleSystem>();
-
-        //gameObject.AddComponent<ParticleSystem>();
-        //particle = GetComponent<ParticleSystem>();
-        //particle = dataParticle;
-
         gameObject.SetActive(false);
-    }
-
-    // 풀에 담을 용도
-    // effectName은 없어도 되면 삭제할 예정 (보기 편하려고 추가)
-    public Effect CreateEffect(Transform parentsObject, string effectName)
-    {
-        var effect = Instantiate(this, startPos.position, Quaternion.identity, parentsObject);
-        effect.name = effectName;
-
-        var particleData = Instantiate(data.particle, effect.gameObject.transform);
-        particle = particleData.GetComponent<ParticleSystem>();
-
-        return effect;
     }
 
     // 시작 지점 변경하게 될 수도 있을거 같아서 추가
@@ -62,20 +44,19 @@ public class Effect : MonoBehaviour
     }
 
     IEnumerator CoEffectRoutine()
-    {
+    {        
         var startDelay = data.startDelay;
         var duration = data.duration;
 
         if (startDelay > 0f)
             yield return new WaitForSeconds(startDelay);
 
-        if (particle == null)
+        for (int i = 0; i < particles.Count; i++)
         {
-            Debug.LogError("particle is null");
-            yield break;
+            if (particles[i] == null)
+                Logger.Debug("null");
+            particles[i].Play();
         }
-
-        particle.Play();
 
         while (duration > 0f)
         {
@@ -83,7 +64,10 @@ public class Effect : MonoBehaviour
             yield return null;
         }
 
-        particle.Stop();
+        for (int i = 0; i < particles.Count; i++)
+        {
+            particles[i].Stop();
+        }
 
         gameObject.SetActive(false);
     }

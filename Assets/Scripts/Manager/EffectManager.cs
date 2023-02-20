@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EffectManager : Singleton<EffectManager>
@@ -51,6 +53,30 @@ public class EffectManager : Singleton<EffectManager>
         }
     }
 
+    // 풀에 담을 용도
+    private Effect CreateEffect(Transform parentsObject, string effectName, int effectListIndex)
+    {
+        var effect =
+            Instantiate(effectList[effectListIndex],
+            effectList[effectListIndex].startPos.position,
+            Quaternion.identity,
+            parentsObject);
+        effect.name = effectName;
+
+        var particles = effectList[effectListIndex].data.particles;
+        var particleList = effect.particles;
+
+        for (int i = 0; i < particles.Count; i++)
+        {
+            var particleData = Instantiate(particles[i], effect.transform);
+
+            if (particleList.Count == 0)
+                particleList.Add(particleData.GetComponentInChildren<ParticleSystem>());
+        }
+
+        return effect;
+    }
+
     // 한 종류의 이펙트들 생성
     private void CreateSelectEffect(int effectListIndex)
     {
@@ -64,8 +90,8 @@ public class EffectManager : Singleton<EffectManager>
         for (int i = 0; i < effectPoolSize; i++)
         {
             // 이펙트 리스트 요소 당 풀의 사이즈만큼 생성 (각각 번호붙여 이름도 추가)
-            var effect = effectList[effectListIndex].
-                CreateEffect(parents.transform, $"{effectList[effectListIndex].name} {i}");
+            var effect = 
+                CreateEffect(parents.transform, $"{effectList[effectListIndex].name} {i}", effectListIndex);
 
             // 만든 이펙트 풀에 저장
             effectPool[effectListIndex].Add(effect);
