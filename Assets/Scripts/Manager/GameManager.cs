@@ -21,7 +21,6 @@ public class GameManager : Singleton<GameManager>
             string path = $"{Application.dataPath}/{filePathList[(int)index]["Path"]}/{item["Name"]}.json";
             string test = File.ReadAllText(path);
             characters.Add(JsonUtility.FromJson<CharacterData>(test));
-            characters[count].PrintState();
             count++;
         }
     }

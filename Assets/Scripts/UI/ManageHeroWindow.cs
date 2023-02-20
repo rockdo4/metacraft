@@ -11,7 +11,6 @@ public class ManageHeroWindow : View
 
     public void SelectSortType(Int32 value)
     {
-        Logger.Debug($"{value}");
         switch (value)
         {
             case 0:
@@ -34,27 +33,6 @@ public class ManageHeroWindow : View
         SetInfos();
     }
 
-    /*public void SortItems(int mode)
-    {
-        if (mode == 0)
-        {
-            items.Sort();
-        }
-        else if (mode == 1)
-        {
-            items.Sort((x, y) => { return x.name.CompareTo(y.name) * -1; });
-        }
-        else if (mode == 2)
-        {
-            items.Sort((x, y) => { return x.type.CompareTo(y.type); });
-        }
-        else if (mode == 3)
-        {
-            items.Sort((x, y) => { return x.type.CompareTo(y.type) * -1; });
-        }
-        SetSlots();
-    }*/
-
     private void Start()
     {
         // heroInfos Initialize
@@ -67,13 +45,15 @@ public class ManageHeroWindow : View
             HeroInfo info = obj.GetComponent<HeroInfo>();
             heroInfos.Add(info);
         }
+
         SetInfos();
     }
 
     private void OnEnable()
     {
         copyCharacterDatas = GameManager.Instance.characters;
-        SetInfos();
+        if (heroInfos.Count != 0)
+            SetInfos();
     }
 
     private void SetInfos()
