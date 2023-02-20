@@ -12,11 +12,6 @@ public class BattleHero : MonoBehaviour
     public List<HeroBuff> buffList = new();
     CharactorData charactorData;
 
-    public Action Attack;
-    public Action Skill;
-    public Action passive;
-
-
     private void Awake()
     {
         viewBuffList.SetList(ref buffList);
@@ -65,10 +60,26 @@ public class BattleHero : MonoBehaviour
         testData.cooldown = 1;
         testData.skillCooldown = 3;
         testData.exp = 0;
-        testData.attackEvent = () => { Logger.Debug("Attack Test"); };
-        testData.skillEvent = () => { Logger.Debug("Skill Test"); AddBuff(); };
-        testData.passiveEvent = () => { Logger.Debug("Passive Test"); };
+        testData.attackEvent = () => {  };
+        testData.skillEvent = () => {  AddBuff(); };
+        testData.passiveEvent = () => {  };
 
         return testData;
+    }
+
+    public void Attack()
+    {
+        Logger.Debug("Attack Test");
+
+    }
+    public void Skill()
+    {
+        Logger.Debug("Skill Test");
+
+    }
+    public void Passive()
+    {
+        Logger.Debug("Passive Test");
+
     }
 }
