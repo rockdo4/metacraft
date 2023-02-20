@@ -21,7 +21,7 @@ public class ClearHeroInfo : MonoBehaviour
     private void Awake()
     {
         SetTest();
-        Init(1, 0);   
+        Init(1, 0);
     }
 
     public void Init(int level, int exp)
@@ -42,8 +42,8 @@ public class ClearHeroInfo : MonoBehaviour
 
     public void Clear(int getExp)
     {
-        int nextLevel = nowLevel; 
-        int tempExp = nowExp; 
+        int nextLevel = nowLevel;
+        int tempExp = nowExp;
         int needExp = ExpTable[nextLevel] - tempExp; //레벨업에 필요한 경험치
 
         while (true)
@@ -69,7 +69,7 @@ public class ClearHeroInfo : MonoBehaviour
         }
 
         addLevel = nextLevel - nowLevel;
-        lastExp = tempExp; 
+        lastExp = tempExp;
 
         nowLevel = nextLevel;
         nowExp = tempExp;
@@ -85,7 +85,7 @@ public class ClearHeroInfo : MonoBehaviour
         //    Clear(testGetExp);
         //}
 
-        if(isMove)
+        if (isMove)
         {
             exp.fillAmount += Time.deltaTime;
             var nowFill = ((float)lastExp / (float)ExpTable[nowLevel]);
@@ -97,7 +97,7 @@ public class ClearHeroInfo : MonoBehaviour
                 exp.fillAmount = nowFill;
                 isMove = false;
             }
-           else if(exp.fillAmount >= 1)
+            else if (exp.fillAmount >= 1)
             {
                 addLevel--;
 

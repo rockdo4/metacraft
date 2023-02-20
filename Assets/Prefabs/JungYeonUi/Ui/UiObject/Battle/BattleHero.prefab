@@ -582,8 +582,10 @@ GameObject:
   m_Component:
   - component: {fileID: 1083336054319177431}
   - component: {fileID: 1083336054319177426}
-  - component: {fileID: 5095432709778420783}
   - component: {fileID: 8397443804223974051}
+  - component: {fileID: 5095432709778420783}
+  - component: {fileID: 3575681098592713931}
+  - component: {fileID: 4267207354368855900}
   m_Layer: 5
   m_Name: BattleHero
   m_TagString: Untagged
@@ -622,21 +624,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1083336054319177430}
   m_CullTransparentMesh: 1
---- !u!114 &5095432709778420783
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1083336054319177430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7f345c3a26c46040b8840a2e3c9b3bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  heroSkill: {fileID: 5470180096343849315}
-  viewBuffList: {fileID: 2627750738483922926}
-  buffList: []
 --- !u!114 &8397443804223974051
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -667,6 +654,47 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &5095432709778420783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1083336054319177430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7f345c3a26c46040b8840a2e3c9b3bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heroSkill: {fileID: 3575681098592713931}
+  heroAttack: {fileID: 4267207354368855900}
+  viewBuffList: {fileID: 2627750738483922926}
+  buffList: []
+--- !u!114 &3575681098592713931
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1083336054319177430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a82ece9dcd07bdd4787da34f03498ed0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skillCoolDownImage: {fileID: 1083336052954431790}
+--- !u!114 &4267207354368855900
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1083336054319177430}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bfa10d92aecf19b40929d0ec489c2c56, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1083336054329273775
 GameObject:
   m_ObjectHideFlags: 0
@@ -807,7 +835,6 @@ GameObject:
   - component: {fileID: 1083336054424080232}
   - component: {fileID: 1083336054424080234}
   - component: {fileID: 1083336054424080233}
-  - component: {fileID: 5470180096343849315}
   - component: {fileID: 6349231604553500627}
   m_Layer: 5
   m_Name: Skill
@@ -875,19 +902,6 @@ MonoBehaviour:
   m_FillOrigin: 2
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5470180096343849315
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1083336054424080239}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a82ece9dcd07bdd4787da34f03498ed0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  skillCoolDownImage: {fileID: 1083336052954431790}
 --- !u!114 &6349231604553500627
 MonoBehaviour:
   m_ObjectHideFlags: 0
