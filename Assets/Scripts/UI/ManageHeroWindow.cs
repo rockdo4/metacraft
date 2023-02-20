@@ -38,12 +38,7 @@ public class ManageHeroWindow : View
     private void OnEnable()
     {
         copyCharacterDatas = GameManager.Instance.characters;
-        scrollBar.value = 0f;
-        SetInfos();
-    }
 
-    private void SetInfos()
-    {
         if (heroInfos.Count == 0)
         {
             int count = copyCharacterDatas.Count;
@@ -55,17 +50,16 @@ public class ManageHeroWindow : View
                 heroInfos.Add(info);
             }
         }
+        SelectSortType(0);
+    }
 
+    private void SetInfos()
+    {
         int index = 0;
         foreach (var character in copyCharacterDatas)
         {
             heroInfos[index].SetData(character);
             index++;
         }
-    }
-
-    private void OnDisable()
-    {
-        copyCharacterDatas.Sort();
     }
 }

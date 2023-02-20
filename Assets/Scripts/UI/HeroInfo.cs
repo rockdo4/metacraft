@@ -4,7 +4,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 
-public class HeroInfo : MonoBehaviour
+public class HeroInfo : MonoBehaviour, IUseAddressable
 {
     public TextMeshProUGUI heroNameText;
     public TextMeshProUGUI gradeText;
@@ -16,6 +16,28 @@ public class HeroInfo : MonoBehaviour
     private AsyncOperationHandle handle;
     private bool loadFlag = false;
 
+    public AsyncOperationHandle Handle
+    {
+        get => handle;
+        set => handle = value;
+    }
+   
+    public void LoadAddressable(string address)
+    {
+        Addressables.LoadAssetAsync<Sprite>(address).Completed +=
+            (AsyncOperationHandle<Sprite> obj) =>
+            {
+                handle = obj;
+                loadFlag = true;
+                portrait.sprite = obj.Result;
+            };
+    }
+
+    public void ReleaseAddressable()
+    {
+        Addressables.Release(handle);
+    }
+
     public void SetData(CharacterData data)
     {
         baseData = data;
@@ -23,19 +45,13 @@ public class HeroInfo : MonoBehaviour
         gradeText.text = baseData.grade;
         typeText.text = baseData.type;
         levelText.text = baseData.level;
-        Addressables.LoadAssetAsync<Sprite>(baseData.heroName).Completed +=
-            (AsyncOperationHandle<Sprite> obj) =>
-            {
-                handle = obj;
-                portrait.sprite = obj.Result;
-                loadFlag = true;
-            };
+        LoadAddressable(baseData.heroName);
     }
 
     private void OnDisable()
     {
         if (loadFlag)
-            Addressables.Release(handle);
+            ReleaseAddressable();
         loadFlag = false;
     }
 }
