@@ -11,6 +11,11 @@ public class ClearUi : MonoBehaviour
     private void Awake()
     {
         heros = heroTr.GetComponentsInChildren<ClearHeroInfo>();
+        foreach (var hero in heros)
+        {
+            hero.SetInfo(1, 0); //실행될때 히어로 정보(레벨, 경험치 등 가져오기)
+        }
+
         Clear();
     }
     public void Clear()
