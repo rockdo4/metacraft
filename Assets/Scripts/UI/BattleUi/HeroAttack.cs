@@ -30,15 +30,11 @@ public class HeroAttack : MonoBehaviour
         if (coolDownTimer > 0)
         {
             coolDownTimer -= Time.deltaTime;
-            coolDownTimer = Mathf.Max(coolDownTimer, 0);
         }
-    }
-    public void OnClickSkill()
-    {
-        if (IsCoolDown)
+        else
         {
-            effect();
             coolDownTimer = coolDown;
+            effect();
         }
     }
 }
