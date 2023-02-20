@@ -60,9 +60,9 @@ public class BattleHero : MonoBehaviour
         testData.cooldown = 1;
         testData.skillCooldown = 3;
         testData.exp = 0;
-        testData.attackEvent = () => {  };
-        testData.skillEvent = () => {  AddBuff(); };
-        testData.passiveEvent = () => {  };
+        testData.attackEvent = Attack;
+        testData.skillEvent = Skill;
+        testData.passiveEvent = Passive;
 
         return testData;
     }
@@ -70,16 +70,18 @@ public class BattleHero : MonoBehaviour
     public void Attack()
     {
         Logger.Debug("Attack Test");
-
+        charactorData.PrintBattleInfo();
     }
     public void Skill()
     {
+        AddBuff();
         Logger.Debug("Skill Test");
+        charactorData.PrintBattleInfo();
 
     }
     public void Passive()
     {
         Logger.Debug("Passive Test");
-
+        charactorData.PrintBattleInfo();
     }
 }
