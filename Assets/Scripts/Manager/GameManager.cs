@@ -31,7 +31,6 @@ public class GameManager : Singleton<GameManager>
         base.Awake();
         filePathList = CSVReader.ReadByPath(GetTableRootPath());
         InitCharacterTable();
-        Debug.Log("2");
     }
 
     private void Update()
