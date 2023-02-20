@@ -1,12 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UItestCode : MonoBehaviour
 {
-    public void TestCode()
+    private AttackedDamageUI attacked;
+    private void Start()
     {
-        Logger.Debug("Clicked");
+        attacked = GetComponent<AttackedDamageUI>();
     }
-
+    private void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.B))
+        {
+            attacked.OnAttack(10, false, transform.position);
+        }
+    }
 }
