@@ -5,45 +5,59 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
-public class GameManager : Singleton<GameManager>, IUseAddressable
+public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
     public List<CharacterData> characters = new();
-
-    private AsyncOperationHandle handle;
-    private TextAsset textAsset;
-
-    public AsyncOperationHandle Handle
-    {
-        get => handle;
-        set => handle = value;
-    }
+    private List<AsyncOperationHandle> heroTableHandles = new();
 
     public void LoadAddressable(string address)
     {
+        AsyncOperationHandle ctlHandle;
+
         Addressables.LoadAssetAsync<TextAsset>(address).Completed +=
-            (AsyncOperationHandle<TextAsset> obj) =>
+            (AsyncOperationHandle<TextAsset> ctl) =>
             {
-                handle = obj;
-                textAsset = obj.Result;
-                List<Dictionary<string, object>> characterTableList = CSVReader.SplitTextAsset(textAsset);
+                ctlHandle = ctl;
+                List<Dictionary<string, object>> characterTableList = CSVReader.SplitTextAsset(ctl.Result);
+                int characterCount = characterTableList.Count;
 
                 int count = 0;
                 foreach (var item in characterTableList)
                 {
                     Addressables.LoadAssetAsync<TextAsset>($"{item["Name"]}.json").Completed +=
-                        (AsyncOperationHandle<TextAsset> obj) =>
+                        (AsyncOperationHandle<TextAsset> eachTable) =>
                         {
-                            characters.Add(JsonUtility.FromJson<CharacterData>(obj.Result.text));
+                            heroTableHandles.Add(eachTable);
+                            characters.Add(JsonUtility.FromJson<CharacterData>(eachTable.Result.text));
+                            Logger.Debug($"Wait {characters.Count}/{characterCount}");
                         };
                     count++;
                 }
+                Addressables.Release(ctlHandle);
+                StartCoroutine(CoWaitForLoadResource(characterCount));
             };
+    }
+
+    private IEnumerator CoWaitForLoadResource(int characterCount)
+    {
+        while (characterCount != characters.Count)
+        {
+            Logger.Debug($"co Wait {characters.Count}/{characterCount}");
+            yield return null;
+        }
+        Logger.Debug($"co Success {characters.Count}/{characterCount}");
+        ReleaseAddressable();
     }
 
     public void ReleaseAddressable()
     {
-        Addressables.Release(handle);
+        foreach (var handle in heroTableHandles)
+        {
+            Addressables.Release(handle);
+        }
+        heroTableHandles.Clear();
+        heroTableHandles.Capacity = 0;
     }
 
     public override void Awake()
@@ -71,12 +85,10 @@ public class GameManager : Singleton<GameManager>, IUseAddressable
     }
 
     //private readonly SaveLoadSystem sls;
-    private void OnApplicationQuit()
-    {
-        // 종료시 자동 저장할 수 있게 함
-        // sls.SaveSequence();
-        ReleaseAddressable();
-    }
+    //private void OnApplicationQuit()
+    // 종료시 자동 저장할 수 있게 함
+    // sls.SaveSequence();
+    //ReleaseAddressable();
 
     public void LoadScene(int sceneIdx)
     {

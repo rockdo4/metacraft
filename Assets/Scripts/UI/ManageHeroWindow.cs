@@ -24,7 +24,7 @@ public class ManageHeroWindow : View
                 break;
 
             case 2:
-                copyCharacterDatas.Sort((x, y) => { return x.type.CompareTo(y.type); });
+                copyCharacterDatas.Sort((x, y) => { return x.job.CompareTo(y.job); });
                 break;
 
             case 3:

@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class AttackableHero : MonoBehaviour
 {
-    protected CharactorData charactorData;
+    protected CharacterData charactorData;
 
     protected AttackCoolDown attackCoolDown;
     protected FindTarget findTarget;
@@ -38,25 +38,25 @@ public class AttackableHero : MonoBehaviour
         Logger.Debug("Skill");
     }
 
-    public CharactorData SetTestData()
+    public CharacterData SetTestData()
     {
-        CharactorData testData = new CharactorData();
+        CharacterData testData = new ();
 
         testData.damage = 100;
         testData.def = 20;
         testData.hp = 100;
         testData.speed = 20;
-        testData.chritical = 50;
-        testData.chriticalDmg = 2;
+        testData.critical = 50;
+        testData.criticalDmg = 2;
         testData.evasion = 20;
         testData.accuracy = 80;
 
         testData.attackDistance = 1f;
         testData.attackCount = 1;
 
-        testData.grade = 'A';
+        testData.grade = "A";
         testData.level = 1;
-        testData.type = "TEST";
+        testData.job = "TEST";
         testData.cooldown = 1;
         testData.skillCooldown = 0.3f;
         testData.exp = 0;
