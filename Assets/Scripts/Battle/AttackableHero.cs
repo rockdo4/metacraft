@@ -21,6 +21,8 @@ public class AttackableHero : MonoBehaviour
     public Action nowUpdate;
     public Action NormalSkill;
 
+    float ultimateStartTime;
+
     HeroState heroState;
     public HeroState HeroState {
         get {
@@ -55,8 +57,6 @@ public class AttackableHero : MonoBehaviour
                 case HeroState.Die:
                     pathFind.isStopped = true;
                     nowUpdate = DieUpdate;
-                    break;
-                default:
                     break;
             }
         }
@@ -154,6 +154,8 @@ public class AttackableHero : MonoBehaviour
     }
     public virtual void Skill()
     {
+        ultimateStartTime = Time.time;
+        HeroBattleState = HeroBattleState.Ulitimate;
         Logger.Debug("Skill");
     }
 
@@ -178,6 +180,7 @@ public class AttackableHero : MonoBehaviour
         testData.job = "TEST";
         testData.cooldown = 1;
         testData.skillCooldown = 0.3f;
+        testData.skillDuration = 3f;
         testData.exp = 0;
 
         return testData;
@@ -197,8 +200,6 @@ public class AttackableHero : MonoBehaviour
     {
         switch (HeroBattleState)
         {
-            case HeroBattleState.None:
-                break;
             case HeroBattleState.Normal:
                 //Å¸°ÙÀÌ ¾øÀ¸¸é Å¸°Ù ÃßÃ´
                 if (target == null)
@@ -218,12 +219,12 @@ public class AttackableHero : MonoBehaviour
                 }
                 break;
             case HeroBattleState.Ulitimate:
+                if(Time.time - ultimateStartTime > charactorData.skillDuration)
+                {
+                    HeroBattleState = HeroBattleState.Normal;
+                }
                 break;
             case HeroBattleState.Stun:
-                break;
-            case HeroBattleState.Count:
-                break;
-            default:
                 break;
         }
 
