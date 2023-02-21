@@ -8,7 +8,6 @@ public class EventTrigger : MonoBehaviour
     [Header("스테이지에 포함된 적들을 넣어주세요")]
     public List<GameObject> enemys;
     private List<NavMeshAgent> enemysNav = new();
-    public List<GameObject> returnPoints = new();
 
     [SerializeField, Header("마지막 관문일 때 체크해주세요")]
     private bool isStageEnd = false;
