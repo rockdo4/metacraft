@@ -1,16 +1,11 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
-using System.Net;
-using Unity.VisualScripting;
-using UnityEditor.MemoryProfiler;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class AttackableHero : MonoBehaviour
 {
-    protected CharactorData charactorData;
+    protected CharacterData charactorData;
     protected BattleHero heroUi;
     private NavMeshAgent pathFind;
 
@@ -162,9 +157,9 @@ public class AttackableHero : MonoBehaviour
         Logger.Debug("Skill");
     }
 
-    public CharactorData LoadTestData()
+    public CharacterData LoadTestData()
     {
-        CharactorData testData = new CharactorData();
+        CharacterData testData = new ();
 
         testData.damage = 100;
         testData.def = 20;
@@ -178,9 +173,9 @@ public class AttackableHero : MonoBehaviour
         testData.attackDistance = 3f;
         testData.attackCount = 2;
 
-        testData.grade = 'A';
+        testData.grade = "A";
         testData.level = 1;
-        testData.type = "TEST";
+        testData.job = "TEST";
         testData.cooldown = 1;
         testData.skillCooldown = 0.3f;
         testData.exp = 0;

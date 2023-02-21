@@ -4,7 +4,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 
-public class HeroInfo : MonoBehaviour, IUseAddressable
+public class HeroInfoButton : MonoBehaviour
 {
     public TextMeshProUGUI heroNameText;
     public TextMeshProUGUI gradeText;
@@ -15,12 +15,6 @@ public class HeroInfo : MonoBehaviour, IUseAddressable
     private CharacterData baseData;
     private AsyncOperationHandle handle;
     private bool loadFlag = false;
-
-    public AsyncOperationHandle Handle
-    {
-        get => handle;
-        set => handle = value;
-    }
    
     public void LoadAddressable(string address)
     {
@@ -43,8 +37,8 @@ public class HeroInfo : MonoBehaviour, IUseAddressable
         baseData = data;
         heroNameText.text = baseData.heroName;
         gradeText.text = baseData.grade;
-        typeText.text = baseData.type;
-        levelText.text = baseData.level;
+        typeText.text = baseData.job;
+        levelText.text = baseData.level.ToString();
         LoadAddressable(baseData.heroName);
     }
 
