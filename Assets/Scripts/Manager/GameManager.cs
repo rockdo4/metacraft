@@ -1,68 +1,64 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
     public List<Hero> newCharacters = new();
-
-    //public List<CharacterData> characters = new();
-    //private List<AsyncOperationHandle> heroTableHandles = new();
-
-    //public void LoadAddressable(string address)
-    //{
-    //    AsyncOperationHandle ctlHandle;
-
-    //    Addressables.LoadAssetAsync<TextAsset>(address).Completed +=
-    //        (AsyncOperationHandle<TextAsset> ctl) =>
-    //        {
-    //            ctlHandle = ctl;
-    //            List<Dictionary<string, object>> characterTableList = CSVReader.SplitTextAsset(ctl.Result);
-    //            int characterCount = characterTableList.Count;
-
-    //            int count = 0;
-    //            foreach (var item in characterTableList)
-    //            {
-    //                Addressables.LoadAssetAsync<TextAsset>($"{item["Name"]}.json").Completed +=
-    //                    (AsyncOperationHandle<TextAsset> eachTable) =>
-    //                    {
-    //                        heroTableHandles.Add(eachTable);
-    //                        characters.Add(JsonUtility.FromJson<CharacterData>(eachTable.Result.text));
-    //                        Logger.Debug($"Wait {characters.Count}/{characterCount}");
-    //                    };
-    //                count++;
-    //            }
-    //            Addressables.Release(ctlHandle);
-    //            StartCoroutine(CoWaitForLoadResource(characterCount));
-    //        };
-    //}
-
-    //private IEnumerator CoWaitForLoadResource(int characterCount)
-    //{
-    //    while (characterCount != characters.Count)
-    //    {
-    //        Logger.Debug($"co Wait {characters.Count}/{characterCount}");
-    //        yield return null;
-    //    }
-    //    Logger.Debug($"co Success {characters.Count}/{characterCount}");
-    //    ReleaseAddressable();
-    //}
-
-    //public void ReleaseAddressable()
-    //{
-    //    foreach (var handle in heroTableHandles)
-    //    {
-    //        Addressables.Release(handle);
-    //    }
-    //    heroTableHandles.Clear();
-    //    heroTableHandles.Capacity = 0;
-    //}
+    public Dictionary<string, Sprite> testPortraits = new();
 
     public override void Awake()
     {
         base.Awake();
-        //LoadAddressable("CharacterList");
+        StartCoroutine(LoadAllResources());
+    }
+
+    private IEnumerator LoadAllResources()
+    {
+        List<AsyncOperationHandle> handles = new();
+
+        foreach (var character in newCharacters)
+        {
+            string address = character.info.resourceAddress;
+            Addressables.LoadAssetAsync<Sprite>(address).Completed +=
+                (AsyncOperationHandle<Sprite> obj) =>
+                {
+                    testPortraits.Add(address, obj.Result);
+                    handles.Add(obj);
+                };
+        }
+
+        int count = 0;
+        bool loadAll = false;
+        // 리소스 로드
+        while (!loadAll)
+        {
+            count = 0;
+            loadAll = true;
+            foreach (var handle in handles)
+            {
+                if (!handle.IsDone)
+                {
+                    loadAll = false;
+                    break;
+                }
+                count++;
+            }
+            Logger.Debug($"progress {count} / {handles.Count}");
+            yield return null;
+        }
+        Logger.Debug("Load All Resources");
+        ReleaseAddressable(handles);
+    }
+
+    public void ReleaseAddressable(List<AsyncOperationHandle> handles)
+    {
+        foreach (var handle in handles)
+            Addressables.Release(handle);
     }
 
     private void Update()
@@ -82,12 +78,6 @@ public class GameManager : Singleton<GameManager>
             // 메뉴 버튼
         }
     }
-
-    //private readonly SaveLoadSystem sls;
-    //private void OnApplicationQuit()
-    // 종료시 자동 저장할 수 있게 함
-    // sls.SaveSequence();
-    //ReleaseAddressable();
 
     public void LoadScene(int sceneIdx)
     {

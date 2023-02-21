@@ -11,6 +11,24 @@ public class ManageHeroWindow : View
     private List<Hero> copyCharacterDatas;
     public Scrollbar scrollBar;
 
+    private void Awake()
+    {
+        copyCharacterDatas = GameManager.Instance.newCharacters;
+
+        int count = copyCharacterDatas.Count;
+        for (int i = 0; i < count; i++)
+        {
+            GameObject obj = Instantiate(heroInfoPrefab, contents);
+            HeroInfoButton info = obj.GetComponent<HeroInfoButton>();
+            heroInfos.Add(info);
+        }
+    }
+
+    private void OnEnable()
+    {
+        SelectSortType(0);
+    }
+
     public void SelectSortType(Int32 value)
     {
         switch (value)
@@ -33,24 +51,6 @@ public class ManageHeroWindow : View
         }
 
         SetInfos();
-    }
-
-    private void OnEnable()
-    {
-        copyCharacterDatas = GameManager.Instance.newCharacters;
-
-        if (heroInfos.Count == 0)
-        {
-            int count = copyCharacterDatas.Count;
-
-            for (int i = 0; i < count; i++)
-            {
-                GameObject obj = Instantiate(heroInfoPrefab, contents);
-                HeroInfoButton info = obj.GetComponent<HeroInfoButton>();
-                heroInfos.Add(info);
-            }
-        }
-        SelectSortType(0);
     }
 
     private void SetInfos()
