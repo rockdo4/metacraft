@@ -1,69 +1,68 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
 public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
-    public List<CharacterData> characters = new();
-    private List<AsyncOperationHandle> heroTableHandles = new();
+    public List<Hero> newCharacters = new();
 
-    public void LoadAddressable(string address)
-    {
-        AsyncOperationHandle ctlHandle;
+    //public List<CharacterData> characters = new();
+    //private List<AsyncOperationHandle> heroTableHandles = new();
 
-        Addressables.LoadAssetAsync<TextAsset>(address).Completed +=
-            (AsyncOperationHandle<TextAsset> ctl) =>
-            {
-                ctlHandle = ctl;
-                List<Dictionary<string, object>> characterTableList = CSVReader.SplitTextAsset(ctl.Result);
-                int characterCount = characterTableList.Count;
+    //public void LoadAddressable(string address)
+    //{
+    //    AsyncOperationHandle ctlHandle;
 
-                int count = 0;
-                foreach (var item in characterTableList)
-                {
-                    Addressables.LoadAssetAsync<TextAsset>($"{item["Name"]}.json").Completed +=
-                        (AsyncOperationHandle<TextAsset> eachTable) =>
-                        {
-                            heroTableHandles.Add(eachTable);
-                            characters.Add(JsonUtility.FromJson<CharacterData>(eachTable.Result.text));
-                            Logger.Debug($"Wait {characters.Count}/{characterCount}");
-                        };
-                    count++;
-                }
-                Addressables.Release(ctlHandle);
-                StartCoroutine(CoWaitForLoadResource(characterCount));
-            };
-    }
+    //    Addressables.LoadAssetAsync<TextAsset>(address).Completed +=
+    //        (AsyncOperationHandle<TextAsset> ctl) =>
+    //        {
+    //            ctlHandle = ctl;
+    //            List<Dictionary<string, object>> characterTableList = CSVReader.SplitTextAsset(ctl.Result);
+    //            int characterCount = characterTableList.Count;
 
-    private IEnumerator CoWaitForLoadResource(int characterCount)
-    {
-        while (characterCount != characters.Count)
-        {
-            Logger.Debug($"co Wait {characters.Count}/{characterCount}");
-            yield return null;
-        }
-        Logger.Debug($"co Success {characters.Count}/{characterCount}");
-        ReleaseAddressable();
-    }
+    //            int count = 0;
+    //            foreach (var item in characterTableList)
+    //            {
+    //                Addressables.LoadAssetAsync<TextAsset>($"{item["Name"]}.json").Completed +=
+    //                    (AsyncOperationHandle<TextAsset> eachTable) =>
+    //                    {
+    //                        heroTableHandles.Add(eachTable);
+    //                        characters.Add(JsonUtility.FromJson<CharacterData>(eachTable.Result.text));
+    //                        Logger.Debug($"Wait {characters.Count}/{characterCount}");
+    //                    };
+    //                count++;
+    //            }
+    //            Addressables.Release(ctlHandle);
+    //            StartCoroutine(CoWaitForLoadResource(characterCount));
+    //        };
+    //}
 
-    public void ReleaseAddressable()
-    {
-        foreach (var handle in heroTableHandles)
-        {
-            Addressables.Release(handle);
-        }
-        heroTableHandles.Clear();
-        heroTableHandles.Capacity = 0;
-    }
+    //private IEnumerator CoWaitForLoadResource(int characterCount)
+    //{
+    //    while (characterCount != characters.Count)
+    //    {
+    //        Logger.Debug($"co Wait {characters.Count}/{characterCount}");
+    //        yield return null;
+    //    }
+    //    Logger.Debug($"co Success {characters.Count}/{characterCount}");
+    //    ReleaseAddressable();
+    //}
+
+    //public void ReleaseAddressable()
+    //{
+    //    foreach (var handle in heroTableHandles)
+    //    {
+    //        Addressables.Release(handle);
+    //    }
+    //    heroTableHandles.Clear();
+    //    heroTableHandles.Capacity = 0;
+    //}
 
     public override void Awake()
     {
         base.Awake();
-        LoadAddressable("CharacterList");
+        //LoadAddressable("CharacterList");
     }
 
     private void Update()

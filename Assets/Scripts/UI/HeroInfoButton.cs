@@ -8,11 +8,10 @@ public class HeroInfoButton : MonoBehaviour
 {
     public TextMeshProUGUI heroNameText;
     public TextMeshProUGUI gradeText;
-    public TextMeshProUGUI typeText;
+    public TextMeshProUGUI jobText;
     public TextMeshProUGUI levelText;
     public Image portrait;
 
-    private CharacterData baseData;
     private AsyncOperationHandle handle;
     private bool loadFlag = false;
    
@@ -32,14 +31,14 @@ public class HeroInfoButton : MonoBehaviour
         Addressables.Release(handle);
     }
 
-    public void SetData(CharacterData data)
+    public void SetData(Hero data)
     {
-        baseData = data;
-        heroNameText.text = baseData.heroName;
-        gradeText.text = baseData.grade;
-        typeText.text = baseData.job;
-        levelText.text = baseData.level.ToString();
-        LoadAddressable(baseData.heroName);
+        InfoHero info = data.info;
+        heroNameText.text = info.name;
+        gradeText.text = info.grade;
+        jobText.text = info.job;
+        levelText.text = info.level.ToString();
+        LoadAddressable(info.resourceAddress);
     }
 
     private void OnDisable()

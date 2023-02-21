@@ -8,7 +8,7 @@ public class ManageHeroWindow : View
     public GameObject heroInfoPrefab;
     public Transform contents;
     public List<HeroInfoButton> heroInfos = new ();
-    private List<CharacterData> copyCharacterDatas;
+    private List<Hero> copyCharacterDatas;
     public Scrollbar scrollBar;
 
     public void SelectSortType(Int32 value)
@@ -20,15 +20,15 @@ public class ManageHeroWindow : View
                 break;
 
             case 1:
-                copyCharacterDatas.Sort((x, y) => { return x.grade.CompareTo(y.grade); });
+                copyCharacterDatas.Sort((x, y) => { return x.info.grade.CompareTo(y.info.grade); });
                 break;
 
             case 2:
-                copyCharacterDatas.Sort((x, y) => { return x.job.CompareTo(y.job); });
+                copyCharacterDatas.Sort((x, y) => { return x.info.job.CompareTo(y.info.job); });
                 break;
 
             case 3:
-                copyCharacterDatas.Sort((x, y) => { return x.level.CompareTo(y.level); });
+                copyCharacterDatas.Sort((x, y) => { return x.info.level.CompareTo(y.info.level); });
                 break;
         }
 
@@ -37,7 +37,7 @@ public class ManageHeroWindow : View
 
     private void OnEnable()
     {
-        copyCharacterDatas = GameManager.Instance.characters;
+        copyCharacterDatas = GameManager.Instance.newCharacters;
 
         if (heroInfos.Count == 0)
         {

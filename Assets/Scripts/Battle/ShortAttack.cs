@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 public class ShortAttack : AttackableHero
 {
@@ -37,13 +35,6 @@ public class ShortAttack : AttackableHero
         {
             Logger.Debug("Attack : " + enemy.name);
         }
-    }
-
-    private void OnDrawGizmos()
-    {
-        // DrawSolidArc(시작점, 노멀벡터(법선벡터), 그려줄 방향 벡터, 각도, 반지름)
-        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, angleRange / 2, charactorData.attackDistance);
-        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -angleRange / 2, charactorData.attackDistance);
     }
 
     public override void Skill()
