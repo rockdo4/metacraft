@@ -36,6 +36,7 @@ public class AttackableHero : MonoBehaviour
                 return;
 
             heroState = value;
+            heroUi.heroState = heroState;
             switch (heroState)
             {
                 case HeroState.None:
@@ -102,6 +103,8 @@ public class AttackableHero : MonoBehaviour
         charactorData = LoadTestData(); //임시 데이터 로드
         pathFind = transform.GetComponent<NavMeshAgent>();
         SetData();
+
+        HeroState = HeroState.Idle;
     }
 
     // Ui와 연결, Ui에 스킬 쿨타임 연결

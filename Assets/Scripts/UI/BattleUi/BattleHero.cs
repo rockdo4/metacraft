@@ -9,6 +9,7 @@ public class BattleHero : MonoBehaviour
     [SerializeField]
     private BuffList viewBuffList;
     private List<HeroBuff> buffList = new();
+    public HeroState heroState;
 
     private void Awake()
     {
@@ -20,6 +21,15 @@ public class BattleHero : MonoBehaviour
         viewBuffList.AddBuff();
     }
 
-    public void OnClickHeroSkill() => heroSkill.OnClickSkill();
-    public void OnClickPopUp() => viewBuffList.OnClickPopUp();
+    public void OnClickHeroSkill()
+    {
+        if(heroState == HeroState.Battle)
+            heroSkill.OnClickSkill();
+    }
+
+    public void OnClickPopUp()
+    {
+        if (heroState == HeroState.Battle)
+            viewBuffList.OnClickPopUp();
+    }
 }
