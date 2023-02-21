@@ -1,4 +1,3 @@
-[System.Serializable]
 public enum EffectEnum
 {
     None = -1,
