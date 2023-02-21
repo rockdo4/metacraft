@@ -6,7 +6,6 @@ using static UnityEngine.Rendering.DebugUI;
 public class ShortAttack : AttackableHero
 {
     public float angleRange = 30f;
-    public float rad = 10f;
 
     public override void Attack()
     {
@@ -22,7 +21,7 @@ public class ShortAttack : AttackableHero
 
         List<GameObject> attackEenmys = new();
 
-        var Enemys = Physics.SphereCastAll(transform.position, rad, Vector3.up, 0f);
+        var Enemys = Physics.SphereCastAll(transform.position, charactorData.attackDistance, Vector3.up, 0f);
         foreach (var enemy in Enemys)
         {
             Vector3 interV = enemy.transform.position - transform.position;
@@ -43,8 +42,8 @@ public class ShortAttack : AttackableHero
     private void OnDrawGizmos()
     {
         // DrawSolidArc(시작점, 노멀벡터(법선벡터), 그려줄 방향 벡터, 각도, 반지름)
-        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, angleRange / 2, rad);
-        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -angleRange / 2, rad);
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, angleRange / 2, charactorData.attackDistance);
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -angleRange / 2, charactorData.attackDistance);
     }
 
     public override void Skill()

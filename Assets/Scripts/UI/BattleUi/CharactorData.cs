@@ -14,8 +14,8 @@ public class CharactorData
     public float attackDistance; //공격 범위 = 네비게이션 스탑 디스턴스
     public int attackCount; // 일반스킬 최대 공격 개체수
 
-    public float chritical; //크리티컬 확률
-    public float chriticalDmg; //크리티컬 데미지 비율
+    public float critical; //크리티컬 확률
+    public float criticalDmg; //크리티컬 데미지 비율
     public float evasion; //회피율
     public float accuracy; //명중률
     public char grade; //등급

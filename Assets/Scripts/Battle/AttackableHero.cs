@@ -39,8 +39,6 @@ public class AttackableHero : MonoBehaviour
             heroUi.heroState = heroState;
             switch (heroState)
             {
-                case HeroState.None:
-                    break;
                 case HeroState.Idle:
                     pathFind.isStopped = true;
                     nowUpdate = IdleUpdate;
@@ -62,8 +60,6 @@ public class AttackableHero : MonoBehaviour
                 case HeroState.Die:
                     pathFind.isStopped = true;
                     nowUpdate = DieUpdate;
-                    break;
-                case HeroState.Count:
                     break;
                 default:
                     break;
@@ -174,8 +170,8 @@ public class AttackableHero : MonoBehaviour
         testData.def = 20;
         testData.hp = 100;
         testData.speed = 20;
-        testData.chritical = 50;
-        testData.chriticalDmg = 2;
+        testData.critical = 50;
+        testData.criticalDmg = 2;
         testData.evasion = 20;
         testData.accuracy = 80;
 
