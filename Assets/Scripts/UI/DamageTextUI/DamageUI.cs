@@ -11,7 +11,7 @@ public class DamageUI : MonoBehaviour
 
     public float transSpeed = 1f;
     public float lifeTime = 2f;
-    public float yPosUp = 1f;
+    public float heightAboveGround = 1f;
     
     private void Awake()
     {
@@ -32,7 +32,7 @@ public class DamageUI : MonoBehaviour
     public void SetUI(int damage, Vector3 enemyPos)
     {
         textMeshPro.text = damage.ToString();
-        pos = enemyPos + Vector3.up * yPosUp;        
+        pos = enemyPos + Vector3.up * heightAboveGround;        
         transform.position = cam.WorldToScreenPoint(pos);
         Invoke("Realese", lifeTime);
     }
