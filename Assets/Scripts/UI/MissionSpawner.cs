@@ -19,10 +19,10 @@ public class MissionSpawner : MonoBehaviour
 
         for (int i = 0; i < count; i++)
         {
-            while(true)
-            {
-                //slectedPoints[i] = 
-            }
+            //while(true)
+            //{
+            //    //slectedPoints[i] = 
+            //}
         }
         Random.Range(0,points.Length-1);
         
