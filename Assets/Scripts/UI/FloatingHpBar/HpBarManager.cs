@@ -3,9 +3,12 @@ using UnityEngine.UI;
 public struct tempInfo
 {
     public tempInfo(float maxHp)
-    { this.maxHp = maxHp; this.hp = maxHp; }
+    {
+        this.maxHp = maxHp;
+        this.hp = maxHp;
+    }
     public float maxHp;
-    public float hp;    
+    public float hp;
 }
 public class HpBarManager : MonoBehaviour
 {
@@ -32,7 +35,7 @@ public class HpBarManager : MonoBehaviour
     {
         if (!isInstantiated)
             return;
- 
+
         hpBar.gameObject.SetActive(true);
         canvasGroup.alpha = 0f;
         isOn = false;
@@ -48,7 +51,7 @@ public class HpBarManager : MonoBehaviour
     }
     void Update()
     {
-        UpdateBar();        
+        UpdateBar();
         CheckDurationTimer();
     }
     private void InstantiateHpBar()
@@ -77,7 +80,7 @@ public class HpBarManager : MonoBehaviour
     public void WhenDieAnimationTriggered()
     {
         hpBar.gameObject.SetActive(false);
-        isOn = false;        
+        isOn = false;
     }
 
     //매프레임 데미지 입었는지 검사하는 함수. 필요하면 update에서 사용.

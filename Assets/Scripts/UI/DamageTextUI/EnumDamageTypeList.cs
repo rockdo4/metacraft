@@ -1,4 +1,3 @@
-[System.Serializable]
 public enum DamageType
 {
     None = -1,
