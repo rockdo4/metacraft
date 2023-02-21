@@ -5,7 +5,6 @@ public class DamageUiObjPool : MonoBehaviour
     static private DamageUiObjPool instance;
     static public DamageUiObjPool Instance { get { return instance; } }
 
-
     public DamageUI normalPrefab;
     public DamageUI critPrefab;
     public int normalMaxSize = 256;
