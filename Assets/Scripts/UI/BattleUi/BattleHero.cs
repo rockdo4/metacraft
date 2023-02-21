@@ -21,9 +21,5 @@ public class BattleHero : MonoBehaviour
     }
 
     public void OnClickHeroSkill() => heroSkill.OnClickSkill();
-    public void SkillEffect()
-    {
-        viewBuffList.AddBuff();
-    }
     public void OnClickPopUp() => viewBuffList.OnClickPopUp();
 }

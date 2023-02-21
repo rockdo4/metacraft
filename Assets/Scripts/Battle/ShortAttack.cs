@@ -4,6 +4,7 @@ public class ShortAttack : AttackableHero
     {
         base.Attack();
         Logger.Debug("Attack1111");
+        Logger.Debug(charactorData.damage);
     }
     public override void Skill()
     {
