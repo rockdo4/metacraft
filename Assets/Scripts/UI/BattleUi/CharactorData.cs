@@ -1,7 +1,9 @@
 using System;
+using System.Runtime.CompilerServices;
 
 public class CharactorData
 {
+    public string heroName;
     public int damage; //일반 공격 데미지
     public int def; //방어력
     public int hp; //체력
@@ -22,4 +24,20 @@ public class CharactorData
     public Action attackEvent;
     public Action skillEvent;
     public Action passiveEvent;
+
+    private string printFormat = "{0} : {1}";
+        
+    public void PrintBattleInfo()
+    {
+        Logger.Debug(string.Format(printFormat, "데미지", damage));
+        //Logger.Debug(string.Format(printFormat, "방어력", def));
+        //Logger.Debug(string.Format(printFormat, "체력", hp));
+        //Logger.Debug(string.Format(printFormat, "이동속도", speed));
+        //Logger.Debug(string.Format(printFormat, "크리티컬", chritical));
+        //Logger.Debug(string.Format(printFormat, "크리티컬 배율", chriticalDmg));
+        //Logger.Debug(string.Format(printFormat, "명중률", accuracy));
+        //Logger.Debug(string.Format(printFormat, "레벨", level));
+        //Logger.Debug(string.Format(printFormat, "타입", type));
+        Logger.Debug("");
+    }
 }

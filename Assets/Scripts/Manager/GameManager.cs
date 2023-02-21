@@ -1,47 +1,65 @@
+using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using UnityEngine;
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
-public class GameManager : Singleton<GameManager>
+public class GameManager : Singleton<GameManager>, IUseAddressable
 {
     public SceneIndex currentScene = SceneIndex.Title;
-    public List<Dictionary<string, object>> filePathList;
-    public List<CharacterData> characters = new ();
+    public List<CharacterData> characters = new();
 
-    private void InitCharacterTable()
+    private AsyncOperationHandle handle;
+    private TextAsset textAsset;
+
+    public AsyncOperationHandle Handle
     {
-        FilePathList index = FilePathList.CharacterList;
+        get => handle;
+        set => handle = value;
+    }
 
-        List<Dictionary<string, object>> characterTableList = CSVReader.ReadByPath(GetFilePathByIndex(index));
+    public void LoadAddressable(string address)
+    {
+        Addressables.LoadAssetAsync<TextAsset>(address).Completed +=
+            (AsyncOperationHandle<TextAsset> obj) =>
+            {
+                handle = obj;
+                textAsset = obj.Result;
+                List<Dictionary<string, object>> characterTableList = CSVReader.SplitTextAsset(textAsset);
 
-        int count = 0;
-        foreach (var item in characterTableList)
-        {
-            string path = $"{Application.dataPath}/{filePathList[(int)index]["Path"]}/{item["Name"]}.json";
-            string test = File.ReadAllText(path);
-            characters.Add(JsonUtility.FromJson<CharacterData>(test));
-            count++;
-        }
+                int count = 0;
+                foreach (var item in characterTableList)
+                {
+                    Addressables.LoadAssetAsync<TextAsset>($"{item["Name"]}.json").Completed +=
+                        (AsyncOperationHandle<TextAsset> obj) =>
+                        {
+                            characters.Add(JsonUtility.FromJson<CharacterData>(obj.Result.text));
+                        };
+                    count++;
+                }
+            };
+    }
+
+    public void ReleaseAddressable()
+    {
+        Addressables.Release(handle);
     }
 
     public override void Awake()
     {
         base.Awake();
-        filePathList = CSVReader.ReadByPath(GetTableRootPath());
-        InitCharacterTable();
+        LoadAddressable("CharacterList");
     }
 
     private void Update()
     {
-#if UNITY_ANDROID
         if (Input.GetKeyDown(KeyCode.Escape)) // Navigator Back Button
         {
             // 종료하시겠습니까 팝업 띄우기 or 그냥 종료하기
-            
+
             Application.Quit();
         }
-#endif
         if (Input.GetKeyDown(KeyCode.Home)) // Navigator Home Button
         {
             // 홈버튼
@@ -53,31 +71,16 @@ public class GameManager : Singleton<GameManager>
     }
 
     //private readonly SaveLoadSystem sls;
-    //private void OnApplicationQuit()
-    //{
-    //    // 종료시 자동 저장할 수 있게 함
-    //    // sls.SaveSequence();
-    //}
+    private void OnApplicationQuit()
+    {
+        // 종료시 자동 저장할 수 있게 함
+        // sls.SaveSequence();
+        ReleaseAddressable();
+    }
 
     public void LoadScene(int sceneIdx)
     {
         SceneManager.LoadScene(sceneIdx);
         currentScene = (SceneIndex)sceneIdx;
-    }
-
-    private string GetTableRootPath()
-    {
-        return $"{Application.dataPath}/Tables/PathList.csv";
-    }
-
-    public string GetFilePathByIndex(FilePathList index)
-    {
-        if (index == FilePathList.None || index == FilePathList.Count)
-        {
-            Logger.Error("Check File Index");
-            return string.Empty;
-        }
-        int i = (int)index;
-        return $"{Application.dataPath}/{filePathList[i]["Path"]}/{filePathList[i]["File"]}.{filePathList[i]["Extension"]}";
     }
 }

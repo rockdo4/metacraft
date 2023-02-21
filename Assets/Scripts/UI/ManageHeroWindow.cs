@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ManageHeroWindow : View
 {
@@ -8,6 +9,7 @@ public class ManageHeroWindow : View
     public Transform contents;
     public List<HeroInfo> heroInfos = new ();
     private List<CharacterData> copyCharacterDatas;
+    public Scrollbar scrollBar;
 
     public void SelectSortType(Int32 value)
     {
@@ -33,27 +35,22 @@ public class ManageHeroWindow : View
         SetInfos();
     }
 
-    private void Start()
-    {
-        // heroInfos Initialize
-        copyCharacterDatas = GameManager.Instance.characters;
-        int count = copyCharacterDatas.Count;
-
-        for (int i = 0; i < count; i++)
-        {
-            GameObject obj = Instantiate(heroInfoPrefab, contents);
-            HeroInfo info = obj.GetComponent<HeroInfo>();
-            heroInfos.Add(info);
-        }
-
-        SetInfos();
-    }
-
     private void OnEnable()
     {
         copyCharacterDatas = GameManager.Instance.characters;
-        if (heroInfos.Count != 0)
-            SetInfos();
+
+        if (heroInfos.Count == 0)
+        {
+            int count = copyCharacterDatas.Count;
+
+            for (int i = 0; i < count; i++)
+            {
+                GameObject obj = Instantiate(heroInfoPrefab, contents);
+                HeroInfo info = obj.GetComponent<HeroInfo>();
+                heroInfos.Add(info);
+            }
+        }
+        SelectSortType(0);
     }
 
     private void SetInfos()

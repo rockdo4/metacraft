@@ -18,14 +18,9 @@ public class ClearHeroInfo : MonoBehaviour
 
     private Dictionary<int, int> ExpTable = new();
 
-    private void Awake()
+    public void SetInfo(int level, int exp)
     {
         SetTest();
-        Init(1, 0);
-    }
-
-    public void Init(int level, int exp)
-    {
         nowLevel = level;
         nowExp = exp;
     }
