@@ -37,6 +37,7 @@ public class ClearHeroInfo : MonoBehaviour
 
     public void Clear(int getExp)
     {
+        this.getExp.text = getExp.ToString();
         int nextLevel = nowLevel;
         int tempExp = nowExp;
         int needExp = ExpTable[nextLevel] - tempExp; //레벨업에 필요한 경험치
