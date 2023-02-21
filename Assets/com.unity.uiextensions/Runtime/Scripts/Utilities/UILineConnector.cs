@@ -59,16 +59,16 @@ namespace UnityEngine.UI.Extensions
             //    worldSpaces[i] = transforms[i].TransformPoint(thisPivot);
             //}
 
-            // Then, convert to canvas space
-            for (int i = 0; i < transforms.Length; i++)
-            {
-                canvasSpaces[i] = canvas.InverseTransformPoint(transforms[i].position);
-            }
+            //// Then, convert to canvas space
+            //for (int i = 0; i < transforms.Length; i++)
+            //{
+            //    canvasSpaces[i] = canvas.InverseTransformPoint(worldSpaces[i]);
+            //}
 
             // Calculate delta from the canvas pivot point
             for (int i = 0; i < transforms.Length; i++)
             {
-                points[i] = new Vector2(canvasSpaces[i].x, canvasSpaces[i].y);
+                points[i] = new Vector2(transforms[i].localPosition.x, transforms[i].localPosition.y);
             }
 
             // And assign the converted points to the line renderer
