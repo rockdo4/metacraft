@@ -94,7 +94,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1083336053044464724
 RectTransform:
   m_ObjectHideFlags: 0
@@ -585,7 +585,6 @@ GameObject:
   - component: {fileID: 8397443804223974051}
   - component: {fileID: 5095432709778420783}
   - component: {fileID: 3575681098592713931}
-  - component: {fileID: 4267207354368855900}
   m_Layer: 5
   m_Name: BattleHero
   m_TagString: Untagged
@@ -667,9 +666,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heroSkill: {fileID: 3575681098592713931}
-  heroAttack: {fileID: 4267207354368855900}
   viewBuffList: {fileID: 2627750738483922926}
-  buffList: []
+  popUp: {fileID: 1083336054153132843}
 --- !u!114 &3575681098592713931
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -683,18 +681,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   skillCoolDownImage: {fileID: 1083336052954431790}
---- !u!114 &4267207354368855900
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1083336054319177430}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bfa10d92aecf19b40929d0ec489c2c56, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1083336054329273775
 GameObject:
   m_ObjectHideFlags: 0
@@ -795,6 +781,7 @@ MonoBehaviour:
   viewBuffTr: {fileID: 1083336054113538013}
   popUpBuffTr: {fileID: 1083336053368208127}
   popUp: {fileID: 1083336054153132843}
+  plusImage: {fileID: 1083336053044464725}
 --- !u!114 &5692594742932544339
 MonoBehaviour:
   m_ObjectHideFlags: 0
