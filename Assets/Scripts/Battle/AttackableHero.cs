@@ -180,7 +180,7 @@ public class AttackableHero : MonoBehaviour
         testData.accuracy = 80;
 
         testData.attackDistance = 3f;
-        testData.attackCount = 1;
+        testData.attackCount = 2;
 
         testData.grade = 'A';
         testData.level = 1;
