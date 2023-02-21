@@ -7,9 +7,9 @@ public class EffectManager : Singleton<EffectManager>
     public int effectPoolSize;
     public List<Effect> effectList;      // 생성할 이펙트 리스트들. 인스펙터에서 추가
     public Transform parentsObject;
-    private static List<List<Effect>> effectPool = new List<List<Effect>>();    // 이펙트 풀
+    private static List<List<Effect>> effectPool = new((int)EffectEnum.Count);    // 이펙트 풀
     public static EffectEnum effectIndex = EffectEnum.None;
-    private static List<int> effectPoolIndex = new List<int>();     // 활성화할 이펙트 프리펩의 번호
+    private static List<int> effectPoolIndex = new();     // 활성화할 이펙트 프리펩의 번호
 
     private void Start()
     {
