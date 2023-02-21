@@ -4,7 +4,7 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 
-public class HeroInfo : MonoBehaviour
+public class HeroInfoButton : MonoBehaviour
 {
     public TextMeshProUGUI heroNameText;
     public TextMeshProUGUI gradeText;

@@ -7,7 +7,7 @@ public class ManageHeroWindow : View
 {
     public GameObject heroInfoPrefab;
     public Transform contents;
-    public List<HeroInfo> heroInfos = new ();
+    public List<HeroInfoButton> heroInfos = new ();
     private List<CharacterData> copyCharacterDatas;
     public Scrollbar scrollBar;
 
@@ -46,7 +46,7 @@ public class ManageHeroWindow : View
             for (int i = 0; i < count; i++)
             {
                 GameObject obj = Instantiate(heroInfoPrefab, contents);
-                HeroInfo info = obj.GetComponent<HeroInfo>();
+                HeroInfoButton info = obj.GetComponent<HeroInfoButton>();
                 heroInfos.Add(info);
             }
         }
