@@ -15,6 +15,6 @@ public class TestBattleManager : MonoBehaviour
         var hero = Instantiate(cube);
         var heroUi = Instantiate(battleHero, battleHeroTr);
 
-        hero.Set(heroUi);
+        hero.SetUi(heroUi);
     }
 }
