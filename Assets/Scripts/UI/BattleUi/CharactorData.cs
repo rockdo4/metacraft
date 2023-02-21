@@ -1,5 +1,6 @@
 using System;
 using System.Runtime.CompilerServices;
+using UnityEngine;
 
 public class CharactorData
 {
@@ -8,6 +9,11 @@ public class CharactorData
     public int def; //방어력
     public int hp; //체력
     public int speed; //이속
+
+
+    public float attackDistance; //공격 범위 = 네비게이션 스탑 디스턴스
+    public int attackCount; // 일반스킬 최대 공격 개체수
+
     public float chritical; //크리티컬 확률
     public float chriticalDmg; //크리티컬 데미지 비율
     public float evasion; //회피율
@@ -20,10 +26,6 @@ public class CharactorData
     public float skillCooldown;
 
     public int exp;
-
-    public Action attackEvent;
-    public Action skillEvent;
-    public Action passiveEvent;
 
     private string printFormat = "{0} : {1}";
         
@@ -39,5 +41,7 @@ public class CharactorData
         //Logger.Debug(string.Format(printFormat, "레벨", level));
         //Logger.Debug(string.Format(printFormat, "타입", type));
         Logger.Debug("");
+
+        
     }
 }
