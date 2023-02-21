@@ -7,9 +7,9 @@ public class EffectManager : Singleton<EffectManager>
     public int effectPoolSize;
     public List<Effect> effectList;      // 생성할 이펙트 리스트들. 인스펙터에서 추가
     public Transform parentsObject;
-    private static List<List<Effect>> effectPool = new List<List<Effect>>();    // 이펙트 풀
-    private static int effectIndex = 0;
-    private static List<int> effectPoolIndex = new List<int>();     // 활성화할 이펙트 프리펩의 번호
+    private static List<List<Effect>> effectPool = new((int)EffectEnum.Count);    // 이펙트 풀
+    public static EffectEnum effectIndex = EffectEnum.None;
+    private static List<int> effectPoolIndex = new();     // 활성화할 이펙트 프리펩의 번호
 
     private void Start()
     {
@@ -20,26 +20,32 @@ public class EffectManager : Singleton<EffectManager>
     {
         if (Input.GetKeyDown(KeyCode.A))
         {
-            Get(0);
+            Get(EffectEnum.Test1);
         }
         if (Input.GetKeyDown(KeyCode.B))
         {
-            Get(1);
+            Get(EffectEnum.Test2);
         }
     }
 
-    public static void Get(int index)
+    public static void Get(EffectEnum index)
     {
-        // index = 뽑고 싶은 이펙트가 저장된 풀의 번호
-        effectIndex = index;
+        // index = 뽑고 싶은 이펙트가 저장된 풀의 이름 (Enum)
+        if (effectIndex != index)
+        {
+            effectIndex = index;
+        }
+
+        int poolIndex = (int)effectIndex;
         // effectPool의 [풀 번호][이펙트인덱스[번호]] 활성화
-        effectPool[effectIndex][effectPoolIndex[effectIndex]].StartEffect();
+        effectPool[poolIndex][effectPoolIndex[poolIndex]].StartEffect();
+        //effectPool[effectIndex].Dequeue().StartEffect();
 
         // index가 프리펩의 최대 개수를 넘어가면 0으로 초기화
-        if (effectPoolIndex[effectIndex] < effectPool[effectIndex].Count - 1)
-            effectPoolIndex[effectIndex]++;
+        if (effectPoolIndex[poolIndex] < effectPool[poolIndex].Count - 1)
+            effectPoolIndex[poolIndex]++;
         else
-            effectPoolIndex[effectIndex] = 0;
+            effectPoolIndex[poolIndex] = 0;
     }
 
     // 담고있는 리스트의 모든 이펙트 생성
@@ -49,6 +55,30 @@ public class EffectManager : Singleton<EffectManager>
         {
             CreateSelectEffect(i);
         }
+    }
+
+    // 풀에 담을 용도
+    private Effect CreateEffect(Transform parentsObject, string effectName, int effectListIndex)
+    {
+        var effect =
+            Instantiate(effectList[effectListIndex],
+            effectList[effectListIndex].startPos.position,
+            Quaternion.identity,
+            parentsObject);
+        effect.name = effectName;
+
+        var particles = effectList[effectListIndex].data.particles;
+        var particleList = effect.particles;
+
+        for (int i = 0; i < particles.Count; i++)
+        {
+            var particleData = Instantiate(particles[i], effect.transform);
+
+            if (particleList.Count == 0)
+                particleList.Add(particleData.GetComponentInChildren<ParticleSystem>());
+        }
+
+        return effect;
     }
 
     // 한 종류의 이펙트들 생성
@@ -64,8 +94,8 @@ public class EffectManager : Singleton<EffectManager>
         for (int i = 0; i < effectPoolSize; i++)
         {
             // 이펙트 리스트 요소 당 풀의 사이즈만큼 생성 (각각 번호붙여 이름도 추가)
-            var effect = effectList[effectListIndex].
-                CreateEffect(parents.transform, $"{effectList[effectListIndex].name} {i}");
+            var effect = 
+                CreateEffect(parents.transform, $"{effectList[effectListIndex].name} {i}", effectListIndex);
 
             // 만든 이펙트 풀에 저장
             effectPool[effectListIndex].Add(effect);
