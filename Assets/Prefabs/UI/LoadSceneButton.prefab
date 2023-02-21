@@ -66,10 +66,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Button
+  m_text: "\uB85C\uBE44"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: bdc64b4452911cf4faf0e62328b0082f, type: 2}
+  m_sharedMaterial: {fileID: 4565134964853867374, guid: bdc64b4452911cf4faf0e62328b0082f,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -93,8 +94,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 24
-  m_fontSizeBase: 24
+  m_fontSize: 100
+  m_fontSizeBase: 100
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
@@ -147,7 +148,7 @@ GameObject:
   - component: {fileID: 1012977466013315295}
   - component: {fileID: 7925124359894300629}
   - component: {fileID: 4048777531916590695}
-  - component: {fileID: 8405884247978121137}
+  - component: {fileID: 303855066418570938}
   m_Layer: 5
   m_Name: LoadSceneButton
   m_TagString: Untagged
@@ -258,9 +259,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 8405884247978121137}
-        m_TargetAssemblyTypeName: LoadScene, Assembly-CSharp
-        m_MethodName: DoLoadScene
+      - m_Target: {fileID: 303855066418570938}
+        m_TargetAssemblyTypeName: LoadSceneButton, Assembly-CSharp
+        m_MethodName: LoadSceneByIndex
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -270,7 +271,7 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
---- !u!114 &8405884247978121137
+--- !u!114 &303855066418570938
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -279,6 +280,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 7759071371137861972}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e65a0c2103d736458a62c09e2a80594, type: 3}
+  m_Script: {fileID: 11500000, guid: 01107fdb797d3964588e7507f02d774f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

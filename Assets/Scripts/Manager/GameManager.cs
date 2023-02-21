@@ -5,51 +5,60 @@ using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.SceneManagement;
 
-public class GameManager : Singleton<GameManager>, IUseAddressable
+public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
-    public List<CharacterData> characters = new();
-
-    private AsyncOperationHandle handle;
-    private TextAsset textAsset;
-
-    public AsyncOperationHandle Handle
-    {
-        get => handle;
-        set => handle = value;
-    }
-
-    public void LoadAddressable(string address)
-    {
-        Addressables.LoadAssetAsync<TextAsset>(address).Completed +=
-            (AsyncOperationHandle<TextAsset> obj) =>
-            {
-                handle = obj;
-                textAsset = obj.Result;
-                List<Dictionary<string, object>> characterTableList = CSVReader.SplitTextAsset(textAsset);
-
-                int count = 0;
-                foreach (var item in characterTableList)
-                {
-                    Addressables.LoadAssetAsync<TextAsset>($"{item["Name"]}.json").Completed +=
-                        (AsyncOperationHandle<TextAsset> obj) =>
-                        {
-                            characters.Add(JsonUtility.FromJson<CharacterData>(obj.Result.text));
-                        };
-                    count++;
-                }
-            };
-    }
-
-    public void ReleaseAddressable()
-    {
-        Addressables.Release(handle);
-    }
+    public List<Hero> newCharacters = new();
+    public Dictionary<string, Sprite> testPortraits = new();
 
     public override void Awake()
     {
         base.Awake();
-        LoadAddressable("CharacterList");
+        StartCoroutine(LoadAllResources());
+    }
+
+    private IEnumerator LoadAllResources()
+    {
+        List<AsyncOperationHandle> handles = new();
+
+        foreach (var character in newCharacters)
+        {
+            string address = character.info.resourceAddress;
+            Addressables.LoadAssetAsync<Sprite>(address).Completed +=
+                (AsyncOperationHandle<Sprite> obj) =>
+                {
+                    testPortraits.Add(address, obj.Result);
+                    handles.Add(obj);
+                };
+        }
+
+        int count = 0;
+        bool loadAll = false;
+        // 리소스 로드
+        while (!loadAll)
+        {
+            count = 0;
+            loadAll = true;
+            foreach (var handle in handles)
+            {
+                if (!handle.IsDone)
+                {
+                    loadAll = false;
+                    break;
+                }
+                count++;
+            }
+            Logger.Debug($"progress {count} / {handles.Count}");
+            yield return null;
+        }
+        Logger.Debug("Load All Resources");
+        ReleaseAddressable(handles);
+    }
+
+    public void ReleaseAddressable(List<AsyncOperationHandle> handles)
+    {
+        foreach (var handle in handles)
+            Addressables.Release(handle);
     }
 
     private void Update()
@@ -68,14 +77,6 @@ public class GameManager : Singleton<GameManager>, IUseAddressable
         {
             // 메뉴 버튼
         }
-    }
-
-    //private readonly SaveLoadSystem sls;
-    private void OnApplicationQuit()
-    {
-        // 종료시 자동 저장할 수 있게 함
-        // sls.SaveSequence();
-        ReleaseAddressable();
     }
 
     public void LoadScene(int sceneIdx)

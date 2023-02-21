@@ -38,7 +38,7 @@ public class HeroSkill : MonoBehaviour
     {
         if (coolDownTimer > 0)
         {
-            coolDownTimer -= Time.deltaTime;
+            coolDownTimer -= Time.deltaTime;    
             coolDownTimer = Mathf.Max(coolDownTimer, 0);
             CoolDownFill = coolDownTimer / coolDown;
         }
