@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class AttackableHero : MonoBehaviour
 {
@@ -16,7 +18,8 @@ public class AttackableHero : MonoBehaviour
     private float coolDownTimer;
     private float coolDown;
 
-    private Vector3 returnPos = Vector3.zero;
+    [SerializeField]
+    private Transform returnPos;
 
     public Action nowUpdate;
     public Action NormalSkill;
@@ -42,12 +45,13 @@ public class AttackableHero : MonoBehaviour
                     break;
                 case HeroState.ReturnPosition: // 재배치
                     pathFind.isStopped = false;
+                    pathFind.SetDestination(returnPos.position); //재배치 위치 설정
                     pathFind.stoppingDistance = 0; //가까이 가기
                     nowUpdate = ReturnPosUpdate;
                     break;
                 case HeroState.MoveNext:
                     pathFind.isStopped = false;
-                    nowUpdate = ReturnPosUpdate;
+                    nowUpdate = MoveNextUpdate;
                     break;
                 case HeroState.Battle:
                     pathFind.isStopped = false;
@@ -88,6 +92,8 @@ public class AttackableHero : MonoBehaviour
             return IsNormal && InRange;
         }
     }
+
+    Coroutine ReadyRotate;
 
     private void Awake()
     {
@@ -186,17 +192,37 @@ public class AttackableHero : MonoBehaviour
         return testData;
     }
 
-    public void IdleUpdate()
+    private void IdleUpdate()
+    {
+
+    }
+    Vector3 test;
+    private void ReturnPosUpdate()
+    {
+        switch(pathFind.isStopped)
+        {
+            case true:
+                transform.rotation = Quaternion.Lerp(transform.rotation, returnPos.rotation, Time.deltaTime * 5);
+
+
+                break;
+            case false:
+                if (Vector3.Distance(returnPos.position, transform.position) < 0.1f)
+                {
+                    pathFind.isStopped = true;
+                    transform.position = returnPos.position;
+                }
+                break;
+        }
+    }
+
+
+    private void MoveNextUpdate()
     {
 
     }
 
-    public void ReturnPosUpdate()
-    {
-        pathFind.SetDestination(returnPos); //재배치 위치 설정
-    }
-
-    public void BattleUpdate()
+    private void BattleUpdate()
     {
         switch (HeroBattleState)
         {
@@ -230,7 +256,7 @@ public class AttackableHero : MonoBehaviour
 
     }
 
-    public void DieUpdate()
+    private void DieUpdate()
     {
 
     }
