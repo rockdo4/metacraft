@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -883,6 +883,16 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3537347449189574671, guid: 04f595d1fa48c8f41b0d5ff1f5eb7024,
+        type: 3}
+      propertyPath: popUpsInHierarchy.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3537347449189574671, guid: 04f595d1fa48c8f41b0d5ff1f5eb7024,
+        type: 3}
+      propertyPath: popUpsInHierarchy.Array.data[0]
+      value: 
+      objectReference: {fileID: 1804810974}
     - target: {fileID: 6991163156566108878, guid: 04f595d1fa48c8f41b0d5ff1f5eb7024,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -1337,6 +1347,12 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 2553096147792292503, guid: 934b1155e81040945b6b6571c095f08c,
     type: 3}
   m_PrefabInstance: {fileID: 1713650483}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1804810974 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6991163157742715367, guid: 04f595d1fa48c8f41b0d5ff1f5eb7024,
+    type: 3}
+  m_PrefabInstance: {fileID: 1169247373}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &1864848163 stripped
 MonoBehaviour:

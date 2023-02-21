@@ -48,8 +48,7 @@ public class HpBarManager : MonoBehaviour
     }
     void Update()
     {
-        UpdateBar();
-        CheckDamaged();
+        UpdateBar();        
         CheckDurationTimer();
     }
     private void InstantiateHpBar()
@@ -80,16 +79,18 @@ public class HpBarManager : MonoBehaviour
         hpBar.gameObject.SetActive(false);
         isOn = false;        
     }
-    private void CheckDamaged()
-    {
-        var currHp = hpInfo.hp;
-        if (currHp != prevHpValue)
-        {
-            isOn = true;
-            timer = 0f;
-        }
-        prevHpValue = currHp;
-    }
+
+    //매프레임 데미지 입었는지 검사하는 함수. 필요하면 update에서 사용.
+    //private void CheckDamaged()
+    //{
+    //    var currHp = hpInfo.hp;
+    //    if (currHp != prevHpValue)
+    //    {
+    //        isOn = true;
+    //        timer = 0f;
+    //    }
+    //    prevHpValue = currHp;
+    //}
     private void CheckDurationTimer()
     {
         timer += Time.deltaTime;
@@ -98,8 +99,14 @@ public class HpBarManager : MonoBehaviour
             isOn = false;
         }
     }
+    public void WhenHit()
+    {
+        isOn = true;
+        timer = 0f;
+    }
     public void TestCode(float damage)
     {
-        hpInfo.hp -= damage;        
+        hpInfo.hp -= damage;
+        WhenHit();
     }
 }
