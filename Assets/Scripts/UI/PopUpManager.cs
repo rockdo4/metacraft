@@ -40,7 +40,7 @@ public class PopUpManager : MonoBehaviour
             popUpsInHierarchy[i].transform.parent = popupHolder.transform;
         }
     }
-    public void ShowAtPopupHolder(int index)
+    public void ShowPopupInHierarchy(int index)
     {
         popupHolder.SetActive(true);
         HidePopups();
