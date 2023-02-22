@@ -29,4 +29,9 @@ public class MapEventTrigger : MonoBehaviour
             enemysNav[i].SetDestination(other.transform.position);
         }
     }
+
+    public void OnDead(AttackableEnemy enemy)
+    {
+        enemys.Remove(enemy);
+    }
 }

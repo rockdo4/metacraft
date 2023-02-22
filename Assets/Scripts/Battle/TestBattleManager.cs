@@ -8,6 +8,7 @@ public class TestBattleManager : MonoBehaviour
     public BattleHero battleHero;
     public Transform battleHeroTr;
     public List<Transform> startPositions;
+    protected List<AttackableHero> useHeroes;
 
     private void Awake()
     {
@@ -19,6 +20,7 @@ public class TestBattleManager : MonoBehaviour
             var heroUi = Instantiate(battleHero, battleHeroTr);
 
             hero.SetUi(heroUi);
+            useHeroes.Add(hero);
         }
     }
 
