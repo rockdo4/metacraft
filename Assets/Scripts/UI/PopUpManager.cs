@@ -19,10 +19,26 @@ public class PopUpManager : MonoBehaviour
     {
         Instance = this;
         isInstanced = new bool[prefabs.Length];
+        SetPanel();        
         popupHolder.transform.SetAsLastSibling();
+    }
+    private void Start()
+    {
+        MovePopupsToHolder();
+    }
+    private void SetPanel()
+    {
+        interactablePanel = Instantiate(interactablePanel, transform);
         interactablePanel.GetComponent<RawImage>().color = interactablePanelColor;
+        noneInteractablePanel = Instantiate(noneInteractablePanel, transform);
         noneInteractablePanel.GetComponent<RawImage>().color = noneInteractablePanelColor;
-
+    }
+    private void MovePopupsToHolder()
+    {
+        for(int i = 0; i < popUpsInHierarchy.Length; i++)
+        {
+            popUpsInHierarchy[i].transform.parent = popupHolder.transform;
+        }
     }
     public void ShowAtPopupHolder(int index)
     {
