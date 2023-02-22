@@ -6,8 +6,9 @@ using UnityEngine.AI;
 
 public abstract class AttackableUnit : MonoBehaviour
 {
-    protected TestBattleManager testBattleManager;
-    [SerializeField] // Why ?
+    protected BeltScrollBattleManager battleManager;
+
+    [SerializeField]
     protected HeroData heroData;
 
     protected NavMeshAgent pathFind;
@@ -15,40 +16,45 @@ public abstract class AttackableUnit : MonoBehaviour
     protected AttackableUnit target;
     protected LayerMask targetType;
 
-    [SerializeField] // Why ?
+    [SerializeField] //hp를 인스펙터에서 보려고 작성. 
     protected int hp;
 
     protected float lastNormalAttackTime;
-    protected float lastAutoTime;
-    protected float lastActiveTime;
+    protected float lastNormalSkillTime;
+    protected float lastActiveSkillTime;
 
     protected float activeStartTime; //궁극기 유지 시간동안 평타, 일반스킬X
 
     protected Action nowUpdate;
 
-    protected Action Common;
-    protected Action Auto;
-    protected Action Active;
+    protected Action NormalAttackAction;
+    protected Action NormalSkillAction;
+    protected Action ActiveSkillAction;
 
     protected virtual void Awake()
     {
-        testBattleManager = GameObject.FindObjectOfType<TestBattleManager>();
+        battleManager = GameObject.FindObjectOfType<BeltScrollBattleManager>();
     }
 
     protected UnitState unitState;
-    protected UnitState UnitState { get { return unitState; } set { unitState = value; } }
+    public virtual UnitState UnitState { get { return unitState; } set { unitState = value; } }
 
     protected UnitBattleState battleState;
-    protected UnitBattleState BattleState { get { return battleState; }  set { battleState = value; } }
+    public virtual UnitBattleState BattleState { get { return battleState; }  set { battleState = value; } }
 
     protected bool CanNormalAttack {
         get {
             return (Time.time - lastNormalAttackTime) > heroData.normalAttack.cooldown;
         }
     }
+    protected bool CanNormalSkill {
+        get {
+            return (Time.time - lastNormalSkillTime) > heroData.normalAttack.cooldown;
+        }
+    }
 
     protected bool InRange => Vector3.Distance(target.transform.position, transform.position) < heroData.normalAttack.distance;
-    protected bool IsNormal => battleState != UnitBattleState.Action && battleState != UnitBattleState.Stun;
+    protected bool IsNormal => battleState != UnitBattleState.ActiveSkill && battleState != UnitBattleState.Stun;
 
     protected bool IsAttack {
         get {
@@ -56,29 +62,13 @@ public abstract class AttackableUnit : MonoBehaviour
         }
     }
 
-    [SerializeField]
-    protected List<AttackableUnit> targetList;
-    protected void SetTargetList(List<AttackableUnit> list) => targetList = list;
-
-    //BattleManager에서 targetList 가 null이면 다음 행동 지시
-    protected virtual void SetTarget()
-    {
-        if (targetList.Count == 0)
-        {
-            target = null;
-            return;
-        }
-
-        target = targetList.OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
-                          .FirstOrDefault();
-    }
     protected void SetData()
     {
         lastNormalAttackTime = Time.time;
         pathFind.stoppingDistance = heroData.normalAttack.distance;
-        Common = CommonAttack;
-        Auto = AutoAttack;
-        Active = ActiveAttack;
+        NormalAttackAction = NormalAttack;
+        NormalSkillAction = NormalSkill;
+        ActiveSkillAction = ActiveAttack;
 
         hp = heroData.stats.healthPoint;
     }
@@ -96,10 +86,10 @@ public abstract class AttackableUnit : MonoBehaviour
         }
     }
 
-    protected abstract void SetTestBattle();
+    public abstract void SetTestBattle();
 
-    public abstract void CommonAttack();
-    public abstract void AutoAttack();
+    public abstract void NormalAttack();
+    public abstract void NormalSkill();
     public abstract void ActiveAttack();
 
     protected abstract void IdleUpdate();
@@ -110,30 +100,4 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public abstract void OnDamage(int dmg);
 
-    //public CharacterData LoadTestData()
-    //{
-    //    CharacterData testData = new();
-
-    //    testData.damage = 3;
-    //    testData.def = 20;
-    //    testData.hp = 100;
-    //    testData.speed = 3;
-    //    testData.critical = 50;
-    //    testData.criticalDmg = 2;
-    //    testData.evasion = 20;
-    //    testData.accuracy = 80;
-
-    //    testData.attackDistance = 3f;
-    //    testData.attackCount = 2;
-
-    //    testData.grade = "A";
-    //    testData.level = 1;
-    //    testData.job = "TEST";
-    //    testData.cooldown = 1;
-    //    testData.skillCooldown = 0.3f;
-    //    testData.skillDuration = 3f;
-    //    testData.exp = 0;
-
-    //    return testData;
-    //}
 }

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,8 +12,24 @@ public class AttackableHero : AttackableUnit
     public void SetReturnPos(Transform tr) => returnPos = returnPos = tr; 
     public float skillDuration; // 임시 변수
 
-    protected new UnitState unitState;
-    public new UnitState UnitState {
+    [SerializeField]
+    protected List<AttackableEnemy> targetList;
+    public void SetTargetList(List<AttackableEnemy> list) => targetList = list;
+
+    //BattleManager에서 targetList 가 null이면 다음 행동 지시
+    protected virtual void SetTarget()
+    {
+        if (targetList.Count == 0)
+        {
+            target = null;
+            return;
+        }
+
+        target = targetList.OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
+                          .FirstOrDefault();
+    }
+
+    public override UnitState UnitState {
         get {
             return unitState;
         }
@@ -29,7 +47,6 @@ public class AttackableHero : AttackableUnit
                     break;
                 case UnitState.ReturnPosition: // 재배치
                     pathFind.isStopped = false;
-                    pathFind.speed = 10;
                     pathFind.SetDestination(returnPos.position); //재배치 위치 설정
                     pathFind.stoppingDistance = 0; //가까이 가기
                     nowUpdate = ReturnPosUpdate;
@@ -39,9 +56,11 @@ public class AttackableHero : AttackableUnit
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
+                    pathFind.stoppingDistance = heroData.normalAttack.distance; //가까이 가기
+                    battleManager.GetEnemyList(ref targetList);
                     pathFind.speed = heroData.stats.moveSpeed;
                     pathFind.isStopped = false;
-                    HeroBattleState = UnitBattleState.Common;
+                    HeroBattleState = UnitBattleState.NormalAttack;
                     nowUpdate = BattleUpdate;
                     break;
                 case UnitState.Die:
@@ -72,26 +91,27 @@ public class AttackableHero : AttackableUnit
         SetData();
 
         unitState = UnitState.Idle;
+        base.Awake();
     }
 
     // Ui와 연결, Ui에 스킬 쿨타임 연결
     public virtual void SetUi(BattleHero _heroUI)
     {
         heroUI = _heroUI;
-        heroUI.heroSkill.Set(heroData.activeSkill.cooldown, AutoAttack); //궁극기 쿨타임과 궁극기 함수 등록
+        heroUI.heroSkill.Set(heroData.activeSkill.cooldown, NormalSkill); //궁극기 쿨타임과 궁극기 함수 등록
     }
 
-    public override void CommonAttack()
+    public override void NormalAttack()
     {
     }
-    public override void AutoAttack()
+    public override void NormalSkill()
     {
 
     }
     public override void ActiveAttack()
     {
         activeStartTime = Time.time;
-        BattleState = UnitBattleState.Action;
+        BattleState = UnitBattleState.ActiveSkill;
         Logger.Debug("Skill");
     }
 
@@ -103,7 +123,7 @@ public class AttackableHero : AttackableUnit
     {
         switch (HeroBattleState)
         {
-            case UnitBattleState.Common:
+            case UnitBattleState.NormalAttack:
                 //타겟이 없으면 타겟 추척
                 if (target == null)
                 {
@@ -112,19 +132,24 @@ public class AttackableHero : AttackableUnit
                 }
 
                 //타겟으로 이동
+                transform.LookAt(target.transform);
                 pathFind.SetDestination(target.transform.position);
 
                 //타겟과 일정 범위 안에 있으며, 일반스킬 상태이고, 쿨타임 조건이 충족될때
                 if (IsAttack && CanNormalAttack)
                 {
                     lastNormalAttackTime = Time.time;
-                    Common();
+                    NormalAttackAction();
                 }
+                else
+                    //타겟으로 이동
+                    pathFind.SetDestination(target.transform.position);
+
                 break;
-            case UnitBattleState.Action:
+            case UnitBattleState.ActiveSkill:
                 if (Time.time - activeStartTime > skillDuration)
                 {
-                    HeroBattleState = UnitBattleState.Common;
+                    HeroBattleState = UnitBattleState.NormalAttack;
                 }
                 break;
             case UnitBattleState.Stun:
@@ -154,12 +179,12 @@ public class AttackableHero : AttackableUnit
 
                 if (angle <= 0)
                 {
-                    
+                    battleManager.OnReady();
                     UnitState = UnitState.Idle;
                 }
                 break;
             case false:
-                if (Vector3.Distance(returnPos.position, transform.position) < 0.1f)
+                if (Vector3.Distance(returnPos.position, transform.position) < 1f)
                 {
                     pathFind.isStopped = true;
                     transform.position = returnPos.position;
@@ -168,10 +193,17 @@ public class AttackableHero : AttackableUnit
         }
     }
 
-    [ContextMenu("Battle")]
-    protected override void SetTestBattle()
+    public override void SetTestBattle()
     {
         UnitState = UnitState.Battle;
+    }
+    public virtual void SetMoveNext()
+    {
+        UnitState = UnitState.MoveNext;
+    }
+    public virtual void SetReturn()
+    {
+        UnitState = UnitState.ReturnPosition;
     }
 
     public override void OnDamage(int dmg)
@@ -179,5 +211,10 @@ public class AttackableHero : AttackableUnit
         hp = Mathf.Max(hp - dmg, 0);
         if (hp <= 0)
             UnitState = UnitState.Die;
+    }
+
+    private void OnDestroy()
+    {
+       battleManager.OnDeadHero(this);
     }
 }

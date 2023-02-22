@@ -26,7 +26,12 @@ public class MapEventTrigger : MonoBehaviour
         for (int i = 0; i < enemys.Count; i++)
         {
             enemysNav[i].enabled = true;
-            enemysNav[i].SetDestination(other.transform.position);
+            enemys[i].SetTestBattle();
         }
+    }
+
+    public void OnDead(AttackableEnemy enemy)
+    {
+        enemys.Remove(enemy);
     }
 }
