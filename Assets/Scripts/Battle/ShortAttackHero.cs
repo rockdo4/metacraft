@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class ShortAttack : AttackableHero
+public class ShortAttackHero : AttackableHero
 {
     public override void NormalAttack()
     {

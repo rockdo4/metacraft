@@ -128,7 +128,6 @@ public abstract class AttackableHero : AttackableUnit
     {
 
     }
-    public bool Test;
     protected override void BattleUpdate()
     {
         switch (BattleState)
@@ -145,19 +144,15 @@ public abstract class AttackableHero : AttackableUnit
                 Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - transform.position);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 120);
 
-                //transform.LookAt(target.transform); // 타겟이 바뀌면 너무 빨리 바라봐. 천천히 바라보고 싶어
+                //transform.LookAt(target.transform);
 
                 //패시브 스킬 가능이면 패시브 사용, 아니라면 평타
                 if (IsPassiveAttack && CanPassiveSkillTime)
                 {
-                    if (Test)
-                        Debug.Log("PassiveSkill");
                     PassiveSkillAction();
                 }
                 else if (IsNormalAttack && CanNormalAttackTime)
                 {
-                    if (Test)
-                        Debug.Log("NormalAttack");
                     lastNormalAttackTime = Time.time;
                     NormalAttackAction();
                 }
