@@ -1,13 +1,13 @@
 using System;
-using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 
 public class AttackableHero : MonoBehaviour
 {
     protected CharacterData charactorData;
+    protected HeroData heroData;
+
     protected BattleHero heroUi;
     private NavMeshAgent pathFind;
 
@@ -180,13 +180,13 @@ public class AttackableHero : MonoBehaviour
 
         testData.attackDistance = 3f;
         testData.attackCount = 2;
+        testData.cooldown = 1;
+        testData.skillCooldown = 0.3f;
+        testData.skillDuration = 3f;
 
         testData.grade = "A";
         testData.level = 1;
         testData.job = "TEST";
-        testData.cooldown = 1;
-        testData.skillCooldown = 0.3f;
-        testData.skillDuration = 3f;
         testData.exp = 0;
 
         return testData;

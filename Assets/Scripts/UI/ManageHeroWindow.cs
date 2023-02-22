@@ -8,7 +8,7 @@ public class ManageHeroWindow : View
     public GameObject heroInfoPrefab;
     public Transform contents;
     public List<HeroInfoButton> heroInfos = new ();
-    private List<Hero> copyCharacterDatas;
+    private List<HeroData> copyCharacterDatas;
     public Scrollbar scrollBar;
 
     private void Awake()
