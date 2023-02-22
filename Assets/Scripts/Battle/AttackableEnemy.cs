@@ -1,13 +1,13 @@
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AttackableHero : AttackableUnit
+public class AttackableEnemy : AttackableUnit
 {
-    protected BattleHero heroUi;
-
-    [SerializeField]
-    private Transform returnPos;
-
     protected new UnitState unitState;
     public new UnitState UnitState {
         get {
@@ -18,28 +18,16 @@ public class AttackableHero : AttackableUnit
                 return;
 
             unitState = value;
-            heroUi.heroState = unitState;
             switch (unitState)
             {
                 case UnitState.Idle:
                     pathFind.isStopped = true;
                     nowUpdate = IdleUpdate;
                     break;
-                case UnitState.ReturnPosition: // 재배치
-                    pathFind.isStopped = false;
-                    pathFind.speed = 10;
-                    pathFind.SetDestination(returnPos.position); //재배치 위치 설정
-                    pathFind.stoppingDistance = 0; //가까이 가기
-                    nowUpdate = ReturnPosUpdate;
-                    break;
-                case UnitState.MoveNext:
-                    pathFind.isStopped = false;
-                    nowUpdate = MoveNextUpdate;
-                    break;
                 case UnitState.Battle:
                     pathFind.speed = charactorData.speed;
                     pathFind.isStopped = false;
-                    HeroBattleState = UnitBattleState.Common;
+                    EnemyBattleState = UnitBattleState.Common;
                     nowUpdate = BattleUpdate;
                     break;
                 case UnitState.Die:
@@ -47,19 +35,22 @@ public class AttackableHero : AttackableUnit
                     nowUpdate = DieUpdate;
                     Destroy(gameObject, 1);
                     break;
+                default:
+                    Logger.Debug("Error");
+                    break;
             }
         }
     }
 
-    UnitBattleState heroBattleState;
-    public UnitBattleState HeroBattleState {
+    UnitBattleState enemyBattleState;
+    public UnitBattleState EnemyBattleState {
         get {
-            return heroBattleState;
+            return enemyBattleState;
         }
         set {
-            if (value == heroBattleState)
+            if (value == enemyBattleState)
                 return;
-            heroBattleState = value;
+            enemyBattleState = value;
         }
     }
 
@@ -68,15 +59,6 @@ public class AttackableHero : AttackableUnit
         charactorData = LoadTestData(); //임시 데이터 로드
         pathFind = transform.GetComponent<NavMeshAgent>();
         SetData();
-
-        unitState = UnitState.Idle;
-    }
-
-    // Ui와 연결, Ui에 스킬 쿨타임 연결
-    public virtual void SetUi(BattleHero heroUI)
-    {
-        this.heroUi = heroUI;
-        this.heroUi.heroSkill.Set(charactorData.skillCooldown, AutoAttack); //궁극기 쿨타임과 궁극기 함수 등록
     }
 
     public override void CommonAttack()
@@ -99,7 +81,7 @@ public class AttackableHero : AttackableUnit
     }
     protected override void BattleUpdate()
     {
-        switch (HeroBattleState)
+        switch (EnemyBattleState)
         {
             case UnitBattleState.Common:
                 //타겟이 없으면 타겟 추척
@@ -122,7 +104,7 @@ public class AttackableHero : AttackableUnit
             case UnitBattleState.Action:
                 if (Time.time - activeStartTime > charactorData.skillDuration)
                 {
-                    HeroBattleState = UnitBattleState.Common;
+                    EnemyBattleState = UnitBattleState.Common;
                 }
                 break;
             case UnitBattleState.Stun:
@@ -140,32 +122,11 @@ public class AttackableHero : AttackableUnit
     {
 
     }
-
     protected override void ReturnPosUpdate()
     {
-        switch(pathFind.isStopped)
-        {
-            case true:
-                transform.rotation = Quaternion.Lerp(transform.rotation, returnPos.rotation, Time.deltaTime * 5);
 
-                float angle = Quaternion.Angle(transform.rotation, returnPos.rotation);
-
-                if (angle <= 0)
-                {
-                    Logger.Debug("회전 완료");
-
-                    UnitState = UnitState.Idle;
-                }
-                break;
-            case false:
-                if (Vector3.Distance(returnPos.position, transform.position) < 0.1f)
-                {
-                    pathFind.isStopped = true;
-                    transform.position = returnPos.position;
-                }
-                break;
-        }
     }
+
 
     [ContextMenu("Battle")]
     protected override void SetTestBattle()

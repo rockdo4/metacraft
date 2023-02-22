@@ -1,38 +1,39 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ShortAttack : AttackableHero
+public class ShortAttackEnemy : AttackableEnemy
 {
     public float angleRange = 30f;
 
     public override void CommonAttack()
     {
         base.CommonAttack();
-        Logger.Debug("Attack1111");
+        Logger.Debug("Enemy_Attack1111");
         Logger.Debug(charactorData.damage);
 
         if (charactorData.attackCount == 1)
         {
-            target.GetComponent<AttackableUnit>().OnDamage(charactorData.damage);
+            target.GetComponent<AttackableHero>().OnDamage(charactorData.damage);
             return;
         }
 
-        List<GameObject> attackEenmys = new();
+        List<GameObject> attackHeros = new();
 
-        foreach (var enemy in targetList)
+        foreach (var hero in targetList)
         {
-            Vector3 interV = enemy.transform.position - transform.position;
+            Vector3 interV = hero.transform.position - transform.position;
             float dot = Vector3.Dot(interV.normalized, transform.forward);
             float theta = Mathf.Acos(dot);
             float degree = Mathf.Rad2Deg * theta;
 
             if (degree <= angleRange / 2f)
-                attackEenmys.Add(enemy.transform.gameObject);
+                attackHeros.Add(hero.transform.gameObject);
         }
 
-        foreach (var enemy in attackEenmys)
+        foreach (var hero in attackHeros)
         {
-            enemy.GetComponent<AttackableEnemy>().OnDamage(charactorData.damage);
+            hero.GetComponent<AttackableHero>().OnDamage(charactorData.damage);
         }
     }
     public override void AutoAttack()
@@ -45,5 +46,4 @@ public class ShortAttack : AttackableHero
     {
         base.SetTarget(); //근거리 타겟 추적
     }
-
 }
