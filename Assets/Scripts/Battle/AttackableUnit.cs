@@ -22,7 +22,10 @@ public abstract class AttackableUnit : MonoBehaviour
     //쿨타임에 사용, Hero는 Ui버튼을 누를때 쿨타임을 검사하지만 Enemy나 Boss 가 생길수도 있으니 같이 작성해놓음
     protected float lastNormalAttackTime;
     protected float lastPassiveSkillTime;
-    protected float lastActiveSkillTime; 
+    protected float lastActiveSkillTime;
+
+    protected float lastNavTime;
+    protected float navDelay = 0.2f;
 
     //현재 상태의 Update함수 호출
     protected Action nowUpdate;
@@ -55,18 +58,18 @@ public abstract class AttackableUnit : MonoBehaviour
         }
     }
 
-    protected bool InRangeNormal => Vector3.Distance(target.transform.position, transform.position) < heroData.normalAttack.distance;
-    protected bool InRangePassive => Vector3.Distance(target.transform.position, transform.position) < heroData.passiveSkill.distance;
+    protected bool InRangeNormalAttack => Vector3.Distance(target.transform.position, transform.position) < heroData.normalAttack.distance;
+    protected bool InRangePassiveSkill => Vector3.Distance(target.transform.position, transform.position) < heroData.passiveSkill.distance;
     protected bool NonActiveSkill => battleState != UnitBattleState.ActiveSkill && battleState != UnitBattleState.Stun;
 
     protected bool IsNormalAttack {
         get {
-            return NonActiveSkill && InRangeNormal;
+            return NonActiveSkill && InRangeNormalAttack;
         }
     }
     protected bool IsPassiveAttack {
         get {
-            return NonActiveSkill && InRangePassive;
+            return NonActiveSkill && InRangePassiveSkill;
         }
     }
 
