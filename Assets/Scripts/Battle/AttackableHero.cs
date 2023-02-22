@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -10,8 +12,24 @@ public class AttackableHero : AttackableUnit
     public void SetReturnPos(Transform tr) => returnPos = returnPos = tr; 
     public float skillDuration; // 임시 변수
 
-    protected new UnitState unitState;
-    public new UnitState UnitState {
+    [SerializeField]
+    protected List<AttackableEnemy> targetList;
+    public void SetTargetList(List<AttackableEnemy> list) => targetList = list;
+
+    //BattleManager에서 targetList 가 null이면 다음 행동 지시
+    protected virtual void SetTarget()
+    {
+        if (targetList.Count == 0)
+        {
+            target = null;
+            return;
+        }
+
+        target = targetList.OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
+                          .FirstOrDefault();
+    }
+
+    public override UnitState UnitState {
         get {
             return unitState;
         }
@@ -28,6 +46,7 @@ public class AttackableHero : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.ReturnPosition: // 재배치
+                    battleManager.GetEnemyList(ref targetList);
                     pathFind.isStopped = false;
                     pathFind.speed = 10;
                     pathFind.SetDestination(returnPos.position); //재배치 위치 설정

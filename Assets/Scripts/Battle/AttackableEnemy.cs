@@ -1,8 +1,27 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class AttackableEnemy : AttackableUnit
 {
+    [SerializeField]
+    protected List<AttackableHero> targetList;
+    public void SetTargetList(List<AttackableHero> list) => targetList = list;
+
+    //BattleManager에서 targetList 가 null이면 다음 행동 지시
+    protected virtual void SetTarget()
+    {
+        if (targetList.Count == 0)
+        {
+            target = null;
+            return;
+        }
+
+        target = targetList.OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
+                          .FirstOrDefault();
+    }
+
     public float skillDuration; // 임시 변수
     public override UnitState UnitState {
         get {
@@ -20,7 +39,7 @@ public class AttackableEnemy : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
-                    //battleManager.GetHeroList(ref targetList);
+                    battleManager.GetHeroList(ref targetList);
                     pathFind.speed = heroData.stats.moveSpeed;
                     pathFind.isStopped = false;
                     EnemyBattleState = UnitBattleState.NormalAttack;
