@@ -89,7 +89,6 @@ public class BeltScrollBattleManager : TestBattleManager
     private void SetStageClear()
     {
         ViewManager.Show(1);
-        clearUi.SetHoros(useHeroes);
         clearUi.Clear();
         Logger.Debug("Clear!");
     }

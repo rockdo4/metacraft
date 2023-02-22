@@ -25,6 +25,7 @@ public class TestBattleManager : MonoBehaviour
             useHeroes.Add(hero);
             heroUi.SetHeroInfo(hero.GetHeroData());
         }
+        clearUi.SetHoros(useHeroes);
     }
 
     public List<Transform> GetStartPosition()
