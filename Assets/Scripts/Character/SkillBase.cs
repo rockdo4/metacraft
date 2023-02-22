@@ -3,8 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SkillBase", menuName = "SkillBase/SkillBase")]
 public class SkillBase : ScriptableObject
 {
-    public float cooldown;          // 쿨다운 남은 시간
-    public float maxCooldown;       // 쿨다운
+    public float cooldown;          // 쿨다운
     public float distance;          // 적용 범위 (= 네비게이션 정지 거리)
     public int count;               // 스킬 최대 적용 개체수
     public float angle;             // 적용 범위 각

@@ -1,11 +1,5 @@
-using System;
-using System.Collections;
-using System.Diagnostics;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 
 public class AttackableHero : AttackableUnit
 {

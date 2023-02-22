@@ -10,7 +10,7 @@ public class HeroInfoButton : MonoBehaviour
     public TextMeshProUGUI levelText;
     public Image portrait;
 
-    public void SetData(Hero data)
+    public void SetData(HeroData data)
     {
         InfoHero info = data.info;
         heroNameText.text = info.name;

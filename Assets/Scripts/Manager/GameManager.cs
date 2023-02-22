@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
-    public List<Hero> newCharacters = new();
+    public List<HeroData> newCharacters = new();
     public Dictionary<string, Sprite> testPortraits = new();
 
     public override void Awake()
