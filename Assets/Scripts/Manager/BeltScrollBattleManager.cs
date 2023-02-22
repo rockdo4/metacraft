@@ -118,7 +118,7 @@ public class BeltScrollBattleManager : TestBattleManager
         // 히어로들 배틀 상태로 전환
         for (int i = 0; i < useHeroes.Count; i++)
         {
-            useHeroes[i].SetTestBattle();
+            useHeroes[i].SetBattle();
         }
     }
 }

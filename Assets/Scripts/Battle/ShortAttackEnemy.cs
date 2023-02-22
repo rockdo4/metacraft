@@ -1,16 +1,12 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class ShortAttackEnemy : AttackableEnemy
 {
-    public float angleRange = 30f;
-
     public override void NormalAttack()
     {
         base.NormalAttack();
-        Logger.Debug("Enemy_Attack1111");
-        Logger.Debug(heroData.stats.baseDamage);
+        //Logger.Debug("Enemy_NormalAttack");
 
         if (heroData.normalAttack.count == 1)
         {
@@ -23,12 +19,15 @@ public class ShortAttackEnemy : AttackableEnemy
         foreach (var hero in targetList)
         {
             Vector3 interV = hero.transform.position - transform.position;
-            float dot = Vector3.Dot(interV.normalized, transform.forward);
-            float theta = Mathf.Acos(dot);
-            float degree = Mathf.Rad2Deg * theta;
+            if (interV.magnitude <= heroData.normalAttack.distance)
+            {
+                float dot = Vector3.Dot(interV.normalized, transform.forward);
+                float theta = Mathf.Acos(dot);
+                float degree = Mathf.Rad2Deg * theta;
 
-            if (degree <= angleRange / 2f)
-                attackHeros.Add(hero.transform.gameObject);
+                if (degree <= heroData.normalAttack.angle / 2f)
+                    attackHeros.Add(hero.transform.gameObject);
+            }
         }
 
         foreach (var hero in attackHeros)
@@ -36,14 +35,20 @@ public class ShortAttackEnemy : AttackableEnemy
             hero.GetComponent<AttackableHero>().OnDamage(heroData.stats.baseDamage);
         }
     }
-    public override void NormalSkill()
+    public override void PassiveSkill()
     {
-        base.NormalSkill();
-        Logger.Debug("Enemy_Skill111");
+        base.PassiveSkill();
+        //Logger.Debug("Enemy_PassiveSkill");
     }
 
-    protected override void SetTarget()
+    protected override void SearchTarget()
     {
-        base.SetTarget(); //근거리 타겟 추적
+        SearchNearbyEnemy(); //근거리 타겟 추적
     }
+
+    //private void OnDrawGizmos()
+    //{
+    //    Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, heroData.normalAttack.angle / 2, heroData.normalAttack.distance);
+    //    Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -heroData.normalAttack.angle / 2, heroData.normalAttack.distance);
+    //}
 }

@@ -13,7 +13,7 @@ public enum UnitBattleState
 {
     None = -1,
     NormalAttack,
-    NormalSkill,
+    PassiveSkill,
     ActiveSkill,
     Stun,
     Count

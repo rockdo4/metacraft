@@ -3,33 +3,17 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AttackableHero : AttackableUnit
+public abstract class AttackableHero : AttackableUnit
 {
     protected BattleHero heroUI;
 
-    [SerializeField]
     private Transform returnPos;
-    public void SetReturnPos(Transform tr) => returnPos = returnPos = tr; 
-    public float skillDuration; // 임시 변수
+    public void SetReturnPos(Transform tr) => returnPos = returnPos = tr;
 
-    [SerializeField]
+    //배틀이 시작될때마다 BattleManager에서 참조할 예정.
     protected List<AttackableEnemy> targetList;
-    public void SetTargetList(List<AttackableEnemy> list) => targetList = list;
 
-    //BattleManager에서 targetList 가 null이면 다음 행동 지시
-    protected virtual void SetTarget()
-    {
-        if (targetList.Count == 0)
-        {
-            target = null;
-            return;
-        }
-
-        target = targetList.OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
-                          .FirstOrDefault();
-    }
-
-    public override UnitState UnitState {
+    protected override UnitState UnitState {
         get {
             return unitState;
         }
@@ -60,7 +44,7 @@ public class AttackableHero : AttackableUnit
                     battleManager.GetEnemyList(ref targetList);
                     pathFind.speed = heroData.stats.moveSpeed;
                     pathFind.isStopped = false;
-                    HeroBattleState = UnitBattleState.NormalAttack;
+                    BattleState = UnitBattleState.NormalAttack;
                     nowUpdate = BattleUpdate;
                     break;
                 case UnitState.Die:
@@ -72,15 +56,14 @@ public class AttackableHero : AttackableUnit
         }
     }
 
-    UnitBattleState heroBattleState;
-    public UnitBattleState HeroBattleState {
+    protected override UnitBattleState BattleState {
         get {
-            return heroBattleState;
+            return battleState;
         }
         set {
-            if (value == heroBattleState)
+            if (value == battleState)
                 return;
-            heroBattleState = value;
+            battleState = value;
         }
     }
 
@@ -98,64 +81,94 @@ public class AttackableHero : AttackableUnit
     public virtual void SetUi(BattleHero _heroUI)
     {
         heroUI = _heroUI;
-        heroUI.heroSkill.Set(heroData.activeSkill.cooldown, NormalSkill); //궁극기 쿨타임과 궁극기 함수 등록
+        heroUI.heroSkill.Set(heroData.activeSkill.cooldown, PassiveSkill); //궁극기 쿨타임과 궁극기 함수 등록
     }
+
+    //BattleManager에서 targetList 가 null이면 SetReturnPos 를 실행해줌
+    protected void SearchNearbyEnemy()
+    {
+        if (targetList.Count == 0)
+        {
+            target = null;
+            return;
+        }
+
+        //가장 가까운 적 탐색
+        target = targetList.OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
+                          .FirstOrDefault();
+    }
+    protected abstract void SearchTarget();
 
     public override void NormalAttack()
     {
     }
-    public override void NormalSkill()
+    public override void PassiveSkill()
     {
-
+        Invoke("TestPassiveEnd", 2);
+        BattleState = UnitBattleState.PassiveSkill;
     }
     public override void ActiveAttack()
     {
-        activeStartTime = Time.time;
+
+        Invoke("TestActiveEnd", 2);
         BattleState = UnitBattleState.ActiveSkill;
-        Logger.Debug("Skill");
+    }
+    public override void TestPassiveEnd()
+    {
+        lastNormalAttackTime = lastPassiveSkillTime = Time.time;
+        BattleState = UnitBattleState.NormalAttack;
+    }
+    public override void TestActiveEnd()
+    {
+        lastNormalAttackTime = lastPassiveSkillTime = Time.time;
+        BattleState = UnitBattleState.NormalAttack;
     }
 
     protected override void IdleUpdate()
     {
 
     }
+    public bool Test;
     protected override void BattleUpdate()
     {
-        switch (HeroBattleState)
+        switch (BattleState)
         {
             case UnitBattleState.NormalAttack:
                 //타겟이 없으면 타겟 추척
                 if (target == null)
                 {
-                    SetTarget();
+                    SearchTarget();
                     return;
                 }
 
-                //타겟으로 이동
                 transform.LookAt(target.transform);
-                pathFind.SetDestination(target.transform.position);
 
-                //타겟과 일정 범위 안에 있으며, 일반스킬 상태이고, 쿨타임 조건이 충족될때
-                if (IsAttack && CanNormalAttack)
+                //패시브 스킬 가능이면 패시브 사용, 아니라면 평타
+                if (IsPassiveAttack && CanPassiveSkillTime)
                 {
+                    if (Test)
+                        Debug.Log("PassiveSkill");
+                    PassiveSkillAction();
+                }
+                else if (IsNormalAttack && CanNormalAttackTime)
+                {
+                    if (Test)
+                        Debug.Log("NormalAttack");
                     lastNormalAttackTime = Time.time;
                     NormalAttackAction();
                 }
                 else
-                    //타겟으로 이동
+                {
                     pathFind.SetDestination(target.transform.position);
-
+                }
+                break;
+            case UnitBattleState.PassiveSkill:
                 break;
             case UnitBattleState.ActiveSkill:
-                if (Time.time - activeStartTime > skillDuration)
-                {
-                    HeroBattleState = UnitBattleState.NormalAttack;
-                }
                 break;
             case UnitBattleState.Stun:
                 break;
         }
-
     }
 
     protected override void DieUpdate()
@@ -193,9 +206,10 @@ public class AttackableHero : AttackableUnit
         }
     }
 
-    public override void SetTestBattle()
+    public override void SetBattle()
     {
         UnitState = UnitState.Battle;
+        lastNormalAttackTime = Time.time;
     }
     public virtual void SetMoveNext()
     {

@@ -3,47 +3,51 @@ using UnityEngine;
 
 public class ShortAttack : AttackableHero
 {
-    public float angleRange = 30f;
-
     public override void NormalAttack()
     {
         base.NormalAttack();
-        Logger.Debug("Attack1111");
-        Logger.Debug(heroData.stats.baseDamage);
+        //Logger.Debug("Hero_NormalAttack");
 
         if (heroData.normalAttack.count == 1)
         {
-            target.GetComponent<AttackableUnit>().OnDamage(heroData.stats.baseDamage);
+            target.GetComponent<AttackableHero>().OnDamage(heroData.stats.baseDamage);
             return;
         }
 
-        List<GameObject> attackEenmys = new();
+        List<GameObject> attackHeros = new();
 
-        foreach (var enemy in targetList)
+        foreach (var hero in targetList)
         {
-            Vector3 interV = enemy.transform.position - transform.position;
-            float dot = Vector3.Dot(interV.normalized, transform.forward);
-            float theta = Mathf.Acos(dot);
-            float degree = Mathf.Rad2Deg * theta;
+            Vector3 interV = hero.transform.position - transform.position;
+            if (interV.magnitude <= heroData.normalAttack.distance)
+            {
+                float dot = Vector3.Dot(interV.normalized, transform.forward);
+                float theta = Mathf.Acos(dot);
+                float degree = Mathf.Rad2Deg * theta;
 
-            if (degree <= angleRange / 2f)
-                attackEenmys.Add(enemy.transform.gameObject);
+                if (degree <= heroData.normalAttack.angle / 2f)
+                    attackHeros.Add(hero.transform.gameObject);
+            }
         }
 
-        foreach (var enemy in attackEenmys)
+        foreach (var hero in attackHeros)
         {
-            enemy.GetComponent<AttackableEnemy>().OnDamage(heroData.stats.baseDamage);
+            hero.GetComponent<AttackableEnemy>().OnDamage(heroData.stats.baseDamage);
         }
     }
-    public override void NormalSkill()
+    public override void PassiveSkill()
     {
-        base.NormalSkill();
-        Logger.Debug("Skill111");
+        base.PassiveSkill();
+        //Logger.Debug("Hero_PassiveSkill");
     }
 
-    protected override void SetTarget()
+    protected override void SearchTarget()
     {
-        base.SetTarget(); //근거리 타겟 추적
+       SearchNearbyEnemy(); //근거리 타겟 추적
     }
-
+    //private void OnDrawGizmos()
+    //{
+    //    Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, heroData.normalAttack.angle / 2, heroData.normalAttack.distance);
+    //    Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -heroData.normalAttack.angle / 2, heroData.normalAttack.distance);
+    //}
 }

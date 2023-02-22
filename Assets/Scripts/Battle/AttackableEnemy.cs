@@ -3,27 +3,14 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class AttackableEnemy : AttackableUnit
+public abstract class AttackableEnemy : AttackableUnit
 {
     [SerializeField]
     protected List<AttackableHero> targetList;
     public void SetTargetList(List<AttackableHero> list) => targetList = list;
 
-    //BattleManager에서 targetList 가 null이면 다음 행동 지시
-    protected virtual void SetTarget()
-    {
-        if (targetList.Count == 0)
-        {
-            target = null;
-            return;
-        }
-
-        target = targetList.OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
-                          .FirstOrDefault();
-    }
-
     public float skillDuration; // 임시 변수
-    public override UnitState UnitState {
+    protected override UnitState UnitState {
         get {
             return unitState;
         }
@@ -39,10 +26,11 @@ public class AttackableEnemy : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
+                    pathFind.stoppingDistance = heroData.normalAttack.distance; //가까이 가기
                     battleManager.GetHeroList(ref targetList);
                     pathFind.speed = heroData.stats.moveSpeed;
                     pathFind.isStopped = false;
-                    EnemyBattleState = UnitBattleState.NormalAttack;
+                    BattleState = UnitBattleState.NormalAttack;
                     nowUpdate = BattleUpdate;
                     break;
                 case UnitState.Die:
@@ -57,15 +45,14 @@ public class AttackableEnemy : AttackableUnit
         }
     }
 
-    UnitBattleState enemyBattleState;
-    public UnitBattleState EnemyBattleState {
+    protected override UnitBattleState BattleState {
         get {
-            return enemyBattleState;
+            return battleState;
         }
         set {
-            if (value == enemyBattleState)
+            if (value == battleState)
                 return;
-            enemyBattleState = value;
+            battleState = value;
         }
     }
 
@@ -77,18 +64,44 @@ public class AttackableEnemy : AttackableUnit
         base.Awake();
     }
 
-    public override void NormalAttack()
+    protected void SearchNearbyEnemy()
     {
+        if (targetList.Count == 0)
+        {
+            target = null;
+            return;
+        }
+
+        //가장 가까운 적 탐색
+        target = targetList.OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
+                          .FirstOrDefault();
     }
-    public override void NormalSkill()
+
+    protected abstract void SearchTarget();
+
+    public override void NormalAttack()
     {
 
     }
+    public override void PassiveSkill()
+    {
+        Invoke("TestPassiveEnd", 2);
+        BattleState = UnitBattleState.PassiveSkill;
+    }
     public override void ActiveAttack()
     {
-        activeStartTime = Time.time;
+        Invoke("TestPassiveEnd", 2);
         BattleState = UnitBattleState.ActiveSkill;
-        Logger.Debug("Skill");
+    }
+    public override void TestPassiveEnd()
+    {
+        lastNormalAttackTime = lastPassiveSkillTime = Time.time;
+        BattleState = UnitBattleState.NormalAttack;
+    }
+    public override void TestActiveEnd()
+    {
+        lastNormalAttackTime = lastPassiveSkillTime = Time.time;
+        BattleState = UnitBattleState.NormalAttack;
     }
 
     protected override void IdleUpdate()
@@ -97,13 +110,13 @@ public class AttackableEnemy : AttackableUnit
     }
     protected override void BattleUpdate()
     {
-        switch (EnemyBattleState)
+        switch (BattleState)
         {
             case UnitBattleState.NormalAttack:
                 //타겟이 없으면 타겟 추척
                 if (target == null)
                 {
-                    SetTarget();
+                    SearchTarget();
                     return;
                 }
 
@@ -112,17 +125,13 @@ public class AttackableEnemy : AttackableUnit
                 pathFind.SetDestination(target.transform.position);
 
                 //타겟과 일정 범위 안에 있으며, 일반스킬 상태이고, 쿨타임 조건이 충족될때
-                if (IsAttack && CanNormalAttack)
+                if (IsNormalAttack && CanNormalAttackTime)
                 {
                     lastNormalAttackTime = Time.time;
                     NormalAttackAction();
                 }
                 break;
             case UnitBattleState.ActiveSkill:
-                if (Time.time - activeStartTime > skillDuration)
-                {
-                    EnemyBattleState = UnitBattleState.NormalAttack;
-                }
                 break;
             case UnitBattleState.Stun:
                 break;
@@ -146,7 +155,7 @@ public class AttackableEnemy : AttackableUnit
 
 
     [ContextMenu("Battle")]
-    public override void SetTestBattle()
+    public override void SetBattle()
     {
         UnitState = UnitState.Battle;
     }
