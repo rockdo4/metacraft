@@ -62,22 +62,6 @@ public abstract class AttackableUnit : MonoBehaviour
         }
     }
 
-    [SerializeField]
-    protected List<AttackableUnit> targetList;
-    public void SetTargetList(List<AttackableUnit> list) => targetList = list;
-
-    //BattleManager에서 targetList 가 null이면 다음 행동 지시
-    protected virtual void SetTarget()
-    {
-        if (targetList.Count == 0)
-        {
-            target = null;
-            return;
-        }
-
-        target = targetList.OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
-                          .FirstOrDefault();
-    }
     protected void SetData()
     {
         lastNormalAttackTime = Time.time;
