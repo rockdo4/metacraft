@@ -49,10 +49,10 @@ public class BeltScrollBattleManager : TestBattleManager
         if (readyCount == 0 && !triggers[currTriggerIndex].isStageEnd)
         {
             readyCount = useHeroes.Count;
-            //for (int i = 0; i < useHeroes.Count; i++)
-            //{
-            //    useHeroes[i].SetMoveNext();
-            //}
+            for (int i = 0; i < useHeroes.Count; i++)
+            {
+                useHeroes[i].SetMoveNext();
+            }
             StartCoroutine(MovingMap());
         }
         else if (triggers[currTriggerIndex].isStageEnd)
@@ -65,10 +65,10 @@ public class BeltScrollBattleManager : TestBattleManager
     {
         if (!triggers[currTriggerIndex].isStageEnd)
         {
-            //for (int i = 0; i < useHeroes.Count; i++)
-            //{
-            //    useHeroes[i].SetMoveNext();
-            //}
+            for (int i = 0; i < useHeroes.Count; i++)
+            {
+                useHeroes[i].SetMoveNext();
+            }
             StartCoroutine(MovingMap());
         }
         else

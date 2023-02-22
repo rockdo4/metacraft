@@ -8,7 +8,7 @@ public class TestBattleManager : MonoBehaviour
     public BattleHero battleHero;
     public Transform battleHeroTr;
     public List<Transform> startPositions;
-    protected List<AttackableHero> useHeroes;
+    protected List<AttackableHero> useHeroes = new();
 
     private void Awake()
     {

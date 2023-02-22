@@ -176,7 +176,7 @@ public class AttackableHero : AttackableUnit
     {
         UnitState = UnitState.Battle;
     }
-    protected virtual void SetMoveNext()
+    public virtual void SetMoveNext()
     {
         UnitState = UnitState.MoveNext;
     }
