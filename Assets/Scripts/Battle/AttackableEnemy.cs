@@ -54,6 +54,7 @@ public class AttackableEnemy : AttackableUnit
         //charactorData = LoadTestData(); //임시 데이터 로드
         pathFind = transform.GetComponent<NavMeshAgent>();
         SetData();
+        base.Awake();
     }
 
     public override void NormalAttack()
@@ -124,7 +125,7 @@ public class AttackableEnemy : AttackableUnit
 
 
     [ContextMenu("Battle")]
-    protected override void SetTestBattle()
+    public override void SetTestBattle()
     {
         UnitState = UnitState.Battle;
     }
@@ -138,6 +139,6 @@ public class AttackableEnemy : AttackableUnit
 
     private void OnDestroy()
     {
-        //battleManager.OnDeadEnemy(gameObject);
+        battleManager.OnDeadEnemy(this);
     }
 }

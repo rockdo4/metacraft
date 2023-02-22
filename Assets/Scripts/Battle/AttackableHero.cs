@@ -72,6 +72,7 @@ public class AttackableHero : AttackableUnit
         SetData();
 
         unitState = UnitState.Idle;
+        base.Awake();
     }
 
     // Ui와 연결, Ui에 스킬 쿨타임 연결
@@ -172,7 +173,7 @@ public class AttackableHero : AttackableUnit
         }
     }
 
-    protected override void SetTestBattle()
+    public override void SetTestBattle()
     {
         UnitState = UnitState.Battle;
     }
@@ -190,6 +191,6 @@ public class AttackableHero : AttackableUnit
 
     private void OnDestroy()
     {
-       //battleManager.OnDeadHero(gameObject);
+       battleManager.OnDeadHero(this);
     }
 }
