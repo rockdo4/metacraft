@@ -12,14 +12,52 @@ public class BeltScrollBattleManager : TestBattleManager
     private int currTriggerIndex = 0;
     private int readyCount = 3;
     private float nextStageMoveTimer = 0f;
-    
-    public void Ready()
+
+    public void GetEnemyList(ref List<AttackableEnemy> enemyList)
+    {
+        enemyList = triggers[currTriggerIndex].enemys;
+    }
+    public void GetHeroList(ref List<AttackableHero> heroList)
+    {
+        heroList = useHeroes;
+    }
+
+    public void OnDeadEnemy(AttackableEnemy enemy)
+    {
+        triggers[currTriggerIndex].OnDead(enemy);
+        if (triggers[currTriggerIndex].enemys.Count == 0)
+        {
+            SetHeroReturnPositioning();
+        }
+    }
+    public void OnDeadHero(AttackableHero hero)
+    {
+        useHeroes.Remove(hero);
+    }
+
+    private void SetHeroReturnPositioning()
+    {
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            useHeroes[i].SetReturnPos(triggers[currTriggerIndex].settingPositions[i]);
+        }
+    }
+
+    public void OnReady()
     {
         readyCount--;
         if (readyCount == 0 && !triggers[currTriggerIndex].isStageEnd)
         {
-            readyCount = 3;
+            readyCount = useHeroes.Count;
+            //for (int i = 0; i < useHeroes.Count; i++)
+            //{
+            //    useHeroes[i].SetMoveNext();
+            //}
             StartCoroutine(MovingMap());
+        }
+        else if (triggers[currTriggerIndex].isStageEnd)
+        {
+            SetStageClear();
         }
     }
 
@@ -27,7 +65,15 @@ public class BeltScrollBattleManager : TestBattleManager
     {
         if (!triggers[currTriggerIndex].isStageEnd)
         {
+            //for (int i = 0; i < useHeroes.Count; i++)
+            //{
+            //    useHeroes[i].SetMoveNext();
+            //}
             StartCoroutine(MovingMap());
+        }
+        else
+        {
+            SetStageClear();
         }
     }
     private void Update()
@@ -38,18 +84,10 @@ public class BeltScrollBattleManager : TestBattleManager
         }
     }
 
-    public List<Transform> GetNextTriggerHeroSettingPos()
+    // 클리어 시 호출할 함수 (Ui 업데이트)
+    private void SetStageClear()
     {
-        if (triggers[currTriggerIndex + 1] != null)
-            return triggers[currTriggerIndex + 1].settingPositions;
-
-        return null;
-    }
-
-    // 클리어 시 호출할 함수 (적어둘 내용들 몰라서 아직 안 적음)
-    public void StageClear()
-    {
-
+        Logger.Debug("Clear!");
     }
 
     IEnumerator MovingMap()
