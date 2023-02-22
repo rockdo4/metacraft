@@ -5,9 +5,9 @@ public class ShortAttack : AttackableHero
 {
     public float angleRange = 30f;
 
-    public override void CommonAttack()
+    public override void NormalAttack()
     {
-        base.CommonAttack();
+        base.NormalAttack();
         Logger.Debug("Attack1111");
         Logger.Debug(heroData.stats.baseDamage);
 
@@ -35,9 +35,9 @@ public class ShortAttack : AttackableHero
             enemy.GetComponent<AttackableEnemy>().OnDamage(heroData.stats.baseDamage);
         }
     }
-    public override void AutoAttack()
+    public override void NormalSkill()
     {
-        base.AutoAttack();
+        base.NormalSkill();
         Logger.Debug("Skill111");
     }
 

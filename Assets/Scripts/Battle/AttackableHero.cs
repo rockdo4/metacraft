@@ -41,7 +41,7 @@ public class AttackableHero : AttackableUnit
                 case UnitState.Battle:
                     pathFind.speed = heroData.stats.moveSpeed;
                     pathFind.isStopped = false;
-                    HeroBattleState = UnitBattleState.Common;
+                    HeroBattleState = UnitBattleState.NormalAttack;
                     nowUpdate = BattleUpdate;
                     break;
                 case UnitState.Die:
@@ -78,20 +78,20 @@ public class AttackableHero : AttackableUnit
     public virtual void SetUi(BattleHero _heroUI)
     {
         heroUI = _heroUI;
-        heroUI.heroSkill.Set(heroData.activeSkill.cooldown, AutoAttack); //±Ã±Ø±â ÄðÅ¸ÀÓ°ú ±Ã±Ø±â ÇÔ¼ö µî·Ï
+        heroUI.heroSkill.Set(heroData.activeSkill.cooldown, NormalSkill); //±Ã±Ø±â ÄðÅ¸ÀÓ°ú ±Ã±Ø±â ÇÔ¼ö µî·Ï
     }
 
-    public override void CommonAttack()
+    public override void NormalAttack()
     {
     }
-    public override void AutoAttack()
+    public override void NormalSkill()
     {
 
     }
     public override void ActiveAttack()
     {
         activeStartTime = Time.time;
-        BattleState = UnitBattleState.Action;
+        BattleState = UnitBattleState.ActiveSkill;
         Logger.Debug("Skill");
     }
 
@@ -103,7 +103,7 @@ public class AttackableHero : AttackableUnit
     {
         switch (HeroBattleState)
         {
-            case UnitBattleState.Common:
+            case UnitBattleState.NormalAttack:
                 //Å¸°ÙÀÌ ¾øÀ¸¸é Å¸°Ù ÃßÃ´
                 if (target == null)
                 {
@@ -118,13 +118,17 @@ public class AttackableHero : AttackableUnit
                 if (IsAttack && CanNormalAttack)
                 {
                     lastNormalAttackTime = Time.time;
-                    Common();
+                    NormalAttackAction();
                 }
+                else
+                    //Å¸°ÙÀ¸·Î ÀÌµ¿
+                    pathFind.SetDestination(target.transform.position);
+
                 break;
-            case UnitBattleState.Action:
+            case UnitBattleState.ActiveSkill:
                 if (Time.time - activeStartTime > skillDuration)
                 {
-                    HeroBattleState = UnitBattleState.Common;
+                    HeroBattleState = UnitBattleState.NormalAttack;
                 }
                 break;
             case UnitBattleState.Stun:
@@ -154,7 +158,7 @@ public class AttackableHero : AttackableUnit
 
                 if (angle <= 0)
                 {
-                    
+                    // battleManager.OnReady(gameObject);
                     UnitState = UnitState.Idle;
                 }
                 break;
@@ -168,10 +172,13 @@ public class AttackableHero : AttackableUnit
         }
     }
 
-    [ContextMenu("Battle")]
     protected override void SetTestBattle()
     {
         UnitState = UnitState.Battle;
+    }
+    protected virtual void SetMoveNext()
+    {
+        UnitState = UnitState.MoveNext;
     }
 
     public override void OnDamage(int dmg)
@@ -179,5 +186,10 @@ public class AttackableHero : AttackableUnit
         hp = Mathf.Max(hp - dmg, 0);
         if (hp <= 0)
             UnitState = UnitState.Die;
+    }
+
+    private void OnDestroy()
+    {
+       //battleManager.OnDeadHero(gameObject);
     }
 }

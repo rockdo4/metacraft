@@ -23,7 +23,7 @@ public class AttackableEnemy : AttackableUnit
                 case UnitState.Battle:
                     pathFind.speed = heroData.stats.moveSpeed;
                     pathFind.isStopped = false;
-                    EnemyBattleState = UnitBattleState.Common;
+                    EnemyBattleState = UnitBattleState.NormalAttack;
                     nowUpdate = BattleUpdate;
                     break;
                 case UnitState.Die:
@@ -57,17 +57,17 @@ public class AttackableEnemy : AttackableUnit
         SetData();
     }
 
-    public override void CommonAttack()
+    public override void NormalAttack()
     {
     }
-    public override void AutoAttack()
+    public override void NormalSkill()
     {
 
     }
     public override void ActiveAttack()
     {
         activeStartTime = Time.time;
-        BattleState = UnitBattleState.Action;
+        BattleState = UnitBattleState.ActiveSkill;
         Logger.Debug("Skill");
     }
 
@@ -79,7 +79,7 @@ public class AttackableEnemy : AttackableUnit
     {
         switch (EnemyBattleState)
         {
-            case UnitBattleState.Common:
+            case UnitBattleState.NormalAttack:
                 //Å¸°ÙÀÌ ¾øÀ¸¸é Å¸°Ù ÃßÃ´
                 if (target == null)
                 {
@@ -94,13 +94,13 @@ public class AttackableEnemy : AttackableUnit
                 if (IsAttack && CanNormalAttack)
                 {
                     lastNormalAttackTime = Time.time;
-                    Common();
+                    NormalAttackAction();
                 }
                 break;
-            case UnitBattleState.Action:
+            case UnitBattleState.ActiveSkill:
                 if (Time.time - activeStartTime > skillDuration)
                 {
-                    EnemyBattleState = UnitBattleState.Common;
+                    EnemyBattleState = UnitBattleState.NormalAttack;
                 }
                 break;
             case UnitBattleState.Stun:
@@ -135,5 +135,10 @@ public class AttackableEnemy : AttackableUnit
         hp = Mathf.Max(hp - dmg, 0);
         if (hp <= 0)
             UnitState = UnitState.Die;
+    }
+
+    private void OnDestroy()
+    {
+        //battleManager.OnDeadEnemy(gameObject);
     }
 }

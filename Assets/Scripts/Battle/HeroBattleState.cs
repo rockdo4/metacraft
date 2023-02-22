@@ -12,9 +12,9 @@ public enum UnitState
 public enum UnitBattleState
 {
     None = -1,
-    Common,
-    Auto,
-    Action,
+    NormalAttack,
+    NormalSkill,
+    ActiveSkill,
     Stun,
     Count
 }
