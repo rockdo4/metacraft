@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -8,6 +9,7 @@ public class MissionManager : MonoBehaviour
 {
     public Image portrait;
     public TextMeshProUGUI explanation;
+    public TextMeshProUGUI ExpectedCost;
     public Button heroSlot1;
     public Button heroSlot2;
     public Button heroSlot3;
@@ -19,21 +21,24 @@ public class MissionManager : MonoBehaviour
 
     public GameObject heroSlectWindowPrefab;
     //TEST용
+    List<Dictionary<string, object>> testTable;
 
     private void Start()
     {
+        testTable = CSVReader.Read("TestMissionInfoTable");
         UpdateMissionInfo();
     }
 
     public void UpdateMissionInfo()
     {
-        Addressables.LoadAssetAsync<Sprite>("노틸러스").Completed += (AsyncOperationHandle<Sprite> obj) => { portrait.sprite = obj.Result; };
-        explanation.text = $"이것은 설명란입니다.";
-        fitProperties1.text = $"적합 속성1";
-        fitProperties2.text = $"적합 속성2";
-        fitProperties3.text = $"적합 속성3";
-        deductionAP.text = $"AP - {10}";
-        ProperCombatPower.text = $"0100/1000";
+        Addressables.LoadAssetAsync<Sprite>(testTable[0]["BossID"]).Completed += (AsyncOperationHandle<Sprite> obj) => { portrait.sprite = obj.Result; };
+        explanation.text = $"{testTable[0]["OperationDescription"]}";
+        ExpectedCost.text = $"{testTable[0]["ExpectedCostID"]}";
+        fitProperties1.text = $"{testTable[0]["FitProperties1"]}";
+        fitProperties2.text = $"{testTable[0]["FitProperties2"]}";
+        fitProperties3.text = $"{testTable[0]["FitProperties3"]}";
+        deductionAP.text = $"AP -{testTable[0]["ConsumptionBehavior"]}";
+        ProperCombatPower.text = $"1000/{testTable[0]["ProperCombatPower"]}";
     }
 
     public void OnClickHeroSlot1Button()
