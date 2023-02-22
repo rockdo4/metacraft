@@ -43,6 +43,10 @@ public class BeltScrollBattleManager : TestBattleManager
     {
         useHeroes.Remove(hero);
         readyCount = useHeroes.Count;
+        if (useHeroes.Count == 0)
+        {
+            SetEnemyIdle();
+        }
     }
 
     private void SetHeroReturnPositioning()
@@ -52,6 +56,15 @@ public class BeltScrollBattleManager : TestBattleManager
             useHeroes[i].SetReturnPos(triggers[currTriggerIndex].settingPositions[i]);
             useHeroes[i].SetReturn();
         }
+    }
+    private void SetEnemyIdle()
+    {
+        for (int i = 0; i < triggers[currTriggerIndex].enemys.Count; i++)
+        {
+
+        }
+
+        SetStageFail();
     }
 
     public void OnReady()
@@ -75,7 +88,13 @@ public class BeltScrollBattleManager : TestBattleManager
     // 클리어 시 호출할 함수 (Ui 업데이트)
     private void SetStageClear()
     {
+        ViewManager.Show(1);
         Logger.Debug("Clear!");
+    }
+    private void SetStageFail()
+    {
+        PopUpManager.Instance.ShowPopupInHierarchy(2);
+        Logger.Debug("Fail!");
     }
 
     IEnumerator MovingMap()
