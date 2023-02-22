@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 public struct tempInfo
@@ -28,9 +29,10 @@ public class HpBarManager : MonoBehaviour
     private bool isInstantiated = false;
     private bool isOn = false;
     private float timer = 0f;
-    private float lastPosUpdateTime;
     public float maxDuration = 3f;
 
+    private float lastPosUpdateTime;
+    private float posUpdateRatio;
     private void OnEnable()
     {
         if (!isInstantiated)
@@ -45,8 +47,10 @@ public class HpBarManager : MonoBehaviour
         cam = Camera.main;
         canvasBarHolder = CanvasHpBarHolder.Instance;
         InstantiateHpBar();
-        canvasGroup = hpBar.GetComponent<CanvasGroup>();
+        if(!hpBar.TryGetComponent(out canvasGroup))
+            canvasGroup = hpBar.AddComponent<CanvasGroup>();
         maxHpDiv = 1 / hpInfo.maxHp;
+        posUpdateRatio = 1 / 20f;
     }
     void Update()
     {
@@ -78,7 +82,7 @@ public class HpBarManager : MonoBehaviour
     }
     private void UpdateBarPos()
     {
-        if (Time.time - lastPosUpdateTime < 0.05f)
+        if (Time.time - lastPosUpdateTime < posUpdateRatio)
             return;
 
         lastPosUpdateTime = Time.time;
