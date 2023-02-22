@@ -209,6 +209,9 @@ public class AttackableHero : AttackableUnit
     public override void OnDamage(int dmg)
     {
         hp = Mathf.Max(hp - dmg, 0);
+
+        heroUI.SetHp(hp);
+
         if (hp <= 0)
             UnitState = UnitState.Die;
     }

@@ -10,6 +10,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     [SerializeField]
     protected HeroData heroData;
+    public HeroData GetHeroData() => heroData;
 
     protected NavMeshAgent pathFind;
 

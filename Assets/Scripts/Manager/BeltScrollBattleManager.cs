@@ -79,7 +79,7 @@ public class BeltScrollBattleManager : TestBattleManager
             }
             StartCoroutine(MovingMap());
         }
-        else if (triggers[currTriggerIndex].isStageEnd)
+        else if (readyCount == 0 && triggers[currTriggerIndex].isStageEnd)
         {
             SetStageClear();
         }
@@ -89,6 +89,8 @@ public class BeltScrollBattleManager : TestBattleManager
     private void SetStageClear()
     {
         ViewManager.Show(1);
+        clearUi.SetHoros(useHeroes);
+        clearUi.Clear();
         Logger.Debug("Clear!");
     }
     private void SetStageFail()
