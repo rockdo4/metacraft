@@ -4,7 +4,7 @@ using UnityEngine.AI;
 
 public class MapEventTrigger : MonoBehaviour
 {
-    public Transform settingPosition;
+    public List<Transform> settingPositions;
     [Header("스테이지에 포함된 적들을 넣어주세요")]
     public List<GameObject> enemys;
     private List<NavMeshAgent> enemysNav = new();

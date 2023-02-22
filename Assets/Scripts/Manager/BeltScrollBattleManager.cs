@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class BeltScrollBattleManager : TestBattleManager
@@ -15,26 +16,18 @@ public class BeltScrollBattleManager : TestBattleManager
     public void Ready()
     {
         readyCount--;
-        for (int i = 0; i < triggers.Count; i++)
+        if (readyCount == 0 && !triggers[currTriggerIndex].isStageEnd)
         {
-            if (readyCount == 0 && !triggers[i].isStageEnd)
-            {
-                readyCount = 3;
-                StartCoroutine(MovingMap());
-                return;
-            }
+            readyCount = 3;
+            StartCoroutine(MovingMap());
         }
     }
 
     private void TempMoveTest()
     {
-        for (int i = 0; i < triggers.Count; i++)
+        if (!triggers[currTriggerIndex].isStageEnd)
         {
-            if (!triggers[i].isStageEnd)
-            {
-                StartCoroutine(MovingMap());
-                return;
-            }
+            StartCoroutine(MovingMap());
         }
     }
     private void Update()
@@ -43,6 +36,14 @@ public class BeltScrollBattleManager : TestBattleManager
         {
             TempMoveTest();
         }
+    }
+
+    public List<Transform> GetNextTriggerHeroSettingPos()
+    {
+        if (triggers[currTriggerIndex + 1] != null)
+            return triggers[currTriggerIndex + 1].settingPositions;
+
+        return null;
     }
 
     // 클리어 시 호출할 함수 (적어둘 내용들 몰라서 아직 안 적음)
@@ -55,15 +56,16 @@ public class BeltScrollBattleManager : TestBattleManager
     {
         yield return new WaitForSeconds(nextStageMoveTimer);
 
-        var curPos = platform.gameObject.transform.position.z + triggers[currTriggerIndex].settingPosition.position.z;
-        var nextPos = triggers[currTriggerIndex + 1].settingPosition.position.z;
-        var movePos = curPos - nextPos;
+        var curMaxZPos = platform.transform.position.z + 
+            triggers[currTriggerIndex].settingPositions.Max(transform => transform.position.z);
+        var nextMaxZPos = triggers[currTriggerIndex + 1].settingPositions.Max(transform => transform.position.z);
+        var movePos = curMaxZPos - nextMaxZPos;
 
         currTriggerIndex++;
 
-        while (platform.gameObject.transform.position.z >= movePos)
+        while (platform.transform.position.z >= movePos)
         {
-            platform.gameObject.transform.Translate((Vector3.forward * platformMoveSpeed * Time.deltaTime) * -1);
+            platform.transform.Translate((Vector3.forward * platformMoveSpeed * Time.deltaTime) * -1);
             yield return new WaitForSeconds(Time.deltaTime);
         }
     }
