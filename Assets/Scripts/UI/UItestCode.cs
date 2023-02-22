@@ -1,12 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UItestCode : MonoBehaviour
 {
-    public void TestCode()
+    private AttackedDamageUI attacked;
+    private HpBarManager hpBarManager;
+    private void Start()
     {
-        Logger.Debug("Clicked");
+        attacked = GetComponent<AttackedDamageUI>();
+        hpBarManager = GetComponent<HpBarManager>();
     }
-
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Z))
+        {
+            attacked.OnAttack(10, false, transform.position, DamageType.Normal);
+            hpBarManager.TestCode(10f);
+        }
+        if (Input.GetKeyDown(KeyCode.X))
+        {
+            attacked.OnAttack(10, false, transform.position, DamageType.Heal);
+            hpBarManager.TestCode( - 10f);
+        }
+    }
 }

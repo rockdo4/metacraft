@@ -5,9 +5,9 @@ using UnityEngine;
 
 public class CSVReader
 {
-    static string SPLIT_RE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
-    static string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
-    static char[] TRIM_CHARS = { '\"' };
+    static readonly string SPLIT_RE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
+    static readonly string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
+    static readonly char[] TRIM_CHARS = { '\"' };
 
     // New2. Split Text Asset
     public static List<Dictionary<string, object>> SplitTextAsset(TextAsset asset)

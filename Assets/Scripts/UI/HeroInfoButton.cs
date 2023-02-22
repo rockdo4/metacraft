@@ -1,51 +1,22 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 
 public class HeroInfoButton : MonoBehaviour
 {
     public TextMeshProUGUI heroNameText;
     public TextMeshProUGUI gradeText;
-    public TextMeshProUGUI typeText;
+    public TextMeshProUGUI jobText;
     public TextMeshProUGUI levelText;
     public Image portrait;
 
-    private CharacterData baseData;
-    private AsyncOperationHandle handle;
-    private bool loadFlag = false;
-   
-    public void LoadAddressable(string address)
+    public void SetData(Hero data)
     {
-        Addressables.LoadAssetAsync<Sprite>(address).Completed +=
-            (AsyncOperationHandle<Sprite> obj) =>
-            {
-                handle = obj;
-                loadFlag = true;
-                portrait.sprite = obj.Result;
-            };
-    }
-
-    public void ReleaseAddressable()
-    {
-        Addressables.Release(handle);
-    }
-
-    public void SetData(CharacterData data)
-    {
-        baseData = data;
-        heroNameText.text = baseData.heroName;
-        gradeText.text = baseData.grade;
-        typeText.text = baseData.job;
-        levelText.text = baseData.level.ToString();
-        LoadAddressable(baseData.heroName);
-    }
-
-    private void OnDisable()
-    {
-        if (loadFlag)
-            ReleaseAddressable();
-        loadFlag = false;
+        InfoHero info = data.info;
+        heroNameText.text = info.name;
+        gradeText.text = info.grade;
+        jobText.text = info.job;
+        levelText.text = info.level.ToString();
+        portrait.sprite = GameManager.Instance.testPortraits[info.resourceAddress];
     }
 }
