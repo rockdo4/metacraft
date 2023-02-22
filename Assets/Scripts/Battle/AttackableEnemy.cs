@@ -4,8 +4,7 @@ using UnityEngine.AI;
 public class AttackableEnemy : AttackableUnit
 {
     public float skillDuration; // 임시 변수
-    protected new UnitState unitState;
-    public new UnitState UnitState {
+    public override UnitState UnitState {
         get {
             return unitState;
         }
