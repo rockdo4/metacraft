@@ -53,22 +53,22 @@ namespace UnityEngine.UI.Extensions
             Vector3[] canvasSpaces = new Vector3[transforms.Length];
             Vector2[] points = new Vector2[transforms.Length];
 
-            //// First, convert the pivot to worldspace
-            //for (int i = 0; i < transforms.Length; i++)
-            //{
-            //    worldSpaces[i] = transforms[i].TransformPoint(thisPivot);
-            //}
+            // First, convert the pivot to worldspace
+            for (int i = 0; i < transforms.Length; i++)
+            {
+                worldSpaces[i] = transforms[i].TransformPoint(thisPivot);
+            }
 
-            //// Then, convert to canvas space
-            //for (int i = 0; i < transforms.Length; i++)
-            //{
-            //    canvasSpaces[i] = canvas.InverseTransformPoint(worldSpaces[i]);
-            //}
+            // Then, convert to canvas space
+            for (int i = 0; i < transforms.Length; i++)
+            {
+                canvasSpaces[i] = canvas.InverseTransformPoint(worldSpaces[i]);
+            }
 
             // Calculate delta from the canvas pivot point
             for (int i = 0; i < transforms.Length; i++)
             {
-                points[i] = new Vector2(transforms[i].localPosition.x, transforms[i].localPosition.y);
+                points[i] = new Vector2(canvasSpaces[i].x, canvasSpaces[i].y);
             }
 
             // And assign the converted points to the line renderer
