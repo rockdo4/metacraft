@@ -32,11 +32,10 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected virtual void Awake()
     {
-        testBattleManager = GameObject.FindObjectOfType<TestBattleManager>();
+        testBattleManager = FindObjectOfType<TestBattleManager>();
     }
 
     protected UnitState unitState;
-    protected UnitState UnitState { get { return unitState; } set { unitState = value; } }
 
     protected UnitBattleState battleState;
     protected UnitBattleState BattleState { get { return battleState; }  set { battleState = value; } }

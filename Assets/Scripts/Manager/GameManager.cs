@@ -8,8 +8,11 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
-    public List<CharacterDataBundle> newCharacters = new();
+    public List<CharacterDataBundle> characterTable = new();
     public Dictionary<string, Sprite> testPortraits = new();
+    public GameObject testCharacterPrefab;
+
+    private List<Dictionary<string, object>> characterList;
 
     public override void Awake()
     {
@@ -19,11 +22,29 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator LoadAllResources()
     {
-        List<AsyncOperationHandle> handles = new();
+        var cl = Addressables.LoadAssetAsync<TextAsset>("CharacterList");
 
-        foreach (var character in newCharacters)
+        cl.Completed +=
+                (AsyncOperationHandle<TextAsset> obj) =>
+                {
+                    characterList = CSVReader.SplitTextAsset(obj.Result);
+                    Addressables.Release(obj);
+                };
+
+        bool loadAll = false;
+        // 텍스트 리소스 로드
+        while (!loadAll)
         {
-            string address = character.info.name;
+            if (cl.IsDone)
+                loadAll = true;
+            yield return null;
+        }
+
+
+        List<AsyncOperationHandle> handles = new();
+        foreach (var character in characterTable)
+        {
+            string address = character.data.name;
             Addressables.LoadAssetAsync<Sprite>(address).Completed +=
                 (AsyncOperationHandle<Sprite> obj) =>
                 {
@@ -33,8 +54,8 @@ public class GameManager : Singleton<GameManager>
         }
 
         int count = 0;
-        bool loadAll = false;
-        // 리소스 로드
+        loadAll = false;
+        // 스프라이트 리소스 로드
         while (!loadAll)
         {
             count = 0;

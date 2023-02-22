@@ -13,7 +13,7 @@ public class ManageHeroWindow : View
 
     private void Awake()
     {
-        copyCharacterDatas = GameManager.Instance.newCharacters;
+        copyCharacterDatas = GameManager.Instance.characterTable;
 
         int count = copyCharacterDatas.Count;
         for (int i = 0; i < count; i++)
@@ -38,15 +38,15 @@ public class ManageHeroWindow : View
                 break;
 
             case 1:
-                copyCharacterDatas.Sort((x, y) => { return x.info.grade.CompareTo(y.info.grade); });
+                copyCharacterDatas.Sort((x, y) => { return x.data.grade.CompareTo(y.data.grade); });
                 break;
 
             case 2:
-                copyCharacterDatas.Sort((x, y) => { return x.info.job.CompareTo(y.info.job); });
+                copyCharacterDatas.Sort((x, y) => { return x.data.job.CompareTo(y.data.job); });
                 break;
 
             case 3:
-                copyCharacterDatas.Sort((x, y) => { return x.info.level.CompareTo(y.info.level); });
+                copyCharacterDatas.Sort((x, y) => { return x.data.level.CompareTo(y.data.level); });
                 break;
         }
 

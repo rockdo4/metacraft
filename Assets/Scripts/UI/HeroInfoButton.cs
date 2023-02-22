@@ -12,7 +12,7 @@ public class HeroInfoButton : MonoBehaviour
 
     public void SetData(CharacterDataBundle data)
     {
-        var info = data.info;
+        var info = data.data;
         heroNameText.text = info.name;
         gradeText.text = info.grade;
         jobText.text = info.job;

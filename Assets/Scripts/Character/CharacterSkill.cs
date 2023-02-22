@@ -1,6 +1,6 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "SkillBase", menuName = "Character/SkillBase")]
+[CreateAssetMenu(fileName = "CharacterSkill", menuName = "Character/CharacterSkill")]
 public class CharacterSkill : ScriptableObject
 {
     public float    cooldown;       // 보정 되지 않은 쿨다운

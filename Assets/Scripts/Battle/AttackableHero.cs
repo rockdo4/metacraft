@@ -10,8 +10,7 @@ public class AttackableHero : AttackableUnit
     public void SetReturnPos(Transform tr) => returnPos = returnPos = tr; 
     public float skillDuration; // 임시 변수
 
-    protected new UnitState unitState;
-    public new UnitState UnitState {
+    public UnitState UnitState {
         get {
             return unitState;
         }
