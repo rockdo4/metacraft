@@ -3,10 +3,11 @@ using UnityEngine.AI;
 
 public class AttackableHero : AttackableUnit
 {
-    protected BattleHero heroUi;
+    protected BattleHero heroUI;
 
     [SerializeField]
     private Transform returnPos;
+    public float skillDuration; // 임시 변수
 
     protected new UnitState unitState;
     public new UnitState UnitState {
@@ -18,7 +19,7 @@ public class AttackableHero : AttackableUnit
                 return;
 
             unitState = value;
-            heroUi.heroState = unitState;
+            heroUI.heroState = unitState;
             switch (unitState)
             {
                 case UnitState.Idle:
@@ -37,7 +38,7 @@ public class AttackableHero : AttackableUnit
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
-                    pathFind.speed = charactorData.speed;
+                    pathFind.speed = heroData.stats.moveSpeed;
                     pathFind.isStopped = false;
                     HeroBattleState = UnitBattleState.Common;
                     nowUpdate = BattleUpdate;
@@ -65,7 +66,7 @@ public class AttackableHero : AttackableUnit
 
     private void Awake()
     {
-        charactorData = LoadTestData(); //임시 데이터 로드
+        //charactorData = LoadTestData(); //임시 데이터 로드
         pathFind = transform.GetComponent<NavMeshAgent>();
         SetData();
 
@@ -73,10 +74,10 @@ public class AttackableHero : AttackableUnit
     }
 
     // Ui와 연결, Ui에 스킬 쿨타임 연결
-    public virtual void SetUi(BattleHero heroUI)
+    public virtual void SetUi(BattleHero _heroUI)
     {
-        this.heroUi = heroUI;
-        this.heroUi.heroSkill.Set(charactorData.skillCooldown, AutoAttack); //궁극기 쿨타임과 궁극기 함수 등록
+        heroUI = _heroUI;
+        heroUI.heroSkill.Set(heroData.activeSkill.cooldown, AutoAttack); //궁극기 쿨타임과 궁극기 함수 등록
     }
 
     public override void CommonAttack()
@@ -113,14 +114,14 @@ public class AttackableHero : AttackableUnit
                 pathFind.SetDestination(target.transform.position);
 
                 //타겟과 일정 범위 안에 있으며, 일반스킬 상태이고, 쿨타임 조건이 충족될때
-                if (IsAttack && IsBasicCoolDown)
+                if (IsAttack && CanNormalAttack)
                 {
-                    lastCommonTime = Time.time;
+                    lastNormalAttackTime = Time.time;
                     Common();
                 }
                 break;
             case UnitBattleState.Action:
-                if (Time.time - activeStartTime > charactorData.skillDuration)
+                if (Time.time - activeStartTime > skillDuration)
                 {
                     HeroBattleState = UnitBattleState.Common;
                 }
