@@ -54,7 +54,7 @@ public class AttackableEnemy : AttackableUnit
         }
     }
 
-    private void Awake()
+    protected override void Awake()
     {
         charactorData = LoadTestData(); //임시 데이터 로드
         pathFind = transform.GetComponent<NavMeshAgent>();

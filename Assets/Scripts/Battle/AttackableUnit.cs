@@ -6,6 +6,7 @@ using UnityEngine.AI;
 
 public abstract class AttackableUnit : MonoBehaviour
 {
+    protected TestBattleManager testBattleManager;
     protected CharacterData charactorData;
     protected NavMeshAgent pathFind;
 
@@ -27,6 +28,10 @@ public abstract class AttackableUnit : MonoBehaviour
     protected Action Auto;
     protected Action Active;
 
+    protected virtual void Awake()
+    {
+        testBattleManager = GameObject.FindObjectOfType<TestBattleManager>();
+    }
 
     protected UnitState unitState;
     protected UnitState UnitState { get { return unitState; } set { unitState = value; } }
@@ -91,6 +96,7 @@ public abstract class AttackableUnit : MonoBehaviour
     }
 
     protected abstract void SetTestBattle();
+
     public abstract void CommonAttack();
     public abstract void AutoAttack();
     public abstract void ActiveAttack();

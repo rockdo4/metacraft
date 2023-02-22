@@ -7,6 +7,7 @@ public class AttackableHero : AttackableUnit
 
     [SerializeField]
     private Transform returnPos;
+    public void SetReturnPos(Transform tr) => returnPos = returnPos = tr; 
 
     protected new UnitState unitState;
     public new UnitState UnitState {
@@ -63,7 +64,7 @@ public class AttackableHero : AttackableUnit
         }
     }
 
-    private void Awake()
+    protected override void Awake()
     {
         charactorData = LoadTestData(); //임시 데이터 로드
         pathFind = transform.GetComponent<NavMeshAgent>();
@@ -152,8 +153,7 @@ public class AttackableHero : AttackableUnit
 
                 if (angle <= 0)
                 {
-                    Logger.Debug("회전 완료");
-
+                    
                     UnitState = UnitState.Idle;
                 }
                 break;
