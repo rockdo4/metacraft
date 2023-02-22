@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "CharacterInfo", menuName = "Character/CharacterInfo")]
+[CreateAssetMenu(fileName = "CharacterData", menuName = "Character/CharacterData")]
 public class CharacterData : ScriptableObject, IComparable<CharacterData>
 {
     public new string   name;               // ¿Ã∏ß

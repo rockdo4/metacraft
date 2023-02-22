@@ -20,7 +20,7 @@ public class AttackableEnemy : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
-                    pathFind.speed = heroData.stats.moveSpeed;
+                    pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
                     EnemyBattleState = UnitBattleState.Common;
                     nowUpdate = BattleUpdate;

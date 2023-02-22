@@ -38,7 +38,7 @@ public class AttackableHero : AttackableUnit
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
-                    pathFind.speed = heroData.stats.moveSpeed;
+                    pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
                     HeroBattleState = UnitBattleState.Common;
                     nowUpdate = BattleUpdate;
@@ -77,7 +77,7 @@ public class AttackableHero : AttackableUnit
     public virtual void SetUi(BattleHero _heroUI)
     {
         heroUI = _heroUI;
-        heroUI.heroSkill.Set(heroData.activeSkill.cooldown, AutoAttack); //±Ã±Ø±â ÄðÅ¸ÀÓ°ú ±Ã±Ø±â ÇÔ¼ö µî·Ï
+        heroUI.heroSkill.Set(characterData.skill.cooldown, AutoAttack); //±Ã±Ø±â ÄðÅ¸ÀÓ°ú ±Ã±Ø±â ÇÔ¼ö µî·Ï
     }
 
     public override void CommonAttack()

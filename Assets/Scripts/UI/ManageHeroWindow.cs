@@ -8,14 +8,14 @@ public class ManageHeroWindow : View
     public GameObject heroInfoPrefab;
     public Transform contents;
     public List<HeroInfoButton> heroInfos = new ();
-    private List<CharacterDataBundle> copyCharacterDatas;
+    private List<CharacterDataBundle> copyCharacterTable;
     public Scrollbar scrollBar;
 
     private void Awake()
     {
-        copyCharacterDatas = GameManager.Instance.characterTable;
+        copyCharacterTable = GameManager.Instance.characterTable;
 
-        int count = copyCharacterDatas.Count;
+        int count = copyCharacterTable.Count;
         for (int i = 0; i < count; i++)
         {
             GameObject obj = Instantiate(heroInfoPrefab, contents);
@@ -34,19 +34,19 @@ public class ManageHeroWindow : View
         switch (value)
         {
             case 0:
-                copyCharacterDatas.Sort();
+                copyCharacterTable.Sort();
                 break;
 
             case 1:
-                copyCharacterDatas.Sort((x, y) => { return x.data.grade.CompareTo(y.data.grade); });
+                copyCharacterTable.Sort((x, y) => { return x.data.grade.CompareTo(y.data.grade); });
                 break;
 
             case 2:
-                copyCharacterDatas.Sort((x, y) => { return x.data.job.CompareTo(y.data.job); });
+                copyCharacterTable.Sort((x, y) => { return x.data.job.CompareTo(y.data.job); });
                 break;
 
             case 3:
-                copyCharacterDatas.Sort((x, y) => { return x.data.level.CompareTo(y.data.level); });
+                copyCharacterTable.Sort((x, y) => { return x.data.level.CompareTo(y.data.level); });
                 break;
         }
 
@@ -56,7 +56,7 @@ public class ManageHeroWindow : View
     private void SetInfos()
     {
         int index = 0;
-        foreach (var character in copyCharacterDatas)
+        foreach (var character in copyCharacterTable)
         {
             heroInfos[index].SetData(character);
             index++;

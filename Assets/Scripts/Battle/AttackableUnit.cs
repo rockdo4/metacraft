@@ -8,7 +8,7 @@ public abstract class AttackableUnit : MonoBehaviour
 {
     protected TestBattleManager testBattleManager;
     [SerializeField]
-    protected CharacterDataBundle heroData;
+    protected CharacterDataBundle characterData;
 
     protected NavMeshAgent pathFind;
 
@@ -42,11 +42,11 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected bool CanNormalAttack {
         get {
-            return (Time.time - lastNormalAttackTime) > heroData.normalAttack.cooldown;
+            return (Time.time - lastNormalAttackTime) > characterData.attack.cooldown;
         }
     }
 
-    protected bool InRange => Vector3.Distance(target.transform.position, transform.position) < heroData.normalAttack.distance;
+    protected bool InRange => Vector3.Distance(target.transform.position, transform.position) < characterData.attack.distance;
     protected bool IsNormal => battleState != UnitBattleState.Action && battleState != UnitBattleState.Stun;
 
     protected bool IsAttack {
@@ -74,12 +74,12 @@ public abstract class AttackableUnit : MonoBehaviour
     protected void SetData()
     {
         lastNormalAttackTime = Time.time;
-        pathFind.stoppingDistance = heroData.normalAttack.distance;
+        pathFind.stoppingDistance = characterData.attack.distance;
         Common = CommonAttack;
         Auto = AutoAttack;
         Active = ActiveAttack;
 
-        hp = heroData.stats.healthPoint;
+        hp = characterData.data.healthPoint;
     }
     protected void FixedUpdate()
     {
@@ -89,7 +89,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected void NormalAttackUpdate()
     {
-        if (Time.time - lastNormalAttackTime >= heroData.normalAttack.cooldown)
+        if (Time.time - lastNormalAttackTime >= characterData.attack.cooldown)
         {
             lastNormalAttackTime = Time.deltaTime;
         }

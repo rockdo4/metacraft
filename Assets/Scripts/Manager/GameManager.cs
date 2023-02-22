@@ -9,8 +9,9 @@ public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
     public List<CharacterDataBundle> characterTable = new();
-    public Dictionary<string, Sprite> testPortraits = new();
-    public GameObject testCharacterPrefab;
+    // public Dictionary<string, Sprite> testPortraits = new();
+    public Dictionary<string, Sprite> iconSprites = new();
+    public Dictionary<string, Sprite> illustrationSprites = new();
 
     private List<Dictionary<string, object>> characterList;
 
@@ -39,19 +40,57 @@ public class GameManager : Singleton<GameManager>
                 loadAll = true;
             yield return null;
         }
+        // foreach (var character in characterTable)
+        //foreach (var character in characterList)
+        //{
+        //    //string address = character.data.name;
+        //    string address = (string)character["Name"];
+        //    Debug.Log(address);
+        //    Addressables.LoadAssetAsync<Sprite>(address).Completed +=
+        //        (AsyncOperationHandle<Sprite> obj) =>
+        //        {
+        //            testPortraits.Add(address, obj.Result);
+        //            handles.Add(obj);
+        //        };
+        //}
 
+        List<string> iconAddress = new()
+        {
+            "Icon_다인",
+            "Icon_신하루",
+            "Icon_이수빈",
+            "Icon_한서은",
+        };
+
+        List<string> illustrationAddress = new()
+        {
+            "Illu_다인",
+            "Illu_신하루",
+            "Illu_이수빈",
+            "Illu_한서은",
+        };
 
         List<AsyncOperationHandle> handles = new();
-        foreach (var character in characterTable)
+        foreach (string icon in iconAddress)
         {
-            string address = character.data.name;
-            Addressables.LoadAssetAsync<Sprite>(address).Completed +=
+            Addressables.LoadAssetAsync<Sprite>(icon).Completed +=
                 (AsyncOperationHandle<Sprite> obj) =>
                 {
-                    testPortraits.Add(address, obj.Result);
+                    iconSprites.Add(icon, obj.Result);
                     handles.Add(obj);
                 };
         }
+
+        foreach (string illustration in illustrationAddress)
+        {
+            Addressables.LoadAssetAsync<Sprite>(illustration).Completed +=
+                (AsyncOperationHandle<Sprite> obj) =>
+                {
+                    illustrationSprites.Add(illustration, obj.Result);
+                    handles.Add(obj);
+                };
+        }
+
 
         int count = 0;
         loadAll = false;

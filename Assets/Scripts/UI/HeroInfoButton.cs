@@ -8,7 +8,7 @@ public class HeroInfoButton : MonoBehaviour
     public TextMeshProUGUI gradeText;
     public TextMeshProUGUI jobText;
     public TextMeshProUGUI levelText;
-    public Image portrait;
+    public Image icon;
 
     public void SetData(CharacterDataBundle data)
     {
@@ -17,6 +17,6 @@ public class HeroInfoButton : MonoBehaviour
         gradeText.text = info.grade;
         jobText.text = info.job;
         levelText.text = info.level.ToString();
-        portrait.sprite = GameManager.Instance.testPortraits[info.name];
+        icon.sprite = GameManager.Instance.iconSprites[$"Icon_{info.name}"];
     }
 }
