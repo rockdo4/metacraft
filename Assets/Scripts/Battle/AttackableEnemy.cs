@@ -1,13 +1,9 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
 public class AttackableEnemy : AttackableUnit
 {
+    public float skillDuration; // 임시 변수
     protected new UnitState unitState;
     public new UnitState UnitState {
         get {
@@ -25,7 +21,7 @@ public class AttackableEnemy : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
-                    pathFind.speed = charactorData.speed;
+                    pathFind.speed = heroData.stats.moveSpeed;
                     pathFind.isStopped = false;
                     EnemyBattleState = UnitBattleState.Common;
                     nowUpdate = BattleUpdate;
@@ -54,9 +50,9 @@ public class AttackableEnemy : AttackableUnit
         }
     }
 
-    private void Awake()
+    protected override void Awake()
     {
-        charactorData = LoadTestData(); //임시 데이터 로드
+        //charactorData = LoadTestData(); //임시 데이터 로드
         pathFind = transform.GetComponent<NavMeshAgent>();
         SetData();
     }
@@ -95,14 +91,14 @@ public class AttackableEnemy : AttackableUnit
                 pathFind.SetDestination(target.transform.position);
 
                 //타겟과 일정 범위 안에 있으며, 일반스킬 상태이고, 쿨타임 조건이 충족될때
-                if (IsAttack && IsBasicCoolDown)
+                if (IsAttack && CanNormalAttack)
                 {
-                    lastCommonTime = Time.time;
+                    lastNormalAttackTime = Time.time;
                     Common();
                 }
                 break;
             case UnitBattleState.Action:
-                if (Time.time - activeStartTime > charactorData.skillDuration)
+                if (Time.time - activeStartTime > skillDuration)
                 {
                     EnemyBattleState = UnitBattleState.Common;
                 }
