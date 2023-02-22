@@ -33,6 +33,7 @@ public class BeltScrollBattleManager : TestBattleManager
     public void OnDeadHero(AttackableHero hero)
     {
         useHeroes.Remove(hero);
+        readyCount = useHeroes.Count;
     }
 
     private void SetHeroReturnPositioning()
