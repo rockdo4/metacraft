@@ -57,7 +57,7 @@ public class BeltScrollBattleManager : TestBattleManager
         }
         else if (triggers[currTriggerIndex].isStageEnd)
         {
-            StageClear();
+            SetStageClear();
         }
     }
 
@@ -73,7 +73,7 @@ public class BeltScrollBattleManager : TestBattleManager
         }
         else
         {
-            StageClear();
+            SetStageClear();
         }
     }
     private void Update()
@@ -85,7 +85,7 @@ public class BeltScrollBattleManager : TestBattleManager
     }
 
     // 클리어 시 호출할 함수 (Ui 업데이트)
-    private void StageClear()
+    private void SetStageClear()
     {
         Logger.Debug("Clear!");
     }
