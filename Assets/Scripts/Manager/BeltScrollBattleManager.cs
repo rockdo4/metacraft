@@ -38,10 +38,10 @@ public class BeltScrollBattleManager : TestBattleManager
         }
     }
 
-    public List<Transform> GetNextTriggerHeroSettingPos()
+    public List<Transform> GetCurrTriggerHeroSettingPos()
     {
-        if (triggers[currTriggerIndex + 1] != null)
-            return triggers[currTriggerIndex + 1].settingPositions;
+        if (triggers[currTriggerIndex] != null)
+            return triggers[currTriggerIndex].settingPositions;
 
         return null;
     }
