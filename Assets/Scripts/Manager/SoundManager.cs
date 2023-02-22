@@ -40,12 +40,12 @@ public class SoundManager : Singleton<SoundManager>
     }
     private void CheckAllSEplayerSetted()
     {
-        if (prefabs.Count > (int)SeList.TotalCount)
+        if (prefabs.Count > (int)SeList.Count)
         {
             Logger.Error("프레펩 수가 실제 SE숫자보다 많습니다");            
         }
         LinkedList<int> unUsdedIndex = new();
-        for (int i = 0; i < (int)SeList.TotalCount; ++i)
+        for (int i = 0; i < (int)SeList.Count; ++i)
         {
             unUsdedIndex.AddLast(i);
         }
