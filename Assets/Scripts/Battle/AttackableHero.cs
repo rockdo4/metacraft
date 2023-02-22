@@ -46,7 +46,6 @@ public class AttackableHero : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.ReturnPosition: // 재배치
-                    battleManager.GetEnemyList(ref targetList);
                     pathFind.isStopped = false;
                     pathFind.speed = 10;
                     pathFind.SetDestination(returnPos.position); //재배치 위치 설정
@@ -58,6 +57,7 @@ public class AttackableHero : AttackableUnit
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
+                    battleManager.GetEnemyList(ref targetList);
                     pathFind.speed = heroData.stats.moveSpeed;
                     pathFind.isStopped = false;
                     HeroBattleState = UnitBattleState.NormalAttack;
