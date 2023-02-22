@@ -13,6 +13,9 @@ GameObject:
   - component: {fileID: 2773607555342008345}
   - component: {fileID: 2773607555342008344}
   - component: {fileID: 2773607555342008347}
+  - component: {fileID: 4669360973059954256}
+  - component: {fileID: 8363582515770038548}
+  - component: {fileID: 4903795191332194566}
   m_Layer: 0
   m_Name: Test Unit1
   m_TagString: Untagged
@@ -113,7 +116,65 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   info: {fileID: 11400000, guid: 994524362455b594bbcdfbcf7d2acdfa, type: 2}
   stats: {fileID: 11400000, guid: dd746cba5aceb424597f987950769e01, type: 2}
-  commonSkill: {fileID: 0}
-  autoSkill: {fileID: 0}
-  passiveSkill: {fileID: 0}
-  activeSkill: {fileID: 0}
+  normalAttack: {fileID: 11400000, guid: 091b820fa2d618c48ac028867240a1dd, type: 2}
+  normalSkill: {fileID: 11400000, guid: 95d044d6af9dee94792df2997ced805e, type: 2}
+  passiveSkill: {fileID: 11400000, guid: a4cefbe12827f1e41bbe187a6fab5b0b, type: 2}
+  activeSkill: {fileID: 11400000, guid: ba6f2027424942347a4c5103becacc21, type: 2}
+--- !u!195 &4669360973059954256
+NavMeshAgent:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2773607555342008346}
+  m_Enabled: 1
+  m_AgentTypeID: 0
+  m_Radius: 0.5
+  m_Speed: 3.5
+  m_Acceleration: 8
+  avoidancePriority: 50
+  m_AngularSpeed: 120
+  m_StoppingDistance: 10
+  m_AutoTraverseOffMeshLink: 1
+  m_AutoBraking: 1
+  m_AutoRepath: 1
+  m_Height: 1
+  m_BaseOffset: 0.5
+  m_WalkableMask: 4294967295
+  m_ObstacleAvoidanceType: 4
+--- !u!114 &8363582515770038548
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2773607555342008346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eeb636bf02dbd6d408d205f034c35665, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heroData: {fileID: 4903795191332194566}
+  hp: 0
+  targetList: []
+  returnPos: {fileID: 0}
+  skillDuration: 0
+  angleRange: 30
+--- !u!114 &4903795191332194566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2773607555342008346}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: db77ef36c066e8943acd22fe638f96ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  info: {fileID: 11400000, guid: 994524362455b594bbcdfbcf7d2acdfa, type: 2}
+  stats: {fileID: 11400000, guid: dd746cba5aceb424597f987950769e01, type: 2}
+  normalAttack: {fileID: 11400000, guid: 091b820fa2d618c48ac028867240a1dd, type: 2}
+  normalSkill: {fileID: 11400000, guid: 95d044d6af9dee94792df2997ced805e, type: 2}
+  passiveSkill: {fileID: 11400000, guid: a4cefbe12827f1e41bbe187a6fab5b0b, type: 2}
+  activeSkill: {fileID: 11400000, guid: ba6f2027424942347a4c5103becacc21, type: 2}
