@@ -11,10 +11,13 @@ public class TestBattleManager : MonoBehaviour
 
     private void Awake()
     {
-        //히어로 만들고, 히어로 ui만들고 서로 연결
-        var hero = Instantiate(cube);
-        var heroUi = Instantiate(battleHero, battleHeroTr);
+        for (int i = 0; i < 3; i++)
+        {
+            //히어로 만들고, 히어로 ui만들고 서로 연결
+            var hero = Instantiate(cube);
+            var heroUi = Instantiate(battleHero, battleHeroTr);
 
-        hero.SetUi(heroUi);
+            hero.SetUi(heroUi);
+        }
     }
 }

@@ -1,4 +1,4 @@
-public enum HeroState
+public enum UnitState
 {
     None = -1,
     Idle,
@@ -9,11 +9,12 @@ public enum HeroState
     Count
 }
 
-public enum HeroBattleState
+public enum UnitBattleState
 {
-    None,
-    Normal,
-    Ulitimate,
+    None = -1,
+    Common,
+    Auto,
+    Action,
     Stun,
     Count
 }
