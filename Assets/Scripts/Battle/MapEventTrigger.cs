@@ -3,7 +3,7 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EventTrigger : MonoBehaviour
+public class MapEventTrigger : MonoBehaviour
 {
     public Transform settingPosition;
     [Header("스테이지에 포함된 적들을 넣어주세요")]
@@ -18,6 +18,7 @@ public class EventTrigger : MonoBehaviour
         for (int i = 0; i < enemys.Count; i++)
         {
             enemysNav.Add(enemys[i].GetComponent<NavMeshAgent>());
+            enemysNav[i].enabled = false;
         }
     }
 
@@ -25,6 +26,7 @@ public class EventTrigger : MonoBehaviour
     {
         for (int i = 0; i < enemys.Count; i++)
         {
+            enemysNav[i].enabled = true;
             enemysNav[i].SetDestination(other.transform.position);
         }
     }
