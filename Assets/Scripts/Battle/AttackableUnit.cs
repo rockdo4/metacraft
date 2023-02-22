@@ -37,10 +37,10 @@ public abstract class AttackableUnit : MonoBehaviour
     }
 
     protected UnitState unitState;
-    protected UnitState UnitState { get { return unitState; } set { unitState = value; } }
+    public virtual UnitState UnitState { get { return unitState; } set { unitState = value; } }
 
     protected UnitBattleState battleState;
-    protected UnitBattleState BattleState { get { return battleState; }  set { battleState = value; } }
+    public virtual UnitBattleState BattleState { get { return battleState; }  set { battleState = value; } }
 
     protected bool CanNormalAttack {
         get {
