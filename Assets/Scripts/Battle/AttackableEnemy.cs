@@ -20,6 +20,7 @@ public class AttackableEnemy : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
+                    //battleManager.GetHeroList(ref targetList);
                     pathFind.speed = heroData.stats.moveSpeed;
                     pathFind.isStopped = false;
                     EnemyBattleState = UnitBattleState.NormalAttack;

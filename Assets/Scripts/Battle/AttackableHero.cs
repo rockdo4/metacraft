@@ -159,7 +159,7 @@ public class AttackableHero : AttackableUnit
 
                 if (angle <= 0)
                 {
-                    // battleManager.OnReady(gameObject);
+                    battleManager.OnReady();
                     UnitState = UnitState.Idle;
                 }
                 break;
