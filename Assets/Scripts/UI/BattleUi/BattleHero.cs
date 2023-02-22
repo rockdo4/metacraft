@@ -9,7 +9,7 @@ public class BattleHero : MonoBehaviour
     [SerializeField]
     private BuffList viewBuffList;
     private List<HeroBuff> buffList = new();
-    public HeroState heroState;
+    public UnitState heroState;
 
     private void Awake()
     {
@@ -23,13 +23,12 @@ public class BattleHero : MonoBehaviour
 
     public void OnClickHeroSkill()
     {
-        if(heroState == HeroState.Battle)
+        if(heroState == UnitState.Battle)
             heroSkill.OnClickSkill();
     }
 
     public void OnClickPopUp()
     {
-        if (heroState == HeroState.Battle)
-            viewBuffList.OnClickPopUp();
+        viewBuffList.OnClickPopUp();
     }
 }
