@@ -47,7 +47,6 @@ public class AttackableHero : AttackableUnit
                     break;
                 case UnitState.ReturnPosition: // 재배치
                     pathFind.isStopped = false;
-                    pathFind.speed = 10;
                     pathFind.SetDestination(returnPos.position); //재배치 위치 설정
                     pathFind.stoppingDistance = 0; //가까이 가기
                     nowUpdate = ReturnPosUpdate;
@@ -57,6 +56,7 @@ public class AttackableHero : AttackableUnit
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
+                    pathFind.stoppingDistance = heroData.normalAttack.distance; //가까이 가기
                     battleManager.GetEnemyList(ref targetList);
                     pathFind.speed = heroData.stats.moveSpeed;
                     pathFind.isStopped = false;
@@ -184,7 +184,7 @@ public class AttackableHero : AttackableUnit
                 }
                 break;
             case false:
-                if (Vector3.Distance(returnPos.position, transform.position) < 0.1f)
+                if (Vector3.Distance(returnPos.position, transform.position) < 1f)
                 {
                     pathFind.isStopped = true;
                     transform.position = returnPos.position;
@@ -200,6 +200,10 @@ public class AttackableHero : AttackableUnit
     public virtual void SetMoveNext()
     {
         UnitState = UnitState.MoveNext;
+    }
+    public virtual void SetReturn()
+    {
+        UnitState = UnitState.ReturnPosition;
     }
 
     public override void OnDamage(int dmg)

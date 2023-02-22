@@ -40,6 +40,7 @@ public class BeltScrollBattleManager : TestBattleManager
         for (int i = 0; i < useHeroes.Count; i++)
         {
             useHeroes[i].SetReturnPos(triggers[currTriggerIndex].settingPositions[i]);
+            useHeroes[i].SetReturn();
         }
     }
 
