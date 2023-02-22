@@ -10,13 +10,13 @@ public class HeroInfoButton : MonoBehaviour
     public TextMeshProUGUI levelText;
     public Image portrait;
 
-    public void SetData(HeroData data)
+    public void SetData(CharacterDataBundle data)
     {
-        InfoHero info = data.info;
+        var info = data.info;
         heroNameText.text = info.name;
         gradeText.text = info.grade;
         jobText.text = info.job;
         levelText.text = info.level.ToString();
-        portrait.sprite = GameManager.Instance.testPortraits[info.resourceAddress];
+        portrait.sprite = GameManager.Instance.testPortraits[info.name];
     }
 }

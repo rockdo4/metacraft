@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
-    public List<HeroData> newCharacters = new();
+    public List<CharacterDataBundle> newCharacters = new();
     public Dictionary<string, Sprite> testPortraits = new();
 
     public override void Awake()
@@ -23,7 +23,7 @@ public class GameManager : Singleton<GameManager>
 
         foreach (var character in newCharacters)
         {
-            string address = character.info.resourceAddress;
+            string address = character.info.name;
             Addressables.LoadAssetAsync<Sprite>(address).Completed +=
                 (AsyncOperationHandle<Sprite> obj) =>
                 {

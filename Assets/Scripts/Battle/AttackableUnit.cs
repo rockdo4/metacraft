@@ -7,15 +7,15 @@ using UnityEngine.AI;
 public abstract class AttackableUnit : MonoBehaviour
 {
     protected TestBattleManager testBattleManager;
-    [SerializeField] // Why ?
-    protected HeroData heroData;
+    [SerializeField]
+    protected CharacterDataBundle heroData;
 
     protected NavMeshAgent pathFind;
 
     protected AttackableUnit target;
     protected LayerMask targetType;
 
-    [SerializeField] // Why ?
+    [SerializeField]
     protected int hp;
 
     protected float lastNormalAttackTime;
@@ -109,31 +109,4 @@ public abstract class AttackableUnit : MonoBehaviour
     protected abstract void ReturnPosUpdate();
 
     public abstract void OnDamage(int dmg);
-
-    //public CharacterData LoadTestData()
-    //{
-    //    CharacterData testData = new();
-
-    //    testData.damage = 3;
-    //    testData.def = 20;
-    //    testData.hp = 100;
-    //    testData.speed = 3;
-    //    testData.critical = 50;
-    //    testData.criticalDmg = 2;
-    //    testData.evasion = 20;
-    //    testData.accuracy = 80;
-
-    //    testData.attackDistance = 3f;
-    //    testData.attackCount = 2;
-
-    //    testData.grade = "A";
-    //    testData.level = 1;
-    //    testData.job = "TEST";
-    //    testData.cooldown = 1;
-    //    testData.skillCooldown = 0.3f;
-    //    testData.skillDuration = 3f;
-    //    testData.exp = 0;
-
-    //    return testData;
-    //}
 }
