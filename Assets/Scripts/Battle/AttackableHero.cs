@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class AttackableHero : MonoBehaviour
 {
@@ -16,10 +18,13 @@ public class AttackableHero : MonoBehaviour
     private float coolDownTimer;
     private float coolDown;
 
-    private Vector3 returnPos = Vector3.zero;
+    [SerializeField]
+    private Transform returnPos;
 
     public Action nowUpdate;
     public Action NormalSkill;
+
+    float ultimateStartTime;
 
     HeroState heroState;
     public HeroState HeroState {
@@ -40,12 +45,13 @@ public class AttackableHero : MonoBehaviour
                     break;
                 case HeroState.ReturnPosition: // 재배치
                     pathFind.isStopped = false;
+                    pathFind.SetDestination(returnPos.position); //재배치 위치 설정
                     pathFind.stoppingDistance = 0; //가까이 가기
                     nowUpdate = ReturnPosUpdate;
                     break;
                 case HeroState.MoveNext:
                     pathFind.isStopped = false;
-                    nowUpdate = ReturnPosUpdate;
+                    nowUpdate = MoveNextUpdate;
                     break;
                 case HeroState.Battle:
                     pathFind.isStopped = false;
@@ -55,8 +61,6 @@ public class AttackableHero : MonoBehaviour
                 case HeroState.Die:
                     pathFind.isStopped = true;
                     nowUpdate = DieUpdate;
-                    break;
-                default:
                     break;
             }
         }
@@ -88,6 +92,8 @@ public class AttackableHero : MonoBehaviour
             return IsNormal && InRange;
         }
     }
+
+    Coroutine ReadyRotate;
 
     private void Awake()
     {
@@ -154,6 +160,8 @@ public class AttackableHero : MonoBehaviour
     }
     public virtual void Skill()
     {
+        ultimateStartTime = Time.time;
+        HeroBattleState = HeroBattleState.Ulitimate;
         Logger.Debug("Skill");
     }
 
@@ -178,27 +186,46 @@ public class AttackableHero : MonoBehaviour
         testData.job = "TEST";
         testData.cooldown = 1;
         testData.skillCooldown = 0.3f;
+        testData.skillDuration = 3f;
         testData.exp = 0;
 
         return testData;
     }
 
-    public void IdleUpdate()
+    private void IdleUpdate()
+    {
+
+    }
+    Vector3 test;
+    private void ReturnPosUpdate()
+    {
+        switch(pathFind.isStopped)
+        {
+            case true:
+                transform.rotation = Quaternion.Lerp(transform.rotation, returnPos.rotation, Time.deltaTime * 5);
+
+
+                break;
+            case false:
+                if (Vector3.Distance(returnPos.position, transform.position) < 0.1f)
+                {
+                    pathFind.isStopped = true;
+                    transform.position = returnPos.position;
+                }
+                break;
+        }
+    }
+
+
+    private void MoveNextUpdate()
     {
 
     }
 
-    public void ReturnPosUpdate()
-    {
-        pathFind.SetDestination(returnPos); //재배치 위치 설정
-    }
-
-    public void BattleUpdate()
+    private void BattleUpdate()
     {
         switch (HeroBattleState)
         {
-            case HeroBattleState.None:
-                break;
             case HeroBattleState.Normal:
                 //타겟이 없으면 타겟 추척
                 if (target == null)
@@ -218,18 +245,18 @@ public class AttackableHero : MonoBehaviour
                 }
                 break;
             case HeroBattleState.Ulitimate:
+                if(Time.time - ultimateStartTime > charactorData.skillDuration)
+                {
+                    HeroBattleState = HeroBattleState.Normal;
+                }
                 break;
             case HeroBattleState.Stun:
-                break;
-            case HeroBattleState.Count:
-                break;
-            default:
                 break;
         }
 
     }
 
-    public void DieUpdate()
+    private void DieUpdate()
     {
 
     }

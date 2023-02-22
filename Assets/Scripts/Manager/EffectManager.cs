@@ -1,15 +1,15 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EffectManager : Singleton<EffectManager>
+public class EffectManager : MonoBehaviour
 {
     [Range(0, 100)]
     public int effectPoolSize;
     public List<Effect> effectList;      // 생성할 이펙트 리스트들. 인스펙터에서 추가
     public Transform parentsObject;
-    private static List<List<Effect>> effectPool = new((int)EffectEnum.Count);    // 이펙트 풀
-    public static EffectEnum effectIndex = EffectEnum.None;
-    private static List<int> effectPoolIndex = new();     // 활성화할 이펙트 프리펩의 번호
+
+    private List<List<Effect>> effectPool = new((int)EffectEnum.Count);    // 이펙트 풀
+    private List<int> effectPoolIndex = new();     // 활성화할 이펙트 프리펩의 번호
 
     private void Start()
     {
@@ -28,18 +28,13 @@ public class EffectManager : Singleton<EffectManager>
         }
     }
 
-    public static void Get(EffectEnum index)
+    public void Get(EffectEnum index)
     {
         // index = 뽑고 싶은 이펙트가 저장된 풀의 이름 (Enum)
-        if (effectIndex != index)
-        {
-            effectIndex = index;
-        }
 
-        int poolIndex = (int)effectIndex;
+        int poolIndex = (int)index;
         // effectPool의 [풀 번호][이펙트인덱스[번호]] 활성화
         effectPool[poolIndex][effectPoolIndex[poolIndex]].StartEffect();
-        //effectPool[effectIndex].Dequeue().StartEffect();
 
         // index가 프리펩의 최대 개수를 넘어가면 0으로 초기화
         if (effectPoolIndex[poolIndex] < effectPool[poolIndex].Count - 1)
@@ -94,7 +89,7 @@ public class EffectManager : Singleton<EffectManager>
         for (int i = 0; i < effectPoolSize; i++)
         {
             // 이펙트 리스트 요소 당 풀의 사이즈만큼 생성 (각각 번호붙여 이름도 추가)
-            var effect = 
+            var effect =
                 CreateEffect(parents.transform, $"{effectList[effectListIndex].name} {i}", effectListIndex);
 
             // 만든 이펙트 풀에 저장

@@ -25,6 +25,7 @@ public class CharacterData : IComparable<CharacterData>
 
     public float cooldown;
     public float skillCooldown;
+    public float skillDuration;
 
     public int exp;
 
