@@ -13,6 +13,15 @@ public class BeltScrollBattleManager : TestBattleManager
     private int readyCount = 3;
     private float nextStageMoveTimer = 0f;
 
+    private void Start()
+    {
+        // Test
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            Invoke("OnReady", 1f);
+        }
+    }
+
     public void GetEnemyList(ref List<AttackableEnemy> enemyList)
     {
         enemyList = triggers[currTriggerIndex].enemys;
@@ -60,29 +69,6 @@ public class BeltScrollBattleManager : TestBattleManager
         else if (triggers[currTriggerIndex].isStageEnd)
         {
             SetStageClear();
-        }
-    }
-
-    private void TempMoveTest()
-    {
-        if (!triggers[currTriggerIndex].isStageEnd)
-        {
-            for (int i = 0; i < useHeroes.Count; i++)
-            {
-                useHeroes[i].SetMoveNext();
-            }
-            StartCoroutine(MovingMap());
-        }
-        else
-        {
-            SetStageClear();
-        }
-    }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            TempMoveTest();
         }
     }
 
