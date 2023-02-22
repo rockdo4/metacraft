@@ -108,6 +108,7 @@ public class AttackableEnemy : AttackableUnit
                 }
 
                 //타겟으로 이동
+                transform.LookAt(target.transform);
                 pathFind.SetDestination(target.transform.position);
 
                 //타겟과 일정 범위 안에 있으며, 일반스킬 상태이고, 쿨타임 조건이 충족될때
