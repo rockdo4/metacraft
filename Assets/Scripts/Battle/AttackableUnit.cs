@@ -6,7 +6,7 @@ using UnityEngine.AI;
 
 public abstract class AttackableUnit : MonoBehaviour
 {
-    protected TestBattleManager battleManager;
+    protected BeltScrollBattleManager battleManager;
 
     [SerializeField]
     protected HeroData heroData;
@@ -33,7 +33,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected virtual void Awake()
     {
-        battleManager = GameObject.FindObjectOfType<TestBattleManager>();
+        battleManager = GameObject.FindObjectOfType<BeltScrollBattleManager>();
     }
 
     protected UnitState unitState;
@@ -102,7 +102,7 @@ public abstract class AttackableUnit : MonoBehaviour
         }
     }
 
-    protected abstract void SetTestBattle();
+    public abstract void SetTestBattle();
 
     public abstract void NormalAttack();
     public abstract void NormalSkill();
