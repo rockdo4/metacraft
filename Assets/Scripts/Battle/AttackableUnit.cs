@@ -7,16 +7,18 @@ using UnityEngine.AI;
 public abstract class AttackableUnit : MonoBehaviour
 {
     protected TestBattleManager testBattleManager;
-    protected CharacterData charactorData;
+    [SerializeField] // Why ?
+    protected HeroData heroData;
+
     protected NavMeshAgent pathFind;
 
     protected AttackableUnit target;
     protected LayerMask targetType;
 
-    [SerializeField]
+    [SerializeField] // Why ?
     protected int hp;
 
-    protected float lastCommonTime;
+    protected float lastNormalAttackTime;
     protected float lastAutoTime;
     protected float lastActiveTime;
 
@@ -39,13 +41,13 @@ public abstract class AttackableUnit : MonoBehaviour
     protected UnitBattleState battleState;
     protected UnitBattleState BattleState { get { return battleState; }  set { battleState = value; } }
 
-    protected bool IsBasicCoolDown {
+    protected bool CanNormalAttack {
         get {
-            return Time.time - lastCommonTime > charactorData.cooldown;
+            return (Time.time - lastNormalAttackTime) > heroData.normalAttack.cooldown;
         }
     }
 
-    protected bool InRange => Vector3.Distance(target.transform.position, transform.position) < charactorData.attackDistance;
+    protected bool InRange => Vector3.Distance(target.transform.position, transform.position) < heroData.normalAttack.distance;
     protected bool IsNormal => battleState != UnitBattleState.Action && battleState != UnitBattleState.Stun;
 
     protected bool IsAttack {
@@ -72,26 +74,25 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     protected void SetData()
     {
-        lastCommonTime = Time.time;
-        pathFind.stoppingDistance = charactorData.attackDistance;
+        lastNormalAttackTime = Time.time;
+        pathFind.stoppingDistance = heroData.normalAttack.distance;
         Common = CommonAttack;
         Auto = AutoAttack;
         Active = ActiveAttack;
 
-        hp = charactorData.hp;
+        hp = heroData.stats.healthPoint;
     }
     protected void FixedUpdate()
     {
-        BasicCoolDownUpdate();
-        if (nowUpdate != null)
-            nowUpdate();
+        NormalAttackUpdate();
+        nowUpdate?.Invoke();
     }
 
-    protected void BasicCoolDownUpdate()
+    protected void NormalAttackUpdate()
     {
-        if (Time.time - lastCommonTime >= charactorData.cooldown)
+        if (Time.time - lastNormalAttackTime >= heroData.normalAttack.cooldown)
         {
-            lastCommonTime = Time.deltaTime;
+            lastNormalAttackTime = Time.deltaTime;
         }
     }
 
@@ -107,31 +108,32 @@ public abstract class AttackableUnit : MonoBehaviour
     protected abstract void MoveNextUpdate();
     protected abstract void ReturnPosUpdate();
 
-    public CharacterData LoadTestData()
-    {
-        CharacterData testData = new();
-
-        testData.damage = 3;
-        testData.def = 20;
-        testData.hp = 100;
-        testData.speed = 3;
-        testData.critical = 50;
-        testData.criticalDmg = 2;
-        testData.evasion = 20;
-        testData.accuracy = 80;
-
-        testData.attackDistance = 3f;
-        testData.attackCount = 2;
-
-        testData.grade = "A";
-        testData.level = 1;
-        testData.job = "TEST";
-        testData.cooldown = 1;
-        testData.skillCooldown = 0.3f;
-        testData.skillDuration = 3f;
-        testData.exp = 0;
-
-        return testData;
-    }
     public abstract void OnDamage(int dmg);
+
+    //public CharacterData LoadTestData()
+    //{
+    //    CharacterData testData = new();
+
+    //    testData.damage = 3;
+    //    testData.def = 20;
+    //    testData.hp = 100;
+    //    testData.speed = 3;
+    //    testData.critical = 50;
+    //    testData.criticalDmg = 2;
+    //    testData.evasion = 20;
+    //    testData.accuracy = 80;
+
+    //    testData.attackDistance = 3f;
+    //    testData.attackCount = 2;
+
+    //    testData.grade = "A";
+    //    testData.level = 1;
+    //    testData.job = "TEST";
+    //    testData.cooldown = 1;
+    //    testData.skillCooldown = 0.3f;
+    //    testData.skillDuration = 3f;
+    //    testData.exp = 0;
+
+    //    return testData;
+    //}
 }

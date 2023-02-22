@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 5220265615185062815}
   - component: {fileID: 6228428988213396497}
   m_Layer: 6
-  m_Name: Hero
+  m_Name: Cube
   m_TagString: Hero
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -150,9 +150,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeb636bf02dbd6d408d205f034c35665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetType:
-    serializedVersion: 2
-    m_Bits: 128
+  heroData: {fileID: 2773607555342008347, guid: 09d233cf36ee386429be38cf12e49e5b,
+    type: 3}
   hp: 0
+  targetList: []
   returnPos: {fileID: 0}
+  skillDuration: 0
   angleRange: 30

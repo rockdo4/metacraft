@@ -9,11 +9,11 @@ public class ShortAttack : AttackableHero
     {
         base.CommonAttack();
         Logger.Debug("Attack1111");
-        Logger.Debug(charactorData.damage);
+        Logger.Debug(heroData.stats.baseDamage);
 
-        if (charactorData.attackCount == 1)
+        if (heroData.normalAttack.count == 1)
         {
-            target.GetComponent<AttackableUnit>().OnDamage(charactorData.damage);
+            target.GetComponent<AttackableUnit>().OnDamage(heroData.stats.baseDamage);
             return;
         }
 
@@ -32,7 +32,7 @@ public class ShortAttack : AttackableHero
 
         foreach (var enemy in attackEenmys)
         {
-            enemy.GetComponent<AttackableEnemy>().OnDamage(charactorData.damage);
+            enemy.GetComponent<AttackableEnemy>().OnDamage(heroData.stats.baseDamage);
         }
     }
     public override void AutoAttack()
