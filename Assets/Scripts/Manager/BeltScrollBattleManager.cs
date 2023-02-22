@@ -106,5 +106,11 @@ public class BeltScrollBattleManager : TestBattleManager
             platform.transform.Translate((Vector3.forward * platformMoveSpeed * Time.deltaTime) * -1);
             yield return new WaitForSeconds(Time.deltaTime);
         }
+
+        // 히어로들 배틀 상태로 전환
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            useHeroes[i].SetTestBattle();
+        }
     }
 }
