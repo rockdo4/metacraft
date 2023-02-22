@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 
 public class ShortAttack : AttackableHero
@@ -10,31 +11,32 @@ public class ShortAttack : AttackableHero
 
         if (heroData.normalAttack.count == 1)
         {
-            target.GetComponent<AttackableHero>().OnDamage(heroData.stats.baseDamage);
+            target.GetComponent<AttackableEnemy>().OnDamage(heroData.stats.baseDamage);
             return;
         }
 
-        List<GameObject> attackHeros = new();
+        List<GameObject> attackEnemies = new();
 
-        foreach (var hero in targetList)
+        foreach (var enemy in targetList)
         {
-            Vector3 interV = hero.transform.position - transform.position;
+            Vector3 interV = enemy.transform.position - transform.position;
             if (interV.magnitude <= heroData.normalAttack.distance)
             {
-                float dot = Vector3.Dot(interV.normalized, transform.forward);
-                float theta = Mathf.Acos(dot);
-                float degree = Mathf.Rad2Deg * theta;
+                float angle = Vector3.Angle(transform.forward, interV);
 
-                if (degree <= heroData.normalAttack.angle / 2f)
-                    attackHeros.Add(hero.transform.gameObject);
+                if (Mathf.Abs(angle) < heroData.normalAttack.angle / 2f)
+                {
+                    attackEnemies.Add(enemy.transform.gameObject);
+                }
             }
         }
 
-        foreach (var hero in attackHeros)
+        foreach (var hero in attackEnemies)
         {
             hero.GetComponent<AttackableEnemy>().OnDamage(heroData.stats.baseDamage);
         }
     }
+
     public override void PassiveSkill()
     {
         base.PassiveSkill();
@@ -45,9 +47,9 @@ public class ShortAttack : AttackableHero
     {
        SearchNearbyEnemy(); //근거리 타겟 추적
     }
-    //private void OnDrawGizmos()
-    //{
-    //    Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, heroData.normalAttack.angle / 2, heroData.normalAttack.distance);
-    //    Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -heroData.normalAttack.angle / 2, heroData.normalAttack.distance);
-    //}
+    private void OnDrawGizmos()
+    {
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, heroData.normalAttack.angle / 2, heroData.normalAttack.distance);
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -heroData.normalAttack.angle / 2, heroData.normalAttack.distance);
+    }
 }
