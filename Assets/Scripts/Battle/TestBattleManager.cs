@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class TestBattleManager : MonoBehaviour
@@ -9,6 +10,7 @@ public class TestBattleManager : MonoBehaviour
     public Transform battleHeroTr;
     public List<Transform> startPositions;
     protected List<AttackableHero> useHeroes = new();
+    public StageEnemy enemyCountTxt;
 
     public ClearUi clearUi;
 

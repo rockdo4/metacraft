@@ -44,6 +44,7 @@ public abstract class AttackableHero : AttackableUnit
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
+                    animator.SetTrigger("Idle");
                     battleManager.GetEnemyList(ref targetList);
                     pathFind.stoppingDistance = characterData.attack.distance * 0.9f;
                     pathFind.speed = characterData.data.moveSpeed;
@@ -119,6 +120,10 @@ public abstract class AttackableHero : AttackableUnit
 
         return targetChanged;
     }
+    protected bool ContainTarget(AttackableUnit target, float distance)
+    {
+        return Vector3.Distance(target.transform.position, transform.position) <= distance;
+    }
     protected void SearchMaxHealthTarget()
     {
         if (targetList.Count == 0)
@@ -143,7 +148,7 @@ public abstract class AttackableHero : AttackableUnit
     }
     protected virtual void SearchTarget()
     {
-        if (target != null)
+        if (target != null && ContainTarget(target, characterData.attack.distance))
             animator.SetTrigger("Run");
     }
 
