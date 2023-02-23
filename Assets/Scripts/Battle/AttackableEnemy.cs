@@ -77,7 +77,11 @@ public abstract class AttackableEnemy : AttackableUnit
                           .FirstOrDefault();
     }
 
-    protected abstract void SearchTarget();
+    protected virtual void SearchTarget()
+    {
+        if(target != null)
+          Logger.Debug("TargetChange");
+    }
 
     public override void NormalAttack()
     {
