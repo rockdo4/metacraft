@@ -44,7 +44,6 @@ public abstract class AttackableHero : AttackableUnit
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
-                    animator.SetTrigger("Idle");
                     battleManager.GetEnemyList(ref targetList);
                     pathFind.stoppingDistance = characterData.attack.distance * 0.9f;
                     pathFind.speed = characterData.data.moveSpeed;
@@ -148,23 +147,25 @@ public abstract class AttackableHero : AttackableUnit
     }
     protected virtual void SearchTarget()
     {
-        if (target != null)
-            animator.SetTrigger("Run");
     }
 
 
     public override void NormalAttack()
     {
+        Logger.Debug("NormalAttack!");
+        animator.SetTrigger("Attack");
     }
     public override void PassiveSkill()
     {
+        animator.SetTrigger("Attack");
         Logger.Debug("Passive!");
         Invoke("TestPassiveEnd", 2);
         BattleState = UnitBattleState.PassiveSkill;
     }
     public override void ActiveAttack()
     {
-
+        animator.SetTrigger("Attack");
+        Logger.Debug("ActiveAttack!");
         Invoke("TestActiveEnd", 2);
         BattleState = UnitBattleState.ActiveSkill;
     }
@@ -192,6 +193,21 @@ public abstract class AttackableHero : AttackableUnit
                 if (target == null)
                 {
                     SearchTarget();
+
+                    if (target != null)
+                    {
+                        if (ContainTarget(target, characterData.attack.distance))
+                        {
+                            animator.SetTrigger("Idle");
+                            Logger.Debug("Target In");
+                        }
+                        else
+                        {
+                            animator.SetTrigger("Run");
+                            Logger.Debug(Vector3.Distance(target.transform.position, transform.position));
+                            Logger.Debug("Target Out");
+                        }
+                    }
                     return;
                 }
 
@@ -202,11 +218,11 @@ public abstract class AttackableHero : AttackableUnit
                 //패시브 스킬 가능이면 패시브 사용, 아니라면 평타
                 if (IsPassiveAttack && CanPassiveSkillTime)
                 {
+                    lastPassiveSkillTime = Time.time;
                     PassiveSkillAction();
                 }
                 else if (IsNormalAttack && CanNormalAttackTime)
                 {
-                    animator.SetTrigger("Attack");
                     lastNormalAttackTime = Time.time;
                     NormalAttackAction();
                 }
@@ -263,7 +279,7 @@ public abstract class AttackableHero : AttackableUnit
     public override void SetBattle()
     {
         UnitState = UnitState.Battle;
-        lastNormalAttackTime = Time.time;
+        lastNormalAttackTime = Time.time - characterData.attack.cooldown;
     }
     public virtual void SetMoveNext()
     {

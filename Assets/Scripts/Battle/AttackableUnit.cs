@@ -116,7 +116,7 @@ public abstract class AttackableUnit : MonoBehaviour
     {
         if (Time.time - lastNormalAttackTime >= characterData.attack.cooldown)
         {
-            lastNormalAttackTime = Time.deltaTime;
+           // lastNormalAttackTime = Time.deltaTime;
         }
     }
 

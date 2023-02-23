@@ -52,9 +52,11 @@ public class ShortAttackEnemy : AttackableEnemy
         base.SearchTarget();
     }
 
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, characterData.attack.angle / 2, characterData.attack.distance);
         Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -characterData.attack.angle / 2, characterData.attack.distance);
     }
+#endif
 }
