@@ -22,10 +22,10 @@ public class TestBattleManager : MonoBehaviour
             var heroUi = Instantiate(battleHero, battleHeroTr);
 
             hero.SetUi(heroUi);
-            useHeroes.Add(hero);
             heroUi.SetHeroInfo(hero.GetHeroData());
+            useHeroes.Add(hero);
         }
-        clearUi.SetHoros(useHeroes);
+        clearUi.SetHeroes(useHeroes);
     }
 
     public List<Transform> GetStartPosition()
