@@ -1,87 +1,128 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PopUpManager : MonoBehaviour
+struct panelHolder
 {
-    public static PopUpManager Instance { get; private set; }    
-    public GameObject popupHolder;
-    public GameObject[] popUpsInHierarchy; 
+    public panelHolder(GameObject interactable, GameObject noneInteractable)
+    {
+        this.interactable = interactable;
+        this.noneInteractable= noneInteractable;
+    }
+    public GameObject interactable;
+    public GameObject noneInteractable;
 
+    public void HidePanels()
+    {
+        interactable.SetActive(false);
+        noneInteractable.SetActive(false);
+    }
+}
+public class PopUpManager : MonoBehaviour
+{   
+    private List<GameObject> popUpHolders;
+    private List<List<GameObject>> popUpsInHierarchy;    
+
+    public GameObject prefabPopupHolder;    
     public GameObject[] prefabs;
     private bool[] isInstanced;
 
     public GameObject interactablePanel;
     public GameObject noneInteractablePanel;
-    
+
+    public GameObject panelHolder;
+    private List<panelHolder> panelHolders;
+
     public Color interactablePanelColor;
     public Color noneInteractablePanelColor;
-    private void Awake()
-    {
-        Instance = this;
-        isInstanced = new bool[prefabs.Length];
-        SetPanel();        
-        popupHolder.transform.SetAsLastSibling();
-    }
+    public int CurrentViewIndex { get; set; }
     private void Start()
     {
-        MovePopupsToHolder();
+        isInstanced = new bool[prefabs.Length];
+        SetPanel();
+        prefabPopupHolder.transform.SetAsLastSibling();
+    }
+    public void Init(List<GameObject> holders)
+    {
+        popUpHolders = holders;
+        popUpsInHierarchy = new List<List<GameObject>>(popUpHolders.Count);
+
+        for (int i = 0; i < popUpHolders.Count; i++)
+        {
+            List<GameObject> popUps = new List<GameObject>(popUpHolders[i].transform.childCount);
+            for (int j = 0; j < popUps.Capacity; j++)
+            {
+                popUps.Add(popUpHolders[i].transform.GetChild(j).gameObject);
+            }
+            popUpsInHierarchy.Add(popUps);
+        }
     }
     private void SetPanel()
     {
-        interactablePanel = Instantiate(interactablePanel, transform);
         interactablePanel.GetComponent<RawImage>().color = interactablePanelColor;
-        noneInteractablePanel = Instantiate(noneInteractablePanel, transform);
         noneInteractablePanel.GetComponent<RawImage>().color = noneInteractablePanelColor;
-    }
-    private void MovePopupsToHolder()
-    {
-        for(int i = 0; i < popUpsInHierarchy.Length; i++)
-        {
-            popUpsInHierarchy[i].transform.parent = popupHolder.transform;
+
+        panelHolders = new(popUpHolders.Count);
+
+        for (int i = 0; i < panelHolders.Capacity;i++)
+        {            
+            GameObject panelHolder = Instantiate(this.panelHolder, popUpHolders[i].transform);            
+            panelHolder.transform.SetAsFirstSibling();
+
+            var interactable = Instantiate(interactablePanel, panelHolder.transform);            
+            var nonInteractable = Instantiate(noneInteractablePanel, panelHolder.transform);
+
+            panelHolders.Add(new panelHolder(interactable, nonInteractable));
         }
     }
     public void ShowPopupInHierarchy(int index)
     {
-        popupHolder.SetActive(true);
+        var viewIndex = CurrentViewIndex;
+        popUpHolders[viewIndex].SetActive(true);
         HidePopups();
-        popUpsInHierarchy[index].SetActive(true);        
+        popUpsInHierarchy[viewIndex][index].SetActive(true);
     }
     public void ShowPrefab(int index)
-    {
-        popupHolder.SetActive(true);
+    {        
+        prefabPopupHolder.SetActive(true);
         HidePopups();
         if (!isInstanced[index])
         {
-            prefabs[index] = Instantiate(prefabs[index], popupHolder.transform);
+            prefabs[index] = Instantiate(prefabs[index], prefabPopupHolder.transform);
             isInstanced[index] = true;
         }
-        prefabs[index].SetActive(true);        
-    }
-    [Tooltip("체크시 상호작용 가능한 패널생성, 반대는 상호작용 불가")]
-    public void ShowPanelInteractableOrNot(bool interactable = true)
+        prefabs[index].SetActive(true);
+    }    
+    public void ShowPanelInteractable(bool interactable)
     {
-        interactablePanel.SetActive(interactable);
-        noneInteractablePanel.SetActive(!interactable);
+        panelHolders[CurrentViewIndex].interactable.SetActive(interactable);
+        panelHolders[CurrentViewIndex].noneInteractable.SetActive(!interactable);
     }
     private void HidePanel()
     {
+        panelHolders[CurrentViewIndex].HidePanels();
+
         interactablePanel.SetActive(false);
         noneInteractablePanel.SetActive(false);
     }
     private void HidePopups()
     {
-        foreach(var popup in popUpsInHierarchy)
+        var viewIndex = CurrentViewIndex;
+        for (int i = 0; i < popUpsInHierarchy[viewIndex].Count; i++) 
         {
-            popup.gameObject.SetActive(false);
+            popUpsInHierarchy[viewIndex][i].SetActive(false);
         }
-        foreach(var prefab in prefabs)
+        for(int i = 0; i < prefabs.Length; i++)
         {
-            prefab.gameObject.SetActive(false);
+            prefabs[i].SetActive(false);
         }
     }
-    public void ClearPopupWindow()
+    public void ClearPopups()
     {
-        popupHolder.SetActive(false);
+        prefabPopupHolder.SetActive(false);
         HidePanel();
-    }
+
+        popUpHolders[CurrentViewIndex].SetActive(false);
+        HidePanel();
+    }   
 }

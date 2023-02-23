@@ -6,8 +6,7 @@ public class HeroInfoView : View
     public int index;
     private void Awake()
     {
-        button = GetComponent<Button>();
-        button.onClick.AddListener(() => ViewManager.Show(index));        
+        button = GetComponent<Button>();        
+        button.onClick.AddListener(() => UIManager.Instance.ShowView(index));        
     }
-
 }

@@ -2,19 +2,14 @@ using System.Collections.Generic;
 using UnityEngine;
 public class ViewManager : MonoBehaviour
 {
-    public static ViewManager Instance { get; private set; }
-
-    public View startingView;
-
-    private View currentView;
-
-    public List<View> views = new ();    
-    private void Awake() => Instance = this; 
-   
+    private List<View> views;
+    private View startingView;
+    private View currentView;    
+    public int CurrentViewIndex { get; set; }
     private void Start()
-    {   
+    {
         foreach (var view in views)
-        {            
+        {
             view.Hide();
         }
 
@@ -22,22 +17,28 @@ public class ViewManager : MonoBehaviour
         {
             Show(startingView);
         }
-    } 
-    public static void Show(int index)
+    }
+    public void Init(View startingView, List<View> views)
     {
-        if (index >= Instance.views.Count)
+        this.startingView = startingView;
+        this.views = views;        
+    }
+    public void Show(int index)
+    {
+        if (index >= views.Count)
             return;
 
-        var viewToDisplay = Instance.views[index];
-        Instance.currentView?.Hide();
+        var viewToDisplay = views[index];
+        currentView?.Hide();
         viewToDisplay.Show();
-        Instance.currentView = viewToDisplay;
+        currentView = viewToDisplay;
+       
     }
-    public static void Show(View view)
+    public void Show(View view)
     {
-        Instance.currentView?.Hide();
+        currentView?.Hide();
         view.Show();
-        Instance.currentView = view;
+        currentView = view;
     }
 }
 
