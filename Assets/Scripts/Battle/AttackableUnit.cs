@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public abstract class AttackableUnit : MonoBehaviour
 {
@@ -18,6 +19,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     [SerializeField]
     protected int hp;
+    public int GetHp() => hp;
 
     //쿨타임에 사용, Hero는 Ui버튼을 누를때 쿨타임을 검사하지만 Enemy나 Boss 가 생길수도 있으니 같이 작성해놓음
     protected float lastNormalAttackTime;

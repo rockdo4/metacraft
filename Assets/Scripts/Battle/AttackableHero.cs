@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -85,17 +86,57 @@ public abstract class AttackableHero : AttackableUnit
     }
 
     //BattleManager에서 targetList 가 null이면 SetReturnPos 를 실행해줌
-    protected void SearchNearbyEnemy()
+    protected void SearchNearbyTarget()
     {
         if (targetList.Count == 0)
         {
             target = null;
             return;
         }
-
         //가장 가까운 적 탐색
         target = targetList.OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
                           .FirstOrDefault();
+    }
+    protected bool InRangeTarget(List<AttackableUnit> targetList,ref AttackableUnit target,float distance)
+    {
+        float minDist = float.MaxValue;
+        bool targetChanged = false;
+
+        foreach (var unit in targetList)
+        {
+            float dist = Vector3.Distance(unit.transform.position, transform.position);
+
+            if (dist <= distance && dist < minDist)
+            {
+                target = unit;
+                minDist = dist;
+                targetChanged = true;
+            }
+        }
+
+        return targetChanged;
+    }
+    protected void SearchMaxHealthTarget()
+    {
+        if (targetList.Count == 0)
+        {
+            target = null;
+            return;
+        }
+        //가장 가까운 적 탐색
+        var maxHp = targetList.Max(t => t.GetHp());
+        target = targetList.Where(t => t.GetHp() == maxHp).FirstOrDefault().GetComponent<AttackableUnit>();
+    }
+    protected void SearchMinHealthTarget()
+    {
+        if (targetList.Count == 0)
+        {
+            target = null;
+            return;
+        }
+        //가장 가까운 적 탐색
+        var minHp = targetList.Min(t => t.GetHp());
+        target = targetList.Where(t => t.GetHp() == minHp).FirstOrDefault().GetComponent<AttackableUnit>();
     }
     protected virtual void SearchTarget()
     {
