@@ -16,6 +16,17 @@ public class GameManager : Singleton<GameManager>
     private List<Dictionary<string, object>> characterList;
     public List<Dictionary<string, object>> missionInfoList;
 
+    public Sprite GetSpriteByAddress(string address)
+    {
+        if (iconSprites.ContainsKey(address))
+            return iconSprites[address];
+
+        if (illustrationSprites.ContainsKey(address))
+            return illustrationSprites[address];
+
+        return null;
+    }
+
     public override void Awake()
     {
         base.Awake();
