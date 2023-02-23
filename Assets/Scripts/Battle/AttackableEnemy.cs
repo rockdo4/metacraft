@@ -180,17 +180,17 @@ public abstract class AttackableEnemy : AttackableUnit
         UnitState = UnitState.Battle;
     }
 
-    public override void OnDamage(int dmg)
+    public override void OnDamage(int dmg, bool isCritical)
     {
         hp = Mathf.Max(hp - dmg, 0);
         if (hp <= 0)
             UnitState = UnitState.Die;
 
-        TempShowHpBarAndDamageText(dmg);
+        TempShowHpBarAndDamageText(dmg, isCritical);
     }
-    public void TempShowHpBarAndDamageText(int dmg)
+    public void TempShowHpBarAndDamageText(int dmg, bool isCritical = false)
     {
-        floatingDamageText.OnAttack(dmg, false, transform.position, DamageType.Normal);
+        floatingDamageText.OnAttack(dmg, isCritical, transform.position, DamageType.Normal);
         hpBarManager.TestCode(dmg);
         if (hp <= 0)
             hpBarManager.Die();

@@ -44,6 +44,7 @@ public abstract class AttackableHero : AttackableUnit
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
+                    animator.SetTrigger("Idle");
                     battleManager.GetEnemyList(ref targetList);
                     pathFind.stoppingDistance = characterData.attack.distance * 0.9f;
                     pathFind.speed = characterData.data.moveSpeed;
@@ -54,9 +55,7 @@ public abstract class AttackableHero : AttackableUnit
                 case UnitState.Die:
                     pathFind.isStopped = true;
                     animator.SetTrigger("Die");
-                    float destroyDelay = animator.GetCurrentAnimatorStateInfo(0).length;
                     nowUpdate = DieUpdate;
-                    Destroy(gameObject, destroyDelay + 1);
                     break;
             }
         }
@@ -120,6 +119,10 @@ public abstract class AttackableHero : AttackableUnit
         }
 
         return targetChanged;
+    }
+    protected bool ContainTarget(AttackableUnit target, float distance)
+    {
+        return Vector3.Distance(target.transform.position, transform.position) <= distance;
     }
     protected void SearchMaxHealthTarget()
     {
@@ -271,7 +274,7 @@ public abstract class AttackableHero : AttackableUnit
         UnitState = UnitState.ReturnPosition;
     }
 
-    public override void OnDamage(int dmg)
+    public override void OnDamage(int dmg, bool isCritical = false)
     {
         hp = Mathf.Max(hp - dmg, 0);
 
@@ -280,8 +283,14 @@ public abstract class AttackableHero : AttackableUnit
         if (hp <= 0)
             UnitState = UnitState.Die;
     }
-    private void OnDestroy()
+    
+    public void DeadHero(AnimationEvent ev)
     {
-       battleManager.OnDeadHero(this);
+        battleManager.OnDeadHero(this);
+    }
+
+    public void DestroyHero(AnimationEvent ev)
+    {
+        Destroy(gameObject);
     }
 }
