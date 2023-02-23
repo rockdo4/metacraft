@@ -12,7 +12,7 @@ public class ShortAttackHero : AttackableHero
 
         if (characterData.attack.count == 1)
         {
-            target.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage);
+            target.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage, false);
             return;
         }
 
@@ -37,13 +37,44 @@ public class ShortAttackHero : AttackableHero
         var cnt = Mathf.Min(attackEnemies.Count, characterData.attack.count);
         for (int i = 0; i < cnt; i++)
         {
-            attackEnemies[i].GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage);
+            attackEnemies[i].GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage, false);
         }
     }
 
     public override void PassiveSkill()
     {
         base.PassiveSkill();
+        //Logger.Debug("Hero_NormalAttack");
+
+        if (characterData.attack.count == 1)
+        {
+            target.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage,true);
+            return;
+        }
+
+        List<GameObject> attackEnemies = new();
+
+        foreach (var enemy in targetList)
+        {
+            Vector3 interV = enemy.transform.position - transform.position;
+            if (interV.magnitude <= characterData.attack.distance)
+            {
+                float angle = Vector3.Angle(transform.forward, interV);
+
+                if (Mathf.Abs(angle) < characterData.attack.angle / 2f)
+                {
+                    attackEnemies.Add(enemy.transform.gameObject);
+                }
+            }
+        }
+
+        attackEnemies.OrderBy(t => Vector3.Distance(transform.position, t.transform.position));
+
+        var cnt = Mathf.Min(attackEnemies.Count, characterData.attack.count);
+        for (int i = 0; i < cnt; i++)
+        {
+            attackEnemies[i].GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage, true);
+        }
         //Logger.Debug("Hero_PassiveSkill");
     }
 
@@ -52,9 +83,12 @@ public class ShortAttackHero : AttackableHero
        SearchNearbyTarget(); //근거리 타겟 추적
        base.SearchTarget();
     }
-    //private void OnDrawGizmos()
-    //{
-    //    Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, characterData.attack.angle / 2, characterData.attack.distance);
-    //    Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -characterData.attack.angle / 2, characterData.attack.distance);
-    //}
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, characterData.attack.angle / 2, characterData.attack.distance);
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -characterData.attack.angle / 2, characterData.attack.distance);
+    }
+#endif
 }

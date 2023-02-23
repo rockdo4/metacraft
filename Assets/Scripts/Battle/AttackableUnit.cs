@@ -62,9 +62,11 @@ public abstract class AttackableUnit : MonoBehaviour
 
     // AttackableHero �� AttackableEnemy ���� ������Ƽ ������
     // ���°� ��ġ�°� ����, Enemy�� ��ų�� ���� ��츦 ���
+    [SerializeField]
     protected UnitState unitState;
     protected virtual UnitState UnitState { get; set; }
 
+    [SerializeField]
     protected UnitBattleState battleState;
     protected virtual UnitBattleState BattleState { get; set; }
 
@@ -138,5 +140,5 @@ public abstract class AttackableUnit : MonoBehaviour
     protected abstract void MoveNextUpdate();
     protected abstract void ReturnPosUpdate();
 
-    public abstract void OnDamage(int dmg);
+    public abstract void OnDamage(int dmg, bool isCritical = false);
 }
