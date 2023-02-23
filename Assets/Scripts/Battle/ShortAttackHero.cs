@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,9 +32,12 @@ public class ShortAttackHero : AttackableHero
             }
         }
 
-        foreach (var hero in attackEnemies)
+        attackEnemies.OrderBy(t => Vector3.Distance(transform.position, t.transform.position));
+
+        var cnt = Mathf.Min(attackEnemies.Count, characterData.attack.count);
+        for (int i = 0; i < cnt; i++)
         {
-            hero.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage);
+            attackEnemies[i].GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage);
         }
     }
 
@@ -45,8 +49,8 @@ public class ShortAttackHero : AttackableHero
 
     protected override void SearchTarget()
     {
-       SearchNearbyEnemy(); //근거리 타겟 추적
-        base.SearchTarget();
+       SearchNearbyTarget(); //근거리 타겟 추적
+       base.SearchTarget();
     }
     //private void OnDrawGizmos()
     //{

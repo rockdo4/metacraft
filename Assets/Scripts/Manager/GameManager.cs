@@ -9,7 +9,7 @@ public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
     public List<CharacterDataBundle> characterTable = new();
-    // public Dictionary<string, Sprite> testPortraits = new();
+    //public Dictionary<string, Sprite> testPortraits = new();
     public Dictionary<string, Sprite> iconSprites = new();
     public Dictionary<string, Sprite> illustrationSprites = new();
 
@@ -59,10 +59,10 @@ public class GameManager : Singleton<GameManager>
                 loadAll = true;
             yield return null;
         }
-        // foreach (var character in characterTable)
+
+        List<AsyncOperationHandle> handles = new();
         //foreach (var character in characterList)
         //{
-        //    //string address = character.data.name;
         //    string address = (string)character["Name"];
         //    Debug.Log(address);
         //    Addressables.LoadAssetAsync<Sprite>(address).Completed +=
@@ -89,7 +89,6 @@ public class GameManager : Singleton<GameManager>
             "Illu_ÇÑ¼­Àº",
         };
 
-        List<AsyncOperationHandle> handles = new();
         foreach (string icon in iconAddress)
         {
             Addressables.LoadAssetAsync<Sprite>(icon).Completed +=
@@ -127,10 +126,10 @@ public class GameManager : Singleton<GameManager>
                 }
                 count++;
             }
-            Logger.Debug($"progress {count} / {handles.Count}");
+            //Logger.Debug($"progress {count} / {handles.Count}");
             yield return null;
         }
-        Logger.Debug("Load All Resources");
+        //Logger.Debug("Load All Resources");
         ReleaseAddressable(handles);
     }
 

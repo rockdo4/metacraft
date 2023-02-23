@@ -3,7 +3,9 @@ using UnityEngine.Pool;
 public class AttackedDamageUI : MonoBehaviour
 {   
     private IObjectPool<DamageUI> normalPool;
-    private IObjectPool<DamageUI> critPool;    
+    private IObjectPool<DamageUI> critPool;
+
+    public float heightAboveGround = 2f;
 
     private void Start()
     {
@@ -16,6 +18,6 @@ public class AttackedDamageUI : MonoBehaviour
     public void OnAttack(int damage, bool isCritical, Vector3 enemyPos, DamageType type)
     {
         var dmgUI = isCritical ? critPool.Get() : normalPool.Get();
-        dmgUI.SetUI(damage, enemyPos, type);
+        dmgUI.SetUI(damage, enemyPos, type, heightAboveGround);
     }
 }

@@ -653,9 +653,8 @@ GameObject:
   - component: {fileID: 6488599665337194434}
   - component: {fileID: 4937613226201563976}
   - component: {fileID: 5478494251590263493}
-  - component: {fileID: 2752790747294089861}
   m_Layer: 5
-  m_Name: HeroInfoButton
+  m_Name: MissionHeroInfoButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -767,9 +766,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2752790747294089861}
-        m_TargetAssemblyTypeName: ControlUIManagerFlow, Assembly-CSharp
-        m_MethodName: ShowView
+      - m_Target: {fileID: 4770930035862738204, guid: 9c38b54c7a0e777439f11416a7734636,
+          type: 3}
+        m_TargetAssemblyTypeName: ViewManager, Assembly-CSharp
+        m_MethodName: 
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -809,18 +809,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   index: 3
---- !u!114 &2752790747294089861
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6488599665337194439}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a4cf4b5055f162f48a9306b137185391, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &8113026983336322243
 GameObject:
   m_ObjectHideFlags: 0

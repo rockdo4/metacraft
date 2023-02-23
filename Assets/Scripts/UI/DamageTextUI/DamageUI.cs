@@ -10,8 +10,7 @@ public class DamageUI : MonoBehaviour
     private Vector3 pos;
 
     public float transSpeed = 1f;
-    public float lifeTime = 2f;
-    public float heightAboveGround = 1f;
+    public float lifeTime = 2f;    
     public DamageTypeColors damageTypeColors;    
 
     private string releaseMethodName = nameof(Realese);
@@ -27,12 +26,11 @@ public class DamageUI : MonoBehaviour
     }
     private void Update()
     {
-        pos.y += transSpeed * Time.deltaTime;
-        transform.position = cam.WorldToScreenPoint(pos);
+        transform.Translate(0f, transSpeed * Time.deltaTime, 0f);
         //뷰가 심하게 돌아가는 게임에선 아래 코드 사용해야함
         //textMeshPro.alpha = transform.position.z > 0f ? 1f : 0f;
     }
-    public void SetUI(int damage, Vector3 enemyPos, DamageType type)
+    public void SetUI(int damage, Vector3 enemyPos, DamageType type, float heightAboveGround)
     {
         textMeshPro.text = damage.ToString();
         textMeshPro.color = damageTypeColors.colors[(int)type];
