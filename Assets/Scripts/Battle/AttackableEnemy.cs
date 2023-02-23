@@ -67,7 +67,7 @@ public abstract class AttackableEnemy : AttackableUnit
         base.Awake();
     }
 
-    protected void SearchNearbyEnemy()
+    protected void SearchNearbyTarget()
     {
         if (targetList.Count == 0)
         {

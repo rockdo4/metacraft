@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public abstract class AttackableUnit : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     [SerializeField]
     protected int hp;
+    public int GetHp() => hp;
 
     //��Ÿ�ӿ� ���, Hero�� Ui��ư�� ������ ��Ÿ���� �˻������� Enemy�� Boss �� ������� ������ ���� �ۼ��س���
     protected float lastNormalAttackTime;

@@ -1,12 +1,12 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-public struct tempInfo
+public struct HpInfo
 {
-    public tempInfo(float maxHp)
+    public HpInfo(float maxHp, float hp)
     {
         this.maxHp = maxHp;
-        hp = maxHp;
+        this.hp = hp;
     }
     public float maxHp;
     public float hp;
@@ -18,7 +18,7 @@ public class HpBarManager : MonoBehaviour
     private CanvasHpBarHolder canvasBarHolder;
     private Camera cam;
 
-    private tempInfo hpInfo = new tempInfo(100f);
+    private HpInfo hpInfo;
     private Vector3 barLocation;
     private float maxHpDiv;
 
@@ -49,13 +49,18 @@ public class HpBarManager : MonoBehaviour
         InstantiateHpBar();
         if(!hpBar.TryGetComponent(out canvasGroup))
             canvasGroup = hpBar.AddComponent<CanvasGroup>();
-        maxHpDiv = 1 / hpInfo.maxHp;
+        
         posUpdateRatio = 1 / 20f;
     }
     void Update()
     {
         UpdateBar();
         CheckDurationTimer();
+    }
+    public void SetHp(float maxHp, float hp)
+    {
+        hpInfo = new HpInfo(maxHp, hp); 
+        maxHpDiv = 1 / hpInfo.maxHp;
     }
     private void InstantiateHpBar()
     {
@@ -68,12 +73,9 @@ public class HpBarManager : MonoBehaviour
     }
     private void UpdateBar()
     {
-        if (!isOn)
-            return;
-
         UpdateBarPos();
 
-        canvasGroup.alpha = isOn ? 1f : 0f;
+        canvasGroup.alpha = isOn ? 1f : 0f;        
 
         hpBar.value = hpInfo.hp * maxHpDiv;
         //카메라 위치 체인지가 극심한 게임에선 필요함
@@ -93,7 +95,7 @@ public class HpBarManager : MonoBehaviour
     }
 
     //조건을 hp < 0 으로 걸어도됨. 대신 매프레임 체크나 외부에서 호출하는 식으로 바꿔야됨.
-    public void WhenDieAnimationTriggered()
+    public void Die()
     {
         hpBar.gameObject.SetActive(false);
         isOn = false;
