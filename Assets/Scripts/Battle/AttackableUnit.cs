@@ -1,8 +1,7 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Experimental.GlobalIllumination;
 
 public abstract class AttackableUnit : MonoBehaviour
 {
@@ -18,8 +17,9 @@ public abstract class AttackableUnit : MonoBehaviour
 
     [SerializeField]
     protected int hp;
+    public int GetHp() => hp;
 
-    //ÄðÅ¸ÀÓ¿¡ »ç¿ë, Hero´Â Ui¹öÆ°À» ´©¸¦¶§ ÄðÅ¸ÀÓÀ» °Ë»çÇÏÁö¸¸ Enemy³ª Boss °¡ »ý±æ¼öµµ ÀÖÀ¸´Ï °°ÀÌ ÀÛ¼ºÇØ³õÀ½
+    //ï¿½ï¿½Å¸ï¿½Ó¿ï¿½ ï¿½ï¿½ï¿½, Heroï¿½ï¿½ Uiï¿½ï¿½Æ°ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½Ë»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Enemyï¿½ï¿½ Boss ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Û¼ï¿½ï¿½Ø³ï¿½ï¿½ï¿½
     protected float lastNormalAttackTime;
     protected float lastPassiveSkillTime;
     protected float lastActiveSkillTime;
@@ -27,24 +27,41 @@ public abstract class AttackableUnit : MonoBehaviour
     protected float lastNavTime;
     protected float navDelay = 0.2f;
 
-    //ÇöÀç »óÅÂÀÇ UpdateÇÔ¼ö È£Ãâ
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Updateï¿½Ô¼ï¿½ È£ï¿½ï¿½
     protected Action nowUpdate;
 
-    //°¢°¢ÀÇ Ä³¸¯ÅÍ°¡ µé°íÀÖ´Â ½ºÅ³µé, ³ªÁß¿¡ °¢°¢ÀÇ ½ºÅ³À»µé Á¦ÀÛÇÏ°í, ÇØ´ç Ä³¸¯ÅÍ°¡ ¹ØÀÇ ÀÌº¥Æ®¿¡ ÇÒ´çÇØÁÖ´Â ¹æ½ÄÀ¸·Î »ç¿ë¿¹Á¤
+    //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½Å³ï¿½ï¿½, ï¿½ï¿½ï¿½ß¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Å³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï°ï¿½, ï¿½Ø´ï¿½ Ä³ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½Ìºï¿½Æ®ï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ë¿¹ï¿½ï¿½
     protected Action NormalAttackAction;
     protected Action PassiveSkillAction;
     protected Action ActiveSkillAction;
 
-    //Å¸°Ù Ã£À¸¸é true Å¸°Ù¿¡°Ô µµÂøÇÏ¸é false
+    //Å¸ï¿½ï¿½ Ã£ï¿½ï¿½ï¿½ï¿½ true Å¸ï¿½Ù¿ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ false
     protected bool moveTarget;
+
+    protected Animator animator;
+    protected float normalAttackDelay;
+    private string normalAttackClipName = "Attack";
+    private readonly int hashAttackSpeed = Animator.StringToHash("AttackSpeed");
 
     protected virtual void Awake()
     {
         battleManager = FindObjectOfType<BeltScrollBattleManager>();
+        animator = GetComponent<Animator>();
+        float speed = animator.GetFloat(hashAttackSpeed);
+
+        for (int i = 0; i <  animator.runtimeAnimatorController.animationClips.Length; i++)
+        {
+            if (animator.runtimeAnimatorController.animationClips[i].name.Equals(normalAttackClipName))
+            {
+                float delay = animator.runtimeAnimatorController.animationClips[i].length;
+                normalAttackDelay = delay / speed;
+                break;
+            }
+        }
     }
 
-    // AttackableHero ¿Í AttackableEnemy ¿¡¼­ ÇÁ·ÎÆÛÆ¼ ÀçÁ¤ÀÇ
-    // »óÅÂ°¡ °ãÄ¡´Â°Ô ¸¹°í, Enemy°¡ ½ºÅ³À» °¡Áú °æ¿ì¸¦ ´ëºñ
+    // AttackableHero ï¿½ï¿½ AttackableEnemy ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ¼ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+    // ï¿½ï¿½ï¿½Â°ï¿½ ï¿½ï¿½Ä¡ï¿½Â°ï¿½ ï¿½ï¿½ï¿½ï¿½, Enemyï¿½ï¿½ ï¿½ï¿½Å³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ì¸¦ ï¿½ï¿½ï¿½
     protected UnitState unitState;
     protected virtual UnitState UnitState { get; set; }
 
@@ -53,7 +70,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected bool CanNormalAttackTime {
         get {
-            return (Time.time - lastNormalAttackTime) > characterData.attack.cooldown;
+            return (Time.time - lastNormalAttackTime) > normalAttackDelay;
         }
     }
     protected bool CanPassiveSkillTime {
@@ -79,14 +96,14 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected void SetData()
     {
-        pathFind.stoppingDistance = characterData.attack.distance;
+        pathFind.stoppingDistance = characterData.attack.distance * 0.9f;
 
-        //ÀÌº¥Æ® ¿¬°á. ¹ØÀÇ ÇÔ¼öµéÀº abstract ·Î ¼±¾ðÇß±â ¶§¹®¿¡ »ó¼Ó¹ÞÀº Ä³¸¯ÅÍµéÀÌ µé°íÀÖ´Â ÇÔ¼ö¸¦ ½ÇÇà
+        //ï¿½Ìºï¿½Æ® ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ï¿½ï¿½ abstract ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ß±ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ó¹ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
         NormalAttackAction = NormalAttack;
         PassiveSkillAction = PassiveSkill;
         ActiveSkillAction = ActiveAttack;
 
-        hp = characterData.data.healthPoint; //ÇöÀç ÀÜ¿© Hpµ¥ÀÌÅÍ°¡ ¾ø±â¿¡ HeroData¿¡ ÀÖ´Â ÃÖ´ëÃ¼·Â »ç¿ë
+        hp = characterData.data.healthPoint; //ï¿½ï¿½ï¿½ï¿½ ï¿½Ü¿ï¿½ Hpï¿½ï¿½ï¿½ï¿½ï¿½Í°ï¿½ ï¿½ï¿½ï¿½â¿¡ HeroDataï¿½ï¿½ ï¿½Ö´ï¿½ ï¿½Ö´ï¿½Ã¼ï¿½ï¿½ ï¿½ï¿½ï¿½
     }
     protected void FixedUpdate()
     {
@@ -101,20 +118,20 @@ public abstract class AttackableUnit : MonoBehaviour
         }
     }
 
-    //Enemy¿Í Hero°¡ °øÅëÀ¸·Î µé°íÀÖ´Â ÇÔ¼ö. Hero´Â SetMoveNext¿Í SetRetrunPos ¸¦ ´õ °¡Áö°í ÀÖÀ½
+    //Enemyï¿½ï¿½ Heroï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ô¼ï¿½. Heroï¿½ï¿½ SetMoveNextï¿½ï¿½ SetRetrunPos ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
     public abstract void SetBattle();
 
-    //ÇØ´çÇÏ´Â ½ºÅ³µéÀ» »ó¼Ó¹ÞÀº Ä³¸¯ÅÍµéÀÌ °¡Áö°í ÀÖ¾î¾ß ÇÔ
-    //ÇØ´çÇÏ´Â ½ºÅ³µé ¸¸µé¾î³õ°í À§¿¡ NormalAttackAction ¿¡ ÇÒ´çÇÒ ÇÔ¼ö¸¦ ¹Ù²ãÁÖ°í½ÍÀ½
+    //ï¿½Ø´ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½Å³ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ó¹ï¿½ï¿½ï¿½ Ä³ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ö¾ï¿½ï¿½ ï¿½ï¿½
+    //ï¿½Ø´ï¿½ï¿½Ï´ï¿½ ï¿½ï¿½Å³ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ NormalAttackAction ï¿½ï¿½ ï¿½Ò´ï¿½ï¿½ï¿½ ï¿½Ô¼ï¿½ï¿½ï¿½ ï¿½Ù²ï¿½ï¿½Ö°ï¿½ï¿½ï¿½ï¿½ï¿½
     public abstract void NormalAttack();
     public abstract void PassiveSkill();
     public abstract void ActiveAttack();
 
-    //ÇöÀç ¾Ö´Ï¸ÞÀÌ¼ÇÀÌ ¾øÀ¸´Ï, »óÅÂ¸¦ NormalAttack·Î ¹Ù²ãÁÙ ÀÓ½Ã ÇÔ¼ö
+    //ï¿½ï¿½ï¿½ï¿½ ï¿½Ö´Ï¸ï¿½ï¿½Ì¼ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½ï¿½ï¿½Â¸ï¿½ NormalAttackï¿½ï¿½ ï¿½Ù²ï¿½ï¿½ï¿½ ï¿½Ó½ï¿½ ï¿½Ô¼ï¿½
     public abstract void TestPassiveEnd();
     public abstract void TestActiveEnd();
 
-    //Ä³¸¯ÅÍµéÀÇ »óÅÂ¸¶´ÙÀÇ ¾÷µ¥ÀÌÆ® ÇÔ¼ö. Enemy´Â »ç¿ëÇÏÁö ¾Ê´Â »óÅÂ¿Í, Update¸¦ °¡Áú¼ö ÀÖÀ½. ¾Æ¹«±â´ÉX
+    //Ä³ï¿½ï¿½ï¿½Íµï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Â¸ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Æ® ï¿½Ô¼ï¿½. Enemyï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ê´ï¿½ ï¿½ï¿½ï¿½Â¿ï¿½, Updateï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. ï¿½Æ¹ï¿½ï¿½ï¿½ï¿½X
     protected abstract void IdleUpdate();
     protected abstract void BattleUpdate();
     protected abstract void DieUpdate();

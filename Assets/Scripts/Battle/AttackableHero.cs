@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -27,21 +28,24 @@ public abstract class AttackableHero : AttackableUnit
             {
                 case UnitState.Idle:
                     pathFind.isStopped = true;
+                    animator.SetTrigger("Idle");
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.ReturnPosition: // 재배치
                     pathFind.isStopped = false;
+                    animator.SetTrigger("Run");
                     pathFind.SetDestination(returnPos.position); //재배치 위치 설정
                     pathFind.stoppingDistance = 0; //가까이 가기
                     nowUpdate = ReturnPosUpdate;
                     break;
                 case UnitState.MoveNext:
                     pathFind.isStopped = false;
+                    animator.SetTrigger("Run");
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
                     battleManager.GetEnemyList(ref targetList);
-                    pathFind.stoppingDistance = characterData.attack.distance;
+                    pathFind.stoppingDistance = characterData.attack.distance * 0.9f;
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
                     BattleState = UnitBattleState.NormalAttack;
@@ -49,8 +53,10 @@ public abstract class AttackableHero : AttackableUnit
                     break;
                 case UnitState.Die:
                     pathFind.isStopped = true;
+                    animator.SetTrigger("Die");
+                    float destroyDelay = animator.GetCurrentAnimatorStateInfo(0).length;
                     nowUpdate = DieUpdate;
-                    Destroy(gameObject, 1);
+                    Destroy(gameObject, destroyDelay + 1);
                     break;
             }
         }
@@ -85,25 +91,71 @@ public abstract class AttackableHero : AttackableUnit
     }
 
     //BattleManager에서 targetList 가 null이면 SetReturnPos 를 실행해줌
-    protected void SearchNearbyEnemy()
+    protected void SearchNearbyTarget()
     {
         if (targetList.Count == 0)
         {
             target = null;
             return;
         }
-
         //가장 가까운 적 탐색
-        target = targetList.OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
+        target = targetList.Where(t=>t.GetHp() > 0).OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
                           .FirstOrDefault();
     }
-    protected abstract void SearchTarget();
+    protected bool ContainTarget(List<AttackableUnit> targetList,ref AttackableUnit target,float distance)
+    {
+        float minDist = float.MaxValue;
+        bool targetChanged = false;
+
+        foreach (var unit in targetList)
+        {
+            float dist = Vector3.Distance(unit.transform.position, transform.position);
+
+            if (dist <= distance && dist < minDist)
+            {
+                target = unit;
+                minDist = dist;
+                targetChanged = true;
+            }
+        }
+
+        return targetChanged;
+    }
+    protected void SearchMaxHealthTarget()
+    {
+        if (targetList.Count == 0)
+        {
+            target = null;
+            return;
+        }
+        //가장 가까운 적 탐색
+        var maxHp = targetList.Max(t => t.GetHp());
+        target = targetList.Where(t => t.GetHp() == maxHp && (t.GetHp() > 0)).FirstOrDefault().GetComponent<AttackableUnit>();
+    }
+    protected void SearchMinHealthTarget()
+    {
+        if (targetList.Count == 0)
+        {
+            target = null;
+            return;
+        }
+        //가장 가까운 적 탐색
+        var minHp = targetList.Min(t => t.GetHp());
+        target = targetList.Where(t => (t.GetHp() == minHp) && (t.GetHp() > 0)).FirstOrDefault().GetComponent<AttackableUnit>();
+    }
+    protected virtual void SearchTarget()
+    {
+        if (target != null)
+            animator.SetTrigger("Run");
+    }
+
 
     public override void NormalAttack()
     {
     }
     public override void PassiveSkill()
     {
+        Logger.Debug("Passive!");
         Invoke("TestPassiveEnd", 2);
         BattleState = UnitBattleState.PassiveSkill;
     }
@@ -144,8 +196,6 @@ public abstract class AttackableHero : AttackableUnit
                 Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - transform.position);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 120);
 
-                //transform.LookAt(target.transform);
-
                 //패시브 스킬 가능이면 패시브 사용, 아니라면 평타
                 if (IsPassiveAttack && CanPassiveSkillTime)
                 {
@@ -153,13 +203,10 @@ public abstract class AttackableHero : AttackableUnit
                 }
                 else if (IsNormalAttack && CanNormalAttackTime)
                 {
+                    animator.SetTrigger("Attack");
                     lastNormalAttackTime = Time.time;
                     NormalAttackAction();
                 }
-                //else if(!InRangeNormalAttack) // 만약 멀리 떨어져 있다면
-                //{
-                //    target = null; //타겟을 재설정하기 위해 null로
-                //}
                  if(Time.time - lastNavTime  > navDelay) //SetDestination 에 0.2초의 딜레이 적용
                 {
                     lastNavTime = Time.time;
@@ -196,8 +243,8 @@ public abstract class AttackableHero : AttackableUnit
 
                 if (angle <= 0)
                 {
-                    battleManager.OnReady();
                     UnitState = UnitState.Idle;
+                    battleManager.OnReady();
                 }
                 break;
             case false:
@@ -233,7 +280,6 @@ public abstract class AttackableHero : AttackableUnit
         if (hp <= 0)
             UnitState = UnitState.Die;
     }
-
     private void OnDestroy()
     {
        battleManager.OnDeadHero(this);

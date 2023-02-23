@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
-
 struct panelHolder
 {
     public panelHolder(GameObject interactable, GameObject noneInteractable)
@@ -31,10 +30,7 @@ public class PopUpManager : MonoBehaviour
     public GameObject noneInteractablePanel;
 
     public GameObject panelHolder;
-    private List<panelHolder> panelHolders;
-
-    public Color interactablePanelColor;
-    public Color noneInteractablePanelColor;
+    private List<panelHolder> panelHolders;   
     public int CurrentViewIndex { get; set; }
     private void Start()
     {
@@ -57,18 +53,20 @@ public class PopUpManager : MonoBehaviour
             popUpsInHierarchy.Add(popUps);
         }
     }
+    public void SetPanelColor(Color interactable, Color noneInteractable)
+    {        
+        interactablePanel.GetComponent<RawImage>().color = interactable;
+        noneInteractablePanel.GetComponent<RawImage>().color = noneInteractable;
+    }
     private void SetPanel()
-    {
-        interactablePanel.GetComponent<RawImage>().color = interactablePanelColor;
-        noneInteractablePanel.GetComponent<RawImage>().color = noneInteractablePanelColor;
-
+    {        
         panelHolders = new(popUpHolders.Count);
 
         for (int i = 0; i < panelHolders.Capacity;i++)
         {            
             GameObject panelHolder = Instantiate(this.panelHolder, popUpHolders[i].transform);            
             panelHolder.transform.SetAsFirstSibling();
-
+            
             var interactable = Instantiate(interactablePanel, panelHolder.transform);            
             var nonInteractable = Instantiate(noneInteractablePanel, panelHolder.transform);
 
@@ -120,8 +118,6 @@ public class PopUpManager : MonoBehaviour
     public void ClearPopups()
     {
         prefabPopupHolder.SetActive(false);
-        HidePanel();
-
         popUpHolders[CurrentViewIndex].SetActive(false);
         HidePanel();
     }   

@@ -1,10 +1,18 @@
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class ShortAttackHero : AttackableHero
+public class RangeAttackHero : AttackableHero
 {
+    protected AttackableUnit warningTarget;
+
+    protected override void SearchTarget()
+    {
+        SearchNearbyTarget(); //체력이 가장 많은 타겟 추적
+        base.SearchTarget();
+    }
+
     public override void NormalAttack()
     {
         base.NormalAttack();
@@ -40,21 +48,28 @@ public class ShortAttackHero : AttackableHero
             attackEnemies[i].GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage);
         }
     }
-
     public override void PassiveSkill()
     {
         base.PassiveSkill();
-        //Logger.Debug("Hero_PassiveSkill");
     }
 
-    protected override void SearchTarget()
+    protected override void BattleUpdate()
     {
-       SearchNearbyTarget(); //근거리 타겟 추적
-       base.SearchTarget();
-    }
-    private void OnDrawGizmos()
-    {
-        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, characterData.attack.angle / 2, characterData.attack.distance);
-        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -characterData.attack.angle / 2, characterData.attack.distance);
+        switch (BattleState)
+        {
+            case UnitBattleState.NormalAttack:
+                //if(ContainTarget(targetList, target, characterData.attack.distance))
+                //{
+
+                //}
+                break;
+            case UnitBattleState.PassiveSkill:
+                break;
+            case UnitBattleState.ActiveSkill:
+                break;
+            case UnitBattleState.Stun:
+                break;
+        }
+        base.BattleUpdate();
     }
 }
