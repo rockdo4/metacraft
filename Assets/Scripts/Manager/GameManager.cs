@@ -14,6 +14,7 @@ public class GameManager : Singleton<GameManager>
     public Dictionary<string, Sprite> illustrationSprites = new();
 
     private List<Dictionary<string, object>> characterList;
+    public List<Dictionary<string, object>> missionInfoList;
 
     public override void Awake()
     {
@@ -24,11 +25,18 @@ public class GameManager : Singleton<GameManager>
     private IEnumerator LoadAllResources()
     {
         var cl = Addressables.LoadAssetAsync<TextAsset>("CharacterList");
+        var mit = Addressables.LoadAssetAsync<TextAsset>("MissionInfoTable");
 
         cl.Completed +=
                 (AsyncOperationHandle<TextAsset> obj) =>
                 {
                     characterList = CSVReader.SplitTextAsset(obj.Result);
+                    Addressables.Release(obj);
+                };
+        mit.Completed +=
+                (AsyncOperationHandle<TextAsset> obj) =>
+                {
+                    missionInfoList = CSVReader.SplitTextAsset(obj.Result);
                     Addressables.Release(obj);
                 };
 
