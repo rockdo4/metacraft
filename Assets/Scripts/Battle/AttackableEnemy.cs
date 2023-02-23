@@ -76,7 +76,7 @@ public abstract class AttackableEnemy : AttackableUnit
         }
 
         //���� ����� �� Ž��
-        target = targetList.OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
+        target = targetList.Where(t => t.GetHp() > 0).OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
                           .FirstOrDefault();
     }
 

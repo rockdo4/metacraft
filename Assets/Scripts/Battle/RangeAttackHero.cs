@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class RangeAttackHero : AttackableHero
@@ -57,7 +58,10 @@ public class RangeAttackHero : AttackableHero
         switch (BattleState)
         {
             case UnitBattleState.NormalAttack:
+                //if(ContainTarget(targetList, target, characterData.attack.distance))
+                //{
 
+                //}
                 break;
             case UnitBattleState.PassiveSkill:
                 break;
@@ -66,5 +70,6 @@ public class RangeAttackHero : AttackableHero
             case UnitBattleState.Stun:
                 break;
         }
+        base.BattleUpdate();
     }
 }
