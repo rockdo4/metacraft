@@ -54,9 +54,7 @@ public abstract class AttackableHero : AttackableUnit
                 case UnitState.Die:
                     pathFind.isStopped = true;
                     animator.SetTrigger("Die");
-                    float destroyDelay = animator.GetCurrentAnimatorStateInfo(0).length;
                     nowUpdate = DieUpdate;
-                    Destroy(gameObject, destroyDelay + 1);
                     break;
             }
         }
@@ -280,9 +278,14 @@ public abstract class AttackableHero : AttackableUnit
         if (hp <= 0)
             UnitState = UnitState.Die;
     }
-
-    private void OnDestroy()
+    
+    public void DeadHero(AnimationEvent ev)
     {
-       battleManager.OnDeadHero(this);
+        battleManager.OnDeadHero(this);
+    }
+
+    public void DestroyHero(AnimationEvent ev)
+    {
+        Destroy(gameObject);
     }
 }
