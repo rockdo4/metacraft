@@ -15,17 +15,13 @@ public class BattleHero : MonoBehaviour
     private List<HeroBuff> buffList = new();
     public UnitState heroState;
 
-    HeroData heroData;
+    CharacterDataBundle heroData;
 
-    public void SetHeroInfo(HeroData data)
+    public void SetHeroInfo(CharacterDataBundle data)
     {
         heroData = data;
-        Addressables.LoadAssetAsync<Sprite>(heroData.info.resourceAddress).Completed +=
-            (AsyncOperationHandle<Sprite> obj) =>
-            {
-                heroImage.sprite = obj.Result;
-            };
-        SetHp(heroData.stats.healthPoint);
+        //heroImage.sprite = GameManager.Instance.iconSprites[$"Icon_{heroData.data.name}"];
+        SetHp(heroData.data.healthPoint);
     }
 
     private void Awake()
@@ -50,6 +46,6 @@ public class BattleHero : MonoBehaviour
     }
     public void SetHp(int nowHp)
     {
-        hpBar.value = Mathf.Max((float)nowHp / (float)heroData.stats.healthPoint);
+        hpBar.value = Mathf.Max((float)nowHp / (float)heroData.data.healthPoint);
     }
 }

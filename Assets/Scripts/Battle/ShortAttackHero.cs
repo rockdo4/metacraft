@@ -9,9 +9,9 @@ public class ShortAttackHero : AttackableHero
         base.NormalAttack();
         //Logger.Debug("Hero_NormalAttack");
 
-        if (heroData.normalAttack.count == 1)
+        if (characterData.attack.count == 1)
         {
-            target.GetComponent<AttackableEnemy>().OnDamage(heroData.stats.baseDamage);
+            target.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage);
             return;
         }
 
@@ -20,11 +20,11 @@ public class ShortAttackHero : AttackableHero
         foreach (var enemy in targetList)
         {
             Vector3 interV = enemy.transform.position - transform.position;
-            if (interV.magnitude <= heroData.normalAttack.distance)
+            if (interV.magnitude <= characterData.attack.distance)
             {
                 float angle = Vector3.Angle(transform.forward, interV);
 
-                if (Mathf.Abs(angle) < heroData.normalAttack.angle / 2f)
+                if (Mathf.Abs(angle) < characterData.attack.angle / 2f)
                 {
                     attackEnemies.Add(enemy.transform.gameObject);
                 }
@@ -33,7 +33,7 @@ public class ShortAttackHero : AttackableHero
 
         foreach (var hero in attackEnemies)
         {
-            hero.GetComponent<AttackableEnemy>().OnDamage(heroData.stats.baseDamage);
+            hero.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage);
         }
     }
 
@@ -49,7 +49,7 @@ public class ShortAttackHero : AttackableHero
     }
     private void OnDrawGizmos()
     {
-        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, heroData.normalAttack.angle / 2, heroData.normalAttack.distance);
-        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -heroData.normalAttack.angle / 2, heroData.normalAttack.distance);
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, characterData.attack.angle / 2, characterData.attack.distance);
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -characterData.attack.angle / 2, characterData.attack.distance);
     }
 }

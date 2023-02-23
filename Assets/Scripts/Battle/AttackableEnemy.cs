@@ -26,9 +26,9 @@ public abstract class AttackableEnemy : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
-                    pathFind.stoppingDistance = heroData.normalAttack.distance; //가까이 가기
+                    pathFind.stoppingDistance = characterData.attack.distance; //가까이 가기
                     battleManager.GetHeroList(ref targetList);
-                    pathFind.speed = heroData.stats.moveSpeed;
+                    pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
                     BattleState = UnitBattleState.NormalAttack;
                     nowUpdate = BattleUpdate;
@@ -134,7 +134,7 @@ public abstract class AttackableEnemy : AttackableUnit
                 //{
                 //    target = null;
                 //}
-                else if (Time.time - lastNavTime > navDelay)
+                if (Time.time - lastNavTime > navDelay)
                 {
                     lastNavTime = Time.time;
                     pathFind.SetDestination(target.transform.position);
