@@ -1284,6 +1284,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterData: {fileID: 4162986801234299680}
   hp: 0
+  unitState: 0
+  battleState: 0
 --- !u!114 &4162986801234299680
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1296,7 +1298,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8666468cbdf1927409dca387dd261c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  data: {fileID: 11400000, guid: 4fb04830452938646b3f1713b17420c5, type: 2}
+  originData: {fileID: 11400000, guid: 4fb04830452938646b3f1713b17420c5, type: 2}
+  data:
+    name: 
+    grade: 
+    job: 
+    maxGrade: 
+    energy: 0
+    likeability: 0
+    level: 0
+    exp: 0
+    baseDamage: 50
+    baseDefense: 0
+    healthPoint: 500
+    moveSpeed: 3
+    critical: 0
+    criticalDmg: 2
+    evasion: 0
+    accuracy: 0.5
+    equipment: {fileID: 0}
+    synergys: 
   attack: {fileID: 11400000, guid: d5b9a7358e0855b46acac612b4428307, type: 2}
   activeSkill: {fileID: 11400000, guid: 72914e2e9e922d84eb7b5c550ed005df, type: 2}
   passiveSkill: {fileID: 11400000, guid: 72914e2e9e922d84eb7b5c550ed005df, type: 2}

@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 
 public class MissionManager : MonoBehaviour
@@ -58,7 +56,7 @@ public class MissionManager : MonoBehaviour
         ProperCombatPower.text = $"1000/{dic["ProperCombatPower"]}";
     }
 
-    public void OnClickHeroSelect(CharacterData data)
+    public void OnClickHeroSelect(LiveData data)
     {
         Logger.Debug(2);
         curButton.GetComponent<Image>().sprite = GameManager.Instance.iconSprites[$"Icon_{data.name}"];

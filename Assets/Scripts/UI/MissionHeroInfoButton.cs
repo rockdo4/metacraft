@@ -1,5 +1,4 @@
 using TMPro;
-using UnityEngine;
 using UnityEngine.UI;
 
 
@@ -19,6 +18,6 @@ public class MissionHeroInfoButton : HeroInfoButton
     public void OnClick()
     {
         Logger.Debug(1);
-        GameObject.FindObjectOfType<MissionManager>().OnClickHeroSelect(data);
+        FindObjectOfType<MissionManager>().OnClickHeroSelect(data);
     }
 }

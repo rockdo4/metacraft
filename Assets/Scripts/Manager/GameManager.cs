@@ -33,6 +33,14 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine(LoadAllResources());
     }
 
+    private void Start()
+    {
+        foreach (var character in characterTable)
+        {
+            character.SetActive(false);
+        }
+    }
+
     private IEnumerator LoadAllResources()
     {
         var cl = Addressables.LoadAssetAsync<TextAsset>("CharacterList");

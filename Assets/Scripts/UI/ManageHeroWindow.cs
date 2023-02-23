@@ -41,15 +41,15 @@ public class ManageHeroWindow : View
                 break;
 
             case 1:
-                copyCharacterTable.Sort((x, y) => { return x.data.grade.CompareTo(y.data.grade); });
+                copyCharacterTable.Sort((Comparison<CharacterDataBundle>)((x, y) => { return x.data.grade.CompareTo((string)y.data.grade); }));
                 break;
 
             case 2:
-                copyCharacterTable.Sort((x, y) => { return x.data.job.CompareTo(y.data.job); });
+                copyCharacterTable.Sort((Comparison<CharacterDataBundle>)((x, y) => { return x.data.job.CompareTo((string)y.data.job); }));
                 break;
 
             case 3:
-                copyCharacterTable.Sort((x, y) => { return x.data.level.CompareTo(y.data.level); });
+                copyCharacterTable.Sort((Comparison<CharacterDataBundle>)((x, y) => { return x.data.level.CompareTo((int)y.data.level); }));
                 break;
         }
 
