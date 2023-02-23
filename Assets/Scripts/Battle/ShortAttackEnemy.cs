@@ -9,9 +9,9 @@ public class ShortAttackEnemy : AttackableEnemy
         base.NormalAttack();
         //Logger.Debug("Hero_NormalAttack");
 
-        if (heroData.normalAttack.count == 1)
+        if (characterData.attack.count == 1)
         {
-            target.GetComponent<AttackableHero>().OnDamage(heroData.stats.baseDamage);
+            target.GetComponent<AttackableHero>().OnDamage(characterData.data.baseDamage);
             return;
         }
 
@@ -20,11 +20,11 @@ public class ShortAttackEnemy : AttackableEnemy
         foreach (var hero in targetList)
         {
             Vector3 interV = hero.transform.position - transform.position;
-            if (interV.magnitude <= heroData.normalAttack.distance)
+            if (interV.magnitude <= characterData.attack.distance)
             {
                 float angle = Vector3.Angle(transform.forward, interV);
 
-                if (Mathf.Abs(angle) < heroData.normalAttack.angle / 2f)
+                if (Mathf.Abs(angle) < characterData.attack.angle / 2f)
                 {
                     attackHeroes.Add(hero.transform.gameObject);
                 }
@@ -33,7 +33,7 @@ public class ShortAttackEnemy : AttackableEnemy
 
         foreach (var hero in attackHeroes)
         {
-            hero.GetComponent<AttackableHero>().OnDamage(heroData.stats.baseDamage);
+            hero.GetComponent<AttackableHero>().OnDamage(characterData.data.baseDamage);
         }
     }
     public override void PassiveSkill()
@@ -49,7 +49,7 @@ public class ShortAttackEnemy : AttackableEnemy
 
     private void OnDrawGizmos()
     {
-        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, heroData.normalAttack.angle / 2, heroData.normalAttack.distance);
-        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -heroData.normalAttack.angle / 2, heroData.normalAttack.distance);
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, characterData.attack.angle / 2, characterData.attack.distance);
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -characterData.attack.angle / 2, characterData.attack.distance);
     }
 }

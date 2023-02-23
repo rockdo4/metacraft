@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 5220265615185062814}
   - component: {fileID: 5220265615185062815}
   - component: {fileID: 6228428988213396497}
+  - component: {fileID: 3728486985338745868}
   m_Layer: 6
   m_Name: Hero
   m_TagString: Hero
@@ -150,9 +151,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eeb636bf02dbd6d408d205f034c35665, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetType:
-    serializedVersion: 2
-    m_Bits: 128
+  characterData: {fileID: 3728486985338745868}
   hp: 0
+  targetList: []
   returnPos: {fileID: 0}
+  skillDuration: 0
   angleRange: 30
+--- !u!114 &3728486985338745868
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5220265615185062804}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8666468cbdf1927409dca387dd261c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  data: {fileID: 11400000, guid: 4fb04830452938646b3f1713b17420c5, type: 2}
+  attack: {fileID: 11400000, guid: d5b9a7358e0855b46acac612b4428307, type: 2}
+  skill: {fileID: 11400000, guid: 72914e2e9e922d84eb7b5c550ed005df, type: 2}

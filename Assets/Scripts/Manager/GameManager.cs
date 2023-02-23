@@ -8,8 +8,12 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
-    public List<HeroData> newCharacters = new();
-    public Dictionary<string, Sprite> testPortraits = new();
+    public List<CharacterDataBundle> characterTable = new();
+    // public Dictionary<string, Sprite> testPortraits = new();
+    public Dictionary<string, Sprite> iconSprites = new();
+    public Dictionary<string, Sprite> illustrationSprites = new();
+
+    private List<Dictionary<string, object>> characterList;
 
     public override void Awake()
     {
@@ -19,22 +23,78 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator LoadAllResources()
     {
-        List<AsyncOperationHandle> handles = new();
+        var cl = Addressables.LoadAssetAsync<TextAsset>("CharacterList");
 
-        foreach (var character in newCharacters)
+        cl.Completed +=
+                (AsyncOperationHandle<TextAsset> obj) =>
+                {
+                    characterList = CSVReader.SplitTextAsset(obj.Result);
+                    Addressables.Release(obj);
+                };
+
+        bool loadAll = false;
+        // 텍스트 리소스 로드
+        while (!loadAll)
         {
-            string address = character.info.resourceAddress;
-            Addressables.LoadAssetAsync<Sprite>(address).Completed +=
+            if (cl.IsDone)
+                loadAll = true;
+            yield return null;
+        }
+        // foreach (var character in characterTable)
+        //foreach (var character in characterList)
+        //{
+        //    //string address = character.data.name;
+        //    string address = (string)character["Name"];
+        //    Debug.Log(address);
+        //    Addressables.LoadAssetAsync<Sprite>(address).Completed +=
+        //        (AsyncOperationHandle<Sprite> obj) =>
+        //        {
+        //            testPortraits.Add(address, obj.Result);
+        //            handles.Add(obj);
+        //        };
+        //}
+
+        List<string> iconAddress = new()
+        {
+            "Icon_다인",
+            "Icon_신하루",
+            "Icon_이수빈",
+            "Icon_한서은",
+        };
+
+        List<string> illustrationAddress = new()
+        {
+            "Illu_다인",
+            "Illu_신하루",
+            "Illu_이수빈",
+            "Illu_한서은",
+        };
+
+        List<AsyncOperationHandle> handles = new();
+        foreach (string icon in iconAddress)
+        {
+            Addressables.LoadAssetAsync<Sprite>(icon).Completed +=
                 (AsyncOperationHandle<Sprite> obj) =>
                 {
-                    testPortraits.Add(address, obj.Result);
+                    iconSprites.Add(icon, obj.Result);
                     handles.Add(obj);
                 };
         }
 
+        foreach (string illustration in illustrationAddress)
+        {
+            Addressables.LoadAssetAsync<Sprite>(illustration).Completed +=
+                (AsyncOperationHandle<Sprite> obj) =>
+                {
+                    illustrationSprites.Add(illustration, obj.Result);
+                    handles.Add(obj);
+                };
+        }
+
+
         int count = 0;
-        bool loadAll = false;
-        // 리소스 로드
+        loadAll = false;
+        // 스프라이트 리소스 로드
         while (!loadAll)
         {
             count = 0;

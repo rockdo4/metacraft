@@ -1,51 +1,47 @@
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 
-[Serializable]
-public class CharacterData : IComparable<CharacterData>
+[CreateAssetMenu(fileName = "CharacterData", menuName = "Character/CharacterData")]
+public class CharacterData : ScriptableObject, IComparable<CharacterData>
 {
-    // 기본 정보
-    public string   heroName;         //이름
-    public string   grade;            //등급
-    public string   job;              //직업
-    public int      level;            //레벨
+    public new string   name;               // 이름
+    public string       grade;              // 등급
+    public string       job;                // 직업
 
-    // 전투 스탯
-    public int damage; //일반 공격 데미지
-    public int def; //방어력
-    public int hp; //체력
-    public int speed; //이속
+    public string       maxGrade;           // 승급 가능 최대 등급
+    public int          energy;             // 활동력 소모량
+    public int          likeability;        // 호감도
+    public int          level;              // 레벨
+    public int          exp;                // 경험치
 
-    public float attackDistance; //공격 범위 = 네비게이션 스탑 디스턴스
-    public int attackCount; // 일반스킬 최대 공격 개체수
+    public int Power
+    {
+        // 전투력 계산식
+        private set { power = baseDamage + baseDefense + healthPoint * 10; }
+        get { return power; }
+    }
 
-    public float critical; //크리티컬 확률
-    public float criticalDmg; //크리티컬 데미지 비율
-    public float evasion; //회피율
-    public float accuracy; //명중률
+    private int power;              // 전투력
+    public int baseDamage = 50;    // 일반 공격 데미지
+    public int baseDefense = 0;    // 방어력
+    public int healthPoint = 500;  // 최대 체력
+    public int moveSpeed;          // 이동 속도. 범위, 초기값 설정 필요
+    [Range(0f, 1f)]
+    public float critical = 0f;      // 크리티컬 확률
+    [Range(1f, 10f)]
+    public float criticalDmg = 2f;   // 크리티컬 데미지 배율
+    [Range(0f, 1f)]
+    public float evasion = 0f;       // 회피율
+    [Range(0f, 1f)]
+    public float accuracy = 0.5f;    // 명중률
 
-    public float cooldown;
-    public float skillCooldown;
-    public float skillDuration;
-
-    public int exp;
+    public GameObject equipment;          // 장비
+    public List<int> synergys;           // 시너지 리스트. 정수 or Enum으로 가지고 있다가
+                                         // 공격대에 같은 시너지 index를 가지고 있는 영웅이 있으면 시너지 발동
 
     public int CompareTo(CharacterData other)
     {
-        return heroName.CompareTo(other.heroName);
-    }
-
-    public void PrintBattleInfo()
-    {
-        string printFormat = "{0} : {1}";
-        Logger.Debug(string.Format(printFormat, "데미지", damage));
-        //Logger.Debug(string.Format(printFormat, "방어력", def));
-        //Logger.Debug(string.Format(printFormat, "체력", hp));
-        //Logger.Debug(string.Format(printFormat, "이동속도", speed));
-        //Logger.Debug(string.Format(printFormat, "크리티컬", chritical));
-        //Logger.Debug(string.Format(printFormat, "크리티컬 배율", chriticalDmg));
-        //Logger.Debug(string.Format(printFormat, "명중률", accuracy));
-        //Logger.Debug(string.Format(printFormat, "레벨", level));
-        //Logger.Debug(string.Format(printFormat, "타입", type));
-        Logger.Debug("");
+        return name.CompareTo(other.name);
     }
 }

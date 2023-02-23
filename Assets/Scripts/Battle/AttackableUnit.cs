@@ -9,14 +9,14 @@ public abstract class AttackableUnit : MonoBehaviour
     protected BeltScrollBattleManager battleManager;
 
     [SerializeField]
-    protected HeroData heroData;
-    public HeroData GetHeroData() => heroData;
+    protected CharacterDataBundle characterData;
+    public CharacterDataBundle GetHeroData() => characterData;
 
     protected NavMeshAgent pathFind;
 
     protected AttackableUnit target;
 
-    [SerializeField] //hp를 인스펙터에서 보려고 작성. 
+    [SerializeField]
     protected int hp;
 
     //쿨타임에 사용, Hero는 Ui버튼을 누를때 쿨타임을 검사하지만 Enemy나 Boss 가 생길수도 있으니 같이 작성해놓음
@@ -40,29 +40,30 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected virtual void Awake()
     {
-        battleManager = GameObject.FindObjectOfType<BeltScrollBattleManager>();
+        battleManager = FindObjectOfType<BeltScrollBattleManager>();
     }
 
     // AttackableHero 와 AttackableEnemy 에서 프로퍼티 재정의
     // 상태가 겹치는게 많고, Enemy가 스킬을 가질 경우를 대비
     protected UnitState unitState;
     protected virtual UnitState UnitState { get; set; }
+
     protected UnitBattleState battleState;
     protected virtual UnitBattleState BattleState { get; set; }
 
     protected bool CanNormalAttackTime {
         get {
-            return (Time.time - lastNormalAttackTime) > heroData.normalAttack.cooldown;
+            return (Time.time - lastNormalAttackTime) > characterData.attack.cooldown;
         }
     }
     protected bool CanPassiveSkillTime {
         get {
-            return (Time.time - lastPassiveSkillTime) > heroData.passiveSkill.cooldown;
+            return (Time.time - lastPassiveSkillTime) > characterData.activeSkill.cooldown;
         }
     }
 
-    protected bool InRangeNormalAttack => Vector3.Distance(target.transform.position, transform.position) < heroData.normalAttack.distance;
-    protected bool InRangePassiveSkill => Vector3.Distance(target.transform.position, transform.position) < heroData.passiveSkill.distance;
+    protected bool InRangeNormalAttack => Vector3.Distance(target.transform.position, transform.position) < characterData.attack.distance;
+    protected bool InRangePassiveSkill => Vector3.Distance(target.transform.position, transform.position) < characterData.passiveSkill.distance;
     protected bool NonActiveSkill => battleState != UnitBattleState.ActiveSkill && battleState != UnitBattleState.Stun;
 
     protected bool IsNormalAttack {
@@ -78,21 +79,27 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected void SetData()
     {
-        pathFind.stoppingDistance = heroData.normalAttack.distance;
+        pathFind.stoppingDistance = characterData.attack.distance;
 
         //이벤트 연결. 밑의 함수들은 abstract 로 선언했기 때문에 상속받은 캐릭터들이 들고있는 함수를 실행
         NormalAttackAction = NormalAttack;
         PassiveSkillAction = PassiveSkill;
         ActiveSkillAction = ActiveAttack;
 
-        hp = heroData.stats.healthPoint; //현재 잔여 Hp데이터가 없기에 HeroData에 있는 최대체력 사용
+        hp = characterData.data.healthPoint; //현재 잔여 Hp데이터가 없기에 HeroData에 있는 최대체력 사용
     }
     protected void FixedUpdate()
     {
         nowUpdate?.Invoke();
     }
 
-    //평타와 패시브 스킬 실시간으로 계산
+    protected void NormalAttackUpdate()
+    {
+        if (Time.time - lastNormalAttackTime >= characterData.attack.cooldown)
+        {
+            lastNormalAttackTime = Time.deltaTime;
+        }
+    }
 
     //Enemy와 Hero가 공통으로 들고있는 함수. Hero는 SetMoveNext와 SetRetrunPos 를 더 가지고 있음
     public abstract void SetBattle();

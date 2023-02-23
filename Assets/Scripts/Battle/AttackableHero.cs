@@ -41,8 +41,8 @@ public abstract class AttackableHero : AttackableUnit
                     break;
                 case UnitState.Battle:
                     battleManager.GetEnemyList(ref targetList);
-                    pathFind.stoppingDistance = heroData.normalAttack.distance;
-                    pathFind.speed = heroData.stats.moveSpeed;
+                    pathFind.stoppingDistance = characterData.attack.distance;
+                    pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
                     BattleState = UnitBattleState.NormalAttack;
                     nowUpdate = BattleUpdate;
@@ -81,7 +81,7 @@ public abstract class AttackableHero : AttackableUnit
     public virtual void SetUi(BattleHero _heroUI)
     {
         heroUI = _heroUI;
-        heroUI.heroSkill.Set(heroData.activeSkill.cooldown, PassiveSkill); //궁극기 쿨타임과 궁극기 함수 등록
+        heroUI.heroSkill.Set(characterData.activeSkill.cooldown, ActiveAttack); //궁극기 쿨타임과 궁극기 함수 등록
     }
 
     //BattleManager에서 targetList 가 null이면 SetReturnPos 를 실행해줌
@@ -160,7 +160,7 @@ public abstract class AttackableHero : AttackableUnit
                 //{
                 //    target = null; //타겟을 재설정하기 위해 null로
                 //}
-                else if(Time.time - lastNavTime  > navDelay) //SetDestination 에 0.2초의 딜레이 적용
+                 if(Time.time - lastNavTime  > navDelay) //SetDestination 에 0.2초의 딜레이 적용
                 {
                     lastNavTime = Time.time;
                     pathFind.SetDestination(target.transform.position);
