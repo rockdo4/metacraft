@@ -41,7 +41,8 @@ public class RangeAttackHero : AttackableHero
 
         attackEnemies.OrderBy(t => Vector3.Distance(transform.position, t.transform.position));
 
-        for (int i = 0; i < characterData.attack.count; i++)
+        var cnt = Mathf.Min(attackEnemies.Count, characterData.attack.count);
+        for (int i = 0; i < cnt; i++)
         {
             attackEnemies[i].GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage);
         }

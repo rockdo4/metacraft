@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
@@ -31,9 +32,12 @@ public class ShortAttackEnemy : AttackableEnemy
             }
         }
 
-        foreach (var hero in attackHeroes)
+        attackHeroes.OrderBy(t => Vector3.Distance(transform.position, t.transform.position));
+
+        var cnt = Mathf.Min(attackHeroes.Count, characterData.attack.count);
+        for (int i = 0; i < cnt; i++)
         {
-            hero.GetComponent<AttackableHero>().OnDamage(characterData.data.baseDamage);
+            attackHeroes[i].GetComponent<AttackableHero>().OnDamage(characterData.data.baseDamage);
         }
     }
     public override void PassiveSkill()
