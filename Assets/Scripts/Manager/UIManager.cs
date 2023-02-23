@@ -13,13 +13,15 @@ public class UIManager : MonoBehaviour
     private void Awake()
     {
         Instance = this;
-        SetViewManager();
+        viewManager = gameObject.AddComponent<ViewManager>();
+        //SetViewManager();
         popUpHolders = new(views.Count);
         SetPopUpHolders();
         InitManagers();
     }
     private void SetViewManager()
     {
+        viewManager = gameObject.AddComponent<ViewManager>();
         GameObject viewMgr = new GameObject("VeiwManager");
         viewMgr.transform.parent = transform;
         viewMgr.AddComponent<ViewManager>();
