@@ -81,6 +81,8 @@ GameObject:
   - component: {fileID: 5108290738248420505}
   - component: {fileID: 794226059069708701}
   - component: {fileID: 7547186301610492899}
+  - component: {fileID: -3202756765942621078}
+  - component: {fileID: 5049397885406703672}
   m_Layer: 0
   m_Name: TestAnimationEnemy
   m_TagString: Untagged
@@ -252,6 +254,36 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &-3202756765942621078
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 559785238683214898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57b5116c7ad7e2b4ea4a025f97f2f5f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heightAboveGround: 3
+--- !u!114 &5049397885406703672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 559785238683214898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8a11b41c0382c948beaad15a6840597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hpBar: {fileID: 4063157195768919331, guid: 40a7a86452837ef4c9c67e339a8147c1, type: 3}
+  barWidth: 100
+  barHeigth: 20
+  heightAboveGround: 2.5
+  maxDuration: 3
 --- !u!1 &655988562200369957
 GameObject:
   m_ObjectHideFlags: 0
