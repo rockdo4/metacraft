@@ -105,7 +105,7 @@ public abstract class AttackableHero : AttackableUnit
     protected virtual void SearchTarget()
     {
         if (target != null)
-            Logger.Debug("TargetChange");
+            animator.SetTrigger("Run");
     }
 
 
@@ -114,6 +114,7 @@ public abstract class AttackableHero : AttackableUnit
     }
     public override void PassiveSkill()
     {
+        Logger.Debug("Passive!");
         Invoke("TestPassiveEnd", 2);
         BattleState = UnitBattleState.PassiveSkill;
     }
@@ -201,8 +202,8 @@ public abstract class AttackableHero : AttackableUnit
 
                 if (angle <= 0)
                 {
-                    battleManager.OnReady();
                     UnitState = UnitState.Idle;
+                    battleManager.OnReady();
                 }
                 break;
             case false:
