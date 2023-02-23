@@ -9,7 +9,6 @@ public class ManageHeroWindow : View
     public Transform contents;
     public List<HeroInfoButton> heroInfos = new ();
     private List<CharacterDataBundle> copyCharacterTable;
-    public Scrollbar scrollBar;
 
     private void Awake()
     {
