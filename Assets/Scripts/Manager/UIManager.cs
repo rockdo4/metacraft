@@ -6,39 +6,37 @@ public class UIManager : MonoBehaviour
 
     private ViewManager viewManager;
     public List<View> views;
-    public View startingView;    
+    public View startingView;
 
     public PopUpManager popUpManager;
-    private List<GameObject> popUpHolders;
+
     private void Awake()
     {
         Instance = this;
         viewManager = gameObject.AddComponent<ViewManager>();
-        //SetViewManager();
-        popUpHolders = new(views.Count);
+        SetPopupManager();
         SetPopUpHolders();
-        InitManagers();
+        SetViewManager();
     }
-    private void SetViewManager()
+    private void SetPopupManager()
     {
-        viewManager = gameObject.AddComponent<ViewManager>();
-        GameObject viewMgr = new GameObject("VeiwManager");
-        viewMgr.transform.parent = transform;
-        viewMgr.AddComponent<ViewManager>();
-        viewManager = viewMgr.GetComponent<ViewManager>();
+        popUpManager = Instantiate(popUpManager, transform);
     }
     private void SetPopUpHolders()
     {
+        List<GameObject> popUpHolders;
+        popUpHolders = new(views.Count);
         for (int i = 0; i < popUpHolders.Capacity; i++)
         {
             var popUpHolderIndex = views[i].transform.childCount - 1;
-            popUpHolders.Add(views[i].transform.GetChild(popUpHolderIndex).gameObject);            
+            popUpHolders.Add(views[i].transform.GetChild(popUpHolderIndex).gameObject);
         }
+
+        popUpManager.Init(popUpHolders);
     }
-    private void InitManagers()
+    private void SetViewManager()
     {
         viewManager.Init(startingView, views);
-        popUpManager.Init(popUpHolders);        
     }
     public void ShowView(int index)
     {
@@ -48,7 +46,7 @@ public class UIManager : MonoBehaviour
     public void ShowPopup(int index)
     {
         popUpManager.ShowPopupInHierarchy(index);
-    }   
+    }
     public void ShowPanelInteractable(bool interactable)
     {
         popUpManager.ShowPanelInteractable(interactable);
