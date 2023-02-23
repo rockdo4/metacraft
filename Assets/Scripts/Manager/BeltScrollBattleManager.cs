@@ -88,13 +88,13 @@ public class BeltScrollBattleManager : TestBattleManager
     // 클리어 시 호출할 함수 (Ui 업데이트)
     private void SetStageClear()
     {
-        ViewManager.Show(1);
+        UIManager.Instance.ShowView(1);
         clearUi.Clear();
         Logger.Debug("Clear!");
     }
     private void SetStageFail()
     {
-        PopUpManager.Instance.ShowPopupInHierarchy(2);
+        UIManager.Instance.ShowPopup(2);
         Logger.Debug("Fail!");
     }
 
