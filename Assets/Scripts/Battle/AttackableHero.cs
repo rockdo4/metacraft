@@ -150,7 +150,7 @@ public abstract class AttackableHero : AttackableUnit
     }
     protected virtual void SearchTarget()
     {
-        if (target != null && ContainTarget(target, characterData.attack.distance))
+        if (target != null)
             animator.SetTrigger("Run");
     }
 
@@ -276,7 +276,7 @@ public abstract class AttackableHero : AttackableUnit
         UnitState = UnitState.ReturnPosition;
     }
 
-    public override void OnDamage(int dmg)
+    public override void OnDamage(int dmg, bool isCritical = false)
     {
         hp = Mathf.Max(hp - dmg, 0);
 
