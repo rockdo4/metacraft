@@ -112,14 +112,6 @@ public abstract class AttackableUnit : MonoBehaviour
         nowUpdate?.Invoke();
     }
 
-    protected void NormalAttackUpdate()
-    {
-        if (Time.time - lastNormalAttackTime >= characterData.attack.cooldown)
-        {
-           // lastNormalAttackTime = Time.deltaTime;
-        }
-    }
-
     //Enemy�� Hero�� �������� ����ִ� �Լ�. Hero�� SetMoveNext�� SetRetrunPos �� �� ������ ����
     public abstract void SetBattle();
 
