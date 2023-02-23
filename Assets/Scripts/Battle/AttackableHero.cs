@@ -77,8 +77,9 @@ public abstract class AttackableHero : AttackableUnit
             switch(battleState)
             {
                 case UnitBattleState.MoveToTarget:
-                    animator.SetTrigger("Run");
-                    Logger.Debug("Run");
+                    animator.ResetTrigger("MoveToTarget");
+                    animator.SetTrigger("MoveToTarget");
+                    Logger.Debug("MoveToTarget");
                     break;
                 case UnitBattleState.NormalAttack:
                     break;
