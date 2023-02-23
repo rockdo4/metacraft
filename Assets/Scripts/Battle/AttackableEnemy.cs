@@ -130,10 +130,10 @@ public abstract class AttackableEnemy : AttackableUnit
                     lastNormalAttackTime = Time.time;
                     NormalAttackAction();
                 }
-                else if (!InRangeNormalAttack) // 만약 멀리 떨어져 있다면
-                {
-                    target = null;
-                }
+                //else if (!InRangeNormalAttack && !moveTarget) // 만약 멀리 떨어져 있다면
+                //{
+                //    target = null;
+                //}
                 else if (Time.time - lastNavTime > navDelay)
                 {
                     lastNavTime = Time.time;

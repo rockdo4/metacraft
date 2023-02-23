@@ -35,6 +35,9 @@ public abstract class AttackableUnit : MonoBehaviour
     protected Action PassiveSkillAction;
     protected Action ActiveSkillAction;
 
+    //Å¸°Ù Ã£À¸¸é true Å¸°Ù¿¡°Ô µµÂøÇÏ¸é false
+    protected bool moveTarget;
+
     protected virtual void Awake()
     {
         battleManager = GameObject.FindObjectOfType<BeltScrollBattleManager>();

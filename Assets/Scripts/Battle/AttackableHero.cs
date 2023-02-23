@@ -156,10 +156,10 @@ public abstract class AttackableHero : AttackableUnit
                     lastNormalAttackTime = Time.time;
                     NormalAttackAction();
                 }
-                else if(!InRangeNormalAttack) // 만약 멀리 떨어져 있다면
-                {
-                    target = null; //타겟을 재설정하기 위해 null로
-                }
+                //else if(!InRangeNormalAttack) // 만약 멀리 떨어져 있다면
+                //{
+                //    target = null; //타겟을 재설정하기 위해 null로
+                //}
                 else if(Time.time - lastNavTime  > navDelay) //SetDestination 에 0.2초의 딜레이 적용
                 {
                     lastNavTime = Time.time;
