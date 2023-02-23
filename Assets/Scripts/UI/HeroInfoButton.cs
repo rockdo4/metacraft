@@ -10,7 +10,7 @@ public class HeroInfoButton : MonoBehaviour
     public TextMeshProUGUI levelText;
     public Image icon;
 
-    public void SetData(CharacterDataBundle data)
+    public virtual void SetData(CharacterDataBundle data)
     {
         var info = data.data;
         heroNameText.text = info.name;
