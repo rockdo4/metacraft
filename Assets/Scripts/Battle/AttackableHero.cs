@@ -41,7 +41,7 @@ public abstract class AttackableHero : AttackableUnit
                     break;
                 case UnitState.Battle:
                     battleManager.GetEnemyList(ref targetList);
-                    pathFind.stoppingDistance = characterData.attack.distance;
+                    pathFind.stoppingDistance = characterData.attack.distance * 0.9f;
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
                     BattleState = UnitBattleState.NormalAttack;

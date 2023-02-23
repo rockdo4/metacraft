@@ -76,7 +76,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected void SetData()
     {
-        pathFind.stoppingDistance = characterData.attack.distance;
+        pathFind.stoppingDistance = characterData.attack.distance * 0.9f;
 
         //이벤트 연결. 밑의 함수들은 abstract 로 선언했기 때문에 상속받은 캐릭터들이 들고있는 함수를 실행
         NormalAttackAction = NormalAttack;
