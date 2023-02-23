@@ -26,7 +26,7 @@ public abstract class AttackableEnemy : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
-                    pathFind.stoppingDistance = characterData.attack.distance; //가까이 가기
+                    pathFind.stoppingDistance = characterData.attack.distance * 0.9f; //가까이 가기
                     battleManager.GetHeroList(ref targetList);
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
@@ -77,7 +77,11 @@ public abstract class AttackableEnemy : AttackableUnit
                           .FirstOrDefault();
     }
 
-    protected abstract void SearchTarget();
+    protected virtual void SearchTarget()
+    {
+        if(target != null)
+          Logger.Debug("TargetChange");
+    }
 
     public override void NormalAttack()
     {
