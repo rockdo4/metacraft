@@ -47,9 +47,9 @@ public class ShortAttackHero : AttackableHero
     {
        SearchNearbyEnemy(); //근거리 타겟 추적
     }
-    private void OnDrawGizmos()
-    {
-        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, characterData.attack.angle / 2, characterData.attack.distance);
-        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -characterData.attack.angle / 2, characterData.attack.distance);
-    }
+    //private void OnDrawGizmos()
+    //{
+    //    Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, characterData.attack.angle / 2, characterData.attack.distance);
+    //    Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -characterData.attack.angle / 2, characterData.attack.distance);
+    //}
 }
