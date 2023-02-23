@@ -155,28 +155,45 @@ public abstract class AttackableHero : AttackableUnit
 
     public override void NormalAttack()
     {
+        animator.SetTrigger("Attack");
     }
-    public override void PassiveSkill()
+
+    public void HeroPassiveSkill(AnimationEvent ev)
     {
         Logger.Debug("Passive!");
-        Invoke("TestPassiveEnd", 2);
         BattleState = UnitBattleState.PassiveSkill;
+    }
+    public void HeroActiveSkill(AnimationEvent ev)
+    {
+        Logger.Debug("Active!");
+        BattleState = UnitBattleState.ActiveSkill;
+    }
+    public void TestSkillEnd(AnimationEvent ev)
+    {
+        lastNormalAttackTime = lastPassiveSkillTime = Time.time;
+        BattleState = UnitBattleState.NormalAttack;
+    }
+
+    public override void PassiveSkill()
+    {
+        //Logger.Debug("Passive!");
+        //Invoke("TestPassiveEnd", 2); // 이걸 이벤트 트리거로 만들기
+        //BattleState = UnitBattleState.PassiveSkill;
     }
     public override void ActiveAttack()
     {
-
-        Invoke("TestActiveEnd", 2);
-        BattleState = UnitBattleState.ActiveSkill;
+        //Invoke("TestActiveEnd", 2); // 이걸 이벤트 트리거로 만들기
+        //BattleState = UnitBattleState.ActiveSkill;
     }
     public override void TestPassiveEnd()
     {
-        lastNormalAttackTime = lastPassiveSkillTime = Time.time;
-        BattleState = UnitBattleState.NormalAttack;
+        //lastNormalAttackTime = lastPassiveSkillTime = Time.time;
+        //BattleState = UnitBattleState.NormalAttack;
     }
     public override void TestActiveEnd()
     {
-        lastNormalAttackTime = lastPassiveSkillTime = Time.time;
-        BattleState = UnitBattleState.NormalAttack;
+        //lastNormalAttackTime = lastPassiveSkillTime = Time.time;
+        //BattleState = UnitBattleState.NormalAttack;
     }
 
     protected override void IdleUpdate()
@@ -202,11 +219,11 @@ public abstract class AttackableHero : AttackableUnit
                 //패시브 스킬 가능이면 패시브 사용, 아니라면 평타
                 if (IsPassiveAttack && CanPassiveSkillTime)
                 {
+                    animator.SetTrigger("Passive");
                     PassiveSkillAction();
                 }
                 else if (IsNormalAttack && CanNormalAttackTime)
                 {
-                    animator.SetTrigger("Attack");
                     lastNormalAttackTime = Time.time;
                     NormalAttackAction();
                 }
