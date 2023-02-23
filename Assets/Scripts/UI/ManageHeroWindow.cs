@@ -8,11 +8,15 @@ public class ManageHeroWindow : View
     public GameObject heroInfoPrefab;
     public Transform contents;
     public List<HeroInfoButton> heroInfos = new ();
-    private List<CharacterDataBundle> copyCharacterTable;
+    private List<CharacterDataBundle> copyCharacterTable = new ();
 
     private void Awake()
     {
-        copyCharacterTable = GameManager.Instance.characterTable;
+        var list = GameManager.Instance.characterTable;
+        foreach (var character in list)
+        {
+            copyCharacterTable.Add(character.GetComponent<CharacterDataBundle>());
+        }
 
         int count = copyCharacterTable.Count;
         for (int i = 0; i < count; i++)

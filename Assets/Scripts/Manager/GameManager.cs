@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
-    public List<CharacterDataBundle> characterTable = new();
+    public List<GameObject> characterTable = new();
     //public Dictionary<string, Sprite> testPortraits = new();
     public Dictionary<string, Sprite> iconSprites = new();
     public Dictionary<string, Sprite> illustrationSprites = new();
