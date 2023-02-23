@@ -10,6 +10,12 @@ public abstract class AttackableEnemy : AttackableUnit
     public void SetTargetList(List<AttackableHero> list) => targetList = list;
 
     public float skillDuration; // 임시 변수
+
+    ///////// 데미지 표기관련 임시 변수 
+    private AttackedDamageUI floatingDamageText;
+    private HpBarManager hpBarManager;
+    /////////////////////////////////
+
     protected override UnitState UnitState {
         get {
             return unitState;
@@ -62,6 +68,12 @@ public abstract class AttackableEnemy : AttackableUnit
         pathFind = transform.GetComponent<NavMeshAgent>();
         SetData();
         base.Awake();
+
+        //////////////////////////
+        floatingDamageText = GetComponent<AttackedDamageUI>();
+        hpBarManager = GetComponent<HpBarManager>();
+        hpBarManager.SetHp(hp, hp);        
+        /////////////////////////
     }
 
     protected void SearchNearbyEnemy()
@@ -174,7 +186,16 @@ public abstract class AttackableEnemy : AttackableUnit
         hp = Mathf.Max(hp - dmg, 0);
         if (hp <= 0)
             UnitState = UnitState.Die;
+
+        TempShowHpBarAndDamageText(dmg);
     }
+    public void TempShowHpBarAndDamageText(int dmg)
+    {
+        floatingDamageText.OnAttack(dmg, false, transform.position, DamageType.Normal);
+        hpBarManager.TestCode(dmg);
+        if (hp <= 0)
+            hpBarManager.Die();
+    } 
 
     private void OnDestroy()
     {
