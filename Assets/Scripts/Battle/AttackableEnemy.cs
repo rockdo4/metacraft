@@ -83,7 +83,7 @@ public abstract class AttackableEnemy : AttackableUnit
     protected virtual void SearchTarget()
     {
         if(target != null)
-          Logger.Debug("TargetChange");
+            animator.SetTrigger("Run");
     }
 
     public override void NormalAttack()
