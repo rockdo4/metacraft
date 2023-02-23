@@ -77,7 +77,6 @@ public abstract class AttackableHero : AttackableUnit
             switch(battleState)
             {
                 case UnitBattleState.MoveToTarget:
-                    animator.ResetTrigger("MoveToTarget");
                     animator.SetTrigger("MoveToTarget");
                     Logger.Debug("MoveToTarget");
                     break;
@@ -173,7 +172,8 @@ public abstract class AttackableHero : AttackableUnit
     }
     protected virtual void SearchTarget()
     {
-        BattleState = UnitBattleState.MoveToTarget;
+        if(target != null)
+            BattleState = UnitBattleState.MoveToTarget;
     }
 
 
@@ -183,7 +183,7 @@ public abstract class AttackableHero : AttackableUnit
     }
     public override void PassiveSkill()
     {
-        Logger.Debug("Passive!");
+        Logger.Debug("PassiveSkill!");
 
         Invoke("TestPassiveEnd", 1);
         BattleState = UnitBattleState.PassiveSkill;

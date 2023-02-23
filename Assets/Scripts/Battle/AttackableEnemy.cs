@@ -58,6 +58,26 @@ public abstract class AttackableEnemy : AttackableUnit
             if (value == battleState)
                 return;
             battleState = value;
+
+            switch (battleState)
+            {
+                case UnitBattleState.MoveToTarget:
+                    animator.SetTrigger("MoveToTarget");
+                    Logger.Debug("MoveToTarget");
+                    break;
+                case UnitBattleState.NormalAttack:
+                    break;
+                case UnitBattleState.PassiveSkill:
+                    animator.SetTrigger("Attack");
+                    Logger.Debug("Attack");
+                    break;
+                case UnitBattleState.ActiveSkill:
+                    animator.SetTrigger("Attack");
+                    Logger.Debug("Attack");
+                    break;
+                case UnitBattleState.Stun:
+                    break;
+            }
         }
     }
 
@@ -86,22 +106,51 @@ public abstract class AttackableEnemy : AttackableUnit
                           .FirstOrDefault();
     }
 
+    protected bool ContainTarget(List<AttackableUnit> targetList, ref AttackableUnit target, float distance)
+    {
+        float minDist = float.MaxValue;
+        bool targetChanged = false;
+
+        foreach (var unit in targetList)
+        {
+            float dist = Vector3.Distance(unit.transform.position, transform.position);
+
+            if (dist <= distance && dist < minDist)
+            {
+                target = unit;
+                minDist = dist;
+                targetChanged = true;
+            }
+        }
+
+        return targetChanged;
+    }
+    protected bool ContainTarget(AttackableUnit target, float distance)
+    {
+        return Vector3.Distance(target.transform.position, transform.position) <= distance;
+    }
     protected virtual void SearchTarget()
     {
+        if (target != null)
+            BattleState = UnitBattleState.MoveToTarget;
     }
 
     public override void NormalAttack()
     {
-
+        Logger.Debug("NormalAttack!");
     }
     public override void PassiveSkill()
     {
-        Invoke("TestPassiveEnd", 2);
+        Logger.Debug("PassiveSkill!");
+
+        Invoke("TestPassiveEnd", 1);
         BattleState = UnitBattleState.PassiveSkill;
     }
     public override void ActiveAttack()
     {
-        Invoke("TestPassiveEnd", 2);
+        Logger.Debug("ActiveAttack!");
+
+        Invoke("TestActiveEnd", 1);
         BattleState = UnitBattleState.ActiveSkill;
     }
     public override void TestPassiveEnd()
@@ -123,6 +172,23 @@ public abstract class AttackableEnemy : AttackableUnit
     {
         switch (BattleState)
         {
+            case UnitBattleState.MoveToTarget:
+                //타겟이 없으면 타겟 추척
+                if (target == null)
+                {
+                    SearchTarget();
+                    return;
+                }
+                if (ContainTarget(target, characterData.attack.distance))
+                {
+                    BattleState = UnitBattleState.NormalAttack;
+                }
+                if (Time.time - lastNavTime > navDelay) //SetDestination 에 0.2초의 딜레이 적용
+                {
+                    lastNavTime = Time.time;
+                    pathFind.SetDestination(target.transform.position);
+                }
+                break;
             case UnitBattleState.NormalAttack:
                 //타겟이 없으면 타겟 추척
                 if (target == null)
@@ -136,18 +202,22 @@ public abstract class AttackableEnemy : AttackableUnit
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 120);
 
                 //타겟과 일정 범위 안에 있으며, 일반스킬 상태이고, 쿨타임 조건이 충족될때
-                if (IsNormalAttack && CanNormalAttackTime)
+                if (IsPassiveAttack && CanPassiveSkillTime)
                 {
-                    animator.SetTrigger("Attack");
+                    lastPassiveSkillTime = Time.time;
+
+                    PassiveSkillAction();
+                }
+                else if (IsNormalAttack && CanNormalAttackTime)
+                {
                     lastNormalAttackTime = Time.time;
+
+                    animator.SetTrigger("Attack");
+                    Logger.Debug("Idle");
                     NormalAttackAction();
                 }
-                if (Time.time - lastNavTime > navDelay)
-                {
-                    animator.SetTrigger("Run");
-                    lastNavTime = Time.time;
-                    pathFind.SetDestination(target.transform.position);
-                }
+                break; ;
+            case UnitBattleState.PassiveSkill:
                 break;
             case UnitBattleState.ActiveSkill:
                 break;
