@@ -44,7 +44,7 @@ public abstract class AttackableHero : AttackableUnit
                     break;
                 case UnitState.Battle:
                     battleManager.GetEnemyList(ref targetList);
-                    pathFind.stoppingDistance = characterData.attack.distance;
+                    pathFind.stoppingDistance = characterData.attack.distance * 0.9f;
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
                     BattleState = UnitBattleState.NormalAttack;
@@ -102,7 +102,12 @@ public abstract class AttackableHero : AttackableUnit
         target = targetList.OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
                           .FirstOrDefault();
     }
-    protected abstract void SearchTarget();
+    protected virtual void SearchTarget()
+    {
+        if (target != null)
+            Logger.Debug("TargetChange");
+    }
+
 
     public override void NormalAttack()
     {
@@ -149,8 +154,6 @@ public abstract class AttackableHero : AttackableUnit
                 Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - transform.position);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 120);
 
-                //transform.LookAt(target.transform);
-
                 //패시브 스킬 가능이면 패시브 사용, 아니라면 평타
                 if (IsPassiveAttack && CanPassiveSkillTime)
                 {
@@ -162,10 +165,6 @@ public abstract class AttackableHero : AttackableUnit
                     lastNormalAttackTime = Time.time;
                     NormalAttackAction();
                 }
-                //else if(!InRangeNormalAttack) // 만약 멀리 떨어져 있다면
-                //{
-                //    target = null; //타겟을 재설정하기 위해 null로
-                //}
                  if(Time.time - lastNavTime  > navDelay) //SetDestination 에 0.2초의 딜레이 적용
                 {
                     lastNavTime = Time.time;

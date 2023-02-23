@@ -46,6 +46,7 @@ public class ShortAttackHero : AttackableHero
     protected override void SearchTarget()
     {
        SearchNearbyEnemy(); //근거리 타겟 추적
+        base.SearchTarget();
     }
     private void OnDrawGizmos()
     {

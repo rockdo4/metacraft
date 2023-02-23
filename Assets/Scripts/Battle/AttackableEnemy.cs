@@ -9,7 +9,7 @@ public abstract class AttackableEnemy : AttackableUnit
     protected List<AttackableHero> targetList;
     public void SetTargetList(List<AttackableHero> list) => targetList = list;
 
-    public float skillDuration; // ÀÓ½Ã º¯¼ö
+    public float skillDuration; // ï¿½Ó½ï¿½ ï¿½ï¿½ï¿½ï¿½
     protected override UnitState UnitState {
         get {
             return unitState;
@@ -27,7 +27,7 @@ public abstract class AttackableEnemy : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
-                    pathFind.stoppingDistance = characterData.attack.distance; //°¡±îÀÌ °¡±â
+                    pathFind.stoppingDistance = characterData.attack.distance * 0.9f; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
                     animator.SetTrigger("Run");
                     battleManager.GetHeroList(ref targetList);
                     pathFind.speed = characterData.data.moveSpeed;
@@ -61,7 +61,7 @@ public abstract class AttackableEnemy : AttackableUnit
 
     protected override void Awake()
     {
-        //charactorData = LoadTestData(); //ÀÓ½Ã µ¥ÀÌÅÍ ·Îµå
+        //charactorData = LoadTestData(); //ï¿½Ó½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½
         pathFind = transform.GetComponent<NavMeshAgent>();
         SetData();
         base.Awake();
@@ -75,12 +75,16 @@ public abstract class AttackableEnemy : AttackableUnit
             return;
         }
 
-        //°¡Àå °¡±î¿î Àû Å½»ö
+        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Å½ï¿½ï¿½
         target = targetList.OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
                           .FirstOrDefault();
     }
 
-    protected abstract void SearchTarget();
+    protected virtual void SearchTarget()
+    {
+        if(target != null)
+          Logger.Debug("TargetChange");
+    }
 
     public override void NormalAttack()
     {
@@ -116,28 +120,24 @@ public abstract class AttackableEnemy : AttackableUnit
         switch (BattleState)
         {
             case UnitBattleState.NormalAttack:
-                //Å¸°ÙÀÌ ¾øÀ¸¸é Å¸°Ù ÃßÃ´
+                //Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½Ã´
                 if (target == null)
                 {
                     SearchTarget();
                     return;
                 }
 
-                //Å¸°ÙÀ¸·Î ¹Ù¶óº¸±â
+                //Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¶óº¸±ï¿½
                 Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - transform.position);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 120);
 
-                //Å¸°Ù°ú ÀÏÁ¤ ¹üÀ§ ¾È¿¡ ÀÖÀ¸¸ç, ÀÏ¹Ý½ºÅ³ »óÅÂÀÌ°í, ÄðÅ¸ÀÓ Á¶°ÇÀÌ ÃæÁ·µÉ¶§
+                //Å¸ï¿½Ù°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½È¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Ï¹Ý½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½ï¿½Ì°ï¿½, ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½É¶ï¿½
                 if (IsNormalAttack && CanNormalAttackTime)
                 {
                     animator.SetTrigger("Attack");
                     lastNormalAttackTime = Time.time;
                     NormalAttackAction();
                 }
-                //else if (!InRangeNormalAttack && !moveTarget) // ¸¸¾à ¸Ö¸® ¶³¾îÁ® ÀÖ´Ù¸é
-                //{
-                //    target = null;
-                //}
                 if (Time.time - lastNavTime > navDelay)
                 {
                     animator.SetTrigger("Run");
