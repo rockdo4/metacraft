@@ -20,44 +20,45 @@ public class MissionManager : MonoBehaviour
     public TextMeshProUGUI ProperCombatPower;
 
     public GameObject heroSlectWindowPrefab;
+    public GameObject missionPoints;
     //TEST¿ë
-    List<Dictionary<string, object>> testTable;
+    private List<Dictionary<string, object>> missionInfoTable;
+    private GameObject[] marks;
 
-    private void Start()
+    public delegate void clickmark(int num);
+
+    public void Start()
     {
-        testTable = CSVReader.Read("TestMissionInfoTable");
-        UpdateMissionInfo();
+        missionInfoTable = GameManager.Instance.missionInfoList;
+        var num = Utils.DistinctRandomNumbers(missionInfoTable.Count, 4);
+        marks = missionPoints.GetComponentInChildren<MissionSpawner>().prefebs;
+        int j = 0;
+        for (int i = 0; i < marks.Length; i++)
+        {
+            if(marks[i].activeInHierarchy)
+            {
+                var index = j++;
+                marks[i].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[num[index]]["Name"]}";
+                marks[i].GetComponentInChildren<Button>().onClick.AddListener(()=>UpdateMissionInfo(num[index]));
+            } 
+        }
+     }
+
+    public void UpdateMissionInfo(int num)
+    {
+        var dic = missionInfoTable[num];
+        portrait.sprite = GameManager.Instance.iconSprites[$"Icon_{dic["BossID"]}"];
+        explanation.text = $"{dic["OperationDescription"]}";
+        ExpectedCost.text = $"{dic["ExpectedCostID"]}";
+        fitProperties1.text = $"{dic["FitProperties1"]}";
+        fitProperties2.text = $"{dic["FitProperties2"]}";
+        fitProperties3.text = $"{dic["FitProperties3"]}";
+        deductionAP.text = $"AP -{dic["ConsumptionBehavior"]}";
+        ProperCombatPower.text = $"1000/{dic["ProperCombatPower"]}";
     }
 
-    public void UpdateMissionInfo()
-    {
-        Addressables.LoadAssetAsync<Sprite>(testTable[0]["BossID"]).Completed += (AsyncOperationHandle<Sprite> obj) => { portrait.sprite = obj.Result; };
-        explanation.text = $"{testTable[0]["OperationDescription"]}";
-        ExpectedCost.text = $"{testTable[0]["ExpectedCostID"]}";
-        fitProperties1.text = $"{testTable[0]["FitProperties1"]}";
-        fitProperties2.text = $"{testTable[0]["FitProperties2"]}";
-        fitProperties3.text = $"{testTable[0]["FitProperties3"]}";
-        deductionAP.text = $"AP -{testTable[0]["ConsumptionBehavior"]}";
-        ProperCombatPower.text = $"1000/{testTable[0]["ProperCombatPower"]}";
-    }
-
-    public void OnClickHeroSlot1Button()
+    public void OnClickHeroSlotButton()
     {
         heroSlectWindowPrefab.SetActive(true);
-    }
-
-    public void OnClickHeroSlot2Button()
-    {
-        heroSlectWindowPrefab.SetActive(true);
-    }
-
-    public void OnClickHeroSlot3Button()
-    {
-        heroSlectWindowPrefab.SetActive(true);
-    }
-
-    public void OnClickHeroWindowCloseButton()
-    {
-        heroSlectWindowPrefab.SetActive(false);
     }
 }
