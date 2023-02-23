@@ -10,6 +10,9 @@ public class UIManager : MonoBehaviour
 
     public PopUpManager popUpManager;
 
+    public Color interactablePanelColor;
+    public Color noneInteractablePanelColor;
+
     private void Awake()
     {
         Instance = this;
@@ -21,6 +24,7 @@ public class UIManager : MonoBehaviour
     private void SetPopupManager()
     {
         popUpManager = Instantiate(popUpManager, transform);
+        popUpManager.SetPanelColor(interactablePanelColor, noneInteractablePanelColor);
     }
     private void SetPopUpHolders()
     {
