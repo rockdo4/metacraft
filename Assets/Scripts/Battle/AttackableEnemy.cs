@@ -9,7 +9,12 @@ public abstract class AttackableEnemy : AttackableUnit
     protected List<AttackableHero> targetList;
     public void SetTargetList(List<AttackableHero> list) => targetList = list;
 
-    public float skillDuration; // ï¿½Ó½ï¿½ ï¿½ï¿½ï¿½ï¿½
+    public float skillDuration; // ÀÓ½Ã º¯¼ö
+
+    //////////////////////////////
+    private AttackedDamageUI floatingDamageText;
+    private HpBarManager hpBarManager;
+    /////////////////////////////////
     protected override UnitState UnitState {
         get {
             return unitState;
@@ -27,7 +32,7 @@ public abstract class AttackableEnemy : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
-                    pathFind.stoppingDistance = characterData.attack.distance * 0.9f; //ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½
+                    pathFind.stoppingDistance = characterData.attack.distance * 0.9f; //°¡±îÀÌ °¡±â
                     animator.SetTrigger("Run");
                     battleManager.GetHeroList(ref targetList);
                     pathFind.speed = characterData.data.moveSpeed;
@@ -61,10 +66,16 @@ public abstract class AttackableEnemy : AttackableUnit
 
     protected override void Awake()
     {
-        //charactorData = LoadTestData(); //ï¿½Ó½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Îµï¿½
+        //charactorData = LoadTestData(); //ÀÓ½Ã µ¥ÀÌÅÍ ·Îµå
         pathFind = transform.GetComponent<NavMeshAgent>();
         SetData();
         base.Awake();
+
+        //////////////////////////
+        floatingDamageText = GetComponent<AttackedDamageUI>();
+        hpBarManager = GetComponent<HpBarManager>();
+        hpBarManager.SetHp(hp, hp);
+        /////////////////////////
     }
 
     protected void SearchNearbyTarget()
@@ -75,7 +86,7 @@ public abstract class AttackableEnemy : AttackableUnit
             return;
         }
 
-        //ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Å½ï¿½ï¿½
+        //°¡Àå °¡±î¿î Àû Å½»ö
         target = targetList.OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
                           .FirstOrDefault();
     }
@@ -120,18 +131,18 @@ public abstract class AttackableEnemy : AttackableUnit
         switch (BattleState)
         {
             case UnitBattleState.NormalAttack:
-                //Å¸ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Å¸ï¿½ï¿½ ï¿½ï¿½Ã´
+                //Å¸°ÙÀÌ ¾øÀ¸¸é Å¸°Ù ÃßÃ´
                 if (target == null)
                 {
                     SearchTarget();
                     return;
                 }
 
-                //Å¸ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ù¶óº¸±ï¿½
+                //Å¸°ÙÀ¸·Î ¹Ù¶óº¸±â
                 Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - transform.position);
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 120);
 
-                //Å¸ï¿½Ù°ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½È¿ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½, ï¿½Ï¹Ý½ï¿½Å³ ï¿½ï¿½ï¿½ï¿½ï¿½Ì°ï¿½, ï¿½ï¿½Å¸ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½É¶ï¿½
+                //Å¸°Ù°ú ÀÏÁ¤ ¹üÀ§ ¾È¿¡ ÀÖÀ¸¸ç, ÀÏ¹Ý½ºÅ³ »óÅÂÀÌ°í, ÄðÅ¸ÀÓ Á¶°ÇÀÌ ÃæÁ·µÉ¶§
                 if (IsNormalAttack && CanNormalAttackTime)
                 {
                     animator.SetTrigger("Attack");
@@ -179,8 +190,16 @@ public abstract class AttackableEnemy : AttackableUnit
         hp = Mathf.Max(hp - dmg, 0);
         if (hp <= 0)
             UnitState = UnitState.Die;
-    }
 
+        TempShowHpBarAndDamageText(dmg);
+    }
+    public void TempShowHpBarAndDamageText(int dmg)
+    {
+        floatingDamageText.OnAttack(dmg, false, transform.position, DamageType.Normal);
+        hpBarManager.TestCode(dmg);
+        if (hp <= 0)
+            hpBarManager.Die();
+    }
     private void OnDestroy()
     {
         battleManager.OnDeadEnemy(this);
