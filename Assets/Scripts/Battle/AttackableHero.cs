@@ -97,10 +97,10 @@ public abstract class AttackableHero : AttackableUnit
             return;
         }
         //가장 가까운 적 탐색
-        target = targetList.OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
+        target = targetList.Where(t=>t.GetHp() > 0).OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
                           .FirstOrDefault();
     }
-    protected bool InRangeTarget(List<AttackableUnit> targetList,ref AttackableUnit target,float distance)
+    protected bool ContainTarget(List<AttackableUnit> targetList,ref AttackableUnit target,float distance)
     {
         float minDist = float.MaxValue;
         bool targetChanged = false;
@@ -128,7 +128,7 @@ public abstract class AttackableHero : AttackableUnit
         }
         //가장 가까운 적 탐색
         var maxHp = targetList.Max(t => t.GetHp());
-        target = targetList.Where(t => t.GetHp() == maxHp).FirstOrDefault().GetComponent<AttackableUnit>();
+        target = targetList.Where(t => t.GetHp() == maxHp && (t.GetHp() > 0)).FirstOrDefault().GetComponent<AttackableUnit>();
     }
     protected void SearchMinHealthTarget()
     {
@@ -139,7 +139,7 @@ public abstract class AttackableHero : AttackableUnit
         }
         //가장 가까운 적 탐색
         var minHp = targetList.Min(t => t.GetHp());
-        target = targetList.Where(t => t.GetHp() == minHp).FirstOrDefault().GetComponent<AttackableUnit>();
+        target = targetList.Where(t => (t.GetHp() == minHp) && (t.GetHp() > 0)).FirstOrDefault().GetComponent<AttackableUnit>();
     }
     protected virtual void SearchTarget()
     {

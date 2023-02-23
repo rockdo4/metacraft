@@ -26,8 +26,7 @@ public class DamageUI : MonoBehaviour
     }
     private void Update()
     {
-        pos.y += transSpeed * Time.deltaTime;
-        transform.position = cam.WorldToScreenPoint(pos);
+        transform.Translate(0f, transSpeed * Time.deltaTime, 0f);
         //뷰가 심하게 돌아가는 게임에선 아래 코드 사용해야함
         //textMeshPro.alpha = transform.position.z > 0f ? 1f : 0f;
     }

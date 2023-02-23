@@ -9,12 +9,9 @@ public abstract class AttackableEnemy : AttackableUnit
     protected List<AttackableHero> targetList;
     public void SetTargetList(List<AttackableHero> list) => targetList = list;
 
-    public float skillDuration; // 임시 변수
-
-    //////////////////////////////
     private AttackedDamageUI floatingDamageText;
     private HpBarManager hpBarManager;
-    /////////////////////////////////
+
     protected override UnitState UnitState {
         get {
             return unitState;
@@ -71,11 +68,9 @@ public abstract class AttackableEnemy : AttackableUnit
         SetData();
         base.Awake();
 
-        //////////////////////////
         floatingDamageText = GetComponent<AttackedDamageUI>();
         hpBarManager = GetComponent<HpBarManager>();
         hpBarManager.SetHp(hp, hp);
-        /////////////////////////
     }
 
     protected void SearchNearbyTarget()
@@ -87,7 +82,7 @@ public abstract class AttackableEnemy : AttackableUnit
         }
 
         //가장 가까운 적 탐색
-        target = targetList.OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
+        target = targetList.Where(t => t.GetHp() > 0).OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
                           .FirstOrDefault();
     }
 
