@@ -10,6 +10,8 @@ public class TestBattleManager : MonoBehaviour
     public List<Transform> startPositions;
     protected List<AttackableHero> useHeroes = new();
 
+    public ClearUi clearUi;
+
     private void Awake()
     {
         //히어로 만들고, 히어로 ui만들고 서로 연결
@@ -21,7 +23,9 @@ public class TestBattleManager : MonoBehaviour
 
             hero.SetUi(heroUi);
             useHeroes.Add(hero);
+            heroUi.SetHeroInfo(hero.GetHeroData());
         }
+        clearUi.SetHoros(useHeroes);
     }
 
     public List<Transform> GetStartPosition()

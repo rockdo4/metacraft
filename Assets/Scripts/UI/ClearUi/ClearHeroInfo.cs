@@ -22,7 +22,10 @@ public class ClearHeroInfo : MonoBehaviour
     {
         SetTest();
         nowLevel = level;
+        this.level.text = nowLevel.ToString();
+
         nowExp = exp;
+        this.exp.fillAmount = ((float)nowExp / (float)ExpTable[nowLevel]);
     }
 
     public void SetTest()

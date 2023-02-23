@@ -43,6 +43,10 @@ public class BeltScrollBattleManager : TestBattleManager
     {
         useHeroes.Remove(hero);
         readyCount = useHeroes.Count;
+        if (useHeroes.Count == 0)
+        {
+            SetEnemyIdle();
+        }
     }
 
     private void SetHeroReturnPositioning()
@@ -52,6 +56,15 @@ public class BeltScrollBattleManager : TestBattleManager
             useHeroes[i].SetReturnPos(triggers[currTriggerIndex].settingPositions[i]);
             useHeroes[i].SetReturn();
         }
+    }
+    private void SetEnemyIdle()
+    {
+        for (int i = 0; i < triggers[currTriggerIndex].enemys.Count; i++)
+        {
+
+        }
+
+        SetStageFail();
     }
 
     public void OnReady()
@@ -66,7 +79,7 @@ public class BeltScrollBattleManager : TestBattleManager
             }
             StartCoroutine(MovingMap());
         }
-        else if (triggers[currTriggerIndex].isStageEnd)
+        else if (readyCount == 0 && triggers[currTriggerIndex].isStageEnd)
         {
             SetStageClear();
         }
@@ -75,7 +88,14 @@ public class BeltScrollBattleManager : TestBattleManager
     // 클리어 시 호출할 함수 (Ui 업데이트)
     private void SetStageClear()
     {
+        UIManager.Instance.ShowView(1);
+        clearUi.Clear();
         Logger.Debug("Clear!");
+    }
+    private void SetStageFail()
+    {
+        UIManager.Instance.ShowPopup(2);
+        Logger.Debug("Fail!");
     }
 
     IEnumerator MovingMap()
@@ -98,7 +118,7 @@ public class BeltScrollBattleManager : TestBattleManager
         // 히어로들 배틀 상태로 전환
         for (int i = 0; i < useHeroes.Count; i++)
         {
-            useHeroes[i].SetTestBattle();
+            useHeroes[i].SetBattle();
         }
     }
 }

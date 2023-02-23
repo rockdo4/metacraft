@@ -8,7 +8,7 @@ public class ViewManager : MonoBehaviour
     public int CurrentViewIndex { get; set; }
     private void Start()
     {
-        foreach (var view in views)
+        foreach (var view in views) 
         {
             view.Hide();
         }
