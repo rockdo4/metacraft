@@ -10,9 +10,9 @@ public class MissionManager : MonoBehaviour
     public Image portrait;
     public TextMeshProUGUI explanation;
     public TextMeshProUGUI ExpectedCost;
-    public Button heroSlot1;
-    public Button heroSlot2;
-    public Button heroSlot3;
+    public GameObject heroSlot1;
+    public GameObject heroSlot2;
+    public GameObject heroSlot3;
     public TextMeshProUGUI fitProperties1;
     public TextMeshProUGUI fitProperties2;
     public TextMeshProUGUI fitProperties3;
@@ -24,6 +24,7 @@ public class MissionManager : MonoBehaviour
     //TEST¿ë
     private List<Dictionary<string, object>> missionInfoTable;
     private GameObject[] marks;
+    private GameObject curButton;
 
     public delegate void clickmark(int num);
 
@@ -57,8 +58,14 @@ public class MissionManager : MonoBehaviour
         ProperCombatPower.text = $"1000/{dic["ProperCombatPower"]}";
     }
 
-    public void OnClickHeroSlotButton()
+    public void OnClickHeroSelect(CharacterData data)
     {
-        heroSlectWindowPrefab.SetActive(true);
+        Logger.Debug(2);
+        curButton.GetComponent<Image>().sprite = GameManager.Instance.iconSprites[$"Icon_{data.name}"];
+    }
+
+    public void ConfirmSelectButton(GameObject obj)
+    {
+        curButton = obj;
     }
 }
