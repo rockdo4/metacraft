@@ -14,4 +14,8 @@ public class ControlUIManagerFlow : MonoBehaviour
     {
         UIManager.Instance.ClearPopups();
     }
+    public void ShowInteratablePanel(bool interactable)
+    {
+        UIManager.Instance.ShowPanelInteractable(interactable);
+    }
 }
