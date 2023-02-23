@@ -19,7 +19,7 @@ public class ClearUi : MonoBehaviour
         //}
     }
 
-    public void SetHoros(List<AttackableHero> heroes)
+    public void SetHeroes(List<AttackableHero> heroes)
     {
         foreach(var hero in heroes)
         {

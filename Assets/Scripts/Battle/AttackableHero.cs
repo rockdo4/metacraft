@@ -27,16 +27,19 @@ public abstract class AttackableHero : AttackableUnit
             {
                 case UnitState.Idle:
                     pathFind.isStopped = true;
+                    animator.SetTrigger("Idle");
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.ReturnPosition: // 재배치
                     pathFind.isStopped = false;
+                    animator.SetTrigger("Run");
                     pathFind.SetDestination(returnPos.position); //재배치 위치 설정
                     pathFind.stoppingDistance = 0; //가까이 가기
                     nowUpdate = ReturnPosUpdate;
                     break;
                 case UnitState.MoveNext:
                     pathFind.isStopped = false;
+                    animator.SetTrigger("Run");
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
@@ -49,8 +52,10 @@ public abstract class AttackableHero : AttackableUnit
                     break;
                 case UnitState.Die:
                     pathFind.isStopped = true;
+                    animator.SetTrigger("Die");
+                    float destroyDelay = animator.GetCurrentAnimatorStateInfo(0).length;
                     nowUpdate = DieUpdate;
-                    Destroy(gameObject, 1);
+                    Destroy(gameObject, destroyDelay + 1);
                     break;
             }
         }
@@ -153,6 +158,7 @@ public abstract class AttackableHero : AttackableUnit
                 }
                 else if (IsNormalAttack && CanNormalAttackTime)
                 {
+                    animator.SetTrigger("Attack");
                     lastNormalAttackTime = Time.time;
                     NormalAttackAction();
                 }

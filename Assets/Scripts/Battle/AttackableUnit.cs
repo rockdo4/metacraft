@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -38,9 +36,26 @@ public abstract class AttackableUnit : MonoBehaviour
     //타겟 찾으면 true 타겟에게 도착하면 false
     protected bool moveTarget;
 
+    protected Animator animator;
+    protected float normalAttackDelay;
+    private string normalAttackClipName = "Attack";
+    private readonly int hashAttackSpeed = Animator.StringToHash("AttackSpeed");
+
     protected virtual void Awake()
     {
         battleManager = FindObjectOfType<BeltScrollBattleManager>();
+        animator = GetComponent<Animator>();
+        float speed = animator.GetFloat(hashAttackSpeed);
+
+        for (int i = 0; i <  animator.runtimeAnimatorController.animationClips.Length; i++)
+        {
+            if (animator.runtimeAnimatorController.animationClips[i].name.Equals(normalAttackClipName))
+            {
+                float delay = animator.runtimeAnimatorController.animationClips[i].length;
+                normalAttackDelay = delay / speed;
+                break;
+            }
+        }
     }
 
     // AttackableHero 와 AttackableEnemy 에서 프로퍼티 재정의
@@ -53,7 +68,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected bool CanNormalAttackTime {
         get {
-            return (Time.time - lastNormalAttackTime) > characterData.attack.cooldown;
+            return (Time.time - lastNormalAttackTime) > normalAttackDelay;
         }
     }
     protected bool CanPassiveSkillTime {

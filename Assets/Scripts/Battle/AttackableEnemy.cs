@@ -23,10 +23,12 @@ public abstract class AttackableEnemy : AttackableUnit
             {
                 case UnitState.Idle:
                     pathFind.isStopped = true;
+                    animator.SetTrigger("Idle");
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
                     pathFind.stoppingDistance = characterData.attack.distance; //가까이 가기
+                    animator.SetTrigger("Run");
                     battleManager.GetHeroList(ref targetList);
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
@@ -35,6 +37,7 @@ public abstract class AttackableEnemy : AttackableUnit
                     break;
                 case UnitState.Die:
                     pathFind.isStopped = true;
+                    animator.SetTrigger("Die");
                     nowUpdate = DieUpdate;
                     Destroy(gameObject, 1);
                     break;
@@ -127,6 +130,7 @@ public abstract class AttackableEnemy : AttackableUnit
                 //타겟과 일정 범위 안에 있으며, 일반스킬 상태이고, 쿨타임 조건이 충족될때
                 if (IsNormalAttack && CanNormalAttackTime)
                 {
+                    animator.SetTrigger("Attack");
                     lastNormalAttackTime = Time.time;
                     NormalAttackAction();
                 }
@@ -136,6 +140,7 @@ public abstract class AttackableEnemy : AttackableUnit
                 //}
                 if (Time.time - lastNavTime > navDelay)
                 {
+                    animator.SetTrigger("Run");
                     lastNavTime = Time.time;
                     pathFind.SetDestination(target.transform.position);
                 }
