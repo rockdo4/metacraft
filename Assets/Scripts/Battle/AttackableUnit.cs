@@ -85,6 +85,8 @@ public abstract class AttackableUnit : MonoBehaviour
         ActiveSkillAction = ActiveSkill;
 
         hp = characterData.data.healthPoint; //���� �ܿ� Hp�����Ͱ� ���⿡ HeroData�� �ִ� �ִ�ü�� ���
+
+        animator.SetFloat("CharID", 0);
     }
     protected void FixedUpdate()
     {

@@ -82,10 +82,10 @@ public abstract class AttackableEnemy : AttackableUnit
 
     protected override void Awake()
     {
+        base.Awake();
         //charactorData = LoadTestData(); //임시 데이터 로드
         pathFind = transform.GetComponent<NavMeshAgent>();
         SetData();
-        base.Awake();
 
         floatingDamageText = GetComponent<AttackedDamageUI>();
         hpBarManager = GetComponent<HpBarManager>();

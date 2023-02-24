@@ -12,11 +12,11 @@ public enum UnitState
 public enum UnitBattleState
 {
     None = -1,
-    MoveToTarget,
-    BattleIdle,
     NormalAttack,
     PassiveSkill,
     ActiveSkill,
+    MoveToTarget,
+    BattleIdle,
     Stun,
     Count
 }
