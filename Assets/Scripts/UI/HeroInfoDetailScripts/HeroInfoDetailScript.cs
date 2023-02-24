@@ -1,7 +1,7 @@
 using UnityEngine;
 using TMPro;
 using System.Text;
-
+using UnityEngine.UI;
 public class HeroInfoDetailScript : MonoBehaviour
 {
     public CharacterData data;
@@ -9,14 +9,17 @@ public class HeroInfoDetailScript : MonoBehaviour
     public TextMeshProUGUI gradeInfoInLeftPanel;
     public TextMeshProUGUI levelInfoInfoInLeftPanel;
     public TextMeshProUGUI statDetail;
+
+    public Button[] trainingPlusButtons;
     private void Start()
     {
         gradeInfoInLeftPanel.text = data.grade;
         levelInfoInfoInLeftPanel.text = data.level.ToString();
 
-        statDetail.text = SetText();
+        statDetail.text = SetHeroStatInfoText();
+        SetTrainingPlusButtons();
     }
-    private string SetText()
+    private string SetHeroStatInfoText()
     {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.Append($"히어로 명 : {data.name}\n");
@@ -31,5 +34,12 @@ public class HeroInfoDetailScript : MonoBehaviour
         stringBuilder.Append($"명중률 : {data.accuracy}\n");
         stringBuilder.Append($"회피율 : {data.evasion}\n");
         return stringBuilder.ToString();
+    }
+    private void SetTrainingPlusButtons()
+    {
+        //int testStat = 10;
+        //trainingPlusButtons[0].onClick.AddListener(()=>data.baseDamage += testStat);
+        //trainingPlusButtons[1].onClick.AddListener(()=>data.baseDefense += testStat);
+        //trainingPlusButtons[2].onClick.AddListener(()=>data.healthPoint += testStat);
     }
 }
