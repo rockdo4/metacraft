@@ -18,7 +18,7 @@ public class ShortAttackEnemy : AttackableEnemy
 
         List<GameObject> attackHeroes = new();
 
-        foreach (var hero in targetList)
+        foreach (var hero in heroList)
         {
             Vector3 interV = hero.transform.position - transform.position;
             if (interV.magnitude <= characterData.attack.distance)

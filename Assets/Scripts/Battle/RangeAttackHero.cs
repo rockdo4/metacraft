@@ -26,7 +26,7 @@ public class RangeAttackHero : AttackableHero
 
         List<GameObject> attackEnemies = new();
 
-        foreach (var enemy in targetList)
+        foreach (var enemy in enemyList)
         {
             Vector3 interV = enemy.transform.position - transform.position;
             if (interV.magnitude <= characterData.attack.distance)

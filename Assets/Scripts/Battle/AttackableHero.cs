@@ -11,9 +11,6 @@ public abstract class AttackableHero : AttackableUnit
     private Transform returnPos;
     public void SetReturnPos(Transform tr) => returnPos = returnPos = tr;
 
-    //배틀이 시작될때마다 BattleManager에서 참조할 예정.
-    protected List<AttackableEnemy> targetList;
-
     protected override UnitState UnitState {
         get {
             return unitState;
@@ -49,7 +46,7 @@ public abstract class AttackableHero : AttackableUnit
                     break;
                 case UnitState.Battle:
                     BattleState = UnitBattleState.MoveToTarget;
-                    battleManager.GetEnemyList(ref targetList);
+                    battleManager.GetEnemyList(ref enemyList);
                     pathFind.stoppingDistance = characterData.attack.distance * 0.9f;
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
@@ -116,13 +113,13 @@ public abstract class AttackableHero : AttackableUnit
     //BattleManager에서 targetList 가 null이면 SetReturnPos 를 실행해줌
     protected void SearchNearbyTarget()
     {
-        if (targetList.Count == 0)
+        if (enemyList.Count == 0)
         {
             target = null;
             return;
         }
         //가장 가까운 적 탐색
-        target = targetList.Where(t=>t.GetHp() > 0).OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
+        target = enemyList.Where(t=>t.GetHp() > 0).OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
                           .FirstOrDefault();
     }
     protected bool ContainTarget(List<AttackableUnit> targetList,ref AttackableUnit target,float distance)
@@ -150,30 +147,31 @@ public abstract class AttackableHero : AttackableUnit
     }
     protected void SearchMaxHealthTarget()
     {
-        if (targetList.Count == 0)
+        if (enemyList.Count == 0)
         {
             target = null;
             return;
         }
         //가장 가까운 적 탐색
-        var maxHp = targetList.Max(t => t.GetHp());
-        target = targetList.Where(t => t.GetHp() == maxHp && (t.GetHp() > 0)).FirstOrDefault().GetComponent<AttackableUnit>();
+        var maxHp = enemyList.Max(t => t.GetHp());
+        target = enemyList.Where(t => t.GetHp() == maxHp && (t.GetHp() > 0)).FirstOrDefault().GetComponent<AttackableUnit>();
     }
     protected void SearchMinHealthTarget()
     {
-        if (targetList.Count == 0)
+        if (enemyList.Count == 0)
         {
             target = null;
             return;
         }
         //가장 가까운 적 탐색
-        var minHp = targetList.Min(t => t.GetHp());
-        target = targetList.Where(t => (t.GetHp() == minHp) && (t.GetHp() > 0)).FirstOrDefault().GetComponent<AttackableUnit>();
+        var minHp = enemyList.Min(t => t.GetHp());
+        target = enemyList.Where(t => (t.GetHp() == minHp) && (t.GetHp() > 0)).FirstOrDefault().GetComponent<AttackableUnit>();
     }
     protected virtual void SearchTarget()
     {
         if(target != null)
             BattleState = UnitBattleState.MoveToTarget;
+
     }
 
 
@@ -236,6 +234,10 @@ public abstract class AttackableHero : AttackableUnit
                 {
                     SearchTarget();
                     return;
+                }
+                if (!ContainTarget(target, characterData.attack.distance))
+                {
+                    BattleState = UnitBattleState.MoveToTarget;
                 }
 
                 //타겟으로 바라보기

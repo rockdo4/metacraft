@@ -6,8 +6,7 @@ using UnityEngine.AI;
 public abstract class AttackableEnemy : AttackableUnit
 {
     [SerializeField]
-    protected List<AttackableHero> targetList;
-    public void SetTargetList(List<AttackableHero> list) => targetList = list;
+    public void SetTargetList(List<AttackableHero> list) => heroList = list;
 
     private AttackedDamageUI floatingDamageText;
     private HpBarManager hpBarManager;
@@ -31,7 +30,7 @@ public abstract class AttackableEnemy : AttackableUnit
                 case UnitState.Battle:
                     pathFind.stoppingDistance = characterData.attack.distance * 0.9f; //가까이 가기
                     animator.SetTrigger("Run");
-                    battleManager.GetHeroList(ref targetList);
+                    battleManager.GetHeroList(ref heroList);
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
                     BattleState = UnitBattleState.NormalAttack;
@@ -95,14 +94,14 @@ public abstract class AttackableEnemy : AttackableUnit
 
     protected void SearchNearbyTarget()
     {
-        if (targetList.Count == 0)
+        if (heroList.Count == 0)
         {
             target = null;
             return;
         }
 
         //가장 가까운 적 탐색
-        target = targetList.Where(t => t.GetHp() > 0).OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
+        target = heroList.Where(t => t.GetHp() > 0).OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
                           .FirstOrDefault();
     }
 
@@ -133,6 +132,7 @@ public abstract class AttackableEnemy : AttackableUnit
     {
         if (target != null)
             BattleState = UnitBattleState.MoveToTarget;
+
     }
 
     public override void NormalAttack()
@@ -195,6 +195,10 @@ public abstract class AttackableEnemy : AttackableUnit
                 {
                     SearchTarget();
                     return;
+                }
+                if (!ContainTarget(target, characterData.attack.distance))
+                {
+                    BattleState = UnitBattleState.MoveToTarget;
                 }
 
                 //타겟으로 바라보기
