@@ -8,7 +8,6 @@ public class BeltScrollBattleManager : TestBattleManager
     public GameObject platform;
     public float platformMoveSpeed;
 
-    public List<MapEventTrigger> triggers;
     private int currTriggerIndex = 0;
     private int readyCount = 3;
     private float nextStageMoveTimer = 0f;
@@ -20,7 +19,8 @@ public class BeltScrollBattleManager : TestBattleManager
         {
             Invoke("OnReady", 1f);
         }
-        enemyCountTxt.Count = 0;
+        
+        enemyCountTxt.Count = GetAllEnemyCount();
     }
 
     public void GetEnemyList(ref List<AttackableEnemy> enemyList)
@@ -122,6 +122,5 @@ public class BeltScrollBattleManager : TestBattleManager
         {
             useHeroes[i].SetBattle();
         }
-        enemyCountTxt.Count = triggers[currTriggerIndex].enemys.Count;
     }
 }
