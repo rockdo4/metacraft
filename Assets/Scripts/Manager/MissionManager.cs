@@ -30,13 +30,12 @@ public class MissionManager : MonoBehaviour
     {
         missionInfoTable = GameManager.Instance.missionInfoList;
         var num = Utils.DistinctRandomNumbers(missionInfoTable.Count, 4);
-        marks = missionPoints.GetComponentInChildren<MissionSpawner>().prefebs;
+        marks = GetComponentInChildren<MissionSpawner>().prefebs;
 
         heroSlotDatas = new MissionHeroSlotButton[3];
         for (int i = 0; i < heroSlots.Length; i++)
         {
             heroSlotDatas[i] = heroSlots[i].GetComponent<MissionHeroSlotButton>();
-
         }
         curSlot = heroSlots[0]; 
         curSlotData = curSlot.GetComponent<MissionHeroSlotButton>();
@@ -44,12 +43,16 @@ public class MissionManager : MonoBehaviour
         int j = 0;
         for (int i = 0; i < marks.Length; i++)
         {
-            if(marks[i].activeSelf)
+            if(marks[i].GetComponent<MissionMarkData>().isMarkOn)
             {
                 var index = j++;
-                marks[i].GetComponentInChildren<TextMeshProUGUI>().text = "1";// $"{missionInfoTable[num[index]]["Name"]}";
+                marks[i].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[num[index]]["Name"]}";
                 marks[i].GetComponentInChildren<Button>().onClick.AddListener(()=>UpdateMissionInfo(num[index]));
-            } 
+            }
+            else
+            {
+                marks[i].SetActive(false);
+            }
         }
      }
 

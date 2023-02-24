@@ -15,7 +15,7 @@ public class MissionSpawner : MonoBehaviour
     {
         foreach (GameObject go in prefebs)
         {
-            go.SetActive(false);
+            go.GetComponent<MissionMarkData>().OnOffMark(false);
         }
 
         randomNumbers = Utils.DistinctRandomNumbers(7, 4);
@@ -28,6 +28,6 @@ public class MissionSpawner : MonoBehaviour
 
     private void CreateMission(int index)
     {
-        prefebs[index].SetActive(true);
+        prefebs[index].GetComponent<MissionMarkData>().OnOffMark(true);
     }
 }
