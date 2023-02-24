@@ -46,42 +46,24 @@ public class ShortAttackHero : AttackableHero
         base.PassiveSkill();
         //Logger.Debug("Hero_NormalAttack");
 
-        if (characterData.attack.count == 1)
-        {
-            target.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage,true);
-            return;
-        }
+        target.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage * 2, true);
+        return;
 
-        List<GameObject> attackEnemies = new();
-
-        foreach (var enemy in enemyList)
-        {
-            Vector3 interV = enemy.transform.position - transform.position;
-            if (interV.magnitude <= characterData.attack.distance)
-            {
-                float angle = Vector3.Angle(transform.forward, interV);
-
-                if (Mathf.Abs(angle) < characterData.attack.angle / 2f)
-                {
-                    attackEnemies.Add(enemy.transform.gameObject);
-                }
-            }
-        }
-
-        attackEnemies.OrderBy(t => Vector3.Distance(transform.position, t.transform.position));
-
-        var cnt = Mathf.Min(attackEnemies.Count, characterData.attack.count);
-        for (int i = 0; i < cnt; i++)
-        {
-            attackEnemies[i].GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage, true);
-        }
         //Logger.Debug("Hero_PassiveSkill");
+    }
+    public override void ActiveAttack()
+    {
+        base.ActiveAttack();
+
+        target.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage * 3, true);
+        return;
+
     }
 
     protected override void SearchTarget()
     {
-       SearchNearbyTarget(); //근거리 타겟 추적
-       base.SearchTarget();
+        SearchNearbyTarget(); //근거리 타겟 추적
+        base.SearchTarget();
     }
 
 #if UNITY_EDITOR

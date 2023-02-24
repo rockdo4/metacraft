@@ -67,7 +67,7 @@ public abstract class AttackableEnemy : AttackableUnit
                 case UnitBattleState.NormalAttack:
                     break;
                 case UnitBattleState.PassiveSkill:
-                    animator.SetTrigger("Attack");
+                    animator.SetTrigger("Passive");
                     Logger.Debug("Attack");
                     break;
                 case UnitBattleState.ActiveSkill:
@@ -137,19 +137,14 @@ public abstract class AttackableEnemy : AttackableUnit
 
     public override void NormalAttack()
     {
-        Logger.Debug("NormalAttack!");
     }
     public override void PassiveSkill()
     {
-        Logger.Debug("PassiveSkill!");
 
-        Invoke("TestPassiveEnd", 1);
         BattleState = UnitBattleState.PassiveSkill;
     }
     public override void ActiveAttack()
     {
-        Logger.Debug("ActiveAttack!");
-
         Invoke("TestActiveEnd", 1);
         BattleState = UnitBattleState.ActiveSkill;
     }

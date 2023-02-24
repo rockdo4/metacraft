@@ -24,25 +24,25 @@ public abstract class AttackableHero : AttackableUnit
             switch (unitState)
             {
                 case UnitState.Idle:
-                    pathFind.isStopped = true;
                     animator.SetTrigger("Idle");
-                    Logger.Debug("Idle");
+                    pathFind.isStopped = true;
                     nowUpdate = IdleUpdate;
+                    Logger.Debug("Idle");
                     break;
                 case UnitState.ReturnPosition: // 재배치
-                    pathFind.isStopped = false;
                     animator.SetTrigger("Run");
-                    Logger.Debug("Run");
+                    pathFind.isStopped = false;
                     pathFind.SetDestination(returnPos.position); //재배치 위치 설정
                     pathFind.stoppingDistance = 0; //가까이 가기
                     nowUpdate = ReturnPosUpdate;
+                    Logger.Debug("Run");
                     break;
                 case UnitState.MoveNext:
+                    animator.SetTrigger("Run");
                     BattleState = UnitBattleState.None;
                     pathFind.isStopped = false;
-                    animator.SetTrigger("Run");
-                    Logger.Debug("Run");
                     nowUpdate = MoveNextUpdate;
+                    Logger.Debug("Run");
                     break;
                 case UnitState.Battle:
                     BattleState = UnitBattleState.MoveToTarget;
@@ -80,12 +80,9 @@ public abstract class AttackableHero : AttackableUnit
                 case UnitBattleState.NormalAttack:
                     break;
                 case UnitBattleState.PassiveSkill:
-                    animator.SetTrigger("Attack");
-                    Logger.Debug("Attack");
                     break;
                 case UnitBattleState.ActiveSkill:
-                    animator.SetTrigger("Attack");
-                    Logger.Debug("Attack");
+                    Logger.Debug("ActiveSkill");
                     break;
                 case UnitBattleState.Stun:
                     break;
@@ -178,32 +175,36 @@ public abstract class AttackableHero : AttackableUnit
     public override void NormalAttack()
     {
         Logger.Debug("NormalAttack!"); 
+        animator.SetTrigger("Attack");
     }
-    public override void PassiveSkill()
+
+    public void HeroPassiveSkill(AnimationEvent ev)
     {
         Logger.Debug("PassiveSkill!");
 
-        Invoke("TestPassiveEnd", 1);
         BattleState = UnitBattleState.PassiveSkill;
+    }
+    public void HeroActiveSkill(AnimationEvent ev)
+    {
+        Logger.Debug("Active!");
+        Invoke("TestActiveEnd", 1);
+        BattleState = UnitBattleState.ActiveSkill;
+    }
+    public void TestSkillEnd(AnimationEvent ev)
+    {
+        lastPassiveSkillTime = Time.time;
+        BattleState = UnitBattleState.NormalAttack;
+    }
+
+    public override void PassiveSkill()
+    {
     }
     public override void ActiveAttack()
     {
         Logger.Debug("ActiveAttack!");
-
-        Invoke("TestActiveEnd", 1);
+        Invoke("TestActiveEnd",1);
         BattleState = UnitBattleState.ActiveSkill;
     }
-    public override void TestPassiveEnd()
-    {
-        lastNormalAttackTime = lastPassiveSkillTime = Time.time;
-        BattleState = UnitBattleState.NormalAttack;
-    }
-    public override void TestActiveEnd()
-    {
-        lastNormalAttackTime = lastPassiveSkillTime = Time.time;
-        BattleState = UnitBattleState.NormalAttack;
-    }
-
     protected override void IdleUpdate()
     {
 
@@ -245,18 +246,15 @@ public abstract class AttackableHero : AttackableUnit
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 120);
 
                 //패시브 스킬 가능이면 패시브 사용, 아니라면 평타
-                if (IsPassiveAttack && CanPassiveSkillTime)
+                if (IsPassiveAttack && CanPassiveSkillTime && CanNormalAttackTime)
                 {
                     lastPassiveSkillTime = Time.time;
-
+                    animator.SetTrigger("Passive");
                     PassiveSkillAction();
                 }
                 else if (IsNormalAttack && CanNormalAttackTime)
                 {
                     lastNormalAttackTime = Time.time;
-
-                    animator.SetTrigger("Attack");
-                    Logger.Debug("Idle");
                     NormalAttackAction();
                 }
                 break;
@@ -335,5 +333,12 @@ public abstract class AttackableHero : AttackableUnit
     public void DestroyHero(AnimationEvent ev)
     {
         Destroy(gameObject);
+    }
+
+    //???? ????????? ??????, ???¸? NormalAttack?? ????? ??? ???
+    public override void TestPassiveEnd() { }
+    public override void TestActiveEnd()
+    {
+        BattleState = UnitBattleState.NormalAttack;
     }
 }
