@@ -28,11 +28,11 @@ public abstract class AttackableEnemy : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
+                    pathFind.isStopped = false;
                     pathFind.stoppingDistance = characterData.attack.distance * 0.9f; //가까이 가기
                     animator.SetTrigger("Run");
                     battleManager.GetHeroList(ref heroList);
                     pathFind.speed = characterData.data.moveSpeed;
-                    pathFind.isStopped = false;
                     BattleState = UnitBattleState.NormalAttack;
                     nowUpdate = BattleUpdate;
                     break;
@@ -79,6 +79,8 @@ public abstract class AttackableEnemy : AttackableUnit
             }
         }
     }
+
+    private bool isMapTriggerEnter = false;
 
     protected override void Awake()
     {
@@ -239,6 +241,10 @@ public abstract class AttackableEnemy : AttackableUnit
     [ContextMenu("Battle")]
     public override void SetBattle()
     {
+        isMapTriggerEnter = true;
+        if (pathFind.enabled.Equals(false))
+            pathFind.enabled = true;
+
         UnitState = UnitState.Battle;
     }
 

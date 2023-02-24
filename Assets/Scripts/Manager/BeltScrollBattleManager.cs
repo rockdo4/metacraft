@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class BeltScrollBattleManager : TestBattleManager
 {
@@ -14,12 +15,20 @@ public class BeltScrollBattleManager : TestBattleManager
 
     private void Start()
     {
+        for (int i = 0; i < triggers.Count; i++)
+        {
+            for (int j = 0; j < triggers[i].enemysNav.Count; j++)
+            {
+                triggers[i].enemysNav[j].enabled = false;
+            }
+        }
+
         // Test
         for (int i = 0; i < useHeroes.Count; i++)
         {
             Invoke("OnReady", 1f);
         }
-        
+
         enemyCountTxt.Count = GetAllEnemyCount();
     }
 
