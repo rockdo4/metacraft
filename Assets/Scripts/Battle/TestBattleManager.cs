@@ -13,6 +13,7 @@ public class TestBattleManager : MonoBehaviour
     public StageEnemy enemyCountTxt;
 
     public ClearUi clearUi;
+    public List<MapEventTrigger> triggers;
 
     private void Awake()
     {
@@ -33,5 +34,16 @@ public class TestBattleManager : MonoBehaviour
     public List<Transform> GetStartPosition()
     {
         return startPositions;
+    }
+
+    public int GetAllEnemyCount()
+    {
+        int count = 0;
+        for (int i = 0; i < triggers.Count; i++)
+        {
+            count += triggers[i].enemys.Count;
+        }
+
+        return count;
     }
 }
