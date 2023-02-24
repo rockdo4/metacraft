@@ -95,6 +95,22 @@ public class MissionManager : MonoBehaviour
         heroSlotsIndex = idx;
     }
 
+    public void StartMission()
+    {
+        GameManager gm = GameManager.Instance;
+        int count = 0;
+        foreach (var num in gm.battleGroups)
+        {
+            if (num != null)
+                count++;
+        }
+        if (count > 0)
+        {
+            gm.LoadScene((int)SceneIndex.Battle);
+        }
+    }
+
+
     // 전투 종료시 초기화 코드
     //GameManager.Instance.ClearBattleGroups();
     //foreach (var slot in heroSlots)
