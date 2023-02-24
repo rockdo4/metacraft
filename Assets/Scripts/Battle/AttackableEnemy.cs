@@ -80,7 +80,7 @@ public abstract class AttackableEnemy : AttackableUnit
         }
     }
 
-    private bool isMapTriggerEnter = false;
+    public bool isMapTriggerEnter = false;
 
     protected override void Awake()
     {
@@ -241,8 +241,11 @@ public abstract class AttackableEnemy : AttackableUnit
     [ContextMenu("Battle")]
     public override void SetBattle()
     {
+        if (isMapTriggerEnter)
+            return;
         isMapTriggerEnter = true;
-        if (pathFind.enabled.Equals(false))
+
+        if (!pathFind.enabled)
             pathFind.enabled = true;
 
         UnitState = UnitState.Battle;
