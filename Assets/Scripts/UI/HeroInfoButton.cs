@@ -23,8 +23,8 @@ public class HeroInfoButton : MonoBehaviour
         icon.sprite = GameManager.Instance.iconSprites[$"Icon_{data.name}"];
     }
 
-    public void SelectCharacter()
+    public virtual void OnClick()
     {
-        GameManager.Instance.selectObject = bundle.gameObject;
+        GameManager.Instance.currentSelectObject = bundle.gameObject;
     }
 }

@@ -11,7 +11,7 @@ public class MissionManager : MonoBehaviour
 
     public TextMeshProUGUI ExpectedCost;
     public GameObject[] heroSlots;
-    private GameObject curSlot;
+    private int heroSlotsIndex;
     public TextMeshProUGUI[] fitProperties;
 
     public TextMeshProUGUI deductionAP;
@@ -29,23 +29,23 @@ public class MissionManager : MonoBehaviour
         var num = Utils.DistinctRandomNumbers(missionInfoTable.Count, 4);
         marks = GetComponentInChildren<MissionSpawner>().prefebs;
 
-        curSlot = heroSlots[0];
+        heroSlotsIndex = 0;
 
         int j = 0;
         for (int i = 0; i < marks.Length; i++)
         {
-            if(marks[i].GetComponent<MissionMarkData>().isMarkOn)
+            if (marks[i].GetComponent<MissionMarkData>().isMarkOn)
             {
                 var index = j++;
                 marks[i].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[num[index]]["Name"]}";
-                marks[i].GetComponentInChildren<Button>().onClick.AddListener(()=>UpdateMissionInfo(num[index]));
+                marks[i].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(num[index]));
             }
             else
             {
                 marks[i].SetActive(false);
             }
         }
-     }
+    }
 
     public void UpdateMissionInfo(int num)
     {
@@ -62,13 +62,41 @@ public class MissionManager : MonoBehaviour
         ProperCombatPower.text = $"1000/{dic["ProperCombatPower"]}";
     }
 
-    public void OnClickHeroSelect(CharacterDataBundle data)
+    // Mission Hero Info Button 에서 호출
+    public void OnClickHeroSelect(CharacterDataBundle bundle)
     {
-        curSlot.GetComponent<Image>().sprite = GameManager.Instance.iconSprites[$"Icon_{data.name}"];
+        int index = GameManager.Instance.GetHeroIndex(bundle.gameObject);
+        var selectIndexGroup = GameManager.Instance.battleGroups;
+
+        int? duplication = null;
+        for (int i = 0; i < 3; i++)
+        {
+            if (selectIndexGroup[i] == index)
+            {
+                duplication = i;
+                break;
+            }
+        }
+
+        LiveData liveData = bundle.data;
+        heroSlots[heroSlotsIndex].GetComponent<Image>().sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{liveData.name}");
+        selectIndexGroup[heroSlotsIndex] = index;
+
+        if (duplication != null)
+        {
+            heroSlots[(int)duplication].GetComponent<Image>().sprite = null;
+            selectIndexGroup[(int)duplication] = null;
+        }
     }
 
-    public void ConfirmSelectButton(GameObject obj)
+    // Hero Slot 에서 Index 전달
+    public void ConfirmSelectButton(int idx)
     {
-        curSlot = obj;
+        heroSlotsIndex = idx;
     }
+
+    // 전투 종료시 초기화 코드
+    //GameManager.Instance.ClearBattleGroups();
+    //foreach (var slot in heroSlots)
+    //    slot.GetComponent<Image>().sprite = null;
 }

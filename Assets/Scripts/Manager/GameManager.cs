@@ -14,18 +14,8 @@ public class GameManager : Singleton<GameManager>
 
     public List<Dictionary<string, object>> missionInfoList;
 
-    public GameObject selectObject;
-
-    public Sprite GetSpriteByAddress(string address)
-    {
-        if (iconSprites.ContainsKey(address))
-            return iconSprites[address];
-
-        if (illustrationSprites.ContainsKey(address))
-            return illustrationSprites[address];
-
-        return null;
-    }
+    public GameObject currentSelectObject;
+    public List<int?> battleGroups = new (3) { null, null, null };
 
     public override void Awake()
     {
@@ -107,10 +97,8 @@ public class GameManager : Singleton<GameManager>
                 }
                 count++;
             }
-            //Logger.Debug($"progress {count} / {handles.Count}");
             yield return null;
         }
-        //Logger.Debug("Load All Resources");
         ReleaseAddressable(handles);
     }
 
@@ -142,5 +130,38 @@ public class GameManager : Singleton<GameManager>
     {
         SceneManager.LoadScene(sceneIdx);
         currentScene = (SceneIndex)sceneIdx;
+    }
+
+    public void ClearBattleGroups()
+    {
+        battleGroups.Clear();
+        for (int i = 0; i < 3; i++)
+        {
+            battleGroups.Add(null);
+        }
+    }
+
+    public int GetHeroIndex(GameObject hero)
+    {
+        int count = heroTable.Count;
+        for (int i = 0; i < count; i++)
+        {
+            string tableName = heroTable[i].GetComponent<CharacterDataBundle>().data.name;
+            string selectHeroName = hero.GetComponent<CharacterDataBundle>().data.name;
+            if (tableName.Equals(selectHeroName))
+                return i;
+        }
+        return -1;
+    }
+
+    public Sprite GetSpriteByAddress(string address)
+    {
+        if (iconSprites.ContainsKey(address))
+            return iconSprites[address];
+
+        if (illustrationSprites.ContainsKey(address))
+            return illustrationSprites[address];
+
+        return null;
     }
 }
