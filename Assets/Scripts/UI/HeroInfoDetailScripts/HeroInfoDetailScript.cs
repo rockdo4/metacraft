@@ -3,21 +3,12 @@ using System.Text;
 using UnityEngine.UI;
 public class HeroInfoDetailScript : View
 {
-    //public CharacterData data;
     public Image portrait;
     public TextMeshProUGUI gradeInfoInLeftPanel;
     public TextMeshProUGUI levelInfoInfoInLeftPanel;
     public TextMeshProUGUI statDetail;
 
     public Button[] trainingPlusButtons;
-    //private void Start()
-    //{
-    //    //gradeInfoInLeftPanel.text = data.grade;
-    //    //levelInfoInfoInLeftPanel.text = data.level.ToString();
-
-    //    //statDetail.text = SetHeroStatInfoText();
-    //    //SetTrainingPlusButtons();
-    //}
 
     private void OnEnable()
     {
@@ -26,10 +17,8 @@ public class HeroInfoDetailScript : View
 
     private void SetHeroStatInfoText()
     {
-        LiveData data = GameManager.Instance.selectDetail;
-        string spriteKey = $"Illur_{data.name}";
-        Logger.Debug(spriteKey);
-        portrait.sprite = GameManager.Instance.GetSpriteByAddress(spriteKey);
+        LiveData data = GameManager.Instance.currentSelectObject.GetComponent<AttackableUnit>().GetHeroData().data;
+        portrait.sprite = GameManager.Instance.GetSpriteByAddress($"Illur_{data.name}");
 
         gradeInfoInLeftPanel.text = data.grade;
         levelInfoInfoInLeftPanel.text = data.level.ToString();

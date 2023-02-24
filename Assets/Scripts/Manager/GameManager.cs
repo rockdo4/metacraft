@@ -8,26 +8,14 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
-    public List<GameObject> characterTable = new();
-    //public Dictionary<string, Sprite> testPortraits = new();
+    public List<GameObject> heroTable = new();
     public Dictionary<string, Sprite> iconSprites = new();
     public Dictionary<string, Sprite> illustrationSprites = new();
 
-    private List<Dictionary<string, object>> characterList;
     public List<Dictionary<string, object>> missionInfoList;
 
-    public LiveData selectDetail;
-
-    public Sprite GetSpriteByAddress(string address)
-    {
-        if (iconSprites.ContainsKey(address))
-            return iconSprites[address];
-
-        if (illustrationSprites.ContainsKey(address))
-            return illustrationSprites[address];
-
-        return null;
-    }
+    public GameObject currentSelectObject;
+    public List<int?> battleGroups = new (3) { null, null, null };
 
     public override void Awake()
     {
@@ -37,7 +25,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        foreach (var character in characterTable)
+        foreach (var character in heroTable)
         {
             character.SetActive(false);
         }
@@ -45,15 +33,9 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator LoadAllResources()
     {
-        var cl = Addressables.LoadAssetAsync<TextAsset>("CharacterList");
+        // 텍스트 리소스 로드
         var mit = Addressables.LoadAssetAsync<TextAsset>("MissionInfoTable");
 
-        cl.Completed +=
-                (AsyncOperationHandle<TextAsset> obj) =>
-                {
-                    characterList = CSVReader.SplitTextAsset(obj.Result);
-                    Addressables.Release(obj);
-                };
         mit.Completed +=
                 (AsyncOperationHandle<TextAsset> obj) =>
                 {
@@ -61,27 +43,7 @@ public class GameManager : Singleton<GameManager>
                     Addressables.Release(obj);
                 };
 
-        bool loadAll = false;
-        // 텍스트 리소스 로드
-        while (!loadAll)
-        {
-            if (cl.IsDone)
-                loadAll = true;
-            yield return null;
-        }
-
         List<AsyncOperationHandle> handles = new();
-        //foreach (var character in characterList)
-        //{
-        //    string address = (string)character["Name"];
-        //    Debug.Log(address);
-        //    Addressables.LoadAssetAsync<Sprite>(address).Completed +=
-        //        (AsyncOperationHandle<Sprite> obj) =>
-        //        {
-        //            testPortraits.Add(address, obj.Result);
-        //            handles.Add(obj);
-        //        };
-        //}
 
         List<string> iconAddress = new()
         {
@@ -119,9 +81,8 @@ public class GameManager : Singleton<GameManager>
                 };
         }
 
-
+        bool loadAll = false;
         int count = 0;
-        loadAll = false;
         // 스프라이트 리소스 로드
         while (!loadAll)
         {
@@ -136,10 +97,8 @@ public class GameManager : Singleton<GameManager>
                 }
                 count++;
             }
-            //Logger.Debug($"progress {count} / {handles.Count}");
             yield return null;
         }
-        //Logger.Debug("Load All Resources");
         ReleaseAddressable(handles);
     }
 
@@ -171,5 +130,38 @@ public class GameManager : Singleton<GameManager>
     {
         SceneManager.LoadScene(sceneIdx);
         currentScene = (SceneIndex)sceneIdx;
+    }
+
+    public void ClearBattleGroups()
+    {
+        battleGroups.Clear();
+        for (int i = 0; i < 3; i++)
+        {
+            battleGroups.Add(null);
+        }
+    }
+
+    public int GetHeroIndex(GameObject hero)
+    {
+        int count = heroTable.Count;
+        for (int i = 0; i < count; i++)
+        {
+            string tableName = heroTable[i].GetComponent<CharacterDataBundle>().data.name;
+            string selectHeroName = hero.GetComponent<CharacterDataBundle>().data.name;
+            if (tableName.Equals(selectHeroName))
+                return i;
+        }
+        return -1;
+    }
+
+    public Sprite GetSpriteByAddress(string address)
+    {
+        if (iconSprites.ContainsKey(address))
+            return iconSprites[address];
+
+        if (illustrationSprites.ContainsKey(address))
+            return illustrationSprites[address];
+
+        return null;
     }
 }
