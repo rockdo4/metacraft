@@ -17,7 +17,6 @@ public class MissionHeroInfoButton : HeroInfoButton
 
     public void OnClick()
     {
-        Logger.Debug(1);
         FindObjectOfType<MissionManager>().OnClickHeroSelect(data);
     }
 }

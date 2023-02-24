@@ -16,6 +16,8 @@ public class GameManager : Singleton<GameManager>
     private List<Dictionary<string, object>> characterList;
     public List<Dictionary<string, object>> missionInfoList;
 
+    public LiveData selectDetail;
+
     public Sprite GetSpriteByAddress(string address)
     {
         if (iconSprites.ContainsKey(address))
@@ -91,10 +93,10 @@ public class GameManager : Singleton<GameManager>
 
         List<string> illustrationAddress = new()
         {
-            "Illu_다인",
-            "Illu_신하루",
-            "Illu_이수빈",
-            "Illu_한서은",
+            "Illur_다인",
+            "Illur_신하루",
+            "Illur_이수빈",
+            "Illur_한서은",
         };
 
         foreach (string icon in iconAddress)
