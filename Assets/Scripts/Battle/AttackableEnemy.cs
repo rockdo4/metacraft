@@ -241,6 +241,8 @@ public abstract class AttackableEnemy : AttackableUnit
     [ContextMenu("Battle")]
     public override void SetBattle()
     {
+        Logger.Debug("Battle!");
+
         if (isMapTriggerEnter)
             return;
         isMapTriggerEnter = true;

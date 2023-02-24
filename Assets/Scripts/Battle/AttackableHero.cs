@@ -178,19 +178,18 @@ public abstract class AttackableHero : AttackableUnit
         animator.SetTrigger("Attack");
     }
 
-    public void HeroPassiveSkill(AnimationEvent ev)
+    public void HeroPassiveSkill()
     {
         Logger.Debug("PassiveSkill!");
-
         BattleState = UnitBattleState.PassiveSkill;
     }
-    public void HeroActiveSkill(AnimationEvent ev)
+    public void HeroActiveSkill()
     {
         Logger.Debug("Active!");
         Invoke("TestActiveEnd", 1);
         BattleState = UnitBattleState.ActiveSkill;
     }
-    public void TestSkillEnd(AnimationEvent ev)
+    public void TestSkillEnd()
     {
         lastPassiveSkillTime = Time.time;
         BattleState = UnitBattleState.NormalAttack;
@@ -325,12 +324,12 @@ public abstract class AttackableHero : AttackableUnit
             UnitState = UnitState.Die;
     }
     
-    public void DeadHero(AnimationEvent ev)
+    public void DeadHero()
     {
         battleManager.OnDeadHero(this);
     }
 
-    public void DestroyHero(AnimationEvent ev)
+    public void DestroyHero()
     {
         Destroy(gameObject);
     }

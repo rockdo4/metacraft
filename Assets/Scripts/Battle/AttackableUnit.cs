@@ -50,7 +50,7 @@ public abstract class AttackableUnit : MonoBehaviour
     protected virtual void Awake()
     {
         battleManager = FindObjectOfType<BeltScrollBattleManager>();
-        animator = GetComponent<Animator>();
+        animator = GetComponentInChildren<Animator>();
         float speed = animator.GetFloat(hashAttackSpeed);
 
         for (int i = 0; i <  animator.runtimeAnimatorController.animationClips.Length; i++)
