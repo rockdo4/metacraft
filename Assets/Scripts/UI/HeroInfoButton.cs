@@ -9,14 +9,15 @@ public class HeroInfoButton : MonoBehaviour
     public TextMeshProUGUI jobText;
     public TextMeshProUGUI levelText;
     public Image icon;
+    public LiveData data;
 
-    public void SetData(CharacterDataBundle data)
+    public virtual void SetData(CharacterDataBundle dataBundle)
     {
-        var info = data.data;
-        heroNameText.text = info.name;
-        gradeText.text = info.grade;
-        jobText.text = info.job;
-        levelText.text = info.level.ToString();
-        icon.sprite = GameManager.Instance.iconSprites[$"Icon_{info.name}"];
+        data = dataBundle.data;
+        heroNameText.text = data.name;
+        gradeText.text = data.grade;
+        jobText.text = data.job;
+        levelText.text = data.level.ToString();
+        icon.sprite = GameManager.Instance.iconSprites[$"Icon_{data.name}"];
     }
 }
