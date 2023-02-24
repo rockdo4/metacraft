@@ -1,9 +1,7 @@
 using System.Collections.Generic;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEditor.Rendering.Universal.ShaderGUI.LitGUI;
 
 public class MissionManager : MonoBehaviour
 {
@@ -49,7 +47,7 @@ public class MissionManager : MonoBehaviour
             if(marks[i].activeSelf)
             {
                 var index = j++;
-                marks[i].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[num[index]]["Name"]}";
+                marks[i].GetComponentInChildren<TextMeshProUGUI>().text = "1";// $"{missionInfoTable[num[index]]["Name"]}";
                 marks[i].GetComponentInChildren<Button>().onClick.AddListener(()=>UpdateMissionInfo(num[index]));
             } 
         }

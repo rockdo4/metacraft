@@ -20,4 +20,9 @@ public class HeroInfoButton : MonoBehaviour
         levelText.text = data.level.ToString();
         icon.sprite = GameManager.Instance.iconSprites[$"Icon_{data.name}"];
     }
+
+    public void SelectCharacter()
+    {
+        GameManager.Instance.selectDetail = data;
+    }
 }
