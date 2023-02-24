@@ -40,7 +40,7 @@ public class MissionManager : MonoBehaviour
             heroSlotDatas[i] = heroSlots[i].GetComponent<MissionHeroSlotButton>();
 
         }
-        curSlot = heroSlots[1];
+        curSlot = heroSlots[1]; // 이거 왜 1로 넣어둠?
         curSlotData = curSlot.GetComponent<MissionHeroSlotButton>();
 
         int j = 0;
@@ -72,13 +72,15 @@ public class MissionManager : MonoBehaviour
 
     public void OnClickHeroSelect(LiveData data)
     {
-        foreach (var slot in heroSlotDatas)
-        {
-            if(slot.data.name==curSlotData.data.name)
-            {
-                slot.data = null;
-            }
-        }
+        //중복제거코드
+        //foreach (var slot in heroSlotDatas)
+        //{
+        //    Logger.Debug($"{slot.data.name} {curSlotData.data.name}");
+        //    //if(slot.data.name==curSlotData.data.name)
+        //    {
+        //    //    slot.data = null;
+        //    }
+        //}
 
         curSlot.GetComponent<Image>().sprite = GameManager.Instance.iconSprites[$"Icon_{data.name}"];
         curSlot.GetComponent<MissionHeroSlotButton>().data = data;
