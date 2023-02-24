@@ -40,13 +40,13 @@ public class MissionManager : MonoBehaviour
             heroSlotDatas[i] = heroSlots[i].GetComponent<MissionHeroSlotButton>();
 
         }
-        curSlot = heroSlots[1]; // 이거 왜 1로 넣어둠?
+        curSlot = heroSlots[0]; 
         curSlotData = curSlot.GetComponent<MissionHeroSlotButton>();
 
         int j = 0;
         for (int i = 0; i < marks.Length; i++)
         {
-            if(marks[i].activeInHierarchy)
+            if(marks[i].activeSelf)
             {
                 var index = j++;
                 marks[i].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[num[index]]["Name"]}";
