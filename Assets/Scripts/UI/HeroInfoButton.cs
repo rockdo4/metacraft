@@ -9,6 +9,7 @@ public class HeroInfoButton : MonoBehaviour
     public TextMeshProUGUI jobText;
     public TextMeshProUGUI levelText;
     public Image icon;
+    //public CharacterDataBundle data;
     public CharacterData data;
 
     public virtual void SetData(CharacterDataBundle dataBundle)
