@@ -201,13 +201,8 @@ public abstract class AttackableEnemy : AttackableUnit
                 transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 120);
 
                 //타겟과 일정 범위 안에 있으며, 일반스킬 상태이고, 쿨타임 조건이 충족될때
-                if (IsPassiveAttack && CanPassiveSkillTime)
-                {
-                    lastPassiveSkillTime = Time.time;
 
-                    PassiveSkillAction();
-                }
-                else if (IsNormalAttack && CanNormalAttackTime)
+                if (IsNormalAttack && CanNormalAttackTime)
                 {
                     lastNormalAttackTime = Time.time;
 
