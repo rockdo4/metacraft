@@ -8,7 +8,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
-    public List<CharacterDataBundle> characterTable = new();
+    public List<GameObject> characterTable = new();
     //public Dictionary<string, Sprite> testPortraits = new();
     public Dictionary<string, Sprite> iconSprites = new();
     public Dictionary<string, Sprite> illustrationSprites = new();
@@ -16,10 +16,29 @@ public class GameManager : Singleton<GameManager>
     private List<Dictionary<string, object>> characterList;
     public List<Dictionary<string, object>> missionInfoList;
 
+    public Sprite GetSpriteByAddress(string address)
+    {
+        if (iconSprites.ContainsKey(address))
+            return iconSprites[address];
+
+        if (illustrationSprites.ContainsKey(address))
+            return illustrationSprites[address];
+
+        return null;
+    }
+
     public override void Awake()
     {
         base.Awake();
         StartCoroutine(LoadAllResources());
+    }
+
+    private void Start()
+    {
+        foreach (var character in characterTable)
+        {
+            character.SetActive(false);
+        }
     }
 
     private IEnumerator LoadAllResources()

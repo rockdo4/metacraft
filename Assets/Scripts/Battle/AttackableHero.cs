@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -92,6 +91,7 @@ public abstract class AttackableHero : AttackableUnit
 
     protected override void Awake()
     {
+        characterData.InitSetting();
         //charactorData = LoadTestData(); //임시 데이터 로드
         pathFind = transform.GetComponent<NavMeshAgent>();
         SetData();
