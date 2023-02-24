@@ -20,7 +20,7 @@ public class RangeAttackHero : AttackableHero
 
         if (characterData.attack.count == 1)
         {
-            target.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage);
+            target.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage, false);
             return;
         }
 
@@ -45,7 +45,7 @@ public class RangeAttackHero : AttackableHero
         var cnt = Mathf.Min(attackEnemies.Count, characterData.attack.count);
         for (int i = 0; i < cnt; i++)
         {
-            attackEnemies[i].GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage);
+            attackEnemies[i].GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage, false);
         }
     }
     public override void PassiveSkill()

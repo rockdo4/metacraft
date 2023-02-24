@@ -25,7 +25,7 @@ public class ClearUi : MonoBehaviour
         {
             var data = hero.GetHeroData().data;
             var heroInfo = Instantiate(clearHeroPref, heroTr);
-            heroInfo.SetInfo(data.level, data.exp);
+            heroInfo.SetInfo((int)data.level, (int)data.exp);
 
             this.heroes.Add(heroInfo);
         }

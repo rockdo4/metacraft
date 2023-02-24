@@ -20,6 +20,7 @@ public class BeltScrollBattleManager : TestBattleManager
         {
             Invoke("OnReady", 1f);
         }
+        enemyCountTxt.Count = 0;
     }
 
     public void GetEnemyList(ref List<AttackableEnemy> enemyList)
@@ -33,6 +34,7 @@ public class BeltScrollBattleManager : TestBattleManager
 
     public void OnDeadEnemy(AttackableEnemy enemy)
     {
+        enemyCountTxt.DimEnemy();
         triggers[currTriggerIndex].OnDead(enemy);
         if (triggers[currTriggerIndex].enemys.Count == 0)
         {
@@ -120,5 +122,6 @@ public class BeltScrollBattleManager : TestBattleManager
         {
             useHeroes[i].SetBattle();
         }
+        enemyCountTxt.Count = triggers[currTriggerIndex].enemys.Count;
     }
 }

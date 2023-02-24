@@ -24,8 +24,10 @@ public class HeroSkill : MonoBehaviour
     public void Set(float coolDown, Action effect)
     {
         this.coolDown = coolDown;
-        coolDownTimer = coolDown;
         this.effect = effect;
+
+        coolDownTimer = 0;
+        CoolDownFill = coolDownTimer / coolDown;
     }
 
 

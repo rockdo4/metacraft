@@ -2,8 +2,6 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 using static UnityEditor.Rendering.Universal.ShaderGUI.LitGUI;
 
@@ -72,7 +70,7 @@ public class MissionManager : MonoBehaviour
         ProperCombatPower.text = $"1000/{dic["ProperCombatPower"]}";
     }
 
-    public void OnClickHeroSelect(CharacterData data)
+    public void OnClickHeroSelect(LiveData data)
     {
         foreach (var slot in heroSlotDatas)
         {
