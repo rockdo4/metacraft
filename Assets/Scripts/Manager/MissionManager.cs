@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,18 +11,14 @@ public class MissionManager : MonoBehaviour
 
     public TextMeshProUGUI ExpectedCost;
     public GameObject[] heroSlots;
-    private MissionHeroSlotButton[] heroSlotDatas;
     private GameObject curSlot;
-    private MissionHeroSlotButton curSlotData;
     public TextMeshProUGUI[] fitProperties;
 
     public TextMeshProUGUI deductionAP;
     public TextMeshProUGUI ProperCombatPower;
 
-    public GameObject heroSlectWindowPrefab;
     public GameObject missionPoints;
     private GameObject[] marks;
-    //TEST용
     private List<Dictionary<string, object>> missionInfoTable;
 
     public delegate void clickmark(int num);
@@ -32,13 +29,7 @@ public class MissionManager : MonoBehaviour
         var num = Utils.DistinctRandomNumbers(missionInfoTable.Count, 4);
         marks = GetComponentInChildren<MissionSpawner>().prefebs;
 
-        heroSlotDatas = new MissionHeroSlotButton[3];
-        for (int i = 0; i < heroSlots.Length; i++)
-        {
-            heroSlotDatas[i] = heroSlots[i].GetComponent<MissionHeroSlotButton>();
-        }
-        curSlot = heroSlots[0]; 
-        curSlotData = curSlot.GetComponent<MissionHeroSlotButton>();
+        curSlot = heroSlots[0];
 
         int j = 0;
         for (int i = 0; i < marks.Length; i++)
@@ -71,20 +62,9 @@ public class MissionManager : MonoBehaviour
         ProperCombatPower.text = $"1000/{dic["ProperCombatPower"]}";
     }
 
-    public void OnClickHeroSelect(LiveData data)
+    public void OnClickHeroSelect(CharacterDataBundle data)
     {
-        //중복제거코드
-        //foreach (var slot in heroSlotDatas)
-        //{
-        //    Logger.Debug($"{slot.data.name} {curSlotData.data.name}");
-        //    //if(slot.data.name==curSlotData.data.name)
-        //    {
-        //    //    slot.data = null;
-        //    }
-        //}
-
         curSlot.GetComponent<Image>().sprite = GameManager.Instance.iconSprites[$"Icon_{data.name}"];
-        curSlot.GetComponent<MissionHeroSlotButton>().data = data;
     }
 
     public void ConfirmSelectButton(GameObject obj)

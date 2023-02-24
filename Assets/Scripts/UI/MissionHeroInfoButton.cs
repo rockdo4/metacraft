@@ -15,8 +15,8 @@ public class MissionHeroInfoButton : HeroInfoButton
         hpBar.maxValue = data.healthPoint;
     }
 
-    public void OnClick()
-    {
-        FindObjectOfType<MissionManager>().OnClickHeroSelect(data);
-    }
+    //public void OnClick()
+    //{
+    //    FindObjectOfType<MissionManager>().OnClickHeroSelect(bundle);
+    //}
 }

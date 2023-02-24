@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &4770930035862738204
+--- !u!1 &949333611882228291
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,22 +8,22 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4770930035862738178}
-  - component: {fileID: 4770930035862738179}
-  m_Layer: 0
-  m_Name: MissionManager
+  - component: {fileID: 9024622154237547512}
+  - component: {fileID: 1123684772277306586}
+  m_Layer: 5
+  m_Name: UI Manager
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4770930035862738178
-Transform:
+--- !u!224 &9024622154237547512
+RectTransform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4770930035862738204}
+  m_GameObject: {fileID: 949333611882228291}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
@@ -32,27 +32,26 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4770930035862738179
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1123684772277306586
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4770930035862738204}
+  m_GameObject: {fileID: 949333611882228291}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 237c7168788b0be4dad260cf845d1711, type: 3}
+  m_Script: {fileID: 11500000, guid: 4253862e933090048960e9a8e28cf864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  portrait: {fileID: 0}
-  explanation: {fileID: 0}
-  ExpectedCost: {fileID: 0}
-  heroSlot1: {fileID: 0}
-  heroSlot2: {fileID: 0}
-  heroSlot3: {fileID: 0}
-  fitProperties1: {fileID: 0}
-  fitProperties2: {fileID: 0}
-  fitProperties3: {fileID: 0}
-  deductionAP: {fileID: 0}
-  ProperCombatPower: {fileID: 0}
-  heroSlectWindowPrefab: {fileID: 0}
+  views: []
+  startingView: {fileID: 0}
+  popUpManager: {fileID: 126768008897492406, guid: 6515b3886141d234591883698c2c2fd2,
+    type: 3}
+  interactablePanelColor: {r: 0, g: 0, b: 0, a: 0.6039216}
+  noneInteractablePanelColor: {r: 0, g: 0, b: 0, a: 0.54509807}
