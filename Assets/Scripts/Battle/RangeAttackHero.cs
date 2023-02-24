@@ -10,7 +10,6 @@ public class RangeAttackHero : AttackableHero
     protected override void SearchTarget()
     {
         SearchNearbyTarget(); //체력이 가장 많은 타겟 추적
-        base.SearchTarget();
     }
 
     public override void NormalAttack()

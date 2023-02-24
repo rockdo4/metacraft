@@ -51,9 +51,9 @@ public class ShortAttackHero : AttackableHero
 
         //Logger.Debug("Hero_PassiveSkill");
     }
-    public override void ActiveAttack()
+    public override void ActiveSkill()
     {
-        base.ActiveAttack();
+        base.ActiveSkill();
 
         target.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage * 3, true);
         return;
@@ -63,7 +63,6 @@ public class ShortAttackHero : AttackableHero
     protected override void SearchTarget()
     {
         SearchNearbyTarget(); //근거리 타겟 추적
-        base.SearchTarget();
     }
 
 #if UNITY_EDITOR

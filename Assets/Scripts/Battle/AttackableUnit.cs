@@ -43,25 +43,11 @@ public abstract class AttackableUnit : MonoBehaviour
     protected bool moveTarget;
 
     protected Animator animator;
-    protected float normalAttackDelay;
-    private string normalAttackClipName = "Attack";
-    private readonly int hashAttackSpeed = Animator.StringToHash("AttackSpeed");
 
     protected virtual void Awake()
     {
         battleManager = FindObjectOfType<BeltScrollBattleManager>();
         animator = GetComponent<Animator>();
-        float speed = animator.GetFloat(hashAttackSpeed);
-
-        for (int i = 0; i <  animator.runtimeAnimatorController.animationClips.Length; i++)
-        {
-            if (animator.runtimeAnimatorController.animationClips[i].name.Equals(normalAttackClipName))
-            {
-                float delay = animator.runtimeAnimatorController.animationClips[i].length;
-                normalAttackDelay = delay / speed;
-                break;
-            }
-        }
     }
 
     // AttackableHero �� AttackableEnemy ���� ������Ƽ ������
@@ -76,29 +62,18 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected bool CanNormalAttackTime {
         get {
-            return (Time.time - lastNormalAttackTime) > normalAttackDelay;
+            return (Time.time - lastNormalAttackTime) > characterData.attack.cooldown;
         }
     }
     protected bool CanPassiveSkillTime {
         get {
-            return (Time.time - lastPassiveSkillTime) > characterData.activeSkill.cooldown;
+            return (Time.time - lastPassiveSkillTime) > characterData.passiveSkill.cooldown;
         }
     }
 
     protected bool InRangeNormalAttack => Vector3.Distance(target.transform.position, transform.position) < characterData.attack.distance;
     protected bool InRangePassiveSkill => Vector3.Distance(target.transform.position, transform.position) < characterData.passiveSkill.distance;
     protected bool NonActiveSkill => battleState != UnitBattleState.ActiveSkill && battleState != UnitBattleState.Stun;
-
-    protected bool IsNormalAttack {
-        get {
-            return NonActiveSkill && InRangeNormalAttack;
-        }
-    }
-    protected bool IsPassiveAttack {
-        get {
-            return NonActiveSkill && InRangePassiveSkill;
-        }
-    }
 
     protected void SetData()
     {
@@ -107,7 +82,7 @@ public abstract class AttackableUnit : MonoBehaviour
         //�̺�Ʈ ����. ���� �Լ����� abstract �� �����߱� ������ ��ӹ��� ĳ���͵��� ����ִ� �Լ��� ����
         NormalAttackAction = NormalAttack;
         PassiveSkillAction = PassiveSkill;
-        ActiveSkillAction = ActiveAttack;
+        ActiveSkillAction = ActiveSkill;
 
         hp = characterData.data.healthPoint; //���� �ܿ� Hp�����Ͱ� ���⿡ HeroData�� �ִ� �ִ�ü�� ���
     }
@@ -123,11 +98,12 @@ public abstract class AttackableUnit : MonoBehaviour
     //�ش��ϴ� ��ų�� �������� ���� NormalAttackAction �� �Ҵ��� �Լ��� �ٲ��ְ�����
     public abstract void NormalAttack();
     public abstract void PassiveSkill();
-    public abstract void ActiveAttack();
+    public abstract void ActiveSkill();
 
     //���� �ִϸ��̼��� ������, ���¸� NormalAttack�� �ٲ��� �ӽ� �Լ�
-    public abstract void TestPassiveEnd();
-    public abstract void TestActiveEnd();
+    public abstract void NormalAttackEnd();
+    public abstract void PassiveSkillEnd();
+    public abstract void ActiveSkillEnd();
 
     //ĳ���͵��� ���¸����� ������Ʈ �Լ�. Enemy�� ������� �ʴ� ���¿�, Update�� ������ ����. �ƹ����X
     protected abstract void IdleUpdate();
