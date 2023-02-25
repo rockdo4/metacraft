@@ -48,7 +48,7 @@ public class ShortAttackEnemy : AttackableEnemy
 
     protected override void SearchTarget()
     {
-        SearchNearbyTarget(); //근거리 타겟 추적
+        SearchNearbyTarget(heroList);
         base.SearchTarget();
     }
 

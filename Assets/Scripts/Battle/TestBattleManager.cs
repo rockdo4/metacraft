@@ -25,7 +25,7 @@ public class TestBattleManager : MonoBehaviour
             var heroUi = Instantiate(battleHero, battleHeroTr);
 
             hero.SetUi(heroUi);
-            heroUi.SetHeroInfo(hero.GetHeroData());
+            heroUi.SetHeroInfo(hero.GetUnitData());
             useHeroes.Add(hero);
         }
         clearUi.SetHeroes(useHeroes);

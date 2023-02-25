@@ -29,7 +29,6 @@ public abstract class AttackableHero : AttackableUnit
                     break;
                 case UnitState.ReturnPosition: // 재배치
                     animator.ResetTrigger("Run");
-                    animator.ResetTrigger("IsAttack");
 
                     animator.SetFloat("IsBattle", 0);
                     animator.SetTrigger("Run");
@@ -124,64 +123,6 @@ public abstract class AttackableHero : AttackableUnit
     {
         heroUI = _heroUI;
         heroUI.heroSkill.Set(characterData.activeSkill.cooldown, () => { BattleState = UnitBattleState.ActiveSkill; }); //궁극기 쿨타임과 궁극기 함수 등록
-    }
-
-    //BattleManager에서 targetList 가 null이면 SetReturnPos 를 실행해줌
-    protected void SearchNearbyTarget()
-    {
-        if (enemyList.Count == 0)
-        {
-            target = null;
-            return;
-        }
-        //가장 가까운 적 탐색
-        target = enemyList.Where(t=>t.GetHp() > 0).OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
-                          .FirstOrDefault();
-    }
-    protected bool ContainTarget(List<AttackableUnit> targetList,ref AttackableUnit target,float distance)
-    {
-        float minDist = float.MaxValue;
-        bool targetChanged = false;
-
-        foreach (var unit in targetList)
-        {
-            float dist = Vector3.Distance(unit.transform.position, transform.position);
-
-            if (dist <= distance && dist < minDist)
-            {
-                target = unit;
-                minDist = dist;
-                targetChanged = true;
-            }
-        }
-
-        return targetChanged;
-    }
-    protected bool ContainTarget(AttackableUnit target, float distance)
-    {
-        return Vector3.Distance(target.transform.position, transform.position) <= distance;
-    }
-    protected void SearchMaxHealthTarget()
-    {
-        if (enemyList.Count == 0)
-        {
-            target = null;
-            return;
-        }
-        //가장 가까운 적 탐색
-        var maxHp = enemyList.Max(t => t.GetHp());
-        target = enemyList.Where(t => t.GetHp() == maxHp && (t.GetHp() > 0)).FirstOrDefault().GetComponent<AttackableUnit>();
-    }
-    protected void SearchMinHealthTarget()
-    {
-        if (enemyList.Count == 0)
-        {
-            target = null;
-            return;
-        }
-        //가장 가까운 적 탐색
-        var minHp = enemyList.Min(t => t.GetHp());
-        target = enemyList.Where(t => (t.GetHp() == minHp) && (t.GetHp() > 0)).FirstOrDefault().GetComponent<AttackableUnit>();
     }
 
     protected abstract void SearchTarget(); //각각의 캐릭터가 탐색 조건이 다름.
@@ -296,17 +237,13 @@ public abstract class AttackableHero : AttackableUnit
         }
     }
 
-    public override void SetBattle()
+    public override void ChangeUnitState(UnitState state)
     {
-        UnitState = UnitState.Battle;
+        UnitState = state;
     }
-    public virtual void SetMoveNext()
+    public override void ChangeBattleState(UnitBattleState state)
     {
-        UnitState = UnitState.MoveNext;
-    }
-    public virtual void SetReturn()
-    {
-        UnitState = UnitState.ReturnPosition;
+        BattleState = state;
     }
 
     public override void OnDamage(int dmg, bool isCritical = false)

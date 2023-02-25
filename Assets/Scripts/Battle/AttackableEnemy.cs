@@ -91,43 +91,6 @@ public abstract class AttackableEnemy : AttackableUnit
         hpBarManager = GetComponent<HpBarManager>();
         hpBarManager.SetHp(hp, hp);
     }
-
-    protected void SearchNearbyTarget()
-    {
-        if (heroList.Count == 0)
-        {
-            target = null;
-            return;
-        }
-
-        //가장 가까운 적 탐색
-        target = heroList.Where(t => t.GetHp() > 0).OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
-                          .FirstOrDefault();
-    }
-
-    protected bool ContainTarget(List<AttackableUnit> targetList, ref AttackableUnit target, float distance)
-    {
-        float minDist = float.MaxValue;
-        bool targetChanged = false;
-
-        foreach (var unit in targetList)
-        {
-            float dist = Vector3.Distance(unit.transform.position, transform.position);
-
-            if (dist <= distance && dist < minDist)
-            {
-                target = unit;
-                minDist = dist;
-                targetChanged = true;
-            }
-        }
-
-        return targetChanged;
-    }
-    protected bool ContainTarget(AttackableUnit target, float distance)
-    {
-        return Vector3.Distance(target.transform.position, transform.position) <= distance;
-    }
     protected virtual void SearchTarget()
     {
         if (target != null)
@@ -228,11 +191,13 @@ public abstract class AttackableEnemy : AttackableUnit
 
     }
 
-
-    [ContextMenu("Battle")]
-    public override void SetBattle()
+    public override void ChangeUnitState(UnitState state)
     {
-        UnitState = UnitState.Battle;
+        UnitState = state;
+    }
+    public override void ChangeBattleState(UnitBattleState state)
+    {
+        BattleState = state;
     }
 
     public override void OnDamage(int dmg, bool isCritical)

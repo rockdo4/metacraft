@@ -62,7 +62,7 @@ public class ShortAttackHero : AttackableHero
 
     protected override void SearchTarget()
     {
-        SearchNearbyTarget(); //근거리 타겟 추적
+        SearchNearbyTarget(enemyList); //근거리 타겟 추적
     }
 
 #if UNITY_EDITOR

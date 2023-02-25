@@ -1,21 +1,38 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class RangeAttackHero : AttackableHero
 {
     protected AttackableUnit warningTarget;
+    float searchDelay = 1f;
+    float lastSearchTime = 1f;
 
+    protected override void Awake()
+    {
+        lastSearchTime = Time.time;
+        base.Awake();
+    }
     protected override void SearchTarget()
     {
-        SearchNearbyTarget(); //체력이 가장 많은 타겟 추적
+        if (Time.time - lastSearchTime >= searchDelay)
+        {
+            lastSearchTime = Time.time;
+            var minTarget = GetSearchTargetInAround(enemyList, characterData.attack.distance / 2);
+
+            if (minTarget != null)
+            {
+                target = minTarget;
+                return;
+            }
+
+        }
+        SearchMaxHealthTarget(enemyList); //체력이 가장 많은 타겟 추적
     }
 
     public override void NormalAttack()
     {
         base.NormalAttack();
-        //Logger.Debug("Hero_NormalAttack");
 
         if (characterData.attack.count == 1)
         {
@@ -56,19 +73,21 @@ public class RangeAttackHero : AttackableHero
     {
         switch (BattleState)
         {
-            case UnitBattleState.NormalAttack:
-                //if(ContainTarget(targetList, target, characterData.attack.distance))
-                //{
+            //타겟에게 이동중이거나, 공격 대기중에 범위 안에 적이 들어왔는지 확인
+            case UnitBattleState.MoveToTarget:
+            case UnitBattleState.BattleIdle:
+                if (Time.time - lastSearchTime >= searchDelay)
+                {
+                    var minTarget = GetSearchTargetInAround(enemyList, characterData.attack.distance/2);
 
-                //}
-                break;
-            case UnitBattleState.PassiveSkill:
-                break;
-            case UnitBattleState.ActiveSkill:
-                break;
-            case UnitBattleState.Stun:
+                    if (minTarget != null)
+                        target = minTarget;
+
+                    lastSearchTime = Time.time;
+                }
                 break;
         }
+
         base.BattleUpdate();
     }
 }
