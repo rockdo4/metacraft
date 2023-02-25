@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawningAndPositioning : MonoBehaviour
@@ -19,7 +20,7 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     public AttackableEnemy GetEnemy() => enemy;
     public float GetRespawnTimer() => respawnTimer;
 
-    private IEnumerator CoRespawn(GameObject parents)
+    private IEnumerator CoRespawn(GameObject parents, List<AttackableEnemy> enemyPool)
     {
         while (respawnTimer <= 0f)
         {
@@ -28,11 +29,11 @@ public class EnemySpawningAndPositioning : MonoBehaviour
         }
 
         // ¸®½ºÆù
-        SpawnEnemy(parents);
+        enemyPool.Add(SpawnEnemy(parents));
     }
-    public void RespawnEnemy(GameObject parents)
+    public void RespawnEnemy(GameObject parents, ref List<AttackableEnemy> enemyPool)
     {
-        StartCoroutine(CoRespawn(parents));
+        StartCoroutine(CoRespawn(parents, enemyPool));
     }
     public AttackableEnemy SpawnEnemy(GameObject parents)
     {

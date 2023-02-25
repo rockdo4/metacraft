@@ -8,8 +8,8 @@ public class MapEventTrigger : MonoBehaviour
     [Header("적을 소환할 위치를 넣어주세요.")]
     public List<EnemySpawningAndPositioning> enemySettingPositions;
 
-    public List<AttackableEnemy> enemys;
-    public List<NavMeshAgent> enemysNav = new();
+    public List<AttackableEnemy> enemys;                // 현재 생성되어있는 enemy들
+    public List<NavMeshAgent> enemysNav = new();        // 생성되어있는 enemy들의 NavMeshAgent
 
     public GameObject enemyPool; // Enemy GameObject들이 들어갈 부모
 
