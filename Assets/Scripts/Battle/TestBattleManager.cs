@@ -45,4 +45,25 @@ public class TestBattleManager : MonoBehaviour
 
         return count;
     }
+
+    public void GetHeroList(ref List<AttackableHero> heroList)
+    {
+        heroList = useHeroes;
+    }
+    public virtual void OnDeadHero(AttackableHero hero)
+    {
+        useHeroes.Remove(hero);
+    }
+    public virtual void OnDeadEnemy(AttackableEnemy enemy)
+    {
+        enemyCountTxt.DimEnemy();
+    }
+    public virtual void GetEnemyList(ref List<AttackableEnemy> enemyList) { }
+    public virtual void OnReady()
+    {
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            useHeroes[i].SetMoveNext();
+        }
+    }
 }

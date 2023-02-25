@@ -31,27 +31,23 @@ public class BeltScrollBattleManager : TestBattleManager
         enemyCountTxt.Count = GetAllEnemyCount();
     }
 
-    public void GetEnemyList(ref List<AttackableEnemy> enemyList)
+    public override void GetEnemyList(ref List<AttackableEnemy> enemyList)
     {
         enemyList = triggers[currTriggerIndex].enemys;
     }
-    public void GetHeroList(ref List<AttackableHero> heroList)
-    {
-        heroList = useHeroes;
-    }
 
-    public void OnDeadEnemy(AttackableEnemy enemy)
+    public override void OnDeadEnemy(AttackableEnemy enemy)
     {
-        enemyCountTxt.DimEnemy();
+        base.OnDeadEnemy(enemy);
         triggers[currTriggerIndex].OnDead(enemy);
         if (triggers[currTriggerIndex].enemys.Count == 0)
         {
             SetHeroReturnPositioning();
         }
     }
-    public void OnDeadHero(AttackableHero hero)
+    public override void OnDeadHero(AttackableHero hero)
     {
-        useHeroes.Remove(hero);
+        base.OnDeadHero(hero);
         readyCount = useHeroes.Count;
         if (useHeroes.Count == 0)
         {
@@ -77,16 +73,13 @@ public class BeltScrollBattleManager : TestBattleManager
         SetStageFail();
     }
 
-    public void OnReady()
+    public override void OnReady()
     {
         readyCount--;
         if (readyCount == 0 && !triggers[currTriggerIndex].isStageEnd)
         {
             readyCount = useHeroes.Count;
-            for (int i = 0; i < useHeroes.Count; i++)
-            {
-                useHeroes[i].SetMoveNext();
-            }
+            base.OnReady();
             StartCoroutine(MovingMap());
         }
         else if (readyCount == 0 && triggers[currTriggerIndex].isStageEnd)

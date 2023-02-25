@@ -32,22 +32,26 @@ public class MapEventTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (!other.GetComponent<AttackableHero>().Equals(null))
+        if (other.GetComponent<AttackableHero>() != null)
         {
             for (int i = 0; i < enemys.Count; i++)
             {
                 enemys[i].SetBattle();
             }
         }
-        else
-        {
-            var enemy = other.GetComponent<AttackableEnemy>();
-            enemy.SetBattle();
-        }
     }
 
     public void OnDead(AttackableEnemy enemy)
     {
         enemys.Remove(enemy);
+    }
+
+    // Test
+    public void TestRespawnAllEnemy()
+    {
+        for (int i = 0; i < enemySettingPositions.Count; i++)
+        {
+            enemySettingPositions[i].RespawnEnemy(enemyPool, ref enemys);
+        }
     }
 }

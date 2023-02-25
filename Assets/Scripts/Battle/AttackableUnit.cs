@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public abstract class AttackableUnit : MonoBehaviour
 {
-    protected BeltScrollBattleManager battleManager;
+    protected TestBattleManager battleManager;
 
     [SerializeField]
     protected CharacterDataBundle characterData;
@@ -49,7 +49,9 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected virtual void Awake()
     {
-        battleManager = FindObjectOfType<BeltScrollBattleManager>();
+        //battleManager = FindObjectOfType<BeltScrollBattleManager>();
+        battleManager = FindObjectOfType<TestBattleManager>();
+
         animator = GetComponentInChildren<Animator>();
         float speed = animator.GetFloat(hashAttackSpeed);
 

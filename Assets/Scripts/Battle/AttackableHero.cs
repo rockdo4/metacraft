@@ -340,4 +340,9 @@ public abstract class AttackableHero : AttackableUnit
     {
         BattleState = UnitBattleState.NormalAttack;
     }
+
+    public void TestBattle()
+    {
+        UnitState = UnitState.Battle;
+    }
 }
