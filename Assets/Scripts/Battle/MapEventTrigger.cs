@@ -5,20 +5,25 @@ using UnityEngine.AI;
 
 public class MapEventTrigger : MonoBehaviour
 {
-    public List<Transform> settingPositions;
+    public List<Transform> heroSettingPositions;
+    [Header("적을 소환할 위치를 넣어주세요.")]
+    public List<EnemySpawningAndPositioning> enemySettingPositions;
 
-    // 스테이지에 미리 넣어두는게 아니라 포함될 적(프리펩)들로 해서 각 위치에 Instantiate 해주기
-    [Header("스테이지에 포함된 적들을 넣어주세요")]
     public List<AttackableEnemy> enemys;
     public List<NavMeshAgent> enemysNav = new();
+
+    public GameObject enemyPool; // Enemy GameObject들이 들어갈 부모
 
     [SerializeField, Header("마지막 관문일 때 체크해주세요")]
     public bool isStageEnd = false;
 
     private void Start()
     {
-        // Instantiate 해주기
-        // instantiate한 오브젝트들의 nav 가져오기
+        for (int i = 0; i < enemySettingPositions.Count; i++)
+        {
+            var enemy = enemySettingPositions[i].SpawnEnemy(enemyPool);
+            enemys.Add(enemy);
+        }
 
         for (int i = 0; i < enemys.Count; i++)
         {

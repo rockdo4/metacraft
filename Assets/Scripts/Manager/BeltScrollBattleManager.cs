@@ -64,7 +64,7 @@ public class BeltScrollBattleManager : TestBattleManager
     {
         for (int i = 0; i < useHeroes.Count; i++)
         {
-            useHeroes[i].SetReturnPos(triggers[currTriggerIndex].settingPositions[i]);
+            useHeroes[i].SetReturnPos(triggers[currTriggerIndex].heroSettingPositions[i]);
             useHeroes[i].SetReturn();
         }
     }
@@ -114,8 +114,8 @@ public class BeltScrollBattleManager : TestBattleManager
         yield return new WaitForSeconds(nextStageMoveTimer);
 
         var curMaxZPos = platform.transform.position.z + 
-            triggers[currTriggerIndex].settingPositions.Max(transform => transform.position.z);
-        var nextMaxZPos = triggers[currTriggerIndex + 1].settingPositions.Max(transform => transform.position.z);
+            triggers[currTriggerIndex].heroSettingPositions.Max(transform => transform.position.z);
+        var nextMaxZPos = triggers[currTriggerIndex + 1].heroSettingPositions.Max(transform => transform.position.z);
         var movePos = curMaxZPos - nextMaxZPos;
 
         currTriggerIndex++;
