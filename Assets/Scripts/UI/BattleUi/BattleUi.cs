@@ -14,6 +14,12 @@ public class BattleUi : MonoBehaviour
     {
         Instantiate(battleMenu, transform);
     }
-
-
+    public void OnPause()
+    {
+        Time.timeScale = 0f;
+    }
+    public void OffPause()
+    {
+        Time.timeScale = 1f;
+    }
 }
