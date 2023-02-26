@@ -81,7 +81,7 @@ public class RangeAttackHero : AttackableHero
                     var minTarget = GetSearchTargetInAround(enemyList, characterData.attack.distance/2);
 
                     if (minTarget != null)
-                        target = minTarget;
+                            target = minTarget;
 
                     lastSearchTime = Time.time;
                 }

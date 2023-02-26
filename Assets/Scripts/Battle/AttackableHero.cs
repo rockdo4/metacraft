@@ -162,10 +162,9 @@ public abstract class AttackableHero : AttackableUnit
                         else
                             BattleState = UnitBattleState.MoveToTarget;
                     }
-                    return;
+                    else
+                        return;
                 }
-                Quaternion targetRotation = Quaternion.LookRotation(target.transform.position - transform.position);
-                transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, Time.deltaTime * 120);
                 break;
         }
 
@@ -183,7 +182,11 @@ public abstract class AttackableHero : AttackableUnit
                 }
                 break;
             case UnitBattleState.BattleIdle:
-                if (InRangePassiveSkill && CanPassiveSkillTime) // 거리, 쿨타임 체크
+                if (!InRangeNormalAttack)
+                {
+                    BattleState = UnitBattleState.MoveToTarget;
+                }
+                else if (InRangePassiveSkill && CanPassiveSkillTime) // 거리, 쿨타임 체크
                 {
                     BattleState = UnitBattleState.PassiveSkill;
                 }
