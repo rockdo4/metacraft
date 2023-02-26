@@ -23,8 +23,8 @@ public abstract class AttackableHero : AttackableUnit
             switch (unitState)
             {
                 case UnitState.Idle:
-                    animator.SetTrigger("Idle");
                     pathFind.isStopped = true;
+                    animator.SetTrigger("Idle");
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.ReturnPosition: // 재배치
@@ -69,6 +69,7 @@ public abstract class AttackableHero : AttackableUnit
         set {
             if (value == battleState)
             {
+                // Attack 에서 Attack로 갈수도 있어서 일단은 returnX
                // return;
             }
             battleState = value;
@@ -83,16 +84,19 @@ public abstract class AttackableHero : AttackableUnit
                     animator.SetTrigger("Idle");
                     break;
                 case UnitBattleState.NormalAttack:
+                    animator.ResetTrigger("Run"); //문제가 생겨서 임시. 
                     animator.SetTrigger("IsAttack");
                     animator.SetFloat("SkillType", 0);
                     //NormalAttackAction();
                     break;
                 case UnitBattleState.PassiveSkill:
+                    animator.ResetTrigger("Run");
                     animator.SetTrigger("IsAttack");
                     animator.SetFloat("SkillType", 1);
                     //PassiveSkillAction();
                     break;
                 case UnitBattleState.ActiveSkill:
+                    animator.ResetTrigger("Run");
                     animator.SetTrigger("IsAttack");
                     animator.SetFloat("SkillType", 2);
                     //ActiveSkillAction();
@@ -106,10 +110,8 @@ public abstract class AttackableHero : AttackableUnit
     protected override void Awake()
     {
         base.Awake();
-
-        characterData.InitSetting();
-        //charactorData = LoadTestData(); //임시 데이터 로드
         pathFind = transform.GetComponent<NavMeshAgent>();
+        characterData.InitSetting();
         SetData();
 
         unitState = UnitState.Idle;
@@ -231,7 +233,7 @@ public abstract class AttackableHero : AttackableUnit
                 }
                 break;
             case false:
-                if (Vector3.Distance(returnPos.position, transform.position) < 1f)
+                if (Vector3.Distance(returnPos.position, transform.position) < 0.5f)
                 {
                     pathFind.isStopped = true;
                     transform.position = returnPos.position;
