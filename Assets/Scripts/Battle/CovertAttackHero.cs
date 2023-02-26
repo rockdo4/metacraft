@@ -1,37 +1,18 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
-public class RangeAttackHero : AttackableHero
+public class CovertAttackHero : AttackableHero
 {
     protected float searchDelay = 1f;
     protected float lastSearchTime;
 
-    protected override void Awake()
-    {
-        lastSearchTime = Time.time;
-        base.Awake();
-    }
-    protected override void SearchTarget()
-    {
-        if (Time.time - lastSearchTime >= searchDelay)
-        {
-            lastSearchTime = Time.time;
-            var minTarget = GetSearchTargetInAround(enemyList, characterData.attack.distance / 2);
-
-            if (minTarget != null)
-            {
-                target = minTarget;
-                return;
-            }
-
-        }
-        SearchMaxHealthTarget(enemyList); //체력이 가장 많은 타겟 추적
-    }
-
     public override void NormalAttack()
     {
         base.NormalAttack();
+        //Logger.Debug("Hero_NormalAttack");
 
         if (characterData.attack.count == 1)
         {
@@ -63,30 +44,39 @@ public class RangeAttackHero : AttackableHero
             attackEnemies[i].GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage, false);
         }
     }
+
     public override void PassiveSkill()
     {
         base.PassiveSkill();
-    }
+        //Logger.Debug("Hero_NormalAttack");
 
-    protected override void BattleUpdate()
+        target.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage * 2, true);
+        return;
+
+        //Logger.Debug("Hero_PassiveSkill");
+    }
+    public override void ActiveSkill()
     {
-        switch (BattleState)
-        {
-            //타겟에게 이동중이거나, 공격 대기중에 범위 안에 적이 들어왔는지 확인
-            case UnitBattleState.MoveToTarget:
-            case UnitBattleState.BattleIdle:
-                if (Time.time - lastSearchTime >= searchDelay)
-                {
-                    var minTarget = GetSearchTargetInAround(enemyList, characterData.attack.distance/2);
+        base.ActiveSkill();
 
-                    if (minTarget != null)
-                            target = minTarget;
+        target.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage * 3, true);
+        return;
 
-                    lastSearchTime = Time.time;
-                }
-                break;
-        }
-
-        base.BattleUpdate();
     }
+
+    protected override void SearchTarget()
+    {
+        if(heroList.Count == 1)
+            SearchNearbyTarget(heroList); //근거리 타겟 추적
+        else
+            SearchMinHealthTarget(enemyList); //체력이 가장 많은 타겟 추적
+    }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, characterData.attack.angle / 2, characterData.attack.distance);
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -characterData.attack.angle / 2, characterData.attack.distance);
+    }
+#endif
 }
