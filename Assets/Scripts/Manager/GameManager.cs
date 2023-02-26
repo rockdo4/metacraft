@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
+    public GameRule gameRule;
 
     // Origin Database - Set Prefab & Scriptable Objects
     public List<GameObject> heroDatabase = new();
