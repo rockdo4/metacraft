@@ -8,14 +8,22 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
-    public List<GameObject> heroTable = new();
+
+    // Origin Database - Set Prefab & Scriptable Objects
+    public List<GameObject> heroDatabase = new();
+
+    // MyData - Craft, Load & Save to this data
+    public List<GameObject> myHeroes = new();
+    public Transform heroSpawnTransform;
+
+    // Resources - Sprites, TextAsset + (Scriptable Objects, Sound etc)
     public Dictionary<string, Sprite> iconSprites = new();
     public Dictionary<string, Sprite> illustrationSprites = new();
-
     public List<Dictionary<string, object>> missionInfoList;
 
-    public GameObject currentSelectObject;
-    public List<int?> battleGroups = new (3) { null, null, null };
+    // Office Select
+    public GameObject currentSelectObject; // Hero Info
+    public List<int?> battleGroups = new (3) { null, null, null }; // Mission select -> Battle Scene
 
     public override void Awake()
     {
@@ -25,7 +33,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        foreach (var character in heroTable)
+        foreach (var character in myHeroes)
         {
             character.SetActive(false);
         }
@@ -143,10 +151,10 @@ public class GameManager : Singleton<GameManager>
 
     public int GetHeroIndex(GameObject hero)
     {
-        int count = heroTable.Count;
+        int count = myHeroes.Count;
         for (int i = 0; i < count; i++)
         {
-            string tableName = heroTable[i].GetComponent<CharacterDataBundle>().data.name;
+            string tableName = myHeroes[i].GetComponent<CharacterDataBundle>().data.name;
             string selectHeroName = hero.GetComponent<CharacterDataBundle>().data.name;
             if (tableName.Equals(selectHeroName))
                 return i;

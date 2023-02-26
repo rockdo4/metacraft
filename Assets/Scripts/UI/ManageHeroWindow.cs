@@ -12,7 +12,7 @@ public class ManageHeroWindow : View
 
     private void Awake()
     {
-        var list = GameManager.Instance.heroTable;
+        var list = GameManager.Instance.myHeroes;
         foreach (var character in list)
         {
             copyCharacterTable.Add(character.GetComponent<CharacterDataBundle>());
