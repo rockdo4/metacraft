@@ -50,7 +50,7 @@ public class CovertAttackHero : AttackableHero
         base.PassiveSkill();
         //Logger.Debug("Hero_NormalAttack");
 
-        target.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage * 2, true);
+        target.OnDamage(characterData.data.baseDamage * 2, true);
         return;
 
         //Logger.Debug("Hero_PassiveSkill");
@@ -59,7 +59,7 @@ public class CovertAttackHero : AttackableHero
     {
         base.ActiveSkill();
 
-        target.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage * 3, true);
+        target.OnDamage(characterData.data.baseDamage * 3, true);
         return;
 
     }
