@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -132,6 +134,24 @@ public class GameManager : Singleton<GameManager>
         if (Input.GetKeyDown(KeyCode.Menu)) // Navigator Menu Button
         {
             // 메뉴 버튼
+        }
+
+        // Test Key
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            StringBuilder sb = new();
+            int count = 0;
+            sb.AppendLine("{");
+            foreach (var hero in myHeroes)
+            {
+                LiveData data = hero.GetComponent<CharacterDataBundle>().data;
+                count++;
+                sb.Append($"\"{data.name}\":\n{JsonUtility.ToJson(data, true)}");
+                if (myHeroes.Count != count)
+                    sb.AppendLine(",");
+            }
+            sb.Append("\n}");
+            File.WriteAllText($"{Application.persistentDataPath}/saveTest.json", sb.ToString());
         }
     }
 
