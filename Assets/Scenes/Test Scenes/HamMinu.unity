@@ -2869,9 +2869,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   heroList: {fileID: 435952717}
   cube: {fileID: 88010878592413192, guid: 34caae005cce3e04ea9a8de4904f7b7a, type: 3}
-  battleHero: {fileID: 5095432709778420783, guid: 54e066ad1921b0e42ba195f220b254b4,
-    type: 3}
-  battleHeroTr: {fileID: 222697829}
+  heroUi: {fileID: 5095432709778420783, guid: 54e066ad1921b0e42ba195f220b254b4, type: 3}
+  heroUiTr: {fileID: 222697829}
   startPositions:
   - {fileID: 1717118656}
   - {fileID: 1717118655}
@@ -4063,7 +4062,23 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 3052140529990437465, guid: a2a96ae7f6b786d4eb021e431e149138,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 30
+      objectReference: {fileID: 0}
     - target: {fileID: 7014321635646178834, guid: a2a96ae7f6b786d4eb021e431e149138,
+        type: 3}
+      propertyPath: enemy
+      value: 
+      objectReference: {fileID: 8428398282218722840, guid: ce9d68e4ebf1692408f9cae7d2a01b1d,
+        type: 3}
+    - target: {fileID: 7014321635646178834, guid: a2a96ae7f6b786d4eb021e431e149138,
+        type: 3}
+      propertyPath: spawnCount
+      value: 5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7014321635646178844, guid: a2a96ae7f6b786d4eb021e431e149138,
         type: 3}
       propertyPath: enemy
       value: 
@@ -4071,16 +4086,20 @@ PrefabInstance:
         type: 3}
     - target: {fileID: 7014321635646178844, guid: a2a96ae7f6b786d4eb021e431e149138,
         type: 3}
-      propertyPath: enemy
-      value: 
-      objectReference: {fileID: 8428398282218722840, guid: ce9d68e4ebf1692408f9cae7d2a01b1d,
-        type: 3}
+      propertyPath: spawnCount
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 7014321635646178845, guid: a2a96ae7f6b786d4eb021e431e149138,
         type: 3}
       propertyPath: enemy
       value: 
       objectReference: {fileID: 8428398282218722840, guid: ce9d68e4ebf1692408f9cae7d2a01b1d,
         type: 3}
+    - target: {fileID: 7014321635646178845, guid: a2a96ae7f6b786d4eb021e431e149138,
+        type: 3}
+      propertyPath: spawnCount
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 8634998261490399942, guid: a2a96ae7f6b786d4eb021e431e149138,
         type: 3}
       propertyPath: m_Name
@@ -4104,7 +4123,7 @@ PrefabInstance:
     - target: {fileID: 8634998261490399994, guid: a2a96ae7f6b786d4eb021e431e149138,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 37.17
+      value: 8.3
       objectReference: {fileID: 0}
     - target: {fileID: 8634998261490399994, guid: a2a96ae7f6b786d4eb021e431e149138,
         type: 3}
