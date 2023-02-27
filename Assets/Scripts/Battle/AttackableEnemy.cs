@@ -28,7 +28,7 @@ public abstract class AttackableEnemy : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
-                    animator.SetFloat("IsBattle", 1);
+                    animator.SetBool("IsBattle", true);
                     BattleState = UnitBattleState.MoveToTarget;
                     battleManager.GetHeroList(ref heroList);
                     pathFind.stoppingDistance = characterData.attack.distance * 0.9f; //가까이 가기
@@ -71,7 +71,6 @@ public abstract class AttackableEnemy : AttackableUnit
                 case UnitBattleState.NormalAttack:
                     animator.ResetTrigger("Run"); //문제가 생겨서 임시. 
                     animator.SetTrigger("IsAttack");
-                    animator.SetFloat("SkillType", 0);
                     //NormalAttackAction();
                     break;
                 case UnitBattleState.PassiveSkill:

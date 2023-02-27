@@ -30,7 +30,7 @@ public abstract class AttackableHero : AttackableUnit
                 case UnitState.ReturnPosition: // 재배치
                     animator.ResetTrigger("Run");
 
-                    animator.SetFloat("IsBattle", 0);
+                    animator.SetBool("IsBattle", false);
                     animator.SetTrigger("Run");
 
                     pathFind.isStopped = false;
@@ -45,7 +45,7 @@ public abstract class AttackableHero : AttackableUnit
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
-                    animator.SetFloat("IsBattle", 1);
+                    animator.SetBool("IsBattle", true);
                     BattleState = UnitBattleState.MoveToTarget;
                     battleManager.GetEnemyList(ref enemyList);
                     pathFind.stoppingDistance = characterData.attack.distance * 0.9f;
@@ -86,19 +86,16 @@ public abstract class AttackableHero : AttackableUnit
                 case UnitBattleState.NormalAttack:
                     animator.ResetTrigger("Run"); //문제가 생겨서 임시. 
                     animator.SetTrigger("IsAttack");
-                    animator.SetFloat("SkillType", 0);
                     //NormalAttackAction();
                     break;
                 case UnitBattleState.PassiveSkill:
                     animator.ResetTrigger("Run");
                     animator.SetTrigger("IsAttack");
-                    animator.SetFloat("SkillType", 1);
                     //PassiveSkillAction();
                     break;
                 case UnitBattleState.ActiveSkill:
                     animator.ResetTrigger("Run");
                     animator.SetTrigger("IsAttack");
-                    animator.SetFloat("SkillType", 2);
                     //ActiveSkillAction();
                     break;
                 case UnitBattleState.Stun:
@@ -117,7 +114,6 @@ public abstract class AttackableHero : AttackableUnit
         unitState = UnitState.Idle;
 
         lastNormalAttackTime = lastPassiveSkillTime = Time.time;
-
     }
 
     // Ui와 연결, Ui에 스킬 쿨타임 연결
