@@ -7,8 +7,9 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     private Transform tr;
     [Header("생성할 적 프리펩을 넣어주세요")]
     public AttackableEnemy enemy;
-    [SerializeField]
-    public int spawnCount;
+    [SerializeField, Header("해당 위치에 생성할 몬스터 마리수를 적어주세요")]
+    public int enemyCount;
+    private int spawnCount;
 
     private void Awake()
     {
@@ -41,12 +42,15 @@ public class EnemySpawningAndPositioning : MonoBehaviour
         }
 
         // 리스폰 후 다시 코루틴 시작
-        var spawnEnemy = SpawnEnemy(parents);
-        spawnEnemy.ChangeUnitState(UnitState.Battle);
-        enemyPool.Add(spawnEnemy);
+        //var spawnEnemy = SpawnEnemy(parents);
+        //spawnEnemy.ChangeUnitState(UnitState.Battle);
+        //enemyPool.Add(spawnEnemy);
 
-        spawnCount--;
-        if (spawnCount == 0)
+        enemyPool[spawnCount].gameObject.SetActive(true);
+        enemyPool[spawnCount].ChangeUnitState(UnitState.Battle);
+
+        spawnCount++;
+        if (spawnCount == enemyCount)
             yield break;
 
         StartCoroutine(CoInfinityRespawn(parents, enemyPool, saveTimer));
@@ -63,5 +67,13 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     public void InfinityRespawn(GameObject parents, ref List<AttackableEnemy> enemyPool, float timer)
     {
         StartCoroutine(CoInfinityRespawn(parents, enemyPool, timer));
+    }
+    public void SpawnAllEnemy(GameObject parents, ref List<AttackableEnemy> enemyPool)
+    {
+        for (int i = 0; i < enemyCount; i++)
+        {
+            var e = Instantiate(enemy, tr.position, enemy.gameObject.transform.rotation, parents.transform);
+            enemyPool.Add(e);
+        }
     }
 }

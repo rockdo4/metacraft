@@ -8,9 +8,9 @@ public class MapEventTrigger : MonoBehaviour
     [Header("적을 소환할 위치를 넣어주세요.")]
     public List<EnemySpawningAndPositioning> enemySettingPositions;
 
-    public List<AttackableEnemy> enemys;                // 현재 생성되어있는 enemy들
-    public List<AttackableEnemy> useEnemys = new();     // 
-    public List<NavMeshAgent> enemysNav = new();        // 생성되어있는 enemy들의 NavMeshAgent
+    public List<AttackableEnemy> enemys = new();                // 생성할 Enemy들
+    public List<AttackableEnemy> useEnemys = new();     // 현재 생성된 Enemy들
+    public List<NavMeshAgent> enemysNav = new();        // enemy들의 NavMeshAgent
 
     public GameObject enemyPool; // Enemy GameObject들이 들어갈 부모
 
@@ -31,13 +31,15 @@ public class MapEventTrigger : MonoBehaviour
         {
             AttackableEnemy enemy = other.GetComponent<AttackableEnemy>();
             AddUseEnemyList(enemy);
+            enemys.Remove(enemy);
         }
     }
 
     public void OnDead(AttackableEnemy enemy)
     {
-        enemys.Remove(enemy);
         useEnemys.Remove(enemy);
+        enemy.gameObject.SetActive(false);
+        enemys.Add(enemy);
     }
 
     // Test
@@ -65,5 +67,17 @@ public class MapEventTrigger : MonoBehaviour
     public void SubUseEnemyList(AttackableEnemy enemy)
     {
         useEnemys.Remove(enemy);
+    }
+    public void SpawnAllEnemy()
+    {
+        for (int i = 0; i < enemySettingPositions.Count; i++)
+        {
+            enemySettingPositions[i].SpawnAllEnemy(enemyPool, ref enemys);
+        }
+
+        for (int i = 0; i < enemys.Count; i++)
+        {
+            enemys[i].gameObject.SetActive(false);
+        }
     }
 }
