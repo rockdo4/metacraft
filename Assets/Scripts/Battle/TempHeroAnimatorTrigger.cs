@@ -2,26 +2,38 @@ using UnityEngine;
 
 public class TempHeroAnimatorTrigger : MonoBehaviour
 {
-    public ShortAttackHero hero;
+    public AttackableUnit unit;
 
-    public void HeroPassiveSkill(AnimationEvent ev)
+    public void NormalAttack(AnimationEvent ev)
     {
-        hero.HeroPassiveSkill();
+        unit.NormalAttack();
     }
-    public void HeroActiveSkill(AnimationEvent ev)
+    public void PassiveSkill(AnimationEvent ev)
     {
-        hero.HeroActiveSkill();
+        unit.PassiveSkill();
     }
-    public void TestSkillEnd(AnimationEvent ev)
+    public void ActiveSkill(AnimationEvent ev)
     {
-        hero.TestSkillEnd();
+        unit.ActiveSkill();
     }
-    public void DeadHero(AnimationEvent ev)
+    public void NormalAttackEnd(AnimationEvent ev)
     {
-        hero.DeadHero();
+        unit.NormalAttackEnd();
     }
-    public void DestroyHero(AnimationEvent ev)
+    public void PassiveSkillEnd(AnimationEvent ev)
     {
-        hero.DestroyHero();
+        unit.PassiveSkillEnd();
+    }
+    public void ActiveSkillEnd(AnimationEvent ev)
+    {
+        unit.ActiveSkillEnd();
+    }
+    public void DeadUnit(AnimationEvent ev)
+    {
+        unit.OnDead(unit);
+    }
+    public void DestroyUnit(AnimationEvent ev)
+    {
+        unit.DestroyUnit();
     }
 }

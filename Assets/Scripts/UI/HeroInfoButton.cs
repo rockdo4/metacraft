@@ -10,9 +10,11 @@ public class HeroInfoButton : MonoBehaviour
     public TextMeshProUGUI levelText;
     public Image icon;
     public LiveData data;
+    protected CharacterDataBundle bundle;
 
     public virtual void SetData(CharacterDataBundle dataBundle)
     {
+        bundle = dataBundle;
         data = dataBundle.data;
         heroNameText.text = data.name;
         gradeText.text = data.grade;
@@ -21,8 +23,8 @@ public class HeroInfoButton : MonoBehaviour
         icon.sprite = GameManager.Instance.iconSprites[$"Icon_{data.name}"];
     }
 
-    public void SelectCharacter()
+    public virtual void OnClick()
     {
-        GameManager.Instance.selectDetail = data;
+        GameManager.Instance.currentSelectObject = bundle.gameObject;
     }
 }

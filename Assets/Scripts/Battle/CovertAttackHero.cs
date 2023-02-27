@@ -1,10 +1,14 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-public class ShortAttackHero : AttackableHero
+public class CovertAttackHero : AttackableHero
 {
+    protected float searchDelay = 1f;
+    protected float lastSearchTime;
+
     public override void NormalAttack()
     {
         base.NormalAttack();
@@ -62,7 +66,10 @@ public class ShortAttackHero : AttackableHero
 
     protected override void SearchTarget()
     {
-        SearchNearbyTarget(enemyList); //근거리 타겟 추적
+        if(heroList.Count == 1)
+            SearchNearbyTarget(heroList); //근거리 타겟 추적
+        else
+            SearchMinHealthTarget(enemyList); //체력이 가장 많은 타겟 추적
     }
 
 #if UNITY_EDITOR

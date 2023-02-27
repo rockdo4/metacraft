@@ -1,8 +1,9 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-public class RangeAttackHero : AttackableHero
+public class SupportAttackHero : AttackableHero
 {
     protected float searchDelay = 1f;
     protected float lastSearchTime;
@@ -21,12 +22,12 @@ public class RangeAttackHero : AttackableHero
 
             if (minTarget != null)
             {
-                target = minTarget;
+                SearchNearbyTarget(heroList);
                 return;
             }
 
         }
-        SearchMaxHealthTarget(enemyList); //체력이 가장 많은 타겟 추적
+        SearchNearbyTarget(enemyList); //가장 가까운 적
     }
 
     public override void NormalAttack()
@@ -77,10 +78,10 @@ public class RangeAttackHero : AttackableHero
             case UnitBattleState.BattleIdle:
                 if (Time.time - lastSearchTime >= searchDelay)
                 {
-                    var minTarget = GetSearchTargetInAround(enemyList, characterData.attack.distance/2);
+                    var minTarget = GetSearchTargetInAround(enemyList, characterData.attack.distance / 2);
 
                     if (minTarget != null)
-                            target = minTarget;
+                        target = minTarget;
 
                     lastSearchTime = Time.time;
                 }

@@ -24,7 +24,7 @@ public class TestBattleManager : MonoBehaviour
             var heroUi = Instantiate(battleHero, battleHeroTr);
 
             hero.SetUi(heroUi);
-            heroUi.SetHeroInfo(hero.GetHeroData());
+            heroUi.SetHeroInfo(hero.GetUnitData());
             useHeroes.Add(hero);
         }
         clearUi.SetHeroes(useHeroes);
@@ -63,7 +63,7 @@ public class TestBattleManager : MonoBehaviour
     {
         for (int i = 0; i < useHeroes.Count; i++)
         {
-            useHeroes[i].SetMoveNext();
+            useHeroes[i].ChangeUnitState(UnitState.MoveNext);
         }
     }
 }

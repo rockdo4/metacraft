@@ -60,7 +60,7 @@ public class BeltScrollBattleManager : TestBattleManager
         for (int i = 0; i < useHeroes.Count; i++)
         {
             useHeroes[i].SetReturnPos(triggers[currTriggerIndex].heroSettingPositions[i]);
-            useHeroes[i].SetReturn();
+            useHeroes[i].ChangeUnitState(UnitState.ReturnPosition);
         }
     }
     private void SetEnemyIdle()
@@ -121,7 +121,7 @@ public class BeltScrollBattleManager : TestBattleManager
         // 히어로들 배틀 상태로 전환
         for (int i = 0; i < useHeroes.Count; i++)
         {
-            useHeroes[i].SetBattle();
+            useHeroes[i].ChangeUnitState(UnitState.Battle);
         }
     }
 }

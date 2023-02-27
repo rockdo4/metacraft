@@ -14,7 +14,7 @@ public class DefenseBattleManager : TestBattleManager
         {
             for (int i = 0; i < triggers[0].enemys.Count; i++)
             {
-                triggers[0].enemys[i].SetBattle();
+                triggers[0].enemys[i].ChangeUnitState(UnitState.Battle);
             }
         }
 
@@ -22,7 +22,7 @@ public class DefenseBattleManager : TestBattleManager
         {
             for (int i = 0; i < useHeroes.Count; i++)
             {
-                useHeroes[i].TestBattle();
+                useHeroes[i].ChangeUnitState(UnitState.Battle);
             }
         }
     }
@@ -33,6 +33,7 @@ public class DefenseBattleManager : TestBattleManager
     public override void OnDeadEnemy(AttackableEnemy enemy)
     {
         base.OnDeadEnemy(enemy);
+        triggers[0].OnDead(enemy);
     }
     public override void GetEnemyList(ref List<AttackableEnemy> enemyList) 
     {

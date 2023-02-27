@@ -36,7 +36,8 @@ public class MapEventTrigger : MonoBehaviour
         {
             for (int i = 0; i < enemys.Count; i++)
             {
-                enemys[i].SetBattle();
+                enemysNav[i].enabled = true;
+                enemys[i].ChangeUnitState(UnitState.Battle);
             }
         }
     }
