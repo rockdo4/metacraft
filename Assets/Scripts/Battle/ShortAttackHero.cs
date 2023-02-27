@@ -54,10 +54,9 @@ public class ShortAttackHero : AttackableHero
     public override void ActiveSkill()
     {
         base.ActiveSkill();
+        
 
-        target.OnDamage(characterData.data.baseDamage * 3, true);
-        return;
-
+        //target.OnDamage(characterData.data.baseDamage * 3, true);
     }
 
     protected override void SearchTarget()
