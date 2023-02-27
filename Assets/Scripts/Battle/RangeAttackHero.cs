@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 public class RangeAttackHero : AttackableHero
@@ -91,4 +92,11 @@ public class RangeAttackHero : AttackableHero
 
         base.BattleUpdate();
     }
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, characterData.attack.angle / 2, characterData.attack.distance);
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -characterData.attack.angle / 2, characterData.attack.distance);
+    }
+#endif
 }

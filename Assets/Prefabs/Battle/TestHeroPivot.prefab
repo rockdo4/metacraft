@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 8614529909882607363}
   - component: {fileID: 6141334698470784958}
   - component: {fileID: 8489007089072879661}
-  - component: {fileID: 88010878592413192}
   - component: {fileID: 8489007089072879663}
+  - component: {fileID: 2827228460232715386}
   m_Layer: 0
   m_Name: TestHeroPivot
   m_TagString: Untagged
@@ -89,24 +89,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &88010878592413192
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8489007089072879651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eeb636bf02dbd6d408d205f034c35665, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterData: {fileID: 8489007089072879663}
-  heroList: []
-  enemyList: []
-  hp: 0
-  unitState: 0
-  battleState: 0
 --- !u!114 &8489007089072879663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -126,9 +108,9 @@ MonoBehaviour:
     job: 
     maxGrade: 
     energy: 0
-    likeability: 0
     level: 0
     exp: 0
+    likeability: 0
     baseDamage: 50
     baseDefense: 0
     healthPoint: 500
@@ -137,11 +119,28 @@ MonoBehaviour:
     criticalDmg: 2
     evasion: 0
     accuracy: 0.5
-    equipment: {fileID: 0}
     synergys: 
   attack: {fileID: 11400000, guid: d5b9a7358e0855b46acac612b4428307, type: 2}
   activeSkill: {fileID: 11400000, guid: 72914e2e9e922d84eb7b5c550ed005df, type: 2}
   passiveSkill: {fileID: 11400000, guid: 72914e2e9e922d84eb7b5c550ed005df, type: 2}
+--- !u!114 &2827228460232715386
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8489007089072879651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d4538ba9025bb8346bad4a3702e444bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterData: {fileID: 8489007089072879663}
+  heroList: []
+  enemyList: []
+  hp: 0
+  unitState: 0
+  battleState: 0
 --- !u!1001 &8489007089377315228
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -260,4 +259,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d32210bb7c1ee77498f0919b502ecaa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unit: {fileID: 88010878592413192}
+  unit: {fileID: 2827228460232715386}

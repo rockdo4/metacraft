@@ -794,7 +794,7 @@ PrefabInstance:
     - target: {fileID: 901940982386092994, guid: 8d092cf9e7d286741994bc1d9de47c11,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OffPause
+      value: OnPause
       objectReference: {fileID: 0}
     - target: {fileID: 901940982386092994, guid: 8d092cf9e7d286741994bc1d9de47c11,
         type: 3}
@@ -4018,7 +4018,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heroList: {fileID: 352591562}
-  cube: {fileID: 88010878592413192, guid: 34caae005cce3e04ea9a8de4904f7b7a, type: 3}
+  cube: {fileID: 2827228460232715386, guid: 34caae005cce3e04ea9a8de4904f7b7a, type: 3}
   heroUi: {fileID: 5095432709778420783, guid: 54e066ad1921b0e42ba195f220b254b4, type: 3}
   heroUiTr: {fileID: 1726036109}
   startPositions:
@@ -5813,7 +5813,7 @@ PrefabInstance:
     - target: {fileID: 6224062861768791910, guid: 1171ffbbe6205594f9a1eebf2ac03d5d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6224062861768791910, guid: 1171ffbbe6205594f9a1eebf2ac03d5d,
         type: 3}
@@ -5822,12 +5822,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6224062861768791910, guid: 1171ffbbe6205594f9a1eebf2ac03d5d,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6224062861768791910, guid: 1171ffbbe6205594f9a1eebf2ac03d5d,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 2036142172}
     - target: {fileID: 6224062861768791910, guid: 1171ffbbe6205594f9a1eebf2ac03d5d,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
+      value: 
+      objectReference: {fileID: 2061757133}
+    - target: {fileID: 6224062861768791910, guid: 1171ffbbe6205594f9a1eebf2ac03d5d,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6224062861768791910, guid: 1171ffbbe6205594f9a1eebf2ac03d5d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 6224062861768791910, guid: 1171ffbbe6205594f9a1eebf2ac03d5d,
@@ -5837,8 +5852,18 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6224062861768791910, guid: 1171ffbbe6205594f9a1eebf2ac03d5d,
         type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
+      value: OffPause
+      objectReference: {fileID: 0}
+    - target: {fileID: 6224062861768791910, guid: 1171ffbbe6205594f9a1eebf2ac03d5d,
+        type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
       value: LoadSceneButton, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6224062861768791910, guid: 1171ffbbe6205594f9a1eebf2ac03d5d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
+      value: BattleUi, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6224062861768791910, guid: 1171ffbbe6205594f9a1eebf2ac03d5d,
         type: 3}
@@ -5848,6 +5873,11 @@ PrefabInstance:
     - target: {fileID: 6224062861768791910, guid: 1171ffbbe6205594f9a1eebf2ac03d5d,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 6224062861768791910, guid: 1171ffbbe6205594f9a1eebf2ac03d5d,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
     m_RemovedComponents: []
