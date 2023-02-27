@@ -54,14 +54,14 @@ public abstract class AttackableUnit : MonoBehaviour
             return (Time.time - lastNormalAttackTime) > characterData.attack.cooldown;
         }
     }
-    protected bool CanPassiveSkillTime {
-        get {
-            return (Time.time - lastPassiveSkillTime) > characterData.passiveSkill.cooldown;
-        }
-    }
+    //protected bool CanPassiveSkillTime {
+    //    get {
+    //        return (Time.time - lastPassiveSkillTime) > characterData.passiveSkill.cooldown;
+    //    }
+    //}
 
     protected bool InRangeNormalAttack => Vector3.Distance(target.transform.position, transform.position) < characterData.attack.distance;
-    protected bool InRangePassiveSkill => Vector3.Distance(target.transform.position, transform.position) < characterData.passiveSkill.distance;
+    //protected bool InRangePassiveSkill => Vector3.Distance(target.transform.position, transform.position) < characterData.passiveSkill.distance;
     protected bool NonActiveSkill => battleState != UnitBattleState.ActiveSkill && battleState != UnitBattleState.Stun;
 
     protected virtual void Awake()
@@ -142,7 +142,7 @@ public abstract class AttackableUnit : MonoBehaviour
         }
         //가장 가까운 적 탐색
         var maxHp = list.Max(t => t.GetHp());
-        target = list.Where(t => t.GetHp() == maxHp && (t.GetHp() > 0)).FirstOrDefault().GetComponent<AttackableUnit>();
+        target = list.Where(t => t.GetHp() == maxHp && (t.GetHp() > 0)).FirstOrDefault();
     }
 
     protected void SearchMinHealthTarget<T>(List<T> list) where T : AttackableUnit
@@ -154,7 +154,7 @@ public abstract class AttackableUnit : MonoBehaviour
         }
         //가장 가까운 적 탐색
         var minHp = list.Min(t => t.GetHp());
-        target = list.Where(t => (t.GetHp() == minHp) && (t.GetHp() > 0)).FirstOrDefault().GetComponent<AttackableUnit>();
+        target = list.Where(t => (t.GetHp() == minHp) && (t.GetHp() > 0)).FirstOrDefault();
     }
 
     // Test
