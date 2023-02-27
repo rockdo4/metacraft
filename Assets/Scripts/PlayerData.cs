@@ -9,6 +9,7 @@ public class PlayerData
 
     [Range(1, 10)]
     public int officeLevel = 1;
+    public int officeExperience = 0;
     public int inventoryCount = 5;
     public int characterCount = 5;
     public int trainingCount = 1;

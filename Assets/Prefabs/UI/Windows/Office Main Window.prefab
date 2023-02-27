@@ -509,7 +509,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8798705030322725960}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: ShowView
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 5
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8798705030326052205
 GameObject:
   m_ObjectHideFlags: 0
@@ -1563,7 +1575,7 @@ GameObject:
   - component: {fileID: 8798705030528218514}
   - component: {fileID: 8798705030528218513}
   m_Layer: 5
-  m_Name: Prectice
+  m_Name: Training
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3890,8 +3902,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PopUpManager, Assembly-CSharp
-        m_MethodName: ClearPopupWindow
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: ClearPopups
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4509,8 +4521,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PopUpManager, Assembly-CSharp
-        m_MethodName: ClearPopupWindow
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: ClearPopups
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4521,8 +4533,8 @@ MonoBehaviour:
           m_BoolArgument: 0
         m_CallState: 2
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: ViewManager, Assembly-CSharp
-        m_MethodName: Show
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: ShowView
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5412,7 +5424,7 @@ GameObject:
   - component: {fileID: 8798705031912283511}
   - component: {fileID: 8798705031912283506}
   - component: {fileID: 8798705031912283507}
-  - component: {fileID: 5313928369920883438}
+  - component: {fileID: 5352931363774674922}
   m_Layer: 5
   m_Name: Office Main Window
   m_TagString: Untagged
@@ -5489,7 +5501,7 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
---- !u!114 &5313928369920883438
+--- !u!114 &5352931363774674922
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5498,9 +5510,14 @@ MonoBehaviour:
   m_GameObject: {fileID: 8798705031912283510}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fef3c567d83f8c445b837c147fda90e8, type: 3}
+  m_Script: {fileID: 11500000, guid: 9dedf969c042bd44aa0bf26b5700063d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerName: {fileID: 8798705031260383849}
+  officeLevel: {fileID: 8798705031812399051}
+  officeExp: {fileID: 8798705031622880707}
+  playerGold: {fileID: 2997829276056094551}
+  currentTurn: {fileID: 8798705030410932429}
 --- !u!1 &8798705031949490558
 GameObject:
   m_ObjectHideFlags: 0
@@ -5516,7 +5533,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &8798705031949490559
 RectTransform:
   m_ObjectHideFlags: 0
@@ -5629,7 +5646,7 @@ GameObject:
   - component: {fileID: 8798705032144882005}
   - component: {fileID: 8798705032144882004}
   m_Layer: 5
-  m_Name: Send
+  m_Name: Dispatch
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
