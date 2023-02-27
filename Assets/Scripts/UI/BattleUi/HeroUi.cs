@@ -1,10 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AddressableAssets;
-using UnityEngine.ResourceManagement.AsyncOperations;
 using UnityEngine.UI;
 
-public class BattleHero : MonoBehaviour
+public class HeroUi : MonoBehaviour
 {
     public HeroSkill heroSkill;
     public Image heroImage;
