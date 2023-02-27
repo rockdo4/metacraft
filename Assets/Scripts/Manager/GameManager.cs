@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -8,14 +10,23 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
-    public List<GameObject> heroTable = new();
+    public GameRule gameRule;
+
+    // Origin Database - Set Prefab & Scriptable Objects
+    public List<GameObject> heroDatabase = new();
+
+    // MyData - Craft, Load & Save to this data
+    public List<GameObject> myHeroes = new();
+    public Transform heroSpawnTransform;
+
+    // Resources - Sprites, TextAsset + (Scriptable Objects, Sound etc)
     public Dictionary<string, Sprite> iconSprites = new();
     public Dictionary<string, Sprite> illustrationSprites = new();
-
     public List<Dictionary<string, object>> missionInfoList;
 
-    public GameObject currentSelectObject;
-    public List<int?> battleGroups = new (3) { null, null, null };
+    // Office Select
+    public GameObject currentSelectObject; // Hero Info
+    public List<int?> battleGroups = new (3) { null, null, null }; // Mission select -> Battle Scene
 
     public override void Awake()
     {
@@ -25,7 +36,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        foreach (var character in heroTable)
+        foreach (var character in myHeroes)
         {
             character.SetActive(false);
         }
@@ -124,6 +135,24 @@ public class GameManager : Singleton<GameManager>
         {
             // 메뉴 버튼
         }
+
+        // Test Key
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            StringBuilder sb = new();
+            int count = 0;
+            sb.AppendLine("{");
+            foreach (var hero in myHeroes)
+            {
+                LiveData data = hero.GetComponent<CharacterDataBundle>().data;
+                count++;
+                sb.Append($"\"{data.name}\":\n{JsonUtility.ToJson(data, true)}");
+                if (myHeroes.Count != count)
+                    sb.AppendLine(",");
+            }
+            sb.Append("\n}");
+            File.WriteAllText($"{Application.persistentDataPath}/saveTest.json", sb.ToString());
+        }
     }
 
     public void LoadScene(int sceneIdx)
@@ -143,10 +172,10 @@ public class GameManager : Singleton<GameManager>
 
     public int GetHeroIndex(GameObject hero)
     {
-        int count = heroTable.Count;
+        int count = myHeroes.Count;
         for (int i = 0; i < count; i++)
         {
-            string tableName = heroTable[i].GetComponent<CharacterDataBundle>().data.name;
+            string tableName = myHeroes[i].GetComponent<CharacterDataBundle>().data.name;
             string selectHeroName = hero.GetComponent<CharacterDataBundle>().data.name;
             if (tableName.Equals(selectHeroName))
                 return i;

@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class ManageHeroWindow : View
 {
@@ -12,13 +11,9 @@ public class ManageHeroWindow : View
 
     private void Awake()
     {
-        var list = GameManager.Instance.heroTable;
-        foreach (var character in list)
-        {
-            copyCharacterTable.Add(character.GetComponent<CharacterDataBundle>());
-        }
+        SetList();
 
-        int count = copyCharacterTable.Count;
+        int count = GameManager.Instance.gameRule.HeroMaxCount;
         for (int i = 0; i < count; i++)
         {
             GameObject obj = Instantiate(heroInfoPrefab, contents);
@@ -27,8 +22,19 @@ public class ManageHeroWindow : View
         }
     }
 
+    private void SetList()
+    {
+        copyCharacterTable.Clear();
+        var list = GameManager.Instance.myHeroes;
+        foreach (var character in list)
+        {
+            copyCharacterTable.Add(character.GetComponent<CharacterDataBundle>());
+        }
+    }
+
     private void OnEnable()
     {
+        SetList();
         SelectSortType(0);
     }
 
@@ -41,15 +47,15 @@ public class ManageHeroWindow : View
                 break;
 
             case 1:
-                copyCharacterTable.Sort((Comparison<CharacterDataBundle>)((x, y) => { return x.data.grade.CompareTo((string)y.data.grade); }));
+                copyCharacterTable.Sort((x, y) => { return x.data.grade.CompareTo(y.data.grade); });
                 break;
 
             case 2:
-                copyCharacterTable.Sort((Comparison<CharacterDataBundle>)((x, y) => { return x.data.job.CompareTo((string)y.data.job); }));
+                copyCharacterTable.Sort((x, y) => { return x.data.job.CompareTo(y.data.job); });
                 break;
 
             case 3:
-                copyCharacterTable.Sort((Comparison<CharacterDataBundle>)((x, y) => { return x.data.level.CompareTo((int)y.data.level); }));
+                copyCharacterTable.Sort((x, y) => { return x.data.level.CompareTo(y.data.level); });
                 break;
         }
 
@@ -58,11 +64,18 @@ public class ManageHeroWindow : View
 
     private void SetInfos()
     {
-        int index = 0;
+        int count = 0;
         foreach (var character in copyCharacterTable)
         {
-            heroInfos[index].SetData(character);
-            index++;
+            heroInfos[count].SetData(character);
+            heroInfos[count].gameObject.SetActive(true);
+            count++;
+        }
+
+        int max = GameManager.Instance.gameRule.HeroMaxCount;
+        for (int index = count; index < max; index++)
+        {
+            heroInfos[index].gameObject.SetActive(false);
         }
     }
 }
