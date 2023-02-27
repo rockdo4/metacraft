@@ -123,7 +123,17 @@ public abstract class AttackableEnemy : AttackableUnit
             //타겟에게 이동중이거나, 공격 대기중에 타겟이 죽으면 재탐색
             case UnitBattleState.MoveToTarget:
             case UnitBattleState.BattleIdle:
-                if (target == null)
+                if (target != null)
+                {
+                    Vector3 targetDirection = target.transform.position - transform.position;
+                    Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+                    transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 10);
+
+                    float angle = Quaternion.Angle(transform.rotation, targetRotation);
+                    if (angle > 0)
+                        return;
+                }
+                else if (target == null)
                 {
                     SearchTarget();
                     if (target != null)
@@ -218,6 +228,7 @@ public abstract class AttackableEnemy : AttackableUnit
     //타겟이 없으면 Idle로 가고, 쿨타임 계산해서 바로 스킬 가능하면 사용, 아니라면 대기
     public override void NormalAttackEnd()
     {
+        base.NormalAttackEnd();
         lastNormalAttackTime = Time.time;
         if (target == null)
         {
@@ -235,6 +246,7 @@ public abstract class AttackableEnemy : AttackableUnit
     }
     public override void ActiveSkillEnd()
     {
+        base.ActiveSkillEnd();
     }
 
 }
