@@ -23,7 +23,6 @@ public abstract class AttackableUnit : MonoBehaviour
     protected int hp;
     public int GetHp() => hp;
 
-    //��Ÿ�ӿ� ���, Hero�� Ui��ư�� ������ ��Ÿ���� �˻������� Enemy�� Boss �� ������� ������ ���� �ۼ��س���
     protected float lastNormalAttackTime;
     protected float lastPassiveSkillTime;
     protected float lastActiveSkillTime;
@@ -31,15 +30,15 @@ public abstract class AttackableUnit : MonoBehaviour
     protected float lastNavTime;
     protected float navDelay = 0.2f;
 
-    //���� ������ Update�Լ� ȣ��
+ 
     protected Action nowUpdate;
 
-    //������ ĳ���Ͱ� ����ִ� ��ų��, ���߿� ������ ��ų���� �����ϰ�, �ش� ĳ���Ͱ� ���� �̺�Ʈ�� �Ҵ����ִ� ������� ��뿹��
+   
     protected Action NormalAttackAction;
     protected Action PassiveSkillAction;
     protected Action ActiveSkillAction;
 
-    //Ÿ�� ã���� true Ÿ�ٿ��� �����ϸ� false
+    
     protected bool moveTarget;
 
     protected Animator animator;
@@ -64,8 +63,6 @@ public abstract class AttackableUnit : MonoBehaviour
         }
     }
 
-    // AttackableHero �� AttackableEnemy ���� ������Ƽ ������
-    // ���°� ��ġ�°� ����, Enemy�� ��ų�� ���� ��츦 ���
     [SerializeField]
     protected UnitState unitState;
     protected virtual UnitState UnitState { get; set; }
@@ -104,32 +101,27 @@ public abstract class AttackableUnit : MonoBehaviour
     {
         pathFind.stoppingDistance = characterData.attack.distance * 0.9f;
 
-        //�̺�Ʈ ����. ���� �Լ����� abstract �� �����߱� ������ ��ӹ��� ĳ���͵��� ����ִ� �Լ��� ����
+       
         NormalAttackAction = NormalAttack;
         PassiveSkillAction = PassiveSkill;
         ActiveSkillAction = ActiveAttack;
 
-        hp = characterData.data.healthPoint; //���� �ܿ� Hp�����Ͱ� ���⿡ HeroData�� �ִ� �ִ�ü�� ���
+        hp = characterData.data.healthPoint; 
     }
     protected void FixedUpdate()
     {
         nowUpdate?.Invoke();
     }
 
-    //Enemy�� Hero�� �������� ����ִ� �Լ�. Hero�� SetMoveNext�� SetRetrunPos �� �� ������ ����
     public abstract void SetBattle();
 
-    //�ش��ϴ� ��ų���� ��ӹ��� ĳ���͵��� ������ �־�� ��
-    //�ش��ϴ� ��ų�� �������� ���� NormalAttackAction �� �Ҵ��� �Լ��� �ٲ��ְ�����
     public abstract void NormalAttack();
     public abstract void PassiveSkill();
     public abstract void ActiveAttack();
 
-    //���� �ִϸ��̼��� ������, ���¸� NormalAttack�� �ٲ��� �ӽ� �Լ�
     public abstract void TestPassiveEnd();
     public abstract void TestActiveEnd();
 
-    //ĳ���͵��� ���¸����� ������Ʈ �Լ�. Enemy�� ������� �ʴ� ���¿�, Update�� ������ ����. �ƹ����X
     protected abstract void IdleUpdate();
     protected abstract void BattleUpdate();
     protected abstract void DieUpdate();
