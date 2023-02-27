@@ -22,7 +22,7 @@ public class EnemySpawningAndPositioning : MonoBehaviour
 
     private IEnumerator CoRespawn(GameObject parents, List<AttackableEnemy> enemyPool)
     {
-        while (respawnTimer <= 0f)
+        while (respawnTimer >= 0f)
         {
             respawnTimer -= Time.deltaTime;
             yield return new WaitForSeconds(Time.deltaTime);
@@ -30,6 +30,7 @@ public class EnemySpawningAndPositioning : MonoBehaviour
 
         // ¸®½ºÆù
         enemyPool.Add(SpawnEnemy(parents));
+        respawnTimer = 1f;
     }
     public void RespawnEnemy(GameObject parents, ref List<AttackableEnemy> enemyPool)
     {
