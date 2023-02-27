@@ -214,6 +214,7 @@ public abstract class AttackableEnemy : AttackableUnit
     public override void OnDead(AttackableUnit unit)
     {
         battleManager.OnDeadEnemy((AttackableEnemy)unit);
+        pathFind.enabled = false;
     }
 
     //타겟이 없으면 Idle로 가고, 쿨타임 계산해서 바로 스킬 가능하면 사용, 아니라면 대기
