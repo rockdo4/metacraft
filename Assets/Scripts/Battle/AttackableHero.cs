@@ -28,7 +28,6 @@ public abstract class AttackableHero : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.ReturnPosition: // 재배치
-                    animator.ResetTrigger("Run");
                     animator.SetBool("IsBattle", false);
                     animator.SetTrigger("Run");
 
@@ -38,6 +37,7 @@ public abstract class AttackableHero : AttackableUnit
                     nowUpdate = ReturnPosUpdate;
                     break;
                 case UnitState.MoveNext:
+                    animator.ResetTrigger("Idle");
                     animator.SetTrigger("Run");
                     BattleState = UnitBattleState.None;
                     pathFind.isStopped = false;
@@ -47,7 +47,7 @@ public abstract class AttackableHero : AttackableUnit
                     animator.SetBool("IsBattle", true);
                     BattleState = UnitBattleState.MoveToTarget;
                     battleManager.GetEnemyList(ref enemyList);
-                    pathFind.stoppingDistance = characterData.attack.distance * 0.9f;
+                    pathFind.stoppingDistance = characterData.attack.distance * 0.95f;
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
                     nowUpdate = BattleUpdate;
@@ -88,12 +88,12 @@ public abstract class AttackableHero : AttackableUnit
                     //NormalAttackAction();
                     break;
                 case UnitBattleState.PassiveSkill:
-                    animator.ResetTrigger("Run");
+                    //animator.ResetTrigger("Run");
                     animator.SetTrigger("IsAttack");
                     //PassiveSkillAction();
                     break;
                 case UnitBattleState.ActiveSkill:
-                    animator.ResetTrigger("Run");
+                    //animator.ResetTrigger("Run");
                     animator.SetTrigger("Active");
                     //ActiveSkillAction();
                     break;
@@ -148,7 +148,7 @@ public abstract class AttackableHero : AttackableUnit
             //타겟에게 이동중이거나, 공격 대기중에 타겟이 죽으면 재탐색
             case UnitBattleState.MoveToTarget:
             case UnitBattleState.BattleIdle:
-                if(target != null)
+                if (target != null)
                 {
                     Vector3 targetDirection = target.transform.position - transform.position;
                     Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);

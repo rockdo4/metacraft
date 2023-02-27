@@ -30,7 +30,8 @@ public abstract class AttackableEnemy : AttackableUnit
                 case UnitState.Battle:
                     animator.SetBool("IsBattle", true);
                     BattleState = UnitBattleState.MoveToTarget;
-                    pathFind.stoppingDistance = characterData.attack.distance * 0.9f; //가까이 가기
+                    battleManager.GetHeroList(ref heroList);
+                    pathFind.stoppingDistance = characterData.attack.distance * 0.95f; //가까이 가기
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
                     nowUpdate = BattleUpdate;
@@ -97,10 +98,6 @@ public abstract class AttackableEnemy : AttackableUnit
         floatingDamageText = GetComponent<AttackedDamageUI>();
         hpBarManager = GetComponent<HpBarManager>();
         hpBarManager.SetHp(hp, hp);
-
-        //pathFind.stoppingDistance = characterData.attack.distance * 0.9f; //가까이 가기
-        //pathFind.speed = characterData.data.moveSpeed;
-        battleManager.GetHeroList(ref heroList);
     }
     protected abstract void SearchTarget(); //각각의 캐릭터가 탐색 조건이 다름.
 
@@ -226,7 +223,6 @@ public abstract class AttackableEnemy : AttackableUnit
     public override void OnDead(AttackableUnit unit)
     {
         battleManager.OnDeadEnemy((AttackableEnemy)unit);
-        pathFind.enabled = false;
     }
 
     //타겟이 없으면 Idle로 가고, 쿨타임 계산해서 바로 스킬 가능하면 사용, 아니라면 대기
@@ -253,11 +249,4 @@ public abstract class AttackableEnemy : AttackableUnit
         base.ActiveSkillEnd();
     }
 
-    public AttackableEnemy TestGetIsBattle()
-    {
-        if (UnitState == UnitState.Battle)
-            return this;
-        else
-            return null;
-    }
 }
