@@ -7,6 +7,8 @@ public class ShortAttackHero : AttackableHero
 {
     public override void NormalAttack()
     {
+        if (BattleState == UnitBattleState.ActiveSkill)
+            return;
         base.NormalAttack();
         //Logger.Debug("Hero_NormalAttack");
 

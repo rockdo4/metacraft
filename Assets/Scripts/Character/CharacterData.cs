@@ -12,8 +12,10 @@ public class CharacterData : ScriptableObject, IComparable<CharacterData>
     public string       maxGrade;           // 승급 가능 최대 등급
     public int          energy;             // 활동력 소모량
 
-    public int          level;              // 레벨
+    [Range(1, 20)]
+    public int          level = 1;          // 레벨
     public int          exp;                // 경험치
+    [Range(0, 1000)]
     public int          likeability;        // 호감도
 
     public int Power
@@ -35,9 +37,8 @@ public class CharacterData : ScriptableObject, IComparable<CharacterData>
     [Range(0f, 1f)]
     public float evasion = 0f;       // 회피율
     [Range(0f, 1f)]
-    public float accuracy = 0.5f;    // 명중률
+    public float accuracy = 1f;    // 명중률
 
-    public GameObject equipment;     // 장비
     public List<int> synergys;       // 시너지 리스트. 정수 or Enum으로 가지고 있다가
                                      // 공격대에 같은 시너지 index를 가지고 있는 영웅이 있으면 시너지 발동
 

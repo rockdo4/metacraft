@@ -6,40 +6,41 @@ using UnityEngine;
 public class CSVReader
 {
     static readonly string SPLIT_RE = @",(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
+    static readonly string SPLIT_SEMICOLON = @";(?=(?:[^""]*""[^""]*"")*(?![^""]*""))";
     static readonly string LINE_SPLIT_RE = @"\r\n|\n\r|\n|\r";
     static readonly char[] TRIM_CHARS = { '\"' };
 
     // New2. Split Text Asset
-    public static List<Dictionary<string, object>> SplitTextAsset(TextAsset asset)
+    public static List<Dictionary<string, object>> SplitTextAsset(TextAsset asset, bool splitComma = true)
     {
-        return SplitTokens(asset.text);
+        return SplitTokens(asset.text, splitComma);
     }
 
     // New1. Use File Path
-    public static List<Dictionary<string, object>> ReadByPath(string path)
+    public static List<Dictionary<string, object>> ReadByPath(string path, bool splitComma = true)
     {
         string str = File.ReadAllText(path);
-        return SplitTokens(str);
+        return SplitTokens(str, splitComma);
     }
 
     // Legacy. Use Resource folder
-    public static List<Dictionary<string, object>> Read(string file)
+    public static List<Dictionary<string, object>> Read(string file, bool splitComma = true)
     {
         TextAsset data = Resources.Load(file) as TextAsset;
-        return SplitTokens(data.text);
+        return SplitTokens(data.text, splitComma);
     }
 
-    private static List<Dictionary<string, object>> SplitTokens(string data)
+    private static List<Dictionary<string, object>> SplitTokens(string data, bool splitComma = true)
     {
         var list = new List<Dictionary<string, object>>();
         var lines = Regex.Split(data, LINE_SPLIT_RE);
         if (lines.Length <= 1) return list;
 
-        var header = Regex.Split(lines[0], SPLIT_RE);
+        var header = Regex.Split(lines[0], splitComma ? SPLIT_RE : SPLIT_SEMICOLON);
         for (var i = 1; i < lines.Length; i++)
         {
 
-            var values = Regex.Split(lines[i], SPLIT_RE);
+            var values = Regex.Split(lines[i], splitComma ? SPLIT_RE : SPLIT_SEMICOLON);
             if (values.Length == 0 || values[0] == "") continue;
 
             var entry = new Dictionary<string, object>();
