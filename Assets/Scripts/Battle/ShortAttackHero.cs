@@ -12,11 +12,11 @@ public class ShortAttackHero : AttackableHero
 
         if (characterData.attack.count == 1)
         {
-            target.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage, false);
+            target.OnDamage(characterData.data.baseDamage, false);
             return;
         }
 
-        List<GameObject> attackEnemies = new();
+        List<AttackableUnit> attackEnemies = new();
 
         foreach (var enemy in enemyList)
         {
@@ -27,7 +27,7 @@ public class ShortAttackHero : AttackableHero
 
                 if (Mathf.Abs(angle) < characterData.attack.angle / 2f)
                 {
-                    attackEnemies.Add(enemy.transform.gameObject);
+                    attackEnemies.Add(enemy);
                 }
             }
         }
@@ -37,7 +37,7 @@ public class ShortAttackHero : AttackableHero
         var cnt = Mathf.Min(attackEnemies.Count, characterData.attack.count);
         for (int i = 0; i < cnt; i++)
         {
-            attackEnemies[i].GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage, false);
+            attackEnemies[i].OnDamage(characterData.data.baseDamage, false);
         }
     }
 
@@ -46,24 +46,23 @@ public class ShortAttackHero : AttackableHero
         base.PassiveSkill();
         //Logger.Debug("Hero_NormalAttack");
 
-        target.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage * 2, true);
+        target.OnDamage(characterData.data.baseDamage * 2, true);
         return;
 
         //Logger.Debug("Hero_PassiveSkill");
     }
-    public override void ActiveAttack()
+    public override void ActiveSkill()
     {
-        base.ActiveAttack();
+        base.ActiveSkill();
 
-        target.GetComponent<AttackableEnemy>().OnDamage(characterData.data.baseDamage * 3, true);
+        target.OnDamage(characterData.data.baseDamage * 3, true);
         return;
 
     }
 
     protected override void SearchTarget()
     {
-        SearchNearbyTarget(); //근거리 타겟 추적
-        base.SearchTarget();
+        SearchNearbyTarget(enemyList); //근거리 타겟 추적
     }
 
 #if UNITY_EDITOR

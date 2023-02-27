@@ -12,11 +12,11 @@ public class ShortAttackEnemy : AttackableEnemy
 
         if (characterData.attack.count == 1)
         {
-            target.GetComponent<AttackableHero>().OnDamage(characterData.data.baseDamage);
+            target.OnDamage(characterData.data.baseDamage);
             return;
         }
 
-        List<GameObject> attackHeroes = new();
+        List<AttackableUnit> attackHeroes = new();
 
         foreach (var hero in heroList)
         {
@@ -27,7 +27,7 @@ public class ShortAttackEnemy : AttackableEnemy
 
                 if (Mathf.Abs(angle) < characterData.attack.angle / 2f)
                 {
-                    attackHeroes.Add(hero.transform.gameObject);
+                    attackHeroes.Add(hero);
                 }
             }
         }
@@ -37,7 +37,7 @@ public class ShortAttackEnemy : AttackableEnemy
         var cnt = Mathf.Min(attackHeroes.Count, characterData.attack.count);
         for (int i = 0; i < cnt; i++)
         {
-            attackHeroes[i].GetComponent<AttackableHero>().OnDamage(characterData.data.baseDamage);
+            attackHeroes[i].OnDamage(characterData.data.baseDamage);
         }
     }
     public override void PassiveSkill()
@@ -48,8 +48,7 @@ public class ShortAttackEnemy : AttackableEnemy
 
     protected override void SearchTarget()
     {
-        SearchNearbyTarget(); //근거리 타겟 추적
-        base.SearchTarget();
+        SearchNearbyTarget(heroList); //근거리 타겟 추적
     }
 
 #if UNITY_EDITOR

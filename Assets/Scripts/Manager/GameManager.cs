@@ -1,5 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -8,26 +10,23 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
-    public List<GameObject> characterTable = new();
-    //public Dictionary<string, Sprite> testPortraits = new();
+    public GameRule gameRule;
+
+    // Origin Database - Set Prefab & Scriptable Objects
+    public List<GameObject> heroDatabase = new();
+
+    // MyData - Craft, Load & Save to this data
+    public List<GameObject> myHeroes = new();
+    public Transform heroSpawnTransform;
+
+    // Resources - Sprites, TextAsset + (Scriptable Objects, Sound etc)
     public Dictionary<string, Sprite> iconSprites = new();
     public Dictionary<string, Sprite> illustrationSprites = new();
-
-    private List<Dictionary<string, object>> characterList;
     public List<Dictionary<string, object>> missionInfoList;
 
-    public LiveData selectDetail;
-
-    public Sprite GetSpriteByAddress(string address)
-    {
-        if (iconSprites.ContainsKey(address))
-            return iconSprites[address];
-
-        if (illustrationSprites.ContainsKey(address))
-            return illustrationSprites[address];
-
-        return null;
-    }
+    // Office Select
+    public GameObject currentSelectObject; // Hero Info
+    public List<int?> battleGroups = new (3) { null, null, null }; // Mission select -> Battle Scene
 
     public override void Awake()
     {
@@ -37,7 +36,7 @@ public class GameManager : Singleton<GameManager>
 
     private void Start()
     {
-        foreach (var character in characterTable)
+        foreach (var character in myHeroes)
         {
             character.SetActive(false);
         }
@@ -45,15 +44,9 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator LoadAllResources()
     {
-        var cl = Addressables.LoadAssetAsync<TextAsset>("CharacterList");
+        // 텍스트 리소스 로드
         var mit = Addressables.LoadAssetAsync<TextAsset>("MissionInfoTable");
 
-        cl.Completed +=
-                (AsyncOperationHandle<TextAsset> obj) =>
-                {
-                    characterList = CSVReader.SplitTextAsset(obj.Result);
-                    Addressables.Release(obj);
-                };
         mit.Completed +=
                 (AsyncOperationHandle<TextAsset> obj) =>
                 {
@@ -61,27 +54,7 @@ public class GameManager : Singleton<GameManager>
                     Addressables.Release(obj);
                 };
 
-        bool loadAll = false;
-        // 텍스트 리소스 로드
-        while (!loadAll)
-        {
-            if (cl.IsDone)
-                loadAll = true;
-            yield return null;
-        }
-
         List<AsyncOperationHandle> handles = new();
-        //foreach (var character in characterList)
-        //{
-        //    string address = (string)character["Name"];
-        //    Debug.Log(address);
-        //    Addressables.LoadAssetAsync<Sprite>(address).Completed +=
-        //        (AsyncOperationHandle<Sprite> obj) =>
-        //        {
-        //            testPortraits.Add(address, obj.Result);
-        //            handles.Add(obj);
-        //        };
-        //}
 
         List<string> iconAddress = new()
         {
@@ -119,9 +92,8 @@ public class GameManager : Singleton<GameManager>
                 };
         }
 
-
+        bool loadAll = false;
         int count = 0;
-        loadAll = false;
         // 스프라이트 리소스 로드
         while (!loadAll)
         {
@@ -136,10 +108,8 @@ public class GameManager : Singleton<GameManager>
                 }
                 count++;
             }
-            //Logger.Debug($"progress {count} / {handles.Count}");
             yield return null;
         }
-        //Logger.Debug("Load All Resources");
         ReleaseAddressable(handles);
     }
 
@@ -165,11 +135,62 @@ public class GameManager : Singleton<GameManager>
         {
             // 메뉴 버튼
         }
+
+        // Test Key
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            StringBuilder sb = new();
+            int count = 0;
+            sb.AppendLine("{");
+            foreach (var hero in myHeroes)
+            {
+                LiveData data = hero.GetComponent<CharacterDataBundle>().data;
+                count++;
+                sb.Append($"\"{data.name}\":\n{JsonUtility.ToJson(data, true)}");
+                if (myHeroes.Count != count)
+                    sb.AppendLine(",");
+            }
+            sb.Append("\n}");
+            File.WriteAllText($"{Application.persistentDataPath}/saveTest.json", sb.ToString());
+        }
     }
 
     public void LoadScene(int sceneIdx)
     {
         SceneManager.LoadScene(sceneIdx);
         currentScene = (SceneIndex)sceneIdx;
+    }
+
+    public void ClearBattleGroups()
+    {
+        battleGroups.Clear();
+        for (int i = 0; i < 3; i++)
+        {
+            battleGroups.Add(null);
+        }
+    }
+
+    public int GetHeroIndex(GameObject hero)
+    {
+        int count = myHeroes.Count;
+        for (int i = 0; i < count; i++)
+        {
+            string tableName = myHeroes[i].GetComponent<CharacterDataBundle>().data.name;
+            string selectHeroName = hero.GetComponent<CharacterDataBundle>().data.name;
+            if (tableName.Equals(selectHeroName))
+                return i;
+        }
+        return -1;
+    }
+
+    public Sprite GetSpriteByAddress(string address)
+    {
+        if (iconSprites.ContainsKey(address))
+            return iconSprites[address];
+
+        if (illustrationSprites.ContainsKey(address))
+            return illustrationSprites[address];
+
+        return null;
     }
 }
