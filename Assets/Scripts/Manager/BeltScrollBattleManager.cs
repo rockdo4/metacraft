@@ -14,36 +14,40 @@ public class BeltScrollBattleManager : TestBattleManager
 
     private void Start()
     {
+        for (int i = 0; i < triggers.Count; i++)
+        {
+            for (int j = 0; j < triggers[i].enemysNav.Count; j++)
+            {
+                triggers[i].enemysNav[j].enabled = false;
+            }
+        }
+
         // Test
         for (int i = 0; i < useHeroes.Count; i++)
         {
             Invoke("OnReady", 1f);
         }
-        
+
         enemyCountTxt.Count = GetAllEnemyCount();
     }
 
-    public void GetEnemyList(ref List<AttackableEnemy> enemyList)
+    public override void GetEnemyList(ref List<AttackableEnemy> enemyList)
     {
         enemyList = triggers[currTriggerIndex].enemys;
     }
-    public void GetHeroList(ref List<AttackableHero> heroList)
-    {
-        heroList = useHeroes;
-    }
 
-    public void OnDeadEnemy(AttackableEnemy enemy)
+    public override void OnDeadEnemy(AttackableEnemy enemy)
     {
-        enemyCountTxt.DimEnemy();
+        base.OnDeadEnemy(enemy);
         triggers[currTriggerIndex].OnDead(enemy);
         if (triggers[currTriggerIndex].enemys.Count == 0)
         {
             SetHeroReturnPositioning();
         }
     }
-    public void OnDeadHero(AttackableHero hero)
+    public override void OnDeadHero(AttackableHero hero)
     {
-        useHeroes.Remove(hero);
+        base.OnDeadHero(hero);
         readyCount = useHeroes.Count;
         if (useHeroes.Count == 0)
         {
@@ -55,8 +59,8 @@ public class BeltScrollBattleManager : TestBattleManager
     {
         for (int i = 0; i < useHeroes.Count; i++)
         {
-            useHeroes[i].SetReturnPos(triggers[currTriggerIndex].settingPositions[i]);
-            useHeroes[i].SetReturn();
+            useHeroes[i].SetReturnPos(triggers[currTriggerIndex].heroSettingPositions[i]);
+            useHeroes[i].ChangeUnitState(UnitState.ReturnPosition);
         }
     }
     private void SetEnemyIdle()
@@ -69,16 +73,13 @@ public class BeltScrollBattleManager : TestBattleManager
         SetStageFail();
     }
 
-    public void OnReady()
+    public override void OnReady()
     {
         readyCount--;
         if (readyCount == 0 && !triggers[currTriggerIndex].isStageEnd)
         {
             readyCount = useHeroes.Count;
-            for (int i = 0; i < useHeroes.Count; i++)
-            {
-                useHeroes[i].SetMoveNext();
-            }
+            base.OnReady();
             StartCoroutine(MovingMap());
         }
         else if (readyCount == 0 && triggers[currTriggerIndex].isStageEnd)
@@ -105,8 +106,8 @@ public class BeltScrollBattleManager : TestBattleManager
         yield return new WaitForSeconds(nextStageMoveTimer);
 
         var curMaxZPos = platform.transform.position.z + 
-            triggers[currTriggerIndex].settingPositions.Max(transform => transform.position.z);
-        var nextMaxZPos = triggers[currTriggerIndex + 1].settingPositions.Max(transform => transform.position.z);
+            triggers[currTriggerIndex].heroSettingPositions.Max(transform => transform.position.z);
+        var nextMaxZPos = triggers[currTriggerIndex + 1].heroSettingPositions.Max(transform => transform.position.z);
         var movePos = curMaxZPos - nextMaxZPos;
 
         currTriggerIndex++;
@@ -120,7 +121,7 @@ public class BeltScrollBattleManager : TestBattleManager
         // 히어로들 배틀 상태로 전환
         for (int i = 0; i < useHeroes.Count; i++)
         {
-            useHeroes[i].SetBattle();
+            useHeroes[i].ChangeUnitState(UnitState.Battle);
         }
     }
 }

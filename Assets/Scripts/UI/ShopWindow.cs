@@ -20,7 +20,7 @@ public class ShopWindow : View
         gm.myHeroes.Add(newHero);
         newHero.SetActive(false);
 
-        LiveData data = newHero.GetComponent<AttackableUnit>().GetHeroData().data;
+        LiveData data = newHero.GetComponent<AttackableUnit>().GetUnitData().data;
         portrait.sprite = gm.GetSpriteByAddress($"Illur_{data.name}");
         StringBuilder stringBuilder = new();
         stringBuilder.Append($"히어로 명 : {data.name}\n");

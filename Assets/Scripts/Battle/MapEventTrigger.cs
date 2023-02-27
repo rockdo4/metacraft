@@ -4,34 +4,55 @@ using UnityEngine.AI;
 
 public class MapEventTrigger : MonoBehaviour
 {
-    public List<Transform> settingPositions;
-    [Header("스테이지에 포함된 적들을 넣어주세요")]
-    public List<AttackableEnemy> enemys;
-    private List<NavMeshAgent> enemysNav = new();
+    public List<Transform> heroSettingPositions;
+    [Header("적을 소환할 위치를 넣어주세요.")]
+    public List<EnemySpawningAndPositioning> enemySettingPositions;
+
+    public List<AttackableEnemy> enemys;                // 현재 생성되어있는 enemy들
+    public List<NavMeshAgent> enemysNav = new();        // 생성되어있는 enemy들의 NavMeshAgent
+
+    public GameObject enemyPool; // Enemy GameObject들이 들어갈 부모
 
     [SerializeField, Header("마지막 관문일 때 체크해주세요")]
     public bool isStageEnd = false;
 
     private void Start()
     {
+        for (int i = 0; i < enemySettingPositions.Count; i++)
+        {
+            var enemy = enemySettingPositions[i].SpawnEnemy(enemyPool);
+            enemys.Add(enemy);
+        }
+
         for (int i = 0; i < enemys.Count; i++)
         {
             enemysNav.Add(enemys[i].GetComponent<NavMeshAgent>());
-            enemysNav[i].enabled = false;
         }
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        for (int i = 0; i < enemys.Count; i++)
+        if (other.GetComponent<AttackableHero>() != null)
         {
-            enemysNav[i].enabled = true;
-            enemys[i].SetBattle();
+            for (int i = 0; i < enemys.Count; i++)
+            {
+                enemysNav[i].enabled = true;
+                enemys[i].ChangeUnitState(UnitState.Battle);
+            }
         }
     }
 
     public void OnDead(AttackableEnemy enemy)
     {
         enemys.Remove(enemy);
+    }
+
+    // Test
+    public void TestRespawnAllEnemy()
+    {
+        for (int i = 0; i < enemySettingPositions.Count; i++)
+        {
+            enemySettingPositions[i].RespawnEnemy(enemyPool, ref enemys);
+        }
     }
 }
