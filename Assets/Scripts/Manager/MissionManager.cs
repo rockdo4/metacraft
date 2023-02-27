@@ -21,6 +21,7 @@ public class MissionManager : MonoBehaviour
     private List<Dictionary<string, object>> missionInfoTable;
 
     public delegate void clickmark(int num);
+    private int missionNum;
 
     public void Start()
     {
@@ -48,17 +49,26 @@ public class MissionManager : MonoBehaviour
 
     public void UpdateMissionInfo(int num)
     {
+        missionNum = num;
         var dic = missionInfoTable[num];
         portrait.sprite = GameManager.Instance.iconSprites[$"Icon_{dic["BossID"]}"];
         explanation.text = $"{dic["OperationDescription"]}";
         ExpectedCost.text = $"{dic["ExpectedCostID"]}";
+        GameManager.Instance.ClearBattleGroups();
+        for (int i = 0; i < heroSlots.Length; i++)
+        {
+            heroSlots[i].GetComponent<Image>().sprite = null;
+        }
         for (int i = 0; i < fitProperties.Length; i++)
         {
             var count = $"FitProperties{i + 1}";
             fitProperties[i].text = $"{dic[count]}";
+            fitProperties[i].fontStyle = FontStyles.Normal;
+            fitProperties[i].color = Color.white;
         }
         deductionAP.text = $"AP -{dic["ConsumptionBehavior"]}";
-        ProperCombatPower.text = $"1000/{dic["ProperCombatPower"]}";
+        ProperCombatPower.text = $"0/{dic["ProperCombatPower"]}";
+        ProperCombatPower.color = Color.white;
     }
 
     // Mission Hero Info Button 에서 호출
@@ -79,7 +89,6 @@ public class MissionManager : MonoBehaviour
 
         LiveData liveData = bundle.data;
         heroSlots[heroSlotsIndex].GetComponent<Image>().sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{liveData.name}");
-        fitProperties[heroSlotsIndex].text = liveData.job;
         selectIndexGroup[heroSlotsIndex] = index;
 
         if (duplication != null)
@@ -87,12 +96,63 @@ public class MissionManager : MonoBehaviour
             heroSlots[(int)duplication].GetComponent<Image>().sprite = null;
             selectIndexGroup[(int)duplication] = null;
         }
+
+        PropertyMatchingCheck();
+        TotalPowerCheck();
     }
 
     // Hero Slot 에서 Index 전달
     public void ConfirmSelectButton(int idx)
     {
         heroSlotsIndex = idx;
+    }
+
+    //적합 속성 체크
+    private void PropertyMatchingCheck()
+    {
+        GameManager gm = GameManager.Instance;
+        var myHeroes = gm.myHeroes;
+
+        for (int i = 0; i < fitProperties.Length; i++)
+        {
+            foreach (int? idx in GameManager.Instance.battleGroups)
+            {
+                if (idx == null)
+                    continue;
+                if (myHeroes[(int)idx].GetComponent<CharacterDataBundle>().data.job.Equals(fitProperties[i].text))
+                {
+                    fitProperties[i].fontStyle = FontStyles.Bold;
+                    fitProperties[i].color = Color.red;
+                    break;
+                }
+                fitProperties[i].fontStyle = FontStyles.Normal;
+                fitProperties[i].color = Color.white;
+            }
+        }
+    }
+
+    //전투력 합계 체크
+    private void TotalPowerCheck()
+    {
+        GameManager gm = GameManager.Instance;
+        var myHeroes = gm.myHeroes;
+        int totalPower = 0;
+        foreach (int? idx in GameManager.Instance.battleGroups)
+        {
+            if (idx == null)
+                continue;
+            totalPower += myHeroes[(int)idx].GetComponent<CharacterDataBundle>().data.Power;
+        }
+        var properCombatPower = missionInfoTable[missionNum]["ProperCombatPower"];
+        ProperCombatPower.text = $"{totalPower}/{properCombatPower}";
+        if(totalPower< (int)properCombatPower)
+        {
+            ProperCombatPower.color = Color.red;
+        }
+        else
+        {
+            ProperCombatPower.color = Color.white;
+        }
     }
 
     public void StartMission()
@@ -110,9 +170,15 @@ public class MissionManager : MonoBehaviour
         }
     }
 
-
-    // 전투 종료시 초기화 코드
-    //GameManager.Instance.ClearBattleGroups();
-    //foreach (var slot in heroSlots)
-    //    slot.GetComponent<Image>().sprite = null;
+    private void OnEnable()
+    {
+        GameManager gm = GameManager.Instance;
+        int index = 0;
+        foreach (var num in gm.battleGroups)
+        {
+            if (num == null)
+                heroSlots[index].GetComponent<Image>().sprite = null;
+            index++;
+        }
+    }
 }

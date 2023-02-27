@@ -71,7 +71,7 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     protected void SetData()
     {
-        pathFind.stoppingDistance = characterData.attack.distance * 0.9f;
+        pathFind.stoppingDistance = characterData.attack.distance * 0.95f;
 
         NormalAttackAction = NormalAttack;
         PassiveSkillAction = PassiveSkill;
@@ -79,7 +79,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
         hp = characterData.data.healthPoint;
 
-        //animator.SetFloat("CharID", 0);
+        animator.SetInteger("CharacterType", 0);
     }
     protected void FixedUpdate()
     {
@@ -93,9 +93,23 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void PassiveSkill();
     public abstract void ActiveSkill();
 
-    public abstract void NormalAttackEnd();
-    public abstract void PassiveSkillEnd();
-    public abstract void ActiveSkillEnd();
+    public virtual void NormalAttackEnd()
+    {
+        if(target.GetHp() <= 0)
+        {
+            target = null;
+        }
+    }
+    public virtual void PassiveSkillEnd()
+    {
+    }
+    public virtual void ActiveSkillEnd()
+    {
+        if (target.GetHp() <= 0)
+        {
+            target = null;
+        }
+    }
 
     protected abstract void IdleUpdate();
     protected abstract void BattleUpdate();

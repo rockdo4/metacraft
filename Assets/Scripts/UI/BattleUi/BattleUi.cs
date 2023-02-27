@@ -22,4 +22,8 @@ public class BattleUi : MonoBehaviour
     {
         Time.timeScale = 1f;
     }
+    public void ResetGame()
+    {
+        GameManager.Instance.ClearBattleGroups();
+    }
 }

@@ -31,6 +31,8 @@ public class RangeAttackHero : AttackableHero
 
     public override void NormalAttack()
     {
+        if (BattleState == UnitBattleState.ActiveSkill)
+            return;
         base.NormalAttack();
 
         if (characterData.attack.count == 1)
