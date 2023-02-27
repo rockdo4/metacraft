@@ -62,6 +62,12 @@ public class GameManager : Singleton<GameManager>
             "Icon_신하루",
             "Icon_이수빈",
             "Icon_한서은",
+            "Icon_돌격형",
+            "Icon_방어형",
+            "Icon_지원형",
+            "Icon_은밀형",
+            "Icon_원거리",
+
         };
 
         List<string> illustrationAddress = new()
@@ -70,6 +76,11 @@ public class GameManager : Singleton<GameManager>
             "Illur_신하루",
             "Illur_이수빈",
             "Illur_한서은",
+            "Illur_돌격형",
+            "Illur_방어형",
+            "Illur_지원형",
+            "Illur_은밀형",
+            "Illur_원거리",
         };
 
         foreach (string icon in iconAddress)

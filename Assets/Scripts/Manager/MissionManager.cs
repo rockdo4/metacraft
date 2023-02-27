@@ -79,7 +79,6 @@ public class MissionManager : MonoBehaviour
 
         LiveData liveData = bundle.data;
         heroSlots[heroSlotsIndex].GetComponent<Image>().sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{liveData.name}");
-        fitProperties[heroSlotsIndex].text = liveData.job;
         selectIndexGroup[heroSlotsIndex] = index;
 
         if (duplication != null)
@@ -87,12 +86,37 @@ public class MissionManager : MonoBehaviour
             heroSlots[(int)duplication].GetComponent<Image>().sprite = null;
             selectIndexGroup[(int)duplication] = null;
         }
+
+        PropertyMatchingCheck();
     }
 
     // Hero Slot 에서 Index 전달
     public void ConfirmSelectButton(int idx)
     {
         heroSlotsIndex = idx;
+    }
+
+    private void PropertyMatchingCheck()
+    {
+        GameManager gm = GameManager.Instance;
+        var myHeroes = gm.myHeroes;
+
+        for (int i = 0; i < fitProperties.Length; i++)
+        {
+            foreach (int? idx in GameManager.Instance.battleGroups)
+            {
+                if (idx == null)
+                    continue;
+                if (myHeroes[(int)idx].GetComponent<CharacterDataBundle>().data.job.Equals(fitProperties[i].text))
+                {
+                    fitProperties[i].fontStyle = FontStyles.Bold;
+                    fitProperties[i].color = Color.red;
+                    break;
+                }
+                fitProperties[i].fontStyle = FontStyles.Normal;
+                fitProperties[i].color = Color.white;
+            }            
+        }
     }
 
     public void StartMission()
