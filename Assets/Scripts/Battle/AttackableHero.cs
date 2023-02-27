@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public abstract class AttackableHero : AttackableUnit
 {
-    protected BattleHero heroUI;
+    protected HeroUi heroUI;
 
     private Transform returnPos;
     public void SetReturnPos(Transform tr) => returnPos = returnPos = tr;
@@ -121,7 +121,7 @@ public abstract class AttackableHero : AttackableUnit
     }
 
     // Ui와 연결, Ui에 스킬 쿨타임 연결
-    public virtual void SetUi(BattleHero _heroUI)
+    public virtual void SetUi(HeroUi _heroUI)
     {
         heroUI = _heroUI;
         heroUI.heroSkill.Set(characterData.activeSkill.cooldown, () => { BattleState = UnitBattleState.ActiveSkill; }); //궁극기 쿨타임과 궁극기 함수 등록
