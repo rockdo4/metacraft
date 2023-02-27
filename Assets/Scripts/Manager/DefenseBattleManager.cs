@@ -1,30 +1,21 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class DefenseBattleManager : TestBattleManager
 {
+    private void Start()
+    {
+        GameStart();
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            useHeroes[i].ChangeUnitState(UnitState.Battle);
+        }
+    }
+
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            triggers[0].TestRespawnAllEnemy();
-        }
 
-        if (Input.GetKeyDown(KeyCode.S))
-        {
-            for (int i = 0; i < triggers[0].enemys.Count; i++)
-            {
-                triggers[0].enemys[i].ChangeUnitState(UnitState.Battle);
-            }
-        }
-
-        if (Input.GetKeyDown(KeyCode.D))
-        {
-            for (int i = 0; i < useHeroes.Count; i++)
-            {
-                useHeroes[i].ChangeUnitState(UnitState.Battle);
-            }
-        }
     }
     public override void OnDeadHero(AttackableHero hero)
     {
@@ -37,11 +28,14 @@ public class DefenseBattleManager : TestBattleManager
     }
     public override void GetEnemyList(ref List<AttackableEnemy> enemyList) 
     {
-        // Test
-        enemyList = triggers[0].enemys;
+        enemyList = triggers[0].useEnemys;
     }
     public override void OnReady()
     {
         base.OnReady();
+    }
+    private void GameStart()
+    {
+        triggers[0].TestInfinityRespawnEnemy();
     }
 }

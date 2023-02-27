@@ -30,7 +30,6 @@ public abstract class AttackableEnemy : AttackableUnit
                 case UnitState.Battle:
                     animator.SetFloat("IsBattle", 1);
                     BattleState = UnitBattleState.MoveToTarget;
-                    battleManager.GetHeroList(ref heroList);
                     pathFind.stoppingDistance = characterData.attack.distance * 0.9f; //가까이 가기
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
@@ -99,6 +98,10 @@ public abstract class AttackableEnemy : AttackableUnit
         floatingDamageText = GetComponent<AttackedDamageUI>();
         hpBarManager = GetComponent<HpBarManager>();
         hpBarManager.SetHp(hp, hp);
+
+        //pathFind.stoppingDistance = characterData.attack.distance * 0.9f; //가까이 가기
+        //pathFind.speed = characterData.data.moveSpeed;
+        battleManager.GetHeroList(ref heroList);
     }
     protected abstract void SearchTarget(); //각각의 캐릭터가 탐색 조건이 다름.
 
@@ -239,4 +242,11 @@ public abstract class AttackableEnemy : AttackableUnit
     {
     }
 
+    public AttackableEnemy TestGetIsBattle()
+    {
+        if (UnitState == UnitState.Battle)
+            return this;
+        else
+            return null;
+    }
 }
