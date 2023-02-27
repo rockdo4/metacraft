@@ -21,6 +21,7 @@ public class MissionManager : MonoBehaviour
     private List<Dictionary<string, object>> missionInfoTable;
 
     public delegate void clickmark(int num);
+    private int missionNum;
 
     public void Start()
     {
@@ -48,17 +49,26 @@ public class MissionManager : MonoBehaviour
 
     public void UpdateMissionInfo(int num)
     {
+        missionNum = num;
         var dic = missionInfoTable[num];
         portrait.sprite = GameManager.Instance.iconSprites[$"Icon_{dic["BossID"]}"];
         explanation.text = $"{dic["OperationDescription"]}";
         ExpectedCost.text = $"{dic["ExpectedCostID"]}";
+        GameManager.Instance.ClearBattleGroups();
+        for (int i = 0; i < heroSlots.Length; i++)
+        {
+            heroSlots[i].GetComponent<Image>().sprite = null;
+        }
         for (int i = 0; i < fitProperties.Length; i++)
         {
             var count = $"FitProperties{i + 1}";
             fitProperties[i].text = $"{dic[count]}";
+            fitProperties[i].fontStyle = FontStyles.Normal;
+            fitProperties[i].color = Color.white;
         }
         deductionAP.text = $"AP -{dic["ConsumptionBehavior"]}";
-        ProperCombatPower.text = $"1000/{dic["ProperCombatPower"]}";
+        ProperCombatPower.text = $"0/{dic["ProperCombatPower"]}";
+        ProperCombatPower.color = Color.white;
     }
 
     // Mission Hero Info Button 에서 호출
@@ -88,6 +98,7 @@ public class MissionManager : MonoBehaviour
         }
 
         PropertyMatchingCheck();
+        TotalPowerCheck();
     }
 
     // Hero Slot 에서 Index 전달
@@ -96,6 +107,7 @@ public class MissionManager : MonoBehaviour
         heroSlotsIndex = idx;
     }
 
+    //적합 속성 체크
     private void PropertyMatchingCheck()
     {
         GameManager gm = GameManager.Instance;
@@ -115,7 +127,31 @@ public class MissionManager : MonoBehaviour
                 }
                 fitProperties[i].fontStyle = FontStyles.Normal;
                 fitProperties[i].color = Color.white;
-            }            
+            }
+        }
+    }
+
+    //전투력 합계 체크
+    private void TotalPowerCheck()
+    {
+        GameManager gm = GameManager.Instance;
+        var myHeroes = gm.myHeroes;
+        int totalPower = 0;
+        foreach (int? idx in GameManager.Instance.battleGroups)
+        {
+            if (idx == null)
+                continue;
+            totalPower += myHeroes[(int)idx].GetComponent<CharacterDataBundle>().data.Power;
+        }
+        var properCombatPower = missionInfoTable[missionNum]["ProperCombatPower"];
+        ProperCombatPower.text = $"{totalPower}/{properCombatPower}";
+        if(totalPower< (int)properCombatPower)
+        {
+            ProperCombatPower.color = Color.red;
+        }
+        else
+        {
+            ProperCombatPower.color = Color.white;
         }
     }
 

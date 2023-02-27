@@ -18,11 +18,11 @@ public class LiveData : IComparable<LiveData>
     public int Power
     {
         // 전투력 계산식
-        private set { power = baseDamage + baseDefense + healthPoint * 10; }
-        get { return power; }
+        //private set { power = baseDamage + baseDefense + healthPoint * 10; }
+        get { return baseDamage + baseDefense + healthPoint * 10; }
     }
 
-    private int power;              // 전투력
+    //private int power;              // 전투력
     public int baseDamage = 50;     // 일반 공격 데미지
     public int baseDefense = 0;     // 방어력
     public int healthPoint = 500;   // 최대 체력
