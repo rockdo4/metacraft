@@ -110,9 +110,15 @@ public class MissionManager : MonoBehaviour
         }
     }
 
-
-    // 전투 종료시 초기화 코드
-    //GameManager.Instance.ClearBattleGroups();
-    //foreach (var slot in heroSlots)
-    //    slot.GetComponent<Image>().sprite = null;
+    private void OnEnable()
+    {
+        GameManager gm = GameManager.Instance;
+        int index = 0;
+        foreach (var num in gm.battleGroups)
+        {
+            if (num == null)
+                heroSlots[index].GetComponent<Image>().sprite = null;
+            index++;
+        }
+    }
 }
