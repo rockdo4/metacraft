@@ -79,6 +79,7 @@ public class MissionManager : MonoBehaviour
 
         LiveData liveData = bundle.data;
         heroSlots[heroSlotsIndex].GetComponent<Image>().sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{liveData.name}");
+        fitProperties[heroSlotsIndex].text = liveData.job;
         selectIndexGroup[heroSlotsIndex] = index;
 
         if (duplication != null)
