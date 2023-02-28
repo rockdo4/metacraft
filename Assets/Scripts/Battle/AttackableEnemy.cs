@@ -31,7 +31,7 @@ public abstract class AttackableEnemy : AttackableUnit
                     animator.SetBool("IsBattle", true);
                     BattleState = UnitBattleState.MoveToTarget;
                     battleManager.GetHeroList(ref heroList);
-                    pathFind.stoppingDistance = characterData.attack.distance * 0.95f; //가까이 가기
+                    pathFind.stoppingDistance = characterData.attack.distance * 0.95f;
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
                     nowUpdate = BattleUpdate;
