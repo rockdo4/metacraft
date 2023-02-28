@@ -3,14 +3,13 @@ using UnityEngine;
 using UnityEngine.UI;
 struct panelHolder
 {
+    public GameObject interactable;
+    public GameObject noneInteractable;
     public panelHolder(GameObject interactable, GameObject noneInteractable)
     {
         this.interactable = interactable;
         this.noneInteractable= noneInteractable;
     }
-    public GameObject interactable;
-    public GameObject noneInteractable;
-
     public void HidePanels()
     {
         interactable.SetActive(false);
@@ -32,6 +31,8 @@ public class PopUpManager : MonoBehaviour
     public GameObject panelHolder;
     private List<panelHolder> panelHolders;   
     public int CurrentViewIndex { get; set; }
+
+    private int popupInHierarchyLastIndex;
     private void Start()
     {
         isInstanced = new bool[prefabs.Length];
@@ -41,7 +42,7 @@ public class PopUpManager : MonoBehaviour
     public void Init(List<GameObject> holders)
     {
         popUpHolders = holders;
-        popUpsInHierarchy = new List<List<GameObject>>(popUpHolders.Count);
+        popUpsInHierarchy = new (popUpHolders.Count);
 
         for (int i = 0; i < popUpHolders.Count; i++)
         {
@@ -79,6 +80,12 @@ public class PopUpManager : MonoBehaviour
         popUpHolders[viewIndex].SetActive(true);
         HidePopups();
         popUpsInHierarchy[viewIndex][index].SetActive(true);
+
+        popupInHierarchyLastIndex = index;
+    }
+    public void ShowLastPopupInHierarchy()
+    {
+
     }
     public void ShowPrefab(int index)
     {        

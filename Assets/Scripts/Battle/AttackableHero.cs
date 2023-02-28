@@ -10,6 +10,8 @@ public abstract class AttackableHero : AttackableUnit
     private Transform returnPos;
     public void SetReturnPos(Transform tr) => returnPos = returnPos = tr;
 
+    private Coroutine coWhileActiveSkill;
+
     protected override UnitState UnitState {
         get {
             return unitState;
@@ -119,7 +121,8 @@ public abstract class AttackableHero : AttackableUnit
     public virtual void SetUi(HeroUi _heroUI)
     {
         heroUI = _heroUI;
-        heroUI.heroSkill.Set(characterData.activeSkill.cooldown, () => { BattleState = UnitBattleState.ActiveSkill; }); //±Ã±Ø±â ÄðÅ¸ÀÓ°ú ±Ã±Ø±â ÇÔ¼ö µî·Ï
+        BattleState = UnitBattleState.ActiveSkill;
+        heroUI.heroSkill.Set(characterData.activeSkill.cooldown, ActiveSkill); //±Ã±Ø±â ÄðÅ¸ÀÓ°ú ±Ã±Ø±â ÇÔ¼ö µî·Ï
     }
 
     protected abstract void SearchTarget(); //°¢°¢ÀÇ Ä³¸¯ÅÍ°¡ Å½»ö Á¶°ÇÀÌ ´Ù¸§.
@@ -132,7 +135,10 @@ public abstract class AttackableHero : AttackableUnit
     {
     }
     public override void ActiveSkill()
-    {
+    {        
+        characterData.activeSkill.TestDataInput(characterData.data);
+        characterData.activeSkill.OnActive();
+        coWhileActiveSkill = StartCoroutine(characterData.activeSkill.SkillCoroutine());
     }
 
     protected override void IdleUpdate()
