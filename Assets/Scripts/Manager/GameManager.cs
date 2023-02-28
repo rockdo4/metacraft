@@ -49,9 +49,7 @@ public class GameManager : Singleton<GameManager>
 
         foreach (int? idx in battleGroups)
         {
-            if (idx == null)
-                continue;
-            selectedHeroes.Add(myHeroes[(int)idx]);
+            selectedHeroes.Add(idx == null ? null : myHeroes[(int)idx]);
         }
 
         return selectedHeroes;
@@ -80,9 +78,9 @@ public class GameManager : Singleton<GameManager>
             "한서은",
             "돌격형",
             "방어형",
+            "사격형",
             "지원형",
             "은밀형",
-            "원거리",
         };
 
         foreach (string address in spriteAddress)
@@ -149,15 +147,15 @@ public class GameManager : Singleton<GameManager>
         }
 
         // Test Key Start
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            SaveAllData();
-        }
+        //if (Input.GetKeyDown(KeyCode.K))
+        //{
+        //    SaveAllData();
+        //}
 
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            LoadAllData();
-        }
+        //if (Input.GetKeyDown(KeyCode.L))
+        //{
+        //    LoadAllData();
+        //}
         // Test Key End
     }
 

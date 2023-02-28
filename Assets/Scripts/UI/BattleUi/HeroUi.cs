@@ -18,7 +18,7 @@ public class HeroUi : MonoBehaviour
     public void SetHeroInfo(CharacterDataBundle data)
     {
         heroData = data;
-        //heroImage.sprite = GameManager.Instance.iconSprites[$"Icon_{heroData.data.name}"];
+        heroImage.sprite = GameManager.Instance.iconSprites[$"Icon_{heroData.data.name}"];
         SetHp(heroData.data.healthPoint);
     }
 
