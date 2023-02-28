@@ -4,9 +4,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ActiveSkillAOE", menuName = "Character/ActiveSkill/AOE")]
 public class ActiveSkillAOE : CharacterSkill
 {
-    public GameObject skillAreaIndicator;    
+    public SkillAreaIndicator skillAreaIndicator;    
     private bool isInit = false;    
     private Camera cam;
+    private int layerMask;
 
     public bool isAutoTargeting;
     public float castRangeLimit;
@@ -19,21 +20,25 @@ public class ActiveSkillAOE : CharacterSkill
     {
         if(!isInit)
         {
-            skillAreaIndicator = Instantiate(skillAreaIndicator);
-            skillAreaIndicator.SetActive(false);
+            layerMask = 1 << 8;
+
+            skillAreaIndicator = Instantiate(skillAreaIndicator);            
+            skillAreaIndicator.gameObject.SetActive(false);
 
             cam = Camera.main;
-
+ 
             isInit = true;
         }
-    }
- 
+    } 
     public override IEnumerator SkillCoroutine()
     {
-        skillAreaIndicator.SetActive(true);
+        skillAreaIndicator.gameObject.SetActive(true);
 
         while (true)
         {
+            if (TryActiveSkill())
+                yield break;
+
             MoveIndicator();
             yield return null;
         }
@@ -41,10 +46,30 @@ public class ActiveSkillAOE : CharacterSkill
     private void MoveIndicator()
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo, 100.0f, 8))
-        {
-            skillAreaIndicator.transform.position = new Vector3(hitInfo.point.x, 0.1f, hitInfo.point.z);
+        RaycastHit hit;
+        if (Physics.Raycast(ray, out hit, 100.0f, layerMask))
+        {            
+            skillAreaIndicator.transform.position = hit.point + Vector3.up * 0.1f;
         }        
+    }
+    private bool TryActiveSkill()
+    {
+        if(Input.GetMouseButtonUp(0))
+        {
+            ActiveSkill();          
+            return true;
+        }
+        return false;
+    }
+    private void ActiveSkill()
+    {
+        var targets = skillAreaIndicator.GetUnitsInArea();
+
+        foreach(var target in targets)
+        {
+            target.OnDamage(222);
+        }
+
+        skillAreaIndicator.gameObject.SetActive(false);
     }
 }
