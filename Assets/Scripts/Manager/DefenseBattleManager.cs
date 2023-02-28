@@ -4,19 +4,15 @@ using UnityEngine;
 
 public class DefenseBattleManager : TestBattleManager
 {
+    private int enemyCount;
+
     private void Start()
     {
         GameStart();
-        for (int i = 0; i < useHeroes.Count; i++)
-        {
-            useHeroes[i].ChangeUnitState(UnitState.Battle);
-        }
+        enemyCount = GetAllEnemyCount();
+        enemyCountTxt.Count = enemyCount;
     }
 
-    private void Update()
-    {
-
-    }
     public override void OnDeadHero(AttackableHero hero)
     {
         base.OnDeadHero(hero);
@@ -25,6 +21,12 @@ public class DefenseBattleManager : TestBattleManager
     {
         base.OnDeadEnemy(enemy);
         triggers[0].OnDead(enemy);
+
+        enemyCount--;
+        if (enemyCount == 0)
+        {
+            SetHeroReturnPositioning(startPositions);
+        }
     }
     public override void GetEnemyList(ref List<AttackableEnemy> enemyList) 
     {
@@ -32,7 +34,15 @@ public class DefenseBattleManager : TestBattleManager
     }
     public override void OnReady()
     {
-        base.OnReady();
+        readyCount--;
+        if (readyCount == 0 && enemyCount == 0)
+        {
+            SetStageClear();
+        }
+    }
+    protected override void SetHeroReturnPositioning(List<Transform> pos)
+    {
+        base.SetHeroReturnPositioning(pos);
     }
     private void GameStart()
     {

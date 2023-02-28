@@ -80,7 +80,7 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     protected void SetData()
     {
-        pathFind.stoppingDistance = characterData.attack.distance * 0.95f;
+        pathFind.stoppingDistance = characterData.attack.distance ;
 
         NormalAttackAction = NormalAttack;
         PassiveSkillAction = PassiveSkill;

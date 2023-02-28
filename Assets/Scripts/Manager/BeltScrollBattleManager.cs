@@ -9,7 +9,6 @@ public class BeltScrollBattleManager : TestBattleManager
     public float platformMoveSpeed;
 
     private int currTriggerIndex = 0;
-    private int readyCount = 3;
     private float nextStageMoveTimer = 0f;
 
     private void Start()
@@ -48,7 +47,7 @@ public class BeltScrollBattleManager : TestBattleManager
         triggers[currTriggerIndex].OnDead(enemy);
         if (triggers[currTriggerIndex].useEnemys.Count == 0)
         {
-            SetHeroReturnPositioning();
+            SetHeroReturnPositioning(triggers[currTriggerIndex].heroSettingPositions);
         }
     }
     public override void OnDeadHero(AttackableHero hero)
@@ -60,14 +59,9 @@ public class BeltScrollBattleManager : TestBattleManager
             SetEnemyIdle();
         }
     }
-
-    private void SetHeroReturnPositioning()
+    protected override void SetHeroReturnPositioning(List<Transform> pos)
     {
-        for (int i = 0; i < useHeroes.Count; i++)
-        {
-            useHeroes[i].SetReturnPos(triggers[currTriggerIndex].heroSettingPositions[i]);
-            useHeroes[i].ChangeUnitState(UnitState.ReturnPosition);
-        }
+        base.SetHeroReturnPositioning(pos);
     }
     private void SetEnemyIdle()
     {
@@ -94,13 +88,6 @@ public class BeltScrollBattleManager : TestBattleManager
         }
     }
 
-    // 클리어 시 호출할 함수 (Ui 업데이트)
-    private void SetStageClear()
-    {
-        UIManager.Instance.ShowView(1);
-        clearUi.Clear();
-        Logger.Debug("Clear!");
-    }
     private void SetStageFail()
     {
         Time.timeScale = 0;
