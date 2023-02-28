@@ -123,7 +123,7 @@ public class BeltScrollBattleManager : TestBattleManager
         while (platform.transform.position.z >= movePos)
         {
             platform.transform.Translate((Vector3.forward * platformMoveSpeed * Time.deltaTime) * -1);
-            yield return new WaitForSeconds(Time.deltaTime);
+            yield return null;
         }
 
         // 히어로들 배틀 상태로 전환

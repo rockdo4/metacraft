@@ -42,7 +42,7 @@ public class TestBattleManager : MonoBehaviour
         int count = 0;
         for (int i = 0; i < triggers.Count; i++)
         {
-            count += triggers[i].useEnemys.Count;
+            count += triggers[i].enemys.Count;
         }
 
         return count;
