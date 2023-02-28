@@ -34,6 +34,7 @@ public class RangeAttackHero : AttackableHero
     {
         if (BattleState == UnitBattleState.ActiveSkill)
             return;
+
         base.NormalAttack();
 
         if (characterData.attack.count == 1)
@@ -58,9 +59,9 @@ public class RangeAttackHero : AttackableHero
             }
         }
 
-        attackEnemies.OrderBy(t => Vector3.Distance(transform.position, t.transform.position));
+       attackEnemies =  attackEnemies.OrderBy(t => Vector3.Distance(transform.position, t.transform.position)).ToList();
 
-        var cnt = Mathf.Min(attackEnemies.Count, characterData.attack.count);
+        var cnt = Mathf.Min(attackEnemies.Count(), characterData.attack.count);
         for (int i = 0; i < cnt; i++)
         {
             attackEnemies[i].OnDamage(characterData.data.baseDamage, false);

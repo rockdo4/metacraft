@@ -101,6 +101,7 @@ public class BeltScrollBattleManager : TestBattleManager
     }
     private void SetStageFail()
     {
+        Time.timeScale = 0;
         UIManager.Instance.ShowView(2);
         Logger.Debug("Fail!");
     }
