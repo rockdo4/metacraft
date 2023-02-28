@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class MapEventTrigger : MonoBehaviour
 {
@@ -49,7 +47,7 @@ public class MapEventTrigger : MonoBehaviour
     {
         for (int i = 0; i < enemySettingPositions.Count; i++)
         {
-            enemySettingPositions[i].RespawnEnemy(enemyPool, ref enemys, 1f);
+            enemySettingPositions[i].RespawnEnemy(ref enemys, 1f);
         }
     }
 
@@ -58,7 +56,7 @@ public class MapEventTrigger : MonoBehaviour
         for (int i = 0; i < enemySettingPositions.Count; i++)
         {
             float timer = Random.Range(1f, 2f);
-            enemySettingPositions[i].InfinityRespawn(enemyPool, ref enemys, timer);
+            enemySettingPositions[i].InfinityRespawn(timer);
         }
     }
 
@@ -74,7 +72,7 @@ public class MapEventTrigger : MonoBehaviour
     {
         for (int i = 0; i < enemySettingPositions.Count; i++)
         {
-            enemySettingPositions[i].SpawnAllEnemy(enemyPool, ref enemys);
+            enemySettingPositions[i].SpawnAllEnemy(ref enemys);
         }
 
         for (int i = 0; i < enemys.Count; i++)
