@@ -38,6 +38,7 @@ public class BeltScrollBattleManager : TestBattleManager
 
     public override void GetEnemyList(ref List<AttackableEnemy> enemyList)
     {
+        Logger.Debug(currTriggerIndex);
         enemyList = triggers[currTriggerIndex].useEnemys;
     }
 
@@ -105,6 +106,7 @@ public class BeltScrollBattleManager : TestBattleManager
         var movePos = curMaxZPos - nextMaxZPos;
 
         currTriggerIndex++;
+        Logger.Debug("cur trigger ++");
 
         while (platform.transform.position.z >= movePos)
         {
