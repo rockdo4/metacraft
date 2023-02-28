@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class MapEventTrigger : MonoBehaviour
 {
+    public TestBattleManager manager;
     public List<Transform> heroSettingPositions;
     [Header("적을 소환할 위치를 넣어주세요.")]
     public List<EnemySpawningAndPositioning> enemySettingPositions;
@@ -32,6 +33,7 @@ public class MapEventTrigger : MonoBehaviour
             AttackableEnemy enemy = other.GetComponent<AttackableEnemy>();
             AddUseEnemyList(enemy);
             enemys.Remove(enemy);
+            manager.EnemyTriggerEnter();
         }
     }
 

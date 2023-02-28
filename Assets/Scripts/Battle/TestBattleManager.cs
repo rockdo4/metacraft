@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UIElements;
 
 public class TestBattleManager : MonoBehaviour
 {
@@ -14,6 +15,8 @@ public class TestBattleManager : MonoBehaviour
 
     public ClearUi clearUi;
     public List<MapEventTrigger> triggers;
+
+    protected int readyCount;
 
     private void Awake()
     {
@@ -30,6 +33,8 @@ public class TestBattleManager : MonoBehaviour
             useHeroes.Add(hero);
         }
         clearUi.SetHeroes(useHeroes);
+
+        readyCount = useHeroes.Count;
     }
 
     public List<Transform> GetStartPosition()
@@ -67,5 +72,27 @@ public class TestBattleManager : MonoBehaviour
         {
             useHeroes[i].ChangeUnitState(UnitState.MoveNext);
         }
+    }
+    public void EnemyTriggerEnter()
+    {
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            useHeroes[i].ChangeUnitState(UnitState.Battle);
+        }
+    }
+    protected virtual void SetHeroReturnPositioning(List<Transform> pos)
+    {
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            useHeroes[i].SetReturnPos(pos[i]);
+            useHeroes[i].ChangeUnitState(UnitState.ReturnPosition);
+        }
+    }
+    // 클리어 시 호출할 함수 (Ui 업데이트)
+    protected void SetStageClear()
+    {
+        UIManager.Instance.ShowView(1);
+        clearUi.Clear();
+        Logger.Debug("Clear!");
     }
 }
