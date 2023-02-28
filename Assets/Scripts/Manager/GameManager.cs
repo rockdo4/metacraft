@@ -26,7 +26,7 @@ public class GameManager : Singleton<GameManager>
 
     // Office Select
     public GameObject currentSelectObject; // Hero Info
-    public List<int?> battleGroups = new (3) { null, null, null }; // Mission select -> Battle Scene
+    public List<int?> battleGroups = new(3) { null, null, null }; // Mission select -> Battle Scene
 
     public override void Awake()
     {
@@ -43,6 +43,20 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    public List<GameObject> GetSelectedHeroes()
+    {
+        List<GameObject> selectedHeroes = new();
+
+        foreach (int? idx in battleGroups)
+        {
+            if (idx == null)
+                continue;
+            selectedHeroes.Add(myHeroes[(int)idx]);
+        }
+
+        return selectedHeroes;
+    }
+
     private IEnumerator LoadAllResources()
     {
         // 텍스트 리소스 로드
@@ -57,6 +71,7 @@ public class GameManager : Singleton<GameManager>
 
         List<AsyncOperationHandle> handles = new();
 
+        // Resoureces 테이블로 뺄 예정
         List<string> spriteAddress = new()
         {
             "다인",
@@ -171,7 +186,7 @@ public class GameManager : Singleton<GameManager>
             return;
 
         var loadData = CSVReader.ReadByPath(GetSaveFilePath(), false);
-        foreach ( var item in loadData)
+        foreach (var item in loadData)
         {
             string id = item["ID"].ToString();
             string contents = item["Contents"].ToString();
@@ -196,7 +211,6 @@ public class GameManager : Singleton<GameManager>
             }
         }
     }
-
 
     public GameObject CreateNewHero(string heroName)
     {
