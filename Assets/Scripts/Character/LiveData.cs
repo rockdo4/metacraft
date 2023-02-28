@@ -30,7 +30,7 @@ public class LiveData : IComparable<LiveData>
     public int baseDamage = 50;     // 일반 공격 데미지
     public int baseDefense = 0;     // 방어력
     public int healthPoint = 500;   // 최대 체력
-    public int currentHP = 500;     // 현재 체력
+    public int currentHp = 500;   // 현재 체력
     public int moveSpeed = 3;        // 이동 속도. 범위, 초기값 설정 필요
     [Range(0f, 1f)]
     public float critical = 0f;      // 크리티컬 확률
@@ -57,7 +57,6 @@ public class LiveData : IComparable<LiveData>
         maxGrade = originData.maxGrade;
         energy = originData.energy;
         
-        // Load from save file
         level = 1;
         exp = 0;
         likeability = originData.likeability;
@@ -65,7 +64,8 @@ public class LiveData : IComparable<LiveData>
         baseDamage = originData.baseDamage;
         baseDefense = originData.baseDefense;
         healthPoint = originData.healthPoint;
-        currentHP = originData.currentHP;
+        currentHp = originData.currentHp;
+        moveSpeed = originData.moveSpeed;
         critical = originData.critical;
         criticalDmg = originData.criticalDmg;
         evasion = originData.evasion;
@@ -84,7 +84,6 @@ public class LiveData : IComparable<LiveData>
         maxGrade = parseData.maxGrade;
         energy = parseData.energy;
 
-        // Load from save file
         level = parseData.level;
         exp = parseData.exp;
         likeability = parseData.likeability;
@@ -92,7 +91,8 @@ public class LiveData : IComparable<LiveData>
         baseDamage = parseData.baseDamage;
         baseDefense = parseData.baseDefense;
         healthPoint = parseData.healthPoint;
-        currentHP = parseData.currentHP;
+        currentHp = parseData.currentHp;
+        moveSpeed = parseData.moveSpeed;
         critical = parseData.critical;
         criticalDmg = parseData.criticalDmg;
         evasion = parseData.evasion;
@@ -107,12 +107,12 @@ public class LiveData : IComparable<LiveData>
         sb.Append($"히어로 명 : {name}\n");
         sb.Append($"공격력 : {baseDamage}\n");
         sb.Append($"방어력 : {baseDefense}\n");
-        sb.Append($"체력 : {currentHP}/{healthPoint}\n");
+        sb.Append($"체력 : {currentHp}/{healthPoint}\n");
+        sb.Append($"이동 속도 : {moveSpeed}\n");
         sb.Append($"타입 : {job}\n");
         sb.Append($"활동력 소모량 : {energy}\n");
         sb.Append($"치명타 확률 : {critical}\n");
         sb.Append($"치명타 배율 : {criticalDmg}\n");
-        sb.Append($"이동 속도 : {moveSpeed}\n");
         sb.Append($"명중률 : {accuracy}\n");
         sb.Append($"회피율 : {evasion}\n");
         Logger.Debug(sb);
