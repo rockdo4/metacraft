@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 8428398282218722841}
   - component: {fileID: 8428398282218722838}
   - component: {fileID: 8428398282218722839}
+  - component: {fileID: -258476677999285681}
   m_Layer: 7
   m_Name: TestEnemyPivot
   m_TagString: Enemy
@@ -104,9 +105,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterData: {fileID: 8428398282218722841}
+  target: {fileID: 0}
   heroList: []
   enemyList: []
-  hp: 0
   unitState: 0
   battleState: 0
   isMapTriggerEnter: 0
@@ -135,6 +136,7 @@ MonoBehaviour:
     baseDamage: 50
     baseDefense: 0
     healthPoint: 500
+    currentHp: 500
     moveSpeed: 3
     critical: 0
     criticalDmg: 2
@@ -174,6 +176,24 @@ MonoBehaviour:
   barHeigth: 20
   heightAboveGround: 2.5
   maxDuration: 3
+--- !u!114 &-258476677999285681
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8428398282218722837}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 1, g: 1, b: 0, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1001 &8428398282547750826
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -5,9 +5,9 @@ using UnityEngine;
 public class ActiveSkillAOE : CharacterSkill
 {
     public SkillAreaIndicator skillAreaIndicator;    
-    private bool isInit = false;    
     private Camera cam;
     private int layerMask;
+    public bool isInit = false;    
 
     public bool isAutoTargeting;
     public float castRangeLimit;
@@ -17,7 +17,7 @@ public class ActiveSkillAOE : CharacterSkill
     public SkillTargetType targetType;
     public bool isCriticalPossible;
     public override void OnActive()
-    {
+    {        
         if(!isInit)
         {
             layerMask = 1 << 8;
@@ -36,10 +36,11 @@ public class ActiveSkillAOE : CharacterSkill
 
         while (true)
         {
+            MoveIndicator();
+
             if (TryActiveSkill())
                 yield break;
 
-            MoveIndicator();
             yield return null;
         }
     }

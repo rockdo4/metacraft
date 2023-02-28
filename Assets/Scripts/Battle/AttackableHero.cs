@@ -135,8 +135,7 @@ public abstract class AttackableHero : AttackableUnit
     {
     }
     public override void ActiveSkill()
-    {        
-        characterData.activeSkill.TestDataInput(characterData.data);
+    {   
         characterData.activeSkill.OnActive();
         coWhileActiveSkill = StartCoroutine(characterData.activeSkill.SkillCoroutine());
     }
