@@ -20,6 +20,8 @@ public class TestBattleManager : MonoBehaviour
         for (int i = 0; i < startPositions.Count; i++)
         {
             var hero = Instantiate(heroPref, startPositions[i].position, Quaternion.identity, heroList.transform);
+            var heroNav = hero.GetComponent<NavMeshAgent>();
+            heroNav.enabled = true;
             heroUiList[i].gameObject.SetActive(true);
 
             hero.SetUi(heroUiList[i]);
