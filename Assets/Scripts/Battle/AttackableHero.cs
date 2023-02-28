@@ -10,6 +10,8 @@ public abstract class AttackableHero : AttackableUnit
     private Transform returnPos;
     public void SetReturnPos(Transform tr) => returnPos = returnPos = tr;
 
+    private Coroutine coWhileActiveSkill;
+
     protected override UnitState UnitState {
         get {
             return unitState;
@@ -119,7 +121,8 @@ public abstract class AttackableHero : AttackableUnit
     public virtual void SetUi(HeroUi _heroUI)
     {
         heroUI = _heroUI;
-        heroUI.heroSkill.Set(characterData.activeSkill.cooldown, () => { BattleState = UnitBattleState.ActiveSkill; }); //±Ã±Ø±â ÄðÅ¸ÀÓ°ú ±Ã±Ø±â ÇÔ¼ö µî·Ï
+        BattleState = UnitBattleState.ActiveSkill;
+        heroUI.heroSkill.Set(characterData.activeSkill.cooldown, ActiveSkill); //±Ã±Ø±â ÄðÅ¸ÀÓ°ú ±Ã±Ø±â ÇÔ¼ö µî·Ï
     }
 
     protected abstract void SearchTarget(); //°¢°¢ÀÇ Ä³¸¯ÅÍ°¡ Å½»ö Á¶°ÇÀÌ ´Ù¸§.
@@ -132,7 +135,10 @@ public abstract class AttackableHero : AttackableUnit
     {
     }
     public override void ActiveSkill()
-    {
+    {        
+        characterData.activeSkill.TestDataInput(characterData.data);
+        characterData.activeSkill.OnActive();
+        coWhileActiveSkill = StartCoroutine(characterData.activeSkill.SkillCoroutine());
     }
 
     protected override void IdleUpdate()
@@ -148,25 +154,21 @@ public abstract class AttackableHero : AttackableUnit
             //Å¸°Ù¿¡°Ô ÀÌµ¿ÁßÀÌ°Å³ª, °ø°Ý ´ë±âÁß¿¡ Å¸°ÙÀÌ Á×À¸¸é ÀçÅ½»ö
             case UnitBattleState.MoveToTarget:
             case UnitBattleState.BattleIdle:
-                if (target != null && target.gameObject.activeSelf)
+                if (IsAlive(target))
                 {
-                    if(target.GetHp() <= 0)
-                    {
-                        target = null;
-                        return;
-                    }
                     Vector3 targetDirection = target.transform.position - transform.position;
                     Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
                     transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 10);
 
                     float angle = Quaternion.Angle(transform.rotation, targetRotation);
+
                     if (angle > 0)
                         return;
                 }
-                else if (target == null  || !target.gameObject.activeSelf)
+                else
                 {
                     SearchTarget();
-                    if (target != null && target.gameObject.activeSelf)
+                    if (IsAlive(target))
                     {
                         //if (InRangePassiveSkill && CanPassiveSkillTime)
                         //    BattleState = UnitBattleState.PassiveSkill;
@@ -267,11 +269,11 @@ public abstract class AttackableHero : AttackableUnit
 
     public override void OnDamage(int dmg, bool isCritical = false)
     {
-        hp = Mathf.Max(hp - dmg, 0);
+        UnitHp = Mathf.Max(UnitHp - dmg, 0);
 
-        heroUI.SetHp(hp);
+        heroUI.SetHp(UnitHp);
 
-        if (hp <= 0)
+        if (UnitHp <= 0)
             UnitState = UnitState.Die;
     }
     
@@ -285,7 +287,7 @@ public abstract class AttackableHero : AttackableUnit
     {
         base.NormalAttackEnd();
         lastNormalAttackTime = Time.time;
-        if (target == null  || !target.gameObject.activeSelf)
+        if (!IsAlive(target))
         {
             BattleState = UnitBattleState.BattleIdle;
         }
@@ -301,7 +303,7 @@ public abstract class AttackableHero : AttackableUnit
     public override void PassiveSkillEnd()
     {
         lastPassiveSkillTime = Time.time;
-        if (target == null  || !target.gameObject.activeSelf)
+        if (!IsAlive(target))
         {
             BattleState = UnitBattleState.BattleIdle;
         }
@@ -315,7 +317,7 @@ public abstract class AttackableHero : AttackableUnit
     public override void ActiveSkillEnd()
     {
         base.ActiveSkillEnd();
-        if (target == null  || !target.gameObject.activeSelf)
+        if (!IsAlive(target))
         {
             BattleState = UnitBattleState.BattleIdle;
         }

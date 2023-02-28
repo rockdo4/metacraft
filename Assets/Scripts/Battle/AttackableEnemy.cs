@@ -31,7 +31,7 @@ public abstract class AttackableEnemy : AttackableUnit
                     animator.SetBool("IsBattle", true);
                     BattleState = UnitBattleState.MoveToTarget;
                     battleManager.GetHeroList(ref heroList);
-                    pathFind.stoppingDistance = characterData.attack.distance * 0.95f; //가까이 가기
+                    pathFind.stoppingDistance = characterData.attack.distance * 0.95f;
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
                     nowUpdate = BattleUpdate;
@@ -97,7 +97,7 @@ public abstract class AttackableEnemy : AttackableUnit
 
         floatingDamageText = GetComponent<AttackedDamageUI>();
         hpBarManager = GetComponent<HpBarManager>();
-        hpBarManager.SetHp(hp, hp);
+        hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
     }
     protected abstract void SearchTarget(); //각각의 캐릭터가 탐색 조건이 다름.
 
@@ -125,7 +125,7 @@ public abstract class AttackableEnemy : AttackableUnit
             case UnitBattleState.BattleIdle:
                 if (target != null && target.gameObject.activeSelf)
                 {
-                    if (target.GetHp() <= 0)
+                    if (target.UnitHp <= 0)
                     {
                         target = null;
                         return;
@@ -211,8 +211,8 @@ public abstract class AttackableEnemy : AttackableUnit
 
     public override void OnDamage(int dmg, bool isCritical)
     {
-        hp = Mathf.Max(hp - dmg, 0);
-        if (hp <= 0)
+        UnitHp = Mathf.Max(UnitHp - dmg, 0);
+        if (UnitHp <= 0)
             UnitState = UnitState.Die;
 
         TempShowHpBarAndDamageText(dmg, isCritical);
@@ -221,7 +221,7 @@ public abstract class AttackableEnemy : AttackableUnit
     {
         floatingDamageText.OnAttack(dmg, isCritical, transform.position, DamageType.Normal);
         hpBarManager.TestCode(dmg);
-        if (hp <= 0)
+        if (UnitHp <= 0)
             hpBarManager.Die();
     }
 

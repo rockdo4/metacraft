@@ -29,6 +29,7 @@ public class CharacterData : ScriptableObject, IComparable<CharacterData>
     public int baseDamage = 50;     // 일반 공격 데미지
     public int baseDefense = 0;     // 방어력
     public int healthPoint = 500;   // 최대 체력
+    public int currentHp = 500;     // 현재 체력
     public int moveSpeed = 3;        // 이동 속도. 범위, 초기값 설정 필요
     [Range(0f, 1f)]
     public float critical = 0f;      // 크리티컬 확률
