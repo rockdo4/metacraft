@@ -139,10 +139,9 @@ public abstract class AttackableHero : AttackableUnit
     }
     public override void ActiveSkill()
     {
-        target.OnDamage(177);
-        //characterData.activeSkill.TestDataInput(characterData.data);
-        //characterData.activeSkill.OnActive();
-        //coWhileActiveSkill = StartCoroutine(characterData.activeSkill.SkillCoroutine());
+        //target.OnDamage(177);        
+        characterData.activeSkill.OnActive();
+        coWhileActiveSkill = StartCoroutine(characterData.activeSkill.SkillCoroutine());
     }
 
     protected override void IdleUpdate()
