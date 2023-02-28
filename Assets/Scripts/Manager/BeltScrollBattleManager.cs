@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class BeltScrollBattleManager : TestBattleManager
 {
@@ -19,7 +18,7 @@ public class BeltScrollBattleManager : TestBattleManager
         {
             for (int j = 0; j < triggers[i].enemySettingPositions.Count; j++)
             {
-                var enemy = triggers[i].enemySettingPositions[j].SpawnEnemy(triggers[i].enemyPool);
+                var enemy = triggers[i].enemySettingPositions[j].SpawnEnemy();
                 triggers[i].enemys.Add(enemy);
                 triggers[i].enemys[j].SetEnabledPathFind(false);
             }
