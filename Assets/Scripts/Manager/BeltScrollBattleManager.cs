@@ -13,12 +13,6 @@ public class BeltScrollBattleManager : TestBattleManager
     private int readyCount = 3;
     private float nextStageMoveTimer = 0f;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-            Logger.Debug(GetCurrEnemyCount());
-    }
-
     private void Start()
     {
         for (int i = 0; i < triggers.Count; i++)
