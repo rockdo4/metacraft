@@ -22,8 +22,8 @@ public abstract class AttackableUnit : MonoBehaviour
 
     [SerializeField]
     protected int hp;
-    public int GetHp() => hp;
-
+    public int GetHp() => characterData.data.currentHP;
+     
     protected float lastNormalAttackTime;
     protected float lastPassiveSkillTime;
     protected float lastActiveSkillTime;
@@ -77,7 +77,7 @@ public abstract class AttackableUnit : MonoBehaviour
         PassiveSkillAction = PassiveSkill;
         ActiveSkillAction = ActiveSkill;
 
-        hp = characterData.data.healthPoint;
+        //hp = characterData.data.healthPoint;
 
         animator.SetInteger("CharacterType", 0);
     }

@@ -30,6 +30,7 @@ public class LiveData : IComparable<LiveData>
     public int baseDamage = 50;     // 일반 공격 데미지
     public int baseDefense = 0;     // 방어력
     public int healthPoint = 500;   // 최대 체력
+    public int currentHP = 500;     // 현재 체력
     public int moveSpeed = 3;        // 이동 속도. 범위, 초기값 설정 필요
     [Range(0f, 1f)]
     public float critical = 0f;      // 크리티컬 확률
@@ -64,6 +65,7 @@ public class LiveData : IComparable<LiveData>
         baseDamage = originData.baseDamage;
         baseDefense = originData.baseDefense;
         healthPoint = originData.healthPoint;
+        currentHP = originData.currentHP;
         critical = originData.critical;
         criticalDmg = originData.criticalDmg;
         evasion = originData.evasion;
@@ -90,6 +92,7 @@ public class LiveData : IComparable<LiveData>
         baseDamage = parseData.baseDamage;
         baseDefense = parseData.baseDefense;
         healthPoint = parseData.healthPoint;
+        currentHP = parseData.currentHP;
         critical = parseData.critical;
         criticalDmg = parseData.criticalDmg;
         evasion = parseData.evasion;
@@ -104,7 +107,7 @@ public class LiveData : IComparable<LiveData>
         sb.Append($"히어로 명 : {name}\n");
         sb.Append($"공격력 : {baseDamage}\n");
         sb.Append($"방어력 : {baseDefense}\n");
-        sb.Append($"체력 : {healthPoint}\n");
+        sb.Append($"체력 : {currentHP}/{healthPoint}\n");
         sb.Append($"타입 : {job}\n");
         sb.Append($"활동력 소모량 : {energy}\n");
         sb.Append($"치명타 확률 : {critical}\n");
