@@ -8,13 +8,17 @@ public class SupportAttackHero : AttackableHero
     protected float searchDelay = 1f;
     protected float lastSearchTime;
 
+    bool moveToTeam = false;
+    Vector3 teamPos;
+
     protected override void Awake()
     {
-        lastSearchTime = Time.time;
         base.Awake();
     }
     protected override void SearchTarget()
     {
+        if (moveToTeam)
+            return;
         if (Time.time - lastSearchTime >= searchDelay)
         {
             lastSearchTime = Time.time;
@@ -22,8 +26,17 @@ public class SupportAttackHero : AttackableHero
 
             if (minTarget != null)
             {
-                SearchNearbyTarget(heroList);
+                if(target == null  || !target.gameObject.activeSelf)
+                    SearchNearbyTarget(heroList);
                 return;
+            }
+            else
+            {
+                teamPos = GetSearchNearbyTarget(heroList).transform.position;
+                pathFind.SetDestination(teamPos);
+                moveToTeam = true;
+                animator.ResetTrigger("Run");
+                animator.SetTrigger("Run");
             }
 
         }
@@ -58,10 +71,9 @@ public class SupportAttackHero : AttackableHero
             }
         }
 
-        attackEnemies.OrderBy(t => Vector3.Distance(transform.position, t.transform.position));
+        attackEnemies = GetNearestUnitList(attackEnemies, characterData.attack.count);
 
-        var cnt = Mathf.Min(attackEnemies.Count, characterData.attack.count);
-        for (int i = 0; i < cnt; i++)
+        for (int i = 0; i < attackEnemies.Count; i++)
         {
             attackEnemies[i].OnDamage(characterData.data.baseDamage, false);
         }
@@ -73,6 +85,17 @@ public class SupportAttackHero : AttackableHero
 
     protected override void BattleUpdate()
     {
+        if(moveToTeam )
+        {
+            if (Vector3.Distance(teamPos, transform.position) < characterData.attack.distance/2)
+            {
+                moveToTeam = false;
+                target = null;
+            }
+
+            return;
+        }
+
         switch (BattleState)
         {
             //타겟에게 이동중이거나, 공격 대기중에 범위 안에 적이 들어왔는지 확인

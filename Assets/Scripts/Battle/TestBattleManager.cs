@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TestBattleManager : MonoBehaviour
 {
     public GameObject heroList;
-    public AttackableHero cube;
-    public HeroUi heroUi;
-    public Transform heroUiTr;
+    public AttackableHero heroPref;
+    public List<HeroUi> heroUiList;
     public List<Transform> startPositions;
     protected List<AttackableHero> useHeroes = new();
     public StageEnemy enemyCountTxt;
@@ -17,14 +17,15 @@ public class TestBattleManager : MonoBehaviour
     private void Awake()
     {
         //히어로 만들고, 히어로 ui만들고 서로 연결
-
         for (int i = 0; i < startPositions.Count; i++)
         {
-            var hero = Instantiate(cube, startPositions[i].position, Quaternion.identity, heroList.transform);
-            var heroUi = Instantiate(this.heroUi, heroUiTr);
+            var hero = Instantiate(heroPref, startPositions[i].position, Quaternion.identity, heroList.transform);
+            var heroNav = hero.GetComponent<NavMeshAgent>();
+            heroNav.enabled = true;
+            heroUiList[i].gameObject.SetActive(true);
 
-            hero.SetUi(heroUi);
-            heroUi.SetHeroInfo(hero.GetUnitData());
+            hero.SetUi(heroUiList[i]);
+            heroUiList[i].SetHeroInfo(hero.GetUnitData());
             useHeroes.Add(hero);
         }
         clearUi.SetHeroes(useHeroes);

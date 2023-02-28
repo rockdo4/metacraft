@@ -31,7 +31,7 @@ public abstract class AttackableEnemy : AttackableUnit
                     animator.SetBool("IsBattle", true);
                     BattleState = UnitBattleState.MoveToTarget;
                     battleManager.GetHeroList(ref heroList);
-                    pathFind.stoppingDistance = characterData.attack.distance * 0.95f; //가까이 가기
+                    pathFind.stoppingDistance = characterData.attack.distance * 0.95f;
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
                     nowUpdate = BattleUpdate;
@@ -97,7 +97,7 @@ public abstract class AttackableEnemy : AttackableUnit
 
         floatingDamageText = GetComponent<AttackedDamageUI>();
         hpBarManager = GetComponent<HpBarManager>();
-        hpBarManager.SetHp(hp, hp);
+        hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
     }
     protected abstract void SearchTarget(); //각각의 캐릭터가 탐색 조건이 다름.
 
@@ -123,8 +123,13 @@ public abstract class AttackableEnemy : AttackableUnit
             //타겟에게 이동중이거나, 공격 대기중에 타겟이 죽으면 재탐색
             case UnitBattleState.MoveToTarget:
             case UnitBattleState.BattleIdle:
-                if (target != null)
+                if (target != null && target.gameObject.activeSelf)
                 {
+                    if (target.UnitHp <= 0)
+                    {
+                        target = null;
+                        return;
+                    }
                     Vector3 targetDirection = target.transform.position - transform.position;
                     Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
                     transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 10);
@@ -133,10 +138,10 @@ public abstract class AttackableEnemy : AttackableUnit
                     if (angle > 0)
                         return;
                 }
-                else if (target == null)
+                else if (target == null  || !target.gameObject.activeSelf)
                 {
                     SearchTarget();
-                    if (target != null)
+                    if (target != null && target.gameObject.activeSelf)
                     {
                         if (InRangeNormalAttack && CanNormalAttackTime)
                             BattleState = UnitBattleState.NormalAttack;
@@ -206,8 +211,8 @@ public abstract class AttackableEnemy : AttackableUnit
 
     public override void OnDamage(int dmg, bool isCritical)
     {
-        hp = Mathf.Max(hp - dmg, 0);
-        if (hp <= 0)
+        UnitHp = Mathf.Max(UnitHp - dmg, 0);
+        if (UnitHp <= 0)
             UnitState = UnitState.Die;
 
         TempShowHpBarAndDamageText(dmg, isCritical);
@@ -216,7 +221,7 @@ public abstract class AttackableEnemy : AttackableUnit
     {
         floatingDamageText.OnAttack(dmg, isCritical, transform.position, DamageType.Normal);
         hpBarManager.TestCode(dmg);
-        if (hp <= 0)
+        if (UnitHp <= 0)
             hpBarManager.Die();
     }
 
@@ -230,7 +235,7 @@ public abstract class AttackableEnemy : AttackableUnit
     {
         base.NormalAttackEnd();
         lastNormalAttackTime = Time.time;
-        if (target == null)
+        if (target == null  || !target.gameObject.activeSelf)
         {
             BattleState = UnitBattleState.BattleIdle;
         }
@@ -249,4 +254,15 @@ public abstract class AttackableEnemy : AttackableUnit
         base.ActiveSkillEnd();
     }
 
+    public AttackableEnemy TestGetIsBattle()
+    {
+        if (UnitState == UnitState.Battle)
+            return this;
+        else
+            return null;
+    }
+    public void SetEnabledPathFind(bool set)
+    {
+        pathFind.enabled = set;
+    }
 }

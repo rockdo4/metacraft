@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class MapEventTrigger : MonoBehaviour
 {
@@ -8,9 +7,8 @@ public class MapEventTrigger : MonoBehaviour
     [Header("적을 소환할 위치를 넣어주세요.")]
     public List<EnemySpawningAndPositioning> enemySettingPositions;
 
-    public List<AttackableEnemy> enemys = new();                // 생성할 Enemy들
+    public List<AttackableEnemy> enemys = new();        // 생성할 Enemy들
     public List<AttackableEnemy> useEnemys = new();     // 현재 생성된 Enemy들
-    public List<NavMeshAgent> enemysNav = new();        // enemy들의 NavMeshAgent
 
     public GameObject enemyPool; // Enemy GameObject들이 들어갈 부모
 
@@ -23,8 +21,10 @@ public class MapEventTrigger : MonoBehaviour
         {
             for (int i = 0; i < enemys.Count; i++)
             {
-                enemysNav[i].enabled = true;
+                enemys[i].SetEnabledPathFind(true);
                 enemys[i].ChangeUnitState(UnitState.Battle);
+                AddUseEnemyList(enemys[i]);
+                enemys.Remove(enemys[i]);
             }
         }
         else
@@ -47,7 +47,7 @@ public class MapEventTrigger : MonoBehaviour
     {
         for (int i = 0; i < enemySettingPositions.Count; i++)
         {
-            enemySettingPositions[i].RespawnEnemy(enemyPool, ref enemys, 1f);
+            enemySettingPositions[i].RespawnEnemy(ref enemys, 1f);
         }
     }
 
@@ -56,7 +56,7 @@ public class MapEventTrigger : MonoBehaviour
         for (int i = 0; i < enemySettingPositions.Count; i++)
         {
             float timer = Random.Range(1f, 2f);
-            enemySettingPositions[i].InfinityRespawn(enemyPool, ref enemys, timer);
+            enemySettingPositions[i].InfinityRespawn(timer);
         }
     }
 
@@ -72,7 +72,7 @@ public class MapEventTrigger : MonoBehaviour
     {
         for (int i = 0; i < enemySettingPositions.Count; i++)
         {
-            enemySettingPositions[i].SpawnAllEnemy(enemyPool, ref enemys);
+            enemySettingPositions[i].SpawnAllEnemy(ref enemys);
         }
 
         for (int i = 0; i < enemys.Count; i++)
