@@ -38,6 +38,7 @@ public class BeltScrollBattleManager : TestBattleManager
 
     public override void GetEnemyList(ref List<AttackableEnemy> enemyList)
     {
+        Logger.Debug($"Get! {triggers[currTriggerIndex].useEnemys.Count}");
         enemyList = triggers[currTriggerIndex].useEnemys;
     }
 

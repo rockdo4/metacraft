@@ -75,7 +75,10 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected virtual void Awake()
     {
-        battleManager = FindObjectOfType<TestBattleManager>();
+        var manager = FindObjectOfType<TestBattleManager>();
+        if (manager != null)
+            battleManager = manager;
+
         animator = GetComponentInChildren<Animator>();
     }
     protected void SetData()
@@ -299,5 +302,10 @@ public abstract void OnDead(AttackableUnit unit);
     public void DestroyUnit()
     {
         Destroy(gameObject, 1f);
+    }
+
+    public void SetBattleManager(TestBattleManager manager)
+    {
+        battleManager = manager;
     }
 }

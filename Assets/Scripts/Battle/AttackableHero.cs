@@ -32,7 +32,6 @@ public abstract class AttackableHero : AttackableUnit
                 case UnitState.ReturnPosition: // 재배치
                     animator.SetBool("IsBattle", false);
                     animator.SetTrigger("Run");
-
                     pathFind.isStopped = false;
                     pathFind.SetDestination(returnPos.position); //재배치 위치 설정
                     pathFind.stoppingDistance = 0; //가까이 가기

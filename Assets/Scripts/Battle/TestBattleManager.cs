@@ -51,6 +51,7 @@ public class TestBattleManager : MonoBehaviour
                     NavMeshAgent heroNav = hero.GetComponent<NavMeshAgent>();
                     heroNav.enabled = true;
                     AttackableHero attackableHero = hero.GetComponent<AttackableHero>();
+                    attackableHero.SetBattleManager(this);
                     attackableHero.SetUi(heroUiList[index]);
                     heroUiList[index].SetHeroInfo(attackableHero.GetUnitData());
                     heroUiList[index].gameObject.SetActive(true);
