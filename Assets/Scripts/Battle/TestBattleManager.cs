@@ -4,9 +4,8 @@ using UnityEngine;
 public class TestBattleManager : MonoBehaviour
 {
     public GameObject heroList;
-    public AttackableHero cube;
-    public HeroUi heroUi;
-    public Transform heroUiTr;
+    public AttackableHero heroPref;
+    public List<HeroUi> heroUiList;
     public List<Transform> startPositions;
     protected List<AttackableHero> useHeroes = new();
     public StageEnemy enemyCountTxt;
@@ -20,11 +19,11 @@ public class TestBattleManager : MonoBehaviour
 
         for (int i = 0; i < startPositions.Count; i++)
         {
-            var hero = Instantiate(cube, startPositions[i].position, Quaternion.identity, heroList.transform);
-            var heroUi = Instantiate(this.heroUi, heroUiTr);
+            var hero = Instantiate(heroPref, startPositions[i].position, Quaternion.identity, heroList.transform);
+            heroUiList[i].gameObject.SetActive(true);
 
-            hero.SetUi(heroUi);
-            heroUi.SetHeroInfo(hero.GetUnitData());
+            hero.SetUi(heroUiList[i]);
+            heroUiList[i].SetHeroInfo(hero.GetUnitData());
             useHeroes.Add(hero);
         }
         clearUi.SetHeroes(useHeroes);
