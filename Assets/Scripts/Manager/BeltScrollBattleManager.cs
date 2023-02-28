@@ -13,6 +13,12 @@ public class BeltScrollBattleManager : TestBattleManager
     private int readyCount = 3;
     private float nextStageMoveTimer = 0f;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+            Logger.Debug(GetCurrEnemyCount());
+    }
+
     private void Start()
     {
         for (int i = 0; i < triggers.Count; i++)
@@ -21,8 +27,7 @@ public class BeltScrollBattleManager : TestBattleManager
             {
                 var enemy = triggers[i].enemySettingPositions[j].SpawnEnemy(triggers[i].enemyPool);
                 triggers[i].enemys.Add(enemy);
-                triggers[i].enemysNav.Add(triggers[i].enemys[j].GetComponent<NavMeshAgent>());
-                triggers[i].enemysNav[j].enabled = false;
+                triggers[i].enemys[j].SetEnabledPathFind(false);
             }
         }
 
@@ -34,17 +39,21 @@ public class BeltScrollBattleManager : TestBattleManager
 
         enemyCountTxt.Count = GetAllEnemyCount();
     }
+    private int GetCurrEnemyCount()
+    {
+        return triggers[currTriggerIndex].useEnemys.Count;
+    }
 
     public override void GetEnemyList(ref List<AttackableEnemy> enemyList)
     {
-        enemyList = triggers[currTriggerIndex].enemys;
+        enemyList = triggers[currTriggerIndex].useEnemys;
     }
 
     public override void OnDeadEnemy(AttackableEnemy enemy)
     {
         base.OnDeadEnemy(enemy);
         triggers[currTriggerIndex].OnDead(enemy);
-        if (triggers[currTriggerIndex].enemys.Count == 0)
+        if (triggers[currTriggerIndex].useEnemys.Count == 0)
         {
             SetHeroReturnPositioning();
         }

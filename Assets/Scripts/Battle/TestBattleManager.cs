@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TestBattleManager : MonoBehaviour
 {
@@ -17,10 +18,11 @@ public class TestBattleManager : MonoBehaviour
     private void Awake()
     {
         //히어로 만들고, 히어로 ui만들고 서로 연결
-
         for (int i = 0; i < startPositions.Count; i++)
         {
             var hero = Instantiate(cube, startPositions[i].position, Quaternion.identity, heroList.transform);
+            var heroNav = hero.GetComponent<NavMeshAgent>();
+            heroNav.enabled = true;
             var heroUi = Instantiate(this.heroUi, heroUiTr);
 
             hero.SetUi(heroUi);
@@ -40,7 +42,7 @@ public class TestBattleManager : MonoBehaviour
         int count = 0;
         for (int i = 0; i < triggers.Count; i++)
         {
-            count += triggers[i].enemys.Count;
+            count += triggers[i].useEnemys.Count;
         }
 
         return count;

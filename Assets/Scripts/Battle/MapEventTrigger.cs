@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,9 +9,8 @@ public class MapEventTrigger : MonoBehaviour
     [Header("적을 소환할 위치를 넣어주세요.")]
     public List<EnemySpawningAndPositioning> enemySettingPositions;
 
-    public List<AttackableEnemy> enemys = new();                // 생성할 Enemy들
+    public List<AttackableEnemy> enemys = new();        // 생성할 Enemy들
     public List<AttackableEnemy> useEnemys = new();     // 현재 생성된 Enemy들
-    public List<NavMeshAgent> enemysNav = new();        // enemy들의 NavMeshAgent
 
     public GameObject enemyPool; // Enemy GameObject들이 들어갈 부모
 
@@ -23,8 +23,10 @@ public class MapEventTrigger : MonoBehaviour
         {
             for (int i = 0; i < enemys.Count; i++)
             {
-                enemysNav[i].enabled = true;
+                enemys[i].SetEnabledPathFind(true);
                 enemys[i].ChangeUnitState(UnitState.Battle);
+                AddUseEnemyList(enemys[i]);
+                enemys.Remove(enemys[i]);
             }
         }
         else
