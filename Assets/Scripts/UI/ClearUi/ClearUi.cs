@@ -1,44 +1,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class ClearUi : MonoBehaviour
+public class ClearUi : View
 {
     public ClearHeroInfo clearHeroPref;
     public Transform heroTr;
     public Rewards rewards;
     
-    List<ClearHeroInfo> heroes = new();
-    string expFormat = "+{0}";
+    private List<ClearHeroInfo> heroes = new();
 
-    private void Awake()
-    {
-        //heros = heroTr.GetComponentsInChildren<ClearHeroInfo>();
-        //foreach (var hero in heros)
-        //{
-        //    hero.SetInfo(1, 0); //실행될때 히어로 정보(레벨, 경험치 등 가져오기)
-        //}
-    }
+    //private void Awake()
+    //{
+    //    //heros = heroTr.GetComponentsInChildren<ClearHeroInfo>();
+    //    //foreach (var hero in heros)
+    //    //{
+    //    //    hero.SetInfo(1, 0); //실행될때 히어로 정보(레벨, 경험치 등 가져오기)
+    //    //}
+    //}
 
-    public void SetHeroes(List<AttackableHero> heroes)
+    public void SetHeroes(List<AttackableHero> _heroes)
     {
-        foreach(var hero in heroes)
+        foreach(var hero in _heroes)
         {
             var data = hero.GetUnitData().data;
             var heroInfo = Instantiate(clearHeroPref, heroTr);
-            heroInfo.SetInfo((int)data.level, (int)data.exp);
+            heroInfo.SetInfo(data.level, data.exp);
 
-            this.heroes.Add(heroInfo);
+            heroes.Add(heroInfo);
         }
     }
 
-    public void Clear()
+    public void SetData()
     {
         var count = Random.Range(5, 10);
 
         foreach (var hero in heroes)
         {
             var exp = 400;
-            hero.getExp.text = string.Format(expFormat, exp);
+            hero.getExp.text = $"+{exp}";
             hero.Clear(400);
         }
 

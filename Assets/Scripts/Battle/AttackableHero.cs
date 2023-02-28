@@ -32,7 +32,6 @@ public abstract class AttackableHero : AttackableUnit
                 case UnitState.ReturnPosition: // 재배치
                     animator.SetBool("IsBattle", false);
                     animator.SetTrigger("Run");
-
                     pathFind.isStopped = false;
                     pathFind.SetDestination(returnPos.position); //재배치 위치 설정
                     pathFind.stoppingDistance = 0; //가까이 가기
@@ -48,6 +47,7 @@ public abstract class AttackableHero : AttackableUnit
                 case UnitState.Battle:
                     animator.SetBool("IsBattle", true);
                     BattleState = UnitBattleState.MoveToTarget;
+                    Logger.Debug("battle");
                     battleManager.GetEnemyList(ref enemyList);
                     pathFind.stoppingDistance = characterData.attack.distance;
                     pathFind.speed = characterData.data.moveSpeed;
