@@ -69,7 +69,7 @@ public class GameManager : Singleton<GameManager>
 
         List<AsyncOperationHandle> handles = new();
 
-        // Resoureces 테이블로 뺄 예정
+        // Resources 테이블로 뺄 예정
         List<string> spriteAddress = new()
         {
             "다인",
@@ -147,15 +147,15 @@ public class GameManager : Singleton<GameManager>
         }
 
         // Test Key Start
-        //if (Input.GetKeyDown(KeyCode.K))
-        //{
-        //    SaveAllData();
-        //}
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            SaveAllData();
+        }
 
-        //if (Input.GetKeyDown(KeyCode.L))
-        //{
-        //    LoadAllData();
-        //}
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadAllData();
+        }
         // Test Key End
     }
 
@@ -176,6 +176,7 @@ public class GameManager : Singleton<GameManager>
             sb.AppendLine($"Hero_{data.name};{JsonUtility.ToJson(data)}");
         }
         File.WriteAllText(GetSaveFilePath(), sb.ToString());
+        Logger.Debug(sb);
     }
 
     public void LoadAllData()
@@ -207,6 +208,7 @@ public class GameManager : Singleton<GameManager>
                     Logger.Debug($"Load failed {heroName}");
                 }
             }
+            Logger.Debug($"{item["ID"]}:{item["Contents"]}");
         }
     }
 
