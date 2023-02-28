@@ -29,7 +29,7 @@ public class MissionButtonZoom : MonoBehaviour
     {
         Vector3 targetPivot = Camera.main.ScreenToViewportPoint(pos);
         Vector3 targetScale = originalScale * zoomAmount;
-        Vector3 targetAnchoredPosition = new Vector2(-547, -73);
+        Vector3 targetAnchoredPosition = new Vector2(0, 0);
 
         foreach (var mark in marks)
         {
@@ -45,7 +45,7 @@ public class MissionButtonZoom : MonoBehaviour
             float t = elapsedTime / zoomDuration;
             mapImageRectTransform.pivot = Vector3.Lerp(originalPivot, targetPivot, t);
             mapImageRectTransform.localScale = Vector3.Lerp(originalScale, targetScale, t);
-            mapImageRectTransform.anchoredPosition = Vector2.Lerp(originalAnchoredPosition, new Vector2(-547, -73), t);
+            mapImageRectTransform.anchoredPosition = Vector2.Lerp(originalAnchoredPosition, targetAnchoredPosition, t);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
