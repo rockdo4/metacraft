@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BattleUi : MonoBehaviour
+public class BattleUi : View
 {
     public Transform herosTr;
     public StageEnemy stageEnemy;

@@ -91,7 +91,7 @@ public class TestBattleManager : MonoBehaviour
     protected void SetStageClear()
     {
         UIManager.Instance.ShowView(1);
-        clearUi.Clear();
+        clearUi.SetData();
         Logger.Debug("Clear!");
     }
 }

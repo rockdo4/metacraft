@@ -149,15 +149,15 @@ public class GameManager : Singleton<GameManager>
         }
 
         // Test Key Start
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            SaveAllData();
-        }
+        //if (Input.GetKeyDown(KeyCode.K))
+        //{
+        //    SaveAllData();
+        //}
 
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            LoadAllData();
-        }
+        //if (Input.GetKeyDown(KeyCode.L))
+        //{
+        //    LoadAllData();
+        //}
         // Test Key End
     }
 
