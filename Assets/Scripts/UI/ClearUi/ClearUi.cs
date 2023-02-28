@@ -7,7 +7,7 @@ public class ClearUi : View
     public Transform heroTr;
     public Rewards rewards;
     
-    List<ClearHeroInfo> heroes = new();
+    private List<ClearHeroInfo> heroes = new();
 
     //private void Awake()
     //{
