@@ -156,6 +156,11 @@ public abstract class AttackableHero : AttackableUnit
             case UnitBattleState.BattleIdle:
                 if (target != null)
                 {
+                    if(target.GetHp() <= 0)
+                    {
+                        target = null;
+                        return;
+                    }
                     Vector3 targetDirection = target.transform.position - transform.position;
                     Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
                     transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 10);
