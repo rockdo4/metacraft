@@ -154,7 +154,7 @@ public abstract class AttackableHero : AttackableUnit
             //타겟에게 이동중이거나, 공격 대기중에 타겟이 죽으면 재탐색
             case UnitBattleState.MoveToTarget:
             case UnitBattleState.BattleIdle:
-                if (target != null)
+                if (target != null && target.gameObject.activeSelf)
                 {
                     if(target.GetHp() <= 0)
                     {
@@ -169,10 +169,10 @@ public abstract class AttackableHero : AttackableUnit
                     if (angle > 0)
                         return;
                 }
-                else if (target == null)
+                else if (target == null  || !target.gameObject.activeSelf)
                 {
                     SearchTarget();
-                    if (target != null)
+                    if (target != null && target.gameObject.activeSelf)
                     {
                         //if (InRangePassiveSkill && CanPassiveSkillTime)
                         //    BattleState = UnitBattleState.PassiveSkill;
@@ -291,7 +291,7 @@ public abstract class AttackableHero : AttackableUnit
     {
         base.NormalAttackEnd();
         lastNormalAttackTime = Time.time;
-        if (target == null)
+        if (target == null  || !target.gameObject.activeSelf)
         {
             BattleState = UnitBattleState.BattleIdle;
         }
@@ -307,7 +307,7 @@ public abstract class AttackableHero : AttackableUnit
     public override void PassiveSkillEnd()
     {
         lastPassiveSkillTime = Time.time;
-        if (target == null)
+        if (target == null  || !target.gameObject.activeSelf)
         {
             BattleState = UnitBattleState.BattleIdle;
         }
@@ -321,7 +321,7 @@ public abstract class AttackableHero : AttackableUnit
     public override void ActiveSkillEnd()
     {
         base.ActiveSkillEnd();
-        if (target == null)
+        if (target == null  || !target.gameObject.activeSelf)
         {
             BattleState = UnitBattleState.BattleIdle;
         }

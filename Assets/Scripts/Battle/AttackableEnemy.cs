@@ -123,7 +123,7 @@ public abstract class AttackableEnemy : AttackableUnit
             //타겟에게 이동중이거나, 공격 대기중에 타겟이 죽으면 재탐색
             case UnitBattleState.MoveToTarget:
             case UnitBattleState.BattleIdle:
-                if (target != null)
+                if (target != null && target.gameObject.activeSelf)
                 {
                     if (target.GetHp() <= 0)
                     {
@@ -138,10 +138,10 @@ public abstract class AttackableEnemy : AttackableUnit
                     if (angle > 0)
                         return;
                 }
-                else if (target == null)
+                else if (target == null  || !target.gameObject.activeSelf)
                 {
                     SearchTarget();
-                    if (target != null)
+                    if (target != null && target.gameObject.activeSelf)
                     {
                         if (InRangeNormalAttack && CanNormalAttackTime)
                             BattleState = UnitBattleState.NormalAttack;
@@ -235,7 +235,7 @@ public abstract class AttackableEnemy : AttackableUnit
     {
         base.NormalAttackEnd();
         lastNormalAttackTime = Time.time;
-        if (target == null)
+        if (target == null  || !target.gameObject.activeSelf)
         {
             BattleState = UnitBattleState.BattleIdle;
         }
@@ -254,4 +254,15 @@ public abstract class AttackableEnemy : AttackableUnit
         base.ActiveSkillEnd();
     }
 
+    public AttackableEnemy TestGetIsBattle()
+    {
+        if (UnitState == UnitState.Battle)
+            return this;
+        else
+            return null;
+    }
+    public void SetEnabledPathFind(bool set)
+    {
+        pathFind.enabled = set;
+    }
 }

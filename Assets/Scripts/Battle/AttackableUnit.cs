@@ -14,6 +14,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected NavMeshAgent pathFind;
 
+    [SerializeField]
     protected AttackableUnit target;
     [SerializeField]
     protected List<AttackableHero> heroList;

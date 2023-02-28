@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class EnemySpawningAndPositioning : MonoBehaviour
 {
@@ -42,10 +43,7 @@ public class EnemySpawningAndPositioning : MonoBehaviour
         }
 
         // 리스폰 후 다시 코루틴 시작
-        //var spawnEnemy = SpawnEnemy(parents);
-        //spawnEnemy.ChangeUnitState(UnitState.Battle);
-        //enemyPool.Add(spawnEnemy);
-
+        enemyPool[spawnCount].SetEnabledPathFind(true);
         enemyPool[spawnCount].gameObject.SetActive(true);
         enemyPool[spawnCount].ChangeUnitState(UnitState.Battle);
 
