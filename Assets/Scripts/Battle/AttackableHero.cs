@@ -121,7 +121,7 @@ public abstract class AttackableHero : AttackableUnit
     public virtual void SetUi(HeroUi _heroUI)
     {
         heroUI = _heroUI;
-        BattleState = UnitBattleState.ActiveSkill;
+        //BattleState = UnitBattleState.ActiveSkill;
         heroUI.heroSkill.Set(characterData.activeSkill.cooldown, ActiveSkill); //±Ã±Ø±â ÄðÅ¸ÀÓ°ú ±Ã±Ø±â ÇÔ¼ö µî·Ï
     }
 
