@@ -254,4 +254,15 @@ public abstract class AttackableEnemy : AttackableUnit
         base.ActiveSkillEnd();
     }
 
+    public AttackableEnemy TestGetIsBattle()
+    {
+        if (UnitState == UnitState.Battle)
+            return this;
+        else
+            return null;
+    }
+    public void SetEnabledPathFind(bool set)
+    {
+        pathFind.enabled = set;
+    }
 }

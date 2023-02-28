@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TestBattleManager : MonoBehaviour
 {
@@ -16,7 +17,6 @@ public class TestBattleManager : MonoBehaviour
     private void Awake()
     {
         //히어로 만들고, 히어로 ui만들고 서로 연결
-
         for (int i = 0; i < startPositions.Count; i++)
         {
             var hero = Instantiate(heroPref, startPositions[i].position, Quaternion.identity, heroList.transform);
