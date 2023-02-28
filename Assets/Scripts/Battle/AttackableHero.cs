@@ -140,6 +140,7 @@ public abstract class AttackableHero : AttackableUnit
     public override void ActiveSkill()
     {
         target.OnDamage(177);
+        BattleState = UnitBattleState.ActiveSkill;
         //characterData.activeSkill.TestDataInput(characterData.data);
         //characterData.activeSkill.OnActive();
         //coWhileActiveSkill = StartCoroutine(characterData.activeSkill.SkillCoroutine());
@@ -260,6 +261,8 @@ public abstract class AttackableHero : AttackableUnit
 
     public override void ChangeUnitState(UnitState state)
     {
+        if (BattleState == UnitBattleState.ActiveSkill)
+            return;
         UnitState = state;
     }
     public override void ChangeBattleState(UnitBattleState state)
@@ -317,6 +320,12 @@ public abstract class AttackableHero : AttackableUnit
     public override void ActiveSkillEnd()
     {
         base.ActiveSkillEnd();
+
+        if(enemyList.Count == 0)
+        {
+            ChangeUnitState(UnitState.ReturnPosition);
+        }    
+
         if (!IsAlive(target))
         {
             BattleState = UnitBattleState.BattleIdle;
