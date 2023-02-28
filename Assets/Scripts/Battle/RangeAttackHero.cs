@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 public class RangeAttackHero : AttackableHero
@@ -31,6 +32,9 @@ public class RangeAttackHero : AttackableHero
 
     public override void NormalAttack()
     {
+        if (BattleState == UnitBattleState.ActiveSkill)
+            return;
+
         base.NormalAttack();
 
         if (characterData.attack.count == 1)
@@ -55,9 +59,9 @@ public class RangeAttackHero : AttackableHero
             }
         }
 
-        attackEnemies.OrderBy(t => Vector3.Distance(transform.position, t.transform.position));
+       attackEnemies =  attackEnemies.OrderBy(t => Vector3.Distance(transform.position, t.transform.position)).ToList();
 
-        var cnt = Mathf.Min(attackEnemies.Count, characterData.attack.count);
+        var cnt = Mathf.Min(attackEnemies.Count(), characterData.attack.count);
         for (int i = 0; i < cnt; i++)
         {
             attackEnemies[i].OnDamage(characterData.data.baseDamage, false);
@@ -89,4 +93,11 @@ public class RangeAttackHero : AttackableHero
 
         base.BattleUpdate();
     }
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, characterData.attack.angle / 2, characterData.attack.distance);
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -characterData.attack.angle / 2, characterData.attack.distance);
+    }
+#endif
 }

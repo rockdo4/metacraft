@@ -11,6 +11,8 @@ public class CovertAttackHero : AttackableHero
 
     public override void NormalAttack()
     {
+        if (BattleState == UnitBattleState.ActiveSkill)
+            return;
         base.NormalAttack();
         //Logger.Debug("Hero_NormalAttack");
 
@@ -36,7 +38,7 @@ public class CovertAttackHero : AttackableHero
             }
         }
 
-        attackEnemies.OrderBy(t => Vector3.Distance(transform.position, t.transform.position));
+        attackEnemies = attackEnemies.OrderBy(t => Vector3.Distance(transform.position, t.transform.position)).ToList();
 
         var cnt = Mathf.Min(attackEnemies.Count, characterData.attack.count);
         for (int i = 0; i < cnt; i++)

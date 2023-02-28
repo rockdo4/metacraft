@@ -10,7 +10,7 @@ using UnityEngine.SceneManagement;
 public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
-    public GameRule gameRule;
+    public PlayerData playerData;
 
     // Origin Database - Set Prefab & Scriptable Objects
     public List<GameObject> heroDatabase = new();
@@ -31,6 +31,7 @@ public class GameManager : Singleton<GameManager>
     public override void Awake()
     {
         base.Awake();
+        LoadAllData();
         StartCoroutine(LoadAllResources());
     }
 
@@ -147,23 +148,86 @@ public class GameManager : Singleton<GameManager>
             // 메뉴 버튼
         }
 
-        // Test Key
+        // Test Key Start
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            SaveAllData();
+        }
+
         if (Input.GetKeyDown(KeyCode.L))
         {
-            StringBuilder sb = new();
-            int count = 0;
-            sb.AppendLine("{");
-            foreach (var hero in myHeroes)
-            {
-                LiveData data = hero.GetComponent<CharacterDataBundle>().data;
-                count++;
-                sb.Append($"\"{data.name}\":\n{JsonUtility.ToJson(data, true)}");
-                if (myHeroes.Count != count)
-                    sb.AppendLine(",");
-            }
-            sb.Append("\n}");
-            File.WriteAllText($"{Application.persistentDataPath}/saveTest.json", sb.ToString());
+            LoadAllData();
         }
+        // Test Key End
+    }
+
+    public void OnApplicationQuit()
+    {
+        SaveAllData();
+    }
+
+    public void SaveAllData()
+    {
+        StringBuilder sb = new();
+        sb.AppendLine("ID;Contents");
+        sb.AppendLine($"PlayerData;{JsonUtility.ToJson(playerData)}");
+
+        foreach (var hero in myHeroes)
+        {
+            LiveData data = hero.GetComponent<CharacterDataBundle>().data;
+            sb.AppendLine($"Hero_{data.name};{JsonUtility.ToJson(data)}");
+        }
+        File.WriteAllText(GetSaveFilePath(), sb.ToString());
+    }
+
+    public void LoadAllData()
+    {
+        if (!File.Exists(GetSaveFilePath()))
+            return;
+
+        var loadData = CSVReader.ReadByPath(GetSaveFilePath(), false);
+        foreach ( var item in loadData)
+        {
+            string id = item["ID"].ToString();
+            string contents = item["Contents"].ToString();
+            if (id.Equals("PlayerData"))
+            {
+                playerData = JsonUtility.FromJson<PlayerData>(contents);
+            }
+            else if (id.Contains("Hero_"))
+            {
+                string heroName = id[5..];
+                GameObject newHero = CreateNewHero(heroName);
+                if (newHero != null)
+                {
+                    newHero.GetComponent<CharacterDataBundle>().data.SetLoad(contents);
+                    newHero.name = heroName;
+                    myHeroes.Add(newHero);
+                }
+                else
+                {
+                    Logger.Debug($"Load failed {heroName}");
+                }
+            }
+        }
+    }
+
+
+    public GameObject CreateNewHero(string heroName)
+    {
+        return CreateNewHero(GetHeroIndex(heroName));
+    }
+
+    public GameObject CreateNewHero(int index)
+    {
+        if (index == -1)
+            return null;
+        return Instantiate(heroDatabase[index], heroSpawnTransform);
+    }
+
+    private string GetSaveFilePath()
+    {
+        return $"{Application.persistentDataPath}/SaveFile.msf";
     }
 
     public void LoadScene(int sceneIdx)
@@ -181,17 +245,21 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public int GetHeroIndex(GameObject hero)
+    public int GetHeroIndex(string heroName)
     {
-        int count = myHeroes.Count;
+        int count = heroDatabase.Count;
         for (int i = 0; i < count; i++)
         {
-            string tableName = myHeroes[i].GetComponent<CharacterDataBundle>().data.name;
-            string selectHeroName = hero.GetComponent<CharacterDataBundle>().data.name;
-            if (tableName.Equals(selectHeroName))
+            string tableName = heroDatabase[i].GetComponent<CharacterDataBundle>().originData.name;
+            if (tableName.Equals(heroName))
                 return i;
         }
         return -1;
+    }
+
+    public int GetHeroIndex(GameObject hero)
+    {
+        return GetHeroIndex(hero.GetComponent<CharacterDataBundle>().data.name);
     }
 
     public Sprite GetSpriteByAddress(string address)

@@ -28,9 +28,10 @@ public abstract class AttackableEnemy : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
-                    animator.SetFloat("IsBattle", 1);
+                    animator.SetBool("IsBattle", true);
                     BattleState = UnitBattleState.MoveToTarget;
-                    pathFind.stoppingDistance = characterData.attack.distance * 0.9f; //가까이 가기
+                    battleManager.GetHeroList(ref heroList);
+                    pathFind.stoppingDistance = characterData.attack.distance * 0.95f; //가까이 가기
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
                     nowUpdate = BattleUpdate;
@@ -70,7 +71,6 @@ public abstract class AttackableEnemy : AttackableUnit
                 case UnitBattleState.NormalAttack:
                     animator.ResetTrigger("Run"); //문제가 생겨서 임시. 
                     animator.SetTrigger("IsAttack");
-                    animator.SetFloat("SkillType", 0);
                     //NormalAttackAction();
                     break;
                 case UnitBattleState.PassiveSkill:
@@ -98,10 +98,6 @@ public abstract class AttackableEnemy : AttackableUnit
         floatingDamageText = GetComponent<AttackedDamageUI>();
         hpBarManager = GetComponent<HpBarManager>();
         hpBarManager.SetHp(hp, hp);
-
-        //pathFind.stoppingDistance = characterData.attack.distance * 0.9f; //가까이 가기
-        //pathFind.speed = characterData.data.moveSpeed;
-        battleManager.GetHeroList(ref heroList);
     }
     protected abstract void SearchTarget(); //각각의 캐릭터가 탐색 조건이 다름.
 
@@ -127,10 +123,25 @@ public abstract class AttackableEnemy : AttackableUnit
             //타겟에게 이동중이거나, 공격 대기중에 타겟이 죽으면 재탐색
             case UnitBattleState.MoveToTarget:
             case UnitBattleState.BattleIdle:
-                if (target == null)
+                if (target != null && target.gameObject.activeSelf)
+                {
+                    if (target.GetHp() <= 0)
+                    {
+                        target = null;
+                        return;
+                    }
+                    Vector3 targetDirection = target.transform.position - transform.position;
+                    Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
+                    transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 10);
+
+                    float angle = Quaternion.Angle(transform.rotation, targetRotation);
+                    if (angle > 0)
+                        return;
+                }
+                else if (target == null  || !target.gameObject.activeSelf)
                 {
                     SearchTarget();
-                    if (target != null)
+                    if (target != null && target.gameObject.activeSelf)
                     {
                         if (InRangeNormalAttack && CanNormalAttackTime)
                             BattleState = UnitBattleState.NormalAttack;
@@ -217,14 +228,14 @@ public abstract class AttackableEnemy : AttackableUnit
     public override void OnDead(AttackableUnit unit)
     {
         battleManager.OnDeadEnemy((AttackableEnemy)unit);
-        pathFind.enabled = false;
     }
 
     //타겟이 없으면 Idle로 가고, 쿨타임 계산해서 바로 스킬 가능하면 사용, 아니라면 대기
     public override void NormalAttackEnd()
     {
+        base.NormalAttackEnd();
         lastNormalAttackTime = Time.time;
-        if (target == null)
+        if (target == null  || !target.gameObject.activeSelf)
         {
             BattleState = UnitBattleState.BattleIdle;
         }
@@ -240,6 +251,7 @@ public abstract class AttackableEnemy : AttackableUnit
     }
     public override void ActiveSkillEnd()
     {
+        base.ActiveSkillEnd();
     }
 
     public AttackableEnemy TestGetIsBattle()

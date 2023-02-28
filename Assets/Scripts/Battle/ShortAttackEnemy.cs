@@ -32,7 +32,7 @@ public class ShortAttackEnemy : AttackableEnemy
             }
         }
 
-        attackHeroes.OrderBy(t => Vector3.Distance(transform.position, t.transform.position));
+        attackHeroes = attackHeroes.OrderBy(t => Vector3.Distance(transform.position, t.transform.position)).ToList();
 
         var cnt = Mathf.Min(attackHeroes.Count, characterData.attack.count);
         for (int i = 0; i < cnt; i++)

@@ -34,7 +34,7 @@ public class BeltScrollBattleManager : TestBattleManager
         // Test
         for (int i = 0; i < useHeroes.Count; i++)
         {
-            Invoke("OnReady", 1f);
+            Invoke(nameof(OnReady), 1f);
         }
 
         enemyCountTxt.Count = GetAllEnemyCount();
@@ -110,6 +110,7 @@ public class BeltScrollBattleManager : TestBattleManager
     }
     private void SetStageFail()
     {
+        Time.timeScale = 0;
         UIManager.Instance.ShowView(2);
         Logger.Debug("Fail!");
     }
