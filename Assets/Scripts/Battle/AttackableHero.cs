@@ -190,7 +190,6 @@ public abstract class AttackableHero : AttackableUnit
                 //if (InRangePassiveSkill && CanPassiveSkillTime)
                 //    BattleState = UnitBattleState.PassiveSkill;
                 //else 
-                Logger.Debug(transform.GetSiblingIndex() + " + " + Vector3.Distance(target.transform.position, transform.position));
                 if (InRangeNormalAttack)
                     BattleState = CanNormalAttackTime ? UnitBattleState.NormalAttack : UnitBattleState.BattleIdle;
                 else if (Time.time - lastNavTime > navDelay) //일반공격, 패시브 사용 불가 거리일시 이동

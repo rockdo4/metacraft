@@ -117,10 +117,11 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     public virtual void ActiveSkillEnd()
     {
-        if (target.UnitHp <= 0)
-        {
-            target = null;
-        }
+        if (target != null)
+            if (target.UnitHp <= 0)
+            {
+                target = null;
+            }
     }
 
     protected abstract void IdleUpdate();

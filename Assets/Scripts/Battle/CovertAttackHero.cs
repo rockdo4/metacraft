@@ -60,9 +60,6 @@ public class CovertAttackHero : AttackableHero
     {
         base.ActiveSkill();
 
-        target.OnDamage(characterData.data.baseDamage * 3, true);
-        return;
-
     }
 
     protected override void SearchTarget()
@@ -70,7 +67,7 @@ public class CovertAttackHero : AttackableHero
         if(heroList.Count == 1)
             SearchNearbyTarget(heroList); //근거리 타겟 추적
         else
-            SearchMinHealthTarget(enemyList); //체력이 가장 많은 타겟 추적
+            SearchMinHealthTarget(enemyList); //체력이 가장 적은 타겟 추적
     }
 
 #if UNITY_EDITOR
