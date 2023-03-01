@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -31,7 +30,7 @@ public abstract class AttackableEnemy : AttackableUnit
                     animator.SetBool("IsBattle", true);
                     BattleState = UnitBattleState.MoveToTarget;
                     battleManager.GetHeroList(ref heroList);
-                    pathFind.stoppingDistance = characterData.attack.distance * 0.95f;
+                    pathFind.stoppingDistance = characterData.attack.distance ;
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
                     nowUpdate = BattleUpdate;
@@ -64,12 +63,15 @@ public abstract class AttackableEnemy : AttackableUnit
             {
                 case UnitBattleState.MoveToTarget:
                     animator.SetTrigger("Run");
+                    animator.ResetTrigger("Idle");
                     break;
                 case UnitBattleState.BattleIdle:
+                    animator.ResetTrigger("Run");
                     animator.SetTrigger("Idle");
                     break;
                 case UnitBattleState.NormalAttack:
                     animator.ResetTrigger("Run"); //문제가 생겨서 임시. 
+                    animator.ResetTrigger("Idle");
                     animator.SetTrigger("IsAttack");
                     //NormalAttackAction();
                     break;
@@ -123,26 +125,20 @@ public abstract class AttackableEnemy : AttackableUnit
             //타겟에게 이동중이거나, 공격 대기중에 타겟이 죽으면 재탐색
             case UnitBattleState.MoveToTarget:
             case UnitBattleState.BattleIdle:
-                if (target != null && target.gameObject.activeSelf)
+                if (IsAlive(target))
                 {
-                    if (target.UnitHp <= 0)
-                    {
-                        target = null;
-                        return;
-                    }
                     Vector3 targetDirection = target.transform.position - transform.position;
                     Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
                     transform.rotation = Quaternion.Lerp(transform.rotation, targetRotation, Time.deltaTime * 10);
-
-                    float angle = Quaternion.Angle(transform.rotation, targetRotation);
-                    if (angle > 0)
-                        return;
                 }
-                else if (target == null  || !target.gameObject.activeSelf)
+                else
                 {
                     SearchTarget();
-                    if (target != null && target.gameObject.activeSelf)
+                    if (IsAlive(target))
                     {
+                        //if (InRangePassiveSkill && CanPassiveSkillTime)   
+                        //    BattleState = UnitBattleState.PassiveSkill;
+                        //else
                         if (InRangeNormalAttack && CanNormalAttackTime)
                             BattleState = UnitBattleState.NormalAttack;
                         else
@@ -157,8 +153,8 @@ public abstract class AttackableEnemy : AttackableUnit
         switch (BattleState)
         {
             case UnitBattleState.MoveToTarget: //타겟에게 이동중 타겟 거리 계산.
-                if (InRangeNormalAttack && CanNormalAttackTime)
-                    BattleState = UnitBattleState.NormalAttack;
+                if (InRangeNormalAttack)
+                    BattleState = CanNormalAttackTime ? UnitBattleState.NormalAttack : UnitBattleState.BattleIdle;
                 else if (Time.time - lastNavTime > navDelay) //일반공격, 패시브 사용 불가 거리일시 이동
                 {
                     lastNavTime = Time.time;

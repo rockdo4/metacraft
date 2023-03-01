@@ -1,3 +1,14 @@
+public enum UnitType
+{
+    None = -1,
+    Rush,
+    Range,
+    Support,
+    Assassin,
+    Defense,
+    Count
+}
+
 public enum UnitState
 {
     None = -1,

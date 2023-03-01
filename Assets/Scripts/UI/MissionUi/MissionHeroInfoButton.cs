@@ -13,6 +13,7 @@ public class MissionHeroInfoButton : HeroInfoButton
         data = dataBundle.data;
         energyConsumption.text = data.energy.ToString();
         hpBar.maxValue = data.healthPoint;
+        hpBar.value = data.currentHp;
     }
 
     public override void OnClick()
