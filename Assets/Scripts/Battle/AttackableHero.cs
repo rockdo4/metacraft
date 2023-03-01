@@ -30,6 +30,7 @@ public abstract class AttackableHero : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.ReturnPosition: // 재배치
+                    BattleState = UnitBattleState.None;
                     animator.SetBool("IsBattle", false);
                     animator.SetTrigger("Run");
                     pathFind.isStopped = false;
@@ -40,7 +41,6 @@ public abstract class AttackableHero : AttackableUnit
                 case UnitState.MoveNext:
                     animator.ResetTrigger("Idle");
                     animator.SetTrigger("Run");
-                    BattleState = UnitBattleState.None;
                     pathFind.isStopped = false;
                     nowUpdate = MoveNextUpdate;
                     break;
@@ -139,7 +139,8 @@ public abstract class AttackableHero : AttackableUnit
     }
     public override void ActiveSkill()
     {
-        target.OnDamage(177);
+        if(IsAlive(target)) //임시코드라 타겟에 직접 데미지를 줘야해서 null체크.
+            target.OnDamage(177);
         BattleState = UnitBattleState.ActiveSkill;
         //characterData.activeSkill.TestDataInput(characterData.data);
         //characterData.activeSkill.OnActive();
@@ -320,19 +321,14 @@ public abstract class AttackableHero : AttackableUnit
     {
         base.ActiveSkillEnd();
 
-        if(enemyList.Count == 0)
+        if (enemyList.Count == 0)
         {
-            ChangeUnitState(UnitState.ReturnPosition);
-        }    
-
-        if (!IsAlive(target))
+            UnitState = UnitState.ReturnPosition ;
+        }
+        else if (!IsAlive(target))
         {
             BattleState = UnitBattleState.BattleIdle;
         }
-        //else if (InRangePassiveSkill && CanPassiveSkillTime)
-        //{
-        //    BattleState = UnitBattleState.PassiveSkill;
-        //}
         else if (InRangeNormalAttack && CanNormalAttackTime)
         {
             BattleState = UnitBattleState.NormalAttack;
@@ -341,5 +337,9 @@ public abstract class AttackableHero : AttackableUnit
         {
             BattleState = UnitBattleState.BattleIdle;
         }
+        //else if (InRangePassiveSkill && CanPassiveSkillTime)
+        //{
+        //    BattleState = UnitBattleState.PassiveSkill;
+        //}
     }
 }
