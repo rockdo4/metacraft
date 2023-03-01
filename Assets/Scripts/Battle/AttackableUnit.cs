@@ -114,10 +114,11 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     public virtual void ActiveSkillEnd()
     {
-        if (target.UnitHp <= 0)
-        {
-            target = null;
-        }
+        if (target != null)
+            if (target.UnitHp <= 0)
+            {
+                target = null;
+            }
     }
 
     protected abstract void IdleUpdate();
@@ -231,7 +232,7 @@ public abstract class AttackableUnit : MonoBehaviour
         float minHp = int.MaxValue;
         float minDis = int.MaxValue;
 
-        for (int i = 1; i < list.Count; i++)
+        for (int i = 0; i < list.Count; i++)
         {
             if (!IsAlive(list[i]))
                 continue;
