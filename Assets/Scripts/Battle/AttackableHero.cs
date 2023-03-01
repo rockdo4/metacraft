@@ -79,8 +79,8 @@ public abstract class AttackableHero : AttackableUnit
             switch (battleState)
             {
                 case UnitBattleState.MoveToTarget:
-                    animator.SetTrigger("Run");
                     animator.ResetTrigger("Idle");
+                    animator.SetTrigger("Run");
                     break;
                 case UnitBattleState.BattleIdle:
                     animator.ResetTrigger("Run");
@@ -98,6 +98,8 @@ public abstract class AttackableHero : AttackableUnit
                     //PassiveSkillAction();
                     break;
                 case UnitBattleState.ActiveSkill:
+                    animator.ResetTrigger("Run"); //문제가 생겨서 임시. 
+                    animator.ResetTrigger("Idle");
                     //animator.ResetTrigger("Run");
                     animator.SetTrigger("Active");
                     //ActiveSkillAction();
@@ -139,9 +141,10 @@ public abstract class AttackableHero : AttackableUnit
     }
     public override void ActiveSkill()
     {
-        if(IsAlive(target)) //임시코드라 타겟에 직접 데미지를 줘야해서 null체크.
-            target.OnDamage(177);
+        pathFind.isStopped = true;
         BattleState = UnitBattleState.ActiveSkill;
+        if(IsAlive(target)) //임시코드라 타겟에 직접 데미지를 줘야해서 null체크.원래라면 이것도 상속받는 함수가 가지고 있어야 함.
+            target.OnDamage(177);
         //characterData.activeSkill.TestDataInput(characterData.data);
         //characterData.activeSkill.OnActive();
         //coWhileActiveSkill = StartCoroutine(characterData.activeSkill.SkillCoroutine());
@@ -319,6 +322,7 @@ public abstract class AttackableHero : AttackableUnit
     }
     public override void ActiveSkillEnd()
     {
+        pathFind.isStopped = false;
         base.ActiveSkillEnd();
 
         if (enemyList.Count == 0)
