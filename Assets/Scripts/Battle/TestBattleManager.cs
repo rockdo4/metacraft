@@ -18,7 +18,6 @@ public class TestBattleManager : MonoBehaviour
 
     private void Awake()
     {
-
         int index = 0;
         List<GameObject> selectedHeroes = GameManager.Instance.GetSelectedHeroes();
         int notNullCount = 0;
@@ -33,10 +32,10 @@ public class TestBattleManager : MonoBehaviour
                 var hero = Instantiate(heroPref, startPositions[i].position, Quaternion.identity, heroList.transform);
                 var heroNav = hero.GetComponent<NavMeshAgent>();
                 heroNav.enabled = true;
-                heroUiList[i].gameObject.SetActive(true);
+                //heroUiList[i].gameObject.SetActive(true);
 
-                hero.SetUi(heroUiList[i]);
-                heroUiList[i].SetHeroInfo(hero.GetUnitData());
+                //hero.SetUi(heroUiList[i]);
+                //heroUiList[i].SetHeroInfo(hero.GetUnitData());
                 useHeroes.Add(hero);
             }
         }
@@ -47,7 +46,7 @@ public class TestBattleManager : MonoBehaviour
                 if (hero != null)
                 {
                     hero.SetActive(true);
-                    Utils.CopyTransform(hero, startPositions[index]);
+                    Utils.CopyPositionAndRotation(hero, startPositions[index]);
                     NavMeshAgent heroNav = hero.GetComponent<NavMeshAgent>();
                     heroNav.enabled = true;
                     AttackableHero attackableHero = hero.GetComponent<AttackableHero>();
@@ -92,7 +91,7 @@ public class TestBattleManager : MonoBehaviour
     }
     public virtual void OnDeadEnemy(AttackableEnemy enemy)
     {
-        enemyCountTxt.DimEnemy();
+        enemyCountTxt.DieEnemy();
     }
     public virtual void GetEnemyList(ref List<AttackableEnemy> enemyList) { }
     public virtual void OnReady()

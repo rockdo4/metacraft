@@ -295,11 +295,13 @@ public abstract class AttackableUnit : MonoBehaviour
         return tempList;
     }
 
-// Test
-public abstract void OnDead(AttackableUnit unit);
+    // Test
+    public abstract void OnDead(AttackableUnit unit);
     public void DestroyUnit()
     {
-        Destroy(gameObject, 1f);
+        // 이 부분 로테이션 이상할 시 바꿔야함
+        Utils.CopyTransform(gameObject, gameObject.transform.parent);
+        gameObject.SetActive(false);
     }
 
     public void SetBattleManager(TestBattleManager manager)

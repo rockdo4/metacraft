@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Utils
@@ -34,5 +33,10 @@ public class Utils
     {
         gameObject.transform.SetPositionAndRotation(dest.position, dest.rotation);
         gameObject.transform.localScale = dest.localScale;
+    }
+
+    public static void CopyPositionAndRotation(GameObject gameObject, Transform dest)
+    {
+        gameObject.transform.SetPositionAndRotation(dest.position, dest.rotation);
     }
 }
