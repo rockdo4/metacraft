@@ -64,7 +64,7 @@ public abstract class AttackableEnemy : AttackableUnit
                     pathFind.isStopped = false;
                     break;
                 case UnitBattleState.BattleIdle:
-                    pathFind.isStopped = false;
+                    pathFind.isStopped = true;
                     break;
                 case UnitBattleState.NormalAttack:
                     pathFind.isStopped = true;

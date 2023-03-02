@@ -35,12 +35,12 @@ public abstract class AttackableHero : AttackableUnit
                     nowUpdate = ReturnPosUpdate;
                     break;
                 case UnitState.MoveNext:
-                    animator.SetFloat("Speed", characterData.data.moveSpeed);
                     pathFind.isStopped = false;
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
                     pathFind.isStopped = false;
+                    pathFind.speed = characterData.data.moveSpeed;
                     BattleState = UnitBattleState.MoveToTarget;
                     battleManager.GetEnemyList(ref enemyList);
                     battleManager.GetHeroList(ref heroList);
@@ -144,7 +144,7 @@ public abstract class AttackableHero : AttackableUnit
             //타겟에게 이동중이거나, 공격 대기중에 타겟이 죽으면 재탐색
             case UnitBattleState.MoveToTarget:
             case UnitBattleState.BattleIdle:
-                animator.SetFloat("Speed", pathFind.speed / characterData.data.moveSpeed);
+                animator.SetFloat("Speed", pathFind.velocity.magnitude / characterData.data.moveSpeed);
                 if (IsAlive(target))
                 {
                     Vector3 targetDirection = target.transform.position - transform.position;
@@ -217,6 +217,9 @@ public abstract class AttackableHero : AttackableUnit
 
     protected override void MoveNextUpdate()
     {
+        var nowSpeed = animator.GetFloat("Speed");
+        nowSpeed = Mathf.Lerp(nowSpeed, 1, Time.deltaTime * 5f);
+        animator.SetFloat("Speed", nowSpeed);
     }
 
     protected override void ReturnPosUpdate()
@@ -227,6 +230,10 @@ public abstract class AttackableHero : AttackableUnit
                 transform.rotation = Quaternion.Lerp(transform.rotation, returnPos.rotation, Time.deltaTime * 5);
                 float angle = Quaternion.Angle(transform.rotation, returnPos.rotation);
 
+                var nowSpeed = animator.GetFloat("Speed");
+                var downSpeed = Mathf.Lerp(0, 1, Time.deltaTime * 5f);
+                animator.SetFloat("Speed", nowSpeed - downSpeed);
+
                 if (angle <= 0)
                 {
                     UnitState = UnitState.Idle;
@@ -236,6 +243,7 @@ public abstract class AttackableHero : AttackableUnit
             case false:
                 if (Vector3.Distance(returnPos.position, transform.position) <= 0.5f)
                 {
+                    animator.SetFloat("Speed", pathFind.velocity.magnitude / characterData.data.moveSpeed);
                     pathFind.isStopped = true;
                     transform.position = returnPos.position;
                 }
