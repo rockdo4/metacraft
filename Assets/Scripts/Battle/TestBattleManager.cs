@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 
 public class TestBattleManager : MonoBehaviour
 {
@@ -9,7 +8,7 @@ public class TestBattleManager : MonoBehaviour
     public AttackableHero heroPref;
     public List<HeroUi> heroUiList;
     public List<Transform> startPositions;
-    protected List<AttackableHero> useHeroes = new();
+    public List<AttackableHero> useHeroes = new();
     public StageEnemy enemyCountTxt;
 
     public ClearUi clearUi;
@@ -19,18 +18,49 @@ public class TestBattleManager : MonoBehaviour
 
     private void Awake()
     {
-        //히어로 만들고, 히어로 ui만들고 서로 연결
-        for (int i = 0; i < startPositions.Count; i++)
-        {
-            var hero = Instantiate(heroPref, startPositions[i].position, Quaternion.identity, heroList.transform);
-            var heroNav = hero.GetComponent<NavMeshAgent>();
-            heroNav.enabled = true;
-            heroUiList[i].gameObject.SetActive(true);
 
-            hero.SetUi(heroUiList[i]);
-            heroUiList[i].SetHeroInfo(hero.GetUnitData());
-            useHeroes.Add(hero);
+        int index = 0;
+        List<GameObject> selectedHeroes = GameManager.Instance.GetSelectedHeroes();
+        int notNullCount = 0;
+        foreach (GameObject hero in selectedHeroes)
+            if (hero != null) notNullCount++;
+
+        if (notNullCount == 0)
+        {
+            //히어로 만들고, 히어로 ui만들고 서로 연결
+            for (int i = 0; i < startPositions.Count; i++)
+            {
+                var hero = Instantiate(heroPref, startPositions[i].position, Quaternion.identity, heroList.transform);
+                var heroNav = hero.GetComponent<NavMeshAgent>();
+                heroNav.enabled = true;
+                heroUiList[i].gameObject.SetActive(true);
+
+                hero.SetUi(heroUiList[i]);
+                heroUiList[i].SetHeroInfo(hero.GetUnitData());
+                useHeroes.Add(hero);
+            }
         }
+        else
+        {
+            foreach (GameObject hero in selectedHeroes)
+            {
+                if (hero != null)
+                {
+                    hero.SetActive(true);
+                    Utils.CopyTransform(hero, startPositions[index]);
+                    NavMeshAgent heroNav = hero.GetComponent<NavMeshAgent>();
+                    heroNav.enabled = true;
+                    AttackableHero attackableHero = hero.GetComponent<AttackableHero>();
+                    attackableHero.SetBattleManager(this);
+                    attackableHero.SetUi(heroUiList[index]);
+                    heroUiList[index].SetHeroInfo(attackableHero.GetUnitData());
+                    heroUiList[index].gameObject.SetActive(true);
+                    useHeroes.Add(attackableHero);
+                }
+                index++;
+            }
+        }
+
         clearUi.SetHeroes(useHeroes);
 
         readyCount = useHeroes.Count;
@@ -91,7 +121,7 @@ public class TestBattleManager : MonoBehaviour
     protected void SetStageClear()
     {
         UIManager.Instance.ShowView(1);
-        clearUi.Clear();
+        clearUi.SetData();
         Logger.Debug("Clear!");
     }
 }

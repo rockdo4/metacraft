@@ -105,7 +105,6 @@ MonoBehaviour:
   target: {fileID: 0}
   heroList: []
   enemyList: []
-  hp: 0
   unitState: 0
   battleState: 0
 --- !u!114 &8489007089072879663
@@ -133,15 +132,16 @@ MonoBehaviour:
     baseDamage: 50
     baseDefense: 0
     healthPoint: 500
+    currentHp: 500
     moveSpeed: 3
     critical: 0
     criticalDmg: 2
     evasion: 0
     accuracy: 0.5
     synergys: 
-  attack: {fileID: 11400000, guid: 5fcd1894dfa1ef54e9871c0977379d2e, type: 2}
-  activeSkill: {fileID: 11400000, guid: 0835dcdb3becd4a48b30fa7c1680f849, type: 2}
-  passiveSkill: {fileID: 11400000, guid: 0835dcdb3becd4a48b30fa7c1680f849, type: 2}
+  attack: {fileID: 11400000, guid: d5b9a7358e0855b46acac612b4428307, type: 2}
+  activeSkill: {fileID: 11400000, guid: c9f64039ca8bd8146ae8d8344c554f5f, type: 2}
+  passiveSkill: {fileID: 11400000, guid: 72914e2e9e922d84eb7b5c550ed005df, type: 2}
 --- !u!1001 &8489007089377315228
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -260,4 +260,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d32210bb7c1ee77498f0919b502ecaa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unit: {fileID: 0}
+  unit: {fileID: 6991144328854555625}

@@ -17,7 +17,7 @@ public class HeroInfoButton : MonoBehaviour
         bundle = dataBundle;
         data = dataBundle.data;
         heroNameText.text = data.name;
-        gradeText.text = data.grade;
+        gradeText.text = $"{(CharacterGrade)data.grade}";
         jobText.text = data.job;
         levelText.text = data.level.ToString();
         icon.sprite = GameManager.Instance.iconSprites[$"Icon_{data.name}"];

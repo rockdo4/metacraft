@@ -117,14 +117,17 @@ public class MissionManager : MonoBehaviour
         {
             foreach (var hero in selectedHeroes)
             {
-                if (hero.GetComponent<CharacterDataBundle>().data.job.Equals(fitProperties[i].text))
+                if (hero != null)
                 {
-                    fitProperties[i].fontStyle = FontStyles.Bold;
-                    fitProperties[i].color = Color.red;
-                    break;
+                    if (hero.GetComponent<CharacterDataBundle>().data.job.Equals(fitProperties[i].text))
+                    {
+                        fitProperties[i].fontStyle = FontStyles.Bold;
+                        fitProperties[i].color = Color.red;
+                        break;
+                    }
+                    fitProperties[i].fontStyle = FontStyles.Normal;
+                    fitProperties[i].color = Color.white;
                 }
-                fitProperties[i].fontStyle = FontStyles.Normal;
-                fitProperties[i].color = Color.white;
             }
         }
     }
@@ -137,7 +140,8 @@ public class MissionManager : MonoBehaviour
         int totalPower = 0;
         foreach (var hero in selectedHeroes)
         {
-            totalPower += hero.GetComponent<CharacterDataBundle>().data.Power;
+            if (hero != null)
+                totalPower += hero.GetComponent<CharacterDataBundle>().data.Power;
         }
         var properCombatPower = missionInfoTable[missionNum]["ProperCombatPower"];
         ProperCombatPower.text = $"{totalPower}/{properCombatPower}";

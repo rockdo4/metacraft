@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -137,7 +136,7 @@ public abstract class AttackableEnemy : AttackableUnit
                     SearchTarget();
                     if (IsAlive(target))
                     {
-                        //if (InRangePassiveSkill && CanPassiveSkillTime)
+                        //if (InRangePassiveSkill && CanPassiveSkillTime)   
                         //    BattleState = UnitBattleState.PassiveSkill;
                         //else
                         if (InRangeNormalAttack && CanNormalAttackTime)
@@ -145,6 +144,8 @@ public abstract class AttackableEnemy : AttackableUnit
                         else
                             BattleState = UnitBattleState.MoveToTarget;
                     }
+                    else
+                        return;
                 }
                 break;
         }

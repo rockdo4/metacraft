@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -30,9 +28,9 @@ public abstract class AttackableHero : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.ReturnPosition: // 재배치
+                    BattleState = UnitBattleState.None;
                     animator.SetBool("IsBattle", false);
                     animator.SetTrigger("Run");
-
                     pathFind.isStopped = false;
                     pathFind.SetDestination(returnPos.position); //재배치 위치 설정
                     pathFind.stoppingDistance = 0; //가까이 가기
@@ -41,13 +39,13 @@ public abstract class AttackableHero : AttackableUnit
                 case UnitState.MoveNext:
                     animator.ResetTrigger("Idle");
                     animator.SetTrigger("Run");
-                    BattleState = UnitBattleState.None;
                     pathFind.isStopped = false;
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
                     animator.SetBool("IsBattle", true);
                     BattleState = UnitBattleState.MoveToTarget;
+                    Logger.Debug("battle");
                     battleManager.GetEnemyList(ref enemyList);
                     pathFind.stoppingDistance = characterData.attack.distance;
                     pathFind.speed = characterData.data.moveSpeed;
@@ -79,8 +77,8 @@ public abstract class AttackableHero : AttackableUnit
             switch (battleState)
             {
                 case UnitBattleState.MoveToTarget:
-                    animator.SetTrigger("Run");
                     animator.ResetTrigger("Idle");
+                    animator.SetTrigger("Run");
                     break;
                 case UnitBattleState.BattleIdle:
                     animator.ResetTrigger("Run");
@@ -98,6 +96,8 @@ public abstract class AttackableHero : AttackableUnit
                     //PassiveSkillAction();
                     break;
                 case UnitBattleState.ActiveSkill:
+                    animator.ResetTrigger("Run"); //문제가 생겨서 임시. 
+                    animator.ResetTrigger("Idle");
                     //animator.ResetTrigger("Run");
                     animator.SetTrigger("Active");
                     //ActiveSkillAction();
@@ -139,9 +139,13 @@ public abstract class AttackableHero : AttackableUnit
     }
     public override void ActiveSkill()
     {
-        //target.OnDamage(177);        
-        characterData.activeSkill.OnActive();
-        coWhileActiveSkill = StartCoroutine(characterData.activeSkill.SkillCoroutine());
+        pathFind.isStopped = true;
+        BattleState = UnitBattleState.ActiveSkill;
+        if(IsAlive(target)) //임시코드라 타겟에 직접 데미지를 줘야해서 null체크.원래라면 이것도 상속받는 함수가 가지고 있어야 함.
+            target.OnDamage(177);
+        //characterData.activeSkill.TestDataInput(characterData.data);
+        //characterData.activeSkill.OnActive();
+        //coWhileActiveSkill = StartCoroutine(characterData.activeSkill.SkillCoroutine());
     }
 
     protected override void IdleUpdate()
@@ -188,7 +192,6 @@ public abstract class AttackableHero : AttackableUnit
                 //if (InRangePassiveSkill && CanPassiveSkillTime)
                 //    BattleState = UnitBattleState.PassiveSkill;
                 //else 
-                Logger.Debug(transform.GetSiblingIndex() + " + " + Vector3.Distance(target.transform.position, transform.position));
                 if (InRangeNormalAttack)
                     BattleState = CanNormalAttackTime ? UnitBattleState.NormalAttack : UnitBattleState.BattleIdle;
                 else if (Time.time - lastNavTime > navDelay) //일반공격, 패시브 사용 불가 거리일시 이동
@@ -259,6 +262,8 @@ public abstract class AttackableHero : AttackableUnit
 
     public override void ChangeUnitState(UnitState state)
     {
+        if (BattleState == UnitBattleState.ActiveSkill)
+            return;
         UnitState = state;
     }
     public override void ChangeBattleState(UnitBattleState state)
@@ -315,15 +320,17 @@ public abstract class AttackableHero : AttackableUnit
     }
     public override void ActiveSkillEnd()
     {
+        pathFind.isStopped = false;
         base.ActiveSkillEnd();
-        if (!IsAlive(target))
+
+        if (enemyList.Count == 0)
+        {
+            UnitState = UnitState.ReturnPosition ;
+        }
+        else if (!IsAlive(target))
         {
             BattleState = UnitBattleState.BattleIdle;
         }
-        //else if (InRangePassiveSkill && CanPassiveSkillTime)
-        //{
-        //    BattleState = UnitBattleState.PassiveSkill;
-        //}
         else if (InRangeNormalAttack && CanNormalAttackTime)
         {
             BattleState = UnitBattleState.NormalAttack;
@@ -332,5 +339,9 @@ public abstract class AttackableHero : AttackableUnit
         {
             BattleState = UnitBattleState.BattleIdle;
         }
+        //else if (InRangePassiveSkill && CanPassiveSkillTime)
+        //{
+        //    BattleState = UnitBattleState.PassiveSkill;
+        //}
     }
 }

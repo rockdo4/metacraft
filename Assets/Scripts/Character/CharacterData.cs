@@ -6,10 +6,11 @@ using UnityEngine;
 public class CharacterData : ScriptableObject, IComparable<CharacterData>
 {
     public new string   name;               // 이름
-    public string       grade;              // 등급
-    public string       job;                // 직업
+    [Range(1, 5)]
+    public int          grade;              // 등급
+    public int          maxGrade;           // 승급 가능 최대 등급
 
-    public string       maxGrade;           // 승급 가능 최대 등급
+    public string       job;                // 직업, 특성
     public int          energy;             // 활동력 소모량
 
     [Range(1, 20)]

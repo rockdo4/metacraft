@@ -6,17 +6,15 @@ using System.Text;
 [Serializable]
 public class LiveData : IComparable<LiveData>
 {
-    public string name;               // 이름
-    public string grade;              // 등급
-    public string job;                // 직업
+    public string name;            // 이름
+    public int grade;              // 등급
+    public int maxGrade;           // 승급 가능 최대 등급
 
-    public string maxGrade;           // 승급 가능 최대 등급
+    public string job;             // 직업, 특성
     public int energy;             // 활동력 소모량
 
-    [Range(1, 20)]
     public int level = 1;          // 레벨
     public int exp;                // 경험치
-    [Range(0, 1000)]
     public int likeability;        // 호감도
 
     public int Power
@@ -32,13 +30,9 @@ public class LiveData : IComparable<LiveData>
     public int healthPoint = 500;   // 최대 체력
     public int currentHp = 500;   // 현재 체력
     public int moveSpeed = 3;        // 이동 속도. 범위, 초기값 설정 필요
-    [Range(0f, 1f)]
     public float critical = 0f;      // 크리티컬 확률
-    [Range(1f, 10f)]
     public float criticalDmg = 2f;   // 크리티컬 데미지 배율
-    [Range(0f, 1f)]
     public float evasion = 0f;       // 회피율
-    [Range(0f, 1f)]
     public float accuracy = 1f;    // 명중률
 
     public List<int> synergys;       // 시너지 리스트. 정수 or Enum으로 가지고 있다가
@@ -53,8 +47,8 @@ public class LiveData : IComparable<LiveData>
     {
         name = originData.name;
         grade = originData.grade;
-        job = originData.job;
         maxGrade = originData.maxGrade;
+        job = originData.job;
         energy = originData.energy;
         
         level = 1;
@@ -80,8 +74,8 @@ public class LiveData : IComparable<LiveData>
 
         name = parseData.name;
         grade = parseData.grade;
-        job = parseData.job;
         maxGrade = parseData.maxGrade;
+        job = parseData.job;
         energy = parseData.energy;
 
         level = parseData.level;

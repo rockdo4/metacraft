@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 
 public abstract class AttackableUnit : MonoBehaviour
 {
@@ -75,7 +72,10 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected virtual void Awake()
     {
-        battleManager = FindObjectOfType<TestBattleManager>();
+        var manager = FindObjectOfType<TestBattleManager>();
+        if (manager != null)
+            battleManager = manager;
+
         animator = GetComponentInChildren<Animator>();
     }
     protected void SetData()
@@ -114,10 +114,11 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     public virtual void ActiveSkillEnd()
     {
-        if (target.UnitHp <= 0)
-        {
-            target = null;
-        }
+        if (target != null)
+            if (target.UnitHp <= 0)
+            {
+                target = null;
+            }
     }
 
     protected abstract void IdleUpdate();
@@ -231,7 +232,7 @@ public abstract class AttackableUnit : MonoBehaviour
         float minHp = int.MaxValue;
         float minDis = int.MaxValue;
 
-        for (int i = 1; i < list.Count; i++)
+        for (int i = 0; i < list.Count; i++)
         {
             if (!IsAlive(list[i]))
                 continue;
@@ -299,5 +300,10 @@ public abstract void OnDead(AttackableUnit unit);
     public void DestroyUnit()
     {
         Destroy(gameObject, 1f);
+    }
+
+    public void SetBattleManager(TestBattleManager manager)
+    {
+        battleManager = manager;
     }
 }

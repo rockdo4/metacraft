@@ -19,7 +19,7 @@ public class HeroUi : MonoBehaviour
     {
         heroData = data;
         heroImage.sprite = GameManager.Instance.iconSprites[$"Icon_{heroData.data.name}"];
-        SetHp(heroData.data.healthPoint);
+        SetHp(heroData.data.currentHp);
     }
 
     private void Awake()

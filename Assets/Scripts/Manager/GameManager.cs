@@ -26,7 +26,8 @@ public class GameManager : Singleton<GameManager>
 
     // Office Select
     public GameObject currentSelectObject; // Hero Info
-    public List<int?> battleGroups = new(3) { null, null, null }; // Mission select -> Battle Scene
+    public Dictionary<string, object> currentSelectMission; // Mission Select
+    public List<int?> battleGroups = new(3) { null, null, null }; // Mission Select -> Battle Scene
 
     public override void Awake()
     {
@@ -49,9 +50,7 @@ public class GameManager : Singleton<GameManager>
 
         foreach (int? idx in battleGroups)
         {
-            if (idx == null)
-                continue;
-            selectedHeroes.Add(myHeroes[(int)idx]);
+            selectedHeroes.Add(idx == null ? null : myHeroes[(int)idx]);
         }
 
         return selectedHeroes;
@@ -71,7 +70,7 @@ public class GameManager : Singleton<GameManager>
 
         List<AsyncOperationHandle> handles = new();
 
-        // Resoureces 테이블로 뺄 예정
+        // Resources 테이블로 뺄 예정
         List<string> spriteAddress = new()
         {
             "다인",
@@ -80,9 +79,9 @@ public class GameManager : Singleton<GameManager>
             "한서은",
             "돌격형",
             "방어형",
+            "사격형",
             "지원형",
             "은밀형",
-            "원거리",
         };
 
         foreach (string address in spriteAddress)
@@ -178,6 +177,7 @@ public class GameManager : Singleton<GameManager>
             sb.AppendLine($"Hero_{data.name};{JsonUtility.ToJson(data)}");
         }
         File.WriteAllText(GetSaveFilePath(), sb.ToString());
+        Logger.Debug(sb);
     }
 
     public void LoadAllData()
@@ -209,6 +209,7 @@ public class GameManager : Singleton<GameManager>
                     Logger.Debug($"Load failed {heroName}");
                 }
             }
+            Logger.Debug($"{item["ID"]}:{item["Contents"]}");
         }
     }
 
