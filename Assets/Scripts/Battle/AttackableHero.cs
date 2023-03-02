@@ -144,6 +144,7 @@ public abstract class AttackableHero : AttackableUnit
     {        
         if (coOnIndicator != null)
         {
+            characterData.activeSkill.SkillCancle();
             StopCoroutine(coOnIndicator);
             coOnIndicator = null;
             return;
@@ -158,9 +159,9 @@ public abstract class AttackableHero : AttackableUnit
         StopCoroutine(coOnIndicator);
         coOnIndicator = null;
     }    
-    public void OnActiveSkill()
-    {        
-        characterData.activeSkill.OnActive();
+    public override void OnActiveSkill()
+    {
+        characterData.activeSkill.OnActiveSkill();
     }
 
     protected override void IdleUpdate()
@@ -300,6 +301,8 @@ public abstract class AttackableHero : AttackableUnit
     {
         battleManager.OnDeadHero((AttackableHero)unit);
         heroUI.SetDieImage();
+
+        characterData.activeSkill.SkillCancle();
     }
 
     //타겟이 없으면 Idle로 가고, 쿨타임 계산해서 바로 스킬 가능하면 사용, 아니라면 대기

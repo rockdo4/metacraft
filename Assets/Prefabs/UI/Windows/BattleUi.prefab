@@ -93,7 +93,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 3270393158830189407}
           m_TargetAssemblyTypeName: HeroSkill, Assembly-CSharp
-          m_MethodName: IsInskillActivedPanelArea
+          m_MethodName: IsPointerInSkillActivedPanel
           m_Mode: 6
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -105,7 +105,7 @@ MonoBehaviour:
           m_CallState: 2
         - m_Target: {fileID: 6169069848393226457}
           m_TargetAssemblyTypeName: HeroSkill, Assembly-CSharp
-          m_MethodName: IsInskillActivedPanelArea
+          m_MethodName: IsPointerInSkillActivedPanel
           m_Mode: 6
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -117,7 +117,7 @@ MonoBehaviour:
           m_CallState: 2
         - m_Target: {fileID: 9179155079343524336}
           m_TargetAssemblyTypeName: HeroSkill, Assembly-CSharp
-          m_MethodName: IsInskillActivedPanelArea
+          m_MethodName: IsPointerInSkillActivedPanel
           m_Mode: 6
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -133,7 +133,7 @@ MonoBehaviour:
         m_Calls:
         - m_Target: {fileID: 3270393158830189407}
           m_TargetAssemblyTypeName: HeroSkill, Assembly-CSharp
-          m_MethodName: IsInskillActivedPanelArea
+          m_MethodName: IsPointerInSkillActivedPanel
           m_Mode: 6
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -145,7 +145,7 @@ MonoBehaviour:
           m_CallState: 2
         - m_Target: {fileID: 6169069848393226457}
           m_TargetAssemblyTypeName: HeroSkill, Assembly-CSharp
-          m_MethodName: IsInskillActivedPanelArea
+          m_MethodName: IsPointerInSkillActivedPanel
           m_Mode: 6
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -157,7 +157,7 @@ MonoBehaviour:
           m_CallState: 2
         - m_Target: {fileID: 9179155079343524336}
           m_TargetAssemblyTypeName: HeroSkill, Assembly-CSharp
-          m_MethodName: IsInskillActivedPanelArea
+          m_MethodName: IsPointerInSkillActivedPanel
           m_Mode: 6
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -1593,7 +1593,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -1618,7 +1618,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -1639,7 +1639,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1498804876145463244}
+      objectReference: {fileID: 3270393158830189407}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -1678,7 +1678,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
+      value: OnUpSkillActive
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -1698,7 +1698,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
+      value: HeroSkill, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -2030,7 +2030,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -2055,7 +2055,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -2076,7 +2076,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1498804876145463244}
+      objectReference: {fileID: 9179155079343524336}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -2115,7 +2115,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
+      value: OnUpSkillActive
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -2135,7 +2135,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
+      value: HeroSkill, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -2343,7 +2343,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -2368,7 +2368,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -2389,7 +2389,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1498804876145463244}
+      objectReference: {fileID: 6169069848393226457}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -2428,7 +2428,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
+      value: OnUpSkillActive
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -2448,7 +2448,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
+      value: HeroSkill, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}

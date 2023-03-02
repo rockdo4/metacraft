@@ -11,7 +11,9 @@ public class HeroSkill : MonoBehaviour
     [SerializeField]
     private GameObject skillActivedPanel;
 
-    bool isInskillActivedPanelArea = false;
+    private float prevTimeScale;
+
+    private bool isPointerInSkillActivedPanel;
     private float CoolDownFill {
         set {
             skillCoolDownImage.fillAmount = value;
@@ -59,13 +61,14 @@ public class HeroSkill : MonoBehaviour
         {
             effect();
             SetActiveSkillGUIs(true);
+            isPointerInSkillActivedPanel = false;
+
+            prevTimeScale = Time.timeScale;
+            Time.timeScale = 0.25f;
         }
     }
     public void CancleSkill()
-    {
-        if (!skillActivedHighlight.activeSelf)
-            return;
-
+    {        
         effect();
         SetActiveSkillGUIs(false);
     }
@@ -73,7 +76,12 @@ public class HeroSkill : MonoBehaviour
     {
         if (!skillActivedHighlight.activeSelf)
             return;
-        
+
+        Time.timeScale = prevTimeScale;
+
+        if (!isPointerInSkillActivedPanel)
+            CancleSkill();
+
         action();
         SetActiveSkillGUIs(false);
         CoolDownFill = 1;
@@ -85,9 +93,9 @@ public class HeroSkill : MonoBehaviour
         skillActivedHighlight.SetActive(active);
         skillActivedPanel.SetActive(active);
     }
-    public void IsInskillActivedPanelArea(bool isIn)
+
+    public void IsPointerInSkillActivedPanel(bool isIn)
     {
-        isInskillActivedPanelArea = isIn;
-        Logger.Debug(isIn);
+        isPointerInSkillActivedPanel = isIn;        
     }
 }

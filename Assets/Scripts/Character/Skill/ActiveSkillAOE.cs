@@ -53,8 +53,8 @@ public class ActiveSkillAOE : CharacterSkill
             skillAreaIndicator.transform.position = hit.point + Vector3.up * 0.1f;
         }        
     }
-    public void OnActiveSkill()
-    {
+    public override void OnActiveSkill()
+    {        
         var targets = skillAreaIndicator.GetUnitsInArea();
 
         foreach(var target in targets)
@@ -62,6 +62,10 @@ public class ActiveSkillAOE : CharacterSkill
             target.OnDamage(222);
         }
 
+        skillAreaIndicator.gameObject.SetActive(false);
+    }
+    public override void SkillCancle()
+    {
         skillAreaIndicator.gameObject.SetActive(false);
     }
 }

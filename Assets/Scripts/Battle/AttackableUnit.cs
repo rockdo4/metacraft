@@ -101,6 +101,7 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void NormalAttack();
     public abstract void PassiveSkill();
     public abstract void ReadyActiveSkill();
+    public virtual void OnActiveSkill() { }
 
     public virtual void NormalAttackEnd()
     {
@@ -127,6 +128,7 @@ public abstract class AttackableUnit : MonoBehaviour
     protected abstract void DieUpdate();
     protected abstract void MoveNextUpdate();
     protected abstract void ReturnPosUpdate();
+    
 
     public abstract void OnDamage(int dmg, bool isCritical = false);
 
