@@ -17,4 +17,5 @@ public class PlayerData
     public int currentGameDay = 0;
     public int cumulateGameDay = 0;
     public int gold = 0;
+    public int battleSpeedIdx = 0;
 }
