@@ -5,9 +5,9 @@ using UnityEngine;
 public class ActiveSkillAOE : CharacterSkill
 {
     public SkillAreaIndicator skillAreaIndicator;    
-    private bool isInit = false;    
     private Camera cam;
-    private int layerMask;
+    public LayerMask layerM;    
+    public bool isInit = false;    
 
     public bool isAutoTargeting;
     public float castRangeLimit;
@@ -18,36 +18,40 @@ public class ActiveSkillAOE : CharacterSkill
     public bool isCriticalPossible;
     public override void OnActive()
     {
-        if(!isInit)
-        {
-            layerMask = 1 << 8;
+        if (isInit)
+            return;
 
-            skillAreaIndicator = Instantiate(skillAreaIndicator);            
-            skillAreaIndicator.gameObject.SetActive(false);
+        //layerM = 1 << 8;
 
-            cam = Camera.main;
- 
-            isInit = true;
-        }
+        skillAreaIndicator = Instantiate(skillAreaIndicator);
+        skillAreaIndicator.gameObject.SetActive(false);
+
+        cam = Camera.main;
+
+        isInit = true;
     } 
     public override IEnumerator SkillCoroutine()
     {
+        OnActive();
+
         skillAreaIndicator.gameObject.SetActive(true);
 
         while (true)
         {
+            MoveIndicator();
+
             if (TryActiveSkill())
                 yield break;
 
-            MoveIndicator();
             yield return null;
         }
     }
     private void MoveIndicator()
-    {
+    {        
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100.0f, layerMask))
+        
+        if (Physics.Raycast(ray, out hit, 100.0f, layerM))
         {            
             skillAreaIndicator.transform.position = hit.point + Vector3.up * 0.1f;
         }        

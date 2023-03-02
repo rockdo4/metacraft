@@ -4,8 +4,6 @@ using System.Collections;
 [CreateAssetMenu(fileName = "CharacterSkill", menuName = "Character/CharacterSkill")]
 public class CharacterSkill : ScriptableObject
 {
-    public LiveDataInBattle battleData;
-
     public int      id;
     public string   skillName;
     
@@ -18,11 +16,6 @@ public class CharacterSkill : ScriptableObject
     // 공격 이외 디버프, 버프도 있을 수 있기 때문에 적용으로 명명함
     // 일반 스킬(평타)을 해당 클래스 통해서 작성
     public SkillCoefficientType coefficientType; // 스킬 계수 타입. 공격력, 방어력, 체력 등등    
-
-    public void TestDataInput(LiveData liveData)
-    {
-        battleData.Init(liveData);
-    }
     public virtual void OnActive()
     {
 

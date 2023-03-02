@@ -20,7 +20,7 @@ public class HeroInfoDetailScript : View
         LiveData data = GameManager.Instance.currentSelectObject.GetComponent<AttackableUnit>().GetUnitData().data;
         portrait.sprite = GameManager.Instance.GetSpriteByAddress($"Illur_{data.name}");
 
-        gradeInfoInLeftPanel.text = data.grade;
+        gradeInfoInLeftPanel.text = $"{(CharacterGrade)data.grade}";
         levelInfoInfoInLeftPanel.text = data.level.ToString();
         StringBuilder stringBuilder = new();
         stringBuilder.Append($"히어로 명 : {data.name}\n");
