@@ -30,7 +30,7 @@ public class SkillAreaIndicator : MonoBehaviour
     }
     public List<AttackableUnit> GetUnitsInArea()
     {
-        List<AttackableUnit> container = new(unitsInArea.Count);
+        List<AttackableUnit> container = new (unitsInArea.Count);
 
         foreach (Collider collider in unitsInArea)
         {

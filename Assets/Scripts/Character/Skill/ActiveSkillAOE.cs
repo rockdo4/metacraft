@@ -6,7 +6,7 @@ public class ActiveSkillAOE : CharacterSkill
 {
     public SkillAreaIndicator skillAreaIndicator;    
     private Camera cam;
-    private int layerMask;
+    public LayerMask layerM;    
     public bool isInit = false;    
 
     public bool isAutoTargeting;
@@ -17,21 +17,23 @@ public class ActiveSkillAOE : CharacterSkill
     public SkillTargetType targetType;
     public bool isCriticalPossible;
     public override void OnActive()
-    {        
-        if(!isInit)
-        {
-            layerMask = 1 << 8;
+    {
+        if (isInit)
+            return;
 
-            skillAreaIndicator = Instantiate(skillAreaIndicator);            
-            skillAreaIndicator.gameObject.SetActive(false);
+        //layerM = 1 << 8;
 
-            cam = Camera.main;
- 
-            isInit = true;
-        }
+        skillAreaIndicator = Instantiate(skillAreaIndicator);
+        skillAreaIndicator.gameObject.SetActive(false);
+
+        cam = Camera.main;
+
+        isInit = true;
     } 
     public override IEnumerator SkillCoroutine()
     {
+        OnActive();
+
         skillAreaIndicator.gameObject.SetActive(true);
 
         while (true)
@@ -45,10 +47,11 @@ public class ActiveSkillAOE : CharacterSkill
         }
     }
     private void MoveIndicator()
-    {
+    {        
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100.0f, layerMask))
+        
+        if (Physics.Raycast(ray, out hit, 100.0f, layerM))
         {            
             skillAreaIndicator.transform.position = hit.point + Vector3.up * 0.1f;
         }        
