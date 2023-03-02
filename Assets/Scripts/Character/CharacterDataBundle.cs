@@ -16,6 +16,8 @@ public class CharacterDataBundle : MonoBehaviour, IComparable<CharacterDataBundl
     private void Awake()
     {
         InitSetting();
+
+        activeSkill = Instantiate(activeSkill);
     }
 
     public void InitSetting()
