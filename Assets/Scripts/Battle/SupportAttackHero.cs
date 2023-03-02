@@ -1,6 +1,4 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class SupportAttackHero : AttackableHero
@@ -88,6 +86,7 @@ public class SupportAttackHero : AttackableHero
     {
         if(moveToTeam)
         {
+            pathFind.SetDestination(target.transform.position);
             if (Vector3.Distance(target.transform.position, transform.position) < characterData.attack.distance/2)
             {
                 moveToTeam = false;
@@ -106,6 +105,8 @@ public class SupportAttackHero : AttackableHero
                 if (Time.time - lastSearchTime >= searchDelay)
                 {
                     SearchTarget();
+                    if (moveToTeam)
+                        return;
                 }
                 break;
         }
