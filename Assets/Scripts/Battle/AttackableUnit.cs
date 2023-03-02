@@ -107,10 +107,11 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public virtual void NormalAttackEnd()
     {
-        if(target.UnitHp <= 0)
-        {
-            target = null;
-        }
+        if (IsAlive(target))
+            if (target.UnitHp <= 0)
+            {
+                target = null;
+            }
     }
     public virtual void PassiveSkillEnd()
     {
@@ -298,8 +299,8 @@ public abstract class AttackableUnit : MonoBehaviour
         return tempList;
     }
 
-// Test
-public abstract void OnDead(AttackableUnit unit);
+    // Test
+    public abstract void OnDead(AttackableUnit unit);
     public void DestroyUnit()
     {
         Destroy(gameObject, 1f);

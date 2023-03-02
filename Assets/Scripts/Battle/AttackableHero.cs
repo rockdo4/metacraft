@@ -49,6 +49,7 @@ public abstract class AttackableHero : AttackableUnit
                     BattleState = UnitBattleState.MoveToTarget;
                     Logger.Debug("battle");
                     battleManager.GetEnemyList(ref enemyList);
+                    battleManager.GetHeroList(ref heroList);
                     pathFind.stoppingDistance = characterData.attack.distance;
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
@@ -286,6 +287,7 @@ public abstract class AttackableHero : AttackableUnit
     public override void OnDead(AttackableUnit unit)
     {
         battleManager.OnDeadHero((AttackableHero)unit);
+        heroUI.SetDieImage();
     }
 
     //타겟이 없으면 Idle로 가고, 쿨타임 계산해서 바로 스킬 가능하면 사용, 아니라면 대기

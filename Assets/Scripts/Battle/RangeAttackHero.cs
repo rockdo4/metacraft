@@ -15,19 +15,13 @@ public class RangeAttackHero : AttackableHero
     }
     protected override void SearchTarget()
     {
-        if (Time.time - lastSearchTime >= searchDelay)
-        {
-            lastSearchTime = Time.time;
-            var minTarget = GetSearchTargetInAround(enemyList, characterData.attack.distance / 2);
+        lastSearchTime = Time.time;
+        var minTarget = GetSearchTargetInAround(enemyList, characterData.attack.distance / 2);
 
-            if (minTarget != null)
-            {
-                target = minTarget;
-                return;
-            }
-
-        }
-        SearchMaxHealthTarget(enemyList); //체력이 가장 많은 타겟 추적
+        if (IsAlive(minTarget))
+            target = minTarget;
+        else
+            SearchMaxHealthTarget(enemyList); //체력이 가장 많은 타겟 추적
     }
 
     public override void NormalAttack()
@@ -80,12 +74,7 @@ public class RangeAttackHero : AttackableHero
             case UnitBattleState.BattleIdle:
                 if (Time.time - lastSearchTime >= searchDelay)
                 {
-                    var minTarget = GetSearchTargetInAround(enemyList, characterData.attack.distance/2);
-
-                    if (minTarget != null)
-                            target = minTarget;
-
-                    lastSearchTime = Time.time;
+                    SearchTarget();
                 }
                 break;
         }
