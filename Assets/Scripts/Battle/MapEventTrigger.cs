@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class MapEventTrigger : MonoBehaviour
 {
-    public TestBattleManager manager;
     public List<Transform> heroSettingPositions;
     [Header("적을 소환할 위치를 넣어주세요.")]
     public List<EnemySpawningAndPositioning> enemySettingPositions;
@@ -11,31 +10,8 @@ public class MapEventTrigger : MonoBehaviour
     public List<AttackableEnemy> enemys = new();        // 생성할 Enemy들
     public List<AttackableEnemy> useEnemys = new();     // 현재 생성된 Enemy들
 
-    public GameObject enemyPool; // Enemy GameObject들이 들어갈 부모
-
     [SerializeField, Header("마지막 관문일 때 체크해주세요")]
     public bool isStageEnd = false;
-
-    public virtual void OnTriggerEnter(Collider other)
-    {
-        if (other.GetComponent<AttackableHero>() != null)
-        {
-            for (int i = 0; i < enemys.Count; i++)
-            {
-                enemys[i].SetEnabledPathFind(true);
-                enemys[i].ChangeUnitState(UnitState.Battle);
-                AddUseEnemyList(enemys[i]);
-            }
-            enemys.Clear();
-        }
-        else
-        {
-            AttackableEnemy enemy = other.GetComponent<AttackableEnemy>();
-            AddUseEnemyList(enemy);
-            enemys.Remove(enemy);
-            manager.EnemyTriggerEnter();
-        }
-    }
 
     public void OnDead(AttackableEnemy enemy)
     {
