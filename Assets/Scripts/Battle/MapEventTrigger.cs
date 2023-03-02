@@ -25,8 +25,8 @@ public class MapEventTrigger : MonoBehaviour
                 enemys[i].SetEnabledPathFind(true);
                 enemys[i].ChangeUnitState(UnitState.Battle);
                 AddUseEnemyList(enemys[i]);
-                enemys.Remove(enemys[i]);
             }
+            enemys.Clear();
         }
         else
         {

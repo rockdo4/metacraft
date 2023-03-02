@@ -46,7 +46,7 @@ public class TestBattleManager : MonoBehaviour
                 if (hero != null)
                 {
                     hero.SetActive(true);
-                    Utils.CopyTransform(hero, startPositions[index]);
+                    Utils.CopyPositionAndRotation(hero, startPositions[index]);
                     NavMeshAgent heroNav = hero.GetComponent<NavMeshAgent>();
                     heroNav.enabled = true;
                     AttackableHero attackableHero = hero.GetComponent<AttackableHero>();
