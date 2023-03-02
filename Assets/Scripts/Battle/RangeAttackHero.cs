@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 public class RangeAttackHero : AttackableHero
@@ -14,25 +15,20 @@ public class RangeAttackHero : AttackableHero
     }
     protected override void SearchTarget()
     {
-        if (Time.time - lastSearchTime >= searchDelay)
-        {
-            lastSearchTime = Time.time;
-            var minTarget = GetSearchTargetInAround(enemyList, characterData.attack.distance / 2);
+        lastSearchTime = Time.time;
+        var minTarget = GetSearchTargetInAround(enemyList, characterData.attack.distance / 2);
 
-            if (minTarget != null)
-            {
-                target = minTarget;
-                return;
-            }
-
-        }
-        SearchMaxHealthTarget(enemyList); //체력이 가장 많은 타겟 추적
+        if (IsAlive(minTarget))
+            target = minTarget;
+        else
+            SearchMaxHealthTarget(enemyList); //체력이 가장 많은 타겟 추적
     }
 
     public override void NormalAttack()
     {
         if (BattleState == UnitBattleState.ActiveSkill)
             return;
+
         base.NormalAttack();
 
         if (characterData.attack.count == 1)
@@ -57,10 +53,9 @@ public class RangeAttackHero : AttackableHero
             }
         }
 
-        attackEnemies.OrderBy(t => Vector3.Distance(transform.position, t.transform.position));
+        attackEnemies = GetNearestUnitList(attackEnemies, characterData.attack.count);
 
-        var cnt = Mathf.Min(attackEnemies.Count, characterData.attack.count);
-        for (int i = 0; i < cnt; i++)
+        for (int i = 0; i < attackEnemies.Count; i++)
         {
             attackEnemies[i].OnDamage(characterData.data.baseDamage, false);
         }
@@ -79,16 +74,18 @@ public class RangeAttackHero : AttackableHero
             case UnitBattleState.BattleIdle:
                 if (Time.time - lastSearchTime >= searchDelay)
                 {
-                    var minTarget = GetSearchTargetInAround(enemyList, characterData.attack.distance/2);
-
-                    if (minTarget != null)
-                            target = minTarget;
-
-                    lastSearchTime = Time.time;
+                    SearchTarget();
                 }
                 break;
         }
 
         base.BattleUpdate();
     }
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, characterData.attack.angle / 2, characterData.attack.distance);
+        Handles.DrawSolidArc(transform.position, Vector3.up, transform.forward, -characterData.attack.angle / 2, characterData.attack.distance);
+    }
+#endif
 }

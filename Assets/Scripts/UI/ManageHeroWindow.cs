@@ -47,7 +47,7 @@ public class ManageHeroWindow : View
                 break;
 
             case 1:
-                copyCharacterTable.Sort((x, y) => { return x.data.grade.CompareTo(y.data.grade); });
+                copyCharacterTable.Sort((x, y) => { return -1 * x.data.grade.CompareTo(y.data.grade); });
                 break;
 
             case 2:
@@ -55,7 +55,7 @@ public class ManageHeroWindow : View
                 break;
 
             case 3:
-                copyCharacterTable.Sort((x, y) => { return x.data.level.CompareTo(y.data.level); });
+                copyCharacterTable.Sort((x, y) => { return -1 * x.data.level.CompareTo(y.data.level); });
                 break;
         }
 

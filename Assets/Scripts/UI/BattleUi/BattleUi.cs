@@ -1,14 +1,19 @@
 using UnityEngine;
 
-public class BattleUi : MonoBehaviour
+public class BattleUi : View
 {
     public Transform herosTr;
     public StageEnemy stageEnemy;
     public BattleMenu battleMenu;
     public Transform popUp;
+    private TestBattleManager manager;
+
+    private void Awake()
+    {
+        manager = FindObjectOfType<TestBattleManager>();
+    }
 
     public void SetEnemyCount(int c) => stageEnemy.Count = c;
-
 
     public void OnClickMenu()
     {
@@ -24,6 +29,7 @@ public class BattleUi : MonoBehaviour
     }
     public void ResetGame()
     {
+        manager.ResetHeroes();
         GameManager.Instance.ClearBattleGroups();
     }
 }

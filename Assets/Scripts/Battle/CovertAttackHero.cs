@@ -38,10 +38,9 @@ public class CovertAttackHero : AttackableHero
             }
         }
 
-        attackEnemies.OrderBy(t => Vector3.Distance(transform.position, t.transform.position));
+        attackEnemies = GetNearestUnitList(attackEnemies, characterData.attack.count);
 
-        var cnt = Mathf.Min(attackEnemies.Count, characterData.attack.count);
-        for (int i = 0; i < cnt; i++)
+        for (int i = 0; i < attackEnemies.Count; i++)
         {
             attackEnemies[i].OnDamage(characterData.data.baseDamage, false);
         }
@@ -61,9 +60,6 @@ public class CovertAttackHero : AttackableHero
     {
         base.ActiveSkill();
 
-        target.OnDamage(characterData.data.baseDamage * 3, true);
-        return;
-
     }
 
     protected override void SearchTarget()
@@ -71,7 +67,7 @@ public class CovertAttackHero : AttackableHero
         if(heroList.Count == 1)
             SearchNearbyTarget(heroList); //근거리 타겟 추적
         else
-            SearchMinHealthTarget(enemyList); //체력이 가장 많은 타겟 추적
+            SearchMinHealthTarget(enemyList); //체력이 가장 적은 타겟 추적
     }
 
 #if UNITY_EDITOR

@@ -27,7 +27,8 @@ public class GameManager : Singleton<GameManager>
 
     // Office Select
     public GameObject currentSelectObject; // Hero Info
-    public List<int?> battleGroups = new (3) { null, null, null }; // Mission select -> Battle Scene
+    public Dictionary<string, object> currentSelectMission; // Mission Select
+    public List<int?> battleGroups = new(3) { null, null, null }; // Mission Select -> Battle Scene
 
     // Dispatch Select
 
@@ -44,6 +45,18 @@ public class GameManager : Singleton<GameManager>
         {
             character.SetActive(false);
         }
+    }
+
+    public List<GameObject> GetSelectedHeroes()
+    {
+        List<GameObject> selectedHeroes = new();
+
+        foreach (int? idx in battleGroups)
+        {
+            selectedHeroes.Add(idx == null ? null : myHeroes[(int)idx]);
+        }
+
+        return selectedHeroes;
     }
 
     private IEnumerator LoadAllResources()
@@ -70,49 +83,35 @@ public class GameManager : Singleton<GameManager>
 
         List<AsyncOperationHandle> handles = new();
 
-        List<string> iconAddress = new()
+        // Resources 테이블로 뺄 예정
+        List<string> spriteAddress = new()
         {
-            "Icon_다인",
-            "Icon_신하루",
-            "Icon_이수빈",
-            "Icon_한서은",
-            "Icon_돌격형",
-            "Icon_방어형",
-            "Icon_지원형",
-            "Icon_은밀형",
-            "Icon_원거리",
-
+            "다인",
+            "신하루",
+            "이수빈",
+            "한서은",
+            "돌격형",
+            "방어형",
+            "사격형",
+            "지원형",
+            "은밀형",
         };
 
-        List<string> illustrationAddress = new()
+        foreach (string address in spriteAddress)
         {
-            "Illur_다인",
-            "Illur_신하루",
-            "Illur_이수빈",
-            "Illur_한서은",
-            "Illur_돌격형",
-            "Illur_방어형",
-            "Illur_지원형",
-            "Illur_은밀형",
-            "Illur_원거리",
-        };
-
-        foreach (string icon in iconAddress)
-        {
-            Addressables.LoadAssetAsync<Sprite>(icon).Completed +=
+            string iconKey = $"Icon_{address}";
+            Addressables.LoadAssetAsync<Sprite>(iconKey).Completed +=
                 (AsyncOperationHandle<Sprite> obj) =>
                 {
-                    iconSprites.Add(icon, obj.Result);
+                    iconSprites.Add(iconKey, obj.Result);
                     handles.Add(obj);
                 };
-        }
 
-        foreach (string illustration in illustrationAddress)
-        {
-            Addressables.LoadAssetAsync<Sprite>(illustration).Completed +=
+            string illurKey = $"Illur_{address}";
+            Addressables.LoadAssetAsync<Sprite>(illurKey).Completed +=
                 (AsyncOperationHandle<Sprite> obj) =>
                 {
-                    illustrationSprites.Add(illustration, obj.Result);
+                    illustrationSprites.Add(illurKey, obj.Result);
                     handles.Add(obj);
                 };
         }
@@ -191,6 +190,7 @@ public class GameManager : Singleton<GameManager>
             sb.AppendLine($"Hero_{data.name};{JsonUtility.ToJson(data)}");
         }
         File.WriteAllText(GetSaveFilePath(), sb.ToString());
+        Logger.Debug(sb);
     }
 
     public void LoadAllData()
@@ -199,7 +199,7 @@ public class GameManager : Singleton<GameManager>
             return;
 
         var loadData = CSVReader.ReadByPath(GetSaveFilePath(), false);
-        foreach ( var item in loadData)
+        foreach (var item in loadData)
         {
             string id = item["ID"].ToString();
             string contents = item["Contents"].ToString();
@@ -222,9 +222,9 @@ public class GameManager : Singleton<GameManager>
                     Logger.Debug($"Load failed {heroName}");
                 }
             }
+            Logger.Debug($"{item["ID"]}:{item["Contents"]}");
         }
     }
-
 
     public GameObject CreateNewHero(string heroName)
     {

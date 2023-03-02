@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class Utils
@@ -14,8 +13,8 @@ public class Utils
     //Non-duplicate random number generator
     public static List<int> DistinctRandomNumbers(int totalNumber, int requiredNumber)
     {
-        List<int> values = new List<int>();
-        List<int> spwanIndexes = new List<int>();
+        List<int> values = new();
+        List<int> spwanIndexes = new();
         for (int i = 0; i < totalNumber; i++)
         {
             values.Add(i);
@@ -28,5 +27,16 @@ public class Utils
             values.RemoveAt(a);
         }
         return spwanIndexes;
+    }
+
+    public static void CopyTransform(GameObject gameObject, Transform dest)
+    {
+        gameObject.transform.SetPositionAndRotation(dest.position, dest.rotation);
+        gameObject.transform.localScale = dest.localScale;
+    }
+
+    public static void CopyPositionAndRotation(GameObject gameObject, Transform dest)
+    {
+        gameObject.transform.SetPositionAndRotation(dest.position, dest.rotation);
     }
 }

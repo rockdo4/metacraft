@@ -7,9 +7,10 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     private Transform tr;
     [Header("생성할 적 프리펩을 넣어주세요")]
     public AttackableEnemy enemy;
-    [SerializeField, Header("해당 위치에 생성할 몬스터 마리수를 적어주세요")]
+    [SerializeField, Header("생성할 몬스터 마리수를 넣어주세요.")]
     public int enemyCount;
-    private int spawnCount;
+    private int spawnCount = 0;
+    public List<AttackableEnemy> enemys = new();
 
     private void Awake()
     {
@@ -21,7 +22,7 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     public void SetEnemy(AttackableEnemy enemy) => this.enemy = enemy;
     public AttackableEnemy GetEnemy() => enemy;
 
-    private IEnumerator CoRespawn(GameObject parents, List<AttackableEnemy> enemyPool, float timer)
+    private IEnumerator CoRespawn(List<AttackableEnemy> enemyPool, float timer)
     {
         while (timer >= 0f)
         {
@@ -30,9 +31,11 @@ public class EnemySpawningAndPositioning : MonoBehaviour
         }
 
         // 리스폰
-        enemyPool.Add(SpawnEnemy(parents));
+        var spawn = SpawnEnemy();
+        enemyPool.Add(spawn);
+        enemys.Add(spawn);
     }
-    private IEnumerator CoInfinityRespawn(GameObject parents, List<AttackableEnemy> enemyPool, float timer)
+    private IEnumerator CoInfinityRespawn(float timer)
     {
         float saveTimer = timer;
         while (timer >= 0f)
@@ -42,38 +45,36 @@ public class EnemySpawningAndPositioning : MonoBehaviour
         }
 
         // 리스폰 후 다시 코루틴 시작
-        //var spawnEnemy = SpawnEnemy(parents);
-        //spawnEnemy.ChangeUnitState(UnitState.Battle);
-        //enemyPool.Add(spawnEnemy);
-
-        enemyPool[spawnCount].gameObject.SetActive(true);
-        enemyPool[spawnCount].ChangeUnitState(UnitState.Battle);
+        enemys[spawnCount].SetEnabledPathFind(true);
+        enemys[spawnCount].gameObject.SetActive(true);
+        enemys[spawnCount].ChangeUnitState(UnitState.Battle);
 
         spawnCount++;
         if (spawnCount == enemyCount)
             yield break;
 
-        StartCoroutine(CoInfinityRespawn(parents, enemyPool, saveTimer));
+        StartCoroutine(CoInfinityRespawn(saveTimer));
     }
 
-    public AttackableEnemy SpawnEnemy(GameObject parents)
+    public AttackableEnemy SpawnEnemy()
     {
-        return Instantiate(enemy, tr.position, enemy.gameObject.transform.rotation, parents.transform);
+        return Instantiate(enemy, tr.position, enemy.gameObject.transform.rotation, tr);
     }
-    public void RespawnEnemy(GameObject parents, ref List<AttackableEnemy> enemyPool, float timer)
+    public void RespawnEnemy(ref List<AttackableEnemy> enemyPool, float timer)
     {
-        StartCoroutine(CoRespawn(parents, enemyPool, timer));
+        StartCoroutine(CoRespawn(enemyPool, timer));
     }
-    public void InfinityRespawn(GameObject parents, ref List<AttackableEnemy> enemyPool, float timer)
+    public void InfinityRespawn(float timer)
     {
-        StartCoroutine(CoInfinityRespawn(parents, enemyPool, timer));
+        StartCoroutine(CoInfinityRespawn(timer));
     }
-    public void SpawnAllEnemy(GameObject parents, ref List<AttackableEnemy> enemyPool)
+    public void SpawnAllEnemy(ref List<AttackableEnemy> enemyPool)
     {
         for (int i = 0; i < enemyCount; i++)
         {
-            var e = Instantiate(enemy, tr.position, enemy.gameObject.transform.rotation, parents.transform);
+            var e = Instantiate(enemy, tr.position, enemy.gameObject.transform.rotation, tr);
             enemyPool.Add(e);
+            enemys.Add(e);
         }
     }
 }

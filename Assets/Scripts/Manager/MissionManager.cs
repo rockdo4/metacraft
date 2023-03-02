@@ -22,10 +22,11 @@ public class MissionManager : MonoBehaviour
 
     public delegate void clickmark(int num);
     private int missionNum;
+    private GameManager gm = GameManager.Instance;
 
     public void Start()
     {
-        missionInfoTable = GameManager.Instance.missionInfoList;
+        missionInfoTable = gm.missionInfoList;
         var num = Utils.DistinctRandomNumbers(missionInfoTable.Count, 4);
         marks = GetComponentInChildren<MissionSpawner>().prefebs;
 
@@ -51,10 +52,10 @@ public class MissionManager : MonoBehaviour
     {
         missionNum = num;
         var dic = missionInfoTable[num];
-        portrait.sprite = GameManager.Instance.iconSprites[$"Icon_{dic["BossID"]}"];
+        portrait.sprite = gm.iconSprites[$"Icon_{dic["BossID"]}"];
         explanation.text = $"{dic["OperationDescription"]}";
         ExpectedCost.text = $"{dic["ExpectedCostID"]}";
-        GameManager.Instance.ClearBattleGroups();
+        gm.ClearBattleGroups();
         for (int i = 0; i < heroSlots.Length; i++)
         {
             heroSlots[i].GetComponent<Image>().sprite = null;
@@ -74,8 +75,8 @@ public class MissionManager : MonoBehaviour
     // Mission Hero Info Button 에서 호출
     public void OnClickHeroSelect(CharacterDataBundle bundle)
     {
-        int index = GameManager.Instance.GetHeroIndex(bundle.gameObject);
-        var selectIndexGroup = GameManager.Instance.battleGroups;
+        int index = gm.GetHeroIndex(bundle.gameObject);
+        var selectIndexGroup = gm.battleGroups;
 
         int? duplication = null;
         for (int i = 0; i < 3; i++)
@@ -88,7 +89,7 @@ public class MissionManager : MonoBehaviour
         }
 
         LiveData liveData = bundle.data;
-        heroSlots[heroSlotsIndex].GetComponent<Image>().sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{liveData.name}");
+        heroSlots[heroSlotsIndex].GetComponent<Image>().sprite = gm.GetSpriteByAddress($"Icon_{liveData.name}");
         selectIndexGroup[heroSlotsIndex] = index;
 
         if (duplication != null)
@@ -110,23 +111,23 @@ public class MissionManager : MonoBehaviour
     //적합 속성 체크
     private void PropertyMatchingCheck()
     {
-        GameManager gm = GameManager.Instance;
-        var myHeroes = gm.myHeroes;
+        var selectedHeroes = gm.GetSelectedHeroes();
 
         for (int i = 0; i < fitProperties.Length; i++)
         {
-            foreach (int? idx in GameManager.Instance.battleGroups)
+            foreach (var hero in selectedHeroes)
             {
-                if (idx == null)
-                    continue;
-                if (myHeroes[(int)idx].GetComponent<CharacterDataBundle>().data.job.Equals(fitProperties[i].text))
+                if (hero != null)
                 {
-                    fitProperties[i].fontStyle = FontStyles.Bold;
-                    fitProperties[i].color = Color.red;
-                    break;
+                    if (hero.GetComponent<CharacterDataBundle>().data.job.Equals(fitProperties[i].text))
+                    {
+                        fitProperties[i].fontStyle = FontStyles.Bold;
+                        fitProperties[i].color = Color.red;
+                        break;
+                    }
+                    fitProperties[i].fontStyle = FontStyles.Normal;
+                    fitProperties[i].color = Color.white;
                 }
-                fitProperties[i].fontStyle = FontStyles.Normal;
-                fitProperties[i].color = Color.white;
             }
         }
     }
@@ -134,30 +135,21 @@ public class MissionManager : MonoBehaviour
     //전투력 합계 체크
     private void TotalPowerCheck()
     {
-        GameManager gm = GameManager.Instance;
-        var myHeroes = gm.myHeroes;
+        var selectedHeroes = gm.GetSelectedHeroes();
+
         int totalPower = 0;
-        foreach (int? idx in GameManager.Instance.battleGroups)
+        foreach (var hero in selectedHeroes)
         {
-            if (idx == null)
-                continue;
-            totalPower += myHeroes[(int)idx].GetComponent<CharacterDataBundle>().data.Power;
+            if (hero != null)
+                totalPower += hero.GetComponent<CharacterDataBundle>().data.Power;
         }
         var properCombatPower = missionInfoTable[missionNum]["ProperCombatPower"];
         ProperCombatPower.text = $"{totalPower}/{properCombatPower}";
-        if(totalPower< (int)properCombatPower)
-        {
-            ProperCombatPower.color = Color.red;
-        }
-        else
-        {
-            ProperCombatPower.color = Color.white;
-        }
+        ProperCombatPower.color = totalPower < (int)properCombatPower ? Color.red : Color.white;
     }
 
     public void StartMission()
     {
-        GameManager gm = GameManager.Instance;
         int count = 0;
         foreach (var num in gm.battleGroups)
         {
@@ -167,18 +159,6 @@ public class MissionManager : MonoBehaviour
         if (count > 0)
         {
             gm.LoadScene((int)SceneIndex.Battle);
-        }
-    }
-
-    private void OnEnable()
-    {
-        GameManager gm = GameManager.Instance;
-        int index = 0;
-        foreach (var num in gm.battleGroups)
-        {
-            if (num == null)
-                heroSlots[index].GetComponent<Image>().sprite = null;
-            index++;
         }
     }
 }

@@ -1,8 +1,13 @@
 using UnityEngine;
+using System.Collections;
 
 [CreateAssetMenu(fileName = "CharacterSkill", menuName = "Character/CharacterSkill")]
 public class CharacterSkill : ScriptableObject
 {
+    public int      id;
+    public string   skillName;
+    
+    public float    preCooldown;
     public float    cooldown;       // 보정 되지 않은 쿨다운
     public float    distance;       // 적용 범위 (= 네비게이션 정지 거리)
     public int      count;          // 스킬 최대 적용 개체수
@@ -10,7 +15,13 @@ public class CharacterSkill : ScriptableObject
 
     // 공격 이외 디버프, 버프도 있을 수 있기 때문에 적용으로 명명함
     // 일반 스킬(평타)을 해당 클래스 통해서 작성
+    public SkillCoefficientType coefficientType; // 스킬 계수 타입. 공격력, 방어력, 체력 등등    
+    public virtual void OnActive()
+    {
 
-    public int ID;
-    public string Name;
+    }
+    public virtual IEnumerator SkillCoroutine()
+    {
+        yield break;  
+    }
 }

@@ -6,7 +6,7 @@ public enum SkillMainType
     Active,
     Count,
 }
-public enum SkillAreaType
+public enum SkillAreaShape
 {
     None = -1,
     Sector,

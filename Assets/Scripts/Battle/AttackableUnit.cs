@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -14,15 +13,21 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected NavMeshAgent pathFind;
 
+    [SerializeField]
     protected AttackableUnit target;
     [SerializeField]
     protected List<AttackableHero> heroList;
     [SerializeField]
     protected List<AttackableEnemy> enemyList;
 
-    [SerializeField]
-    protected int hp;
-    public int GetHp() => hp;
+    public int UnitHp {
+        get {
+            return characterData.data.currentHp;
+        }
+        set {
+            characterData.data.currentHp = Mathf.Max(value, 0);
+        }
+    }
 
     protected float lastNormalAttackTime;
     protected float lastPassiveSkillTime;
@@ -54,6 +59,7 @@ public abstract class AttackableUnit : MonoBehaviour
             return (Time.time - lastNormalAttackTime) > characterData.attack.cooldown;
         }
     }
+    public bool IsAlive(AttackableUnit unit) => (unit != null) && (unit.gameObject.activeSelf) && (unit.UnitHp > 0);
     //protected bool CanPassiveSkillTime {
     //    get {
     //        return (Time.time - lastPassiveSkillTime) > characterData.passiveSkill.cooldown;
@@ -66,18 +72,21 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected virtual void Awake()
     {
-        battleManager = FindObjectOfType<TestBattleManager>();
+        var manager = FindObjectOfType<TestBattleManager>();
+        if (manager != null)
+            battleManager = manager;
+
         animator = GetComponentInChildren<Animator>();
     }
     protected void SetData()
     {
-        pathFind.stoppingDistance = characterData.attack.distance * 0.95f;
+        pathFind.stoppingDistance = characterData.attack.distance ;
 
         NormalAttackAction = NormalAttack;
         PassiveSkillAction = PassiveSkill;
         ActiveSkillAction = ActiveSkill;
 
-        hp = characterData.data.healthPoint;
+        UnitHp = characterData.data.healthPoint;
 
         animator.SetInteger("CharacterType", 0);
     }
@@ -95,20 +104,22 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public virtual void NormalAttackEnd()
     {
-        if(target.GetHp() <= 0)
-        {
-            target = null;
-        }
+        if (IsAlive(target))
+            if (target.UnitHp <= 0)
+            {
+                target = null;
+            }
     }
     public virtual void PassiveSkillEnd()
     {
     }
     public virtual void ActiveSkillEnd()
     {
-        if (target.GetHp() <= 0)
-        {
-            target = null;
-        }
+        if (target != null)
+            if (target.UnitHp <= 0)
+            {
+                target = null;
+            }
     }
 
     protected abstract void IdleUpdate();
@@ -121,30 +132,65 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public void SearchNearbyTarget<T>(List<T> list) where T : AttackableUnit
     {
+        var tempList = list;
         if (list.Count == 0)
         {
             target = null;
             return;
         }
-        //ê°€ìž¥ ê°€ê¹Œìš´ ì  íƒìƒ‰
-        target = list.Where(t => t.GetHp() > 0).OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
-                          .FirstOrDefault();
+
+        var position = transform.position;
+        float minDis = int.MaxValue;
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (!IsAlive(list[i]))
+                continue;
+
+            var unitDis = Vector3.Distance(position, list[i].transform.position);
+            if(unitDis <= minDis)
+            {
+                minDis = unitDis;
+                target = list[i];
+            }
+        }
     }
 
-    public AttackableUnit GetSearchTargetInAround<T>(List<T> list, float dis) where T : AttackableUnit
+    public T GetSearchNearbyTarget<T>(List<T> list) where T : AttackableUnit
     {
-        AttackableUnit minTarget = null;
+        T minTarget = null;
         if (list.Count == 0)
         {
-            minTarget = null;
-            return null;
+            return minTarget;
         }
-        //ê°€ìž¥ ê°€ê¹Œìš´ ì  íƒìƒ‰
-        minTarget = list.Where(t => (t.GetHp() > 0) && Vector3.Distance(transform.position, t.transform.position) <=  dis)
-            .OrderBy(t => Vector3.Distance(t.transform.position, transform.position))
-                          .FirstOrDefault();
 
+        var position = transform.position;
+        float minDis = int.MaxValue;
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (!IsAlive(list[i]))
+                continue;
+
+            var unitDis = Vector3.Distance(position, list[i].transform.position);
+            if (unitDis <= minDis)
+            {
+                minDis = unitDis;
+                minTarget = list[i];
+            }
+        }
         return minTarget;
+    }
+
+    public T GetSearchTargetInAround<T>(List<T> list, float dis) where T : AttackableUnit
+    {
+        T minTarget = GetSearchNearbyTarget(list);
+        if (minTarget == null)
+            return null;
+        else if(Vector3.Distance(minTarget.transform.position, transform.position) > dis)
+                return minTarget;
+        else
+            return null;
     }
 
     protected void SearchMaxHealthTarget<T>(List<T> list) where T : AttackableUnit
@@ -154,9 +200,27 @@ public abstract class AttackableUnit : MonoBehaviour
             target = null;
             return;
         }
-        //ê°€ìž¥ ê°€ê¹Œìš´ ì  íƒìƒ‰
-        var maxHp = list.Max(t => t.GetHp());
-        target = list.Where(t => t.GetHp() == maxHp && (t.GetHp() > 0)).FirstOrDefault();
+
+        float maxHp = 0;
+        float minDis = int.MaxValue;
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (!IsAlive(list[i]))
+                continue;
+
+            if(maxHp == list[i].UnitHp)
+            {
+                target = Vector3.Distance(transform.position, list[i].transform.position) < minDis ?
+                    list[i] : target;
+            }
+            if (maxHp < list[i].UnitHp)
+            {
+                minDis = Vector3.Distance(transform.position, list[i].transform.position);
+                maxHp = list[i].UnitHp;
+                target = list[i];
+            }
+        }
     }
 
     protected void SearchMinHealthTarget<T>(List<T> list) where T : AttackableUnit
@@ -166,15 +230,90 @@ public abstract class AttackableUnit : MonoBehaviour
             target = null;
             return;
         }
-        //ê°€ìž¥ ê°€ê¹Œìš´ ì  íƒìƒ‰
-        var minHp = list.Min(t => t.GetHp());
-        target = list.Where(t => (t.GetHp() == minHp) && (t.GetHp() > 0)).FirstOrDefault();
+        float minHp = int.MaxValue;
+        float minDis = int.MaxValue;
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (!IsAlive(list[i]))
+                continue;
+
+            if (minHp == list[i].UnitHp)
+            {
+                target = Vector3.Distance(transform.position, list[i].transform.position) < minDis ?
+                    list[i] : target;
+            }
+            if (list[i].UnitHp < minHp)
+            {
+                minDis = Vector3.Distance(transform.position, list[i].transform.position);
+                minHp = list[i].UnitHp;
+                target = list[i];
+            }
+        }
+    }
+
+    public List<T> GetNearestUnitList<T>(List<T> list, int count) where T : AttackableUnit
+    {
+        List<T> tempList = new();
+        if (list.Count == 0)
+        {
+            return tempList;
+        }
+
+        Vector3 position = transform.position;
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            float dist = Vector3.Distance(position, list[i].transform.position);
+
+            for (int j = i + 1; j < list.Count; j++)
+            {
+                float distOther = Vector3.Distance(position, list[j].transform.position);
+
+                if (distOther < dist)
+                {
+                    T temp = list[i];
+                    list[i] = list[j];
+                    list[j] = temp;
+
+                    dist = distOther;
+                }
+            }
+        }
+
+        var nowCount = count;
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (IsAlive(list[i]))
+            {
+                nowCount--;
+                tempList.Add(list[i]);
+            }
+            if (nowCount <= 0)
+                break;
+        }
+
+        return tempList;
     }
 
     // Test
     public abstract void OnDead(AttackableUnit unit);
     public void DestroyUnit()
     {
-        Destroy(gameObject, 1f);
+        // ÀÌ ºÎºÐ ·ÎÅ×ÀÌ¼Ç ÀÌ»óÇÒ ½Ã ¹Ù²ã¾ßÇÔ
+        Utils.CopyPositionAndRotation(gameObject, gameObject.transform.parent);
+        pathFind.enabled = false;
+        gameObject.SetActive(false);
     }
+
+    public void SetBattleManager(TestBattleManager manager)
+    {
+        battleManager = manager;
+    }
+    public void SetEnabledPathFind(bool set)
+    {
+        pathFind.enabled = set;
+    }
+
+    // ¿©±â¿¡ State ÃÊ±âÈ­¶û Æ®¸®°Å ¸ðµÎ ÇØÁ¦ÇÏ´Â ÄÚµå ÀÛ¼º
 }

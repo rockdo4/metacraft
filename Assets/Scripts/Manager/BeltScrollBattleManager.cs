@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class BeltScrollBattleManager : TestBattleManager
 {
@@ -10,7 +9,6 @@ public class BeltScrollBattleManager : TestBattleManager
     public float platformMoveSpeed;
 
     private int currTriggerIndex = 0;
-    private int readyCount = 3;
     private float nextStageMoveTimer = 0f;
 
     private void Start()
@@ -19,10 +17,9 @@ public class BeltScrollBattleManager : TestBattleManager
         {
             for (int j = 0; j < triggers[i].enemySettingPositions.Count; j++)
             {
-                var enemy = triggers[i].enemySettingPositions[j].SpawnEnemy(triggers[i].enemyPool);
+                var enemy = triggers[i].enemySettingPositions[j].SpawnEnemy();
                 triggers[i].enemys.Add(enemy);
-                triggers[i].enemysNav.Add(triggers[i].enemys[j].GetComponent<NavMeshAgent>());
-                triggers[i].enemysNav[j].enabled = false;
+                triggers[i].enemys[j].SetEnabledPathFind(false);
             }
         }
 
@@ -34,19 +31,23 @@ public class BeltScrollBattleManager : TestBattleManager
 
         enemyCountTxt.Count = GetAllEnemyCount();
     }
+    private int GetCurrEnemyCount()
+    {
+        return triggers[currTriggerIndex].useEnemys.Count;
+    }
 
     public override void GetEnemyList(ref List<AttackableEnemy> enemyList)
     {
-        enemyList = triggers[currTriggerIndex].enemys;
+        enemyList = triggers[currTriggerIndex].useEnemys;
     }
 
     public override void OnDeadEnemy(AttackableEnemy enemy)
     {
         base.OnDeadEnemy(enemy);
         triggers[currTriggerIndex].OnDead(enemy);
-        if (triggers[currTriggerIndex].enemys.Count == 0)
+        if (triggers[currTriggerIndex].useEnemys.Count == 0)
         {
-            SetHeroReturnPositioning();
+            SetHeroReturnPositioning(triggers[currTriggerIndex].heroSettingPositions);
         }
     }
     public override void OnDeadHero(AttackableHero hero)
@@ -58,14 +59,9 @@ public class BeltScrollBattleManager : TestBattleManager
             SetEnemyIdle();
         }
     }
-
-    private void SetHeroReturnPositioning()
+    protected override void SetHeroReturnPositioning(List<Transform> pos)
     {
-        for (int i = 0; i < useHeroes.Count; i++)
-        {
-            useHeroes[i].SetReturnPos(triggers[currTriggerIndex].heroSettingPositions[i]);
-            useHeroes[i].ChangeUnitState(UnitState.ReturnPosition);
-        }
+        base.SetHeroReturnPositioning(pos);
     }
     private void SetEnemyIdle()
     {
@@ -92,15 +88,9 @@ public class BeltScrollBattleManager : TestBattleManager
         }
     }
 
-    // 클리어 시 호출할 함수 (Ui 업데이트)
-    private void SetStageClear()
-    {
-        UIManager.Instance.ShowView(1);
-        clearUi.Clear();
-        Logger.Debug("Clear!");
-    }
     private void SetStageFail()
     {
+        Time.timeScale = 0;
         UIManager.Instance.ShowView(2);
         Logger.Debug("Fail!");
     }
@@ -119,7 +109,7 @@ public class BeltScrollBattleManager : TestBattleManager
         while (platform.transform.position.z >= movePos)
         {
             platform.transform.Translate((Vector3.forward * platformMoveSpeed * Time.deltaTime) * -1);
-            yield return new WaitForSeconds(Time.deltaTime);
+            yield return null;
         }
 
         // 히어로들 배틀 상태로 전환
