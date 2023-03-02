@@ -23,10 +23,13 @@ public class GameManager : Singleton<GameManager>
     public Dictionary<string, Sprite> iconSprites = new();
     public Dictionary<string, Sprite> illustrationSprites = new();
     public List<Dictionary<string, object>> missionInfoList;
+    public List<Dictionary<string, object>> dispatchInfoList;
 
     // Office Select
     public GameObject currentSelectObject; // Hero Info
     public List<int?> battleGroups = new (3) { null, null, null }; // Mission select -> Battle Scene
+
+    // Dispatch Select
 
     public override void Awake()
     {
@@ -52,6 +55,16 @@ public class GameManager : Singleton<GameManager>
                 (AsyncOperationHandle<TextAsset> obj) =>
                 {
                     missionInfoList = CSVReader.SplitTextAsset(obj.Result);
+                    Addressables.Release(obj);
+                };
+
+        // 텍스트 리소스 로드
+        var dit = Addressables.LoadAssetAsync<TextAsset>("DispatchInfoTable");
+
+        dit.Completed +=
+                (AsyncOperationHandle<TextAsset> obj) =>
+                {
+                    dispatchInfoList = CSVReader.SplitTextAsset(obj.Result);
                     Addressables.Release(obj);
                 };
 
