@@ -18,7 +18,6 @@ public class TestBattleManager : MonoBehaviour
 
     private void Awake()
     {
-
         int index = 0;
         List<GameObject> selectedHeroes = GameManager.Instance.GetSelectedHeroes();
         int notNullCount = 0;
@@ -33,10 +32,10 @@ public class TestBattleManager : MonoBehaviour
                 var hero = Instantiate(heroPref, startPositions[i].position, Quaternion.identity, heroList.transform);
                 var heroNav = hero.GetComponent<NavMeshAgent>();
                 heroNav.enabled = true;
-                heroUiList[i].gameObject.SetActive(true);
+                //heroUiList[i].gameObject.SetActive(true);
 
-                hero.SetUi(heroUiList[i]);
-                heroUiList[i].SetHeroInfo(hero.GetUnitData());
+                //hero.SetUi(heroUiList[i]);
+                //heroUiList[i].SetHeroInfo(hero.GetUnitData());
                 useHeroes.Add(hero);
             }
         }
