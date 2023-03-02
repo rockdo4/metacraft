@@ -26,4 +26,5 @@ public class BattleSpeed : MonoBehaviour
         GameManager.Instance.playerData.battleSpeedIdx = idx;
         SetBattleSpeed(idx);
     }
+
 }

@@ -133,5 +133,10 @@ public class TestBattleManager : MonoBehaviour
             useHeroes[i].SetEnabledPathFind(false);
             useHeroes[i].gameObject.SetActive(false);
         }
-    }    
+    }
+
+    public void OnDestroy()
+    {
+        Time.timeScale = 1;
+    }
 }
