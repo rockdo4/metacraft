@@ -1,3 +1,5 @@
+using System.Net.NetworkInformation;
+using UnityEditor.MemoryProfiler;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -8,7 +10,7 @@ public abstract class AttackableHero : AttackableUnit
     private Transform returnPos;
     public void SetReturnPos(Transform tr) => returnPos = returnPos = tr;
 
-    private Coroutine coWhileActiveSkill;
+    private Coroutine coOnIndicator;
 
     protected override UnitState UnitState {
         get {
@@ -101,8 +103,7 @@ public abstract class AttackableHero : AttackableUnit
                     animator.ResetTrigger("Idle");
                     //animator.ResetTrigger("Run");
                     animator.SetTrigger("Active");
-                    //ActiveSkillAction();
-                    coWhileActiveSkill = StartCoroutine(characterData.activeSkill.SkillCoroutine());
+                    //ActiveSkillAction();                    
                     break;
                 case UnitBattleState.Stun:
                     break;
@@ -127,7 +128,7 @@ public abstract class AttackableHero : AttackableUnit
     {
         heroUI = _heroUI;
         //BattleState = UnitBattleState.ActiveSkill;
-        heroUI.heroSkill.Set(characterData.activeSkill.cooldown, ActiveSkill); //궁극기 쿨타임과 궁극기 함수 등록
+        heroUI.heroSkill.Set(characterData.activeSkill.cooldown, ReadyActiveSkill, PlayActiveSkillAnimation); //궁극기 쿨타임과 궁극기 함수 등록
     }
 
     protected abstract void SearchTarget(); //각각의 캐릭터가 탐색 조건이 다름.
@@ -139,14 +140,27 @@ public abstract class AttackableHero : AttackableUnit
     public override void PassiveSkill()
     {
     }
-    public override void ActiveSkill()
+    public override void ReadyActiveSkill()
+    {        
+        if (coOnIndicator != null)
+        {
+            StopCoroutine(coOnIndicator);
+            coOnIndicator = null;
+            return;
+        }        
+
+        coOnIndicator = StartCoroutine(characterData.activeSkill.SkillCoroutine());
+    }
+    public void PlayActiveSkillAnimation()
     {
         pathFind.isStopped = true;
         BattleState = UnitBattleState.ActiveSkill;
-        if (IsAlive(target)) //임시코드라 타겟에 직접 데미지를 줘야해서 null체크.원래라면 이것도 상속받는 함수가 가지고 있어야 함.
-            target.OnDamage(177);
-
-        
+        StopCoroutine(coOnIndicator);
+        coOnIndicator = null;
+    }    
+    public void OnActiveSkill()
+    {        
+        characterData.activeSkill.OnActive();
     }
 
     protected override void IdleUpdate()

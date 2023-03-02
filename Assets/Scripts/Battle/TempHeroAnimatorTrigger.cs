@@ -14,7 +14,7 @@ public class TempHeroAnimatorTrigger : MonoBehaviour
     }
     public void ActiveSkill(AnimationEvent ev)
     {
-        unit.ActiveSkill();
+        unit.ReadyActiveSkill();
     }
     public void NormalAttackEnd(AnimationEvent ev)
     {

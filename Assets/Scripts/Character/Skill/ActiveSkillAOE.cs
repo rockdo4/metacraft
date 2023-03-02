@@ -53,7 +53,7 @@ public class ActiveSkillAOE : CharacterSkill
             skillAreaIndicator.transform.position = hit.point + Vector3.up * 0.1f;
         }        
     }
-    public void ActiveSkill()
+    public void OnActiveSkill()
     {
         var targets = skillAreaIndicator.GetUnitsInArea();
 

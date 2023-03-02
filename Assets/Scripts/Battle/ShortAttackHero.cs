@@ -52,9 +52,9 @@ public class ShortAttackHero : AttackableHero
 
         //Logger.Debug("Hero_PassiveSkill");
     }
-    public override void ActiveSkill()
+    public override void ReadyActiveSkill()
     {
-        base.ActiveSkill();
+        base.ReadyActiveSkill();
         
 
         //target.OnDamage(characterData.data.baseDamage * 3, true);

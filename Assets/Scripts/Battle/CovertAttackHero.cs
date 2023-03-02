@@ -56,9 +56,9 @@ public class CovertAttackHero : AttackableHero
 
         //Logger.Debug("Hero_PassiveSkill");
     }
-    public override void ActiveSkill()
+    public override void ReadyActiveSkill()
     {
-        base.ActiveSkill();
+        base.ReadyActiveSkill();
 
     }
 

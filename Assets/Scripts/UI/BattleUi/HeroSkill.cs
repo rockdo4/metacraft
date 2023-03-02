@@ -6,6 +6,12 @@ public class HeroSkill : MonoBehaviour
 {
     [SerializeField]
     private Image skillCoolDownImage;
+    [SerializeField]
+    private GameObject skillActivedHighlight;
+    [SerializeField]
+    private GameObject skillActivedPanel;
+
+    bool isInskillActivedPanelArea = false;
     private float CoolDownFill {
         set {
             skillCoolDownImage.fillAmount = value;
@@ -20,11 +26,13 @@ public class HeroSkill : MonoBehaviour
     private float coolDownTimer;
 
     public Action effect;
+    public Action action;
 
-    public void Set(float coolDown, Action effect)
+    public void Set(float coolDown, Action effect, Action action)
     {
         this.coolDown = coolDown;
         this.effect = effect;
+        this.action = action;
 
         coolDownTimer = 0;
         CoolDownFill = coolDownTimer / coolDown;
@@ -45,13 +53,41 @@ public class HeroSkill : MonoBehaviour
             CoolDownFill = coolDownTimer / coolDown;
         }
     }
-    public void OnClickSkill()
+    public void OnDownSkill()
     {
         if (IsCoolDown)
         {
             effect();
-            CoolDownFill = 1;
-            coolDownTimer = coolDown;
+            SetActiveSkillGUIs(true);
         }
+    }
+    public void CancleSkill()
+    {
+        if (!skillActivedHighlight.activeSelf)
+            return;
+
+        effect();
+        SetActiveSkillGUIs(false);
+    }
+    public void OnUpSkillActive()
+    {
+        if (!skillActivedHighlight.activeSelf)
+            return;
+        
+        action();
+        SetActiveSkillGUIs(false);
+        CoolDownFill = 1;
+        coolDownTimer = coolDown;
+    }
+
+    private void SetActiveSkillGUIs(bool active)
+    {
+        skillActivedHighlight.SetActive(active);
+        skillActivedPanel.SetActive(active);
+    }
+    public void IsInskillActivedPanelArea(bool isIn)
+    {
+        isInskillActivedPanelArea = isIn;
+        Logger.Debug(isIn);
     }
 }

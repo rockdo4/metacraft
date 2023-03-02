@@ -84,7 +84,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
         NormalAttackAction = NormalAttack;
         PassiveSkillAction = PassiveSkill;
-        ActiveSkillAction = ActiveSkill;
+        ActiveSkillAction = ReadyActiveSkill;
 
         UnitHp = characterData.data.healthPoint;
 
@@ -100,7 +100,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public abstract void NormalAttack();
     public abstract void PassiveSkill();
-    public abstract void ActiveSkill();
+    public abstract void ReadyActiveSkill();
 
     public virtual void NormalAttackEnd()
     {

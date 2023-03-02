@@ -109,7 +109,7 @@ public abstract class AttackableEnemy : AttackableUnit
     public override void PassiveSkill()
     {
     }
-    public override void ActiveSkill()
+    public override void ReadyActiveSkill()
     {
     }
 
