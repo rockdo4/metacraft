@@ -26,7 +26,8 @@ public class GameManager : Singleton<GameManager>
 
     // Office Select
     public GameObject currentSelectObject; // Hero Info
-    public List<int?> battleGroups = new(3) { null, null, null }; // Mission select -> Battle Scene
+    public Dictionary<string, object> currentSelectMission; // Mission Select
+    public List<int?> battleGroups = new(3) { null, null, null }; // Mission Select -> Battle Scene
 
     public override void Awake()
     {

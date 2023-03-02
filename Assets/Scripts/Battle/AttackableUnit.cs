@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 
 public abstract class AttackableUnit : MonoBehaviour
 {
@@ -303,7 +300,9 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void OnDead(AttackableUnit unit);
     public void DestroyUnit()
     {
-        Destroy(gameObject, 1f);
+        // 이 부분 로테이션 이상할 시 바꿔야함
+        Utils.CopyTransform(gameObject, gameObject.transform.parent);
+        gameObject.SetActive(false);
     }
 
     public void SetBattleManager(TestBattleManager manager)

@@ -16,8 +16,8 @@ public class StageEnemy : MonoBehaviour
         }
     }
 
-    [ContextMenu("Test/DimEnemy")]
-    public int DimEnemy() => --Count;
+    [ContextMenu("Test/DieEnemy")]
+    public int DieEnemy() => --Count;
     [ContextMenu("Test/AddEnemy")]
     public int AddEnemy() => ++Count;
 
