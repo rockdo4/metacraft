@@ -29,8 +29,6 @@ public class SupportAttackHero : AttackableHero
                     moveToTeam = true;
                     target = GetSearchNearbyTarget(heroList);
                     pathFind.SetDestination(target.transform.position);
-                    animator.ResetTrigger("Run");
-                    animator.SetTrigger("Run");
                 }
                 else
                     SearchNearbyTarget(enemyList); //가장 가까운 적

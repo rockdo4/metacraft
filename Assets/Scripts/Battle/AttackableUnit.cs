@@ -87,8 +87,6 @@ public abstract class AttackableUnit : MonoBehaviour
         ActiveSkillAction = ActiveSkill;
 
         UnitHp = characterData.data.healthPoint;
-
-        animator.SetInteger("CharacterType", 0);
     }
     protected void FixedUpdate()
     {

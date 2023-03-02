@@ -22,16 +22,15 @@ public abstract class AttackableEnemy : AttackableUnit
             switch (unitState)
             {
                 case UnitState.Idle:
+                    animator.SetFloat("Speed", 0);
                     pathFind.isStopped = true;
-                    animator.SetTrigger("Idle");
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
-                    animator.SetBool("IsBattle", true);
                     BattleState = UnitBattleState.MoveToTarget;
                     battleManager.GetHeroList(ref heroList);
-                    pathFind.stoppingDistance = characterData.attack.distance ;
-                    pathFind.speed = characterData.data.moveSpeed;
+                    pathFind.stoppingDistance = characterData.attack.distance;
+                    //pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
                     nowUpdate = BattleUpdate;
                     break;
@@ -62,22 +61,21 @@ public abstract class AttackableEnemy : AttackableUnit
             switch (battleState)
             {
                 case UnitBattleState.MoveToTarget:
-                    animator.SetTrigger("Run");
-                    animator.ResetTrigger("Idle");
+                    pathFind.isStopped = false;
                     break;
                 case UnitBattleState.BattleIdle:
-                    animator.ResetTrigger("Run");
-                    animator.SetTrigger("Idle");
+                    pathFind.isStopped = false;
                     break;
                 case UnitBattleState.NormalAttack:
-                    animator.ResetTrigger("Run"); //문제가 생겨서 임시. 
-                    animator.ResetTrigger("Idle");
-                    animator.SetTrigger("IsAttack");
+                    pathFind.isStopped = true;
+                    animator.SetTrigger("Attack");
                     //NormalAttackAction();
                     break;
                 case UnitBattleState.PassiveSkill:
                     break;
                 case UnitBattleState.ActiveSkill:
+                    pathFind.isStopped = true;
+                    animator.SetTrigger("Active");
                     break;
                 case UnitBattleState.Stun:
                     break;
@@ -189,7 +187,6 @@ public abstract class AttackableEnemy : AttackableUnit
 
     protected override void MoveNextUpdate()
     {
-
     }
     protected override void ReturnPosUpdate()
     {
@@ -230,8 +227,9 @@ public abstract class AttackableEnemy : AttackableUnit
     public override void NormalAttackEnd()
     {
         base.NormalAttackEnd();
+        animator.SetTrigger("AttackEnd");
         lastNormalAttackTime = Time.time;
-        if (target == null  || !target.gameObject.activeSelf)
+        if (target == null || !target.gameObject.activeSelf)
         {
             BattleState = UnitBattleState.BattleIdle;
         }
@@ -247,6 +245,7 @@ public abstract class AttackableEnemy : AttackableUnit
     }
     public override void ActiveSkillEnd()
     {
+        animator.SetTrigger("ActiveEnd");
         base.ActiveSkillEnd();
     }
 
