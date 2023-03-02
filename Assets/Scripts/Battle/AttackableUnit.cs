@@ -301,7 +301,8 @@ public abstract class AttackableUnit : MonoBehaviour
     public void DestroyUnit()
     {
         // 이 부분 로테이션 이상할 시 바꿔야함
-        Utils.CopyTransform(gameObject, gameObject.transform.parent);
+        Utils.CopyPositionAndRotation(gameObject, gameObject.transform.parent);
+        pathFind.enabled = false;
         gameObject.SetActive(false);
     }
 
@@ -309,4 +310,10 @@ public abstract class AttackableUnit : MonoBehaviour
     {
         battleManager = manager;
     }
+    public void SetEnabledPathFind(bool set)
+    {
+        pathFind.enabled = set;
+    }
+
+    // 여기에 State 초기화랑 트리거 모두 해제하는 코드 작성
 }
