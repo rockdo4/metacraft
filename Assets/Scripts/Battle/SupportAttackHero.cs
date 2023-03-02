@@ -86,15 +86,12 @@ public class SupportAttackHero : AttackableHero
     {
         if(moveToTeam)
         {
-            pathFind.SetDestination(target.transform.position);
             if (Vector3.Distance(target.transform.position, transform.position) < characterData.attack.distance/2)
             {
                 moveToTeam = false;
                 target = null;
                 SearchTarget();
             }
-
-            return;
         }
 
         switch (BattleState)
@@ -105,8 +102,6 @@ public class SupportAttackHero : AttackableHero
                 if (Time.time - lastSearchTime >= searchDelay)
                 {
                     SearchTarget();
-                    if (moveToTeam)
-                        return;
                 }
                 break;
         }
