@@ -16,7 +16,7 @@ public class MapEventTrigger : MonoBehaviour
     [SerializeField, Header("마지막 관문일 때 체크해주세요")]
     public bool isStageEnd = false;
 
-    private void OnTriggerEnter(Collider other)
+    public virtual void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<AttackableHero>() != null)
         {
@@ -44,16 +44,7 @@ public class MapEventTrigger : MonoBehaviour
         enemys.Add(enemy);
     }
 
-    // Test
-    public void TestRespawnAllEnemy()
-    {
-        for (int i = 0; i < enemySettingPositions.Count; i++)
-        {
-            enemySettingPositions[i].RespawnEnemy(ref enemys, 1f);
-        }
-    }
-
-    public void TestInfinityRespawnEnemy()
+    public void InfinityRespawnEnemy()
     {
         for (int i = 0; i < enemySettingPositions.Count; i++)
         {

@@ -91,7 +91,7 @@ public class TestBattleManager : MonoBehaviour
     }
     public virtual void OnDeadEnemy(AttackableEnemy enemy)
     {
-        enemyCountTxt.DimEnemy();
+        enemyCountTxt.DieEnemy();
     }
     public virtual void GetEnemyList(ref List<AttackableEnemy> enemyList) { }
     public virtual void OnReady()

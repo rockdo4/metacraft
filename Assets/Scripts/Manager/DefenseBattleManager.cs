@@ -47,6 +47,6 @@ public class DefenseBattleManager : TestBattleManager
     private void GameStart()
     {
         triggers[0].SpawnAllEnemy();
-        triggers[0].TestInfinityRespawnEnemy();
+        triggers[0].InfinityRespawnEnemy();
     }
 }
