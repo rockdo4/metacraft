@@ -19,6 +19,8 @@ public class DispatchInfo : MonoBehaviour
     public TextMeshProUGUI rewardDescription;
     public TextMeshProUGUI proceedingButton;
 
+    public AndroidNotificationManager androidNotificationManager;
+
     public void SetData(Dictionary<string, object> dispatchInfo)
     {
         addRewardCharacterPortrait.sprite = GameManager.Instance.iconSprites[$"Icon_{dispatchInfo["AddRewardCharaID"]}"];
@@ -30,6 +32,7 @@ public class DispatchInfo : MonoBehaviour
     {
         before.SetActive(false);
         proceeding.SetActive(true);
+        androidNotificationManager.OnClickedNotification(10, "Metacraft", "Dispatch is complete");
     }
 
     public void OnClickProceedingButton()
