@@ -5,9 +5,10 @@ using UnityEngine;
 public class ActiveSkillAOE : CharacterSkill
 {
     public SkillAreaIndicator skillAreaIndicator;    
-    private Camera cam;
     public LayerMask layerM;    
     public bool isInit = false;    
+
+    private Camera cam;    
 
     public bool isAutoTargeting;
     public float castRangeLimit;
@@ -34,15 +35,11 @@ public class ActiveSkillAOE : CharacterSkill
     {
         OnActive();
 
-        skillAreaIndicator.gameObject.SetActive(true);
+        skillAreaIndicator.gameObject.SetActive(true);        
 
         while (true)
         {
-            MoveIndicator();
-
-            if (TryActiveSkill())
-                yield break;
-
+            MoveIndicator();        
             yield return null;
         }
     }
@@ -56,16 +53,7 @@ public class ActiveSkillAOE : CharacterSkill
             skillAreaIndicator.transform.position = hit.point + Vector3.up * 0.1f;
         }        
     }
-    private bool TryActiveSkill()
-    {
-        if(Input.GetMouseButtonUp(0))
-        {
-            ActiveSkill();          
-            return true;
-        }
-        return false;
-    }
-    private void ActiveSkill()
+    public void ActiveSkill()
     {
         var targets = skillAreaIndicator.GetUnitsInArea();
 
