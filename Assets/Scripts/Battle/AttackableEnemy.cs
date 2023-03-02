@@ -22,21 +22,27 @@ public abstract class AttackableEnemy : AttackableUnit
             switch (unitState)
             {
                 case UnitState.Idle:
-                    animator.SetFloat("Speed", 0);
                     pathFind.isStopped = true;
+
+                    animator.SetFloat("Speed", 0);
+
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
-                    BattleState = UnitBattleState.MoveToTarget;
-                    battleManager.GetHeroList(ref heroList);
-                    pathFind.stoppingDistance = characterData.attack.distance;
-                    //pathFind.speed = characterData.data.moveSpeed;
                     pathFind.isStopped = false;
+                    pathFind.speed = characterData.data.moveSpeed;
+                    pathFind.stoppingDistance = characterData.attack.distance;
+
+                    battleManager.GetHeroList(ref heroList);
+
+                    BattleState = UnitBattleState.MoveToTarget;
                     nowUpdate = BattleUpdate;
                     break;
                 case UnitState.Die:
-                    animator.SetTrigger("Die");
                     pathFind.isStopped = true;
+
+                    animator.SetTrigger("Die");
+
                     nowUpdate = DieUpdate;
                     break;
                 default:
@@ -69,7 +75,6 @@ public abstract class AttackableEnemy : AttackableUnit
                 case UnitBattleState.NormalAttack:
                     pathFind.isStopped = true;
                     animator.SetTrigger("Attack");
-                    //NormalAttackAction();
                     break;
                 case UnitBattleState.PassiveSkill:
                     break;
