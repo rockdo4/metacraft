@@ -123,4 +123,15 @@ public class TestBattleManager : MonoBehaviour
         clearUi.SetData();
         Logger.Debug("Clear!");
     }
+
+    // 히어로들 안 보이는 위치로 옮기고 Active False 시키는 함수
+    public void ResetHeroes()
+    {
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            Utils.CopyPositionAndRotation(useHeroes[i].gameObject, GameManager.Instance.heroSpawnTransform);
+            useHeroes[i].SetEnabledPathFind(false);
+            useHeroes[i].gameObject.SetActive(false);
+        }
+    }    
 }

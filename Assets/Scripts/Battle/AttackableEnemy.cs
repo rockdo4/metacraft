@@ -257,8 +257,4 @@ public abstract class AttackableEnemy : AttackableUnit
         else
             return null;
     }
-    public void SetEnabledPathFind(bool set)
-    {
-        pathFind.enabled = set;
-    }
 }
