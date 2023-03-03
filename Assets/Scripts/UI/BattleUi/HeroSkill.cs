@@ -13,7 +13,7 @@ public class HeroSkill : MonoBehaviour
 
     private float prevTimeScale;
 
-    private bool isPointerInSkillActivedPanel;
+    private bool isPointerInSkillActivePanel;
     private float CoolDownFill {
         set {
             skillCoolDownImage.fillAmount = value;
@@ -60,10 +60,9 @@ public class HeroSkill : MonoBehaviour
     public void OnDownSkill()
     {
         if (IsCoolDown)
-        {
-            effect();
+        {            
             SetActiveSkillGUIs(true);
-            isPointerInSkillActivedPanel = false;
+            isPointerInSkillActivePanel = false;
 
             prevTimeScale = Time.timeScale;
             Time.timeScale = 0.25f;
@@ -73,22 +72,22 @@ public class HeroSkill : MonoBehaviour
     {
         cancle();
         SetActiveSkillGUIs(false);
+        Time.timeScale = prevTimeScale;
     }
     public void OnUpSkillActive()
     {
         if (!skillActivedHighlight.activeSelf)
             return;
 
-        Time.timeScale = prevTimeScale;
-
-        if (!isPointerInSkillActivedPanel)
+        if (!isPointerInSkillActivePanel)
         {
             CancleSkill();
             return;
-        }            
+        }
 
         action();
         SetActiveSkillGUIs(false);
+        Time.timeScale = prevTimeScale;
         CoolDownFill = 1;
         coolDownTimer = coolDown;
     }
@@ -99,10 +98,16 @@ public class HeroSkill : MonoBehaviour
         skillActivedPanel.SetActive(active);
     }
 
-    public void IsPointerInSkillActivedPanel(bool isIn)
+    public void IsPointerInSkillActivePanel(bool isIn)
     {
-        isPointerInSkillActivedPanel = isIn;
+        isPointerInSkillActivePanel = isIn;
 
-        Logger.Debug(isPointerInSkillActivedPanel);
+        if (!skillActivedHighlight.activeSelf)
+            return;
+
+        if (isIn)
+            effect();
+        else
+            cancle();
     }
 }

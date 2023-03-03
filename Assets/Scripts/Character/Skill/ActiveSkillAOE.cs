@@ -47,8 +47,7 @@ public class ActiveSkillAOE : CharacterSkill
     }
     private void MoveIndicator()
     {
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-        Debug.DrawRay(ray.origin, ray.direction * 100f, Color.red);
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);        
         RaycastHit hit;
 
         if (Physics.Raycast(ray, out hit, 100.0f, layerM))
@@ -58,11 +57,11 @@ public class ActiveSkillAOE : CharacterSkill
     }
     public override void OnActiveSkill()
     {
-        var targets = skillAreaIndicator.GetUnitsInArea();
-
         var particleContainer = Instantiate(particle);
 
         particleContainer.transform.position = indicatorTransform.position;
+
+        var targets = skillAreaIndicator.GetUnitsInArea();
 
         int damage = 0;
         switch(targetType)

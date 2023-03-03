@@ -68,8 +68,8 @@ public class PopUpManager : MonoBehaviour
             GameObject panelHolder = Instantiate(this.panelHolder, popUpHolders[i].transform);            
             panelHolder.transform.SetAsFirstSibling();
             
-            var interactable = Instantiate(interactablePanel, panelHolder.transform);            
             var nonInteractable = Instantiate(noneInteractablePanel, panelHolder.transform);
+            var interactable = Instantiate(interactablePanel, panelHolder.transform);            
 
             panelHolders.Add(new panelHolder(interactable, nonInteractable));
         }
@@ -101,7 +101,7 @@ public class PopUpManager : MonoBehaviour
     public void ShowPanelInteractable(bool interactable)
     {
         panelHolders[CurrentViewIndex].interactable.SetActive(interactable);
-        panelHolders[CurrentViewIndex].noneInteractable.SetActive(!interactable);
+        panelHolders[CurrentViewIndex].noneInteractable.SetActive(true);
     }
     private void HidePanel()
     {
