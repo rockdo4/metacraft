@@ -164,6 +164,7 @@ public class MissionManager : MonoBehaviour
                     gm.LoadScene((int)SceneIndex.Battle);
                     break;
                 case 1:
+                    gm.LoadScene((int)SceneIndex.Battle);
                     break;
                 case 2:
                     gm.LoadScene((int)SceneIndex.Defense);
