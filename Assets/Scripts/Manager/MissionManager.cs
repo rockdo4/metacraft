@@ -158,7 +158,8 @@ public class MissionManager : MonoBehaviour
         }
         if (count > 0)
         {
-            gm.LoadScene((int)SceneIndex.Battle);
+            //gm.LoadScene((int)SceneIndex.Battle);
+            gm.LoadScene((int)SceneIndex.Defense);
         }
     }
 }
