@@ -8,7 +8,7 @@ public abstract class AttackableHero : AttackableUnit
     private Transform returnPos;
     public void SetReturnPos(Transform tr) => returnPos = returnPos = tr;
 
-    private Coroutine coWhileActiveSkill;
+    private Coroutine coOnIndicator;
 
     protected override UnitState UnitState {
         get {
@@ -116,7 +116,8 @@ public abstract class AttackableHero : AttackableUnit
     public virtual void SetUi(HeroUi _heroUI)
     {
         heroUI = _heroUI;
-        heroUI.heroSkill.Set(characterData.activeSkill.cooldown, ActiveSkill); 
+        //BattleState = UnitBattleState.ActiveSkill;
+        heroUI.heroSkill.Set(characterData.activeSkill.cooldown, ReadyActiveSkill, PlayActiveSkillAnimation); //궁극기 쿨타임과 궁극기 함수 등록
     }
 
     protected override void SearchTarget()
@@ -131,10 +132,28 @@ public abstract class AttackableHero : AttackableUnit
     public override void PassiveSkill()
     {
     }
-    public override void ActiveSkill()
+    public override void ReadyActiveSkill()
+    {        
+        if (coOnIndicator != null)
+        {
+            characterData.activeSkill.SkillCancle();
+            StopCoroutine(coOnIndicator);
+            coOnIndicator = null;
+            return;
+        }        
+
+        coOnIndicator = StartCoroutine(characterData.activeSkill.SkillCoroutine());
+    }
+    public void PlayActiveSkillAnimation()
     {
         pathFind.isStopped = true;
         BattleState = UnitBattleState.ActiveSkill;
+        StopCoroutine(coOnIndicator);
+        coOnIndicator = null;
+    }    
+    public override void OnActiveSkill()
+    {
+        characterData.activeSkill.OnActiveSkill();
     }
 
     protected override void IdleUpdate()
@@ -271,6 +290,8 @@ public abstract class AttackableHero : AttackableUnit
     {
         battleManager.OnDeadHero((AttackableHero)unit);
         heroUI.SetDieImage();
+
+        characterData.activeSkill.SkillCancle();
     }
 
     //타겟이 없으면 Idle로 가고, 쿨타임 계산해서 바로 스킬 가능하면 사용, 아니라면 대기

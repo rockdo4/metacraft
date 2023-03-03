@@ -112,7 +112,7 @@ public abstract class AttackableEnemy : AttackableUnit
     public override void PassiveSkill()
     {
     }
-    public override void ActiveSkill()
+    public override void ReadyActiveSkill()
     {
     }
 
@@ -128,6 +128,7 @@ public abstract class AttackableEnemy : AttackableUnit
             //타겟에게 이동중이거나, 공격 대기중에 타겟이 죽으면 재탐색
             case UnitBattleState.MoveToTarget:
             case UnitBattleState.BattleIdle:
+                animator.SetFloat("Speed", pathFind.velocity.magnitude / characterData.data.moveSpeed);
                 if (IsAlive(target))
                 {
                     Vector3 targetDirection = target.transform.position - transform.position;

@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 1354717216788216514}
   - component: {fileID: 9214976654784095278}
   - component: {fileID: 4338150435103202296}
+  - component: {fileID: 4966649920477233394}
   m_Layer: 5
   m_Name: OnActiveSkillPanel
   m_TagString: Untagged
@@ -31,7 +32,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3864779675190084845}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -73,6 +74,99 @@ MonoBehaviour:
     y: 0
     width: 1
     height: 1
+--- !u!114 &4966649920477233394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1498804876145463244}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 0
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3270393158830189407}
+          m_TargetAssemblyTypeName: HeroSkill, Assembly-CSharp
+          m_MethodName: IsPointerInSkillActivedPanel
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+        - m_Target: {fileID: 6169069848393226457}
+          m_TargetAssemblyTypeName: HeroSkill, Assembly-CSharp
+          m_MethodName: IsPointerInSkillActivedPanel
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+        - m_Target: {fileID: 9179155079343524336}
+          m_TargetAssemblyTypeName: HeroSkill, Assembly-CSharp
+          m_MethodName: IsPointerInSkillActivedPanel
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 1
+          m_CallState: 2
+  - eventID: 1
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 3270393158830189407}
+          m_TargetAssemblyTypeName: HeroSkill, Assembly-CSharp
+          m_MethodName: IsPointerInSkillActivedPanel
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 6169069848393226457}
+          m_TargetAssemblyTypeName: HeroSkill, Assembly-CSharp
+          m_MethodName: IsPointerInSkillActivedPanel
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+        - m_Target: {fileID: 9179155079343524336}
+          m_TargetAssemblyTypeName: HeroSkill, Assembly-CSharp
+          m_MethodName: IsPointerInSkillActivedPanel
+          m_Mode: 6
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
 --- !u!1 &3864779673809342117
 GameObject:
   m_ObjectHideFlags: 0
@@ -360,6 +454,7 @@ GameObject:
   - component: {fileID: 3864779674254409822}
   - component: {fileID: 3864779674254409821}
   - component: {fileID: 7522589932740748334}
+  - component: {fileID: 2423110948452844028}
   m_Layer: 5
   m_Name: Heroes
   m_TagString: Untagged
@@ -383,7 +478,7 @@ RectTransform:
   - {fileID: 7713372255302859461}
   - {fileID: 4752845221834615788}
   m_Father: {fileID: 3864779675190084845}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 0}
@@ -454,6 +549,19 @@ MonoBehaviour:
   m_ChildScaleWidth: 0
   m_ChildScaleHeight: 0
   m_ReverseArrangement: 0
+--- !u!114 &2423110948452844028
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3864779674254409819}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates: []
 --- !u!1 &3864779675043466871
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,7 +594,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3864779675190084845}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -640,11 +748,11 @@ RectTransform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 739905693625463177}
   - {fileID: 1354717216788216514}
   - {fileID: 3864779674254409820}
   - {fileID: 3864779675230183195}
   - {fileID: 3864779675043466856}
-  - {fileID: 739905693625463177}
   - {fileID: 7288917648676999985}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -702,7 +810,7 @@ RectTransform:
   m_Children:
   - {fileID: 3864779674054277217}
   m_Father: {fileID: 3864779675190084845}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -1477,10 +1585,15 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3575681098592713931, guid: 54e066ad1921b0e42ba195f220b254b4,
+        type: 3}
+      propertyPath: skillActivedPanel
+      value: 
+      objectReference: {fileID: 1498804876145463244}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -1505,7 +1618,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -1526,7 +1639,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1498804876145463244}
+      objectReference: {fileID: 3270393158830189407}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -1565,7 +1678,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
+      value: OnUpSkillActive
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -1585,7 +1698,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
+      value: HeroSkill, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -1655,6 +1768,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 2088995416942221204}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &3270393158830189407 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3575681098592713931, guid: 54e066ad1921b0e42ba195f220b254b4,
+    type: 3}
+  m_PrefabInstance: {fileID: 2088995416942221204}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a82ece9dcd07bdd4787da34f03498ed0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2492798125848579770
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1675,7 +1800,7 @@ PrefabInstance:
     - target: {fileID: 2944403073375895347, guid: c7ae6bdefb292e34f999bb727a0d9ae6,
         type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2944403073375895347, guid: c7ae6bdefb292e34f999bb727a0d9ae6,
         type: 3}
@@ -1897,10 +2022,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3575681098592713931, guid: 54e066ad1921b0e42ba195f220b254b4,
+        type: 3}
+      propertyPath: skillActivedPanel
+      value: 
+      objectReference: {fileID: 1498804876145463244}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -1925,7 +2055,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -1946,7 +2076,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1498804876145463244}
+      objectReference: {fileID: 9179155079343524336}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -1985,7 +2115,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
+      value: OnUpSkillActive
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -2005,7 +2135,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
+      value: HeroSkill, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -2076,6 +2206,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 5691907723974423867}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9179155079343524336 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3575681098592713931, guid: 54e066ad1921b0e42ba195f220b254b4,
+    type: 3}
+  m_PrefabInstance: {fileID: 5691907723974423867}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a82ece9dcd07bdd4787da34f03498ed0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7206796604634784786
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2193,10 +2335,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3575681098592713931, guid: 54e066ad1921b0e42ba195f220b254b4,
+        type: 3}
+      propertyPath: skillActivedPanel
+      value: 
+      objectReference: {fileID: 1498804876145463244}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.size
-      value: 1
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -2221,7 +2368,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Mode
-      value: 6
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -2242,7 +2389,7 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 1498804876145463244}
+      objectReference: {fileID: 6169069848393226457}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[1].m_Target
@@ -2281,7 +2428,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: SetActive
+      value: OnUpSkillActive
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -2301,7 +2448,7 @@ PrefabInstance:
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
       propertyPath: m_Delegates.Array.data[1].callback.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
-      value: UnityEngine.GameObject, UnityEngine
+      value: HeroSkill, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 7208465833622360583, guid: 54e066ad1921b0e42ba195f220b254b4,
         type: 3}
@@ -2366,6 +2513,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 7206796604634784786}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6169069848393226457 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3575681098592713931, guid: 54e066ad1921b0e42ba195f220b254b4,
+    type: 3}
+  m_PrefabInstance: {fileID: 7206796604634784786}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a82ece9dcd07bdd4787da34f03498ed0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!224 &7713372255302859461 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 1083336054319177431, guid: 54e066ad1921b0e42ba195f220b254b4,

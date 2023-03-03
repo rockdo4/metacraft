@@ -52,9 +52,9 @@ public class CovertAttackHero : AttackableHero
         base.PassiveSkill();
         return;
     }
-    public override void ActiveSkill()
+    public override void ReadyActiveSkill()
     {
-        base.ActiveSkill();
+        base.ReadyActiveSkill();
 
     }
 

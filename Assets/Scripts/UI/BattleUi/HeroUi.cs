@@ -36,7 +36,7 @@ public class HeroUi : MonoBehaviour
     public void OnClickHeroSkill()
     {
         if(heroState == UnitState.Battle)
-            heroSkill.OnClickSkill();
+            heroSkill.OnDownSkill();
     }
 
     public void OnClickPopUp()

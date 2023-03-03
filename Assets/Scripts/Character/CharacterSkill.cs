@@ -24,4 +24,7 @@ public class CharacterSkill : ScriptableObject
     {
         yield break;  
     }
+    public virtual void OnActiveSkill() { }
+
+    public virtual void SkillCancle() { }
 }

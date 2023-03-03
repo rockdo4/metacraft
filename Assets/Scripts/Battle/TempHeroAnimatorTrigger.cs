@@ -1,3 +1,4 @@
+using UnityEditor.Purchasing;
 using UnityEngine;
 
 public class TempHeroAnimatorTrigger : MonoBehaviour
@@ -14,7 +15,7 @@ public class TempHeroAnimatorTrigger : MonoBehaviour
     }
     public void ActiveSkill(AnimationEvent ev)
     {
-        unit.ActiveSkill();
+        unit.ReadyActiveSkill();
     }
     public void NormalAttackEnd(AnimationEvent ev)
     {
@@ -35,5 +36,9 @@ public class TempHeroAnimatorTrigger : MonoBehaviour
     public void DestroyUnit(AnimationEvent ev)
     {
         unit.DestroyUnit();
+    }
+    public void OnActiveSkill(AnimationEvent ev)
+    {
+        unit.OnActiveSkill();
     }
 }
