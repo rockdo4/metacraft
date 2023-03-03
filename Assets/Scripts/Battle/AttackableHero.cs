@@ -124,7 +124,12 @@ public abstract class AttackableHero : AttackableUnit
     {
         heroUI = _heroUI;
         //BattleState = UnitBattleState.ActiveSkill;
-        heroUI.heroSkill.Set(characterData.activeSkill.cooldown, ReadyActiveSkill, PlayActiveSkillAnimation); //±Ã±Ø±â ÄðÅ¸ÀÓ°ú ±Ã±Ø±â ÇÔ¼ö µî·Ï
+        heroUI.heroSkill.
+            Set(
+            characterData.activeSkill.cooldown, 
+            ReadyActiveSkill, 
+            PlayActiveSkillAnimation,
+            CancleActiveSkill); //±Ã±Ø±â ÄðÅ¸ÀÓ°ú ±Ã±Ø±â ÇÔ¼ö µî·Ï
     }
 
     protected override void SearchTarget()
@@ -142,15 +147,17 @@ public abstract class AttackableHero : AttackableUnit
     }
     public override void ReadyActiveSkill()
     {        
-        if (coOnIndicator != null)
-        {
-            characterData.activeSkill.SkillCancle();            
-            StopCoroutine(coOnIndicator);
-            coOnIndicator = null;
-            return;
-        }        
-
         coOnIndicator = StartCoroutine(characterData.activeSkill.SkillCoroutine());
+    }
+    public void CancleActiveSkill()
+    {
+        if (coOnIndicator == null)
+            return;
+
+        characterData.activeSkill.SkillCancle();
+        StopCoroutine(coOnIndicator);
+        coOnIndicator = null;
+        return;
     }
     public void PlayActiveSkillAnimation()
     {
