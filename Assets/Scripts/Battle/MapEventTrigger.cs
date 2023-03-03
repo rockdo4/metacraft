@@ -15,9 +15,9 @@ public class MapEventTrigger : MonoBehaviour
 
     public void OnDead(AttackableEnemy enemy)
     {
+        enemys.Add(enemy);
         useEnemys.Remove(enemy);
         enemy.gameObject.SetActive(false);
-        enemys.Add(enemy);
     }
 
     public void InfinityRespawnEnemy()

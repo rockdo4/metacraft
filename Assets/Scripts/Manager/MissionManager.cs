@@ -158,8 +158,17 @@ public class MissionManager : MonoBehaviour
         }
         if (count > 0)
         {
-            //gm.LoadScene((int)SceneIndex.Battle);
-            gm.LoadScene((int)SceneIndex.Defense);
+            switch (missionInfoTable[missionNum]["Type"])
+            {
+                case 0:
+                    gm.LoadScene((int)SceneIndex.Battle);
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    gm.LoadScene((int)SceneIndex.Defense);
+                    break;
+            }
         }
     }
 }

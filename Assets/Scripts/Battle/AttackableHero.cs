@@ -15,8 +15,8 @@ public abstract class AttackableHero : AttackableUnit
             return unitState;
         }
         set {
-            if (unitState == value)
-                return;
+            //if (unitState == value)
+            //    return;
 
             unitState = value;
             heroUI.heroState = unitState;
