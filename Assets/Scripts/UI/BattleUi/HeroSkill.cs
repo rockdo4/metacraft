@@ -71,6 +71,7 @@ public class HeroSkill : MonoBehaviour
     }
     public void CancleSkill()
     {
+        Time.timeScale = prevTimeScale;
         cancle();
         SetActiveSkillGUIs(false);
     }

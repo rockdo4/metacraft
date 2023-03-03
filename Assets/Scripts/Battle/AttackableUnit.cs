@@ -83,7 +83,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
         UnitHp = characterData.data.healthPoint;
     }
-    protected void FixedUpdate()
+    protected void Update()
     {
         nowUpdate?.Invoke();
     }

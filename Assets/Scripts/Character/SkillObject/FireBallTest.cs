@@ -18,7 +18,7 @@ public class FireBallTest : MonoBehaviour
         target = t;
         var rot = target.rotation;
         rot.y = 0;
-        transform.LookAt(target);
+        //transform.LookAt(target);
     }
 
     public void MoveStart()

@@ -34,10 +34,8 @@ public class RangeAttackHero : AttackableHero
 
         base.NormalAttack();
 
-        if (IsAlive(target))
-            return;
-
         var f = Instantiate(attackPref, attackPos.transform.position, Quaternion.identity);
+        f.transform.rotation = transform.rotation;
         f.Set(target.transform, characterData);
         f.MoveStart();
     }
