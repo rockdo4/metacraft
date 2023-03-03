@@ -9,8 +9,8 @@ public class ShortAttackHero : AttackableHero
     {
         if (BattleState == UnitBattleState.ActiveSkill)
             return;
+
         base.NormalAttack();
-        //Logger.Debug("Hero_NormalAttack");
 
         if (characterData.attack.count == 1)
         {
@@ -45,19 +45,13 @@ public class ShortAttackHero : AttackableHero
     public override void PassiveSkill()
     {
         base.PassiveSkill();
-        //Logger.Debug("Hero_NormalAttack");
-
-        target.OnDamage(characterData.data.baseDamage * 2, true);
-        return;
-
-        //Logger.Debug("Hero_PassiveSkill");
     }
     public override void ActiveSkill()
     {
         base.ActiveSkill();
-        
 
-        //target.OnDamage(characterData.data.baseDamage * 3, true);
+        if (IsAlive(target)) //임시코드라 타겟에 직접 데미지를 줘야해서 null체크.원래라면 이것도 상속받는 함수가 가지고 있어야 함.
+            target.OnDamage(177);
     }
 
     protected override void SearchTarget()

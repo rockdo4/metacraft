@@ -116,11 +116,13 @@ public abstract class AttackableHero : AttackableUnit
     public virtual void SetUi(HeroUi _heroUI)
     {
         heroUI = _heroUI;
-        //BattleState = UnitBattleState.ActiveSkill;
-        heroUI.heroSkill.Set(characterData.activeSkill.cooldown, ActiveSkill); //궁극기 쿨타임과 궁극기 함수 등록
+        heroUI.heroSkill.Set(characterData.activeSkill.cooldown, ActiveSkill); 
     }
 
-    protected abstract void SearchTarget(); //각각의 캐릭터가 탐색 조건이 다름.
+    protected override void SearchTarget()
+    {
+
+    }
 
     public override void NormalAttack()
     {
@@ -133,10 +135,6 @@ public abstract class AttackableHero : AttackableUnit
     {
         pathFind.isStopped = true;
         BattleState = UnitBattleState.ActiveSkill;
-        if (IsAlive(target)) //임시코드라 타겟에 직접 데미지를 줘야해서 null체크.원래라면 이것도 상속받는 함수가 가지고 있어야 함.
-            target.OnDamage(177);
-
-        //coWhileActiveSkill = StartCoroutine(characterData.activeSkill.SkillCoroutine());
     }
 
     protected override void IdleUpdate()
@@ -164,9 +162,6 @@ public abstract class AttackableHero : AttackableUnit
                     SearchTarget();
                     if (IsAlive(target))
                     {
-                        //if (InRangePassiveSkill && CanPassiveSkillTime)
-                        //    BattleState = UnitBattleState.PassiveSkill;
-                        //else
                         if (InRangeNormalAttack && CanNormalAttackTime)
                             BattleState = UnitBattleState.NormalAttack;
                         else
@@ -181,9 +176,6 @@ public abstract class AttackableHero : AttackableUnit
         switch (BattleState)
         {
             case UnitBattleState.MoveToTarget: //타겟에게 이동중 타겟 거리 계산.
-                //if (InRangePassiveSkill && CanPassiveSkillTime)
-                //    BattleState = UnitBattleState.PassiveSkill;
-                //else 
                 if (InRangeNormalAttack)
                     BattleState = CanNormalAttackTime ? UnitBattleState.NormalAttack : UnitBattleState.BattleIdle;
                 else if (Time.time - lastNavTime > navDelay) //일반공격, 패시브 사용 불가 거리일시 이동
@@ -197,11 +189,6 @@ public abstract class AttackableHero : AttackableUnit
                 {
                     BattleState = UnitBattleState.MoveToTarget;
                 }
-                //else
-                //if (InRangePassiveSkill && CanPassiveSkillTime) // 거리, 쿨타임 체크
-                //{
-                //    BattleState = UnitBattleState.PassiveSkill;
-                //}
                 else if (InRangeNormalAttack && CanNormalAttackTime)
                 {
                     BattleState = UnitBattleState.NormalAttack;
@@ -296,8 +283,6 @@ public abstract class AttackableHero : AttackableUnit
         {
             BattleState = UnitBattleState.BattleIdle;
         }
-        //else if (InRangePassiveSkill && CanPassiveSkillTime)
-        //    BattleState = UnitBattleState.PassiveSkill;
         else if (InRangeNormalAttack && CanNormalAttackTime)
             BattleState = UnitBattleState.NormalAttack;
         else
@@ -341,9 +326,5 @@ public abstract class AttackableHero : AttackableUnit
         {
             BattleState = UnitBattleState.BattleIdle;
         }
-        //else if (InRangePassiveSkill && CanPassiveSkillTime)
-        //{
-        //    BattleState = UnitBattleState.PassiveSkill;
-        //}
     }
 }

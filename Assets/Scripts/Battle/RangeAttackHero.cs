@@ -33,35 +33,6 @@ public class RangeAttackHero : AttackableHero
 
         base.NormalAttack();
 
-        //if (characterData.attack.count == 1)
-        //{
-        //    target.OnDamage(characterData.data.baseDamage, false);
-        //    return;
-        //}
-
-        //List<AttackableUnit> attackEnemies = new();
-
-        //foreach (var enemy in enemyList)
-        //{
-        //    Vector3 interV = enemy.transform.position - transform.position;
-        //    if (interV.magnitude <= characterData.attack.distance)
-        //    {
-        //        float angle = Vector3.Angle(transform.forward, interV);
-
-        //        if (Mathf.Abs(angle) < characterData.attack.angle / 2f)
-        //        {
-        //            attackEnemies.Add(enemy);
-        //        }
-        //    }
-        //}
-
-        //attackEnemies = GetNearestUnitList(attackEnemies, characterData.attack.count);
-
-        //for (int i = 0; i < attackEnemies.Count; i++)
-        //{
-        //    attackEnemies[i].OnDamage(characterData.data.baseDamage, false);
-        //}
-
         var f = Instantiate(attackPref, attackPos.transform.position, Quaternion.identity);
         f.Set(target, characterData);
         f.MoveStart();

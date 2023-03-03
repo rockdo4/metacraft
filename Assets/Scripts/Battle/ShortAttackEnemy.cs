@@ -7,8 +7,10 @@ public class ShortAttackEnemy : AttackableEnemy
 {
     public override void NormalAttack()
     {
+        if (BattleState == UnitBattleState.ActiveSkill)
+            return;
+
         base.NormalAttack();
-        //Logger.Debug("Hero_NormalAttack");
 
         if (characterData.attack.count == 1)
         {
@@ -39,10 +41,10 @@ public class ShortAttackEnemy : AttackableEnemy
             attackHeroes[i].OnDamage(characterData.data.baseDamage);
         }
     }
+
     public override void PassiveSkill()
     {
         base.PassiveSkill();
-        //Logger.Debug("Enemy_PassiveSkill");
     }
 
     protected override void SearchTarget()

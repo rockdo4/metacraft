@@ -58,12 +58,9 @@ public abstract class AttackableEnemy : AttackableUnit
         }
         set {
             if (value == battleState)
-            {
-                // Attack 에서 Attack로 갈수도 있어서 일단은 returnX
-                // return;
-            }
-            battleState = value;
+                return;
 
+            battleState = value;
             switch (battleState)
             {
                 case UnitBattleState.MoveToTarget:
@@ -104,7 +101,10 @@ public abstract class AttackableEnemy : AttackableUnit
         hpBarManager = GetComponent<HpBarManager>();
         hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
     }
-    protected abstract void SearchTarget(); //각각의 캐릭터가 탐색 조건이 다름.
+
+    protected override void SearchTarget()
+    {
+    }
 
     public override void NormalAttack()
     {

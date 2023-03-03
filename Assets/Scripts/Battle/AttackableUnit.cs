@@ -19,6 +19,8 @@ public abstract class AttackableUnit : MonoBehaviour
     protected List<AttackableHero> heroList;
     [SerializeField]
     protected List<AttackableEnemy> enemyList;
+    [SerializeField]
+    protected List<AttackableEnemy> citizenList;
 
     public int UnitHp {
         get {
@@ -60,14 +62,7 @@ public abstract class AttackableUnit : MonoBehaviour
         }
     }
     public bool IsAlive(AttackableUnit unit) => (unit != null) && (unit.gameObject.activeSelf) && (unit.UnitHp > 0);
-    //protected bool CanPassiveSkillTime {
-    //    get {
-    //        return (Time.time - lastPassiveSkillTime) > characterData.passiveSkill.cooldown;
-    //    }
-    //}
-
     protected bool InRangeNormalAttack => Vector3.Distance(target.transform.position, transform.position) < characterData.attack.distance;
-    //protected bool InRangePassiveSkill => Vector3.Distance(target.transform.position, transform.position) < characterData.passiveSkill.distance;
     protected bool NonActiveSkill => battleState != UnitBattleState.ActiveSkill && battleState != UnitBattleState.Stun;
 
     protected virtual void Awake()
@@ -128,6 +123,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public abstract void OnDamage(int dmg, bool isCritical = false);
 
+    protected abstract void SearchTarget();
     public void SearchNearbyTarget<T>(List<T> list) where T : AttackableUnit
     {
         var tempList = list;
