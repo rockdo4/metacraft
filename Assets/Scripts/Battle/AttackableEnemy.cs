@@ -35,6 +35,8 @@ public abstract class AttackableEnemy : AttackableUnit
 
                     battleManager.GetHeroList(ref heroList);
 
+                    animator.SetFloat("Speed", 1);
+
                     BattleState = UnitBattleState.MoveToTarget;
                     nowUpdate = BattleUpdate;
                     break;
@@ -140,9 +142,6 @@ public abstract class AttackableEnemy : AttackableUnit
                     SearchTarget();
                     if (IsAlive(target))
                     {
-                        //if (InRangePassiveSkill && CanPassiveSkillTime)   
-                        //    BattleState = UnitBattleState.PassiveSkill;
-                        //else
                         if (InRangeNormalAttack && CanNormalAttackTime)
                             BattleState = UnitBattleState.NormalAttack;
                         else
@@ -167,13 +166,9 @@ public abstract class AttackableEnemy : AttackableUnit
                 break;
             case UnitBattleState.BattleIdle:
                 if (!InRangeNormalAttack)
-                {
                     BattleState = UnitBattleState.MoveToTarget;
-                }
                 else if (InRangeNormalAttack && CanNormalAttackTime)
-                {
                     BattleState = UnitBattleState.NormalAttack;
-                }
                 break;
             case UnitBattleState.NormalAttack:
                 break;
@@ -236,15 +231,11 @@ public abstract class AttackableEnemy : AttackableUnit
         animator.SetTrigger("AttackEnd");
         lastNormalAttackTime = Time.time;
         if (target == null || !target.gameObject.activeSelf)
-        {
             BattleState = UnitBattleState.BattleIdle;
-        }
         else if (InRangeNormalAttack && CanNormalAttackTime)
             BattleState = UnitBattleState.NormalAttack;
         else
-        {
             BattleState = UnitBattleState.BattleIdle;
-        }
     }
     public override void PassiveSkillEnd()
     {

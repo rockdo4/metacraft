@@ -17,6 +17,11 @@ public class DefenseBattleManager : TestBattleManager
     public override void OnDeadHero(AttackableHero hero)
     {
         base.OnDeadHero(hero);
+        readyCount = useHeroes.Count;
+        if (useHeroes.Count == 0)
+        {
+           // SetEnemyIdle();
+        }
     }
     public override void OnDeadEnemy(AttackableEnemy enemy)
     {
@@ -37,6 +42,8 @@ public class DefenseBattleManager : TestBattleManager
     public override void OnReady()
     {
         readyCount--;
+        Logger.Debug(readyCount);
+        Logger.Debug(enemyCount);
         if (readyCount == 0 && enemyCount == 0)
         {
             SetStageClear();
