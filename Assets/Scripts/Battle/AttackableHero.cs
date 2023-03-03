@@ -340,7 +340,10 @@ public abstract class AttackableHero : AttackableUnit
         base.ActiveSkillEnd();
 
         if (enemyList.Count == 0)
+        {
+            Logger.Debug("EnemyCount " + enemyList.Count);
             UnitState = UnitState.ReturnPosition;
+        }
         else if (!IsAlive(target))
             BattleState = UnitBattleState.BattleIdle;
         else if (InRangeNormalAttack && CanNormalAttackTime)
