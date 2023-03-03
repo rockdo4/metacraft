@@ -31,6 +31,9 @@ public class RangeAttackHero : AttackableHero
         if (BattleState == UnitBattleState.ActiveSkill)
             return;
 
+        if (IsAlive(target))
+            return;
+
         base.NormalAttack();
 
         var f = Instantiate(attackPref, attackPos.transform.position, Quaternion.identity);
