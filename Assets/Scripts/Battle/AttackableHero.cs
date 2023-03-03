@@ -136,7 +136,7 @@ public abstract class AttackableHero : AttackableUnit
     {        
         if (coOnIndicator != null)
         {
-            characterData.activeSkill.SkillCancle();
+            characterData.activeSkill.SkillCancle();            
             StopCoroutine(coOnIndicator);
             coOnIndicator = null;
             return;
@@ -148,8 +148,11 @@ public abstract class AttackableHero : AttackableUnit
     {
         pathFind.isStopped = true;
         BattleState = UnitBattleState.ActiveSkill;
-        StopCoroutine(coOnIndicator);
-        coOnIndicator = null;
+        if(coOnIndicator != null)
+        {
+            StopCoroutine(coOnIndicator);
+            coOnIndicator = null;
+        }
     }    
     public override void OnActiveSkill()
     {
