@@ -20,8 +20,15 @@ public class DefenseBattleManager : TestBattleManager
         readyCount = useHeroes.Count;
         if (useHeroes.Count == 0)
         {
-           // SetEnemyIdle();
+            SetStageFail();
         }
+    }
+
+    private void SetStageFail()
+    {
+        Time.timeScale = 0;
+        UIManager.Instance.ShowView(2);
+        Logger.Debug("Fail!");
     }
     public override void OnDeadEnemy(AttackableEnemy enemy)
     {
