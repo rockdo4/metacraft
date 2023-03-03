@@ -112,6 +112,7 @@ public class TestBattleManager : MonoBehaviour
     {
         for (int i = 0; i < useHeroes.Count; i++)
         {
+            Logger.Debug("Return");
             useHeroes[i].SetReturnPos(pos[i]);
             useHeroes[i].ChangeUnitState(UnitState.ReturnPosition);
         }

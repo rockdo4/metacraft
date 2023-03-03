@@ -10,6 +10,7 @@ public class DefenseBattleManager : TestBattleManager
     {
         GameStart();
         enemyCount = GetAllEnemyCount();
+        Logger.Debug(enemyCount);
         enemyCountTxt.Count = enemyCount;
     }
 
@@ -23,6 +24,7 @@ public class DefenseBattleManager : TestBattleManager
         triggers[0].OnDead(enemy);
 
         enemyCount--;
+        Logger.Debug($"{triggers[0].enemys.Count} / {triggers[0].useEnemys.Count} / {enemyCount}");
         if (enemyCount == 0)
         {
             SetHeroReturnPositioning(startPositions);
