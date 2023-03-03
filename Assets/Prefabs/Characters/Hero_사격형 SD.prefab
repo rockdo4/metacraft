@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3582953550118868192
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7866418510217010947}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7866418510217010947
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3582953550118868192}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.632, z: 0.436}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8489007089072879650}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &8489007089072879651
 GameObject:
   m_ObjectHideFlags: 0
@@ -34,6 +65,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4417974481713311929}
+  - {fileID: 7866418510217010947}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
@@ -107,6 +139,9 @@ MonoBehaviour:
   enemyList: []
   unitState: 0
   battleState: 0
+  attackPos: {fileID: 7866418510217010947}
+  attackPref: {fileID: 695655192863215371, guid: 14958f7d3c88c4d4abe0ea8dc27cce43,
+    type: 3}
 --- !u!114 &8489007089072879663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,9 +157,9 @@ MonoBehaviour:
   originData: {fileID: 11400000, guid: 2fc8d164435b82a4e9aa48b86f95759d, type: 2}
   data:
     name: 
-    grade: 
+    grade: 0
+    maxGrade: 0
     job: 
-    maxGrade: 
     energy: 0
     level: 0
     exp: 0
@@ -139,7 +174,7 @@ MonoBehaviour:
     evasion: 0
     accuracy: 0.5
     synergys: 
-  attack: {fileID: 11400000, guid: d5b9a7358e0855b46acac612b4428307, type: 2}
+  attack: {fileID: 11400000, guid: 0a5416f85278db745acddeaed4dc02c5, type: 2}
   activeSkill: {fileID: 11400000, guid: c9f64039ca8bd8146ae8d8344c554f5f, type: 2}
   passiveSkill: {fileID: 11400000, guid: 72914e2e9e922d84eb7b5c550ed005df, type: 2}
 --- !u!1001 &4422208325064977245
@@ -201,7 +236,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 927414bd9c991c1469494359c13bcbc4, type: 2}
+      objectReference: {fileID: 22100000, guid: 65d59938ff12ac1438000d1563026696,
+        type: 2}
     - target: {fileID: 95762697582116756, guid: 0021c63169f21074dae11255bb3a1ca8,
         type: 3}
       propertyPath: m_ApplyRootMotion
