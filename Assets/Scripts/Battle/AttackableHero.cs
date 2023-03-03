@@ -8,15 +8,15 @@ public abstract class AttackableHero : AttackableUnit
     private Transform returnPos;
     public void SetReturnPos(Transform tr) => returnPos = returnPos = tr;
 
-    private Coroutine coWhileActiveSkill;
+    private Coroutine coOnIndicator;
 
     protected override UnitState UnitState {
         get {
             return unitState;
         }
         set {
-            if (unitState == value)
-                return;
+            //if (unitState == value)
+            //    return;
 
             unitState = value;
             heroUI.heroState = unitState;
@@ -24,38 +24,47 @@ public abstract class AttackableHero : AttackableUnit
             {
                 case UnitState.Idle:
                     pathFind.isStopped = true;
-                    animator.SetTrigger("Idle");
+
+                    animator.SetFloat("Speed", 0);
+
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.ReturnPosition: // 재배치
-                    BattleState = UnitBattleState.None;
-                    animator.SetBool("IsBattle", false);
-                    animator.SetTrigger("Run");
                     pathFind.isStopped = false;
-                    pathFind.SetDestination(returnPos.position); //재배치 위치 설정
                     pathFind.stoppingDistance = 0; //가까이 가기
+                    pathFind.SetDestination(returnPos.position); //재배치 위치 설정
+
+                    Logger.Debug(returnPos.position);
+                    animator.ResetTrigger("Attack");
+
+                    BattleState = UnitBattleState.None;
                     nowUpdate = ReturnPosUpdate;
+
+                    testRot = false;
                     break;
                 case UnitState.MoveNext:
-                    animator.ResetTrigger("Idle");
-                    animator.SetTrigger("Run");
                     pathFind.isStopped = false;
+
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
-                    animator.SetBool("IsBattle", true);
-                    BattleState = UnitBattleState.MoveToTarget;
-                    Logger.Debug("battle");
+                    pathFind.isStopped = false;
+                    pathFind.speed = characterData.data.moveSpeed;
+                    pathFind.stoppingDistance = characterData.attack.distance;
+
                     battleManager.GetEnemyList(ref enemyList);
                     battleManager.GetHeroList(ref heroList);
-                    pathFind.stoppingDistance = characterData.attack.distance;
-                    pathFind.speed = characterData.data.moveSpeed;
-                    pathFind.isStopped = false;
+
+                    animator.SetFloat("Speed", 1);
+
+                    BattleState = UnitBattleState.MoveToTarget;
                     nowUpdate = BattleUpdate;
                     break;
                 case UnitState.Die:
-                    animator.SetTrigger("Die");
                     pathFind.isStopped = true;
+
+                    animator.SetTrigger("Die");
+
                     nowUpdate = DieUpdate;
                     break;
             }
@@ -68,46 +77,35 @@ public abstract class AttackableHero : AttackableUnit
         }
         set {
             if (value == battleState)
-            {
-                // Attack 에서 Attack로 갈수도 있어서 일단은 returnX
-               // return;
-            }
+                return;
             battleState = value;
 
             //상태가 바뀔때마다 애니메이션 호출
             switch (battleState)
             {
                 case UnitBattleState.MoveToTarget:
-                    animator.ResetTrigger("Idle");
-                    animator.SetTrigger("Run");
+                    pathFind.isStopped = false;
                     break;
                 case UnitBattleState.BattleIdle:
-                    animator.ResetTrigger("Run");
-                    animator.SetTrigger("Idle");
+                    pathFind.isStopped = true;
                     break;
                 case UnitBattleState.NormalAttack:
-                    animator.ResetTrigger("Run"); //문제가 생겨서 임시. 
-                    animator.ResetTrigger("Idle");
-                    animator.SetTrigger("IsAttack");
-                    //NormalAttackAction();
+                    pathFind.isStopped = true;
+                    animator.SetTrigger("Attack");
                     break;
                 case UnitBattleState.PassiveSkill:
-                    //animator.ResetTrigger("Run");
-                    animator.SetTrigger("IsAttack");
-                    //PassiveSkillAction();
                     break;
                 case UnitBattleState.ActiveSkill:
-                    animator.ResetTrigger("Run"); //문제가 생겨서 임시. 
-                    animator.ResetTrigger("Idle");
-                    //animator.ResetTrigger("Run");
+                    pathFind.isStopped = true;
                     animator.SetTrigger("Active");
-                    //ActiveSkillAction();
                     break;
                 case UnitBattleState.Stun:
                     break;
             }
         }
     }
+
+    bool testRot = false;
 
     protected override void Awake()
     {
@@ -126,24 +124,47 @@ public abstract class AttackableHero : AttackableUnit
     {
         heroUI = _heroUI;
         //BattleState = UnitBattleState.ActiveSkill;
-        heroUI.heroSkill.Set(characterData.activeSkill.cooldown, ActiveSkill); //궁극기 쿨타임과 궁극기 함수 등록
+        heroUI.heroSkill.Set(characterData.activeSkill.cooldown, ReadyActiveSkill, PlayActiveSkillAnimation); //궁극기 쿨타임과 궁극기 함수 등록
     }
 
-    protected abstract void SearchTarget(); //각각의 캐릭터가 탐색 조건이 다름.
+    protected override void SearchTarget()
+    {
+
+    }
 
     public override void NormalAttack()
     {
+        pathFind.isStopped = true;
     }
 
     public override void PassiveSkill()
     {
     }
-    public override void ActiveSkill()
+    public override void ReadyActiveSkill()
+    {        
+        if (coOnIndicator != null)
+        {
+            characterData.activeSkill.SkillCancle();            
+            StopCoroutine(coOnIndicator);
+            coOnIndicator = null;
+            return;
+        }        
+
+        coOnIndicator = StartCoroutine(characterData.activeSkill.SkillCoroutine());
+    }
+    public void PlayActiveSkillAnimation()
     {
         pathFind.isStopped = true;
         BattleState = UnitBattleState.ActiveSkill;
-
-        //coWhileActiveSkill = StartCoroutine(characterData.activeSkill.SkillCoroutine());
+        if(coOnIndicator != null)
+        {
+            StopCoroutine(coOnIndicator);
+            coOnIndicator = null;
+        }
+    }    
+    public override void OnActiveSkill()
+    {
+        characterData.activeSkill.OnActiveSkill();
     }
 
     protected override void IdleUpdate()
@@ -159,6 +180,7 @@ public abstract class AttackableHero : AttackableUnit
             //타겟에게 이동중이거나, 공격 대기중에 타겟이 죽으면 재탐색
             case UnitBattleState.MoveToTarget:
             case UnitBattleState.BattleIdle:
+                animator.SetFloat("Speed", pathFind.velocity.magnitude / characterData.data.moveSpeed);
                 if (IsAlive(target))
                 {
                     Vector3 targetDirection = target.transform.position - transform.position;
@@ -170,9 +192,6 @@ public abstract class AttackableHero : AttackableUnit
                     SearchTarget();
                     if (IsAlive(target))
                     {
-                        //if (InRangePassiveSkill && CanPassiveSkillTime)
-                        //    BattleState = UnitBattleState.PassiveSkill;
-                        //else
                         if (InRangeNormalAttack && CanNormalAttackTime)
                             BattleState = UnitBattleState.NormalAttack;
                         else
@@ -187,9 +206,6 @@ public abstract class AttackableHero : AttackableUnit
         switch (BattleState)
         {
             case UnitBattleState.MoveToTarget: //타겟에게 이동중 타겟 거리 계산.
-                //if (InRangePassiveSkill && CanPassiveSkillTime)
-                //    BattleState = UnitBattleState.PassiveSkill;
-                //else 
                 if (InRangeNormalAttack)
                     BattleState = CanNormalAttackTime ? UnitBattleState.NormalAttack : UnitBattleState.BattleIdle;
                 else if (Time.time - lastNavTime > navDelay) //일반공격, 패시브 사용 불가 거리일시 이동
@@ -200,18 +216,9 @@ public abstract class AttackableHero : AttackableUnit
                 break;
             case UnitBattleState.BattleIdle:
                 if (!InRangeNormalAttack)
-                {
                     BattleState = UnitBattleState.MoveToTarget;
-                }
-                //else
-                //if (InRangePassiveSkill && CanPassiveSkillTime) // 거리, 쿨타임 체크
-                //{
-                //    BattleState = UnitBattleState.PassiveSkill;
-                //}
                 else if (InRangeNormalAttack && CanNormalAttackTime)
-                {
                     BattleState = UnitBattleState.NormalAttack;
-                }
                 break;
             case UnitBattleState.NormalAttack:
                 break;
@@ -231,26 +238,37 @@ public abstract class AttackableHero : AttackableUnit
 
     protected override void MoveNextUpdate()
     {
-
+        var nowSpeed = animator.GetFloat("Speed");
+        nowSpeed = Mathf.Lerp(nowSpeed, 1, Time.deltaTime * 5f);
+        animator.SetFloat("Speed", nowSpeed);
     }
 
     protected override void ReturnPosUpdate()
     {
-        switch(pathFind.isStopped)
+        switch (testRot)
         {
             case true:
                 transform.rotation = Quaternion.Lerp(transform.rotation, returnPos.rotation, Time.deltaTime * 5);
                 float angle = Quaternion.Angle(transform.rotation, returnPos.rotation);
 
+                var nowSpeed = animator.GetFloat("Speed");
+                var downSpeed = Mathf.Lerp(0, 1, Time.deltaTime * 10f);
+                animator.SetFloat("Speed", nowSpeed - downSpeed);
+
                 if (angle <= 0)
                 {
+                    testRot = false;
                     UnitState = UnitState.Idle;
                     battleManager.OnReady();
+
+                    Logger.Debug("OnReady");
                 }
                 break;
             case false:
+                animator.SetFloat("Speed", pathFind.velocity.magnitude / characterData.data.moveSpeed);
                 if (Vector3.Distance(returnPos.position, transform.position) <= 0.5f)
                 {
+                    testRot = true;
                     pathFind.isStopped = true;
                     transform.position = returnPos.position;
                 }
@@ -260,7 +278,7 @@ public abstract class AttackableHero : AttackableUnit
 
     public override void ChangeUnitState(UnitState state)
     {
-        if (BattleState == UnitBattleState.ActiveSkill)
+        if (BattleState == UnitBattleState.ActiveSkill || BattleState == UnitBattleState.NormalAttack)
             return;
         UnitState = state;
     }
@@ -278,69 +296,56 @@ public abstract class AttackableHero : AttackableUnit
         if (UnitHp <= 0)
             UnitState = UnitState.Die;
     }
-    
+
     public override void OnDead(AttackableUnit unit)
     {
         battleManager.OnDeadHero((AttackableHero)unit);
         heroUI.SetDieImage();
+
+        characterData.activeSkill.SkillCancle();
     }
 
     //타겟이 없으면 Idle로 가고, 쿨타임 계산해서 바로 스킬 가능하면 사용, 아니라면 대기
     public override void NormalAttackEnd()
     {
+        pathFind.isStopped = false;
+        animator.SetTrigger("AttackEnd");
         base.NormalAttackEnd();
+
         lastNormalAttackTime = Time.time;
-        if (!IsAlive(target))
-        {
+
+        if (enemyList.Count == 0)
+            UnitState = UnitState.ReturnPosition;
+        else if (!IsAlive(target))
             BattleState = UnitBattleState.BattleIdle;
-        }
-        //else if (InRangePassiveSkill && CanPassiveSkillTime)
-        //    BattleState = UnitBattleState.PassiveSkill;
         else if (InRangeNormalAttack && CanNormalAttackTime)
             BattleState = UnitBattleState.NormalAttack;
         else
-        {
             BattleState = UnitBattleState.BattleIdle;
-        }
     }
     public override void PassiveSkillEnd()
     {
         lastPassiveSkillTime = Time.time;
         if (!IsAlive(target))
-        {
             BattleState = UnitBattleState.BattleIdle;
-        }
         else if (InRangeNormalAttack && CanNormalAttackTime)
             BattleState = UnitBattleState.NormalAttack;
         else
-        {
             BattleState = UnitBattleState.BattleIdle;
-        }
     }
     public override void ActiveSkillEnd()
     {
         pathFind.isStopped = false;
+        animator.SetTrigger("ActiveEnd");
         base.ActiveSkillEnd();
 
         if (enemyList.Count == 0)
-        {
-            UnitState = UnitState.ReturnPosition ;
-        }
+            UnitState = UnitState.ReturnPosition;
         else if (!IsAlive(target))
-        {
             BattleState = UnitBattleState.BattleIdle;
-        }
         else if (InRangeNormalAttack && CanNormalAttackTime)
-        {
             BattleState = UnitBattleState.NormalAttack;
-        }
         else
-        {
             BattleState = UnitBattleState.BattleIdle;
-        }
-        //else if (InRangePassiveSkill && CanPassiveSkillTime)
-        //{
-        //    BattleState = UnitBattleState.PassiveSkill;
-        //}
     }
 }

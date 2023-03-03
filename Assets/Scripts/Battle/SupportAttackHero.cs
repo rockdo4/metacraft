@@ -29,8 +29,6 @@ public class SupportAttackHero : AttackableHero
                     moveToTeam = true;
                     target = GetSearchNearbyTarget(heroList);
                     pathFind.SetDestination(target.transform.position);
-                    animator.ResetTrigger("Run");
-                    animator.SetTrigger("Run");
                 }
                 else
                     SearchNearbyTarget(enemyList); //가장 가까운 적
@@ -86,15 +84,12 @@ public class SupportAttackHero : AttackableHero
     {
         if(moveToTeam)
         {
-            pathFind.SetDestination(target.transform.position);
             if (Vector3.Distance(target.transform.position, transform.position) < characterData.attack.distance/2)
             {
                 moveToTeam = false;
                 target = null;
                 SearchTarget();
             }
-
-            return;
         }
 
         switch (BattleState)
@@ -105,8 +100,6 @@ public class SupportAttackHero : AttackableHero
                 if (Time.time - lastSearchTime >= searchDelay)
                 {
                     SearchTarget();
-                    if (moveToTeam)
-                        return;
                 }
                 break;
         }

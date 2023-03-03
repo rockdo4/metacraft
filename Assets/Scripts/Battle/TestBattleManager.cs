@@ -112,6 +112,7 @@ public class TestBattleManager : MonoBehaviour
     {
         for (int i = 0; i < useHeroes.Count; i++)
         {
+            Logger.Debug("Return");
             useHeroes[i].SetReturnPos(pos[i]);
             useHeroes[i].ChangeUnitState(UnitState.ReturnPosition);
         }
@@ -133,5 +134,10 @@ public class TestBattleManager : MonoBehaviour
             useHeroes[i].SetEnabledPathFind(false);
             useHeroes[i].gameObject.SetActive(false);
         }
-    }    
+    }
+
+    public void OnDestroy()
+    {
+        Time.timeScale = 1;
+    }
 }
