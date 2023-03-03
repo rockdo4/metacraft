@@ -54,7 +54,7 @@ public class ActiveSkillAOE : CharacterSkill
         if (Physics.Raycast(ray, out hit, 100.0f, layerM))
         {
             indicatorTransform.position = hit.point + Vector3.up * 0.1f;
-        }
+        }   
     }
     public override void OnActiveSkill()
     {
