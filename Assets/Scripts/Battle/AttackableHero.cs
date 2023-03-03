@@ -205,13 +205,9 @@ public abstract class AttackableHero : AttackableUnit
                 break;
             case UnitBattleState.BattleIdle:
                 if (!InRangeNormalAttack)
-                {
                     BattleState = UnitBattleState.MoveToTarget;
-                }
                 else if (InRangeNormalAttack && CanNormalAttackTime)
-                {
                     BattleState = UnitBattleState.NormalAttack;
-                }
                 break;
             case UnitBattleState.NormalAttack:
                 break;
@@ -301,29 +297,21 @@ public abstract class AttackableHero : AttackableUnit
         animator.SetTrigger("AttackEnd");
         lastNormalAttackTime = Time.time;
         if (!IsAlive(target))
-        {
             BattleState = UnitBattleState.BattleIdle;
-        }
         else if (InRangeNormalAttack && CanNormalAttackTime)
             BattleState = UnitBattleState.NormalAttack;
         else
-        {
             BattleState = UnitBattleState.BattleIdle;
-        }
     }
     public override void PassiveSkillEnd()
     {
         lastPassiveSkillTime = Time.time;
         if (!IsAlive(target))
-        {
             BattleState = UnitBattleState.BattleIdle;
-        }
         else if (InRangeNormalAttack && CanNormalAttackTime)
             BattleState = UnitBattleState.NormalAttack;
         else
-        {
             BattleState = UnitBattleState.BattleIdle;
-        }
     }
     public override void ActiveSkillEnd()
     {
@@ -332,20 +320,12 @@ public abstract class AttackableHero : AttackableUnit
         base.ActiveSkillEnd();
 
         if (enemyList.Count == 0)
-        {
             UnitState = UnitState.ReturnPosition;
-        }
         else if (!IsAlive(target))
-        {
             BattleState = UnitBattleState.BattleIdle;
-        }
         else if (InRangeNormalAttack && CanNormalAttackTime)
-        {
             BattleState = UnitBattleState.NormalAttack;
-        }
         else
-        {
             BattleState = UnitBattleState.BattleIdle;
-        }
     }
 }
