@@ -5,9 +5,9 @@ using static UnityEngine.ParticleSystem;
 [CreateAssetMenu(fileName = "ActiveSkillAOE", menuName = "Character/ActiveSkill/AOE")]
 public class ActiveSkillAOE : CharacterSkill
 {
-    public SkillAreaIndicator skillAreaIndicator;    
-    public LayerMask layerM;    
-    public bool isInit = false;
+    public SkillAreaIndicator skillAreaIndicatorPrefab;
+    private SkillAreaIndicator skillAreaIndicator;    
+    public LayerMask layerM;     
     public ParticleSystem particle;
 
     private Camera cam;
@@ -22,19 +22,16 @@ public class ActiveSkillAOE : CharacterSkill
     public bool isCriticalPossible;
     public override void OnActive()
     {
-        if (isInit)
+        if (skillAreaIndicator != null)
             return;
 
         //layerM = 1 << 8;
 
-        skillAreaIndicator = Instantiate(skillAreaIndicator);
+        skillAreaIndicator = Instantiate(skillAreaIndicatorPrefab);
         skillAreaIndicator.gameObject.SetActive(false);
         indicatorTransform = skillAreaIndicator.transform;
 
         cam = Camera.main;
-
-        isInit = true;
-
     } 
     public override IEnumerator SkillCoroutine()
     {
@@ -77,5 +74,5 @@ public class ActiveSkillAOE : CharacterSkill
     public override void SkillCancle()
     {
         skillAreaIndicator.gameObject.SetActive(false);
-    }
+    }   
 }
