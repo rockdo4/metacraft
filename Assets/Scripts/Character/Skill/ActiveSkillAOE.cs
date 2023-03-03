@@ -1,14 +1,17 @@
 using System.Collections;
 using UnityEngine;
+using static UnityEngine.ParticleSystem;
 
 [CreateAssetMenu(fileName = "ActiveSkillAOE", menuName = "Character/ActiveSkill/AOE")]
 public class ActiveSkillAOE : CharacterSkill
 {
     public SkillAreaIndicator skillAreaIndicator;    
     public LayerMask layerM;    
-    public bool isInit = false;    
+    public bool isInit = false;
+    public ParticleSystem particle;
 
-    private Camera cam;    
+    private Camera cam;
+    private Transform indicatorTransform;
 
     public bool isAutoTargeting;
     public float castRangeLimit;
@@ -26,10 +29,12 @@ public class ActiveSkillAOE : CharacterSkill
 
         skillAreaIndicator = Instantiate(skillAreaIndicator);
         skillAreaIndicator.gameObject.SetActive(false);
+        indicatorTransform = skillAreaIndicator.transform;
 
         cam = Camera.main;
 
         isInit = true;
+
     } 
     public override IEnumerator SkillCoroutine()
     {
@@ -49,17 +54,20 @@ public class ActiveSkillAOE : CharacterSkill
         RaycastHit hit;
         
         if (Physics.Raycast(ray, out hit, 100.0f, layerM))
-        {            
-            skillAreaIndicator.transform.position = hit.point + Vector3.up * 0.1f;
+        {
+            indicatorTransform.position = hit.point + Vector3.up * 0.1f;
         }        
     }
     public override void OnActiveSkill()
     {
-        Logger.Debug(1111111111);
-
         var targets = skillAreaIndicator.GetUnitsInArea();
 
-        foreach(var target in targets)
+
+        var particleContainer = Instantiate(particle);
+
+        particleContainer.transform.position= indicatorTransform.position;        
+
+        foreach (var target in targets)
         {
             target.OnDamage(222);
         }
