@@ -53,24 +53,10 @@ public class BeltScrollBattleManager : TestBattleManager
     public override void OnDeadHero(AttackableHero hero)
     {
         base.OnDeadHero(hero);
-        readyCount = useHeroes.Count;
-        if (useHeroes.Count == 0)
-        {
-            SetEnemyIdle();
-        }
     }
     protected override void SetHeroReturnPositioning(List<Transform> pos)
     {
         base.SetHeroReturnPositioning(pos);
-    }
-    private void SetEnemyIdle()
-    {
-        for (int i = 0; i < triggers[currTriggerIndex].enemys.Count; i++)
-        {
-
-        }
-
-        SetStageFail();
     }
 
     public override void OnReady()
@@ -86,13 +72,6 @@ public class BeltScrollBattleManager : TestBattleManager
         {
             SetStageClear();
         }
-    }
-
-    private void SetStageFail()
-    {
-        Time.timeScale = 0;
-        UIManager.Instance.ShowView(2);
-        Logger.Debug("Fail!");
     }
 
     IEnumerator MovingMap()
