@@ -11,7 +11,7 @@ public class HeroSkill : MonoBehaviour
     [SerializeField]
     private GameObject skillActivedPanel;
 
-    private float prevTimeScale;
+    private float prevTimeScale ;
 
     private bool isPointerInSkillActivedPanel;
     private float CoolDownFill {
@@ -38,6 +38,7 @@ public class HeroSkill : MonoBehaviour
         this.action = action;
         this.cancle = cancle;
 
+        prevTimeScale = GameObject.FindObjectOfType<BattleSpeed>().GetSpeed;
         coolDownTimer = 0;
         CoolDownFill = coolDownTimer / coolDown;
     }
