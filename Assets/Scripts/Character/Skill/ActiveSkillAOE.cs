@@ -54,7 +54,9 @@ public class ActiveSkillAOE : CharacterSkill
         }        
     }
     public override void OnActiveSkill()
-    {        
+    {
+        Logger.Debug(1111111111);
+
         var targets = skillAreaIndicator.GetUnitsInArea();
 
         foreach(var target in targets)
