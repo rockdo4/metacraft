@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -117,12 +118,13 @@ public abstract class AttackableUnit : MonoBehaviour
             }
     }
 
+    public abstract void ResetData();
+
     protected abstract void IdleUpdate();
     protected abstract void BattleUpdate();
     protected abstract void DieUpdate();
     protected abstract void MoveNextUpdate();
     protected abstract void ReturnPosUpdate();
-    
 
     public abstract void OnDamage(int dmg, bool isCritical = false);
 
