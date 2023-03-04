@@ -122,6 +122,7 @@ public abstract class AttackableHero : AttackableUnit
 
         unitState = UnitState.Idle;
 
+        testRot = false;
         lastNormalAttackTime = lastPassiveSkillTime = Time.time;
     }
 
