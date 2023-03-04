@@ -7,7 +7,7 @@ public class BattleSpeed : MonoBehaviour
     float[] speeds = new float[3] { 1f, 2f, 3f };
     string speedFormat = "{0:F1}x";
 
-    int idx = 0;
+    static int idx = 0;
 
     private void Awake()
     {
@@ -29,5 +29,6 @@ public class BattleSpeed : MonoBehaviour
     public void OnClickReturnButton()
     {
         Time.timeScale = speeds[idx];
+        UIManager.Instance.ShowPanelInteractable(false);
     }
 }
