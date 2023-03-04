@@ -184,7 +184,7 @@ public abstract class AttackableUnit : MonoBehaviour
         T minTarget = GetSearchNearbyTarget(list);
         if (minTarget == null)
             return null;
-        else if(Vector3.Distance(minTarget.transform.position, transform.position) > dis)
+        else if(Vector3.Distance(minTarget.transform.position, transform.position) < dis)
                 return minTarget;
         else
             return null;

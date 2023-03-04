@@ -42,6 +42,7 @@ public abstract class AttackableHero : AttackableUnit
                     BattleState = UnitBattleState.None;
                     nowUpdate = ReturnPosUpdate;
 
+                    lastNormalAttackTime = Time.time;
                     heroUI.heroSkill.CancleSkill();
                     testRot = false;
                     break;
