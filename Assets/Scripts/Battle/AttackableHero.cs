@@ -1,3 +1,4 @@
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -31,7 +32,6 @@ public abstract class AttackableHero : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.ReturnPosition: // 재배치
-
                     Logger.Debug("ReturnPosition");
                     pathFind.isStopped = false;
                     pathFind.stoppingDistance = 0; //가까이 가기
@@ -189,8 +189,6 @@ public abstract class AttackableHero : AttackableUnit
 
     protected override void BattleUpdate()
     {
-        if (UnitState != UnitState.Battle)
-            return;
         //타겟이 없을때 타겟을 찾으면 타겟으로 가기
         switch (BattleState)
         {
@@ -238,14 +236,16 @@ public abstract class AttackableHero : AttackableUnit
                     BattleState = UnitBattleState.NormalAttack;
                 break;
             case UnitBattleState.NormalAttack:
-                if (animator.GetCurrentAnimatorStateInfo(0).IsName("NoramlAttack") && !animator.IsInTransition(0))
+                stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+                if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime >= 1.0f)
                 {
                     NormalAttackEnd();
-                    Logger.Debug("NoramlAttack anim_done");
+                    Logger.Debug("NoramlAttack anim_done ------- Enemy");
                 }
                 break;
             case UnitBattleState.ActiveSkill:
-                if (animator.GetCurrentAnimatorStateInfo(0).IsName("ActiveSkill") && !animator.IsInTransition(0))
+                stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+                if (stateInfo.IsName("ActiveSkill") && stateInfo.normalizedTime >= 1.0f)
                 {
                     ActiveSkillEnd();
                     Logger.Debug("ActiveSkill anim_done");

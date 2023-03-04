@@ -47,6 +47,7 @@ public abstract class AttackableUnit : MonoBehaviour
     protected bool moveTarget;
 
     protected Animator animator;
+    protected AnimatorStateInfo stateInfo;
 
     [SerializeField]
     protected UnitState unitState;
