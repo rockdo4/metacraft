@@ -241,14 +241,14 @@ public abstract class AttackableHero : AttackableUnit
                 if (animator.GetCurrentAnimatorStateInfo(0).IsName("NoramlAttack") && !animator.IsInTransition(0))
                 {
                     NormalAttackEnd();
-                    Debug.Log("NoramlAttack anim_done");
+                    Logger.Debug("NoramlAttack anim_done");
                 }
                 break;
             case UnitBattleState.ActiveSkill:
                 if (animator.GetCurrentAnimatorStateInfo(0).IsName("ActiveSkill") && !animator.IsInTransition(0))
                 {
                     ActiveSkillEnd();
-                    Debug.Log("ActiveSkillanim_done");
+                    Logger.Debug("ActiveSkill anim_done");
                 }
                 break;
             case UnitBattleState.Stun:
