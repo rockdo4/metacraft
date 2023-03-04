@@ -26,5 +26,8 @@ public class BattleSpeed : MonoBehaviour
         GameManager.Instance.playerData.battleSpeedIdx = idx;
         SetBattleSpeed(idx);
     }
-
+    public void OnClickReturnButton()
+    {
+        Time.timeScale = speeds[idx];
+    }
 }
