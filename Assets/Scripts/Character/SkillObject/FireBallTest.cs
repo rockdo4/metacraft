@@ -34,8 +34,11 @@ public class FireBallTest : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(moveStart)
+        if (moveStart)
+        {
             rb.AddForce(transform.forward * 20);
+            TargetVisibleCheck();
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -46,4 +49,17 @@ public class FireBallTest : MonoBehaviour
             other.transform.GetComponent<AttackableUnit>().OnDamage(characterData.data.baseDamage);
         }
     }
+
+    public void TargetVisibleCheck()
+    {
+        var cam = Camera.main;
+        var planes = GeometryUtility.CalculateFrustumPlanes(cam);
+        var point = transform.position;
+        foreach (var plane in planes)
+        {
+            if (plane.GetDistanceToPoint(point) < 0)
+                Destroy(gameObject);
+        }
+    }
+
 }
