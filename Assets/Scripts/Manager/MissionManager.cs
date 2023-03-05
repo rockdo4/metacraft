@@ -5,6 +5,9 @@ using UnityEngine.UI;
 
 public class MissionManager : MonoBehaviour
 {
+    public TextMeshProUGUI dayOfweek;
+    public Slider apGauge;
+
     public Image portrait;
     public TextMeshProUGUI explanation;
 
@@ -26,6 +29,11 @@ public class MissionManager : MonoBehaviour
 
     public void Start()
     {
+        PlayerData pd = gm.playerData;
+        //apGauge.maxValue = pd.; // 행동력 넣어야되는데 레벨당 수치 어딨는지 모르겠음
+
+
+
         missionInfoTable = gm.missionInfoList;
         var num = Utils.DistinctRandomNumbers(missionInfoTable.Count, 4);
         marks = GetComponentInChildren<MissionSpawner>().prefebs;
@@ -46,6 +54,12 @@ public class MissionManager : MonoBehaviour
                 marks[i].SetActive(false);
             }
         }
+    }
+
+    public void UpdateMissionDay()
+    {
+        PlayerData pd = gm.playerData;
+        dayOfweek.text = $"{pd.currentDay}요일";
     }
 
     public void UpdateMissionInfo(int num)
@@ -150,6 +164,13 @@ public class MissionManager : MonoBehaviour
 
     public void StartMission()
     {
+
+        if((apGauge.value- (float)missionInfoTable[missionNum]["ConsumptionBehavior"])<=0)
+        {
+            UIManager.Instance.ShowPopup(0);
+            return;
+        }
+
         int count = 0;
         foreach (var num in gm.battleGroups)
         {
