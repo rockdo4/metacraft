@@ -115,6 +115,7 @@ public class TestBattleManager : MonoBehaviour
     {
         if (isFadeIn)
         {
+            fadePanel.gameObject.SetActive(true);
             float fadeAlpha = 0f;
             while (fadeAlpha < 1f)
             {
@@ -137,6 +138,7 @@ public class TestBattleManager : MonoBehaviour
             }
 
             isFadeIn = true;
+            fadePanel.gameObject.SetActive(false);
             yield break;
         }
     }

@@ -6,10 +6,8 @@ public class Effect : MonoBehaviour
 {
     public List<ParticleSystem> particles;
     public EffectData data;
-    private Transform startPos;              // 이펙트 시작 지점
-    private Transform endPos;                // 이펙트 종료 지점
-    public Transform StartPos { get => startPos; }
-    public Transform EndPos { get => endPos; }
+    public Transform startPos;              // 이펙트 시작 지점
+    public Transform endPos;                // 이펙트 종료 지점
     // 종료 지점 추가한 이유
     // 목표한테 이동하는 이펙트 생길 수도 있을거 같아서 미리 추가
     // 당장은 None으로 놔도 됩니다
@@ -47,7 +45,7 @@ public class Effect : MonoBehaviour
     IEnumerator CoEffectRoutine()
     {        
         var startDelay = data.startDelay;
-        float duration = particles[0].duration;
+        float duration = particles[0].main.duration;
 
         while (startDelay > 0f)
         {
