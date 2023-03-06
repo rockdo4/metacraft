@@ -16,8 +16,7 @@ public class ActiveSkillAOE : CharacterSkill
     public float castRangeLimit;
     public SkillAreaShape areaShapeType;
     public float areaRadiusOrRange;
-    public float areaAngleOrWidth;
-    public SkillTargetType targetType;
+    public float areaAngleOrWidth;    
     public bool isCriticalPossible;
     public override void OnActive()
     {
@@ -55,7 +54,7 @@ public class ActiveSkillAOE : CharacterSkill
             indicatorTransform.position = hit.point + Vector3.up * 0.1f;
         }   
     } 
-    public override void OnActiveSkill(int damage)
+    public override void OnActiveSkill(LiveData data)
     {
         var particleContainer = Instantiate(particle);
 
@@ -63,8 +62,7 @@ public class ActiveSkillAOE : CharacterSkill
 
         var targets = skillAreaIndicator.GetUnitsInArea();
 
-        if (targetType == SkillTargetType.Friendly)
-            damage *= -1;
+        var damage = CreateDamageResult(data);
 
         foreach (var target in targets)
         {
