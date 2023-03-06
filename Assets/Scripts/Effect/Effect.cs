@@ -5,12 +5,11 @@ using UnityEngine;
 public class Effect : MonoBehaviour
 {
     public List<ParticleSystem> particles;
-    private EffectData data;
+    public EffectData data;
     private Transform startPos;              // 이펙트 시작 지점
     private Transform endPos;                // 이펙트 종료 지점
     public Transform StartPos { get => startPos; }
     public Transform EndPos { get => endPos; }
-    public EffectData Data { get => data; }
     // 종료 지점 추가한 이유
     // 목표한테 이동하는 이펙트 생길 수도 있을거 같아서 미리 추가
     // 당장은 None으로 놔도 됩니다
@@ -49,7 +48,6 @@ public class Effect : MonoBehaviour
     {        
         var startDelay = data.startDelay;
         float duration = particles[0].duration;
-        Logger.Debug(duration);
 
         while (startDelay > 0f)
         {
@@ -62,6 +60,8 @@ public class Effect : MonoBehaviour
             particles[i].transform.position = startPos.position;
             particles[i].Play();
         }
+
+        yield return null;
 
         while (duration > 0f)
         {

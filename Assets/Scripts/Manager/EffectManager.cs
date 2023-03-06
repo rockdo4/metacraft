@@ -59,7 +59,7 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
             parentsObject);
         effect.name = effectName;
 
-        var particles = effectList[effectListIndex].Data.particles;
+        var particles = effectList[effectListIndex].data.particles;
         var particleList = effect.particles;
 
         for (int i = 0; i < particles.Count; i++)
