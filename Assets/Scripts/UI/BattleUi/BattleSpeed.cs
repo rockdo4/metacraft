@@ -6,15 +6,13 @@ public class BattleSpeed : MonoBehaviour
     public TextMeshProUGUI speedTxt;
     private float[] speeds = new float[3] { 1f, 2f, 3f };
     public float GetSpeed => speeds[idx];
-
-    static int idx = 0;
+    private int idx = 0;
 
     private void Awake()
     {
         idx = GameManager.Instance.playerData.battleSpeed;
         SetBattleSpeed(idx);
     }
-
     public void SetBattleSpeed(int idx)
     {
         Time.timeScale = speeds[idx];
@@ -27,10 +25,9 @@ public class BattleSpeed : MonoBehaviour
         GameManager.Instance.playerData.battleSpeed = idx;
         SetBattleSpeed(idx);
     }
-
     public void OnClickReturnButton()
     {
-        Time.timeScale = speeds[idx];
+        Time.timeScale = speeds[GameManager.Instance.playerData.battleSpeed];
         UIManager.Instance.ShowPanelInteractable(false);
     }
 }

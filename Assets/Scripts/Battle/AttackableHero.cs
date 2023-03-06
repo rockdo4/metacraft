@@ -11,6 +11,7 @@ public abstract class AttackableHero : AttackableUnit
 
     private Coroutine coOnIndicator;
 
+    bool lateReturn = false;
     protected override UnitState UnitState {
         get {
             return unitState;
@@ -45,6 +46,7 @@ public abstract class AttackableHero : AttackableUnit
                     BattleState = UnitBattleState.None;
                     nowUpdate = ReturnPosUpdate;
 
+                    lateReturn = false;
                     lastNormalAttackTime = Time.time;
                     heroUI.heroSkill.CancleSkill();
                     testRot = false;
@@ -147,8 +149,7 @@ public abstract class AttackableHero : AttackableUnit
         UnitState = UnitState.None;
         battleState = UnitBattleState.None;
 
-        animator.runtimeAnimatorController = Instantiate(animator.runtimeAnimatorController);   
-
+        lateReturn = false;
         lastActiveSkillTime = lastNormalAttackTime = lastNavTime = Time.time;
         target = null;
         animator.Rebind();
@@ -317,7 +318,10 @@ public abstract class AttackableHero : AttackableUnit
     public override void ChangeUnitState(UnitState state)
     {
         if (BattleState == UnitBattleState.ActiveSkill || BattleState == UnitBattleState.NormalAttack)
+        {
+            lateReturn = (state == UnitState.ReturnPosition);
             return;
+        }
         UnitState = state;
     }
     public override void ChangeBattleState(UnitBattleState state)
@@ -353,7 +357,7 @@ public abstract class AttackableHero : AttackableUnit
         lastNormalAttackTime = Time.time;
 
         Logger.Debug(enemyList.Count);
-        if (enemyList.Count == 0)
+        if (lateReturn)
         {
             UnitState = UnitState.ReturnPosition;
             Logger.Debug("Enemy - 0");
@@ -377,7 +381,7 @@ public abstract class AttackableHero : AttackableUnit
         base.ActiveSkillEnd();
 
         Logger.Debug(enemyList.Count);
-        if (enemyList.Count == 0)
+        if (lateReturn)
         {
             UnitState = UnitState.ReturnPosition;
             Logger.Debug("Enemy - 0");
