@@ -5,7 +5,6 @@ using UnityEngine.AI;
 public class TestBattleManager : MonoBehaviour
 {
     public GameObject heroList;
-    public AttackableHero heroPref;
     public List<HeroUi> heroUiList;
     public List<Transform> startPositions;
     public List<AttackableHero> useHeroes = new();
@@ -18,50 +17,27 @@ public class TestBattleManager : MonoBehaviour
 
     private void Awake()
     {
-        int index = 0;
         List<GameObject> selectedHeroes = GameManager.Instance.GetSelectedHeroes();
-        int notNullCount = 0;
-        foreach (GameObject hero in selectedHeroes)
-            if (hero != null) notNullCount++;
+        int count = selectedHeroes.Count;
 
-        if (notNullCount == 0)
+        for (int i = 0; i < count; i++)
         {
-            //히어로 만들고, 히어로 ui만들고 서로 연결
-            for (int i = 0; i < startPositions.Count; i++)
+            if (selectedHeroes[i] != null)
             {
-                var hero = Instantiate(heroPref, startPositions[i].position, Quaternion.identity, heroList.transform);
-                var heroNav = hero.GetComponent<NavMeshAgent>();
+                selectedHeroes[i].SetActive(true);
+                Utils.CopyPositionAndRotation(selectedHeroes[i], startPositions[i]);
+                NavMeshAgent heroNav = selectedHeroes[i].GetComponent<NavMeshAgent>();
                 heroNav.enabled = true;
-                //heroUiList[i].gameObject.SetActive(true);
-
-                //hero.SetUi(heroUiList[i]);
-                //heroUiList[i].SetHeroInfo(hero.GetUnitData());
-                useHeroes.Add(hero);
-            }
-        }
-        else
-        {
-            foreach (GameObject hero in selectedHeroes)
-            {
-                if (hero != null)
-                {
-                    hero.SetActive(true);
-                    Utils.CopyPositionAndRotation(hero, startPositions[index]);
-                    NavMeshAgent heroNav = hero.GetComponent<NavMeshAgent>();
-                    heroNav.enabled = true;
-                    AttackableHero attackableHero = hero.GetComponent<AttackableHero>();
-                    attackableHero.SetBattleManager(this);
-                    attackableHero.SetUi(heroUiList[index]);
-                    heroUiList[index].SetHeroInfo(attackableHero.GetUnitData());
-                    heroUiList[index].gameObject.SetActive(true);
-                    useHeroes.Add(attackableHero);
-                }
-                index++;
+                AttackableHero attackableHero = selectedHeroes[i].GetComponent<AttackableHero>();
+                attackableHero.SetBattleManager(this);
+                attackableHero.SetUi(heroUiList[i]);
+                heroUiList[i].SetHeroInfo(attackableHero.GetUnitData());
+                heroUiList[i].gameObject.SetActive(true);
+                useHeroes.Add(attackableHero);
             }
         }
 
         clearUi.SetHeroes(useHeroes);
-
         readyCount = useHeroes.Count;
     }
 

@@ -50,10 +50,11 @@ public class GameManager : Singleton<GameManager>
     public List<GameObject> GetSelectedHeroes()
     {
         List<GameObject> selectedHeroes = new();
+        int count = battleGroups.Count;
 
-        foreach (int? idx in battleGroups)
+        for (int i = 0; i < count; i++)
         {
-            selectedHeroes.Add(idx == null ? null : myHeroes[(int)idx]);
+            selectedHeroes.Add(battleGroups[i] == null ? null : myHeroes[(int)battleGroups[i]]);
         }
 
         return selectedHeroes;
