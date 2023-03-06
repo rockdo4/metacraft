@@ -149,8 +149,6 @@ public abstract class AttackableHero : AttackableUnit
         UnitState = UnitState.None;
         battleState = UnitBattleState.None;
 
-        animator.runtimeAnimatorController = Instantiate(animator.runtimeAnimatorController);
-
         lateReturn = false;
         lastActiveSkillTime = lastNormalAttackTime = lastNavTime = Time.time;
         target = null;
