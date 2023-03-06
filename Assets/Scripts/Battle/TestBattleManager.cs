@@ -67,6 +67,7 @@ public class TestBattleManager : MonoBehaviour
     {
         heroList = useHeroes;
     }
+
     public virtual void OnDeadHero(AttackableHero hero)
     {
         useHeroes.Remove(hero);
@@ -112,6 +113,7 @@ public class TestBattleManager : MonoBehaviour
         clearUi.SetData();
         Logger.Debug("Clear!");
     }
+
     private IEnumerator CoFade()
     {
         if (isFadeIn)
@@ -165,6 +167,7 @@ public class TestBattleManager : MonoBehaviour
     protected void SetStageFail()
     {
         Time.timeScale = 0;
+        GameManager.Instance.NextDay();
         UIManager.Instance.ShowView(2);
         Logger.Debug("Fail!");
     }

@@ -86,8 +86,30 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public void SetLevelExp(int newLevel, int newExp)
     {
-        GetUnitData().data.level = newLevel;
-        GetUnitData().data.exp = newExp;
+        LiveData data = GetUnitData().data;
+        data.level = newLevel;
+        data.exp = newExp;
+    }
+
+    public void LevelUpAdditional(int incDamage, int incDefense, int incHealthPoint)
+    {
+        LiveData data = GetUnitData().data;
+        data.baseDamage += incDamage;
+        data.baseDefense += incDefense;
+        data.healthPoint += incHealthPoint;
+        data.currentHp = data.healthPoint;
+    }
+    
+    public void LevelUpMultiplication(float multipleDamage, float multipleDefense, float multipleHealthPoint)
+    {
+        LiveData data = GetUnitData().data;
+        float newDamage = data.baseDamage * (1 + multipleDamage);
+        data.baseDamage = (int)newDamage;
+        float newDefense = data.baseDamage * (1 + multipleDefense);
+        data.baseDefense = (int)newDefense;
+        float newHealthPoint = data.baseDamage * (1 + multipleHealthPoint);
+        data.healthPoint = (int)newHealthPoint;
+        data.currentHp = data.healthPoint;
     }
 
     protected void Update()
