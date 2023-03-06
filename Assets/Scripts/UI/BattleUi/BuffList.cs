@@ -26,13 +26,17 @@ public class BuffList : MonoBehaviour
             plusImage.gameObject.SetActive(false);
         }
     }
-    public BuffIcon AddIcon(BuffType type, float duration)
+    public BuffIcon AddIcon(BuffType type, float duration, int idx)
     {
+
         var viewBuff = Instantiate(buffPref, viewBuffTr);   //캐릭터 좌측의 리스트에 버프 추가하고, 팝업에도 추가
         var popUpBuff = Instantiate(buffPopUpPref, popUpBuffTr);
 
+        viewBuff.transform.SetSiblingIndex(idx);
+        popUpBuff.transform.SetSiblingIndex(idx);
+
         viewBuff.buffType = type;
-        viewBuff.duration = duration;
+        //viewBuff.duration = duration;
 
         viewBuff.popUpBuff = popUpBuff;
         uiBuffList.Add(viewBuff); 

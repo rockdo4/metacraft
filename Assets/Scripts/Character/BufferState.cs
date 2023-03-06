@@ -2,25 +2,25 @@ using System.Collections.Generic;
 
 public class BufferState
 {
-    public float attackIncrease                 = 1;
-    public float defenseIncrease                = 1; 
-    public float attackDecrease                 = 1;
-    public float defenseDecrease                = 1; 
-    public float damageIncrease                 = 1;
-    public float damageReceivedIncrease         = 1;
-    public float damageDecrease                 = 1;
-    public float damageReceivedDecrease         = 1; 
-    public float criticalProbabilityIncrease    = 1;
-    public float criticalProbabilityDecrease    = 1; 
-    public float criticalDamageIncrease         = 1; 
-    public float criticalDamageDecrease         = 1; 
-
-    public bool provoke     = false;
-    public bool stealth     = false;
-    public bool stun        = false;
-    public bool silence     = false;
-    public bool resistance  = false;
-    public bool blind       = false;
+    public float attackIncrease                 = 1;    // 공격력 증가
+    public float defenseIncrease                = 1;    // 방어력 증가
+    public float attackDecrease                 = 1;    // 공격력 감소
+    public float defenseDecrease                = 1;    // 방어력 감소
+    public float damageIncrease                 = 1;    // 주는 피해 증가
+    public float damageReceivedIncrease         = 1;    // 받는 피해 증가
+    public float damageDecrease                 = 1;    // 주는 피해 감소
+    public float damageReceivedDecrease         = 1;    // 받는 피해 감소
+    public float criticalProbabilityIncrease    = 1;    // 치명타 확률 증가
+    public float criticalProbabilityDecrease    = 1;    // 치명타 확률 감소
+    public float criticalDamageIncrease         = 1;    // 치명타 피해량 증가
+    public float criticalDamageDecrease         = 1;    // 치명타 피해량 감소
+                                                        
+    public bool provoke     = false;                    // 도발
+    public bool stealth     = false;                    // 은신
+    public bool stun        = false;                    // 기절
+    public bool silence     = false;                    // 침묵
+    public bool resistance  = false;                    // 저항
+    public bool blind       = false;                    // 실명
 
     public void Buffer(BuffType type, float scale)
     {

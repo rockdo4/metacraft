@@ -28,6 +28,7 @@ public class CharacterSkill : ScriptableObject
     {
         yield break;  
     }
+    //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)									
     public virtual int CreateDamageResult(LiveData data)
     {        
         var result = 0;

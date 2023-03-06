@@ -384,7 +384,16 @@ public abstract class AttackableHero : AttackableUnit
     }
     public override void AddBuff(BuffType type, float scale, float duration)
     {
-        var icon = heroUI.AddIcon(type, duration);
+        int idx = 0;
+        for (int i = buffList.Count - 1; i >= 0; i--)
+        {
+            if (buffList[i].duration > duration)
+            {
+                idx = i;
+                break;
+            }
+        }
+        var icon = heroUI.AddIcon(type, duration, idx);
         Buff buff = new()
         {
             type = type,
