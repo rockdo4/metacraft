@@ -103,13 +103,10 @@ public abstract class AttackableUnit : MonoBehaviour
     public void LevelUpMultiplication(float multipleDamage, float multipleDefense, float multipleHealthPoint)
     {
         LiveData data = GetUnitData().data;
-        float newDamage = data.baseDamage * (1 + multipleDamage);
-        data.baseDamage = (int)newDamage;
-        float newDefense = data.baseDamage * (1 + multipleDefense);
-        data.baseDefense = (int)newDefense;
-        float newHealthPoint = data.baseDamage * (1 + multipleHealthPoint);
-        data.healthPoint = (int)newHealthPoint;
-        data.currentHp = data.healthPoint;
+        LevelUpAdditional(
+            (int) (data.baseDamage * (1 + multipleDamage)),
+            (int) (data.baseDefense * (1 + multipleDefense)),
+            (int) (data.healthPoint * (1 + multipleHealthPoint)));
     }
 
     protected void Update()
@@ -136,6 +133,7 @@ public abstract class AttackableUnit : MonoBehaviour
     public virtual void PassiveSkillEnd()
     {
     }
+
     public virtual void ActiveSkillEnd()
     {
         if (target != null)

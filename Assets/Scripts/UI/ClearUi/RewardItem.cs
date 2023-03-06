@@ -8,9 +8,10 @@ public class RewardItem : MonoBehaviour
     public TextMeshProUGUI itemCountText;
     public Image itemImage;
 
-    public void SetData(string itemName, string itemCount)
+    public void SetData(string itemName, string itemCount = null)
     {
         itemNameText.text = itemName;
-        itemCountText.text = itemCount;
+        if (itemCountText != null)
+            itemCountText.text = itemCount;
     }
 }

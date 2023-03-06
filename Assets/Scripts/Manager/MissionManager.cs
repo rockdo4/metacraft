@@ -22,6 +22,7 @@ public class MissionManager : View
     public GameObject missionPoints;
     private GameObject[] marks;
     private List<Dictionary<string, object>> missionInfoTable;
+    public List<GameObject> expectedRewards;
 
     public delegate void clickmark(int num);
     //private int missionNum;
@@ -87,6 +88,16 @@ public class MissionManager : View
         //deductionAP.text = $"AP -{dic["ConsumptionBehavior"]}";
         ProperCombatPower.text = $"0/{dic["ProperCombatPower"]}";
         ProperCombatPower.color = Color.white;
+
+        int erCount = expectedRewards.Count;
+        for (int i = 0; i < erCount; i++)
+        {
+            RewardItem ri = expectedRewards[i].GetComponent<RewardItem>();
+            if (i == 0)
+                ri.SetData("골드", $"{dic["Compensation"]}");
+            else
+                ri.SetData($"아이템{i}");
+        }
     }
 
     // Mission Hero Info Button 에서 호출
