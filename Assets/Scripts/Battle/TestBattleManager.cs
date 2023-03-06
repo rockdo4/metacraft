@@ -88,6 +88,11 @@ public class TestBattleManager : MonoBehaviour
     public virtual void OnDeadHero(AttackableHero hero)
     {
         useHeroes.Remove(hero);
+        readyCount = useHeroes.Count;
+        if (useHeroes.Count == 0)
+        {
+            SetStageFail();
+        }
     }
     public virtual void OnDeadEnemy(AttackableEnemy enemy)
     {
@@ -139,5 +144,11 @@ public class TestBattleManager : MonoBehaviour
     public void OnDestroy()
     {
         Time.timeScale = 1;
+    }
+    protected void SetStageFail()
+    {
+        Time.timeScale = 0;
+        UIManager.Instance.ShowView(2);
+        Logger.Debug("Fail!");
     }
 }

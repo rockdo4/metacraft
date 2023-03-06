@@ -11,6 +11,7 @@ public abstract class AttackableHero : AttackableUnit
 
     private Coroutine coOnIndicator;
 
+    bool lateReturn = false;
     protected override UnitState UnitState {
         get {
             return unitState;
@@ -23,6 +24,9 @@ public abstract class AttackableHero : AttackableUnit
             heroUI.heroState = unitState;
             switch (unitState)
             {
+                case UnitState.None:
+                    nowUpdate = null;
+                    break;
                 case UnitState.Idle:
                     Logger.Debug("Idle");
                     pathFind.isStopped = true;
@@ -42,6 +46,8 @@ public abstract class AttackableHero : AttackableUnit
                     BattleState = UnitBattleState.None;
                     nowUpdate = ReturnPosUpdate;
 
+                    lateReturn = false;
+                    lastNormalAttackTime = Time.time;
                     heroUI.heroSkill.CancleSkill();
                     testRot = false;
                     break;
@@ -135,9 +141,18 @@ public abstract class AttackableHero : AttackableUnit
             ReadyActiveSkill, 
             PlayActiveSkillAnimation,
             CancleActiveSkill); //±Ã±Ø±â ÄðÅ¸ÀÓ°ú ±Ã±Ø±â ÇÔ¼ö µî·Ï
+    }
 
+    public override void ResetData()
+    {
+        testRot = false;
         UnitState = UnitState.None;
         battleState = UnitBattleState.None;
+
+        lateReturn = false;
+        lastActiveSkillTime = lastNormalAttackTime = lastNavTime = Time.time;
+        target = null;
+        animator.Rebind();
     }
 
     protected override void SearchTarget()
@@ -303,7 +318,10 @@ public abstract class AttackableHero : AttackableUnit
     public override void ChangeUnitState(UnitState state)
     {
         if (BattleState == UnitBattleState.ActiveSkill || BattleState == UnitBattleState.NormalAttack)
+        {
+            lateReturn = (state == UnitState.ReturnPosition);
             return;
+        }
         UnitState = state;
     }
     public override void ChangeBattleState(UnitBattleState state)
@@ -339,7 +357,7 @@ public abstract class AttackableHero : AttackableUnit
         lastNormalAttackTime = Time.time;
 
         Logger.Debug(enemyList.Count);
-        if (enemyList.Count == 0)
+        if (lateReturn)
         {
             UnitState = UnitState.ReturnPosition;
             Logger.Debug("Enemy - 0");
@@ -363,7 +381,7 @@ public abstract class AttackableHero : AttackableUnit
         base.ActiveSkillEnd();
 
         Logger.Debug(enemyList.Count);
-        if (enemyList.Count == 0)
+        if (lateReturn)
         {
             UnitState = UnitState.ReturnPosition;
             Logger.Debug("Enemy - 0");
