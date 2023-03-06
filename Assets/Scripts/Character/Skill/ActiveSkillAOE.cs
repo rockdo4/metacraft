@@ -6,8 +6,7 @@ public class ActiveSkillAOE : CharacterSkill
 {
     public SkillAreaIndicator skillAreaIndicatorPrefab;
     private SkillAreaIndicator skillAreaIndicator;
-    public LayerMask layerM;
-    public ParticleSystem particle;
+    public LayerMask layerM;    
 
     private Camera cam;
     private Transform indicatorTransform;
@@ -55,12 +54,8 @@ public class ActiveSkillAOE : CharacterSkill
         }   
     } 
     public override void OnActiveSkill(LiveData data)
-    {
-        //var particleContainer = Instantiate(particle);
-
-        //particleContainer.transform.position = indicatorTransform.position;
-        
-        EffectManager.Instance.Get(EffectEnum.AOEattackTest1, indicatorTransform);
+    {      
+        EffectManager.Instance.Get(effectEnum, indicatorTransform);
 
         var targets = skillAreaIndicator.GetUnitsInArea();
 

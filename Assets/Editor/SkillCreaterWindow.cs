@@ -6,7 +6,7 @@ public class SkillCreaterWindow : EditorWindow
     private Dictionary<string, object> skillInfo;
 
     private string sourcePath = "";
-    private string createPath = "Assets/ScriptableObjects/Skills/";
+    private string createPath = "Assets/ScriptableObjects/Skills";
     private string objectName = "";
 
     private int lineNumber;
@@ -35,9 +35,24 @@ public class SkillCreaterWindow : EditorWindow
         isActiveSkill = (SkillMainType)skillInfo["Sort"] == SkillMainType.Active;
 
         var characterSkill = isActiveSkill ?
-            CreateInstance<ActiveSkillAOE>() : CreateInstance<CharacterSkill>();        
+            CreateInstance<ActiveSkillAOE>() : CreateInstance<CharacterSkill>();
+
+        SetSkillValues(characterSkill);
 
         return characterSkill;
+    }
+    private void SetSkillValues(CharacterSkill characterSkill)
+    {
+        if (isActiveSkill)
+        {
+            switch((SkillAreaShape)skillInfo["Shape"])
+            {
+                case SkillAreaShape.Sector:
+                    break;
+                case SkillAreaShape.Rectangle:
+                    break;
+            }            
+        }
     }
     private void OnGUI()
     {
@@ -47,7 +62,7 @@ public class SkillCreaterWindow : EditorWindow
         {
             LoadLine();
 
-            AssetDatabase.CreateAsset(CreateScriptableObject(), $"{createPath}{objectName}.asset");
+            AssetDatabase.CreateAsset(CreateScriptableObject(), $"{createPath}/{objectName}.asset");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
