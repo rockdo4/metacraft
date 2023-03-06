@@ -32,6 +32,8 @@ public class GameManager : Singleton<GameManager>
     public List<int?> battleGroups = new(3) { null, null, null }; // Mission Select -> Battle Scene
     // Dispatch Select
 
+    public List<Effect> effects; // 사용할 이펙트들
+
     public override void Awake()
     {
         base.Awake();

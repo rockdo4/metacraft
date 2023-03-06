@@ -5,7 +5,7 @@ public class EffectManagerSingleton<T> : MonoBehaviour where T : MonoBehaviour
 {
     private static T _instance;
 
-    private static object _lock = new object();
+    private static object _lock = new ();
 
     public static T Instance
     {
