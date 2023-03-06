@@ -23,6 +23,9 @@ public abstract class AttackableHero : AttackableUnit
             heroUI.heroState = unitState;
             switch (unitState)
             {
+                case UnitState.None:
+                    nowUpdate = null;
+                    break;
                 case UnitState.Idle:
                     Logger.Debug("Idle");
                     pathFind.isStopped = true;
@@ -42,6 +45,7 @@ public abstract class AttackableHero : AttackableUnit
                     BattleState = UnitBattleState.None;
                     nowUpdate = ReturnPosUpdate;
 
+                    lastNormalAttackTime = Time.time;
                     heroUI.heroSkill.CancleSkill();
                     testRot = false;
                     break;
@@ -135,9 +139,19 @@ public abstract class AttackableHero : AttackableUnit
             ReadyActiveSkill, 
             PlayActiveSkillAnimation,
             CancleActiveSkill); //±Ã±Ø±â ÄðÅ¸ÀÓ°ú ±Ã±Ø±â ÇÔ¼ö µî·Ï
+    }
 
+    public override void ResetData()
+    {
+        testRot = false;
         UnitState = UnitState.None;
         battleState = UnitBattleState.None;
+
+        animator.runtimeAnimatorController = Instantiate(animator.runtimeAnimatorController);   
+
+        lastActiveSkillTime = lastNormalAttackTime = lastNavTime = Time.time;
+        target = null;
+        animator.Rebind();
     }
 
     protected override void SearchTarget()

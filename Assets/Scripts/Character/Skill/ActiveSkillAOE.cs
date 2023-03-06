@@ -83,6 +83,6 @@ public class ActiveSkillAOE : CharacterSkill
     }
     public override void SkillCancle()
     {
-        skillAreaIndicator.gameObject.SetActive(false);
+        skillAreaIndicator?.gameObject.SetActive(false);
     }
 }

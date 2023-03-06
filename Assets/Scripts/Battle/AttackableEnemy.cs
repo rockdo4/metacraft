@@ -21,6 +21,9 @@ public abstract class AttackableEnemy : AttackableUnit
             unitState = value;
             switch (unitState)
             {
+                case UnitState.None:
+                    nowUpdate = null;
+                    break;
                 case UnitState.Idle:
                     pathFind.isStopped = true;
 
@@ -105,6 +108,16 @@ public abstract class AttackableEnemy : AttackableUnit
         hpBarManager = GetComponent<HpBarManager>();
         hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
 
+    }
+    public override void ResetData()
+    {
+        UnitState = UnitState.None;
+        battleState = UnitBattleState.None;
+
+        animator.Play("Default State");
+        lastActiveSkillTime = lastNormalAttackTime = lastNavTime = Time.time;
+        target = null;
+        animator.Rebind();
     }
 
     protected override void SearchTarget()
