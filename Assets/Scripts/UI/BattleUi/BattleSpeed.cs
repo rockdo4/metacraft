@@ -11,7 +11,7 @@ public class BattleSpeed : MonoBehaviour
 
     private void Awake()
     {
-        idx = GameManager.Instance.playerData.battleSpeedIdx;
+        idx = GameManager.Instance.playerData.battleSpeed;
         SetBattleSpeed(idx);
     }
 
@@ -24,7 +24,7 @@ public class BattleSpeed : MonoBehaviour
     public void OnClickSpeedButton()
     {
         idx = (idx + 1) % speeds.Length;
-        GameManager.Instance.playerData.battleSpeedIdx = idx;
+        GameManager.Instance.playerData.battleSpeed = idx;
         SetBattleSpeed(idx);
     }
 

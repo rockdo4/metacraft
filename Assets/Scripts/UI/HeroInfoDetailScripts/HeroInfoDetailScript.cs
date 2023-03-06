@@ -28,7 +28,6 @@ public class HeroInfoDetailScript : View
         stringBuilder.Append($"방어력 : {data.baseDefense}\n");
         stringBuilder.Append($"체력 : {data.healthPoint}\n");
         stringBuilder.Append($"타입 : {data.job}\n");
-        stringBuilder.Append($"활동력 소모량 : {data.energy}\n");
         stringBuilder.Append($"치명타 확률 : {data.critical}\n");
         stringBuilder.Append($"치명타 배율 : {data.criticalDmg}\n");
         stringBuilder.Append($"이동 속도 : {data.moveSpeed}\n");
