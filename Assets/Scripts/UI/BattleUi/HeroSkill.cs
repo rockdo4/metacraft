@@ -27,23 +27,26 @@ public class HeroSkill : MonoBehaviour
     private float coolDown;
     private float coolDownTimer;
 
-    public Action effect;
+    public Action ready;
     public Action action;
+    public Action offAreaIndicator;
     public Action cancle;
 
-    public void Set(float coolDown, Action effect, Action action, Action cancle)
+    public void Set(float coolDown)
     {
         this.coolDown = coolDown;
-        this.effect = effect;
-        this.action = action;
-        this.cancle = cancle;
 
         prevTimeScale = GameObject.FindObjectOfType<BattleSpeed>().GetSpeed;
         coolDownTimer = 0;
         CoolDownFill = coolDownTimer / coolDown;
     }
-
-
+    public void SetActions(Action ready, Action action, Action offAreaIndicator,Action cancle)
+    {
+        this.ready = ready;
+        this.action = action;
+        this.offAreaIndicator = offAreaIndicator;
+        this.cancle = cancle;
+    }
     private void FixedUpdate()
     {
         CoolDownUpdate();
@@ -108,8 +111,8 @@ public class HeroSkill : MonoBehaviour
             return;
 
         if (isIn)
-            effect();
+            ready();
         else
-            cancle();
+            offAreaIndicator();
     }
 }

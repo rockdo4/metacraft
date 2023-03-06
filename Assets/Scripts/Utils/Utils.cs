@@ -39,4 +39,13 @@ public class Utils
     {
         gameObject.transform.SetPositionAndRotation(dest.position, dest.rotation);
     }
+    public static Vector2 GetPointFromCircleCenterToOutLine(Vector2 center, float radius, Vector2 point)
+    {
+        Vector2 direction = point - center;
+        float distance = direction.magnitude;
+
+        Vector2 normalizedDirection = direction.normalized;
+        Vector2 intersectionPoint = center + normalizedDirection * radius;
+        return intersectionPoint;
+    }
 }

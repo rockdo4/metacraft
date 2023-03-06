@@ -25,7 +25,7 @@ public class SkillCreaterWindow : EditorWindow
     }
     private void LoadLine()
     {
-        var loadedFile = CSVReader.ReadByPath(sourcePath);
+        var loadedFile = CSVReader.ReadByStreamReaderPath(sourcePath);
 
         skillInfo = loadedFile[lineNumber - 2];
         objectName = (string)skillInfo["Name"];
@@ -43,16 +43,27 @@ public class SkillCreaterWindow : EditorWindow
     }
     private void SetSkillValues(CharacterSkill characterSkill)
     {
+
         if (isActiveSkill)
         {
-            switch((SkillAreaShape)skillInfo["Shape"])
-            {
-                case SkillAreaShape.Sector:
-                    break;
-                case SkillAreaShape.Rectangle:
-                    break;
-            }            
+            LoadIndicatorPrefab(characterSkill as ActiveSkillAOE);
         }
+    }
+    private void LoadIndicatorPrefab(ActiveSkillAOE activeSkillAOE)
+    {
+        string prefabPath = "Assets/Prefabs/Battle/SkillIndicator/";
+
+        switch ((SkillAreaShape)skillInfo["Shape"])
+        {
+            case SkillAreaShape.Sector:
+                prefabPath += "SectorIndicator.prefab";
+                break;
+            case SkillAreaShape.Rectangle:
+                prefabPath += "SquareIndicator.prefab";
+                break;
+        }
+
+        activeSkillAOE.skillAreaIndicatorPrefab = AssetDatabase.LoadAssetAtPath<SkillAreaIndicator>(prefabPath);
     }
     private void OnGUI()
     {
@@ -60,7 +71,7 @@ public class SkillCreaterWindow : EditorWindow
 
         if (GUILayout.Button("Create Scriptable Object"))
         {
-            LoadLine();
+            LoadLine();            
 
             AssetDatabase.CreateAsset(CreateScriptableObject(), $"{createPath}/{objectName}.asset");
             AssetDatabase.SaveAssets();

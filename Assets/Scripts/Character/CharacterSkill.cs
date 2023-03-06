@@ -53,6 +53,4 @@ public class CharacterSkill : ScriptableObject
         return result;
     }
     public virtual void OnActiveSkill(LiveData data) { }
-
-    public virtual void SkillCancle() { }
 }
