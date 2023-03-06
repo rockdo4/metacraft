@@ -11,11 +11,12 @@ public class ShortAttackHero : AttackableHero
             return;
 
         base.NormalAttack();
-        AddBuff(BuffType.Silence, 1.0f, 5f);
+
+        AddBuff(BuffType.AttackIncrease, 0.5f, 2f);
 
         if (characterData.attack.targetNumLimit == 1)
         {
-            target.OnDamage(characterData.data.baseDamage, false);
+            target.OnDamage(GetFixedDamage, false);
             return;
         }
 
@@ -39,7 +40,7 @@ public class ShortAttackHero : AttackableHero
 
         for (int i = 0; i < attackEnemies.Count; i++)
         {
-            attackEnemies[i].OnDamage(characterData.data.baseDamage, false);
+            attackEnemies[i].OnDamage(GetFixedDamage, false);
         }
     }
 

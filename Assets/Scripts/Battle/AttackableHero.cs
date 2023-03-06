@@ -395,10 +395,14 @@ public abstract class AttackableHero : AttackableUnit
 
         buff.removeBuff += RemoveBuff;
         buffList.Add(buff);
+
+        bufferState.Buffer(type, scale);
     }
     public override void RemoveBuff(Buff buff)
     {
         heroUI.RemoveBuff(buff.icon);
         buffList.Remove(buff);
+
+        bufferState.Buffer(buff.type, -buff.buffScale);
     }
 }

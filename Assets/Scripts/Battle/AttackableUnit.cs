@@ -68,6 +68,17 @@ public abstract class AttackableUnit : MonoBehaviour
     protected bool NonActiveSkill => battleState != UnitBattleState.ActiveSkill && battleState != UnitBattleState.Stun;
 
     protected List<Buff> buffList = new();
+    protected BufferState bufferState = new();
+    protected int GetFixedDamage {
+        get {
+            return (int)(characterData.data.baseDamage * bufferState.attackIncrease);
+        }
+    }
+    protected int GetFixedActiveDamage {
+        get {
+            return (int)(characterData.data.baseDamage * bufferState.attackIncrease);
+        }
+    }
 
     protected virtual void Awake()
     {
