@@ -82,6 +82,8 @@ public class BeltScrollBattleManager : TestBattleManager
             else if (triggers[currTriggerIndex].isStageEnd)
             {
                 //platform.transform.position = 
+                // test
+                SetStageClear();
             }
             else if (triggers[currTriggerIndex].isMissionEnd)
             {
