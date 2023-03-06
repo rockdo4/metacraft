@@ -19,9 +19,8 @@ public class SkillCreaterWindow : EditorWindow
     }
     private void CreateGUIFields()
     {
-        sourcePath       = EditorGUILayout.TextField("SourcePath", sourcePath);
-        createPath       = EditorGUILayout.TextField("CreatePath", createPath);        
-
+        sourcePath = EditorGUILayout.TextField("SourcePath", sourcePath);
+        createPath = EditorGUILayout.TextField("CreatePath", createPath);
         lineNumber = EditorGUILayout.IntField("LineNumber", lineNumber);
     }
     private void LoadLine()
@@ -33,7 +32,7 @@ public class SkillCreaterWindow : EditorWindow
     }
     private CharacterSkill CreateScriptableObject()
     {
-        isActiveSkill = (int)skillInfo["Sort"] == 2;
+        isActiveSkill = (SkillMainType)skillInfo["Sort"] == SkillMainType.Active;
 
         var characterSkill = isActiveSkill ?
             CreateInstance<ActiveSkillAOE>() : CreateInstance<CharacterSkill>();        
@@ -48,9 +47,7 @@ public class SkillCreaterWindow : EditorWindow
         {
             LoadLine();
 
-            var scriptableObject = CreateScriptableObject();
-
-            AssetDatabase.CreateAsset(scriptableObject, $"{createPath}{objectName}.asset");
+            AssetDatabase.CreateAsset(CreateScriptableObject(), $"{createPath}{objectName}.asset");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }

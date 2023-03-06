@@ -44,8 +44,8 @@ public abstract class AttackableEnemy : AttackableUnit
                     nowUpdate = BattleUpdate;
                     break;
                 case UnitState.Die:
-                    pathFind.isStopped = true;
-
+                    pathFind.enabled = false;
+                    gameObject.GetComponent<Collider>().enabled = false;
                     animator.SetTrigger("Die");
 
                     nowUpdate = DieUpdate;

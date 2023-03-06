@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
+using UnityEditor.ShaderKeywordFilter;
 
 public class Effect : MonoBehaviour
 {
@@ -55,6 +56,7 @@ public class Effect : MonoBehaviour
         {
             if (particles[i] == null)
                 Logger.Debug("null");
+            particles[i].transform.position = startPos.position;
             particles[i].Play();
         }
 
