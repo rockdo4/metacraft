@@ -12,7 +12,7 @@ public class ShortAttackEnemy : AttackableEnemy
 
         base.NormalAttack();
 
-        if (characterData.attack.count == 1)
+        if (characterData.attack.targetNumLimit == 1)
         {
             target.OnDamage(characterData.data.baseDamage);
             return;
@@ -34,7 +34,7 @@ public class ShortAttackEnemy : AttackableEnemy
             }
         }
 
-        attackHeroes = GetNearestUnitList(attackHeroes, characterData.attack.count);
+        attackHeroes = GetNearestUnitList(attackHeroes, characterData.attack.targetNumLimit);
 
         for (int i = 0; i < attackHeroes.Count; i++)
         {

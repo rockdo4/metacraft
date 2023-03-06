@@ -1,33 +1,36 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EffectManager : MonoBehaviour
+public class EffectManager : EffectManagerSingleton<EffectManager>
 {
-    [Range(0, 100)]
     public int effectPoolSize;
-    public List<Effect> effectList;      // 생성할 이펙트 리스트들. 인스펙터에서 추가
-    public Transform parentsObject;
+    public List<Effect> effectList;      // 생성할 이펙트 리스트들
 
-    private List<List<Effect>> effectPool = new((int)EffectEnum.Count);    // 이펙트 풀
+    public List<List<Effect>> effectPool = new();    // 이펙트 풀
     private List<int> effectPoolIndex = new();     // 활성화할 이펙트 프리펩의 번호
+    private GameObject parent;
 
-    public static EffectManager Instance { get; private set; }
+    private EffectEnum currEffect;
 
-    private void Awake()
+    public void Get(EffectEnum index, Transform startPos)
     {
-        Instance = this;
-    }
-    private void Start()
-    {
-        CreateAllEffects();
-    }
+        if (effectPool.Count == 0)
+        {
+            GameObject gm = new("Effects");
+            parent = Instantiate(gm);
+            DontDestroyOnLoad(parent);
+            effectPoolSize = 20;
+            effectList = GameManager.Instance.effects;
+            CreateAllEffects();
+        }
 
-    public void Get(EffectEnum index)
-    {
+        currEffect = index;
+
         // index = 뽑고 싶은 이펙트가 저장된 풀의 이름 (Enum)
-
         int poolIndex = (int)index;
+
         // effectPool의 [풀 번호][이펙트인덱스[번호]] 활성화
+        effectPool[poolIndex][effectPoolIndex[poolIndex]].SetStartPos(startPos);
         effectPool[poolIndex][effectPoolIndex[poolIndex]].StartEffect();
 
         // index가 프리펩의 최대 개수를 넘어가면 0으로 초기화
@@ -75,8 +78,8 @@ public class EffectManager : MonoBehaviour
     {
         // "이펙트 프리펩 이름 + Pool" 이름의 빈 게임 오브젝트를 Effects 게임 오브젝트의 자식으로 생성
         // (종류별로 구분해서 담아두기 위함)
-        var parents = new GameObject($"{effectList[effectListIndex].name} Pool");
-        parents.transform.parent = parentsObject.transform;
+        GameObject parents = new ($"{effectList[effectListIndex].name} Pool");
+        parents.transform.parent = parent.transform;
 
         effectPool.Add(new List<Effect>());
         effectPoolIndex.Add(0);
@@ -88,6 +91,48 @@ public class EffectManager : MonoBehaviour
 
             // 만든 이펙트 풀에 저장
             effectPool[effectListIndex].Add(effect);
+        }
+    }
+
+    // 현재 사용하고 있는 풀
+    public int GetCurrPoolIndex()
+    {
+        return effectPoolIndex[(int)currEffect];
+    }
+
+    // 현재 사용하고 있는 풀의 다음 이펙트.
+    // 다음에 나올 이펙트의 설정값들을 조정해야 할 수 있을 것 같아 추가
+    public void SetNextEffectProperty(float startDelay, float duration, float effectSize)
+    {
+        int index = (int)currEffect;
+
+        if (effectPool[index][effectPoolIndex[index] + 1] != null)
+        {
+            effectPool[index][effectPoolIndex[index + 1]].
+                SetAllData(startDelay, duration, effectSize);
+        }
+        else
+        {
+            effectPool[index][effectPoolIndex[0]].SetAllData(startDelay, duration, effectSize);
+        }
+    }
+    public void SetNextEffectPositions(Transform startPos, Transform endPos)
+    {
+        int index = (int)currEffect;
+
+        if (effectPool[index][effectPoolIndex[index + 1]] != null)
+        {
+            effectPool[index][effectPoolIndex[index + 1]].
+                SetStartPos(startPos);
+            effectPool[index][effectPoolIndex[index + 1]].
+                SetEndPos(endPos);
+        }
+        else
+        {
+            effectPool[index][effectPoolIndex[0]].
+                SetStartPos(startPos);
+            effectPool[index][effectPoolIndex[0]].
+                SetEndPos(endPos);
         }
     }
 }

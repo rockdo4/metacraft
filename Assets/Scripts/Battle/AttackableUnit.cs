@@ -79,14 +79,19 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     protected void SetData()
     {
-        pathFind.stoppingDistance = characterData.attack.distance ;
+        pathFind.stoppingDistance = characterData.attack.distance;
 
         NormalAttackAction = NormalAttack;
         PassiveSkillAction = PassiveSkill;
         ActiveSkillAction = ReadyActiveSkill;
+        ResetAttackableUnit();
+    }
 
+    public void ResetAttackableUnit()
+    {
         UnitHp = characterData.data.healthPoint;
     }
+
     protected void Update()
     {
         nowUpdate?.Invoke();

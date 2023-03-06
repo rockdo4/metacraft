@@ -13,7 +13,7 @@ public class ShortAttackHero : AttackableHero
         base.NormalAttack();
         AddBuff(BuffType.Silence, 1.0f, 5f);
 
-        if (characterData.attack.count == 1)
+        if (characterData.attack.targetNumLimit == 1)
         {
             target.OnDamage(characterData.data.baseDamage, false);
             return;
@@ -35,7 +35,7 @@ public class ShortAttackHero : AttackableHero
             }
         }
 
-        attackEnemies = GetNearestUnitList(attackEnemies, characterData.attack.count);
+        attackEnemies = GetNearestUnitList(attackEnemies, characterData.attack.targetNumLimit);
 
         for (int i = 0; i < attackEnemies.Count; i++)
         {

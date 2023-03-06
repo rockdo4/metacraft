@@ -193,7 +193,8 @@ public abstract class AttackableHero : AttackableUnit
     }
     public override void OnActiveSkill()
     {
-        characterData.activeSkill.OnActiveSkill();
+        Logger.Debug(characterData.data.baseDamage);
+        characterData.activeSkill.OnActiveSkill(characterData.data);
     }
     protected override void IdleUpdate()
     {
