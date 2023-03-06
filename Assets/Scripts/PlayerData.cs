@@ -14,7 +14,8 @@ public class PlayerData
     public int characterCount = 5;
     public int trainingCount = 1;
     public int dispatchCount = 1;
-    public int currentGameDay = 0;
+    public DayOfWeek currentDay = DayOfWeek.¿ù;
+    public int currentGameTurn = 0;
     public int cumulateGameDay = 0;
     public int gold = 0;
     public int battleSpeedIdx = 0;

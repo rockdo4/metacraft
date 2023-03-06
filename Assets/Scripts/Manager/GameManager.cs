@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -283,5 +284,11 @@ public class GameManager : Singleton<GameManager>
             return illustrationSprites[address];
 
         return null;
+    }
+
+    //요일 변경
+    public void NextDay()
+    {
+        playerData.currentDay = playerData.currentDay != DayOfWeek.일 ? playerData.currentDay + 1 : DayOfWeek.월; ;
     }
 }
