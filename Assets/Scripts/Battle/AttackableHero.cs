@@ -154,6 +154,7 @@ public abstract class AttackableHero : AttackableUnit
         lastActiveSkillTime = lastNormalAttackTime = lastNavTime = Time.time;
         target = null;
         animator.Rebind();
+        UnitHp = characterData.data.healthPoint;
     }
 
     protected override void SearchTarget()

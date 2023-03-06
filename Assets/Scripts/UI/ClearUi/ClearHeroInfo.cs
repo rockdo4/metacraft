@@ -8,6 +8,7 @@ public class ClearHeroInfo : MonoBehaviour
     public TextMeshProUGUI levelText;
     public TextMeshProUGUI expText;
     public Image expImage;
+    public Image heroImage;
 
     private int nowLevel; //현재 레벨
     private int nowExp; //현재 exp
@@ -17,18 +18,22 @@ public class ClearHeroInfo : MonoBehaviour
     private bool isMove = false;
 
     private Dictionary<int, int> ExpTable = new();
+    private AttackableHero thisHero;
 
-    public void SetInfo(int level, int exp)
+    public void SetInfo(AttackableHero hero)
     {
-        SetTest();
-        nowLevel = level;
+        SetTestTable();
+        thisHero = hero;
+        LiveData data = hero.GetUnitData().data;
+        nowLevel = data.level;
         levelText.text = $"{nowLevel}";
 
-        nowExp = exp;
+        nowExp = data.exp;
         expImage.fillAmount = (float)nowExp / ExpTable[nowLevel];
+        heroImage.sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{data.name}");
     }
 
-    public void SetTest()
+    public void SetTestTable()
     {
         for (int i = 1; i <= 20; i++)
         {
@@ -56,7 +61,7 @@ public class ClearHeroInfo : MonoBehaviour
                 needExp = ExpTable[nextLevel + 1]; //필요한 경험치는 다음레벨 경험치
 
                 nextLevel++;
-                tempExp = 0; //레벨업 했으니, 현재 레벨의 잔여 경험치는 0ㄴ
+                tempExp = 0; //레벨업 했으니, 현재 레벨의 잔여 경험치는 0
             }
             else //레벨업 못하는 상태면 연산 끝
             {
@@ -70,17 +75,17 @@ public class ClearHeroInfo : MonoBehaviour
 
         nowLevel = nextLevel;
         nowExp = tempExp;
+        thisHero.SetLevelExp(nextLevel, tempExp);
 
         isMove = true;
     }
 
-    public int testGetExp;
     private void Update()
     {
         if (isMove)
         {
             expImage.fillAmount += Time.deltaTime;
-            var nowFill = ((float)lastExp / (float)ExpTable[nowLevel]);
+            var nowFill = (float)lastExp / ExpTable[nowLevel];
             if (addLevel == 0 && expImage.fillAmount >= nowFill)
             {
                 addLevel = 0;

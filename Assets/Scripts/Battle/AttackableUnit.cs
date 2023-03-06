@@ -74,6 +74,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
         animator = GetComponentInChildren<Animator>();
     }
+
     protected void SetData()
     {
         pathFind.stoppingDistance = characterData.attack.distance;
@@ -81,12 +82,12 @@ public abstract class AttackableUnit : MonoBehaviour
         NormalAttackAction = NormalAttack;
         PassiveSkillAction = PassiveSkill;
         ActiveSkillAction = ReadyActiveSkill;
-        ResetAttackableUnit();
     }
 
-    public void ResetAttackableUnit()
+    public void SetLevelExp(int newLevel, int newExp)
     {
-        UnitHp = characterData.data.healthPoint;
+        GetUnitData().data.level = newLevel;
+        GetUnitData().data.exp = newExp;
     }
 
     protected void Update()
