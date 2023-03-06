@@ -21,6 +21,9 @@ public abstract class AttackableEnemy : AttackableUnit
             unitState = value;
             switch (unitState)
             {
+                case UnitState.None:
+                    nowUpdate = null;
+                    break;
                 case UnitState.Idle:
                     pathFind.isStopped = true;
 
@@ -80,6 +83,8 @@ public abstract class AttackableEnemy : AttackableUnit
                 case UnitBattleState.ActiveSkill:
                     pathFind.isStopped = true;
                     animator.SetTrigger("Active");
+                    animator.ResetTrigger("Attack");
+                    animator.ResetTrigger("AttackEnd");
                     break;
                 case UnitBattleState.Stun:
                     break;
@@ -102,6 +107,17 @@ public abstract class AttackableEnemy : AttackableUnit
         floatingDamageText = GetComponent<AttackedDamageUI>();
         hpBarManager = GetComponent<HpBarManager>();
         hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+
+    }
+    public override void ResetData()
+    {
+        UnitState = UnitState.None;
+        battleState = UnitBattleState.None;
+
+        animator.Play("Default State");
+        lastActiveSkillTime = lastNormalAttackTime = lastNavTime = Time.time;
+        target = null;
+        animator.Rebind();
     }
 
     protected override void SearchTarget()
@@ -171,10 +187,20 @@ public abstract class AttackableEnemy : AttackableUnit
                     BattleState = UnitBattleState.NormalAttack;
                 break;
             case UnitBattleState.NormalAttack:
-                break;
-            case UnitBattleState.PassiveSkill:
+                stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+                if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime >= 1.0f)
+                {
+                    NormalAttackEnd();
+                    Logger.Debug("NoramlAttack anim_done ------- Enemy");
+                }
                 break;
             case UnitBattleState.ActiveSkill:
+                stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+                if (stateInfo.IsName("ActiveSkill") && stateInfo.normalizedTime >= 1.0f)
+                {
+                    ActiveSkillEnd();
+                    Logger.Debug("ActiveSkill anim_done");
+                }
                 break;
             case UnitBattleState.Stun:
                 break;
@@ -230,12 +256,8 @@ public abstract class AttackableEnemy : AttackableUnit
         base.NormalAttackEnd();
         animator.SetTrigger("AttackEnd");
         lastNormalAttackTime = Time.time;
-        if (target == null || !target.gameObject.activeSelf)
-            BattleState = UnitBattleState.BattleIdle;
-        else if (InRangeNormalAttack && CanNormalAttackTime)
-            BattleState = UnitBattleState.NormalAttack;
-        else
-            BattleState = UnitBattleState.BattleIdle;
+
+        BattleState = UnitBattleState.BattleIdle;
     }
     public override void PassiveSkillEnd()
     {

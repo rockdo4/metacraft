@@ -11,7 +11,7 @@ public class HeroSkill : MonoBehaviour
     [SerializeField]
     private GameObject skillActivedPanel;
 
-    private float prevTimeScale;
+    private float prevTimeScale ;
 
     private bool isPointerInSkillActivedPanel;
     private float CoolDownFill {
@@ -29,13 +29,16 @@ public class HeroSkill : MonoBehaviour
 
     public Action effect;
     public Action action;
+    public Action cancle;
 
-    public void Set(float coolDown, Action effect, Action action)
+    public void Set(float coolDown, Action effect, Action action, Action cancle)
     {
         this.coolDown = coolDown;
         this.effect = effect;
         this.action = action;
+        this.cancle = cancle;
 
+        prevTimeScale = GameObject.FindObjectOfType<BattleSpeed>().GetSpeed;
         coolDownTimer = 0;
         CoolDownFill = coolDownTimer / coolDown;
     }
@@ -68,8 +71,9 @@ public class HeroSkill : MonoBehaviour
         }
     }
     public void CancleSkill()
-    {        
-        effect();
+    {
+        Time.timeScale = prevTimeScale;
+        cancle();
         SetActiveSkillGUIs(false);
     }
     public void OnUpSkillActive()
@@ -80,7 +84,10 @@ public class HeroSkill : MonoBehaviour
         Time.timeScale = prevTimeScale;
 
         if (!isPointerInSkillActivedPanel)
+        {
             CancleSkill();
+            return;
+        }            
 
         action();
         SetActiveSkillGUIs(false);
@@ -96,6 +103,8 @@ public class HeroSkill : MonoBehaviour
 
     public void IsPointerInSkillActivedPanel(bool isIn)
     {
-        isPointerInSkillActivedPanel = isIn;        
+        isPointerInSkillActivedPanel = isIn;
+
+        Logger.Debug(isPointerInSkillActivedPanel);
     }
 }

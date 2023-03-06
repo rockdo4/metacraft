@@ -31,13 +31,11 @@ public class RangeAttackHero : AttackableHero
         if (BattleState == UnitBattleState.ActiveSkill)
             return;
 
-        if (IsAlive(target))
-            return;
-
         base.NormalAttack();
 
         var f = Instantiate(attackPref, attackPos.transform.position, Quaternion.identity);
-        f.Set(target, characterData);
+        f.transform.rotation = transform.rotation;
+        f.Set(target.transform, characterData);
         f.MoveStart();
     }
     public override void PassiveSkill()
