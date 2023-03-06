@@ -2,7 +2,8 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
+using System;
+using System.Data;
 
 public class DispatchInfo : MonoBehaviour
 {
@@ -18,13 +19,20 @@ public class DispatchInfo : MonoBehaviour
     public Image[] heroPortarits;
     public TextMeshProUGUI rewardDescription;
     public TextMeshProUGUI proceedingButton;
+ 
+    public int completeTime;
+    public DateTime startTime;
+    public Dictionary<string, object> dispatchInfo;
 
+    //알림
     public AndroidNotificationManager androidNotificationManager;
 
-    public void SetData(Dictionary<string, object> dispatchInfo)
+    public void SetData(Dictionary<string, object> info)
     {
+        dispatchInfo = info;
+        completeTime = (int)dispatchInfo["Time"];
         addRewardCharacterPortrait.sprite = GameManager.Instance.iconSprites[$"Icon_{dispatchInfo["AddRewardCharaID"]}"];
-        dispatchDescription.text = $"{dispatchInfo["Time"]}\n{dispatchInfo["Name"]}\n{dispatchInfo["Text"]}";
+        dispatchDescription.text = $"{completeTime}\n{dispatchInfo["Name"]}\n{dispatchInfo["Text"]}";
         beforeButton.text = $"파견";
     }
 
@@ -32,7 +40,8 @@ public class DispatchInfo : MonoBehaviour
     {
         before.SetActive(false);
         proceeding.SetActive(true);
-        androidNotificationManager.OnClickedNotification(10, "Metacraft", "Dispatch is complete");
+        startTime = DateTime.Now;
+        //androidNotificationManager.OnClickedNotification(10, "Metacraft", "Dispatch is complete"); // 알람 비활성화
     }
 
     public void OnClickProceedingButton()
@@ -40,11 +49,4 @@ public class DispatchInfo : MonoBehaviour
         proceeding.SetActive(false);
         before.SetActive(true);
     }
-
-    //public override void OnClick()
-    //{
-    //    base.OnClick();
-    //    MissionManager mm = FindObjectOfType<MissionManager>();
-    //    mm.OnClickHeroSelect(bundle);
-    //}
 }
