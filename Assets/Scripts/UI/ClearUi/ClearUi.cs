@@ -37,7 +37,7 @@ public class ClearUi : View
         foreach (var hero in heroes)
         {
             var exp = 400;
-            hero.getExp.text = $"+{exp}";
+            hero.expText.text = $"+{exp}";
             hero.Clear(400);
         }
 

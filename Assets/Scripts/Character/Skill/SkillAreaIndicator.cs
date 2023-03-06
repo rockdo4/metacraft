@@ -13,13 +13,13 @@ public class SkillAreaIndicator : MonoBehaviour
             case SkillTargetType.Enemy:
                 if (other.CompareTag("Enemy"))
                 {
-                    IsColliderEnter(true, other);
+                    IsColliderIn(true, other);
                 }
                 break;
             case SkillTargetType.Friendly:
                 if (other.CompareTag("Hero"))
                 {
-                    IsColliderEnter(true, other);
+                    IsColliderIn(true, other);
                 }
                 break;
         }
@@ -31,22 +31,22 @@ public class SkillAreaIndicator : MonoBehaviour
             case SkillTargetType.Enemy:
                 if (other.CompareTag("Enemy"))
                 {
-                    IsColliderEnter(false, other);
+                    IsColliderIn(false, other);
                 }
                 break;
             case SkillTargetType.Friendly:
                 if (other.CompareTag("Hero"))
                 {
-                    IsColliderEnter(false, other);
+                    IsColliderIn(false, other);
                 }
                 break;
         }
     }
-    private void IsColliderEnter(bool enter, Collider other)
+    private void IsColliderIn(bool isIn, Collider other)
     {
-        other.GetComponent<Outline>().enabled = enter; 
+        other.GetComponent<Outline>().enabled = isIn; 
 
-        if(enter)
+        if(isIn)
             unitsInArea.Add(other);
         else
             unitsInArea.Remove(other);

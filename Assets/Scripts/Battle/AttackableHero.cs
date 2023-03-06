@@ -196,7 +196,6 @@ public abstract class AttackableHero : AttackableUnit
     {
         characterData.activeSkill.OnActiveSkill();
     }
-
     protected override void IdleUpdate()
     {
 

@@ -366,7 +366,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &9050583900364454681
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1034,7 +1034,24 @@ MonoBehaviour:
   jobText: {fileID: 3753307257043527858}
   levelText: {fileID: 126586766654216786}
   icon: {fileID: 6488599665337194435}
-  data: {fileID: 0}
+  data:
+    name: 
+    grade: 0
+    maxGrade: 0
+    job: 
+    level: 1
+    exp: 0
+    likeability: 0
+    baseDamage: 50
+    baseDefense: 0
+    healthPoint: 500
+    currentHp: 500
+    moveSpeed: 3
+    critical: 0
+    criticalDmg: 2
+    evasion: 0
+    accuracy: 1
+    synergys: 
   energyConsumption: {fileID: 5549827275153247478}
   hpBar: {fileID: 6913550902242587873}
 --- !u!1 &6913550902242587876
@@ -1054,7 +1071,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &6913550902242587879
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1211,7 +1228,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 10, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}

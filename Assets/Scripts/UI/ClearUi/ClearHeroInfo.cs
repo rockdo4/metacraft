@@ -5,9 +5,9 @@ using UnityEngine.UI;
 
 public class ClearHeroInfo : MonoBehaviour
 {
-    public TextMeshProUGUI level;
-    public TextMeshProUGUI getExp;
-    public Image exp;
+    public TextMeshProUGUI levelText;
+    public TextMeshProUGUI expText;
+    public Image expImage;
 
     private int nowLevel; //현재 레벨
     private int nowExp; //현재 exp
@@ -22,25 +22,23 @@ public class ClearHeroInfo : MonoBehaviour
     {
         SetTest();
         nowLevel = level;
-        this.level.text = nowLevel.ToString();
+        levelText.text = $"{nowLevel}";
 
         nowExp = exp;
-        this.exp.fillAmount = ((float)nowExp / (float)ExpTable[nowLevel]);
+        expImage.fillAmount = (float)nowExp / ExpTable[nowLevel];
     }
 
     public void SetTest()
     {
-        ExpTable[1] = 100;
-        ExpTable[2] = 200;
-        ExpTable[3] = 300;
-        ExpTable[4] = 400;
-        ExpTable[5] = 500;
-        ExpTable[6] = 600;
+        for (int i = 1; i <= 20; i++)
+        {
+            ExpTable[i] = 100 * i;
+        }
     }
 
     public void Clear(int getExp)
     {
-        this.getExp.text = getExp.ToString();
+        expText.text = $"{getExp}";
         int nextLevel = nowLevel;
         int tempExp = nowExp;
         int needExp = ExpTable[nextLevel] - tempExp; //레벨업에 필요한 경험치
@@ -81,26 +79,26 @@ public class ClearHeroInfo : MonoBehaviour
     {
         if (isMove)
         {
-            exp.fillAmount += Time.deltaTime;
+            expImage.fillAmount += Time.deltaTime;
             var nowFill = ((float)lastExp / (float)ExpTable[nowLevel]);
-            if (addLevel == 0 && exp.fillAmount >= nowFill)
+            if (addLevel == 0 && expImage.fillAmount >= nowFill)
             {
                 addLevel = 0;
                 lastExp = 0;
 
-                exp.fillAmount = nowFill;
+                expImage.fillAmount = nowFill;
                 isMove = false;
             }
-            else if (exp.fillAmount >= 1)
+            else if (expImage.fillAmount >= 1)
             {
                 addLevel--;
 
-                var textLevel = (int.Parse(level.text) + 1);
+                var textLevel = (int.Parse(levelText.text) + 1);
 
                 if (ExpTable.ContainsKey(textLevel))
                 {
-                    level.text = (int.Parse(level.text) + 1).ToString();
-                    exp.fillAmount = 0;
+                    levelText.text = (int.Parse(levelText.text) + 1).ToString();
+                    expImage.fillAmount = 0;
                 }
             }
         }
