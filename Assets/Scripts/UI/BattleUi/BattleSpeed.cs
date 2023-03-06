@@ -4,8 +4,8 @@ using UnityEngine;
 public class BattleSpeed : MonoBehaviour
 {
     public TextMeshProUGUI speedTxt;
-    float[] speeds = new float[3] { 1f, 2f, 3f };
-    string speedFormat = "{0:F1}x";
+    private float[] speeds = new float[3] { 1f, 2f, 3f };
+    public float GetSpeed => speeds[idx];
 
     static int idx = 0;
 
@@ -14,10 +14,11 @@ public class BattleSpeed : MonoBehaviour
         idx = GameManager.Instance.playerData.battleSpeedIdx;
         SetBattleSpeed(idx);
     }
+
     public void SetBattleSpeed(int idx)
     {
         Time.timeScale = speeds[idx];
-        speedTxt.text = string.Format(speedFormat, speeds[idx]);
+        speedTxt.text = $"{speeds[idx]:F1}x";
     }
 
     public void OnClickSpeedButton()
@@ -26,6 +27,7 @@ public class BattleSpeed : MonoBehaviour
         GameManager.Instance.playerData.battleSpeedIdx = idx;
         SetBattleSpeed(idx);
     }
+
     public void OnClickReturnButton()
     {
         Time.timeScale = speeds[idx];
