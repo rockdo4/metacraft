@@ -56,9 +56,11 @@ public class ActiveSkillAOE : CharacterSkill
     } 
     public override void OnActiveSkill(LiveData data)
     {
-        var particleContainer = Instantiate(particle);
+        //var particleContainer = Instantiate(particle);
 
-        particleContainer.transform.position = indicatorTransform.position;
+        //particleContainer.transform.position = indicatorTransform.position;
+        
+        EffectManager.Instance.Get(EffectEnum.AOEattackTest1, indicatorTransform);
 
         var targets = skillAreaIndicator.GetUnitsInArea();
 

@@ -12,14 +12,14 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
 
     private EffectEnum currEffect;
 
-    public void Get(EffectEnum index)
+    public void Get(EffectEnum index, Transform startPos)
     {
         if (effectPool.Count == 0)
         {
             GameObject gm = new("Effects");
             parent = Instantiate(gm);
             DontDestroyOnLoad(parent);
-            effectPoolSize = 20;
+            effectPoolSize = 3;
             effectList = GameManager.Instance.effects;
             CreateAllEffects();
         }
@@ -30,6 +30,7 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
         int poolIndex = (int)index;
 
         // effectPool의 [풀 번호][이펙트인덱스[번호]] 활성화
+        effectPool[poolIndex][effectPoolIndex[poolIndex]].SetStartPos(startPos);
         effectPool[poolIndex][effectPoolIndex[poolIndex]].StartEffect();
 
         // index가 프리펩의 최대 개수를 넘어가면 0으로 초기화
