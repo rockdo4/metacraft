@@ -52,6 +52,7 @@ public class TestBattleManager : MonoBehaviour
                     AttackableHero attackableHero = hero.GetComponent<AttackableHero>();
                     attackableHero.SetBattleManager(this);
                     attackableHero.SetUi(heroUiList[index]);
+                    attackableHero.ResetData();
                     heroUiList[index].SetHeroInfo(attackableHero.GetUnitData());
                     heroUiList[index].gameObject.SetActive(true);
                     useHeroes.Add(attackableHero);

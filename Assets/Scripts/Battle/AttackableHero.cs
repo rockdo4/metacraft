@@ -46,14 +46,15 @@ public abstract class AttackableHero : AttackableUnit
                     BattleState = UnitBattleState.None;
                     nowUpdate = ReturnPosUpdate;
 
-                    lateReturn = false;
                     lastNormalAttackTime = Time.time;
                     heroUI.heroSkill.CancleSkill();
+
+                    target = null;
+                    lateReturn = false;
                     testRot = false;
                     break;
                 case UnitState.MoveNext:
                     pathFind.isStopped = false;
-
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
@@ -70,8 +71,8 @@ public abstract class AttackableHero : AttackableUnit
                     nowUpdate = BattleUpdate;
                     break;
                 case UnitState.Die:
-                    pathFind.isStopped = true;
-
+                    pathFind.enabled = false;
+                    gameObject.GetComponent<Collider>().enabled = false;
                     animator.SetTrigger("Die");
 
                     nowUpdate = DieUpdate;
