@@ -1,47 +1,56 @@
 using UnityEngine;
 using UnityEditor;
+using System.Collections.Generic;
 public class SkillCreaterWindow : EditorWindow
 {
-    private string path = "Assets/ScriptableObjects/Skills/";
+    private Dictionary<string, object> skillInfo;
+
+    private string sourcePath = "";
+    private string createPath = "Assets/ScriptableObjects/Skills/";
     private string objectName = "";
 
-    private float cooldown;
-    private float distance;
-    private int count;
-    private float angle;
+    private int lineNumber;
+    private bool isActiveSkill;
 
     [MenuItem("Window/CustomEidtor/SkillCreater")]
     public static void ShowWindow()
-    {
+    {        
         GetWindow<SkillCreaterWindow>("SkillCreater");
     }
     private void CreateGUIFields()
     {
-        path       = EditorGUILayout.TextField("Path", path);
-        objectName = EditorGUILayout.TextField("ObjectName", objectName);
+        sourcePath       = EditorGUILayout.TextField("SourcePath", sourcePath);
+        createPath       = EditorGUILayout.TextField("CreatePath", createPath);        
 
-        cooldown = EditorGUILayout.FloatField("Cooldown", cooldown);
-        distance = EditorGUILayout.FloatField("Distance", distance);
-        count    = EditorGUILayout.IntField("Count", count);
-        angle    = EditorGUILayout.FloatField("Angle", angle);
+        lineNumber = EditorGUILayout.IntField("LineNumber", lineNumber);
     }
-    private void SetScriptableObjectValues(CharacterSkill characterSkill)
+    private void LoadLine()
     {
-        characterSkill.cooldown = cooldown;
-        characterSkill.distance = distance;
-        characterSkill.count    = count;
-        characterSkill.angle    = angle;
+        var loadedFile = CSVReader.ReadByPath(sourcePath);
+
+        skillInfo = loadedFile[lineNumber - 2];
+        objectName = (string)skillInfo["Name"];
+    }
+    private CharacterSkill CreateScriptableObject()
+    {
+        isActiveSkill = (int)skillInfo["Sort"] == 2;
+
+        var characterSkill = isActiveSkill ?
+            CreateInstance<ActiveSkillAOE>() : CreateInstance<CharacterSkill>();        
+
+        return characterSkill;
     }
     private void OnGUI()
     {
-        CreateGUIFields();
+        CreateGUIFields();        
 
         if (GUILayout.Button("Create Scriptable Object"))
         {
-            var characterSkill = CreateInstance<CharacterSkill>();
-            SetScriptableObjectValues(characterSkill);
+            LoadLine();
 
-            AssetDatabase.CreateAsset(characterSkill, $"{path}{objectName}.asset");
+            var scriptableObject = CreateScriptableObject();
+
+            AssetDatabase.CreateAsset(scriptableObject, $"{createPath}{objectName}.asset");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }

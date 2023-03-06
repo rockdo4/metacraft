@@ -47,6 +47,7 @@ public abstract class AttackableUnit : MonoBehaviour
     protected bool moveTarget;
 
     protected Animator animator;
+    protected AnimatorStateInfo stateInfo;
 
     [SerializeField]
     protected UnitState unitState;
@@ -83,7 +84,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
         UnitHp = characterData.data.healthPoint;
     }
-    protected void FixedUpdate()
+    protected void Update()
     {
         nowUpdate?.Invoke();
     }
