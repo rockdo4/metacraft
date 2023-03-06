@@ -19,7 +19,7 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
             GameObject gm = new("Effects");
             parent = Instantiate(gm);
             DontDestroyOnLoad(parent);
-            effectPoolSize = 3;
+            effectPoolSize = 20;
             effectList = GameManager.Instance.effects;
             CreateAllEffects();
         }
