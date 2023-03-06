@@ -11,7 +11,6 @@ public class LiveData : IComparable<LiveData>
     public int maxGrade;           // 승급 가능 최대 등급
 
     public string job;             // 직업, 특성
-    public int energy;             // 활동력 소모량
 
     public int level = 1;          // 레벨
     public int exp;                // 경험치
@@ -49,7 +48,6 @@ public class LiveData : IComparable<LiveData>
         grade = originData.grade;
         maxGrade = originData.maxGrade;
         job = originData.job;
-        energy = originData.energy;
         
         level = 1;
         exp = 0;
@@ -58,7 +56,7 @@ public class LiveData : IComparable<LiveData>
         baseDamage = originData.baseDamage;
         baseDefense = originData.baseDefense;
         healthPoint = originData.healthPoint;
-        currentHp = originData.currentHp;
+        currentHp = healthPoint;
         moveSpeed = originData.moveSpeed;
         critical = originData.critical;
         criticalDmg = originData.criticalDmg;
@@ -76,7 +74,6 @@ public class LiveData : IComparable<LiveData>
         grade = parseData.grade;
         maxGrade = parseData.maxGrade;
         job = parseData.job;
-        energy = parseData.energy;
 
         level = parseData.level;
         exp = parseData.exp;
@@ -85,7 +82,7 @@ public class LiveData : IComparable<LiveData>
         baseDamage = parseData.baseDamage;
         baseDefense = parseData.baseDefense;
         healthPoint = parseData.healthPoint;
-        currentHp = parseData.currentHp;
+        currentHp = healthPoint;
         moveSpeed = parseData.moveSpeed;
         critical = parseData.critical;
         criticalDmg = parseData.criticalDmg;
@@ -101,10 +98,9 @@ public class LiveData : IComparable<LiveData>
         sb.Append($"히어로 명 : {name}\n");
         sb.Append($"공격력 : {baseDamage}\n");
         sb.Append($"방어력 : {baseDefense}\n");
-        sb.Append($"체력 : {currentHp}/{healthPoint}\n");
+        sb.Append($"체력 : {healthPoint}\n");
         sb.Append($"이동 속도 : {moveSpeed}\n");
         sb.Append($"타입 : {job}\n");
-        sb.Append($"활동력 소모량 : {energy}\n");
         sb.Append($"치명타 확률 : {critical}\n");
         sb.Append($"치명타 배율 : {criticalDmg}\n");
         sb.Append($"명중률 : {accuracy}\n");

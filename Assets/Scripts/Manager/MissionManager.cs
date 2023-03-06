@@ -3,8 +3,11 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class MissionManager : MonoBehaviour
+public class MissionManager : View
 {
+    public TextMeshProUGUI dayOfweek;
+    // public Slider apGauge;
+
     public Image portrait;
     public TextMeshProUGUI explanation;
 
@@ -13,7 +16,7 @@ public class MissionManager : MonoBehaviour
     private int heroSlotsIndex;
     public TextMeshProUGUI[] fitProperties;
 
-    public TextMeshProUGUI deductionAP;
+    //public TextMeshProUGUI deductionAP;
     public TextMeshProUGUI ProperCombatPower;
 
     public GameObject missionPoints;
@@ -22,11 +25,10 @@ public class MissionManager : MonoBehaviour
 
     public delegate void clickmark(int num);
     private int missionNum;
-    private GameManager gm = GameManager.Instance;
 
-    public void Start()
+    private void Start()
     {
-        missionInfoTable = gm.missionInfoList;
+        missionInfoTable = GameManager.Instance.missionInfoList;
         var num = Utils.DistinctRandomNumbers(missionInfoTable.Count, 4);
         marks = GetComponentInChildren<MissionSpawner>().prefebs;
 
@@ -48,14 +50,19 @@ public class MissionManager : MonoBehaviour
         }
     }
 
+    public void UpdateMissionDay()
+    {
+        dayOfweek.text = $"{GameManager.Instance.playerData.currentDay}요일";
+    }
+
     public void UpdateMissionInfo(int num)
     {
         missionNum = num;
         var dic = missionInfoTable[num];
-        portrait.sprite = gm.iconSprites[$"Icon_{dic["BossID"]}"];
+        portrait.sprite = GameManager.Instance.iconSprites[$"Icon_{dic["BossID"]}"];
         explanation.text = $"{dic["OperationDescription"]}";
         ExpectedCost.text = $"{dic["ExpectedCostID"]}";
-        gm.ClearBattleGroups();
+        GameManager.Instance.ClearBattleGroups();
         for (int i = 0; i < heroSlots.Length; i++)
         {
             heroSlots[i].GetComponent<Image>().sprite = null;
@@ -67,7 +74,7 @@ public class MissionManager : MonoBehaviour
             fitProperties[i].fontStyle = FontStyles.Normal;
             fitProperties[i].color = Color.white;
         }
-        deductionAP.text = $"AP -{dic["ConsumptionBehavior"]}";
+        //deductionAP.text = $"AP -{dic["ConsumptionBehavior"]}";
         ProperCombatPower.text = $"0/{dic["ProperCombatPower"]}";
         ProperCombatPower.color = Color.white;
     }
@@ -75,8 +82,8 @@ public class MissionManager : MonoBehaviour
     // Mission Hero Info Button 에서 호출
     public void OnClickHeroSelect(CharacterDataBundle bundle)
     {
-        int index = gm.GetHeroIndex(bundle.gameObject);
-        var selectIndexGroup = gm.battleGroups;
+        int index = GameManager.Instance.GetHeroIndex(bundle.gameObject);
+        var selectIndexGroup = GameManager.Instance.battleGroups;
 
         int? duplication = null;
         for (int i = 0; i < 3; i++)
@@ -89,7 +96,7 @@ public class MissionManager : MonoBehaviour
         }
 
         LiveData liveData = bundle.data;
-        heroSlots[heroSlotsIndex].GetComponent<Image>().sprite = gm.GetSpriteByAddress($"Icon_{liveData.name}");
+        heroSlots[heroSlotsIndex].GetComponent<Image>().sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{liveData.name}");
         selectIndexGroup[heroSlotsIndex] = index;
 
         if (duplication != null)
@@ -108,10 +115,10 @@ public class MissionManager : MonoBehaviour
         heroSlotsIndex = idx;
     }
 
-    //적합 속성 체크
+    // 적합 속성 체크
     private void PropertyMatchingCheck()
     {
-        var selectedHeroes = gm.GetSelectedHeroes();
+        var selectedHeroes = GameManager.Instance.GetSelectedHeroes();
 
         for (int i = 0; i < fitProperties.Length; i++)
         {
@@ -132,10 +139,10 @@ public class MissionManager : MonoBehaviour
         }
     }
 
-    //전투력 합계 체크
+    // 전투력 합계 체크
     private void TotalPowerCheck()
     {
-        var selectedHeroes = gm.GetSelectedHeroes();
+        var selectedHeroes = GameManager.Instance.GetSelectedHeroes();
 
         int totalPower = 0;
         foreach (var hero in selectedHeroes)
@@ -151,7 +158,7 @@ public class MissionManager : MonoBehaviour
     public void StartMission()
     {
         int count = 0;
-        foreach (var num in gm.battleGroups)
+        foreach (var num in GameManager.Instance.battleGroups)
         {
             if (num != null)
                 count++;
@@ -161,13 +168,13 @@ public class MissionManager : MonoBehaviour
             switch (missionInfoTable[missionNum]["Type"])
             {
                 case 0:
-                    gm.LoadScene((int)SceneIndex.Battle);
+                    GameManager.Instance.LoadScene((int)SceneIndex.Battle);
                     break;
                 case 1:
-                    gm.LoadScene((int)SceneIndex.Battle);
+                    GameManager.Instance.LoadScene((int)SceneIndex.Battle);
                     break;
                 case 2:
-                    gm.LoadScene((int)SceneIndex.Defense);
+                    GameManager.Instance.LoadScene((int)SceneIndex.Defense);
                     break;
             }
         }
