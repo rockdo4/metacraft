@@ -11,7 +11,6 @@ public class CharacterData : ScriptableObject, IComparable<CharacterData>
     public int          maxGrade;           // 승급 가능 최대 등급
 
     public string       job;                // 직업, 특성
-    public int          energy;             // 활동력 소모량
 
     [Range(1, 20)]
     public int          level = 1;          // 레벨

@@ -11,21 +11,15 @@ public class EffectManager : MonoBehaviour
     private List<List<Effect>> effectPool = new((int)EffectEnum.Count);    // 이펙트 풀
     private List<int> effectPoolIndex = new();     // 활성화할 이펙트 프리펩의 번호
 
+    public static EffectManager Instance { get; private set; }
+
+    private void Awake()
+    {
+        Instance = this;
+    }
     private void Start()
     {
         CreateAllEffects();
-    }
-
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.A))
-        {
-            Get(EffectEnum.Test1);
-        }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            Get(EffectEnum.Test2);
-        }
     }
 
     public void Get(EffectEnum index)

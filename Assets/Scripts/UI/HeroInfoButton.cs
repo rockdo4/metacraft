@@ -19,7 +19,7 @@ public class HeroInfoButton : MonoBehaviour
         heroNameText.text = data.name;
         gradeText.text = $"{(CharacterGrade)data.grade}";
         jobText.text = data.job;
-        levelText.text = data.level.ToString();
+        levelText.text = $"{data.level}";
         icon.sprite = GameManager.Instance.iconSprites[$"Icon_{data.name}"];
     }
 

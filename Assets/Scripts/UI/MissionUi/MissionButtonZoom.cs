@@ -89,6 +89,23 @@ public class MissionButtonZoom : MonoBehaviour
         mapImageRectTransform.pivot = originalPivot;
         mapImageRectTransform.localScale = originalScale;
         mapImageRectTransform.anchoredPosition = originalAnchoredPosition;
+    }
 
+    public void ZoomOutImmediatelyButtonClicked()
+    {
+        Vector3 targetPivot = mapImageRectTransform.pivot;
+        Vector3 targetScale = mapImageRectTransform.localScale;
+        Vector3 targetAnchoredPosition = mapImageRectTransform.anchoredPosition;
+
+        foreach (var mark in marks)
+        {
+            if (mark.isMarkOn)
+            {
+                mark.gameObject.SetActive(true);
+            }
+        }
+        mapImageRectTransform.pivot = originalPivot;
+        mapImageRectTransform.localScale = originalScale;
+        mapImageRectTransform.anchoredPosition = originalAnchoredPosition;
     }
 }
