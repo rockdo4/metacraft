@@ -31,6 +31,14 @@ public class BeltScrollBattleManager : TestBattleManager
 
         enemyCountTxt.Count = GetAllEnemyCount();
     }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            MoveNextStage();
+        }
+    }
+
     private int GetCurrEnemyCount()
     {
         return triggers[currTriggerIndex].useEnemys.Count;
@@ -73,7 +81,9 @@ public class BeltScrollBattleManager : TestBattleManager
             }
             else if (triggers[currTriggerIndex].isStageEnd)
             {
-                
+                //platform.transform.position = 
+                // test
+                SetStageClear();
             }
             else if (triggers[currTriggerIndex].isMissionEnd)
             {

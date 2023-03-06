@@ -43,7 +43,8 @@ public class DefenseBattleManager : TestBattleManager
             }
             else
             {
-
+                // test
+                SetStageClear();
             }
         }
     }

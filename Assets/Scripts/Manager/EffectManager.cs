@@ -52,11 +52,7 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
     // 풀에 담을 용도
     private Effect CreateEffect(Transform parentsObject, string effectName, int effectListIndex)
     {
-        var effect =
-            Instantiate(effectList[effectListIndex],
-            effectList[effectListIndex].StartPos.position,
-            Quaternion.identity,
-            parentsObject);
+        var effect = Instantiate(effectList[effectListIndex], parentsObject);
         effect.name = effectName;
 
         var particles = effectList[effectListIndex].data.particles;
