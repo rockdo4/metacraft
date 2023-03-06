@@ -1,14 +1,15 @@
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
-using UnityEditor.ShaderKeywordFilter;
 
 public class Effect : MonoBehaviour
 {
     public List<ParticleSystem> particles;
     public EffectData data;
-    public Transform startPos;              // 이펙트 시작 지점
-    public Transform endPos;                // 이펙트 종료 지점
+    private Transform startPos;              // 이펙트 시작 지점
+    private Transform endPos;                // 이펙트 종료 지점
+    public Transform StartPos { get => startPos; }
+    public Transform EndPos { get => endPos; }
     // 종료 지점 추가한 이유
     // 목표한테 이동하는 이펙트 생길 수도 있을거 같아서 미리 추가
     // 당장은 None으로 놔도 됩니다
@@ -31,10 +32,9 @@ public class Effect : MonoBehaviour
 
     // 각각 속성들 변경해서 쓸 수 있도록 하기 위해 추가
     public void SetAllData
-        (float startDelay, float duration, float effectSize)
+        (float startDelay, float effectSize)
     {
         data.startDelay = startDelay;
-        data.duration = duration;
         data.effectSize = effectSize;
     }
 
@@ -47,18 +47,21 @@ public class Effect : MonoBehaviour
     IEnumerator CoEffectRoutine()
     {        
         var startDelay = data.startDelay;
-        var duration = data.duration;
+        float duration = particles[0].duration;
 
-        if (startDelay > 0f)
-            yield return new WaitForSeconds(startDelay);
+        while (startDelay > 0f)
+        {
+            startDelay -= Time.deltaTime;
+            yield return null;
+        }    
 
         for (int i = 0; i < particles.Count; i++)
         {
-            if (particles[i] == null)
-                Logger.Debug("null");
             particles[i].transform.position = startPos.position;
             particles[i].Play();
         }
+
+        yield return null;
 
         while (duration > 0f)
         {
@@ -73,5 +76,4 @@ public class Effect : MonoBehaviour
 
         gameObject.SetActive(false);
     }
-    // 파티클 자체의 지속시간으로 멈추게 변경될 수도 있음
 }

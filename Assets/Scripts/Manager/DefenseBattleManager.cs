@@ -37,7 +37,14 @@ public class DefenseBattleManager : TestBattleManager
         readyCount--;
         if (readyCount == 0 && enemyCount == 0)
         {
-            SetStageClear();
+            if (triggers[0].isMissionEnd)
+            {
+                SetStageClear();
+            }
+            else
+            {
+
+            }
         }
     }
     protected override void SetHeroReturnPositioning(List<Transform> pos)

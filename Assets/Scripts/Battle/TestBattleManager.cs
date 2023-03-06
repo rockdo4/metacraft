@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class TestBattleManager : MonoBehaviour
 {
@@ -14,6 +16,9 @@ public class TestBattleManager : MonoBehaviour
     public List<MapEventTrigger> triggers;
 
     protected int readyCount;
+
+    public Image fadePanel;
+    public bool isFadeIn = true;
 
     private void Awake()
     {
@@ -106,6 +111,39 @@ public class TestBattleManager : MonoBehaviour
         GameManager.Instance.NextDay();
         clearUi.SetData();
         Logger.Debug("Clear!");
+    }
+    private IEnumerator CoFade()
+    {
+        if (isFadeIn)
+        {
+            float fadeAlpha = 0f;
+            while (fadeAlpha < 1f)
+            {
+                fadeAlpha += 0.01f;
+                yield return null;
+                fadePanel.color = new Color(0, 0, 0, fadeAlpha);
+            }
+
+            isFadeIn = false;
+            yield break;
+        }
+        else
+        {
+            float fadeAlpha = 1f;
+            while (fadeAlpha > 0f)
+            {
+                fadeAlpha -= 0.01f;
+                yield return null;
+                fadePanel.color = new Color(0, 0, 0, fadeAlpha);
+            }
+
+            isFadeIn = true;
+            yield break;
+        }
+    }
+    protected void MoveNextStage()
+    {
+        StartCoroutine(CoFade());
     }
 
     // 히어로들 안 보이는 위치로 옮기고 Active False 시키는 함수
