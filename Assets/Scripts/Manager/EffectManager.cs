@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EffectManager : MonoBehaviour
+public class EffectManager : EffectManagerSingleton<EffectManager>
 {
     [Range(0, 100)]
     public int effectPoolSize;
@@ -11,12 +11,6 @@ public class EffectManager : MonoBehaviour
     private List<List<Effect>> effectPool = new((int)EffectEnum.Count);    // 이펙트 풀
     private List<int> effectPoolIndex = new();     // 활성화할 이펙트 프리펩의 번호
 
-    public static EffectManager Instance { get; private set; }
-
-    private void Awake()
-    {
-        Instance = this;
-    }
     private void Start()
     {
         CreateAllEffects();
