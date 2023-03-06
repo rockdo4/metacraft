@@ -54,8 +54,8 @@ public class ActiveSkillAOE : CharacterSkill
         {
             indicatorTransform.position = hit.point + Vector3.up * 0.1f;
         }   
-    }
-    public override void OnActiveSkill()
+    } 
+    public override void OnActiveSkill(int damage)
     {
         var particleContainer = Instantiate(particle);
 
@@ -63,16 +63,8 @@ public class ActiveSkillAOE : CharacterSkill
 
         var targets = skillAreaIndicator.GetUnitsInArea();
 
-        int damage = 0;
-        switch(targetType)
-        {
-            case SkillTargetType.Enemy:
-                damage = 111;
-                break;
-            case SkillTargetType.Friendly:
-                damage = -111;
-                break;
-        }
+        if (targetType == SkillTargetType.Friendly)
+            damage *= -1;
 
         foreach (var target in targets)
         {
