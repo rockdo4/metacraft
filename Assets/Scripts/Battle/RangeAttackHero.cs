@@ -7,6 +7,8 @@ public class RangeAttackHero : AttackableHero
 {
     protected float searchDelay = 1f;
     protected float lastSearchTime;
+    public Transform attackPos;
+    public FireBallTest attackPref;
 
     protected override void Awake()
     {
@@ -15,19 +17,13 @@ public class RangeAttackHero : AttackableHero
     }
     protected override void SearchTarget()
     {
-        if (Time.time - lastSearchTime >= searchDelay)
-        {
-            lastSearchTime = Time.time;
-            var minTarget = GetSearchTargetInAround(enemyList, characterData.attack.distance / 2);
+        lastSearchTime = Time.time;
+        var minTarget = GetSearchTargetInAround(enemyList, characterData.attack.distance / 2);
 
-            if (minTarget != null)
-            {
-                target = minTarget;
-                return;
-            }
-
-        }
-        SearchMaxHealthTarget(enemyList); //체력이 가장 많은 타겟 추적
+        if (IsAlive(minTarget))
+            target = minTarget;
+        else
+            SearchMaxHealthTarget(enemyList); //체력이 가장 많은 타겟 추적
     }
 
     public override void NormalAttack()
@@ -35,36 +31,14 @@ public class RangeAttackHero : AttackableHero
         if (BattleState == UnitBattleState.ActiveSkill)
             return;
 
+        if (IsAlive(target))
+            return;
+
         base.NormalAttack();
 
-        if (characterData.attack.count == 1)
-        {
-            target.OnDamage(characterData.data.baseDamage, false);
-            return;
-        }
-
-        List<AttackableUnit> attackEnemies = new();
-
-        foreach (var enemy in enemyList)
-        {
-            Vector3 interV = enemy.transform.position - transform.position;
-            if (interV.magnitude <= characterData.attack.distance)
-            {
-                float angle = Vector3.Angle(transform.forward, interV);
-
-                if (Mathf.Abs(angle) < characterData.attack.angle / 2f)
-                {
-                    attackEnemies.Add(enemy);
-                }
-            }
-        }
-
-        attackEnemies = GetNearestUnitList(attackEnemies, characterData.attack.count);
-
-        for (int i = 0; i < attackEnemies.Count; i++)
-        {
-            attackEnemies[i].OnDamage(characterData.data.baseDamage, false);
-        }
+        var f = Instantiate(attackPref, attackPos.transform.position, Quaternion.identity);
+        f.Set(target, characterData);
+        f.MoveStart();
     }
     public override void PassiveSkill()
     {
@@ -80,12 +54,7 @@ public class RangeAttackHero : AttackableHero
             case UnitBattleState.BattleIdle:
                 if (Time.time - lastSearchTime >= searchDelay)
                 {
-                    var minTarget = GetSearchTargetInAround(enemyList, characterData.attack.distance/2);
-
-                    if (minTarget != null)
-                            target = minTarget;
-
-                    lastSearchTime = Time.time;
+                    SearchTarget();
                 }
                 break;
         }

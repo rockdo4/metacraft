@@ -1,52 +1,48 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class SupportAttackHero : AttackableHero
 {
     protected float searchDelay = 1f;
     protected float lastSearchTime;
-
     bool moveToTeam = false;
-    Vector3 teamPos;
 
     protected override void Awake()
     {
+        lastSearchTime = Time.time;
         base.Awake();
     }
     protected override void SearchTarget()
     {
         if (moveToTeam)
             return;
+
         if (Time.time - lastSearchTime >= searchDelay)
         {
             lastSearchTime = Time.time;
-            var minTarget = GetSearchTargetInAround(enemyList, characterData.attack.distance / 2);
 
-            if (minTarget != null)
+            if (heroList.Count != 1)
             {
-                if(target == null  || !target.gameObject.activeSelf)
-                    SearchNearbyTarget(heroList);
-                return;
+                var nearyTeam = GetSearchTargetInAround(heroList, characterData.attack.distance / 2);
+                if (!IsAlive(nearyTeam))
+                {
+                    moveToTeam = true;
+                    target = GetSearchNearbyTarget(heroList);
+                    pathFind.SetDestination(target.transform.position);
+                }
+                else
+                    SearchNearbyTarget(enemyList); //가장 가까운 적
             }
             else
-            {
-                teamPos = GetSearchNearbyTarget(heroList).transform.position;
-                pathFind.SetDestination(teamPos);
-                moveToTeam = true;
-                animator.ResetTrigger("Run");
-                animator.SetTrigger("Run");
-            }
-
+                SearchNearbyTarget(enemyList); //가장 가까운 적
         }
-        SearchNearbyTarget(enemyList); //가장 가까운 적
     }
 
     public override void NormalAttack()
     {
         if (BattleState == UnitBattleState.ActiveSkill)
             return;
+
         base.NormalAttack();
 
         if (characterData.attack.count == 1)
@@ -78,6 +74,7 @@ public class SupportAttackHero : AttackableHero
             attackEnemies[i].OnDamage(characterData.data.baseDamage, false);
         }
     }
+
     public override void PassiveSkill()
     {
         base.PassiveSkill();
@@ -85,15 +82,14 @@ public class SupportAttackHero : AttackableHero
 
     protected override void BattleUpdate()
     {
-        if(moveToTeam )
+        if(moveToTeam)
         {
-            if (Vector3.Distance(teamPos, transform.position) < characterData.attack.distance/2)
+            if (Vector3.Distance(target.transform.position, transform.position) < characterData.attack.distance/2)
             {
                 moveToTeam = false;
                 target = null;
+                SearchTarget();
             }
-
-            return;
         }
 
         switch (BattleState)
@@ -103,12 +99,7 @@ public class SupportAttackHero : AttackableHero
             case UnitBattleState.BattleIdle:
                 if (Time.time - lastSearchTime >= searchDelay)
                 {
-                    var minTarget = GetSearchTargetInAround(enemyList, characterData.attack.distance / 2);
-
-                    if (minTarget != null)
-                        target = minTarget;
-
-                    lastSearchTime = Time.time;
+                    SearchTarget();
                 }
                 break;
         }

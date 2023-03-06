@@ -4,4 +4,5 @@ public enum SceneIndex
     Title,
     Office,
     Battle,
+    Defense,
 }

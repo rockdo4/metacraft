@@ -14,9 +14,10 @@ GameObject:
   - component: {fileID: 8489007089072879661}
   - component: {fileID: 6991144328854555625}
   - component: {fileID: 8489007089072879663}
+  - component: {fileID: -6316505954286571692}
   m_Layer: 0
   m_Name: "Hero_\uC740\uBC00\uD615 SD"
-  m_TagString: Untagged
+  m_TagString: Hero
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 8489007089072879651}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 970850602951436016}
@@ -122,9 +123,9 @@ MonoBehaviour:
   originData: {fileID: 11400000, guid: fc2cd96fbd3854c44a6336d94cac2d13, type: 2}
   data:
     name: 
-    grade: 
+    grade: 0
+    maxGrade: 0
     job: 
-    maxGrade: 
     energy: 0
     level: 0
     exp: 0
@@ -142,6 +143,24 @@ MonoBehaviour:
   attack: {fileID: 11400000, guid: d5b9a7358e0855b46acac612b4428307, type: 2}
   activeSkill: {fileID: 11400000, guid: c9f64039ca8bd8146ae8d8344c554f5f, type: 2}
   passiveSkill: {fileID: 11400000, guid: 72914e2e9e922d84eb7b5c550ed005df, type: 2}
+--- !u!114 &-6316505954286571692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8489007089072879651}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5fea29bb7c508c244a1f805a5fd3fc4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  outlineMode: 1
+  outlineColor: {r: 0, g: 1, b: 0, a: 1}
+  outlineWidth: 10
+  precomputeOutline: 0
+  bakeKeys: []
+  bakeValues: []
 --- !u!1001 &970483107669232990
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -201,7 +220,8 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Controller
       value: 
-      objectReference: {fileID: 9100000, guid: 927414bd9c991c1469494359c13bcbc4, type: 2}
+      objectReference: {fileID: 22100000, guid: aad3b93321cf9f04ba7b4c768ad34290,
+        type: 2}
     - target: {fileID: 95508205990519034, guid: 0276fd68d2eb8e64aa562b0c13ae1bf9,
         type: 3}
       propertyPath: m_ApplyRootMotion

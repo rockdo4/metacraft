@@ -112,6 +112,7 @@ public class TestBattleManager : MonoBehaviour
     {
         for (int i = 0; i < useHeroes.Count; i++)
         {
+            Logger.Debug("Return");
             useHeroes[i].SetReturnPos(pos[i]);
             useHeroes[i].ChangeUnitState(UnitState.ReturnPosition);
         }
@@ -122,5 +123,21 @@ public class TestBattleManager : MonoBehaviour
         UIManager.Instance.ShowView(1);
         clearUi.SetData();
         Logger.Debug("Clear!");
+    }
+
+    // 히어로들 안 보이는 위치로 옮기고 Active False 시키는 함수
+    public void ResetHeroes()
+    {
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            Utils.CopyPositionAndRotation(useHeroes[i].gameObject, GameManager.Instance.heroSpawnTransform);
+            useHeroes[i].SetEnabledPathFind(false);
+            useHeroes[i].gameObject.SetActive(false);
+        }
+    }
+
+    public void OnDestroy()
+    {
+        Time.timeScale = 1;
     }
 }

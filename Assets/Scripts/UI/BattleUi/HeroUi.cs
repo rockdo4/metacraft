@@ -7,6 +7,7 @@ public class HeroUi : MonoBehaviour
     public HeroSkill heroSkill;
     public Image heroImage;
     public Slider hpBar;
+    public Image dieImage;
 
     [SerializeField]
     private BuffList viewBuffList;
@@ -35,7 +36,7 @@ public class HeroUi : MonoBehaviour
     public void OnClickHeroSkill()
     {
         if(heroState == UnitState.Battle)
-            heroSkill.OnClickSkill();
+            heroSkill.OnDownSkill();
     }
 
     public void OnClickPopUp()
@@ -45,5 +46,10 @@ public class HeroUi : MonoBehaviour
     public void SetHp(int nowHp)
     {
         hpBar.value = Mathf.Max((float)nowHp / (float)heroData.data.healthPoint);
+    }
+
+    public void SetDieImage()
+    {
+        dieImage.gameObject.SetActive(true);
     }
 }

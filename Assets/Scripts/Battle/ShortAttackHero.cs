@@ -9,8 +9,8 @@ public class ShortAttackHero : AttackableHero
     {
         if (BattleState == UnitBattleState.ActiveSkill)
             return;
+
         base.NormalAttack();
-        //Logger.Debug("Hero_NormalAttack");
 
         if (characterData.attack.count == 1)
         {
@@ -45,19 +45,10 @@ public class ShortAttackHero : AttackableHero
     public override void PassiveSkill()
     {
         base.PassiveSkill();
-        //Logger.Debug("Hero_NormalAttack");
-
-        target.OnDamage(characterData.data.baseDamage * 2, true);
-        return;
-
-        //Logger.Debug("Hero_PassiveSkill");
     }
-    public override void ActiveSkill()
+    public override void ReadyActiveSkill()
     {
-        base.ActiveSkill();
-        
-
-        //target.OnDamage(characterData.data.baseDamage * 3, true);
+        base.ReadyActiveSkill();
     }
 
     protected override void SearchTarget()

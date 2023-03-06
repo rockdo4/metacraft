@@ -4,10 +4,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ActiveSkillAOE", menuName = "Character/ActiveSkill/AOE")]
 public class ActiveSkillAOE : CharacterSkill
 {
-    public SkillAreaIndicator skillAreaIndicator;    
+    public SkillAreaIndicator skillAreaIndicatorPrefab;
+    private SkillAreaIndicator skillAreaIndicator;
+    public LayerMask layerM;
+    public ParticleSystem particle;
+
     private Camera cam;
-    private int layerMask;
-    public bool isInit = false;    
+    private Transform indicatorTransform;
 
     public bool isAutoTargeting;
     public float castRangeLimit;
@@ -17,60 +20,70 @@ public class ActiveSkillAOE : CharacterSkill
     public SkillTargetType targetType;
     public bool isCriticalPossible;
     public override void OnActive()
-    {        
-        if(!isInit)
-        {
-            layerMask = 1 << 8;
+    {
+        if (skillAreaIndicator != null)
+            return;
 
-            skillAreaIndicator = Instantiate(skillAreaIndicator);            
-            skillAreaIndicator.gameObject.SetActive(false);
+        //layerM = 1 << 8;
 
-            cam = Camera.main;
- 
-            isInit = true;
-        }
-    } 
+        skillAreaIndicator = Instantiate(skillAreaIndicatorPrefab);
+        skillAreaIndicator.TargetType = targetType;
+        skillAreaIndicator.gameObject.SetActive(false);
+        indicatorTransform = skillAreaIndicator.transform;
+
+        cam = Camera.main;
+    }
     public override IEnumerator SkillCoroutine()
     {
+        OnActive();
+
         skillAreaIndicator.gameObject.SetActive(true);
 
         while (true)
         {
             MoveIndicator();
-
-            if (TryActiveSkill())
-                yield break;
-
             yield return null;
         }
     }
     private void MoveIndicator()
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        Debug.DrawRay(ray.origin, ray.direction * 100f, Color.red);
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100.0f, layerMask))
-        {            
-            skillAreaIndicator.transform.position = hit.point + Vector3.up * 0.1f;
-        }        
-    }
-    private bool TryActiveSkill()
-    {
-        if(Input.GetMouseButtonUp(0))
+
+        if (Physics.Raycast(ray, out hit, 100.0f, layerM))
         {
-            ActiveSkill();          
-            return true;
-        }
-        return false;
+            indicatorTransform.position = hit.point + Vector3.up * 0.1f;
+        }   
     }
-    private void ActiveSkill()
+    public override void OnActiveSkill()
     {
         var targets = skillAreaIndicator.GetUnitsInArea();
 
-        foreach(var target in targets)
+        var particleContainer = Instantiate(particle);
+
+        particleContainer.transform.position = indicatorTransform.position;
+
+        int damage = 0;
+        switch(targetType)
         {
-            target.OnDamage(222);
+            case SkillTargetType.Enemy:
+                damage = 111;
+                break;
+            case SkillTargetType.Friendly:
+                damage = -111;
+                break;
         }
 
+        foreach (var target in targets)
+        {
+            target.OnDamage(damage);
+        }
+
+        skillAreaIndicator.gameObject.SetActive(false);
+    }
+    public override void SkillCancle()
+    {
         skillAreaIndicator.gameObject.SetActive(false);
     }
 }

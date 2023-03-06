@@ -7,8 +7,11 @@ public class DefenseMapEventTrigger : MapEventTrigger
     private void OnTriggerEnter(Collider other)
     {
         AttackableEnemy enemy = other.GetComponent<AttackableEnemy>();
-        AddUseEnemyList(enemy);
-        enemys.Remove(enemy);
-        manager.EnemyTriggerEnter();
+        if (enemy != null)
+        {
+            AddUseEnemyList(enemy);
+            enemys.Remove(enemy);
+            manager.EnemyTriggerEnter();
+        }
     }
 }

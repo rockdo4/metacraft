@@ -10,12 +10,18 @@ public class DefenseBattleManager : TestBattleManager
     {
         GameStart();
         enemyCount = GetAllEnemyCount();
+        Logger.Debug(enemyCount);
         enemyCountTxt.Count = enemyCount;
     }
 
     public override void OnDeadHero(AttackableHero hero)
     {
         base.OnDeadHero(hero);
+        readyCount = useHeroes.Count;
+        if (useHeroes.Count == 0)
+        {
+           // SetEnemyIdle();
+        }
     }
     public override void OnDeadEnemy(AttackableEnemy enemy)
     {
@@ -23,6 +29,7 @@ public class DefenseBattleManager : TestBattleManager
         triggers[0].OnDead(enemy);
 
         enemyCount--;
+        Logger.Debug($"{triggers[0].enemys.Count} / {triggers[0].useEnemys.Count} / {enemyCount}");
         if (enemyCount == 0)
         {
             SetHeroReturnPositioning(startPositions);
@@ -35,6 +42,8 @@ public class DefenseBattleManager : TestBattleManager
     public override void OnReady()
     {
         readyCount--;
+        Logger.Debug(readyCount);
+        Logger.Debug(enemyCount);
         if (readyCount == 0 && enemyCount == 0)
         {
             SetStageClear();
