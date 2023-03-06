@@ -11,6 +11,7 @@ public class ShortAttackHero : AttackableHero
             return;
 
         base.NormalAttack();
+        AddBuff(BuffType.Silence, 1.0f, 5f);
 
         if (characterData.attack.count == 1)
         {

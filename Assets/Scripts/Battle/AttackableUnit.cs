@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -66,6 +67,8 @@ public abstract class AttackableUnit : MonoBehaviour
     protected bool InRangeNormalAttack => Vector3.Distance(target.transform.position, transform.position) < characterData.attack.distance;
     protected bool NonActiveSkill => battleState != UnitBattleState.ActiveSkill && battleState != UnitBattleState.Stun;
 
+    protected List<Buff> buffList = new();
+
     protected virtual void Awake()
     {
         var manager = FindObjectOfType<TestBattleManager>();
@@ -87,6 +90,10 @@ public abstract class AttackableUnit : MonoBehaviour
     protected void Update()
     {
         nowUpdate?.Invoke();
+        for (int i = buffList.Count - 1; i >= 0; i--)
+        {
+            buffList[i].Update();
+        }
     }
 
     public abstract void ChangeUnitState(UnitState state);
@@ -314,4 +321,8 @@ public abstract class AttackableUnit : MonoBehaviour
     }
 
     // 여기에 State 초기화랑 트리거 모두 해제하는 코드 작성
+
+    public abstract void AddBuff(BuffType type, float scale, float duration);
+    public abstract void RemoveBuff(Buff buff);
+
 }

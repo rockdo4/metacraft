@@ -28,7 +28,6 @@ public abstract class AttackableHero : AttackableUnit
                     nowUpdate = null;
                     break;
                 case UnitState.Idle:
-                    Logger.Debug("Idle");
                     pathFind.isStopped = true;
 
                     animator.SetFloat("Speed", 0);
@@ -36,7 +35,6 @@ public abstract class AttackableHero : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.ReturnPosition: // 재배치
-                    Logger.Debug("ReturnPosition");
                     pathFind.isStopped = false;
                     pathFind.stoppingDistance = 0; //가까이 가기
                     pathFind.SetDestination(returnPos.position); //재배치 위치 설정
@@ -138,8 +136,8 @@ public abstract class AttackableHero : AttackableUnit
         //BattleState = UnitBattleState.ActiveSkill;
         heroUI.heroSkill.
             Set(
-            characterData.activeSkill.cooldown, 
-            ReadyActiveSkill, 
+            characterData.activeSkill.cooldown,
+            ReadyActiveSkill,
             PlayActiveSkillAnimation,
             CancleActiveSkill); //궁극기 쿨타임과 궁극기 함수 등록
     }
@@ -170,7 +168,7 @@ public abstract class AttackableHero : AttackableUnit
     {
     }
     public override void ReadyActiveSkill()
-    {        
+    {
         coOnIndicator = StartCoroutine(characterData.activeSkill.SkillCoroutine());
     }
     public void CancleActiveSkill()
@@ -187,12 +185,12 @@ public abstract class AttackableHero : AttackableUnit
     {
         pathFind.isStopped = true;
         BattleState = UnitBattleState.ActiveSkill;
-        if(coOnIndicator != null)
+        if (coOnIndicator != null)
         {
             StopCoroutine(coOnIndicator);
             coOnIndicator = null;
         }
-    }    
+    }
     public override void OnActiveSkill()
     {
         characterData.activeSkill.OnActiveSkill();
@@ -255,7 +253,6 @@ public abstract class AttackableHero : AttackableUnit
                 if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime >= 1.0f)
                 {
                     NormalAttackEnd();
-                    Logger.Debug("NoramlAttack anim_done ------- Enemy");
                 }
                 break;
             case UnitBattleState.ActiveSkill:
@@ -263,7 +260,6 @@ public abstract class AttackableHero : AttackableUnit
                 if (stateInfo.IsName("ActiveSkill") && stateInfo.normalizedTime >= 1.0f)
                 {
                     ActiveSkillEnd();
-                    Logger.Debug("ActiveSkill anim_done");
                 }
                 break;
             case UnitBattleState.Stun:
@@ -301,7 +297,6 @@ public abstract class AttackableHero : AttackableUnit
                     UnitState = UnitState.Idle;
                     battleManager.OnReady();
 
-                    Logger.Debug("OnReady");
                 }
                 break;
             case false:
@@ -357,15 +352,12 @@ public abstract class AttackableHero : AttackableUnit
 
         lastNormalAttackTime = Time.time;
 
-        Logger.Debug(enemyList.Count);
         if (lateReturn)
         {
             UnitState = UnitState.ReturnPosition;
-            Logger.Debug("Enemy - 0");
         }
         else
         {
-            Logger.Debug("NormalAttackEnd - BattleIdle");
             BattleState = UnitBattleState.BattleIdle;
         }
     }
@@ -375,22 +367,37 @@ public abstract class AttackableHero : AttackableUnit
     }
     public override void ActiveSkillEnd()
     {
-        Logger.Debug("ActiveSkillEnd");
         pathFind.isStopped = false;
         animator.SetTrigger("ActiveEnd");
         lastNormalAttackTime = Time.time;
         base.ActiveSkillEnd();
 
-        Logger.Debug(enemyList.Count);
         if (lateReturn)
         {
             UnitState = UnitState.ReturnPosition;
-            Logger.Debug("Enemy - 0");
         }
         else
         {
-            Logger.Debug("NormalAttackEnd - BattleIdle");
             BattleState = UnitBattleState.BattleIdle;
         }
+    }
+    public override void AddBuff(BuffType type, float scale, float duration)
+    {
+        var icon = heroUI.AddIcon(type, duration);
+        Buff buff = new()
+        {
+            type = type,
+            buffScale = scale,
+            duration = duration,
+            icon = icon
+        };
+
+        buff.removeBuff += RemoveBuff;
+        buffList.Add(buff);
+    }
+    public override void RemoveBuff(Buff buff)
+    {
+        heroUI.RemoveBuff(buff.icon);
+        buffList.Remove(buff);
     }
 }
