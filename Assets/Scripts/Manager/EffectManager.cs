@@ -54,12 +54,12 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
     {
         var effect =
             Instantiate(effectList[effectListIndex],
-            effectList[effectListIndex].startPos.position,
+            effectList[effectListIndex].StartPos.position,
             Quaternion.identity,
             parentsObject);
         effect.name = effectName;
 
-        var particles = effectList[effectListIndex].data.particles;
+        var particles = effectList[effectListIndex].Data.particles;
         var particleList = effect.particles;
 
         for (int i = 0; i < particles.Count; i++)
@@ -102,37 +102,18 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
 
     // 현재 사용하고 있는 풀의 다음 이펙트.
     // 다음에 나올 이펙트의 설정값들을 조정해야 할 수 있을 것 같아 추가
-    public void SetNextEffectProperty(float startDelay, float duration, float effectSize)
+    public void SetNextEffectProperty(float startDelay, float effectSize)
     {
         int index = (int)currEffect;
 
         if (effectPool[index][effectPoolIndex[index] + 1] != null)
         {
             effectPool[index][effectPoolIndex[index + 1]].
-                SetAllData(startDelay, duration, effectSize);
+                SetAllData(startDelay, effectSize);
         }
         else
         {
-            effectPool[index][effectPoolIndex[0]].SetAllData(startDelay, duration, effectSize);
-        }
-    }
-    public void SetNextEffectPositions(Transform startPos, Transform endPos)
-    {
-        int index = (int)currEffect;
-
-        if (effectPool[index][effectPoolIndex[index + 1]] != null)
-        {
-            effectPool[index][effectPoolIndex[index + 1]].
-                SetStartPos(startPos);
-            effectPool[index][effectPoolIndex[index + 1]].
-                SetEndPos(endPos);
-        }
-        else
-        {
-            effectPool[index][effectPoolIndex[0]].
-                SetStartPos(startPos);
-            effectPool[index][effectPoolIndex[0]].
-                SetEndPos(endPos);
+            effectPool[index][effectPoolIndex[0]].SetAllData(startDelay, effectSize);
         }
     }
 }
