@@ -59,4 +59,19 @@ public class Utils
         return (x >= 0) ? x : -x;
     }
 
+    //postion 두개에 y값이 서로 0이라는 가정하에 실행
+    public static bool IsDistanceIn(Vector3 pos1, Vector3 pos2, float compare)
+    {
+        var x = pos1.x - pos2.x;
+        var z = pos1.z - pos2.z;
+
+        return x * x + z * z < compare * compare;
+    }
+    public static bool IsDistanceInSqr(Vector3 pos1, Vector3 pos2, float compareSqr)
+    {
+        var x = pos1.x - pos2.x;
+        var z = pos1.z - pos2.z;
+
+        return x * x + z * z < compareSqr;
+    }
 }

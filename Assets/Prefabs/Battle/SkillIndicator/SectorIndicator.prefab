@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 7576526140424592270}
   - component: {fileID: 7576526140424592304}
   - component: {fileID: 4881174776758994124}
-  - component: {fileID: 1849928803}
   - component: {fileID: 8302857056872459175}
   m_Layer: 0
   m_Name: SectorIndicator
@@ -56,7 +55,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3a2e983113849b14eb27cb581959fd40, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radius: 5
+  radius: 10
   angle: 60
   segments: 16
 --- !u!23 &4881174776758994124
@@ -101,19 +100,6 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!135 &1849928803
-SphereCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7576526140424592269}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &8302857056872459175
 MonoBehaviour:
   m_ObjectHideFlags: 0
