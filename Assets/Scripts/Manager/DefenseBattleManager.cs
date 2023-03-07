@@ -16,6 +16,7 @@ public class DefenseBattleManager : TestBattleManager
     {
         base.OnDeadHero(hero);
     }
+
     public override void OnDeadEnemy(AttackableEnemy enemy)
     {
         base.OnDeadEnemy(enemy);
