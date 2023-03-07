@@ -28,9 +28,9 @@ public class HeroUi : MonoBehaviour
         buffList = list;
     }
 
-    public BuffIcon AddIcon(BuffType type, float duration)
+    public BuffIcon AddIcon(BuffType type, float duration, int idx)
     {
-        return viewBuffList.AddIcon(type, duration);
+        return viewBuffList.AddIcon(type, duration, idx);
     }
     public void RemoveBuff(BuffIcon icon)
     {
