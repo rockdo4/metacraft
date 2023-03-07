@@ -19,6 +19,7 @@ public class CharacterSkill : ScriptableObject
     public float coefficient = 1; //°è¼ö
 
     public SkillTargetType targetType;
+    public EffectEnum effectEnum;
 
     public virtual void OnActive()
     {
@@ -53,6 +54,4 @@ public class CharacterSkill : ScriptableObject
         return result;
     }
     public virtual void OnActiveSkill(LiveData data) { }
-
-    public virtual void SkillCancle() { }
 }

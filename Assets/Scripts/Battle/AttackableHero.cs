@@ -45,7 +45,7 @@ public abstract class AttackableHero : AttackableUnit
                     nowUpdate = ReturnPosUpdate;
 
                     lastNormalAttackTime = Time.time;
-                    heroUI.heroSkill.CancleSkill();
+                    heroUI.heroSkill.CancleSkill();                    
 
                     target = null;
                     lateReturn = false;
@@ -128,18 +128,24 @@ public abstract class AttackableHero : AttackableUnit
 
         lastNormalAttackTime = lastPassiveSkillTime = Time.time;
     }
+    private void Start()
+    {
+        var activeSkill = characterData.activeSkill as ActiveSkillAOE;
+        activeSkill.ActorTransform = transform;
+    }
 
     // Ui와 연결, Ui에 스킬 쿨타임 연결
     public virtual void SetUi(HeroUi _heroUI)
     {
         heroUI = _heroUI;
         //BattleState = UnitBattleState.ActiveSkill;
+        heroUI.heroSkill.Set(characterData.activeSkill.cooldown); //궁극기 쿨타임 등록
         heroUI.heroSkill.
-            Set(
-            characterData.activeSkill.cooldown,
+            SetActions(
             ReadyActiveSkill,
             PlayActiveSkillAnimation,
-            CancleActiveSkill); //궁극기 쿨타임과 궁극기 함수 등록
+            OffSkillAreaIndicator,
+            SkillCancle);
     }
 
     public override void ResetData()
@@ -171,31 +177,44 @@ public abstract class AttackableHero : AttackableUnit
     {
         coOnIndicator = StartCoroutine(characterData.activeSkill.SkillCoroutine());
     }
-    public void CancleActiveSkill()
+    public void OffSkillAreaIndicator()
     {
         if (coOnIndicator == null)
             return;
 
-        characterData.activeSkill.SkillCancle();
-        StopCoroutine(coOnIndicator);
-        coOnIndicator = null;
-        return;
+        GetActiveSkillAOE().ActiveOffSkillAreaIndicator();                
+    }
+    public void SkillCancle()
+    {
+        if (coOnIndicator == null)
+            return;
+
+        GetActiveSkillAOE().SetActiveIndicators(false);
+        StopAOESkillCoroutine();        
     }
     public void PlayActiveSkillAnimation()
-    {
+    {        
         pathFind.isStopped = true;
         BattleState = UnitBattleState.ActiveSkill;
         if (coOnIndicator != null)
         {
-            StopCoroutine(coOnIndicator);
-            coOnIndicator = null;
+            GetActiveSkillAOE().OffIndicatorsForOnActiveSkill();
+            StopAOESkillCoroutine();
         }
     }
     public override void OnActiveSkill()
     {
-        Logger.Debug(characterData.data.baseDamage);
         characterData.activeSkill.OnActiveSkill(characterData.data);
     }
+    private void StopAOESkillCoroutine()
+    {
+        StopCoroutine(coOnIndicator);
+        coOnIndicator = null;
+    }
+    private ActiveSkillAOE GetActiveSkillAOE()
+    {   
+        return characterData.activeSkill as ActiveSkillAOE;
+    } 
     protected override void IdleUpdate()
     {
 
@@ -341,7 +360,7 @@ public abstract class AttackableHero : AttackableUnit
         battleManager.OnDeadHero((AttackableHero)unit);
         heroUI.SetDieImage();
 
-        characterData.activeSkill.SkillCancle();
+        SkillCancle();      
     }
 
     //타겟이 없으면 Idle로 가고, 쿨타임 계산해서 바로 스킬 가능하면 사용, 아니라면 대기
