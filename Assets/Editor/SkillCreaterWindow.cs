@@ -52,18 +52,28 @@ public class SkillCreaterWindow : EditorWindow
     private void LoadIndicatorPrefab(ActiveSkillAOE activeSkillAOE)
     {
         string prefabPath = "Assets/Prefabs/Battle/SkillIndicator/";
+        string skillAreaIndicator = "";
+        string castRaingIndicator = "";
 
         switch ((SkillAreaShape)skillInfo["Shape"])
         {
             case SkillAreaShape.Sector:
-                prefabPath += "SectorIndicator.prefab";
+                {
+                    bool isCircle = (int)skillInfo["Angle"] == 360;
+                    string prefab = isCircle ? "CircleIndicator.prefab" : "SectorIndicator.prefab";
+                    skillAreaIndicator = prefabPath + prefab;
+                }                
                 break;
             case SkillAreaShape.Rectangle:
-                prefabPath += "SquareIndicator.prefab";
+                skillAreaIndicator = prefabPath + "SquareIndicator.prefab";
                 break;
         }
+        castRaingIndicator = prefabPath + "CastRangeIndicator.prefab";
 
-        activeSkillAOE.skillAreaIndicatorPrefab = AssetDatabase.LoadAssetAtPath<SkillAreaIndicator>(prefabPath);
+        activeSkillAOE.skillAreaIndicatorPrefab
+            = AssetDatabase.LoadAssetAtPath<SkillAreaIndicator>(skillAreaIndicator);
+        activeSkillAOE.castRangeIndicatorPrefab 
+            = AssetDatabase.LoadAssetAtPath<GameObject>(prefabPath);
     }
     private void OnGUI()
     {

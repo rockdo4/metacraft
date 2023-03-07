@@ -1,31 +1,40 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 public class SectorIndicator : SkillAreaIndicator
 {    
     private float angleHalf;
     private float radius;
     private float sqrRadius;
+    private int enemyLayerMask;
+
+    private Collider[] colliders;
+    int maxColliders = 32;
     protected override void Awake()
     {
         base.Awake();
         angleHalf = GetComponent<SectorMesh>().Angle * 0.5f;
         radius = GetComponent<SectorMesh>().Radius;
         sqrRadius = radius * radius;
+        enemyLayerMask = 1 << 7;
+
+        colliders = new Collider[maxColliders];
     }
     private void FixedUpdate()
-    {
-        Collider[] colliders = Physics.OverlapSphereNonAlloc(transform.position, radius);
-        foreach (Collider collider in colliders)
+    {   
+        maxColliders = Physics.OverlapSphereNonAlloc(transform.position, radius, colliders, enemyLayerMask);
+        for(int i = 0; i < maxColliders; i++)
         {
-            if (!collider.CompareTag("Enemy"))
-                continue;
-
-            IsColliderIn(IsInAngle(collider), collider);
+            IsColliderIn(IsInAngle(colliders[i]), colliders[i]);            
         }
 
-        foreach(var collider in unitsInArea)
+        for (int i = unitsInArea.Count - 1; i >= 0; i--)
         {
-            var isIn = IsInAngle(collider) && IsInRaidus(collider.transform.position);
-            IsColliderIn(isIn, collider);
+            var elements = unitsInArea.ElementAt(i);
+            if (!IsInAngle(elements) || !IsInRaidus(elements.transform.position))
+            {
+                IsColliderIn(false, elements);
+            }
         }
     }
     private bool IsInAngle(Collider collider)
