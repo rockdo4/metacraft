@@ -171,7 +171,14 @@ public abstract class AttackableUnit : MonoBehaviour
             }
     }
 
-    public abstract void ResetData();
+    public virtual void ResetData()
+    {
+        foreach (var buff in buffList)
+        {
+            buff.removeBuff(buff);
+        }
+        buffList.Clear();
+    }
 
     protected abstract void IdleUpdate();
     protected abstract void BattleUpdate();
