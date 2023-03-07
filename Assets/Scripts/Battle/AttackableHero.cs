@@ -118,6 +118,16 @@ public abstract class AttackableHero : AttackableUnit
     }
 
     bool testRot = false;
+    public override bool IsAuto {
+        get {
+            return isAuto;
+        }
+        set {
+            isAuto = value;
+            characterData.activeSkill.isAuto = isAuto;
+        }
+    }
+
     protected override void Awake()
     {
         base.Awake();
@@ -147,10 +157,6 @@ public abstract class AttackableHero : AttackableUnit
             PlayActiveSkillAnimation,
             OffSkillAreaIndicator,
             SkillCancle);
-
-
-        //test
-        characterData.activeSkill.isAuto = isAuto;
     }
 
     public override void ResetData()

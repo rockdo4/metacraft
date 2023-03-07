@@ -45,6 +45,8 @@ public class TestBattleManager : MonoBehaviour
 
         clearUi.SetHeroes(useHeroes);
         readyCount = useHeroes.Count;
+
+        FindObjectOfType<AutoButton>().ResetData();
     }
 
     public List<Transform> GetStartPosition()

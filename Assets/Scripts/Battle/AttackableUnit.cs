@@ -81,6 +81,14 @@ public abstract class AttackableUnit : MonoBehaviour
     }
 
     protected bool isAuto = true;
+    public virtual bool IsAuto {
+        get {
+            return isAuto;
+        }
+        set {
+            isAuto = value;
+        }
+    }
 
     protected virtual void Awake()
     {
