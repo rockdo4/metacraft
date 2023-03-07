@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Net;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ActiveSkillAOE", menuName = "Character/ActiveSkill/AOE")]
@@ -76,17 +77,16 @@ public class ActiveSkillAOE : CharacterSkill
             if (IsMouseInSkillRange(hit.point))
             {
                 indicatorTransform.position = hit.point + Vector3.up * 0.1f;
-
             }
-            //else
-            //{
-            //    var point
-            //        = Utils.GetPointFromCircleCenterToOutLine(actorTransform.position, castRangeLimit, hit.point);
-
-            //    indicatorTransform.position = point + Vector3.up * 0.1f;
-            //}
+            else
+            {
+                Vector3 point
+                    = Utils.IntersectPointCircleCenterToOut(actorTransform.position, castRangeLimit, hit.point);
+                
+                indicatorTransform.position = point + Vector3.up * 0.1f;
+            }            
         }   
-    } 
+    }
     private bool IsMouseInSkillRange(Vector3 hitPoint)
     {
         var x = actorTransform.position.x - hitPoint.x;
