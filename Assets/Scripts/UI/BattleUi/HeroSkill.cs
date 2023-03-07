@@ -86,10 +86,19 @@ public class HeroSkill : MonoBehaviour
 
         if (!isPointerInSkillActivePanel)
         {
-            CancleSkill();
+            CancleSkill();  
             return;
         }
 
+        action();
+        SetActiveSkillGUIs(false);
+        Time.timeScale = prevTimeScale;
+        CoolDownFill = 1;
+        coolDownTimer = coolDown;
+    }
+    public void OnAutoSkillActive()
+    {
+        ready();
         action();
         SetActiveSkillGUIs(false);
         Time.timeScale = prevTimeScale;

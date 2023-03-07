@@ -7,6 +7,8 @@ public class SkillAreaIndicator : MonoBehaviour
     public MeshRenderer Renderer { get; private set; }
 
     protected HashSet<Collider> unitsInArea = new();
+
+    public bool isTriggerEnter = false;
     protected virtual void Awake()
     {
         Renderer = GetComponent<MeshRenderer>();
@@ -35,6 +37,7 @@ public class SkillAreaIndicator : MonoBehaviour
                 }
                 break;
         }
+        isTriggerEnter = true;
     }
     protected virtual void OnTriggerExit(Collider other)
     {

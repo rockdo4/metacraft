@@ -21,10 +21,14 @@ public class CharacterSkill : ScriptableObject
     public SkillTargetType targetType;
     public EffectEnum effectEnum;
 
+    public bool isAuto;
+    public Vector3 targetPos;
+
     public virtual void OnActive()
     {
 
     }
+
     public virtual IEnumerator SkillCoroutine()
     {
         yield break;  

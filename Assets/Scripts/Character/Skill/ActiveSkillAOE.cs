@@ -19,7 +19,6 @@ public class ActiveSkillAOE : CharacterSkill
     private Camera cam;
     private Transform indicatorTransform;
 
-    public bool isAutoTargeting;
     public SkillAreaShape areaShapeType;
     public float areaRadiusOrRange;
     public float areaAngleOrWidth;    
@@ -54,12 +53,17 @@ public class ActiveSkillAOE : CharacterSkill
     {
         OnActive();
 
-        SetActiveIndicators(true); 
+        SetActiveIndicators(true);
 
         while (true)
         {
             MoveCastRangeIndicator();
-            MoveSkillAreaIndicator();
+
+            if (isAuto)
+                MoveSkillToTargetAreaIndicator();
+            else
+                MoveSkillAreaIndicator();
+
             yield return null;
         }
     }
@@ -86,6 +90,20 @@ public class ActiveSkillAOE : CharacterSkill
             }
         }
     }
+    private void MoveSkillToTargetAreaIndicator()
+    {
+        if (IsMouseInSkillRange(targetPos))
+        {
+            indicatorTransform.position = targetPos + Vector3.up * 0.1f;
+        }
+        else
+        {
+            Vector3 point
+                = Utils.IntersectPointCircleCenterToOut(actorTransform.position, castRangeLimit, targetPos);
+
+            indicatorTransform.position = point + Vector3.up * 0.1f;
+        }
+    }
     private bool IsMouseInSkillRange(Vector3 hitPoint)
     {
         var x = actorTransform.position.x - hitPoint.x;
@@ -107,6 +125,7 @@ public class ActiveSkillAOE : CharacterSkill
         }
 
         skillAreaIndicator.gameObject.SetActive(false);
+        skillAreaIndicator.isTriggerEnter = false;
     }
     public void SetActiveIndicators(bool active)
     {

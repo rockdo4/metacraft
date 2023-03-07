@@ -19,4 +19,5 @@ public class PlayerData
     public int gold = 0;
     [Range(1, 3)]
     public int battleSpeed = 1;
+    public bool isAuto = false;
 }

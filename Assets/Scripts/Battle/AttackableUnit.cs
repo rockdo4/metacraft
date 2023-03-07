@@ -80,6 +80,8 @@ public abstract class AttackableUnit : MonoBehaviour
         }
     }
 
+    protected bool isAuto = true;
+
     protected virtual void Awake()
     {
         var manager = FindObjectOfType<TestBattleManager>();
@@ -139,8 +141,6 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void PassiveSkill();
     public abstract void ReadyActiveSkill();
     public virtual void OnActiveSkill() { }
-
-    protected bool isAuto = false;
 
     public virtual void NormalAttackEnd()
     {

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
@@ -67,6 +68,7 @@ public abstract class AttackableHero : AttackableUnit
 
                     BattleState = UnitBattleState.MoveToTarget;
                     nowUpdate = BattleUpdate;
+
                     break;
                 case UnitState.Die:
                     pathFind.enabled = false;
@@ -116,7 +118,6 @@ public abstract class AttackableHero : AttackableUnit
     }
 
     bool testRot = false;
-
     protected override void Awake()
     {
         base.Awake();
@@ -146,6 +147,10 @@ public abstract class AttackableHero : AttackableUnit
             PlayActiveSkillAnimation,
             OffSkillAreaIndicator,
             SkillCancle);
+
+
+        //test
+        characterData.activeSkill.isAuto = isAuto;
     }
 
     public override void ResetData()
@@ -220,9 +225,15 @@ public abstract class AttackableHero : AttackableUnit
     {
 
     }
-
+    
     protected override void BattleUpdate()
     {
+        if(isAuto && target != null && heroUI.heroSkill.IsCoolDown)
+        {
+            heroUI.heroSkill.OnDownSkill();
+            characterData.activeSkill.targetPos = target.transform.position;
+            heroUI.heroSkill.OnAutoSkillActive();
+        }
         //타겟이 없을때 타겟을 찾으면 타겟으로 가기
         switch (BattleState)
         {
