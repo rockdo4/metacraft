@@ -20,6 +20,13 @@ public class TestBattleManager : MonoBehaviour
     public Image fadePanel;
     public bool isFadeIn = true;
 
+    // Test Member
+    public List<ForkedRoad> roads = new();
+    public ForkedRoad roadPrefab;
+    public Transform roadTr;
+    public List<Vector3> roadRots = new List<Vector3> { new (0,-45,0), new (0,0,0), new (0,45,0) };
+    public int roadCount = 3;
+
     private void Awake()
     {
         List<GameObject> selectedHeroes = GameManager.Instance.GetSelectedHeroes();
@@ -142,7 +149,7 @@ public class TestBattleManager : MonoBehaviour
             yield break;
         }
     }
-    protected void MoveNextStage()
+    public void MoveNextStage()
     {
         StartCoroutine(CoFade());
     }
@@ -167,5 +174,42 @@ public class TestBattleManager : MonoBehaviour
         Time.timeScale = 0;
         UIManager.Instance.ShowView(2);
         Logger.Debug("Fail!");
+    }
+
+    // 길목 생성
+    protected void CreateRoad(GameObject platform)
+    {
+        //for (int i = 0; i < roadCount; i++)
+        //{
+        //    ForkedRoad road = Instantiate(roadPrefab, platform.transform);
+        //    Transform tr = roadTr;
+        //    tr.transform.localRotation = Quaternion.Euler(roadRots[i]);
+        //    road.SetRoadChangeAngle(tr);
+        //    roads.Add(road);
+        //    triggers.Add(roads[i].fadeTrigger);
+        //}
+
+        ForkedRoad road = Instantiate(roadPrefab, platform.transform);
+        Transform tr = roadTr;
+        tr.transform.localRotation = Quaternion.Euler(roadRots[1]);
+        road.SetRoadChangeAngle(tr);
+        roads.Add(road);
+        triggers.Add(roads[0].fadeTrigger);
+    }
+
+    protected void DisableRoad()
+    {
+        for (int i = 0; i < roads.Count; i++)
+        {
+            roads[i].gameObject.SetActive(false);
+        }
+    }
+
+    protected void ResetStage()
+    {
+        for (int i = 0; i < triggers.Count; i++)
+        {
+            triggers[i].ResetEnemys();
+        }
     }
 }

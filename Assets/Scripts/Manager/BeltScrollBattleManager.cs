@@ -30,13 +30,7 @@ public class BeltScrollBattleManager : TestBattleManager
         }
 
         enemyCountTxt.Count = GetAllEnemyCount();
-    }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            MoveNextStage();
-        }
+        CreateRoad(platform);
     }
 
     private int GetCurrEnemyCount()
@@ -81,8 +75,23 @@ public class BeltScrollBattleManager : TestBattleManager
             }
             else if (triggers[currTriggerIndex].isStageEnd)
             {
-                MoveNextStage();
+                Logger.Debug("End!");
+                for (int i = 0; i < useHeroes.Count; i++)
+                {
+                    useHeroes[i].ResetData();
+                }
                 platform.transform.position = Vector3.zero;
+
+                // 여기에 에너미들 바꿔주는 거랑 마리수 조정
+                // 일단은 다시 소환하는걸로
+                ResetStage();
+                DisableRoad();
+                // 보여질 길목들 다시 enable 해주기
+
+
+                // 페이드 아웃
+                MoveNextStage();
+
                 // test
                 //SetStageClear();
             }
@@ -111,9 +120,12 @@ public class BeltScrollBattleManager : TestBattleManager
         }
 
         // 히어로들 배틀 상태로 전환
-        for (int i = 0; i < useHeroes.Count; i++)
+        if (!triggers[currTriggerIndex].isStageEnd)
         {
-            useHeroes[i].ChangeUnitState(UnitState.Battle);
+            for (int i = 0; i < useHeroes.Count; i++)
+            {
+                useHeroes[i].ChangeUnitState(UnitState.Battle);
+            }
         }
     }
 }

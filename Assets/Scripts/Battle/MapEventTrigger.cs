@@ -50,4 +50,14 @@ public class MapEventTrigger : MonoBehaviour
             enemys[i].gameObject.SetActive(false);
         }
     }
+
+    public void ResetEnemys()
+    {
+        for (int i = 0; i < enemys.Count; i++)
+        {
+            enemys[i].ResetData();
+            enemys[i].gameObject.transform.position = enemySettingPositions[i].GetRespawnPos();
+            enemys[i].SetEnabledPathFind(false);
+        }
+    }
 }
