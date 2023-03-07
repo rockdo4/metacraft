@@ -12,7 +12,7 @@ public class TestBattleManager : MonoBehaviour
     public List<AttackableHero> useHeroes = new();
     public StageEnemy enemyCountTxt;
 
-    public ClearUi clearUi;
+    public ClearUiController clearUi;
     public List<MapEventTrigger> triggers;
 
     protected int readyCount;
@@ -43,7 +43,7 @@ public class TestBattleManager : MonoBehaviour
                 AttackableHero attackableHero = selectedHeroes[i].GetComponent<AttackableHero>();
                 attackableHero.SetBattleManager(this);
                 attackableHero.SetUi(heroUiList[i]);
-                attackableHero.ResetAttackableUnit();
+                attackableHero.ResetData();
                 heroUiList[i].SetHeroInfo(attackableHero.GetUnitData());
                 heroUiList[i].gameObject.SetActive(true);
                 useHeroes.Add(attackableHero);
@@ -74,6 +74,7 @@ public class TestBattleManager : MonoBehaviour
     {
         heroList = useHeroes;
     }
+
     public virtual void OnDeadHero(AttackableHero hero)
     {
         useHeroes.Remove(hero);
@@ -115,9 +116,11 @@ public class TestBattleManager : MonoBehaviour
     protected void SetStageClear()
     {
         UIManager.Instance.ShowView(1);
+        GameManager.Instance.NextDay();
         clearUi.SetData();
         Logger.Debug("Clear!");
     }
+
     private IEnumerator CoFade()
     {
         if (isFadeIn)
@@ -169,9 +172,11 @@ public class TestBattleManager : MonoBehaviour
     {
         Time.timeScale = 1;
     }
+
     protected void SetStageFail()
     {
         Time.timeScale = 0;
+        GameManager.Instance.NextDay();
         UIManager.Instance.ShowView(2);
         Logger.Debug("Fail!");
     }

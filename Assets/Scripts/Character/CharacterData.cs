@@ -6,14 +6,15 @@ public class CharacterData : ScriptableObject, IComparable<CharacterData>
 {
     public new string   name;               // 이름
     [Range(1, 5)]
-    public int          grade;              // 등급
-    public int          maxGrade;           // 승급 가능 최대 등급
+    public int          grade = 1;              // 등급
+    [Range(1, 5)]
+    public int          maxGrade = 1;           // 승급 가능 최대 등급
 
     public string       job;                // 직업, 특성
 
     [Range(1, 20)]
     public int          level = 1;          // 레벨
-    public int          exp;                // 경험치
+    public int          exp = 0;            // 경험치
     [Range(0, 1000)]
     public int          likeability;        // 호감도
 

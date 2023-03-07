@@ -6,10 +6,10 @@ public class BuffList : MonoBehaviour
 {
     // private readonly int maxViewBuffCount = 3;
 
-    public HeroBuff buffPref;
+    public BuffIcon buffPref;
     public GameObject buffPopUpPref;
     [SerializeField]
-    public List<HeroBuff> buffList; //현재 적용된 버프 리스트
+    public List<BuffIcon> uiBuffList = new(); //현재 적용된 버프 리스트
 
     [SerializeField]
     private Transform viewBuffTr; //캐릭터 옆에 버프
@@ -19,36 +19,44 @@ public class BuffList : MonoBehaviour
     public GameObject popUp;
 
     public Image plusImage;
-
-    public void SetList(ref List<HeroBuff> heroBuffs) => this.buffList = heroBuffs;
-
-    public void DelBuff()
+    public void BuffButtonCheck()
     {
-        if(buffList.Count <= 3)
+        if(uiBuffList.Count <= 3)
         {
             plusImage.gameObject.SetActive(false);
         }
     }
-    public void AddBuff()
+    public BuffIcon AddIcon(BuffType type, float duration, int idx)
     {
+
         var viewBuff = Instantiate(buffPref, viewBuffTr);   //캐릭터 좌측의 리스트에 버프 추가하고, 팝업에도 추가
         var popUpBuff = Instantiate(buffPopUpPref, popUpBuffTr);
 
+        viewBuff.transform.SetSiblingIndex(idx);
+        popUpBuff.transform.SetSiblingIndex(idx);
+
+        viewBuff.buffType = type;
+        //viewBuff.duration = duration;
+
         viewBuff.popUpBuff = popUpBuff;
-        viewBuff.duration = 3f;
+        uiBuffList.Add(viewBuff); 
 
-        buffList.Add(viewBuff); 
+        viewBuff.OnEnd += () => uiBuffList.Remove(viewBuff);
+        viewBuff.OnEnd += BuffButtonCheck;
 
-        viewBuff.OnEnd += () => buffList.Remove(viewBuff);
-        viewBuff.OnEnd += DelBuff;
-
-
-        if (buffList.Count >= 3)
+        if (uiBuffList.Count >= 3)
         {
             plusImage.gameObject.SetActive(true);
         }
+
+        return viewBuff;
     }
 
+    public void RemoveBuff(BuffIcon buffIcon)
+    {
+        buffIcon.EndBuffIcon();
+        uiBuffList.Remove(buffIcon);
+    }
     public void OnClickPopUp()
     {
         if(!popUp.activeSelf)

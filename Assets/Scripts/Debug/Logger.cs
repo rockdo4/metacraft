@@ -6,7 +6,7 @@ public static class Logger
     [Conditional("EnableLogger")]
     public static void Debug(object logMsg)
     {
-        UnityEngine.Debug.Log(logMsg);
+        UnityEngine.Debug.Log(logMsg);  
     }
 
     [Conditional("EnableLogger")]

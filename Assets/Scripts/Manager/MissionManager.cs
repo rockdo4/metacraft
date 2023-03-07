@@ -22,13 +22,22 @@ public class MissionManager : View
     public GameObject missionPoints;
     private GameObject[] marks;
     private List<Dictionary<string, object>> missionInfoTable;
+    public List<GameObject> expectedRewards;
 
     public delegate void clickmark(int num);
-    private int missionNum;
+    //private int missionNum;
+    private GameManager gm;
+
+    private void OnEnable()
+    {
+        gm = GameManager.Instance;
+        UpdateMissionDay();
+    }
 
     private void Start()
     {
-        missionInfoTable = GameManager.Instance.missionInfoList;
+        gm = GameManager.Instance;
+        missionInfoTable = gm.missionInfoList;
         var num = Utils.DistinctRandomNumbers(missionInfoTable.Count, 4);
         marks = GetComponentInChildren<MissionSpawner>().prefebs;
 
@@ -52,17 +61,19 @@ public class MissionManager : View
 
     public void UpdateMissionDay()
     {
-        dayOfweek.text = $"{GameManager.Instance.playerData.currentDay}요일";
+        dayOfweek.text = $"{gm.playerData.currentDay}요일";
     }
 
     public void UpdateMissionInfo(int num)
     {
-        missionNum = num;
+        //missionNum = num;
         var dic = missionInfoTable[num];
-        portrait.sprite = GameManager.Instance.iconSprites[$"Icon_{dic["BossID"]}"];
+        gm.currentSelectMission = dic;
+
+        portrait.sprite = gm.iconSprites[$"Icon_{dic["BossID"]}"];
         explanation.text = $"{dic["OperationDescription"]}";
         ExpectedCost.text = $"{dic["ExpectedCostID"]}";
-        GameManager.Instance.ClearBattleGroups();
+        gm.ClearBattleGroups();
         for (int i = 0; i < heroSlots.Length; i++)
         {
             heroSlots[i].GetComponent<Image>().sprite = null;
@@ -77,13 +88,23 @@ public class MissionManager : View
         //deductionAP.text = $"AP -{dic["ConsumptionBehavior"]}";
         ProperCombatPower.text = $"0/{dic["ProperCombatPower"]}";
         ProperCombatPower.color = Color.white;
+
+        int erCount = expectedRewards.Count;
+        for (int i = 0; i < erCount; i++)
+        {
+            RewardItem ri = expectedRewards[i].GetComponent<RewardItem>();
+            if (i == 0)
+                ri.SetData("골드", $"{dic["Compensation"]}");
+            else
+                ri.SetData($"아이템{i}");
+        }
     }
 
     // Mission Hero Info Button 에서 호출
     public void OnClickHeroSelect(CharacterDataBundle bundle)
     {
-        int index = GameManager.Instance.GetHeroIndex(bundle.gameObject);
-        var selectIndexGroup = GameManager.Instance.battleGroups;
+        int index = gm.GetHeroIndex(bundle.gameObject);
+        var selectIndexGroup = gm.battleGroups;
 
         int? duplication = null;
         for (int i = 0; i < 3; i++)
@@ -96,7 +117,7 @@ public class MissionManager : View
         }
 
         LiveData liveData = bundle.data;
-        heroSlots[heroSlotsIndex].GetComponent<Image>().sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{liveData.name}");
+        heroSlots[heroSlotsIndex].GetComponent<Image>().sprite = gm.GetSpriteByAddress($"Icon_{liveData.name}");
         selectIndexGroup[heroSlotsIndex] = index;
 
         if (duplication != null)
@@ -118,7 +139,7 @@ public class MissionManager : View
     // 적합 속성 체크
     private void PropertyMatchingCheck()
     {
-        var selectedHeroes = GameManager.Instance.GetSelectedHeroes();
+        var selectedHeroes = gm.GetSelectedHeroes();
 
         for (int i = 0; i < fitProperties.Length; i++)
         {
@@ -142,7 +163,7 @@ public class MissionManager : View
     // 전투력 합계 체크
     private void TotalPowerCheck()
     {
-        var selectedHeroes = GameManager.Instance.GetSelectedHeroes();
+        var selectedHeroes = gm.GetSelectedHeroes();
 
         int totalPower = 0;
         foreach (var hero in selectedHeroes)
@@ -150,7 +171,7 @@ public class MissionManager : View
             if (hero != null)
                 totalPower += hero.GetComponent<CharacterDataBundle>().data.Power;
         }
-        var properCombatPower = missionInfoTable[missionNum]["ProperCombatPower"];
+        var properCombatPower = gm.currentSelectMission["ProperCombatPower"];
         ProperCombatPower.text = $"{totalPower}/{properCombatPower}";
         ProperCombatPower.color = totalPower < (int)properCombatPower ? Color.red : Color.white;
     }
@@ -158,23 +179,23 @@ public class MissionManager : View
     public void StartMission()
     {
         int count = 0;
-        foreach (var num in GameManager.Instance.battleGroups)
+        foreach (var num in gm.battleGroups)
         {
             if (num != null)
                 count++;
         }
         if (count > 0)
         {
-            switch (missionInfoTable[missionNum]["Type"])
+            switch (gm.currentSelectMission["Type"])
             {
                 case 0:
-                    GameManager.Instance.LoadScene((int)SceneIndex.Battle);
+                    gm.LoadScene((int)SceneIndex.Battle);
                     break;
                 case 1:
-                    GameManager.Instance.LoadScene((int)SceneIndex.Battle);
+                    gm.LoadScene((int)SceneIndex.Battle);
                     break;
                 case 2:
-                    GameManager.Instance.LoadScene((int)SceneIndex.Defense);
+                    gm.LoadScene((int)SceneIndex.Defense);
                     break;
             }
         }

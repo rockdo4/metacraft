@@ -14,7 +14,7 @@ public class ShortAttackEnemy : AttackableEnemy
 
         if (characterData.attack.targetNumLimit == 1)
         {
-            target.OnDamage(characterData.data.baseDamage);
+            target.OnDamage(GetFixedDamage);
             return;
         }
 
@@ -38,7 +38,7 @@ public class ShortAttackEnemy : AttackableEnemy
 
         for (int i = 0; i < attackHeroes.Count; i++)
         {
-            attackHeroes[i].OnDamage(characterData.data.baseDamage);
+            attackHeroes[i].OnDamage(GetFixedDamage);
         }
     }
 
