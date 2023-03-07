@@ -19,6 +19,7 @@ public class CharacterSkill : ScriptableObject
     public float coefficient = 1; //계수
 
     public SkillTargetType targetType;
+    public EffectEnum effectEnum;
 
     public virtual void OnActive()
     {
@@ -28,6 +29,7 @@ public class CharacterSkill : ScriptableObject
     {
         yield break;  
     }
+    //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)									
     public virtual int CreateDamageResult(LiveData data)
     {        
         var result = 0;
@@ -52,6 +54,4 @@ public class CharacterSkill : ScriptableObject
         return result;
     }
     public virtual void OnActiveSkill(LiveData data) { }
-
-    public virtual void SkillCancle() { }
 }

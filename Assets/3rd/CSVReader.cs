@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Text.RegularExpressions;
 using UnityEngine;
 
@@ -22,6 +21,15 @@ public class CSVReader
     {
         string str = File.ReadAllText(path);
         return SplitTokens(str, splitComma);
+    }
+    public static List<Dictionary<string, object>> ReadByStreamReaderPath(string path, bool splitComma = true)
+    {
+        using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
+        using (var reader = new StreamReader(stream))
+        {
+            string str = reader.ReadToEnd();
+            return SplitTokens(str, splitComma);
+        }
     }
 
     // Legacy. Use Resource folder
