@@ -66,6 +66,7 @@ public abstract class AttackableUnit : MonoBehaviour
     public bool IsAlive(AttackableUnit unit) => (unit != null) && (unit.gameObject.activeSelf) && (unit.UnitHp > 0);
     protected bool InRangeNormalAttack => Vector3.Distance(target.transform.position, transform.position) < characterData.attack.distance;
     protected bool NonActiveSkill => battleState != UnitBattleState.ActiveSkill && battleState != UnitBattleState.Stun;
+    //나중에는 NonActiveSkill 상태일시에 스킬버튼을 비활성화 하기
 
     protected List<Buff> buffList = new();
     protected BufferState bufferState = new();

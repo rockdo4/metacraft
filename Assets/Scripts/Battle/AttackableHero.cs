@@ -237,6 +237,9 @@ public abstract class AttackableHero : AttackableUnit
     {
         if(isAuto && target != null && heroUI.heroSkill.IsCoolDown)
         {
+            if (!NonActiveSkill && InRangeNormalAttack)
+                return;
+
             heroUI.heroSkill.OnDownSkill();
             characterData.activeSkill.targetPos = target.transform.position;
             heroUI.heroSkill.OnAutoSkillActive();
