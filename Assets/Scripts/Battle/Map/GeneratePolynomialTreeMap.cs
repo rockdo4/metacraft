@@ -23,8 +23,8 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
     public Transform lineRendererTarget;
 
     private List<TreeNodeObject<string>> nodePool = new();
-    private int nodeIndex = 0;
     private List<GameObject> bundles = new();
+    private List<GameObject> nodes = new();
 
     private void Update()
     {
@@ -46,8 +46,8 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
 
     public void CreateTreeGraph()
     {
-        nodeIndex = 0;
         nodePool.Clear();
+        DestroyAllObjs();
 
         // 필수 노드 생성
         root = new($"{TreeNodeTypes.Root}", TreeNodeTypes.Root);
@@ -60,14 +60,38 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
         // 트리의 깊이 설정
         CreateBundles(height);
 
-        // 노드 생성과 연결
+        // 노드 생성과 트리 구조 완성
         GameObject rootObj = Instantiate(treeNodePrefab, bundles[0].transform);
+        nodes.Add(rootObj);
         CreateNewNodeInstance(rootObj, root);
-        AddChilds(rootObj, root, height);
-        CreateNewNodeInstance(Instantiate(treeNodePrefab, bundles[^1].transform), boss);
+
+        AddChilds(root, height);
+
+        GameObject bossObj = Instantiate(treeNodePrefab, bundles[^1].transform);
+        CreateNewNodeInstance(bossObj, boss);
+        nodes.Add(bossObj);
+
+        // 노드끼리 물리적 연결 (UI Line Renderer)
+        // LinkNodes(rootObj);
     }
 
-    private void AddChilds(GameObject parentObj, TreeNodeObject<string> parent, int depth)
+    public void DestroyAllObjs()
+    {
+        int ncount = nodes.Count;
+        for (int i = 0; i < ncount; i++)
+        {
+            Destroy(nodes[i]);
+        }
+        nodes.Clear();
+        int bcount = bundles.Count;
+        for (int i = 0; i < bcount; i++)
+        {
+            Destroy(bundles[i]);
+        }
+        bundles.Clear();
+    }
+
+    private void AddChilds(TreeNodeObject<string> parent, int depth)
     {
         if (depth == 0)
         {
@@ -91,19 +115,43 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
             // 인스턴스 생성과 데이터 연결
             GameObject childObj = Instantiate(treeNodePrefab, bundles[height - depth + 1].transform);
             CreateNewNodeInstance(childObj, child);
+            nodes.Add(childObj);
 
-            // 인스턴스 사이 연결선 생성
-            GameObject newLineRenderer = Instantiate(uiLineRendererPrefab, lineRendererTarget);
-            UILineRenderer uilr = newLineRenderer.GetComponent<UILineRenderer>();
-            TreeNodeObject ptno = parentObj.GetComponent<TreeNodeObject>();
-            TreeNodeObject ctno = childObj.GetComponent<TreeNodeObject>();
-            uilr.Points[0] = ptno.tail.position;
-            uilr.Points[1] = ctno.head.position;
-            uilr.enabled = true;
-
-            AddChilds(childObj, child, depth - 1);
+            AddChilds(child, depth - 1);
             nodePool.Remove(child);
         }
+    }
+
+    //private void LinkNodes(GameObject parent)
+    //{
+    //    TreeNodeObject ptno = parent.GetComponent<TreeNodeObject>();
+    //    int count = ptno.treeNode.childrens.Count;
+    //    for (int i = 0; i < count; i++)
+    //    {
+    //        GameObject child = FindNodeObj(ptno.treeNode);
+    //        if (child == null)
+    //            return;
+    //        GameObject newLineRenderer = Instantiate(uiLineRendererPrefab, lineRendererTarget);
+    //        UILineRenderer uilr = newLineRenderer.GetComponent<UILineRenderer>();
+    //        TreeNodeObject ctno = child.GetComponent<TreeNodeObject>();
+    //        uilr.Points[0] = ptno.tail.position;
+    //        uilr.Points[1] = ctno.head.position;
+
+    //        Debug.Log($"start: {parent.transform.position} / end: {child.transform.position}");
+    //        LinkNodes(child);
+    //    }
+    //}
+
+    private GameObject FindNodeObj(TreeNodeObject<string> nodeObject)
+    {
+        int count = nodes.Count;
+        for (int i = 0; i < count; i++)
+        {
+            TreeNodeObject<string> compareData = nodes[i].GetComponent<TreeNodeObject>().treeNode;
+            if (nodeObject.data.CompareTo(compareData.data) == 0)
+                return nodes[i];
+        }
+        return null;
     }
 
     private void CreateNewNodeInstance(GameObject instance, TreeNodeObject<string> dataNode)
@@ -117,7 +165,9 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
     {
         for (int i = 0; i < depth + 2; i++)
         {
-            bundles.Add(Instantiate(nodeBundlePrefab, nodeTarget));
+            GameObject bundle = Instantiate(nodeBundlePrefab, nodeTarget);
+            bundle.name = $"bundle_{i}";
+            bundles.Add(bundle);
         }
     }
 
@@ -125,8 +175,7 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
     {
         for (int i = 0; i < count; i++)
         {
-            nodePool.Add(new TreeNodeObject<string>($"{type}", type));
-            nodeIndex++;
+            nodePool.Add(new TreeNodeObject<string>($"{type}{i}", type));
         }
     }
 }
