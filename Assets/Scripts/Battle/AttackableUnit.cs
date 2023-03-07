@@ -88,6 +88,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
         animator = GetComponentInChildren<Animator>();
     }
+
     protected void SetData()
     {
         pathFind.stoppingDistance = characterData.attack.distance;
@@ -95,12 +96,31 @@ public abstract class AttackableUnit : MonoBehaviour
         NormalAttackAction = NormalAttack;
         PassiveSkillAction = PassiveSkill;
         ActiveSkillAction = ReadyActiveSkill;
-        ResetAttackableUnit();
     }
 
-    public void ResetAttackableUnit()
+    public void SetLevelExp(int newLevel, int newExp)
     {
-        UnitHp = characterData.data.healthPoint;
+        LiveData data = GetUnitData().data;
+        data.level = newLevel;
+        data.exp = newExp;
+    }
+
+    public void LevelUpAdditional(int incDamage, int incDefense, int incHealthPoint)
+    {
+        LiveData data = GetUnitData().data;
+        data.baseDamage += incDamage;
+        data.baseDefense += incDefense;
+        data.healthPoint += incHealthPoint;
+        data.currentHp = data.healthPoint;
+    }
+    
+    public void LevelUpMultiplication(float multipleDamage, float multipleDefense, float multipleHealthPoint)
+    {
+        LiveData data = GetUnitData().data;
+        LevelUpAdditional(
+            (int) (data.baseDamage * (1 + multipleDamage)),
+            (int) (data.baseDefense * (1 + multipleDefense)),
+            (int) (data.healthPoint * (1 + multipleHealthPoint)));
     }
 
     protected void Update()
@@ -133,6 +153,7 @@ public abstract class AttackableUnit : MonoBehaviour
     public virtual void PassiveSkillEnd()
     {
     }
+
     public virtual void ActiveSkillEnd()
     {
         if (target != null)
