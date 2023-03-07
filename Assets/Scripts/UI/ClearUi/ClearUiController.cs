@@ -9,7 +9,7 @@ public class ClearUiController : View
     
     private List<ClearHeroInfo> heroes = new();
 
-    public void SetHeroes(List<AttackableHero> _heroes)
+    public void SetHeroes(List<AttackableUnit> _heroes)
     {
         foreach(var hero in _heroes)
         {

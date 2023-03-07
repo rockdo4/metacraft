@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class AttackableEnemy : AttackableUnit
+public class AttackableEnemy : AttackableUnit
 {
     [SerializeField]
-    public void SetTargetList(List<AttackableHero> list) => heroList = list;
+    public void SetTargetList(List<AttackableUnit> list) => heroList = list;
 
     private AttackedDamageUI floatingDamageText;
     private HpBarManager hpBarManager;
@@ -120,15 +120,9 @@ public abstract class AttackableEnemy : AttackableUnit
         animator.Rebind();
     }
 
-    protected override void SearchTarget()
+    public override void PassiveSkillEvent()
     {
-    }
 
-    public override void NormalAttack()
-    {
-    }
-    public override void PassiveSkill()
-    {
     }
     public override void ReadyActiveSkill()
     {
@@ -155,7 +149,7 @@ public abstract class AttackableEnemy : AttackableUnit
                 }
                 else
                 {
-                    SearchTarget();
+                    SearchAi();
                     if (IsAlive(target))
                     {
                         if (InRangeNormalAttack && CanNormalAttackTime)
@@ -276,11 +270,13 @@ public abstract class AttackableEnemy : AttackableUnit
 
     public override void AddBuff(BuffType type, float scale, float duration)
     {
-        Buff buff = new();
-
-        buff.type = type;
-        buff.buffScale = scale;
-        buff.duration = duration;
+        Buff buff = new()
+        {
+            type = type,
+            buffScale = scale,
+            duration = duration
+        };
+        buff.removeBuff += RemoveBuff;
 
         buffList.Add(buff);
     }

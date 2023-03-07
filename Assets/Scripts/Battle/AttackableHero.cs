@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class AttackableHero : AttackableUnit
+public class AttackableHero : AttackableUnit
 {
     protected HeroUi heroUI;
 
@@ -174,19 +174,6 @@ public abstract class AttackableHero : AttackableUnit
         UnitHp = characterData.data.currentHp;
     }
 
-    protected override void SearchTarget()
-    {
-
-    }
-
-    public override void NormalAttack()
-    {
-
-    }
-
-    public override void PassiveSkill()
-    {
-    }
     public override void ReadyActiveSkill()
     {
         coOnIndicator = StartCoroutine(characterData.activeSkill.SkillCoroutine());
@@ -215,10 +202,6 @@ public abstract class AttackableHero : AttackableUnit
             GetActiveSkillAOE().OffIndicatorsForOnActiveSkill();
             StopAOESkillCoroutine();
         }
-    }
-    public override void OnActiveSkill()
-    {
-        characterData.activeSkill.OnActiveSkill(characterData.data);
     }
     private void StopAOESkillCoroutine()
     {
@@ -260,7 +243,7 @@ public abstract class AttackableHero : AttackableUnit
                 }
                 else
                 {
-                    SearchTarget();
+                    SearchAi();
                     if (IsAlive(target))
                     {
                         if (InRangeNormalAttack && CanNormalAttackTime)
@@ -404,7 +387,7 @@ public abstract class AttackableHero : AttackableUnit
             BattleState = UnitBattleState.BattleIdle;
         }
     }
-    public override void PassiveSkillEnd()
+    public override void PassiveSkillEvent()
     {
 
     }
@@ -456,4 +439,5 @@ public abstract class AttackableHero : AttackableUnit
 
         bufferState.Buffer(buff.type, -buff.buffScale);
     }
+
 }

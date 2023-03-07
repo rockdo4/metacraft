@@ -13,6 +13,15 @@ public enum SkillAreaShape
     Rectangle,    
     Count,
 }
+public enum SkillActiveType
+{
+    None = -1,
+    Attack,
+    Buff,
+    Heal,
+    Another,
+    Count,
+}
 public enum SkillTargetType
 {
     None = -1,

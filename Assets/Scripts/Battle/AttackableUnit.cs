@@ -6,30 +6,36 @@ using UnityEngine.AI;
 
 public abstract class AttackableUnit : MonoBehaviour
 {
-    protected TestBattleManager battleManager;
+    protected TestBattleManager battleManager;  
 
-    [SerializeField]
+    [SerializeField, Header("캐릭터 데이터")]
     protected CharacterDataBundle characterData;
     public CharacterDataBundle GetUnitData() => characterData;
 
+    [Header("Ai 타입, 일반공격 버프or디버프, 시간, 증가량")]
+    public UnitAiType aiType;
+    public Transform attackPos;
+    public FireBallTest attackPref; //테스트용
+    public BuffType buffType;
+    public float buffTime;
+    public float buffScale;
+
+    public UnitType unitType;
+
+    protected float searchDelay = 1f;
+    protected float lastSearchTime;
+
     protected NavMeshAgent pathFind;
 
-    [SerializeField]
-    protected AttackableUnit target;
-    [SerializeField]
-    protected List<AttackableHero> heroList;
-    [SerializeField]
-    protected List<AttackableEnemy> enemyList;
-    [SerializeField]
-    protected List<AttackableEnemy> citizenList;
+    [SerializeField, Header("현재 타겟")]     protected AttackableUnit target;
+    [SerializeField, Header("궁극기 타겟")]   protected AttackableUnit activeTarget;
+    [SerializeField, Header("히어로 리스트")] protected List<AttackableUnit> heroList;
+    [SerializeField, Header("에너미 리스트")] protected List<AttackableUnit> enemyList;
+    [SerializeField, Header("시민 리스트")]   protected List<AttackableUnit> citizenList;
 
     public int UnitHp {
-        get {
-            return characterData.data.currentHp;
-        }
-        set {
-            characterData.data.currentHp = Mathf.Max(value, 0);
-        }
+        get { return characterData.data.currentHp;  }
+        set { characterData.data.currentHp = Mathf.Max(value, 0); }
     }
 
     protected float lastNormalAttackTime;
@@ -41,54 +47,40 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected Action nowUpdate;
 
-    protected Action NormalAttackAction;
     protected Action PassiveSkillAction;
     protected Action ActiveSkillAction;
+    private Dictionary<UnitAiType, Action> unitSearchAi = new();
+    protected Action SearchAi;
 
     protected bool moveTarget;
 
     protected Animator animator;
     protected AnimatorStateInfo stateInfo;
 
-    [SerializeField]
+    [SerializeField, Header("메인 상태패턴")]
     protected UnitState unitState;
     protected virtual UnitState UnitState { get; set; }
 
-    [SerializeField]
+    [SerializeField, Header("전투 상태패턴")]
     protected UnitBattleState battleState;
     protected virtual UnitBattleState BattleState { get; set; }
 
-    protected bool CanNormalAttackTime {
-        get {
-            return (Time.time - lastNormalAttackTime) > characterData.attack.cooldown;
-        }
-    }
     public bool IsAlive(AttackableUnit unit) => (unit != null) && (unit.gameObject.activeSelf) && (unit.UnitHp > 0);
+    protected bool CanNormalAttackTime => (Time.time - lastNormalAttackTime) > characterData.attack.cooldown;
     protected bool InRangeNormalAttack => Vector3.Distance(target.transform.position, transform.position) < characterData.attack.distance;
+    protected bool InRangeActiveAttack => Vector3.Distance(target.transform.position, transform.position) < characterData.activeSkill.distance;
     protected bool NonActiveSkill => battleState != UnitBattleState.ActiveSkill && battleState != UnitBattleState.Stun;
     //나중에는 NonActiveSkill 상태일시에 스킬버튼을 비활성화 하기
 
     protected List<Buff> buffList = new();
     protected BufferState bufferState = new();
-    protected int GetFixedDamage {
-        get {
-            return (int)(characterData.data.baseDamage * bufferState.attackIncrease);
-        }
-    }
-    protected int GetFixedActiveDamage {
-        get {
-            return (int)(characterData.data.baseDamage * bufferState.attackIncrease);
-        }
-    }
+    protected int GetFixedDamage => (int)(characterData.data.baseDamage * bufferState.attackIncrease);
+    protected int GetFixedActiveDamage => (int)(characterData.data.baseDamage * bufferState.attackIncrease);
 
     protected bool isAuto = true;
     public virtual bool IsAuto {
-        get {
-            return isAuto;
-        }
-        set {
-            isAuto = value;
-        }
+        get { return isAuto; }
+        set {  isAuto = value; }
     }
 
     protected virtual void Awake()
@@ -98,15 +90,17 @@ public abstract class AttackableUnit : MonoBehaviour
             battleManager = manager;
 
         animator = GetComponentInChildren<Animator>();
+        unitSearchAi[UnitAiType.Rush] = RushSearch;
+        unitSearchAi[UnitAiType.Range] = RangeSearch;
+        unitSearchAi[UnitAiType.Assassin] = AssassinSearch;
     }
 
     protected void SetData()
     {
         pathFind.stoppingDistance = characterData.attack.distance;
-
-        NormalAttackAction = NormalAttack;
-        PassiveSkillAction = PassiveSkill;
+        PassiveSkillAction = PassiveSkillEvent;
         ActiveSkillAction = ReadyActiveSkill;
+        SearchAi = unitSearchAi[aiType];
     }
 
     public void SetLevelExp(int newLevel, int newExp)
@@ -146,31 +140,72 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void ChangeUnitState(UnitState state);
     public abstract void ChangeBattleState(UnitBattleState status);
 
-    public abstract void NormalAttack();
-    public abstract void PassiveSkill();
+    public abstract void PassiveSkillEvent();
     public abstract void ReadyActiveSkill();
-    public virtual void OnActiveSkill() { }
+    public virtual void OnActiveSkill() => characterData.activeSkill.OnActiveSkill(characterData.data);
 
-    public virtual void NormalAttackEnd()
+    public void NormalAttackOnDamage()
     {
-        if (IsAlive(target))
-            if (target.UnitHp <= 0)
+        if (BattleState == UnitBattleState.ActiveSkill)
+            return;
+
+        AddBuff(BuffType.AttackIncrease, 0.5f, 2f);
+
+        if (characterData.attack.targetNumLimit == 1)
+        {
+            target.OnDamage(GetFixedDamage, false);
+            return;
+        }
+
+        List<AttackableUnit> attackTargetList = new();
+
+        var targetList = (unitType == UnitType.Hero) ? enemyList : heroList;
+        foreach (var now_target in targetList)
+        {
+            Vector3 interV = now_target.transform.position - transform.position;
+            if (interV.magnitude <= characterData.attack.distance)
             {
-                target = null;
+                float angle = Vector3.Angle(transform.forward, interV);
+
+                if (Mathf.Abs(angle) < characterData.attack.angle / 2f)
+                {
+                    attackTargetList.Add(now_target);
+                }
             }
+        }
+
+        attackTargetList = GetNearestUnitList(attackTargetList, characterData.attack.targetNumLimit);
+
+        for (int i = 0; i < attackTargetList.Count; i++)
+        {
+            attackTargetList[i].OnDamage(GetFixedDamage, false);
+        }
     }
-    public virtual void PassiveSkillEnd()
+   
+    protected void RushSearch() => SearchNearbyTarget(unitType == UnitType.Hero ? enemyList : heroList); //근거리 타겟 추적
+    protected void RangeSearch()
     {
+        lastSearchTime = Time.time;
+        var targetList = unitType == UnitType.Hero ? enemyList : heroList;
+        var minTarget = GetSearchTargetInAround(targetList, characterData.attack.distance / 2);
+
+        if (IsAlive(minTarget))
+            target = minTarget;
+        else
+            SearchMaxHealthTarget(targetList); //체력이 가장 많은 타겟 추적
+    }
+    protected void AssassinSearch()
+    {
+        var targetList = unitType == UnitType.Hero ? enemyList : heroList;
+        if (targetList.Count == 1)
+            SearchNearbyTarget(targetList); //근거리 타겟 추적
+        else
+            SearchMinHealthTarget(targetList); //체력이 가장 적은 타겟 추적
     }
 
-    public virtual void ActiveSkillEnd()
-    {
-        if (target != null)
-            if (target.UnitHp <= 0)
-            {
-                target = null;
-            }
-    }
+    public virtual void NormalAttackEnd() => target = (IsAlive(target)) ? null : target;
+    public virtual void PassiveSkillEnd() { }
+    public virtual void ActiveSkillEnd() => target = (IsAlive(target)) ? null : target;
 
     public virtual void ResetData()
     {
@@ -189,7 +224,6 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public abstract void OnDamage(int dmg, bool isCritical = false);
 
-    protected abstract void SearchTarget();
     public void SearchNearbyTarget<T>(List<T> list) where T : AttackableUnit
     {
         var tempList = list;
@@ -358,6 +392,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     // Test
     public abstract void OnDead(AttackableUnit unit);
+
     public void DestroyUnit()
     {
         // 이 부분 로테이션 이상할 시 바꿔야함

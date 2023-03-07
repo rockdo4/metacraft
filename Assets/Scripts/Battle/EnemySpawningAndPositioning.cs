@@ -22,7 +22,7 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     public void SetEnemy(AttackableEnemy enemy) => this.enemy = enemy;
     public AttackableEnemy GetEnemy() => enemy;
 
-    private IEnumerator CoRespawn(List<AttackableEnemy> enemyPool, float timer)
+    private IEnumerator CoRespawn(List<AttackableUnit> enemyPool, float timer)
     {
         while (timer >= 0f)
         {
@@ -60,7 +60,7 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     {
         return Instantiate(enemy, tr.position, enemy.gameObject.transform.rotation, tr);
     }
-    public void RespawnEnemy(ref List<AttackableEnemy> enemyPool, float timer)
+    public void RespawnEnemy(ref List<AttackableUnit> enemyPool, float timer)
     {
         StartCoroutine(CoRespawn(enemyPool, timer));
     }
@@ -68,7 +68,7 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     {
         StartCoroutine(CoInfinityRespawn(timer));
     }
-    public void SpawnAllEnemy(ref List<AttackableEnemy> enemyPool)
+    public void SpawnAllEnemy(ref List<AttackableUnit> enemyPool)
     {
         for (int i = 0; i < enemyCount; i++)
         {
