@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "CharacterData", menuName = "Character/CharacterData")]
@@ -7,14 +6,15 @@ public class CharacterData : ScriptableObject, IComparable<CharacterData>
 {
     public new string   name;               // 이름
     [Range(1, 5)]
-    public int          grade;              // 등급
-    public int          maxGrade;           // 승급 가능 최대 등급
+    public int          grade = 1;              // 등급
+    [Range(1, 5)]
+    public int          maxGrade = 1;           // 승급 가능 최대 등급
 
     public string       job;                // 직업, 특성
 
     [Range(1, 20)]
     public int          level = 1;          // 레벨
-    public int          exp;                // 경험치
+    public int          exp = 0;            // 경험치
     [Range(0, 1000)]
     public int          likeability;        // 호감도
 
@@ -39,9 +39,6 @@ public class CharacterData : ScriptableObject, IComparable<CharacterData>
     public float evasion = 0f;       // 회피율
     [Range(0f, 1f)]
     public float accuracy = 1f;    // 명중률
-
-    public List<int> synergys;       // 시너지 리스트. 정수 or Enum으로 가지고 있다가
-                                     // 공격대에 같은 시너지 index를 가지고 있는 영웅이 있으면 시너지 발동
 
     public int CompareTo(CharacterData other)
     {

@@ -30,10 +30,9 @@ public class Effect : MonoBehaviour
 
     // 각각 속성들 변경해서 쓸 수 있도록 하기 위해 추가
     public void SetAllData
-        (float startDelay, float duration, float effectSize)
+        (float startDelay, float effectSize)
     {
         data.startDelay = startDelay;
-        data.duration = duration;
         data.effectSize = effectSize;
     }
 
@@ -46,17 +45,21 @@ public class Effect : MonoBehaviour
     IEnumerator CoEffectRoutine()
     {        
         var startDelay = data.startDelay;
-        var duration = data.duration;
+        float duration = particles[0].main.duration;
 
-        if (startDelay > 0f)
-            yield return new WaitForSeconds(startDelay);
+        while (startDelay > 0f)
+        {
+            startDelay -= Time.deltaTime;
+            yield return null;
+        }    
 
         for (int i = 0; i < particles.Count; i++)
         {
-            if (particles[i] == null)
-                Logger.Debug("null");
+            particles[i].transform.position = startPos.position;
             particles[i].Play();
         }
+
+        yield return null;
 
         while (duration > 0f)
         {
@@ -71,5 +74,4 @@ public class Effect : MonoBehaviour
 
         gameObject.SetActive(false);
     }
-    // 파티클 자체의 지속시간으로 멈추게 변경될 수도 있음
 }

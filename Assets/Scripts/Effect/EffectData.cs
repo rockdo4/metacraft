@@ -7,7 +7,6 @@ public class EffectData : ScriptableObject
 {
     public List<GameObject> particles;
     public float startDelay;        // 이펙트 시작 전 딜레이
-    public float duration;          // 지속시간
     public float effectSize;        // 이펙트 크기
     public float timeScale;         // 재생 속도
 }

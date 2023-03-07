@@ -44,14 +44,13 @@ public abstract class AttackableEnemy : AttackableUnit
                     nowUpdate = BattleUpdate;
                     break;
                 case UnitState.Die:
-                    pathFind.isStopped = true;
-
+                    pathFind.enabled = false;
+                    gameObject.GetComponent<Collider>().enabled = false;
                     animator.SetTrigger("Die");
 
                     nowUpdate = DieUpdate;
                     break;
                 default:
-                    Logger.Debug("Error");
                     break;
             }
         }
@@ -191,7 +190,6 @@ public abstract class AttackableEnemy : AttackableUnit
                 if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime >= 1.0f)
                 {
                     NormalAttackEnd();
-                    Logger.Debug("NoramlAttack anim_done ------- Enemy");
                 }
                 break;
             case UnitBattleState.ActiveSkill:
@@ -199,7 +197,6 @@ public abstract class AttackableEnemy : AttackableUnit
                 if (stateInfo.IsName("ActiveSkill") && stateInfo.normalizedTime >= 1.0f)
                 {
                     ActiveSkillEnd();
-                    Logger.Debug("ActiveSkill anim_done");
                 }
                 break;
             case UnitBattleState.Stun:
@@ -274,5 +271,20 @@ public abstract class AttackableEnemy : AttackableUnit
             return this;
         else
             return null;
+    }
+
+    public override void AddBuff(BuffType type, float scale, float duration)
+    {
+        Buff buff = new();
+
+        buff.type = type;
+        buff.buffScale = scale;
+        buff.duration = duration;
+
+        buffList.Add(buff);
+    }
+    public override void RemoveBuff(Buff buff)
+    {
+        buffList.Remove(buff);
     }
 }

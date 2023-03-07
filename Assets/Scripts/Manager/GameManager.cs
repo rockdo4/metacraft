@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -32,6 +31,8 @@ public class GameManager : Singleton<GameManager>
     public List<int?> battleGroups = new(3) { null, null, null }; // Mission Select -> Battle Scene
     // Dispatch Select
 
+    public List<Effect> effects; // 사용할 이펙트들
+
     public override void Awake()
     {
         base.Awake();
@@ -50,10 +51,11 @@ public class GameManager : Singleton<GameManager>
     public List<GameObject> GetSelectedHeroes()
     {
         List<GameObject> selectedHeroes = new();
+        int count = battleGroups.Count;
 
-        foreach (int? idx in battleGroups)
+        for (int i = 0; i < count; i++)
         {
-            selectedHeroes.Add(idx == null ? null : myHeroes[(int)idx]);
+            selectedHeroes.Add(battleGroups[i] == null ? null : myHeroes[(int)battleGroups[i]]);
         }
 
         return selectedHeroes;
