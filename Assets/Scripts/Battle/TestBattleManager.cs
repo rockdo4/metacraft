@@ -28,7 +28,7 @@ public class TestBattleManager : MonoBehaviour
     public Transform roadTr;
     public List<Vector3> roadRots = new List<Vector3> { new (0,-45,0), new (0,0,0), new (0,45,0) };
     public int roadCount = 3;
-    private TreeNodeObject<string> thisNode;
+    private TreeNodeObject thisNode;
     protected Coroutine coFade;
 
     private void Awake()
@@ -229,6 +229,10 @@ public class TestBattleManager : MonoBehaviour
         for (int i = 0; i < useHeroes.Count; i++)
         {
             Utils.CopyPositionAndRotation(useHeroes[i].gameObject, startPositions[i]);
+        }
+        for (int i = 0; i < roads.Count; i++)
+        {
+            roads[i].fadeTrigger.isEnter = false;
         }
     }
 }
