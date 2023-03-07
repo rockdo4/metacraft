@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class TestBattleManager : MonoBehaviour
 {
@@ -10,10 +12,13 @@ public class TestBattleManager : MonoBehaviour
     public List<AttackableHero> useHeroes = new();
     public StageEnemy enemyCountTxt;
 
-    public ClearUi clearUi;
+    public ClearUiController clearUi;
     public List<MapEventTrigger> triggers;
 
     protected int readyCount;
+
+    public Image fadePanel;
+    public bool isFadeIn = true;
 
     private void Awake()
     {
@@ -31,7 +36,7 @@ public class TestBattleManager : MonoBehaviour
                 AttackableHero attackableHero = selectedHeroes[i].GetComponent<AttackableHero>();
                 attackableHero.SetBattleManager(this);
                 attackableHero.SetUi(heroUiList[i]);
-                attackableHero.ResetAttackableUnit();
+                attackableHero.ResetData();
                 heroUiList[i].SetHeroInfo(attackableHero.GetUnitData());
                 heroUiList[i].gameObject.SetActive(true);
                 useHeroes.Add(attackableHero);
@@ -62,6 +67,7 @@ public class TestBattleManager : MonoBehaviour
     {
         heroList = useHeroes;
     }
+
     public virtual void OnDeadHero(AttackableHero hero)
     {
         useHeroes.Remove(hero);
@@ -103,8 +109,45 @@ public class TestBattleManager : MonoBehaviour
     protected void SetStageClear()
     {
         UIManager.Instance.ShowView(1);
+        GameManager.Instance.NextDay();
         clearUi.SetData();
         Logger.Debug("Clear!");
+    }
+
+    private IEnumerator CoFade()
+    {
+        if (isFadeIn)
+        {
+            fadePanel.gameObject.SetActive(true);
+            float fadeAlpha = 0f;
+            while (fadeAlpha < 1f)
+            {
+                fadeAlpha += 0.01f;
+                yield return null;
+                fadePanel.color = new Color(0, 0, 0, fadeAlpha);
+            }
+
+            isFadeIn = false;
+            yield break;
+        }
+        else
+        {
+            float fadeAlpha = 1f;
+            while (fadeAlpha > 0f)
+            {
+                fadeAlpha -= 0.01f;
+                yield return null;
+                fadePanel.color = new Color(0, 0, 0, fadeAlpha);
+            }
+
+            isFadeIn = true;
+            fadePanel.gameObject.SetActive(false);
+            yield break;
+        }
+    }
+    protected void MoveNextStage()
+    {
+        StartCoroutine(CoFade());
     }
 
     // 히어로들 안 보이는 위치로 옮기고 Active False 시키는 함수
@@ -122,9 +165,11 @@ public class TestBattleManager : MonoBehaviour
     {
         Time.timeScale = 1;
     }
+
     protected void SetStageFail()
     {
         Time.timeScale = 0;
+        GameManager.Instance.NextDay();
         UIManager.Instance.ShowView(2);
         Logger.Debug("Fail!");
     }

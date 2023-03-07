@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -66,6 +67,19 @@ public abstract class AttackableUnit : MonoBehaviour
     protected bool InRangeNormalAttack => Vector3.Distance(target.transform.position, transform.position) < characterData.attack.distance;
     protected bool NonActiveSkill => battleState != UnitBattleState.ActiveSkill && battleState != UnitBattleState.Stun;
 
+    protected List<Buff> buffList = new();
+    protected BufferState bufferState = new();
+    protected int GetFixedDamage {
+        get {
+            return (int)(characterData.data.baseDamage * bufferState.attackIncrease);
+        }
+    }
+    protected int GetFixedActiveDamage {
+        get {
+            return (int)(characterData.data.baseDamage * bufferState.attackIncrease);
+        }
+    }
+
     protected virtual void Awake()
     {
         var manager = FindObjectOfType<TestBattleManager>();
@@ -74,6 +88,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
         animator = GetComponentInChildren<Animator>();
     }
+
     protected void SetData()
     {
         pathFind.stoppingDistance = characterData.attack.distance;
@@ -81,17 +96,40 @@ public abstract class AttackableUnit : MonoBehaviour
         NormalAttackAction = NormalAttack;
         PassiveSkillAction = PassiveSkill;
         ActiveSkillAction = ReadyActiveSkill;
-        ResetAttackableUnit();
     }
 
-    public void ResetAttackableUnit()
+    public void SetLevelExp(int newLevel, int newExp)
     {
-        UnitHp = characterData.data.healthPoint;
+        LiveData data = GetUnitData().data;
+        data.level = newLevel;
+        data.exp = newExp;
+    }
+
+    public void LevelUpAdditional(int incDamage, int incDefense, int incHealthPoint)
+    {
+        LiveData data = GetUnitData().data;
+        data.baseDamage += incDamage;
+        data.baseDefense += incDefense;
+        data.healthPoint += incHealthPoint;
+        data.currentHp = data.healthPoint;
+    }
+    
+    public void LevelUpMultiplication(float multipleDamage, float multipleDefense, float multipleHealthPoint)
+    {
+        LiveData data = GetUnitData().data;
+        LevelUpAdditional(
+            (int) (data.baseDamage * (1 + multipleDamage)),
+            (int) (data.baseDefense * (1 + multipleDefense)),
+            (int) (data.healthPoint * (1 + multipleHealthPoint)));
     }
 
     protected void Update()
     {
         nowUpdate?.Invoke();
+        for (int i = buffList.Count - 1; i >= 0; i--)
+        {
+            buffList[i].Update();
+        }
     }
 
     public abstract void ChangeUnitState(UnitState state);
@@ -113,6 +151,7 @@ public abstract class AttackableUnit : MonoBehaviour
     public virtual void PassiveSkillEnd()
     {
     }
+
     public virtual void ActiveSkillEnd()
     {
         if (target != null)
@@ -319,4 +358,8 @@ public abstract class AttackableUnit : MonoBehaviour
     }
 
     // 여기에 State 초기화랑 트리거 모두 해제하는 코드 작성
+
+    public abstract void AddBuff(BuffType type, float scale, float duration);
+    public abstract void RemoveBuff(Buff buff);
+
 }

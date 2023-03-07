@@ -31,6 +31,14 @@ public class BeltScrollBattleManager : TestBattleManager
 
         enemyCountTxt.Count = GetAllEnemyCount();
     }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            MoveNextStage();
+        }
+    }
+
     private int GetCurrEnemyCount()
     {
         return triggers[currTriggerIndex].useEnemys.Count;
@@ -62,15 +70,26 @@ public class BeltScrollBattleManager : TestBattleManager
     public override void OnReady()
     {
         readyCount--;
-        if (readyCount == 0 && !triggers[currTriggerIndex].isStageEnd)
+
+        if (readyCount == 0)
         {
-            readyCount = useHeroes.Count;
-            base.OnReady();
-            StartCoroutine(MovingMap());
-        }
-        else if (readyCount == 0 && triggers[currTriggerIndex].isStageEnd)
-        {
-            SetStageClear();
+            if (!triggers[currTriggerIndex].isStageEnd)
+            {
+                readyCount = useHeroes.Count;
+                base.OnReady();
+                StartCoroutine(MovingMap());
+            }
+            else if (triggers[currTriggerIndex].isStageEnd)
+            {
+                MoveNextStage();
+                platform.transform.position = Vector3.zero;
+                // test
+                //SetStageClear();
+            }
+            else if (triggers[currTriggerIndex].isMissionEnd)
+            {
+                SetStageClear();
+            }
         }
     }
 

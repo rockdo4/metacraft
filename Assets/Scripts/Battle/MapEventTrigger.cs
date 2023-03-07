@@ -10,8 +10,10 @@ public class MapEventTrigger : MonoBehaviour
     public List<AttackableEnemy> enemys = new();        // 생성할 Enemy들
     public List<AttackableEnemy> useEnemys = new();     // 현재 생성된 Enemy들
 
-    [SerializeField, Header("마지막 관문일 때 체크해주세요")]
+    [SerializeField, Header("스테이지 선택 구간일 때 체크해주세요")]
     public bool isStageEnd = false;
+    [SerializeField, Header("마지막 스테이지일 때 체크해주세요")]
+    public bool isMissionEnd = false;
 
     public void OnDead(AttackableEnemy enemy)
     {

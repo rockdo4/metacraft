@@ -1180,7 +1180,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uD604\uC7AC \uD134"
+  m_text: "\uD604\uC7AC \uC694\uC77C"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: bdc64b4452911cf4faf0e62328b0082f, type: 2}
   m_sharedMaterial: {fileID: 4565134964853867374, guid: bdc64b4452911cf4faf0e62328b0082f,
@@ -5517,7 +5517,7 @@ MonoBehaviour:
   officeLevel: {fileID: 8798705031812399051}
   officeExp: {fileID: 8798705031622880707}
   playerGold: {fileID: 2997829276056094551}
-  currentTurn: {fileID: 8798705030410932429}
+  currentDay: {fileID: 8798705030410932429}
 --- !u!1 &8798705031949490558
 GameObject:
   m_ObjectHideFlags: 0
@@ -5754,7 +5754,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 8798705032144882005}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: ShowView
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 6
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8798705032288881021
 GameObject:
   m_ObjectHideFlags: 0

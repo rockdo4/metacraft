@@ -11,7 +11,7 @@ public class HeroUi : MonoBehaviour
 
     [SerializeField]
     private BuffList viewBuffList;
-    private List<HeroBuff> buffList = new();
+    private List<BuffIcon> buffList;
     public UnitState heroState;
 
     CharacterDataBundle heroData;
@@ -23,14 +23,18 @@ public class HeroUi : MonoBehaviour
         SetHp(heroData.data.currentHp);
     }
 
-    private void Awake()
+    public void SetBuffList(ref List<BuffIcon> list)
     {
-        viewBuffList.SetList(ref buffList);
+        buffList = list;
     }
 
-    public void AddBuff()
+    public BuffIcon AddIcon(BuffType type, float duration)
     {
-        viewBuffList.AddBuff();
+        return viewBuffList.AddIcon(type, duration);
+    }
+    public void RemoveBuff(BuffIcon icon)
+    {
+        viewBuffList.RemoveBuff(icon);
     }
 
     public void OnClickHeroSkill()

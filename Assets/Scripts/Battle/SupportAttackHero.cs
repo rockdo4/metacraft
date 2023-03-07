@@ -47,7 +47,7 @@ public class SupportAttackHero : AttackableHero
 
         if (characterData.attack.targetNumLimit == 1)
         {
-            target.OnDamage(characterData.data.baseDamage, false);
+            target.OnDamage(GetFixedDamage, false);
             return;
         }
 
@@ -71,7 +71,7 @@ public class SupportAttackHero : AttackableHero
 
         for (int i = 0; i < attackEnemies.Count; i++)
         {
-            attackEnemies[i].OnDamage(characterData.data.baseDamage, false);
+            attackEnemies[i].OnDamage(GetFixedDamage, false);
         }
     }
 
