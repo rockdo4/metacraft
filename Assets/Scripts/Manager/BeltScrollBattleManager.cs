@@ -1,3 +1,4 @@
+using Mono.Cecil.Cil;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,6 +11,9 @@ public class BeltScrollBattleManager : TestBattleManager
 
     private int currTriggerIndex = 0;
     private float nextStageMoveTimer = 0f;
+
+    private Coroutine coMovingMap;
+    private Coroutine coResetMap;
 
     private void Start()
     {
@@ -71,29 +75,7 @@ public class BeltScrollBattleManager : TestBattleManager
             {
                 readyCount = useHeroes.Count;
                 base.OnReady();
-                StartCoroutine(MovingMap());
-            }
-            else if (triggers[currTriggerIndex].isStageEnd)
-            {
-                Logger.Debug("End!");
-                for (int i = 0; i < useHeroes.Count; i++)
-                {
-                    useHeroes[i].ResetData();
-                }
-                platform.transform.position = Vector3.zero;
-
-                // 여기에 에너미들 바꿔주는 거랑 마리수 조정
-                // 일단은 다시 소환하는걸로
-                ResetStage();
-                DisableRoad();
-                // 보여질 길목들 다시 enable 해주기
-
-
-                // 페이드 아웃
-                MoveNextStage();
-
-                // test
-                //SetStageClear();
+                coMovingMap = StartCoroutine(CoMovingMap());
             }
             else if (triggers[currTriggerIndex].isMissionEnd)
             {
@@ -102,7 +84,7 @@ public class BeltScrollBattleManager : TestBattleManager
         }
     }
 
-    IEnumerator MovingMap()
+    IEnumerator CoMovingMap()
     {
         yield return new WaitForSeconds(nextStageMoveTimer);
 
@@ -127,5 +109,41 @@ public class BeltScrollBattleManager : TestBattleManager
                 useHeroes[i].ChangeUnitState(UnitState.Battle);
             }
         }
+    }
+
+    public override void MoveNextStage(float timer)
+    {
+        StopCoroutine(coMovingMap);
+        base.MoveNextStage(timer);
+        coResetMap = StartCoroutine(CoResetMap(timer));
+    }
+    private IEnumerator CoResetMap(float timer)
+    {
+        currTriggerIndex = 0;
+        Logger.Debug("End!");
+
+        yield return new WaitForSeconds(timer);
+
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            useHeroes[i].ResetData();
+        }
+
+        platform.transform.position = Vector3.zero;
+
+        // 여기에 에너미들 바꿔주는 거랑 마리수 조정
+        // 일단은 다시 소환하는걸로
+        ResetStage();
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            Invoke(nameof(OnReady), 1f);
+        }
+        enemyCountTxt.Count = GetAllEnemyCount();
+        //DisableRoad();
+        // 보여질 길목들 다시 enable 해주기
+
+        // 페이드 아웃
+        coFade = StartCoroutine(CoFade());
+        yield break;
     }
 }

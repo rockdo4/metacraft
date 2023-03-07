@@ -20,12 +20,16 @@ public class TestBattleManager : MonoBehaviour
     public Image fadePanel;
     public bool isFadeIn = true;
 
+    public GeneratePolynomialTreeMap tree;
+
     // Test Member
     public List<ForkedRoad> roads = new();
     public ForkedRoad roadPrefab;
     public Transform roadTr;
     public List<Vector3> roadRots = new List<Vector3> { new (0,-45,0), new (0,0,0), new (0,45,0) };
     public int roadCount = 3;
+    private TreeNodeObject<string> thisNode;
+    protected Coroutine coFade;
 
     private void Awake()
     {
@@ -49,6 +53,12 @@ public class TestBattleManager : MonoBehaviour
                 useHeroes.Add(attackableHero);
             }
         }
+        
+        tree.CreateTreeGraph();
+        thisNode = tree.root; // 현재 위치한 노드
+        // tree.root.type 맵 타입
+        // tree.root.childrens 맵 순서
+        // thisNode = tree.root.childrens[0]; 다음 노드 선택할 때 쓰는 것
 
         clearUi.SetHeroes(useHeroes);
         readyCount = useHeroes.Count;
@@ -121,7 +131,7 @@ public class TestBattleManager : MonoBehaviour
         Logger.Debug("Clear!");
     }
 
-    private IEnumerator CoFade()
+    protected IEnumerator CoFade()
     {
         if (isFadeIn)
         {
@@ -152,9 +162,9 @@ public class TestBattleManager : MonoBehaviour
             yield break;
         }
     }
-    public void MoveNextStage()
+    public virtual void MoveNextStage(float timer)
     {
-        StartCoroutine(CoFade());
+        coFade = StartCoroutine(CoFade());
     }
 
     // 히어로들 안 보이는 위치로 옮기고 Active False 시키는 함수
@@ -215,6 +225,10 @@ public class TestBattleManager : MonoBehaviour
         for (int i = 0; i < triggers.Count; i++)
         {
             triggers[i].ResetEnemys();
+        }
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            Utils.CopyPositionAndRotation(useHeroes[i].gameObject, startPositions[i]);
         }
     }
 }

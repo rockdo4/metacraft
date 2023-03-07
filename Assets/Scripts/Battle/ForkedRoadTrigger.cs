@@ -14,7 +14,7 @@ public class ForkedRoadTrigger : MapEventTrigger
     {
         if (!isEnter)
         {
-            manager.MoveNextStage();
+            manager.MoveNextStage(2f);
             isEnter = true;
         }
     }

@@ -53,6 +53,7 @@ public abstract class AttackableHero : AttackableUnit
                     break;
                 case UnitState.MoveNext:
                     pathFind.isStopped = false;
+                    pathFind.SetDestination(transform.position);
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
@@ -151,14 +152,17 @@ public abstract class AttackableHero : AttackableUnit
     public override void ResetData()
     {
         testRot = false;
-        UnitState = UnitState.None;
+        UnitState = UnitState.Idle;
         battleState = UnitBattleState.None;
-
+        
         lateReturn = false;
         lastActiveSkillTime = lastNormalAttackTime = lastNavTime = Time.time;
         target = null;
         animator.Rebind();
-        UnitHp = characterData.data.healthPoint;
+        //UnitHp = characterData.data.healthPoint;
+        
+        // Test
+        UnitHp = characterData.data.currentHp;
     }
 
     protected override void SearchTarget()
