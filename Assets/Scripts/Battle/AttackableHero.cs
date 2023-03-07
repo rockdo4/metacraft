@@ -54,6 +54,7 @@ public abstract class AttackableHero : AttackableUnit
                     break;
                 case UnitState.MoveNext:
                     pathFind.isStopped = false;
+                    pathFind.SetDestination(transform.position);
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
@@ -170,7 +171,7 @@ public abstract class AttackableHero : AttackableUnit
         lastActiveSkillTime = lastNormalAttackTime = lastNavTime = Time.time;
         target = null;
         animator.Rebind();
-        UnitHp = characterData.data.healthPoint;
+        UnitHp = characterData.data.currentHp;
     }
 
     protected override void SearchTarget()
@@ -237,12 +238,12 @@ public abstract class AttackableHero : AttackableUnit
     {
         if(isAuto && target != null && heroUI.heroSkill.IsCoolDown)
         {
-            if (!NonActiveSkill && InRangeNormalAttack)
-                return;
-
-            heroUI.heroSkill.OnDownSkill();
-            characterData.activeSkill.targetPos = target.transform.position;
-            heroUI.heroSkill.OnAutoSkillActive();
+            if (InRangeNormalAttack)
+            {
+                heroUI.heroSkill.OnDownSkill();
+                characterData.activeSkill.targetPos = target.transform.position;
+                heroUI.heroSkill.OnAutoSkillActive();
+            }
         }
         //타겟이 없을때 타겟을 찾으면 타겟으로 가기
         switch (BattleState)
