@@ -6,8 +6,8 @@ public class SkillAreaIndicator : MonoBehaviour
     public SkillTargetType TargetType { get; set; }
     public MeshRenderer Renderer { get; private set; }
 
-    private HashSet<Collider> unitsInArea = new();
-    private void Awake()
+    protected HashSet<Collider> unitsInArea = new();
+    protected virtual void Awake()
     {
         Renderer = GetComponent<MeshRenderer>();
     }
@@ -18,7 +18,7 @@ public class SkillAreaIndicator : MonoBehaviour
 
         Renderer.enabled = true;
     }
-    private void OnTriggerEnter(Collider other)
+    protected virtual void OnTriggerEnter(Collider other)
     {
         switch (TargetType)
         {
@@ -36,7 +36,7 @@ public class SkillAreaIndicator : MonoBehaviour
                 break;
         }
     }
-    private void OnTriggerExit(Collider other)
+    protected virtual void OnTriggerExit(Collider other)
     {
         switch (TargetType)
         {
@@ -54,7 +54,7 @@ public class SkillAreaIndicator : MonoBehaviour
                 break;
         }
     }
-    private void IsColliderIn(bool isIn, Collider other)
+    protected virtual void IsColliderIn(bool isIn, Collider other)
     {
         other.GetComponent<Outline>().enabled = isIn;
 

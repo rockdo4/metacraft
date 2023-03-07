@@ -42,7 +42,7 @@ public class ActiveSkillAOE : CharacterSkill
         indicatorTransform = skillAreaIndicator.transform;
 
         castRangeIndicator = Instantiate(castRangeIndicatorPrefab);
-        castRangeIndicator.transform.localScale = Vector3.one * 2 * castRangeLimit;
+        castRangeIndicator.transform.localScale = castRangeLimit * 2 * Vector3.one;
         castRangeIndicator.SetActive(false);
         castRangeIndicatorTransform = castRangeIndicator.transform;
 
@@ -69,10 +69,9 @@ public class ActiveSkillAOE : CharacterSkill
     }
     private void MoveSkillAreaIndicator()
     {
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);        
-        RaycastHit hit;
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
-        if (Physics.Raycast(ray, out hit, 100.0f, layerM))
+        if (Physics.Raycast(ray, out RaycastHit hit, 100.0f, layerM))
         {
             if (IsMouseInSkillRange(hit.point))
             {
@@ -82,10 +81,10 @@ public class ActiveSkillAOE : CharacterSkill
             {
                 Vector3 point
                     = Utils.IntersectPointCircleCenterToOut(actorTransform.position, castRangeLimit, hit.point);
-                
+
                 indicatorTransform.position = point + Vector3.up * 0.1f;
-            }            
-        }   
+            }
+        }
     }
     private bool IsMouseInSkillRange(Vector3 hitPoint)
     {
