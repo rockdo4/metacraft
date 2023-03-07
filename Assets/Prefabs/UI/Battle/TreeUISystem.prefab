@@ -51,13 +51,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 98a33d327da99a64a9c37306636ad0f1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  root: {fileID: 0}
+  boss: {fileID: 0}
   height: 3
-  rangeMin: 1
-  rangeMax: 2
-  normalCount: 10
-  threatCount: 10
-  supplyCount: 10
-  eventCount: 10
+  branchRangeMin: 1
+  branchRangeMax: 3
   nodeBundlePrefab: {fileID: 318044227340278283, guid: 5b2ad751d73a05a4590268a56a2c9750,
     type: 3}
   treeNodePrefab: {fileID: 3574952780080813521, guid: 8eab5c49c50e8e4458a4d70e8f4465c2,
@@ -97,11 +95,11 @@ RectTransform:
   m_Father: {fileID: 3588466067850647863}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
+  m_SizeDelta: {x: 0, y: 0}
+  m_Pivot: {x: 0, y: 1}
 --- !u!1 &3588466068641491593
 GameObject:
   m_ObjectHideFlags: 0
@@ -137,7 +135,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 1}
   m_AnchorMax: {x: 0, y: 1}
   m_AnchoredPosition: {x: -1039.2506, y: 490.00006}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 1}
 --- !u!114 &3588466068641491595
 MonoBehaviour:
