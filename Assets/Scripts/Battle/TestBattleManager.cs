@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
@@ -24,12 +25,10 @@ public class TestBattleManager : MonoBehaviour
     public TreeNodeObject thisNode;
 
     // Test Member
-    public List<ForkedRoad> enableRoads = new();
-    public List<ForkedRoad> disableRoads = new();
-    public ForkedRoad roadPrefab;
+    public List<GameObject> roadPrefab;
+    public List<ForkedRoad> roads;
+    public GameObject road;
     public Transform roadTr;
-    public List<Vector3> roadRots = new List<Vector3> { new (0,-45,0), new (0,45,0), new(0, 0, 0) };
-    public int roadCount = 3;
     protected Coroutine coFadeIn;
     protected Coroutine coFadeOut;
     public List<RoadChoiceButton> choiceButtons;
@@ -181,10 +180,6 @@ public class TestBattleManager : MonoBehaviour
         {
             choiceButtons[i].gameObject.SetActive(false);
         }
-
-        // tree.root.type 맵 타입
-        // tree.root.childrens 맵 순서
-        // thisNode = tree.root.childrens[0]; 다음 노드 선택할 때 쓰는 것
     }
 
     protected void ChoiceNextStage()
@@ -208,6 +203,7 @@ public class TestBattleManager : MonoBehaviour
         for (int i = 0; i < useHeroes.Count; i++)
         {
             Utils.CopyPositionAndRotation(useHeroes[i].gameObject, GameManager.Instance.heroSpawnTransform);
+            useHeroes[i].ResetData();
             useHeroes[i].SetEnabledPathFind(false);
             useHeroes[i].gameObject.SetActive(false);
         }
@@ -229,45 +225,42 @@ public class TestBattleManager : MonoBehaviour
     // 길목 생성
     protected void CreateRoad(GameObject platform)
     {
-        for (int i = 0; i < roadCount; i++)
+        if (thisNode.childrens.Count == 0)
+            return;
+
+        road = Instantiate(roadPrefab[thisNode.childrens.Count - 1], platform.transform);
+        road.transform.position = roadTr.transform.position;
+        roads = road.GetComponentsInChildren<ForkedRoad>().ToList();
+    }
+
+    protected void DestroyRoad()
+    {
+        Destroy(road);
+    }
+
+    protected void AddRoadTrigger()
+    {
+        if (roads == null)
+            return;
+
+        for (int i = 0; i < roads.Count; i++)
         {
-            ForkedRoad road = Instantiate(roadPrefab, platform.transform);
-            Transform tr = roadTr;
-            tr.transform.localRotation = Quaternion.Euler(roadRots[i]);
-            road.SetRoadChangeAngle(tr);
-            road.gameObject.SetActive(false);
-            disableRoads.Add(road);
+            triggers.Add(roads[i].fadeTrigger);
         }
     }
 
-    protected void SetRoad()
+    protected void RemoveRoadTrigger()
     {
-        Logger.Debug(thisNode.childrens.Count);
-
-        for (int i = 0; i < thisNode.childrens.Count; i++)
+        for (int i = 0; i < roads.Count; i++)
         {
-            enableRoads[i].gameObject.SetActive(true);
+            triggers.Remove(roads[i].fadeTrigger);
         }
     }
 
-    protected void EnableRoad()
+    protected void ResetRoads()
     {
-        for (int i = 0; i < thisNode.childrens.Count; i++)
-        {
-            enableRoads.Add(disableRoads[i]);
-            enableRoads[i].gameObject.SetActive(true);
-            triggers.Add(enableRoads[i].fadeTrigger);
-        }
-    }
-
-    protected void DisableRoad()
-    {
-        for (int i = 0; i < enableRoads.Count; i++)
-        {
-            triggers.Remove(enableRoads[i].fadeTrigger);
-        }
-
-        enableRoads.Clear();
+        roads.Clear();
+        roads = null;
     }
 
     protected void ResetStage()

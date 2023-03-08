@@ -26,16 +26,15 @@ public class BeltScrollBattleManager : TestBattleManager
             }
         }
 
-        // Test
+        CreateRoad(platform);
+        AddRoadTrigger();
+
         for (int i = 0; i < useHeroes.Count; i++)
         {
             Invoke(nameof(OnReady), 1f);
         }
 
         enemyCountTxt.Count = GetAllEnemyCount();
-        CreateRoad(platform);
-        EnableRoad();
-        SetRoad();
     }
 
     private int GetCurrEnemyCount()
@@ -70,8 +69,8 @@ public class BeltScrollBattleManager : TestBattleManager
     {
         base.SelectNextStage(index);
         base.OnReady();
-        SetHeroReturnPositioning(enableRoads[nodeIndex].fadeTrigger.heroSettingPositions);
-        Logger.Debug(enableRoads[nodeIndex].fadeTrigger.heroSettingPositions);
+        SetHeroReturnPositioning(roads[nodeIndex].fadeTrigger.heroSettingPositions);
+        coMovingMap = StartCoroutine(CoMovingMap());
     }
 
     public override void OnReady()
@@ -80,7 +79,7 @@ public class BeltScrollBattleManager : TestBattleManager
 
         if (readyCount == 0)
         {
-            if (triggers[currTriggerIndex + 1].isStageEnd)
+            if (triggers[currTriggerIndex + 1] != null && triggers[currTriggerIndex + 1].isStageEnd)
             {
                 ChoiceNextStage();
             }
@@ -99,23 +98,33 @@ public class BeltScrollBattleManager : TestBattleManager
 
     IEnumerator CoMovingMap()
     {
-        if (triggers[currTriggerIndex + 1].isStageEnd)
-        {
-            yield break;
-        }
+        float curMaxZPos = 0f;
+        float nextMaxZPos = 0f;
+        float movePos = 0f;
+        float platformMoveSpeedValue = 0f;
 
         yield return new WaitForSeconds(nextStageMoveTimer);
 
-        float curMaxZPos = platform.transform.position.z +
+        curMaxZPos = platform.transform.position.z +
             triggers[currTriggerIndex].heroSettingPositions.Max(transform => transform.position.z);
-        float nextMaxZPos = triggers[currTriggerIndex + 1].heroSettingPositions.Max(transform => transform.position.z);
-        float movePos = curMaxZPos - nextMaxZPos;
 
+        if (triggers[currTriggerIndex + 1].isStageEnd)
+        {
+            platformMoveSpeedValue = 1f;
+            nextMaxZPos = roads[nodeIndex].fadeTrigger.heroSettingPositions.Max(transform => transform.position.z);
+        }
+        else
+        {
+            platformMoveSpeedValue = platformMoveSpeed;
+            nextMaxZPos = triggers[currTriggerIndex + 1].heroSettingPositions.Max(transform => transform.position.z);
+        }
+
+        movePos = curMaxZPos - nextMaxZPos;
         currTriggerIndex++;
 
         while (platform.transform.position.z >= movePos)
         {
-            platform.transform.Translate((Vector3.forward * platformMoveSpeed * Time.deltaTime) * -1);
+            platform.transform.Translate((Vector3.forward * platformMoveSpeedValue * Time.deltaTime) * -1);
             yield return null;
         }
 
@@ -137,16 +146,12 @@ public class BeltScrollBattleManager : TestBattleManager
         currTriggerIndex = 0;
         Logger.Debug("End!");
 
-        yield return new WaitForSeconds(timer);
+        yield return new WaitForSeconds(timer / Time.timeScale);
 
         for (int i = 0; i < useHeroes.Count; i++)
         {
             useHeroes[i].ResetData();
         }
-
-        DisableRoad();
-        EnableRoad();
-        SetRoad();
 
         platform.transform.position = Vector3.zero;
 
@@ -158,6 +163,12 @@ public class BeltScrollBattleManager : TestBattleManager
             Invoke(nameof(OnReady), 1f);
         }
         enemyCountTxt.Count = GetAllEnemyCount();
+
+        DestroyRoad();
+        RemoveRoadTrigger();
+        ResetRoads();
+        CreateRoad(platform);
+        AddRoadTrigger();
 
         // ÆäÀÌµå ¾Æ¿ô
         coFadeOut = StartCoroutine(CoFadeOut());
