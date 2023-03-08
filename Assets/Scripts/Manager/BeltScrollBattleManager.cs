@@ -34,6 +34,7 @@ public class BeltScrollBattleManager : TestBattleManager
             {
                 var enemy = triggers[i].enemySettingPositions[j].SpawnEnemy();
                 triggers[i].enemys.Add(enemy);
+                triggers[i].AddEnemyColliders(enemy.GetComponent<CapsuleCollider>());
                 triggers[i].enemys[j].SetEnabledPathFind(false);
             }
         }

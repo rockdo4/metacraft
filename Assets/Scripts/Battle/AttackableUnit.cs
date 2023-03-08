@@ -494,4 +494,8 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void AddBuff(BuffType type, float scale, float duration);
     public abstract void RemoveBuff(Buff buff);
 
+    public void SetMaxHp()
+    {
+        UnitHp = characterData.data.healthPoint;
+    }
 }

@@ -205,6 +205,7 @@ public class TestBattleManager : MonoBehaviour
         {
             Utils.CopyPositionAndRotation(useHeroes[i].gameObject, GameManager.Instance.heroSpawnTransform);
             useHeroes[i].ResetData();
+            useHeroes[i].SetMaxHp();
             useHeroes[i].SetEnabledPathFind(false);
             useHeroes[i].gameObject.SetActive(false);
         }
