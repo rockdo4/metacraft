@@ -10,7 +10,7 @@ public class TestBattleManager : MonoBehaviour
 {
     public List<HeroUi> heroUiList;
     public List<Transform> startPositions;
-    public List<AttackableHero> useHeroes = new();
+    public List<AttackableUnit> useHeroes = new();
     public StageEnemy enemyCountTxt;
 
     public ClearUiController clearUi;
@@ -72,6 +72,8 @@ public class TestBattleManager : MonoBehaviour
 
         clearUi.SetHeroes(useHeroes);
         readyCount = useHeroes.Count;
+
+        FindObjectOfType<AutoButton>().ResetData();
     }
 
     public List<Transform> GetStartPosition()
@@ -90,7 +92,7 @@ public class TestBattleManager : MonoBehaviour
         return count;
     }
 
-    public void GetHeroList(ref List<AttackableHero> heroList)
+    public void GetHeroList(ref List<AttackableUnit> heroList)
     {
         heroList = useHeroes;
     }
@@ -108,7 +110,7 @@ public class TestBattleManager : MonoBehaviour
     {
         enemyCountTxt.DieEnemy();
     }
-    public virtual void GetEnemyList(ref List<AttackableEnemy> enemyList) { }
+    public virtual void GetEnemyList(ref List<AttackableUnit> enemyList) { }
     public virtual void OnReady()
     {
         for (int i = 0; i < useHeroes.Count; i++)
@@ -128,7 +130,7 @@ public class TestBattleManager : MonoBehaviour
         for (int i = 0; i < useHeroes.Count; i++)
         {
             Logger.Debug("Return");
-            useHeroes[i].SetReturnPos(pos[i]);
+            ((AttackableHero)useHeroes[i]).SetReturnPos(pos[i]);
             useHeroes[i].ChangeUnitState(UnitState.ReturnPosition);
         }
     }

@@ -12,11 +12,11 @@ GameObject:
   - component: {fileID: 39252020220381179}
   - component: {fileID: 134430037101015005}
   - component: {fileID: 8428398282218722843}
-  - component: {fileID: 8428398282218722840}
   - component: {fileID: 8428398282218722841}
   - component: {fileID: 8428398282218722838}
   - component: {fileID: 8428398282218722839}
   - component: {fileID: -258476677999285681}
+  - component: {fileID: 4537789486287846067}
   m_Layer: 7
   m_Name: TestEnemyPivot
   m_TagString: Enemy
@@ -92,26 +92,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &8428398282218722840
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8428398282218722837}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ad12939854acace4ea0805b6e9b424f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterData: {fileID: 8428398282218722841}
-  target: {fileID: 0}
-  heroList: []
-  enemyList: []
-  citizenList: []
-  unitState: 0
-  battleState: 0
-  isMapTriggerEnter: 0
 --- !u!114 &8428398282218722841
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -130,7 +110,6 @@ MonoBehaviour:
     grade: 0
     maxGrade: 0
     job: 
-    energy: 0
     level: 0
     exp: 0
     likeability: 0
@@ -143,7 +122,7 @@ MonoBehaviour:
     criticalDmg: 2
     evasion: 0
     accuracy: 0.5
-    synergys: 
+    equipment: {fileID: 0}
   attack: {fileID: 11400000, guid: 5fcd1894dfa1ef54e9871c0977379d2e, type: 2}
   activeSkill: {fileID: 11400000, guid: 0835dcdb3becd4a48b30fa7c1680f849, type: 2}
   passiveSkill: {fileID: 11400000, guid: 0835dcdb3becd4a48b30fa7c1680f849, type: 2}
@@ -195,6 +174,34 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &4537789486287846067
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8428398282218722837}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7a6915c1f2aa4468388ccefe03c943, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterData: {fileID: 8428398282218722841}
+  aiType: 0
+  attackPos: {fileID: 0}
+  attackPref: {fileID: 0}
+  buffType: 0
+  buffTime: 0
+  buffScale: 0
+  unitType: 1
+  target: {fileID: 0}
+  activeTarget: {fileID: 0}
+  heroList: []
+  enemyList: []
+  citizenList: []
+  unitState: 0
+  battleState: 0
+  isMapTriggerEnter: 0
 --- !u!1001 &8428398282547750826
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -658,4 +665,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d32210bb7c1ee77498f0919b502ecaa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unit: {fileID: 8428398282218722840}
+  unit: {fileID: 4537789486287846067}

@@ -1,8 +1,7 @@
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class AttackableHero : AttackableUnit
+public class AttackableHero : AttackableUnit
 {
     protected HeroUi heroUI;
 
@@ -68,6 +67,7 @@ public abstract class AttackableHero : AttackableUnit
 
                     BattleState = UnitBattleState.MoveToTarget;
                     nowUpdate = BattleUpdate;
+
                     break;
                 case UnitState.Die:
                     pathFind.enabled = false;
@@ -117,6 +117,15 @@ public abstract class AttackableHero : AttackableUnit
     }
 
     bool testRot = false;
+    public override bool IsAuto {
+        get {
+            return isAuto;
+        }
+        set {
+            isAuto = value;
+            characterData.activeSkill.isAuto = isAuto;
+        }
+    }
 
     protected override void Awake()
     {
@@ -140,7 +149,10 @@ public abstract class AttackableHero : AttackableUnit
     {
         heroUI = _heroUI;
         //BattleState = UnitBattleState.ActiveSkill;
-        heroUI.heroSkill.Set(characterData.activeSkill.cooldown); //±Ã±Ø±â ÄðÅ¸ÀÓ µî·Ï
+        heroUI.heroSkill.
+            Set(
+            characterData.activeSkill.cooldown,
+            characterData.activeSkill.skillDescription); //±Ã±Ø±â ÄðÅ¸ÀÓ µî·Ï
         heroUI.heroSkill.
             SetActions(
             ReadyActiveSkill,
@@ -151,6 +163,7 @@ public abstract class AttackableHero : AttackableUnit
 
     public override void ResetData()
     {
+        base.ResetData();
         testRot = false;
         UnitState = UnitState.Idle;
         battleState = UnitBattleState.None;
@@ -159,25 +172,9 @@ public abstract class AttackableHero : AttackableUnit
         lastActiveSkillTime = lastNormalAttackTime = lastNavTime = Time.time;
         target = null;
         animator.Rebind();
-        //UnitHp = characterData.data.healthPoint;
-        
-        // Test
         UnitHp = characterData.data.currentHp;
     }
 
-    protected override void SearchTarget()
-    {
-
-    }
-
-    public override void NormalAttack()
-    {
-
-    }
-
-    public override void PassiveSkill()
-    {
-    }
     public override void ReadyActiveSkill()
     {
         coOnIndicator = StartCoroutine(characterData.activeSkill.SkillCoroutine());
@@ -207,10 +204,6 @@ public abstract class AttackableHero : AttackableUnit
             StopAOESkillCoroutine();
         }
     }
-    public override void OnActiveSkill()
-    {
-        characterData.activeSkill.OnActiveSkill(characterData.data);
-    }
     private void StopAOESkillCoroutine()
     {
         StopCoroutine(coOnIndicator);
@@ -224,9 +217,19 @@ public abstract class AttackableHero : AttackableUnit
     {
 
     }
-
+    
     protected override void BattleUpdate()
     {
+        if (isAuto && heroUI.heroSkill.IsCoolDown)
+        {
+            SearchActiveTarget();
+            if (activeTarget != null && InRangeActiveAttack)
+            {
+                heroUI.heroSkill.OnDownSkill();
+                characterData.activeSkill.targetPos = activeTarget.transform.position;
+                heroUI.heroSkill.OnAutoSkillActive();
+            }
+        }
         //Å¸°ÙÀÌ ¾øÀ»¶§ Å¸°ÙÀ» Ã£À¸¸é Å¸°ÙÀ¸·Î °¡±â
         switch (BattleState)
         {
@@ -234,7 +237,15 @@ public abstract class AttackableHero : AttackableUnit
             case UnitBattleState.MoveToTarget:
             case UnitBattleState.BattleIdle:
                 animator.SetFloat("Speed", pathFind.velocity.magnitude / characterData.data.moveSpeed);
-                if (IsAlive(target))
+                if (aiType == UnitAiType.Range)
+                {
+                    if (Time.time - lastSearchTime >= searchDelay)
+                    {
+                        lastSearchTime = Time.time;
+                        SearchAi();
+                    }
+                }
+                if (IsAlive(target) && target != this)
                 {
                     Vector3 targetDirection = target.transform.position - transform.position;
                     Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);
@@ -242,7 +253,7 @@ public abstract class AttackableHero : AttackableUnit
                 }
                 else
                 {
-                    SearchTarget();
+                    SearchAi();
                     if (IsAlive(target))
                     {
                         if (InRangeNormalAttack && CanNormalAttackTime)
@@ -386,7 +397,7 @@ public abstract class AttackableHero : AttackableUnit
             BattleState = UnitBattleState.BattleIdle;
         }
     }
-    public override void PassiveSkillEnd()
+    public override void PassiveSkillEvent()
     {
 
     }
@@ -438,4 +449,5 @@ public abstract class AttackableHero : AttackableUnit
 
         bufferState.Buffer(buff.type, -buff.buffScale);
     }
+
 }

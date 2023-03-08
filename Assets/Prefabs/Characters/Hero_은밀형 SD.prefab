@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 8614529909882607363}
   - component: {fileID: 6141334698470784958}
   - component: {fileID: 8489007089072879661}
-  - component: {fileID: 6991144328854555625}
   - component: {fileID: 8489007089072879663}
   - component: {fileID: -6316505954286571692}
-  m_Layer: 0
+  - component: {fileID: 4251690106525898415}
+  m_Layer: 6
   m_Name: "Hero_\uC740\uBC00\uD615 SD"
   m_TagString: Hero
   m_Icon: {fileID: 0}
@@ -90,25 +90,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &6991144328854555625
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8489007089072879651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33e70469d1654634b8dd9335457eb980, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterData: {fileID: 8489007089072879663}
-  target: {fileID: 0}
-  heroList: []
-  enemyList: []
-  citizenList: []
-  unitState: 0
-  battleState: 0
 --- !u!114 &8489007089072879663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -127,7 +108,6 @@ MonoBehaviour:
     grade: 0
     maxGrade: 0
     job: 
-    energy: 0
     level: 0
     exp: 0
     likeability: 0
@@ -140,7 +120,7 @@ MonoBehaviour:
     criticalDmg: 2
     evasion: 0
     accuracy: 0.5
-    synergys: 
+    equipment: {fileID: 0}
   attack: {fileID: 11400000, guid: d5b9a7358e0855b46acac612b4428307, type: 2}
   activeSkill: {fileID: 11400000, guid: c9f64039ca8bd8146ae8d8344c554f5f, type: 2}
   passiveSkill: {fileID: 11400000, guid: 72914e2e9e922d84eb7b5c550ed005df, type: 2}
@@ -162,6 +142,32 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
+--- !u!114 &4251690106525898415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8489007089072879651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 91e7eaca1cb538941a4bd68f0c716979, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterData: {fileID: 8489007089072879663}
+  unitType: 0
+  aiType: 2
+  normalAttackTargetType: 1
+  attackPos: {fileID: 0}
+  attackPref: {fileID: 0}
+  activeAttackTargetType: 1
+  target: {fileID: 0}
+  activeTarget: {fileID: 0}
+  heroList: []
+  enemyList: []
+  citizenList: []
+  unitState: -1
+  battleState: -1
 --- !u!1001 &970483107669232990
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -248,7 +254,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d32210bb7c1ee77498f0919b502ecaa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unit: {fileID: 6991144328854555625}
+  unit: {fileID: 4251690106525898415}
 --- !u!4 &970850602951436016 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4220219224533934, guid: 0276fd68d2eb8e64aa562b0c13ae1bf9,

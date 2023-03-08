@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8634998261490399994}
   - component: {fileID: 8634998261490399943}
-  - component: {fileID: 7014321635573080319}
+  - component: {fileID: 7014321635573080320}
   m_Layer: 0
   m_Name: MapEventTriggerEnemy
   m_TagString: Untagged
@@ -47,7 +47,7 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 20, y: 10, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &7014321635573080319
+--- !u!114 &7014321635573080320
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -56,18 +56,21 @@ MonoBehaviour:
   m_GameObject: {fileID: 8634998261490399942}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: eb57492b387a6bd4a89af0ecfe29738b, type: 3}
+  m_Script: {fileID: 11500000, guid: a0567426d27cfa848a6faaf0efe9f6f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heroSettingPositions: []
+  heroSettingPositions:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   enemySettingPositions:
   - {fileID: 7014321635646178834}
   - {fileID: 7014321635646178845}
   - {fileID: 7014321635646178844}
   enemys: []
   useEnemys: []
-  isStageEnd: 1
-  manager: {fileID: 0}
+  isStageEnd: 0
+  isMissionEnd: 1
 --- !u!1001 &8634998261441395401
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -161,7 +164,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35b2e5b6fddccbd418bba2cf95cd4d4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy: {fileID: 8428398282218722840, guid: ce9d68e4ebf1692408f9cae7d2a01b1d, type: 3}
+  enemy: {fileID: 4537789486287846067, guid: ce9d68e4ebf1692408f9cae7d2a01b1d, type: 3}
   enemyCount: 5
   enemys: []
 --- !u!1 &3052140531052551982 stripped
@@ -182,7 +185,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35b2e5b6fddccbd418bba2cf95cd4d4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy: {fileID: 8428398282218722840, guid: ce9d68e4ebf1692408f9cae7d2a01b1d, type: 3}
+  enemy: {fileID: 4537789486287846067, guid: ce9d68e4ebf1692408f9cae7d2a01b1d, type: 3}
   enemyCount: 5
   enemys: []
 --- !u!1 &3052140531098692730 stripped
@@ -203,6 +206,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 35b2e5b6fddccbd418bba2cf95cd4d4d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemy: {fileID: 8428398282218722840, guid: ce9d68e4ebf1692408f9cae7d2a01b1d, type: 3}
+  enemy: {fileID: 4537789486287846067, guid: ce9d68e4ebf1692408f9cae7d2a01b1d, type: 3}
   enemyCount: 5
   enemys: []

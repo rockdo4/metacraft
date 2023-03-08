@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public abstract class AttackableEnemy : AttackableUnit
+public class AttackableEnemy : AttackableUnit
 {
     [SerializeField]
-    public void SetTargetList(List<AttackableHero> list) => heroList = list;
+    public void SetTargetList(List<AttackableUnit> list) => heroList = list;
 
     private AttackedDamageUI floatingDamageText;
     private HpBarManager hpBarManager;
@@ -110,6 +110,7 @@ public abstract class AttackableEnemy : AttackableUnit
     }
     public override void ResetData()
     {
+        base.ResetData();
         UnitState = UnitState.None;
         battleState = UnitBattleState.None;
         UnitHp = characterData.data.healthPoint;
@@ -119,15 +120,9 @@ public abstract class AttackableEnemy : AttackableUnit
         animator.Rebind();
     }
 
-    protected override void SearchTarget()
+    public override void PassiveSkillEvent()
     {
-    }
 
-    public override void NormalAttack()
-    {
-    }
-    public override void PassiveSkill()
-    {
     }
     public override void ReadyActiveSkill()
     {
@@ -139,6 +134,14 @@ public abstract class AttackableEnemy : AttackableUnit
     }
     protected override void BattleUpdate()
     {
+        if (isAuto && target != null && Time.time - lastActiveSkillTime > characterData.activeSkill.cooldown)
+        {
+            if (InRangeNormalAttack)
+            {
+                lastActiveSkillTime = Time.time;
+                BattleState = UnitBattleState.ActiveSkill;
+            }
+        }
         //타겟이 없을때 타겟을 찾으면 타겟으로 가기
         switch (BattleState)
         {
@@ -154,7 +157,7 @@ public abstract class AttackableEnemy : AttackableUnit
                 }
                 else
                 {
-                    SearchTarget();
+                    SearchAi();
                     if (IsAlive(target))
                     {
                         if (InRangeNormalAttack && CanNormalAttackTime)
@@ -211,6 +214,7 @@ public abstract class AttackableEnemy : AttackableUnit
 
     protected override void MoveNextUpdate()
     {
+
     }
     protected override void ReturnPosUpdate()
     {
@@ -259,9 +263,44 @@ public abstract class AttackableEnemy : AttackableUnit
     public override void PassiveSkillEnd()
     {
     }
+    public override void OnActiveSkill()    //테스트용
+    {
+        if (characterData.attack.targetNumLimit == 1)
+        {
+            target.OnDamage(GetFixedDamage, false);
+            return;
+        }
+
+        List<AttackableUnit> attackTargetList = new();
+
+        var targetList = (activeAttackTargetType == UnitType.Hero) ? heroList : enemyList;
+        foreach (var now_target in targetList)
+        {
+            Vector3 interV = now_target.transform.position - transform.position;
+            if (interV.magnitude <= characterData.attack.distance)
+            {
+                float angle = Vector3.Angle(transform.forward, interV);
+
+                if (Mathf.Abs(angle) < characterData.attack.angle / 2f)
+                {
+                    attackTargetList.Add(now_target);
+                }
+            }
+        }
+
+        attackTargetList = GetNearestUnitList(attackTargetList, characterData.attack.targetNumLimit);
+
+        for (int i = 0; i < attackTargetList.Count; i++)
+        {
+            attackTargetList[i].OnDamage(GetFixedDamage, false);
+        }
+    }
     public override void ActiveSkillEnd()
     {
+        pathFind.isStopped = false;
         animator.SetTrigger("ActiveEnd");
+        lastNormalAttackTime = Time.time;
+        BattleState = UnitBattleState.BattleIdle;
         base.ActiveSkillEnd();
     }
 
@@ -275,11 +314,13 @@ public abstract class AttackableEnemy : AttackableUnit
 
     public override void AddBuff(BuffType type, float scale, float duration)
     {
-        Buff buff = new();
-
-        buff.type = type;
-        buff.buffScale = scale;
-        buff.duration = duration;
+        Buff buff = new()
+        {
+            type = type,
+            buffScale = scale,
+            duration = duration
+        };
+        buff.removeBuff += RemoveBuff;
 
         buffList.Add(buff);
     }

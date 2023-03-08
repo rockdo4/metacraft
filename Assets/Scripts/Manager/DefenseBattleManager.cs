@@ -28,7 +28,7 @@ public class DefenseBattleManager : TestBattleManager
             SetHeroReturnPositioning(startPositions);
         }
     }
-    public override void GetEnemyList(ref List<AttackableEnemy> enemyList) 
+    public override void GetEnemyList(ref List<AttackableUnit> enemyList) 
     {
         enemyList = triggers[0].useEnemys;
     }

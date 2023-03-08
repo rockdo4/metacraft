@@ -54,7 +54,7 @@ public class BeltScrollBattleManager : TestBattleManager
         return triggers[currTriggerIndex].useEnemys.Count;
     }
 
-    public override void GetEnemyList(ref List<AttackableEnemy> enemyList)
+    public override void GetEnemyList(ref List<AttackableUnit> enemyList)
     {
         enemyList = triggers[currTriggerIndex].useEnemys;
     }
@@ -181,6 +181,11 @@ public class BeltScrollBattleManager : TestBattleManager
         ResetRoads();
         CreateRoad(platform);
         AddRoadTrigger();
+
+        if (thisNode.nodeNameText.text == "Boss")
+        {
+            triggers.Last().isMissionEnd = true;
+        }
 
         // ∆‰¿ÃµÂ æ∆øÙ
         coFadeOut = StartCoroutine(CoFadeOut());
