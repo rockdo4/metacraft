@@ -14,6 +14,18 @@ public class BeltScrollBattleManager : TestBattleManager
     private Coroutine coMovingMap;
     private Coroutine coResetMap;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.B))
+        {
+            thisNode.type = TreeNodeTypes.Boss;
+            DestroyRoad();
+            RemoveRoadTrigger();
+            ResetRoads();
+            triggers.Last().isMissionEnd = true;
+        }
+    }
+
     private void Start()
     {
         for (int i = 0; i < triggers.Count; i++)
@@ -79,7 +91,11 @@ public class BeltScrollBattleManager : TestBattleManager
 
         if (readyCount == 0)
         {
-            if (triggers[currTriggerIndex + 1] != null && triggers[currTriggerIndex + 1].isStageEnd)
+            if (triggers[currTriggerIndex].isMissionEnd)
+            {
+                SetStageClear();
+            }
+            else if (triggers[currTriggerIndex + 1] != null && triggers[currTriggerIndex + 1].isStageEnd)
             {
                 ChoiceNextStage();
             }
@@ -88,10 +104,6 @@ public class BeltScrollBattleManager : TestBattleManager
                 readyCount = useHeroes.Count;
                 base.OnReady();
                 coMovingMap = StartCoroutine(CoMovingMap());
-            }
-            else if (triggers[currTriggerIndex].isMissionEnd)
-            {
-                SetStageClear();
             }
         }
     }
