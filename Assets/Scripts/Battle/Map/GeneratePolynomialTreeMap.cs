@@ -172,17 +172,38 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
     {
         int parentLength = parents.Count;
         int index = 0;
+
+        int restBranch = 0;
+        TreeNodeObject parent;
         for (int i = 0; i < parentLength; i++)
         {
-            TreeNodeObject parent = parents[i];
+            parent = parents[i];
+            int count = blueprint[parent.floor][parent.number].branchCount;
+            restBranch += count;
+        }
+
+        for (int i = 0; i < parentLength; i++)
+        {
+            parent = parents[i];
             int count = blueprint[parent.floor][parent.number].branchCount;
 
             for (int j = 0; j < count; j++)
             {
                 parents[i].AddChildren(childrens[index]);
                 CreateNewLine(parent.tail.position, childrens[index].head.position);
+                restBranch--;
                 if (index != childrens.Count - 1)
+                {
                     index++;
+                }
+            }
+
+            if (index != childrens.Count - 1 &&
+                count != 1 &&
+                restBranch > childrens.Count - index)
+            {
+                Debug.Log($"{parent.data} {count}");
+                index--;
             }
         }
     }
