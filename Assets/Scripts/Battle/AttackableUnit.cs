@@ -140,6 +140,8 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void ReadyActiveSkill();
     public virtual void OnActiveSkill() { }
 
+    protected bool isAuto = false;
+
     public virtual void NormalAttackEnd()
     {
         if (IsAlive(target))

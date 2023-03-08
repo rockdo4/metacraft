@@ -4,9 +4,21 @@ using UnityEngine;
 public class SkillAreaIndicator : MonoBehaviour
 {
     public SkillTargetType TargetType { get; set; }
+    public MeshRenderer Renderer { get; private set; }
 
-    private HashSet<Collider> unitsInArea = new();
-    private void OnTriggerEnter(Collider other)
+    protected HashSet<Collider> unitsInArea = new();
+    protected virtual void Awake()
+    {
+        Renderer = GetComponent<MeshRenderer>();
+    }
+    private void OnEnable()
+    {
+        //if(meshRenderer == null)
+        //    meshRenderer = GetComponent<MeshRenderer>();
+
+        Renderer.enabled = true;
+    }
+    protected virtual void OnTriggerEnter(Collider other)
     {
         switch (TargetType)
         {
@@ -24,7 +36,7 @@ public class SkillAreaIndicator : MonoBehaviour
                 break;
         }
     }
-    private void OnTriggerExit(Collider other)
+    protected virtual void OnTriggerExit(Collider other)
     {
         switch (TargetType)
         {
@@ -42,11 +54,11 @@ public class SkillAreaIndicator : MonoBehaviour
                 break;
         }
     }
-    private void IsColliderIn(bool isIn, Collider other)
+    protected virtual void IsColliderIn(bool isIn, Collider other)
     {
-        other.GetComponent<Outline>().enabled = isIn; 
+        other.GetComponent<Outline>().enabled = isIn;
 
-        if(isIn)
+        if (isIn)
             unitsInArea.Add(other);
         else
             unitsInArea.Remove(other);

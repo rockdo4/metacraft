@@ -1,6 +1,8 @@
 public enum EffectEnum
 {
     None = -1,
-    AOEattackTest1,
+    CFXRExplosion1,
+    CFXR3MagicAuraARunic,
+    CFXRImpactGlowingHDRBlue,
     Count,
 }

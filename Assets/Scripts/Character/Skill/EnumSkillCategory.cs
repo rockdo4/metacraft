@@ -10,8 +10,7 @@ public enum SkillAreaShape
 {
     None = -1,
     Sector,
-    Rectangle,
-    Circle,
+    Rectangle,    
     Count,
 }
 public enum SkillTargetType
