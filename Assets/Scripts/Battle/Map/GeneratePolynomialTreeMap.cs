@@ -2,11 +2,13 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI.Extensions;
+using static UnityEngine.UI.Extensions.ContentScrollSnapHorizontal.MoveInfo;
 
 public class GeneratePolynomialTreeMap : MonoBehaviour
 {
     // Root, Boss 타입은 트리에 단 하나만 존재
-    // 트리 가지의 수를 최소 1개, 최대 3개로 고정하고 2, 3개의 확률을 조정함
+    // 트리 가지의 수를 최소 1개, 최대 3개로 고정하고
+    // 가지가 2개, 3개일 확률을 조정함
     public TreeNodeObject root;
     public TreeNodeObject boss;
     public int height = 8;
@@ -33,7 +35,8 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
     private List<GameObject> bundles = new();
     private List<List<TreeNodeObject>> nodes = new();
     private List<GameObject> lines = new();
-    private List<List<(TreeNodeTypes nodeType, int branchCount)>> blueprint;
+    private List<List<(TreeNodeTypes nodeType, int branchCount)>> blueprint = new();
+    private int nodeIndex = 0;
 
     private void Update()
     {
@@ -46,22 +49,12 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
 
     public void CreateTreeGraph()
     {
+        nodeIndex = 0;
         DestroyAllObjs();
-        CreateBundles(height - 2);  // 트리의 깊이 설정
-        CreateBlueprint();          // 설계도 생성
-        CreateNodes();              // 노드 생성
-
-        return;
-        // 노드 생성과 트리 구조 완성
-        //GameObject rootObj = CreateNewNodeInstance(bundles[0].transform, "Root", TreeNodeTypes.Root);
-        //GameObject bossObj = CreateNewNodeInstance(bundles[^1].transform, "Boss", TreeNodeTypes.Boss);
-        //root = rootObj.GetComponent<TreeNodeObject>();
-        //boss = bossObj.GetComponent<TreeNodeObject>();
-        //AddChilds(root, height - 2);
-
-        // 노드끼리 물리적 연결 (UI Line Renderer).
-        // UI Layout Group에서 포지션을 배치하기 위한 시간이 필요해서 코루틴으로 실행 시간 차이를 줌
-        //StartCoroutine(CoLinkNodes());
+        CreateBundles(height - 2);      // 트리의 깊이 설정
+        CreateBlueprint();              // 설계도 생성
+        CreateNodes();                  // 노드 생성
+        StartCoroutine(CoLinkNodes());  // 노드 연결
     }
 
     private void CreateBlueprint()
@@ -99,8 +92,9 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
                 {
                     branchWidth += elem.branchCount;
                 }
+                if (branchWidth > width)
+                    branchWidth = width;
             }
-
             blueprint.Add(new(branchWidth));
             for (int j = 0; j < branchWidth; j++)
             {
@@ -120,11 +114,14 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
     {
         for (int i = 0; i < height; i++)
         {
-            foreach ((TreeNodeTypes type, int branchCount) tuple in blueprint[i])
+            int number = 0;
+            foreach ((TreeNodeTypes type, int branchCount) in blueprint[i])
             {
-                CreateNewNodeInstance(bundles[i].transform, i, $"{tuple.type}", tuple.type);
+                CreateNewNodeInstance(bundles[i].transform, i, number++, $"{type}{nodeIndex++}", type);
             }
         }
+        root = nodes[0][0].GetComponent<TreeNodeObject>();
+        boss = nodes[height - 1][0].GetComponent<TreeNodeObject>();
     }
 
     private TreeNodeTypes SelectType()
@@ -159,68 +156,89 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
         return returnType;
     }
 
-    private void AddChilds(TreeNodeObject parent, int depth)
-    {
-        if (depth == 0)
-        {
-            parent.AddChildren(boss);
-            return;
-        }
-
-        int count = 1;
-        //if (parent.Equals(root))
-        //    count = 2;
-        //else
-        //{
-        //    float randValue = Random.Range(0, 1f);
-        //    if (randValue < branch3Probability)
-        //        count = 3;
-        //    else if (randValue < branch2Probability)
-        //        count = 2;
-        //}
-
-        for (int i = 0; i < count; i++)
-        {
-            //TreeNodeTypes randomType = (TreeNodeTypes)Random.Range((int)TreeNodeTypes.Normal, (int)TreeNodeTypes.Event + 1);
-
-            //// 인스턴스 생성과 데이터 연결
-            //TreeNodeObject childNodeObj =
-            //    CreateNewNodeInstance(bundles[height - 1 - depth].transform, $"{randomType}", randomType).
-            //    GetComponent<TreeNodeObject>();
-            //parent.AddChildren(childNodeObj);
-        }
-
-        for (int i = 0; i < count; i++)
-            AddChilds(parent.childrens[i], depth - 1);
-    }
-
     private IEnumerator CoLinkNodes()
     {
+        // UI Layout Group에서 포지션을 배치하기 위한 시간이 필요해서 코루틴으로 실행 시간 차이를 줌
         yield return null;
-        LinkNodes(root);
+        int nodesLength = nodes.Count;
+        for (int i = 0; i < nodesLength - 1; i++)
+        {
+            int bundleLength = nodes[i].Count;
+            for (int j = 0; j < bundleLength; j++)
+            {
+                LinkNodes(nodes[i][j]);
+            }
+        }
     }
 
     private void LinkNodes(TreeNodeObject parent)
     {
-        int count = parent.childrens.Count;
-        for (int i = 0; i < count; i++)
+        int hIndex = parent.floor;
+        int wIndex = parent.number;
+        if (hIndex == height - 2)
         {
-            TreeNodeObject child = parent.childrens[i];
-            GameObject newLineRenderer = Instantiate(uiLineRendererPrefab, lineRendererTarget);
-            lines.Add(newLineRenderer);
-            UILineRenderer uilr = newLineRenderer.GetComponent<UILineRenderer>();
-            uilr.Points[0] = lineRendererTarget.InverseTransformPoint(parent.tail.position);
-            uilr.Points[1] = lineRendererTarget.InverseTransformPoint(child.head.position);
-            uilr.enabled = true;
-            LinkNodes(child);
+            parent.AddChildren(boss);
+            GameObject lrObj = Instantiate(uiLineRendererPrefab, lineRendererTarget);
+            lines.Add(lrObj);
+            UILineRenderer lr = lrObj.GetComponent<UILineRenderer>();
+            lr.Points[0] = lineRendererTarget.InverseTransformPoint(parent.tail.position);
+            lr.Points[1] = lineRendererTarget.InverseTransformPoint(boss.head.position);
+            lr.enabled = true;
+            Debug.Log($"{parent.data} 보스 연결");
+            return;
+        }
+
+        (_, int branchCount) = blueprint[hIndex][wIndex];
+        int curBranchCount = blueprint[hIndex].Count;
+        int nextBranchCount = blueprint[hIndex + 1].Count;
+        int childStartIndex = wIndex;
+        if (branchCount > 1 && wIndex != 0)
+        {
+            if (wIndex == 0)
+            {
+                childStartIndex = 0;
+                Debug.Log($"{parent.data} 1번 가지 수:{branchCount}");
+            }
+            else if (wIndex == nextBranchCount - 1)
+            {
+                childStartIndex = 2 * nextBranchCount - branchCount - curBranchCount;
+                Debug.Log($"{parent.data} 2번 가지 수:{branchCount}");
+            }
+            else
+            {
+                Debug.Log($"{parent.data} 3번 가지 수:{branchCount}");
+                childStartIndex += (1 - branchCount + (nextBranchCount == wIndex + 1 ? 0 : Random.Range(0, 2)));
+            }
+        }
+        else if (curBranchCount < nextBranchCount && wIndex == nextBranchCount - 1)
+        {
+            childStartIndex = 2 * nextBranchCount - branchCount - curBranchCount;
+            Debug.Log($"{parent.data} 5번 가지 수:{branchCount}");
+        }
+        else
+        {
+            Debug.Log($"{parent.data} 4번 가지 수:{branchCount}");
+        }
+
+        for (int j = 0; j < branchCount; j++)
+        {
+            TreeNodeObject child = nodes[hIndex + 1][childStartIndex + j];
+            parent.AddChildren(child);
+
+            GameObject lrObj = Instantiate(uiLineRendererPrefab, lineRendererTarget);
+            lines.Add(lrObj);
+            UILineRenderer lr = lrObj.GetComponent<UILineRenderer>();
+            lr.Points[0] = lineRendererTarget.InverseTransformPoint(parent.tail.position);
+            lr.Points[1] = lineRendererTarget.InverseTransformPoint(child.head.position);
+            lr.enabled = true;
         }
     }
 
-    private GameObject CreateNewNodeInstance(Transform target, int hIndex, string data, TreeNodeTypes type)
+    private GameObject CreateNewNodeInstance(Transform target, int hIndex, int wIndex, string data, TreeNodeTypes type)
     {
         GameObject instanceNode = Instantiate(treeNodePrefab, target);
         TreeNodeObject node = instanceNode.GetComponent<TreeNodeObject>();
-        node.SetInit(data, type);
+        node.SetInit(data, hIndex, wIndex, type);
         nodes[hIndex].Add(node);
         return instanceNode;
     }
@@ -250,6 +268,13 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
             }
         }
         nodes.Clear();
+
+        int bpcount = blueprint.Count;
+        for (int i = 0; i < bpcount; i++)
+        {
+            blueprint[i]?.Clear();
+        }
+        blueprint.Clear();
 
         int bcount = bundles.Count;
         for (int i = 0; i < bcount; i++)
