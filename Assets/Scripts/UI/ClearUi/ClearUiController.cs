@@ -21,6 +21,10 @@ public class ClearUiController : View
 
     public void SetData()
     {
+        //플레이어 경험치 상승
+        int playerExp = (int)GameManager.Instance.currentSelectMission["Experience"]*10;
+        GameManager.Instance.playerData.officeExperience += playerExp;
+
         foreach (var hero in heroes)
         {
             int exp = (int)GameManager.Instance.currentSelectMission["Experience"];

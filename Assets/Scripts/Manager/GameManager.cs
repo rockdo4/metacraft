@@ -24,6 +24,7 @@ public class GameManager : Singleton<GameManager>
     public Dictionary<string, Sprite> illustrationSprites = new();
     public List<Dictionary<string, object>> missionInfoList;
     public List<Dictionary<string, object>> dispatchInfoList;
+    public List<Dictionary<string, object>> officeInfoList;
 
     // Office Select
     public GameObject currentSelectObject; // Hero Info
@@ -36,7 +37,6 @@ public class GameManager : Singleton<GameManager>
     public override void Awake()
     {
         base.Awake();
-        LoadAllData();
         StartCoroutine(LoadAllResources());
     }
 
@@ -63,7 +63,7 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator LoadAllResources()
     {
-        // 텍스트 리소스 로드
+        // 미션 테이블 로드
         var mit = Addressables.LoadAssetAsync<TextAsset>("MissionInfoTable");
 
         mit.Completed +=
@@ -73,13 +73,23 @@ public class GameManager : Singleton<GameManager>
                     Addressables.Release(obj);
                 };
 
-        // 텍스트 리소스 로드
+        // 파견 테이블 로드
         var dit = Addressables.LoadAssetAsync<TextAsset>("DispatchInfoTable");
 
         dit.Completed +=
                 (AsyncOperationHandle<TextAsset> obj) =>
                 {
                     dispatchInfoList = CSVReader.SplitTextAsset(obj.Result);
+                    Addressables.Release(obj);
+                };
+
+        // 오피스 테이블 로드
+        var oit = Addressables.LoadAssetAsync<TextAsset>("OfficeTable");
+
+        oit.Completed +=
+                (AsyncOperationHandle<TextAsset> obj) =>
+                {
+                    officeInfoList = CSVReader.SplitTextAsset(obj.Result);
                     Addressables.Release(obj);
                 };
 
@@ -137,6 +147,8 @@ public class GameManager : Singleton<GameManager>
             yield return null;
         }
         ReleaseAddressable(handles);
+
+        LoadAllData();
     }
 
     public void ReleaseAddressable(List<AsyncOperationHandle> handles)
@@ -171,6 +183,11 @@ public class GameManager : Singleton<GameManager>
         if (Input.GetKeyDown(KeyCode.L))
         {
             LoadAllData();
+        }
+
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            playerData.AddOfficeExperience(300);
         }
         // Test Key End
     }
@@ -291,6 +308,6 @@ public class GameManager : Singleton<GameManager>
     //요일 변경
     public void NextDay()
     {
-        playerData.currentDay = playerData.currentDay != DayOfWeek.일 ? playerData.currentDay + 1 : DayOfWeek.월; ;
+        playerData.currentDay = playerData.currentDay != DayOfWeek.일 ? playerData.currentDay + 1 : DayOfWeek.월;
     }
 }

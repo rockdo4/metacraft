@@ -23,9 +23,4 @@ public class OfficeMainWindow : View
         playerGold.text = pd.gold.ToString();
         currentDay.text = $"{pd.currentDay}ø‰¿œ";
     }
-
-    public void OnMouseDown()
-    {
-        Logger.Debug("11");
-    }
 }
