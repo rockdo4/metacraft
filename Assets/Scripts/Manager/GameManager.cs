@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -33,6 +34,8 @@ public class GameManager : Singleton<GameManager>
     // Dispatch Select
 
     public List<Effect> effects; // 사용할 이펙트들
+
+    public event Action<string> playerLevelUp;
 
     public override void Awake()
     {
@@ -187,7 +190,7 @@ public class GameManager : Singleton<GameManager>
 
         if (Input.GetKeyDown(KeyCode.U))
         {
-            playerData.AddOfficeExperience(300);
+            AddOfficeExperience(300);
         }
         // Test Key End
     }
@@ -309,5 +312,35 @@ public class GameManager : Singleton<GameManager>
     public void NextDay()
     {
         playerData.currentDay = playerData.currentDay != DayOfWeek.일 ? playerData.currentDay + 1 : DayOfWeek.월;
+    }
+
+    public void AddOfficeExperience(int exp)
+    {
+        playerData.officeExperience += exp;
+        for (int i = 1; i < officeInfoList.Count; i++)
+        {
+            if (playerData.officeExperience <= (int)officeInfoList[i]["NeedExp"])
+            {
+                PlayerInfoUpdate(i);
+                if (playerLevelUp != null)
+                {
+                    playerLevelUp((string)officeInfoList[i]["OfficeImage"]);
+                }
+                break;
+            }
+        }
+    }
+
+    private void PlayerInfoUpdate(int level)
+    {
+        playerData.officeLevel = (int)officeInfoList[level]["OfficeLevel"];
+        playerData.missionDifficulty = (int)officeInfoList[level]["MissionDifficulty"];
+        playerData.isTrainingOpen = (int)officeInfoList[level]["IsTrainingOpen"];
+        playerData.isDispatchOpen = (int)officeInfoList[level]["IsDispatchOpen"];
+        playerData.trainingLevel = (int)officeInfoList[level]["TrainingLevel"];
+        playerData.dispatchLevel = (int)officeInfoList[level]["DispatchLevel"];
+        playerData.stamina = (int)officeInfoList[level]["Stamina"];
+        playerData.inventoryCount = (int)officeInfoList[level]["InventoryCount"];
+        Logger.Debug($"현재 레벨 : {playerData.officeLevel}");
     }
 }
