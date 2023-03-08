@@ -1,6 +1,6 @@
 public enum TreeNodeTypes
 {
-    None = -1,
+    None,
     Root,
     Normal,
     Threat,

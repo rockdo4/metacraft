@@ -163,15 +163,15 @@ public class GameManager : Singleton<GameManager>
         }
 
         // Test Key Start
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            SaveAllData();
-        }
+        //if (Input.GetKeyDown(KeyCode.K))
+        //{
+        //    SaveAllData();
+        //}
 
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            LoadAllData();
-        }
+        //if (Input.GetKeyDown(KeyCode.L))
+        //{
+        //    LoadAllData();
+        //}
         // Test Key End
     }
 
@@ -192,13 +192,16 @@ public class GameManager : Singleton<GameManager>
             sb.AppendLine($"Hero_{data.name};{JsonUtility.ToJson(data)}");
         }
         File.WriteAllText(GetSaveFilePath(), sb.ToString());
-        Logger.Debug(sb);
     }
 
     public void LoadAllData()
     {
         if (!File.Exists(GetSaveFilePath()))
+        {
+            for (int i = 0; i < 3; i++)
+                myHeroes.Add(CreateNewHero(i));
             return;
+        }
 
         var loadData = CSVReader.ReadByPath(GetSaveFilePath(), false);
         foreach (var item in loadData)
@@ -224,7 +227,6 @@ public class GameManager : Singleton<GameManager>
                     Logger.Debug($"Load failed {heroName}");
                 }
             }
-            Logger.Debug($"{item["ID"]}:{item["Contents"]}");
         }
     }
 
@@ -292,5 +294,6 @@ public class GameManager : Singleton<GameManager>
     public void NextDay()
     {
         playerData.currentDay = playerData.currentDay != DayOfWeek.ÀÏ ? playerData.currentDay + 1 : DayOfWeek.¿ù; ;
+        playerData.cumulateGameDay++;
     }
 }

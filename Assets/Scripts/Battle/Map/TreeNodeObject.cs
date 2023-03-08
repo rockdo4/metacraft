@@ -12,6 +12,7 @@ public class TreeNodeObject : MonoBehaviour, IComparable<TreeNodeObject>
     public string data;
     public TreeNodeTypes type;
     public List<TreeNodeObject> childrens = new ();
+    public int childrensCount = 0;
 
     public void SetInit(string data, TreeNodeTypes type = TreeNodeTypes.None)
     {
@@ -23,6 +24,7 @@ public class TreeNodeObject : MonoBehaviour, IComparable<TreeNodeObject>
     public void AddChildren(TreeNodeObject node)
     {
         childrens.Add(node);
+        childrensCount++;
     }
 
     public int CompareTo(TreeNodeObject other)
