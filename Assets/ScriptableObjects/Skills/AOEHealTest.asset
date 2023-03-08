@@ -15,14 +15,18 @@ MonoBehaviour:
   id: 0
   skillName: 
   preCooldown: 0
-  cooldown: 3
-  distance: 0
+  cooldown: 5
+  distance: 4
   targetNumLimit: 0
   angle: 0
   coefficientType: 0
   coefficient: 1
   targetType: 1
+  searchType: 3
   effectEnum: 1
+  isAuto: 0
+  targetPos: {x: 0, y: 0, z: 0}
+  skillDescription: "\uD790\uC774\uC5D0\uC694"
   skillAreaIndicatorPrefab: {fileID: 6672067328229480615, guid: 0da645c26f09e074abad419ddc09fafb,
     type: 3}
   layerM:
@@ -30,9 +34,10 @@ MonoBehaviour:
     m_Bits: 256
   castRangeIndicatorPrefab: {fileID: 1572453404982893073, guid: 3eef904cc2b274c4dbec7f0543fc5a68,
     type: 3}
-  isAutoTargeting: 0
   areaShapeType: 0
-  areaRadiusOrRange: 0
-  areaAngleOrWidth: 0
+  sectorRadius: 0
+  sectorAngle: 0
+  widthZ: 0
+  widthX: 0
   isCriticalPossible: 0
   castRangeLimit: 10

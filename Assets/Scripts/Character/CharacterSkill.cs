@@ -19,12 +19,18 @@ public class CharacterSkill : ScriptableObject
     public float coefficient = 1; //°è¼ö
 
     public SkillTargetType targetType;
+    public SkillSearchType searchType;
     public EffectEnum effectEnum;
+
+    public bool isAuto;
+    public Vector3 targetPos;
+    public string skillDescription;
 
     public virtual void OnActive()
     {
 
     }
+
     public virtual IEnumerator SkillCoroutine()
     {
         yield break;  

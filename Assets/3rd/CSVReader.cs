@@ -22,13 +22,13 @@ public class CSVReader
         string str = File.ReadAllText(path);
         return SplitTokens(str, splitComma);
     }
-    public static List<Dictionary<string, object>> ReadByStreamReaderPath(string path, bool splitComma = true)
+    public static List<Dictionary<string, object>> ReadByStreamReaderPath(string path, bool splitComma = true, bool tryParse = true)
     {
         using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
         using (var reader = new StreamReader(stream))
         {
             string str = reader.ReadToEnd();
-            return SplitTokens(str, splitComma);
+            return SplitTokens(str, splitComma, tryParse);
         }
     }
 
@@ -39,7 +39,7 @@ public class CSVReader
         return SplitTokens(data.text, splitComma);
     }
 
-    private static List<Dictionary<string, object>> SplitTokens(string data, bool splitComma = true)
+    private static List<Dictionary<string, object>> SplitTokens(string data, bool splitComma = true, bool tryParse = true)
     {
         var list = new List<Dictionary<string, object>>();
         var lines = Regex.Split(data, LINE_SPLIT_RE);
@@ -48,7 +48,6 @@ public class CSVReader
         var header = Regex.Split(lines[0], splitComma ? SPLIT_RE : SPLIT_SEMICOLON);
         for (var i = 1; i < lines.Length; i++)
         {
-
             var values = Regex.Split(lines[i], splitComma ? SPLIT_RE : SPLIT_SEMICOLON);
             if (values.Length == 0 || values[0] == "") continue;
 
@@ -58,13 +57,16 @@ public class CSVReader
                 string value = values[j];
                 value = value.TrimStart(TRIM_CHARS).TrimEnd(TRIM_CHARS).Replace("\\", "");
                 object finalvalue = value;
-                if (int.TryParse(value, out int n))
+                if(tryParse)
                 {
-                    finalvalue = n;
-                }
-                else if (float.TryParse(value, out float f))
-                {
-                    finalvalue = f;
+                    if (int.TryParse(value, out int n))
+                    {
+                        finalvalue = n;
+                    }
+                    else if (float.TryParse(value, out float f))
+                    {
+                        finalvalue = f;
+                    }
                 }
                 entry[header[j]] = finalvalue;
             }

@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Net;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ActiveSkillAOE", menuName = "Character/ActiveSkill/AOE")]
@@ -19,10 +18,13 @@ public class ActiveSkillAOE : CharacterSkill
     private Camera cam;
     private Transform indicatorTransform;
 
-    public bool isAutoTargeting;
     public SkillAreaShape areaShapeType;
-    public float areaRadiusOrRange;
-    public float areaAngleOrWidth;    
+
+    public float sectorRadius;
+    public float sectorAngle;
+
+    public float widthZ;
+    public float widthX;
     public bool isCriticalPossible;
 
     public float castRangeLimit = 10f;
@@ -33,8 +35,6 @@ public class ActiveSkillAOE : CharacterSkill
         if (skillAreaIndicator != null &&
             castRangeIndicator != null)
             return;
-
-        //layerM = 1 << 8;
 
         skillAreaIndicator = Instantiate(skillAreaIndicatorPrefab);
         skillAreaIndicator.TargetType = targetType;
@@ -54,12 +54,17 @@ public class ActiveSkillAOE : CharacterSkill
     {
         OnActive();
 
-        SetActiveIndicators(true); 
+        SetActiveIndicators(true);
 
         while (true)
         {
             MoveCastRangeIndicator();
-            MoveSkillAreaIndicator();
+
+            if (isAuto)
+                MoveSkillToTargetAreaIndicator();
+            else
+                MoveSkillAreaIndicator();
+
             yield return null;
         }
     }
@@ -72,18 +77,32 @@ public class ActiveSkillAOE : CharacterSkill
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit, 100.0f, layerM))
-        {
+        {            
             if (IsMouseInSkillRange(hit.point))
             {
-                indicatorTransform.position = hit.point + Vector3.up * 0.1f;
+                indicatorTransform.position = hit.point + Vector3.up * 0.1f;                
             }
             else
             {
                 Vector3 point
                     = Utils.IntersectPointCircleCenterToOut(actorTransform.position, castRangeLimit, hit.point);
-
+                
                 indicatorTransform.position = point + Vector3.up * 0.1f;
             }
+        }
+    }
+    private void MoveSkillToTargetAreaIndicator()
+    {
+        if (IsMouseInSkillRange(targetPos))
+        {
+            indicatorTransform.position = targetPos + Vector3.up * 0.1f;
+        }
+        else
+        {
+            Vector3 point
+                = Utils.IntersectPointCircleCenterToOut(actorTransform.position, castRangeLimit, targetPos);
+
+            indicatorTransform.position = point + Vector3.up * 0.1f;
         }
     }
     private bool IsMouseInSkillRange(Vector3 hitPoint)
@@ -94,7 +113,7 @@ public class ActiveSkillAOE : CharacterSkill
         return x * x + z * z < sqrCastRangeLimit;
     }
     public override void OnActiveSkill(LiveData data)
-    {      
+    {        
         EffectManager.Instance.Get(effectEnum, indicatorTransform);
 
         var targets = skillAreaIndicator.GetUnitsInArea();
@@ -107,6 +126,7 @@ public class ActiveSkillAOE : CharacterSkill
         }
 
         skillAreaIndicator.gameObject.SetActive(false);
+        skillAreaIndicator.isTriggerEnter = false;
     }
     public void SetActiveIndicators(bool active)
     {

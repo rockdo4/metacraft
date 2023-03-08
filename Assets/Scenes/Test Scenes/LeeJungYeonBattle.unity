@@ -153,23 +153,32 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heroList: {fileID: 392096440}
-  cube: {fileID: 4162986801234299681, guid: 2803772b456880c40b58c65033c3f954, type: 3}
-  battleHero: {fileID: 5095432709778420783, guid: 54e066ad1921b0e42ba195f220b254b4,
-    type: 3}
-  battleHeroTr: {fileID: 1095500587}
+  heroUiList: []
   startPositions:
   - {fileID: 2034244606}
   - {fileID: 563353446}
   - {fileID: 962526538}
+  useHeroes: []
   enemyCountTxt: {fileID: 54479575}
   clearUi: {fileID: 1311691597}
-  platform: {fileID: 588673997}
-  platformMoveSpeed: 10
   triggers:
   - {fileID: 2009934198}
   - {fileID: 1405279573}
   - {fileID: 399183787}
   - {fileID: 1709996920}
+  fadePanel: {fileID: 0}
+  isFadeIn: 1
+  tree: {fileID: 0}
+  roads: []
+  roadPrefab: {fileID: 0}
+  roadTr: {fileID: 0}
+  roadRots:
+  - {x: 0, y: -45, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 45, z: 0}
+  roadCount: 3
+  platform: {fileID: 588673997}
+  platformMoveSpeed: 10
 --- !u!4 &11782230
 Transform:
   m_ObjectHideFlags: 0
@@ -183,7 +192,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 10
+  m_RootOrder: 9
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &54479575 stripped
 MonoBehaviour:
@@ -1242,7 +1251,7 @@ Transform:
   m_Children:
   - {fileID: 236456772}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 8
   m_LocalEulerAnglesHint: {x: 50, y: -90, z: 0}
 --- !u!1 &324659673 stripped
 GameObject:
@@ -1297,7 +1306,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &399183787 stripped
 MonoBehaviour:
@@ -1616,7 +1625,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &588673997 stripped
 GameObject:
@@ -2023,7 +2032,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &806639771
 PrefabInstance:
@@ -2244,12 +2253,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4253862e933090048960e9a8e28cf864, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &1095500587 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 3864779674254409820, guid: 8ec9790ec0727d1409e7152a83adf60f,
-    type: 3}
-  m_PrefabInstance: {fileID: 109461431}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1164485953
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2510,7 +2513,6 @@ MonoBehaviour:
   effectList:
   - {fileID: 7999364428399169344, guid: 6d67c21e760accf46ab59668080b1c54, type: 3}
   - {fileID: 7999364428399169344, guid: 89a0d534bc580f24f99a4ad6b690e948, type: 3}
-  parentsObject: {fileID: 2004776591}
 --- !u!4 &1443528218
 Transform:
   m_ObjectHideFlags: 0
@@ -2524,7 +2526,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &1448644319 stripped
 MonoBehaviour:
@@ -2550,54 +2552,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 10be29aa5980e3147a62f5a6d0046a56, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &1749883463 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3984058621016059605, guid: 6efa22ad4f02a9c4a974c0373d41021f,
-    type: 3}
-  m_PrefabInstance: {fileID: 1928110797}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &1749883465
-MeshRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1749883463}
-  m_Enabled: 0
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 0}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
 --- !u!1 &1767172052
 GameObject:
   m_ObjectHideFlags: 0
@@ -2711,7 +2665,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 6
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!114 &1843142004 stripped
 MonoBehaviour:
@@ -3452,7 +3406,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 8
+  m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2009934198 stripped
 MonoBehaviour:

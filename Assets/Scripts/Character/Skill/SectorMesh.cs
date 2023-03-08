@@ -10,15 +10,13 @@ public class SectorMesh : MonoBehaviour
     private int segments = 16;
 
     public float Angle { get { return angle; } }
+    public float Radius { get { return radius; } }
 
     private MeshFilter meshFilter;
-    private Mesh mesh;
-    private SphereCollider sphereCollider;
+    private Mesh mesh;    
     private void Awake()
     {
         meshFilter = GetComponent<MeshFilter>();
-        sphereCollider = GetComponent<SphereCollider>();
-        sphereCollider.radius = radius;
         mesh = new Mesh();
         meshFilter.mesh = mesh;
     }
@@ -32,7 +30,7 @@ public class SectorMesh : MonoBehaviour
 
         for (int i = 1; i <= segments + 1; i++)
         {
-            float currentAngle = (i - 1) * anglePerSegment;
+            float currentAngle = (i - 1) * anglePerSegment - angle / 2f;
             float x = Mathf.Sin(currentAngle * Mathf.Deg2Rad) * radius;
             float z = Mathf.Cos(currentAngle * Mathf.Deg2Rad) * radius;
             vertices[i] = new Vector3(x, 0.0f, z);

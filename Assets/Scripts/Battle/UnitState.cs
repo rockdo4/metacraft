@@ -1,11 +1,18 @@
 public enum UnitType
 {
     None = -1,
+    Hero,
+    Enemy,
+    Count
+}
+
+public enum UnitAiType
+{
+    None = -1,
     Rush,
     Range,
-    Support,
     Assassin,
-    Defense,
+    Supprot,
     Count
 }
 

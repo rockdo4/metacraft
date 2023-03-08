@@ -18,9 +18,9 @@ public class ClearHeroInfo : MonoBehaviour
     private bool isMove = false;
 
     private Dictionary<int, int> ExpTable = new();
-    private AttackableHero thisHero;
+    private AttackableUnit thisHero;
 
-    public void SetInfo(AttackableHero hero)
+    public void SetInfo(AttackableUnit hero)
     {
         SetTestTable();
         thisHero = hero;

@@ -1661,6 +1661,15 @@ MonoBehaviour:
   - {fileID: 7014321635573080319}
   fadePanel: {fileID: 1490594065}
   isFadeIn: 1
+  tree: {fileID: 0}
+  roads: []
+  roadPrefab: {fileID: 0}
+  roadTr: {fileID: 0}
+  roadRots:
+  - {x: 0, y: -45, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 45, z: 0}
+  roadCount: 3
 --- !u!1 &1332120397 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3984058621884256230, guid: 6efa22ad4f02a9c4a974c0373d41021f,
@@ -2236,7 +2245,8 @@ MonoBehaviour:
   m_fontAsset: {fileID: 11400000, guid: bdc64b4452911cf4faf0e62328b0082f, type: 2}
   m_sharedMaterial: {fileID: 4565134964853867374, guid: bdc64b4452911cf4faf0e62328b0082f,
     type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 4565134964853867374, guid: bdc64b4452911cf4faf0e62328b0082f, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
@@ -2793,17 +2803,73 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 7014321635573080320, guid: a2a96ae7f6b786d4eb021e431e149138, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: a2a96ae7f6b786d4eb021e431e149138, type: 3}
---- !u!114 &7014321635573080319 stripped
+--- !u!1 &7014321635573080315 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8634998261490399942, guid: a2a96ae7f6b786d4eb021e431e149138,
+    type: 3}
+  m_PrefabInstance: {fileID: 7014321635573080314}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7014321635573080316 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 7014321635573080319, guid: a2a96ae7f6b786d4eb021e431e149138,
+  m_CorrespondingSourceObject: {fileID: 7014321635646178844, guid: a2a96ae7f6b786d4eb021e431e149138,
     type: 3}
   m_PrefabInstance: {fileID: 7014321635573080314}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35b2e5b6fddccbd418bba2cf95cd4d4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7014321635573080317 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7014321635646178845, guid: a2a96ae7f6b786d4eb021e431e149138,
+    type: 3}
+  m_PrefabInstance: {fileID: 7014321635573080314}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35b2e5b6fddccbd418bba2cf95cd4d4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7014321635573080318 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7014321635646178834, guid: a2a96ae7f6b786d4eb021e431e149138,
+    type: 3}
+  m_PrefabInstance: {fileID: 7014321635573080314}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35b2e5b6fddccbd418bba2cf95cd4d4d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &7014321635573080319
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7014321635573080315}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eb57492b387a6bd4a89af0ecfe29738b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  heroSettingPositions:
+  - {fileID: 1717118656}
+  - {fileID: 1717118655}
+  - {fileID: 1717118654}
+  enemySettingPositions:
+  - {fileID: 7014321635573080318}
+  - {fileID: 7014321635573080317}
+  - {fileID: 7014321635573080316}
+  enemys: []
+  useEnemys: []
+  isStageEnd: 0
+  isMissionEnd: 1
+  manager: {fileID: 1210423040}

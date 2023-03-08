@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -24,6 +25,7 @@ public class GameManager : Singleton<GameManager>
     public Dictionary<string, Sprite> illustrationSprites = new();
     public List<Dictionary<string, object>> missionInfoList;
     public List<Dictionary<string, object>> dispatchInfoList;
+    public List<Dictionary<string, object>> officeInfoList;
 
     // Office Select
     public GameObject currentSelectObject; // Hero Info
@@ -33,10 +35,15 @@ public class GameManager : Singleton<GameManager>
 
     public List<Effect> effects; // 사용할 이펙트들
 
+    //public List<GameObject> battleManagerPrefabs;
+    //private List<GameObject> createdBattleManager = new();
+    //private List<TestBattleManager> battleManagers = new();
+    //public Canvas battleCanvas;
+    public event Action<string> playerLevelUp;
+
     public override void Awake()
     {
         base.Awake();
-        LoadAllData();
         StartCoroutine(LoadAllResources());
     }
 
@@ -63,7 +70,7 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator LoadAllResources()
     {
-        // 텍스트 리소스 로드
+        // 미션 테이블 로드
         var mit = Addressables.LoadAssetAsync<TextAsset>("MissionInfoTable");
 
         mit.Completed +=
@@ -73,13 +80,23 @@ public class GameManager : Singleton<GameManager>
                     Addressables.Release(obj);
                 };
 
-        // 텍스트 리소스 로드
+        // 파견 테이블 로드
         var dit = Addressables.LoadAssetAsync<TextAsset>("DispatchInfoTable");
 
         dit.Completed +=
                 (AsyncOperationHandle<TextAsset> obj) =>
                 {
                     dispatchInfoList = CSVReader.SplitTextAsset(obj.Result);
+                    Addressables.Release(obj);
+                };
+
+        // 오피스 테이블 로드
+        var oit = Addressables.LoadAssetAsync<TextAsset>("OfficeTable");
+
+        oit.Completed +=
+                (AsyncOperationHandle<TextAsset> obj) =>
+                {
+                    officeInfoList = CSVReader.SplitTextAsset(obj.Result);
                     Addressables.Release(obj);
                 };
 
@@ -137,6 +154,8 @@ public class GameManager : Singleton<GameManager>
             yield return null;
         }
         ReleaseAddressable(handles);
+
+        LoadAllData();
     }
 
     public void ReleaseAddressable(List<AsyncOperationHandle> handles)
@@ -163,15 +182,20 @@ public class GameManager : Singleton<GameManager>
         }
 
         // Test Key Start
-        //if (Input.GetKeyDown(KeyCode.K))
-        //{
-        //    SaveAllData();
-        //}
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            SaveAllData();
+        }
 
-        //if (Input.GetKeyDown(KeyCode.L))
-        //{
-        //    LoadAllData();
-        //}
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            LoadAllData();
+        }
+
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            AddOfficeExperience(300);
+        }
         // Test Key End
     }
 
@@ -192,16 +216,13 @@ public class GameManager : Singleton<GameManager>
             sb.AppendLine($"Hero_{data.name};{JsonUtility.ToJson(data)}");
         }
         File.WriteAllText(GetSaveFilePath(), sb.ToString());
+        Logger.Debug(sb);
     }
 
     public void LoadAllData()
     {
         if (!File.Exists(GetSaveFilePath()))
-        {
-            for (int i = 0; i < 3; i++)
-                myHeroes.Add(CreateNewHero(i));
             return;
-        }
 
         var loadData = CSVReader.ReadByPath(GetSaveFilePath(), false);
         foreach (var item in loadData)
@@ -227,6 +248,7 @@ public class GameManager : Singleton<GameManager>
                     Logger.Debug($"Load failed {heroName}");
                 }
             }
+            Logger.Debug($"{item["ID"]}:{item["Contents"]}");
         }
     }
 
@@ -293,7 +315,66 @@ public class GameManager : Singleton<GameManager>
     //요일 변경
     public void NextDay()
     {
-        playerData.currentDay = playerData.currentDay != DayOfWeek.일 ? playerData.currentDay + 1 : DayOfWeek.월; ;
-        playerData.cumulateGameDay++;
+        playerData.currentDay = playerData.currentDay != DayOfWeek.일 ? playerData.currentDay + 1 : DayOfWeek.월;
     }
+
+    public void AddOfficeExperience(int exp)
+    {
+        playerData.officeExperience += exp;
+        for (int i = 1; i < officeInfoList.Count; i++)
+        {
+            if (playerData.officeExperience <= (int)officeInfoList[i]["NeedExp"])
+            {
+                PlayerInfoUpdate(i);
+                //if (playerLevelUp != null)
+                //{
+                //    playerLevelUp((string)officeInfoList[i]["OfficeImage"]);
+                //}
+                break;
+            }
+        }
+    }
+
+    private void PlayerInfoUpdate(int level)
+    {
+        playerData.officeLevel = (int)officeInfoList[level]["OfficeLevel"];
+        playerData.missionDifficulty = (int)officeInfoList[level]["MissionDifficulty"];
+        playerData.isTrainingOpen = (int)officeInfoList[level]["IsTrainingOpen"];
+        playerData.isDispatchOpen = (int)officeInfoList[level]["IsDispatchOpen"];
+        playerData.trainingLevel = (int)officeInfoList[level]["TrainingLevel"];
+        playerData.dispatchLevel = (int)officeInfoList[level]["DispatchLevel"];
+        playerData.stamina = (int)officeInfoList[level]["Stamina"];
+        playerData.inventoryCount = (int)officeInfoList[level]["InventoryCount"];
+        Logger.Debug($"현재 레벨 : {playerData.officeLevel}");
+    }
+
+    //public void CreateBattleMap()
+    //{
+    //    if (createdBattleManager.Count != 0)
+    //        return;
+
+    //    for (int i = 0; i < battleManagerPrefabs.Count; i++)
+    //    {
+    //        var btmgrPrefab = Instantiate(battleManagerPrefabs[i]);
+    //        var btMgr = btmgrPrefab.GetComponent<TestBattleManager>();
+    //        battleManagers.Add(btMgr);
+    //        createdBattleManager.Add(btmgrPrefab);
+    //        btmgrPrefab.gameObject.SetActive(false);
+    //    }
+    //}
+    //public void EnableBattleMap()
+    //{
+    //    switch (currentSelectMission["Type"])
+    //    {
+    //        case 0:
+    //        case 1:
+    //            createdBattleManager[1].SetActive(false);
+    //            createdBattleManager[0].SetActive(true);
+    //            break;
+    //        case 2:
+    //            createdBattleManager[0].SetActive(false);
+    //            createdBattleManager[1].SetActive(true);
+    //            break;
+    //    }
+    //}
 }
