@@ -186,16 +186,18 @@ public class MissionManager : View
         }
         if (count > 0)
         {
+            //gm.CreateBattleMap();
+
             switch (gm.currentSelectMission["Type"])
             {
                 case 0:
-                    gm.LoadScene((int)SceneIndex.Battle);
-                    break;
                 case 1:
                     gm.LoadScene((int)SceneIndex.Battle);
+                    //gm.EnableBattleMap();
                     break;
                 case 2:
                     gm.LoadScene((int)SceneIndex.Defense);
+                    //gm.EnableBattleMap();
                     break;
             }
         }

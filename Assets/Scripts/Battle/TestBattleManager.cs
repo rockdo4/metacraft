@@ -8,7 +8,6 @@ using UnityEngine.UI;
 
 public class TestBattleManager : MonoBehaviour
 {
-    public GameObject heroList;
     public List<HeroUi> heroUiList;
     public List<Transform> startPositions;
     public List<AttackableHero> useHeroes = new();
@@ -22,17 +21,17 @@ public class TestBattleManager : MonoBehaviour
     public Image fadePanel;
 
     public GeneratePolynomialTreeMap tree;
-    public TreeNodeObject thisNode;
+    protected TreeNodeObject thisNode;
 
     // Test Member
     public List<GameObject> roadPrefab;
-    public List<ForkedRoad> roads;
-    public GameObject road;
+    protected List<ForkedRoad> roads;
+    protected GameObject road;
     public Transform roadTr;
     protected Coroutine coFadeIn;
     protected Coroutine coFadeOut;
     public List<RoadChoiceButton> choiceButtons;
-    private List<TextMeshProUGUI> choiceButtonTexts = new();
+    protected List<TextMeshProUGUI> choiceButtonTexts = new();
     protected int nodeIndex;
 
     private void Awake()
