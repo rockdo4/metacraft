@@ -154,7 +154,7 @@ public class BeltScrollBattleManager : TestBattleManager
         // 보여질 길목들 다시 enable 해주기
 
         // 페이드 아웃
-        coFade = StartCoroutine(CoFade());
+        coFadeOut = StartCoroutine(CoFadeOut());
         yield break;
     }
 }

@@ -19,7 +19,6 @@ public class TestBattleManager : MonoBehaviour
     protected int readyCount;
 
     public Image fadePanel;
-    public bool isFadeIn = true;
 
     public GeneratePolynomialTreeMap tree;
     public TreeNodeObject thisNode;
@@ -30,7 +29,8 @@ public class TestBattleManager : MonoBehaviour
     public Transform roadTr;
     public List<Vector3> roadRots = new List<Vector3> { new (0,-45,0), new (0,0,0), new (0,45,0) };
     public int roadCount = 3;
-    protected Coroutine coFade;
+    protected Coroutine coFadeIn;
+    protected Coroutine coFadeOut;
     public List<RoadChoiceButton> choiceButtons;
     private List<TextMeshProUGUI> choiceButtonTexts = new();
 
@@ -141,36 +141,31 @@ public class TestBattleManager : MonoBehaviour
         Logger.Debug("Clear!");
     }
 
-    protected IEnumerator CoFade()
+    protected IEnumerator CoFadeIn()
     {
-        if (isFadeIn)
+        fadePanel.gameObject.SetActive(true);
+        float fadeAlpha = 0f;
+        while (fadeAlpha < 1f)
         {
-            fadePanel.gameObject.SetActive(true);
-            float fadeAlpha = 0f;
-            while (fadeAlpha < 1f)
-            {
-                fadeAlpha += 0.01f;
-                yield return null;
-                fadePanel.color = new Color(0, 0, 0, fadeAlpha);
-            }
-
-            isFadeIn = false;
-            yield break;
+            fadeAlpha += 0.01f;
+            yield return null;
+            fadePanel.color = new Color(0, 0, 0, fadeAlpha);
         }
-        else
+        yield break;
+    }
+
+    protected IEnumerator CoFadeOut()
+    {
+        float fadeAlpha = 1f;
+        while (fadeAlpha > 0f)
         {
-            float fadeAlpha = 1f;
-            while (fadeAlpha > 0f)
-            {
-                fadeAlpha -= 0.01f;
-                yield return null;
-                fadePanel.color = new Color(0, 0, 0, fadeAlpha);
-            }
-
-            isFadeIn = true;
-            fadePanel.gameObject.SetActive(false);
-            yield break;
+            fadeAlpha -= 0.01f;
+            yield return null;
+            fadePanel.color = new Color(0, 0, 0, fadeAlpha);
         }
+
+        fadePanel.gameObject.SetActive(false);
+        yield break;
     }
 
     public virtual void SelectNextStage(int index)
@@ -194,7 +189,7 @@ public class TestBattleManager : MonoBehaviour
     {
         for (int i = 0; i < thisNode.childrens.Count; i++)
         {
-            choiceButtonTexts[i].text = thisNode.childrens[i].name;
+            choiceButtonTexts[i].text = $"{thisNode.childrens[i].type}";
             choiceButtons[i].gameObject.SetActive(true);
             choiceButtons[i].choiceIndex = i;
         }
@@ -202,7 +197,7 @@ public class TestBattleManager : MonoBehaviour
 
     public virtual void MoveNextStage(float timer)
     {
-        coFade = StartCoroutine(CoFade());
+        coFadeIn = StartCoroutine(CoFadeIn());
     }
 
     // 히어로들 안 보이는 위치로 옮기고 Active False 시키는 함수
