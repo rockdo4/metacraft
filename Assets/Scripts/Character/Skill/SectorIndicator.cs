@@ -1,30 +1,36 @@
 using System.Linq;
 using UnityEngine;
 public class SectorIndicator : SkillAreaIndicator
-{    
+{
+    private SectorMesh sectorMesh;
     private float angleHalf;
     private float radius;
     private float sqrRadius;
     private int layerMask;
 
     private Collider[] colliders;
-    int maxColliders = 32;
+    public int maxColliders = 32;
     protected override void Awake()
     {
         base.Awake();
-        angleHalf      = GetComponent<SectorMesh>().Angle * 0.5f;
-        radius         = GetComponent<SectorMesh>().Radius;
-        sqrRadius      = radius * radius;
+        sectorMesh = GetComponent<SectorMesh>();
+        colliders  = new Collider[maxColliders];
+    }
+    public override void SetScale(float x, float y, float z = 1)
+    {
+        sectorMesh.Radius = x;
+        sectorMesh.Angle  = y;
 
-
-        colliders = new Collider[maxColliders];
+        angleHalf = sectorMesh.Angle * 0.5f;
+        radius    = sectorMesh.Radius;
+        sqrRadius = radius * radius;
     }
     private void Start()
     {
         bool isTargetEnemy = TargetType == SkillTargetType.Enemy;
         int enemyLayerMask = 1 << LayerMask.NameToLayer("Enemy");
-        int heroLayerMask = 1 << LayerMask.NameToLayer("Hero");
-        layerMask = isTargetEnemy ? enemyLayerMask : heroLayerMask;
+        int heroLayerMask  = 1 << LayerMask.NameToLayer("Hero");
+        layerMask          = isTargetEnemy ? enemyLayerMask : heroLayerMask;
     }
     private void FixedUpdate()
     {   

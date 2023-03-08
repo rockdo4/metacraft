@@ -62,15 +62,18 @@ public class SkillCreaterWindow : EditorWindow
         
         characterSkill.skillDescription = (string)skillInfo["SkillInfo"];
 
+        characterSkill.isCriticalPossible = ValueToInt(skillInfo["CanCri"]) == 1;
+        //characterSkill.isAuto = ValueToInt(skillInfo["IsAutoTargeting"]) == 0;
+
         if (isActiveSkill)
         {
             var activeSkill = characterSkill as ActiveSkillAOE;
 
             activeSkill.layerM         = 1 << LayerMask.NameToLayer("Floor");
-            activeSkill.castRangeLimit = ValueToInt(skillInfo["Range"]);
+            activeSkill.castRangeLimit = ValueToInt(skillInfo["Range"]) / 100f;
 
             LoadIndicatorPrefab(activeSkill);
-            activeSkill.sectorRadius = ValueToInt(skillInfo["Radius"]);
+            activeSkill.sectorRadius = ValueToInt(skillInfo["Radius"]) / 100f;
             activeSkill.sectorAngle  = ValueToInt(skillInfo["Angle"]);
             activeSkill.widthZ       = ValueToInt(skillInfo["LengthZ"]);
             activeSkill.widthX       = ValueToInt(skillInfo["LengthX"]);
@@ -89,10 +92,16 @@ public class SkillCreaterWindow : EditorWindow
                     bool isCircle      = ValueToInt(skillInfo["Angle"]) == 360;                    
                     string prefab      = isCircle ? "CircleIndicator.prefab" : "SectorIndicator.prefab";
                     skillAreaIndicator = prefabPath + prefab;
+
+                    activeSkillAOE.areaShapeType = isCircle ?
+                        SkillAreaShape.Circle : SkillAreaShape.Sector;
                 }                
                 break;
-            case SkillAreaShape.Rectangle:                
-                skillAreaIndicator = prefabPath + "SquareIndicator.prefab";
+            case SkillAreaShape.Rectangle:
+                {
+                    skillAreaIndicator = prefabPath + "SquareIndicator.prefab";
+                    activeSkillAOE.areaShapeType = SkillAreaShape.Rectangle;
+                }                
                 break;
         }
         castRangeIndicator = prefabPath + "CastRangeIndicator.prefab";

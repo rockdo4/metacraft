@@ -22,6 +22,7 @@ public class CharacterSkill : ScriptableObject
     public SkillSearchType searchType;
     public EffectEnum effectEnum;
 
+    public bool isCriticalPossible;
     public bool isAuto;
     public Vector3 targetPos;
     public string skillDescription;

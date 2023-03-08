@@ -5,7 +5,7 @@ using UnityEngine;
 public class ActiveSkillAOE : CharacterSkill
 {
     public SkillAreaIndicator skillAreaIndicatorPrefab;
-    private SkillAreaIndicator skillAreaIndicator;
+    protected SkillAreaIndicator skillAreaIndicator;
     public LayerMask layerM;    
 
     public Transform ActorTransform { set { actorTransform = value; } }
@@ -16,7 +16,7 @@ public class ActiveSkillAOE : CharacterSkill
     private Transform castRangeIndicatorTransform;
 
     private Camera cam;
-    private Transform indicatorTransform;
+    protected Transform indicatorTransform;
 
     public SkillAreaShape areaShapeType;
 
@@ -24,8 +24,7 @@ public class ActiveSkillAOE : CharacterSkill
     public float sectorAngle;
 
     public float widthZ;
-    public float widthX;
-    public bool isCriticalPossible;
+    public float widthX;    
 
     public float castRangeLimit = 10f;
     private float sqrCastRangeLimit;
@@ -41,6 +40,8 @@ public class ActiveSkillAOE : CharacterSkill
         skillAreaIndicator.gameObject.SetActive(false);
         indicatorTransform = skillAreaIndicator.transform;
 
+        SetIndicatorScale();
+
         castRangeIndicator = Instantiate(castRangeIndicatorPrefab);
         castRangeIndicator.transform.localScale = castRangeLimit * 2 * Vector3.one;
         castRangeIndicator.SetActive(false);
@@ -49,6 +50,21 @@ public class ActiveSkillAOE : CharacterSkill
         cam = Camera.main;
 
         sqrCastRangeLimit = castRangeLimit * castRangeLimit;
+    }
+    private void SetIndicatorScale()
+    {
+        switch(areaShapeType)
+        {
+            case SkillAreaShape.Sector:
+                skillAreaIndicator.SetScale(sectorRadius, sectorAngle);
+                break;
+            case SkillAreaShape.Rectangle:
+                skillAreaIndicator.SetScale(widthX, widthZ);
+                break;
+            case SkillAreaShape.Circle:
+                skillAreaIndicator.SetScale(sectorRadius, sectorRadius);
+                break;
+        }
     }
     public override IEnumerator SkillCoroutine()
     {
