@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI.Extensions;
@@ -24,6 +25,7 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
 
     private List<GameObject> bundles = new();
     private List<TreeNodeObject> nodes = new();
+    private List<GameObject> lines = new();
 
     private void Update()
     {
@@ -31,11 +33,6 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
         {
             Debug.Log("new graph");
             CreateTreeGraph();
-        }
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            Debug.Log("link nodes");
-            LinkNodes(root);
         }
     }
 
@@ -53,27 +50,9 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
         boss = bossObj.GetComponent<TreeNodeObject>();
         AddChilds(root, height);
 
-        // 노드끼리 물리적 연결 (UI Line Renderer)
-        // LinkNodes(root);
-    }
-
-    public void DestroyAllObjs()
-    {
-        int ncount = nodes.Count;
-        for (int i = 0; i < ncount; i++)
-        {
-            if (nodes[i] != null)
-                Destroy(nodes[i]);
-        }
-        nodes.Clear();
-
-        int bcount = bundles.Count;
-        for (int i = 0; i < bcount; i++)
-        {
-            if (bundles[i] != null)
-                Destroy(bundles[i]);
-        }
-        bundles.Clear();
+        // 노드끼리 물리적 연결 (UI Line Renderer).
+        // UI Layout Group에서 포지션을 배치하기 위한 시간이 필요해서 코루틴으로 실행 시간 차이를 줌
+        StartCoroutine(CoLinkNodes());
     }
 
     private void AddChilds(TreeNodeObject parent, int depth)
@@ -99,6 +78,13 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
         }
     }
 
+    private IEnumerator CoLinkNodes()
+    {
+        yield return null;
+        // 재귀 함수. Root로 시작
+        LinkNodes(root);
+    }
+
     private void LinkNodes(TreeNodeObject parent)
     {
         // 재귀 함수. Root로 시작
@@ -106,11 +92,11 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             TreeNodeObject child = parent.childrens[i];
-
             GameObject newLineRenderer = Instantiate(uiLineRendererPrefab, lineRendererTarget);
+            lines.Add(newLineRenderer);
             UILineRenderer uilr = newLineRenderer.GetComponent<UILineRenderer>();
-            uilr.Points[0] = parent.tail.position;
-            uilr.Points[1] = child.tail.position;
+            uilr.Points[0] = lineRendererTarget.InverseTransformPoint(parent.tail.position);
+            uilr.Points[1] = lineRendererTarget.InverseTransformPoint(child.head.position);
             uilr.enabled = true;
             LinkNodes(child);
         }
@@ -133,5 +119,32 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
             bundle.name = $"bundle_{i}";
             bundles.Add(bundle);
         }
+    }
+
+    public void DestroyAllObjs()
+    {
+        int ncount = nodes.Count;
+        for (int i = 0; i < ncount; i++)
+        {
+            if (nodes[i] != null)
+                Destroy(nodes[i]);
+        }
+        nodes.Clear();
+
+        int bcount = bundles.Count;
+        for (int i = 0; i < bcount; i++)
+        {
+            if (bundles[i] != null)
+                Destroy(bundles[i]);
+        }
+        bundles.Clear();
+
+        int lcount = lines.Count;
+        for (int i = 0; i < lcount; i++)
+        {
+            if (lines[i] != null)
+                Destroy(lines[i]);
+        }
+        lines.Clear();
     }
 }
