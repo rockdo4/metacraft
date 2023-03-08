@@ -79,7 +79,11 @@ public class BeltScrollBattleManager : TestBattleManager
 
         if (readyCount == 0)
         {
-            if (triggers[currTriggerIndex + 1] != null && triggers[currTriggerIndex + 1].isStageEnd)
+            if (triggers[currTriggerIndex].isMissionEnd)
+            {
+                SetStageClear();
+            }
+            else if (triggers[currTriggerIndex + 1] != null && triggers[currTriggerIndex + 1].isStageEnd)
             {
                 ChoiceNextStage();
             }
@@ -88,10 +92,6 @@ public class BeltScrollBattleManager : TestBattleManager
                 readyCount = useHeroes.Count;
                 base.OnReady();
                 coMovingMap = StartCoroutine(CoMovingMap());
-            }
-            else if (triggers[currTriggerIndex].isMissionEnd)
-            {
-                SetStageClear();
             }
         }
     }
@@ -169,6 +169,11 @@ public class BeltScrollBattleManager : TestBattleManager
         ResetRoads();
         CreateRoad(platform);
         AddRoadTrigger();
+
+        if (thisNode.nodeNameText.text == "Boss")
+        {
+            triggers.Last().isMissionEnd = true;
+        }
 
         // ∆‰¿ÃµÂ æ∆øÙ
         coFadeOut = StartCoroutine(CoFadeOut());
