@@ -12,6 +12,7 @@ public enum UnitAiType
     Rush,
     Range,
     Assassin,
+    Supprot,
     Count
 }
 

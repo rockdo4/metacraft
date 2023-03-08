@@ -12,15 +12,18 @@ public abstract class AttackableUnit : MonoBehaviour
     protected CharacterDataBundle characterData;
     public CharacterDataBundle GetUnitData() => characterData;
 
-    [Header("Ai 타입, 일반공격 버프or디버프, 시간, 증가량")]
+    [Header("캐릭터 타입")]
+    public UnitType unitType;
+    [Header("Ai 타입")]
     public UnitAiType aiType;
+
+    [Space, Header("일반공격 - 타겟, 시간, 증가량")]
+    public UnitType normalAttackTargetType;
     public Transform attackPos;
     public FireBallTest attackPref; //테스트용
-    public BuffType buffType;
-    public float buffTime;
-    public float buffScale;
 
-    public UnitType unitType;
+    [Space, Header("궁극기 - 타겟, 버프or디버프, 시간, 증가량")]
+    public UnitType activeAttackTargetType;
 
     protected float searchDelay = 1f;
     protected float lastSearchTime;
@@ -37,6 +40,7 @@ public abstract class AttackableUnit : MonoBehaviour
         get { return characterData.data.currentHp;  }
         set { characterData.data.currentHp = Mathf.Max(value, 0); }
     }
+    public float UnitHpScale => (float)characterData.data.currentHp / (float)characterData.data.healthPoint;
 
     protected float lastNormalAttackTime;
     protected float lastPassiveSkillTime;
@@ -49,7 +53,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected Action PassiveSkillAction;
     protected Action ActiveSkillAction;
-    private Dictionary<UnitAiType, Action> unitSearchAi = new();
+    private Dictionary<UnitAiType, Action> unitSearchAi = new();    //일반공격 타겟
     protected Action SearchAi;
 
     protected bool moveTarget;
@@ -68,7 +72,7 @@ public abstract class AttackableUnit : MonoBehaviour
     public bool IsAlive(AttackableUnit unit) => (unit != null) && (unit.gameObject.activeSelf) && (unit.UnitHp > 0);
     protected bool CanNormalAttackTime => (Time.time - lastNormalAttackTime) > characterData.attack.cooldown;
     protected bool InRangeNormalAttack => Vector3.Distance(target.transform.position, transform.position) < characterData.attack.distance;
-    protected bool InRangeActiveAttack => Vector3.Distance(target.transform.position, transform.position) < characterData.activeSkill.distance;
+    protected bool InRangeActiveAttack => Vector3.Distance(activeTarget.transform.position, transform.position) < characterData.activeSkill.distance;
     protected bool NonActiveSkill => battleState != UnitBattleState.ActiveSkill && battleState != UnitBattleState.Stun;
     //나중에는 NonActiveSkill 상태일시에 스킬버튼을 비활성화 하기
 
@@ -93,6 +97,7 @@ public abstract class AttackableUnit : MonoBehaviour
         unitSearchAi[UnitAiType.Rush] = RushSearch;
         unitSearchAi[UnitAiType.Range] = RangeSearch;
         unitSearchAi[UnitAiType.Assassin] = AssassinSearch;
+        unitSearchAi[UnitAiType.Supprot] = SupportSearch;
     }
 
     protected void SetData()
@@ -144,22 +149,21 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void ReadyActiveSkill();
     public virtual void OnActiveSkill() => characterData.activeSkill.OnActiveSkill(characterData.data);
 
-    public void NormalAttackOnDamage()
+    public virtual void NormalAttackOnDamage()
     {
         if (BattleState == UnitBattleState.ActiveSkill)
             return;
 
-        AddBuff(BuffType.AttackIncrease, 0.5f, 2f);
-
+        var isHeal = characterData.attack.searchType == SkillSearchType.Healer ? -1 : 1;
         if (characterData.attack.targetNumLimit == 1)
         {
-            target.OnDamage(GetFixedDamage, false);
+            target.OnDamage(GetFixedDamage * isHeal, false);
             return;
         }
 
         List<AttackableUnit> attackTargetList = new();
 
-        var targetList = (unitType == UnitType.Hero) ? enemyList : heroList;
+        var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
         foreach (var now_target in targetList)
         {
             Vector3 interV = now_target.transform.position - transform.position;
@@ -178,15 +182,18 @@ public abstract class AttackableUnit : MonoBehaviour
 
         for (int i = 0; i < attackTargetList.Count; i++)
         {
-            attackTargetList[i].OnDamage(GetFixedDamage, false);
+            attackTargetList[i].OnDamage(GetFixedDamage * isHeal, false);
         }
     }
-   
-    protected void RushSearch() => SearchNearbyTarget(unitType == UnitType.Hero ? enemyList : heroList); //근거리 타겟 추적
+
+    protected void RushSearch()
+    {
+        SearchNearbyTarget((normalAttackTargetType == UnitType.Hero) ? heroList : enemyList); //근거리 타겟 추적
+    }
     protected void RangeSearch()
     {
         lastSearchTime = Time.time;
-        var targetList = unitType == UnitType.Hero ? enemyList : heroList;
+        var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
         var minTarget = GetSearchTargetInAround(targetList, characterData.attack.distance / 2);
 
         if (IsAlive(minTarget))
@@ -196,11 +203,45 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     protected void AssassinSearch()
     {
-        var targetList = unitType == UnitType.Hero ? enemyList : heroList;
+        var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
         if (targetList.Count == 1)
             SearchNearbyTarget(targetList); //근거리 타겟 추적
         else
             SearchMinHealthTarget(targetList); //체력이 가장 적은 타겟 추적
+    }
+
+    protected void SupportSearch()
+    {
+        target = GetSearchMinHealthScaleTarget((normalAttackTargetType == UnitType.Hero) ? heroList : enemyList); //근거리 타겟 추적
+    }
+
+    protected void SearchActiveTarget()
+    {
+        var targetList = (activeAttackTargetType == UnitType.Hero) ? heroList : enemyList;
+        var teamList = (unitType == UnitType.Hero) ? heroList : enemyList;
+        switch (characterData.activeSkill.searchType)
+        {
+            case SkillSearchType.None:
+                break;
+            case SkillSearchType.AOE:
+                activeTarget = GetSearchNearbyTarget(targetList); //가장 가까운 타겟
+                break;
+            case SkillSearchType.Targeting:
+                activeTarget = target;
+                break;
+            case SkillSearchType.Buffer:
+                activeTarget = GetSearchNearbyTarget(teamList); //가장 가까운 우리팀이 타겟
+                break;
+            case SkillSearchType.Healer:
+                activeTarget = GetSearchMinHealthScaleTarget(teamList); //가장 체력비율 적은 우리팀이 타겟
+                break;
+            case SkillSearchType.Another:
+                break;
+            case SkillSearchType.Count:
+                break;
+            default:
+                break;
+        }
     }
 
     public virtual void NormalAttackEnd() => target = (IsAlive(target)) ? null : target;
@@ -224,9 +265,9 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public abstract void OnDamage(int dmg, bool isCritical = false);
 
-    public void SearchNearbyTarget<T>(List<T> list) where T : AttackableUnit
+    public void SearchNearbyTarget(List<AttackableUnit> list) 
     {
-        var tempList = list;
+        AttackableUnit tempTarget = null;
         if (list.Count == 0)
         {
             target = null;
@@ -245,14 +286,15 @@ public abstract class AttackableUnit : MonoBehaviour
             if(unitDis <= minDis)
             {
                 minDis = unitDis;
-                target = list[i];
+                tempTarget = list[i];
             }
         }
+        target = tempTarget;
     }
 
-    public T GetSearchNearbyTarget<T>(List<T> list) where T : AttackableUnit
+    public AttackableUnit GetSearchNearbyTarget(List<AttackableUnit> list) 
     {
-        T minTarget = null;
+        AttackableUnit minTarget = null;
         if (list.Count == 0)
         {
             return minTarget;
@@ -276,9 +318,9 @@ public abstract class AttackableUnit : MonoBehaviour
         return minTarget;
     }
 
-    public T GetSearchTargetInAround<T>(List<T> list, float dis) where T : AttackableUnit
+    public AttackableUnit GetSearchTargetInAround(List<AttackableUnit> list, float dis) 
     {
-        T minTarget = GetSearchNearbyTarget(list);
+        AttackableUnit minTarget = GetSearchNearbyTarget(list);
         if (minTarget == null)
             return null;
         else if(Vector3.Distance(minTarget.transform.position, transform.position) < dis)
@@ -287,8 +329,9 @@ public abstract class AttackableUnit : MonoBehaviour
             return null;
     }
 
-    protected void SearchMaxHealthTarget<T>(List<T> list) where T : AttackableUnit
+    protected void SearchMaxHealthTarget(List<AttackableUnit> list) 
     {
+        AttackableUnit tempTarget = null;
         if (list.Count == 0)
         {
             target = null;
@@ -305,20 +348,22 @@ public abstract class AttackableUnit : MonoBehaviour
 
             if(maxHp == list[i].UnitHp)
             {
-                target = Vector3.Distance(transform.position, list[i].transform.position) < minDis ?
-                    list[i] : target;
+                tempTarget = Vector3.Distance(transform.position, list[i].transform.position) < minDis ?
+                    list[i] : tempTarget;
             }
             if (maxHp < list[i].UnitHp)
             {
                 minDis = Vector3.Distance(transform.position, list[i].transform.position);
                 maxHp = list[i].UnitHp;
-                target = list[i];
+                tempTarget = list[i];
             }
         }
+        target = tempTarget;
     }
 
-    protected void SearchMinHealthTarget<T>(List<T> list) where T : AttackableUnit
+    protected void SearchMinHealthTarget(List<AttackableUnit> list) 
     {
+        AttackableUnit tempTarget = null;
         if (list.Count == 0)
         {
             target = null;
@@ -334,21 +379,55 @@ public abstract class AttackableUnit : MonoBehaviour
 
             if (minHp == list[i].UnitHp)
             {
-                target = Vector3.Distance(transform.position, list[i].transform.position) < minDis ?
-                    list[i] : target;
+                tempTarget = Vector3.Distance(transform.position, list[i].transform.position) < minDis ?
+                    list[i] : tempTarget;
             }
             if (list[i].UnitHp < minHp)
             {
                 minDis = Vector3.Distance(transform.position, list[i].transform.position);
                 minHp = list[i].UnitHp;
-                target = list[i];
+                tempTarget = list[i];
             }
         }
+
+        target = tempTarget;
     }
 
-    public List<T> GetNearestUnitList<T>(List<T> list, int count) where T : AttackableUnit
+    protected AttackableUnit GetSearchMinHealthScaleTarget(List<AttackableUnit> list) 
     {
-        List<T> tempList = new();
+        AttackableUnit nowTarget = null;
+        if (list.Count == 0)
+        {
+            nowTarget = null;
+            return nowTarget;
+        }
+        float minHp = int.MaxValue;
+        float minDis = int.MaxValue;
+
+        for (int i = 0; i < list.Count; i++)
+        {
+            if (!IsAlive(list[i]))
+                continue;
+
+            if (minHp == list[i].UnitHpScale)
+            {
+                nowTarget = Vector3.Distance(transform.position, list[i].transform.position) < minDis ?
+                    list[i] : nowTarget;
+            }
+            if (list[i].UnitHpScale < minHp)
+            {
+                minDis = Vector3.Distance(transform.position, list[i].transform.position);
+                minHp = list[i].UnitHpScale;
+                nowTarget = list[i];
+            }
+        }
+
+        return nowTarget;
+    }
+
+    public List<AttackableUnit> GetNearestUnitList(List<AttackableUnit> list, int count)
+    {
+        List<AttackableUnit> tempList = new();
         if (list.Count == 0)
         {
             return tempList;
@@ -366,7 +445,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
                 if (distOther < dist)
                 {
-                    T temp = list[i];
+                    AttackableUnit temp = list[i];
                     list[i] = list[j];
                     list[j] = temp;
 

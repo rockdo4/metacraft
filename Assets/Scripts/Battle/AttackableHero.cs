@@ -219,12 +219,13 @@ public class AttackableHero : AttackableUnit
     
     protected override void BattleUpdate()
     {
-        if(isAuto && target != null && heroUI.heroSkill.IsCoolDown)
+        if (isAuto && heroUI.heroSkill.IsCoolDown)
         {
-            if (InRangeNormalAttack)
+            SearchActiveTarget();
+            if (activeTarget != null && InRangeActiveAttack)
             {
                 heroUI.heroSkill.OnDownSkill();
-                characterData.activeSkill.targetPos = target.transform.position;
+                characterData.activeSkill.targetPos = activeTarget.transform.position;
                 heroUI.heroSkill.OnAutoSkillActive();
             }
         }
@@ -235,7 +236,15 @@ public class AttackableHero : AttackableUnit
             case UnitBattleState.MoveToTarget:
             case UnitBattleState.BattleIdle:
                 animator.SetFloat("Speed", pathFind.velocity.magnitude / characterData.data.moveSpeed);
-                if (IsAlive(target))
+                if (aiType == UnitAiType.Range)
+                {
+                    if (Time.time - lastSearchTime >= searchDelay)
+                    {
+                        lastSearchTime = Time.time;
+                        SearchAi();
+                    }
+                }
+                if (IsAlive(target) && target != this)
                 {
                     Vector3 targetDirection = target.transform.position - transform.position;
                     Quaternion targetRotation = Quaternion.LookRotation(targetDirection, Vector3.up);

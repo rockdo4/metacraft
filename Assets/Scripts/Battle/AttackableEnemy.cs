@@ -134,6 +134,14 @@ public class AttackableEnemy : AttackableUnit
     }
     protected override void BattleUpdate()
     {
+        if (isAuto && target != null && Time.time - lastActiveSkillTime > characterData.activeSkill.cooldown)
+        {
+            if (InRangeNormalAttack)
+            {
+                lastActiveSkillTime = Time.time;
+                BattleState = UnitBattleState.ActiveSkill;
+            }
+        }
         //타겟이 없을때 타겟을 찾으면 타겟으로 가기
         switch (BattleState)
         {
@@ -206,6 +214,7 @@ public class AttackableEnemy : AttackableUnit
 
     protected override void MoveNextUpdate()
     {
+
     }
     protected override void ReturnPosUpdate()
     {
@@ -254,9 +263,44 @@ public class AttackableEnemy : AttackableUnit
     public override void PassiveSkillEnd()
     {
     }
+    public override void OnActiveSkill()    //테스트용
+    {
+        if (characterData.attack.targetNumLimit == 1)
+        {
+            target.OnDamage(GetFixedDamage, false);
+            return;
+        }
+
+        List<AttackableUnit> attackTargetList = new();
+
+        var targetList = (activeAttackTargetType == UnitType.Hero) ? heroList : enemyList;
+        foreach (var now_target in targetList)
+        {
+            Vector3 interV = now_target.transform.position - transform.position;
+            if (interV.magnitude <= characterData.attack.distance)
+            {
+                float angle = Vector3.Angle(transform.forward, interV);
+
+                if (Mathf.Abs(angle) < characterData.attack.angle / 2f)
+                {
+                    attackTargetList.Add(now_target);
+                }
+            }
+        }
+
+        attackTargetList = GetNearestUnitList(attackTargetList, characterData.attack.targetNumLimit);
+
+        for (int i = 0; i < attackTargetList.Count; i++)
+        {
+            attackTargetList[i].OnDamage(GetFixedDamage, false);
+        }
+    }
     public override void ActiveSkillEnd()
     {
+        pathFind.isStopped = false;
         animator.SetTrigger("ActiveEnd");
+        lastNormalAttackTime = Time.time;
+        BattleState = UnitBattleState.BattleIdle;
         base.ActiveSkillEnd();
     }
 

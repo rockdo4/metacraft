@@ -13,12 +13,13 @@ public enum SkillAreaShape
     Rectangle,    
     Count,
 }
-public enum SkillActiveType
+public enum SkillSearchType
 {
     None = -1,
-    Attack,
-    Buff,
-    Heal,
+    AOE,
+    Targeting,  //¥‹¿œ±‚
+    Buffer,
+    Healer,
     Another,
     Count,
 }
