@@ -326,10 +326,10 @@ public class GameManager : Singleton<GameManager>
             if (playerData.officeExperience <= (int)officeInfoList[i]["NeedExp"])
             {
                 PlayerInfoUpdate(i);
-                if (playerLevelUp != null)
-                {
-                    playerLevelUp((string)officeInfoList[i]["OfficeImage"]);
-                }
+                //if (playerLevelUp != null)
+                //{
+                //    playerLevelUp((string)officeInfoList[i]["OfficeImage"]);
+                //}
                 break;
             }
         }
