@@ -1,5 +1,3 @@
-using System.Collections;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -151,7 +149,10 @@ public class AttackableHero : AttackableUnit
     {
         heroUI = _heroUI;
         //BattleState = UnitBattleState.ActiveSkill;
-        heroUI.heroSkill.Set(characterData.activeSkill.cooldown); //±Ã±Ø±â ÄðÅ¸ÀÓ µî·Ï
+        heroUI.heroSkill.
+            Set(
+            characterData.activeSkill.cooldown,
+            characterData.activeSkill.skillDescription); //±Ã±Ø±â ÄðÅ¸ÀÓ µî·Ï
         heroUI.heroSkill.
             SetActions(
             ReadyActiveSkill,

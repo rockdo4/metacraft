@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Net;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ActiveSkillAOE", menuName = "Character/ActiveSkill/AOE")]
@@ -20,8 +19,12 @@ public class ActiveSkillAOE : CharacterSkill
     private Transform indicatorTransform;
 
     public SkillAreaShape areaShapeType;
-    public float areaRadiusOrRange;
-    public float areaAngleOrWidth;    
+
+    public float sectorRadius;
+    public float sectorAngle;
+
+    public float widthZ;
+    public float widthX;
     public bool isCriticalPossible;
 
     public float castRangeLimit = 10f;
@@ -32,8 +35,6 @@ public class ActiveSkillAOE : CharacterSkill
         if (skillAreaIndicator != null &&
             castRangeIndicator != null)
             return;
-
-        //layerM = 1 << 8;
 
         skillAreaIndicator = Instantiate(skillAreaIndicatorPrefab);
         skillAreaIndicator.TargetType = targetType;
@@ -76,16 +77,16 @@ public class ActiveSkillAOE : CharacterSkill
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
         if (Physics.Raycast(ray, out RaycastHit hit, 100.0f, layerM))
-        {
+        {            
             if (IsMouseInSkillRange(hit.point))
             {
-                indicatorTransform.position = hit.point + Vector3.up * 0.1f;
+                indicatorTransform.position = hit.point + Vector3.up * 0.1f;                
             }
             else
             {
                 Vector3 point
                     = Utils.IntersectPointCircleCenterToOut(actorTransform.position, castRangeLimit, hit.point);
-
+                
                 indicatorTransform.position = point + Vector3.up * 0.1f;
             }
         }
@@ -112,7 +113,7 @@ public class ActiveSkillAOE : CharacterSkill
         return x * x + z * z < sqrCastRangeLimit;
     }
     public override void OnActiveSkill(LiveData data)
-    {      
+    {        
         EffectManager.Instance.Get(effectEnum, indicatorTransform);
 
         var targets = skillAreaIndicator.GetUnitsInArea();

@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
+using TMPro;
 
 public class HeroSkill : MonoBehaviour
 {
@@ -10,6 +11,8 @@ public class HeroSkill : MonoBehaviour
     private GameObject skillActivedHighlight;
     [SerializeField]
     private GameObject skillActivedPanel;
+    [SerializeField]
+    private TextMeshProUGUI skillDescriptionText;
 
     private float prevTimeScale ;
 
@@ -27,14 +30,17 @@ public class HeroSkill : MonoBehaviour
     private float coolDown;
     private float coolDownTimer;
 
+    private string skillDescription;
+
     public Action ready;
     public Action action;
     public Action offAreaIndicator;
     public Action cancle;
 
-    public void Set(float coolDown)
+    public void Set(float coolDown, string skillDescription)
     {
         this.coolDown = coolDown;
+        this.skillDescription = skillDescription;
 
         prevTimeScale = GameObject.FindObjectOfType<BattleSpeed>().GetSpeed;
         coolDownTimer = 0;
@@ -68,16 +74,16 @@ public class HeroSkill : MonoBehaviour
             SetActiveSkillGUIs(true);
             isPointerInSkillActivePanel = false;
 
-            prevTimeScale = Time.timeScale;
+            prevTimeScale = GameObject.FindObjectOfType<BattleSpeed>().GetSpeed;
             Time.timeScale = 0.25f;
         }
     }
     public void CancleSkill()
     {
-        Time.timeScale = prevTimeScale;
+        Time.timeScale = GameObject.FindObjectOfType<BattleSpeed>().GetSpeed;
         cancle();
         SetActiveSkillGUIs(false);
-        Time.timeScale = prevTimeScale;
+        Time.timeScale = GameObject.FindObjectOfType<BattleSpeed>().GetSpeed;
     }
     public void OnUpSkillActive()
     {
@@ -92,7 +98,7 @@ public class HeroSkill : MonoBehaviour
 
         action();
         SetActiveSkillGUIs(false);
-        Time.timeScale = prevTimeScale;
+        Time.timeScale = GameObject.FindObjectOfType<BattleSpeed>().GetSpeed;
         CoolDownFill = 1;
         coolDownTimer = coolDown;
     }
@@ -101,7 +107,7 @@ public class HeroSkill : MonoBehaviour
         ready();
         action();
         SetActiveSkillGUIs(false);
-        Time.timeScale = prevTimeScale;
+        Time.timeScale = GameObject.FindObjectOfType<BattleSpeed>().GetSpeed;
         CoolDownFill = 1;
         coolDownTimer = coolDown;
     }
@@ -110,6 +116,7 @@ public class HeroSkill : MonoBehaviour
     {
         skillActivedHighlight.SetActive(active);
         skillActivedPanel.SetActive(active);
+        skillDescriptionText.text = skillDescription;
     }
 
     public void IsPointerInSkillActivePanel(bool isIn)

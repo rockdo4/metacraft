@@ -1,16 +1,17 @@
 public enum SkillMainType
 {
     None = -1,
-    BaseAttack,
+    BaseAttack = 1,
     Passive,
     Active,
-    Count,
+    CountPlusOne,
 }
 public enum SkillAreaShape
 {
     None = -1,
     Sector,
-    Rectangle,    
+    Rectangle,
+    Circle,
     Count,
 }
 public enum SkillSearchType

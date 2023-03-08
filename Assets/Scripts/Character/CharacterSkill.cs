@@ -24,6 +24,7 @@ public class CharacterSkill : ScriptableObject
 
     public bool isAuto;
     public Vector3 targetPos;
+    public string skillDescription;
 
     public virtual void OnActive()
     {
