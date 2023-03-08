@@ -160,78 +160,42 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
     {
         // UI Layout Group에서 포지션을 배치하기 위한 시간이 필요해서 코루틴으로 실행 시간 차이를 줌
         yield return null;
+
         int nodesLength = nodes.Count;
         for (int i = 0; i < nodesLength - 1; i++)
         {
-            int bundleLength = nodes[i].Count;
-            for (int j = 0; j < bundleLength; j++)
+            LinkNodes(nodes[i], nodes[i + 1]);
+        }
+    }
+
+    private void LinkNodes(List<TreeNodeObject> parents, List<TreeNodeObject> childrens)
+    {
+        int parentLength = parents.Count;
+        int index = 0;
+        for (int i = 0; i < parentLength; i++)
+        {
+            int floor = parents[i].floor;
+            int number = parents[i].number;
+            int count = blueprint[floor][number].branchCount;
+
+            for (int j = 0; j < count; j++)
             {
-                LinkNodes(nodes[i][j]);
+                parents[i].AddChildren(childrens[index]);
+                CreateNewLine(parents[i].tail.position, childrens[index].head.position);
+                if (index != childrens.Count - 1)
+                    index++;
             }
         }
     }
 
-    private void LinkNodes(TreeNodeObject parent)
+    private void CreateNewLine(Vector3 start, Vector3 end)
     {
-        int hIndex = parent.floor;
-        int wIndex = parent.number;
-        if (hIndex == height - 2)
-        {
-            parent.AddChildren(boss);
-            GameObject lrObj = Instantiate(uiLineRendererPrefab, lineRendererTarget);
-            lines.Add(lrObj);
-            UILineRenderer lr = lrObj.GetComponent<UILineRenderer>();
-            lr.Points[0] = lineRendererTarget.InverseTransformPoint(parent.tail.position);
-            lr.Points[1] = lineRendererTarget.InverseTransformPoint(boss.head.position);
-            lr.enabled = true;
-            Debug.Log($"{parent.data} 보스 연결");
-            return;
-        }
-
-        (_, int branchCount) = blueprint[hIndex][wIndex];
-        int curBranchCount = blueprint[hIndex].Count;
-        int nextBranchCount = blueprint[hIndex + 1].Count;
-        int childStartIndex = wIndex;
-        if (branchCount > 1 && wIndex != 0)
-        {
-            if (wIndex == 0)
-            {
-                childStartIndex = 0;
-                Debug.Log($"{parent.data} 1번 가지 수:{branchCount}");
-            }
-            else if (wIndex == nextBranchCount - 1)
-            {
-                childStartIndex = 2 * nextBranchCount - branchCount - curBranchCount;
-                Debug.Log($"{parent.data} 2번 가지 수:{branchCount}");
-            }
-            else
-            {
-                Debug.Log($"{parent.data} 3번 가지 수:{branchCount}");
-                childStartIndex += (1 - branchCount + (nextBranchCount == wIndex + 1 ? 0 : Random.Range(0, 2)));
-            }
-        }
-        else if (curBranchCount < nextBranchCount && wIndex == nextBranchCount - 1)
-        {
-            childStartIndex = 2 * nextBranchCount - branchCount - curBranchCount;
-            Debug.Log($"{parent.data} 5번 가지 수:{branchCount}");
-        }
-        else
-        {
-            Debug.Log($"{parent.data} 4번 가지 수:{branchCount}");
-        }
-
-        for (int j = 0; j < branchCount; j++)
-        {
-            TreeNodeObject child = nodes[hIndex + 1][childStartIndex + j];
-            parent.AddChildren(child);
-
-            GameObject lrObj = Instantiate(uiLineRendererPrefab, lineRendererTarget);
-            lines.Add(lrObj);
-            UILineRenderer lr = lrObj.GetComponent<UILineRenderer>();
-            lr.Points[0] = lineRendererTarget.InverseTransformPoint(parent.tail.position);
-            lr.Points[1] = lineRendererTarget.InverseTransformPoint(child.head.position);
-            lr.enabled = true;
-        }
+        GameObject lrObj = Instantiate(uiLineRendererPrefab, lineRendererTarget);
+        lines.Add(lrObj);
+        UILineRenderer lr = lrObj.GetComponent<UILineRenderer>();
+        lr.Points[0] = lineRendererTarget.InverseTransformPoint(start);
+        lr.Points[1] = lineRendererTarget.InverseTransformPoint(end);
+        lr.enabled = true;
     }
 
     private GameObject CreateNewNodeInstance(Transform target, int hIndex, int wIndex, string data, TreeNodeTypes type)
