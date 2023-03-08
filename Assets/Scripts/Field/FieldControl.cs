@@ -1,10 +1,21 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class FieldControl : MonoBehaviour
 {
     public GameObject[] offices;
+
+    public void OnEnable()
+    {
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    public void OnSceneLoaded(Scene OfficeScene, LoadSceneMode mode)
+    {
+        OfficeChange();
+    }
 
     private void Start()
     {
