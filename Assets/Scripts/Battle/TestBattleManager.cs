@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -21,6 +22,7 @@ public class TestBattleManager : MonoBehaviour
     public bool isFadeIn = true;
 
     public GeneratePolynomialTreeMap tree;
+    public TreeNodeObject thisNode;
 
     // Test Member
     public List<ForkedRoad> roads = new();
@@ -28,8 +30,9 @@ public class TestBattleManager : MonoBehaviour
     public Transform roadTr;
     public List<Vector3> roadRots = new List<Vector3> { new (0,-45,0), new (0,0,0), new (0,45,0) };
     public int roadCount = 3;
-    private TreeNodeObject thisNode;
     protected Coroutine coFade;
+    public List<RoadChoiceButton> choiceButtons;
+    private List<TextMeshProUGUI> choiceButtonTexts = new();
 
     private void Awake()
     {
@@ -54,8 +57,15 @@ public class TestBattleManager : MonoBehaviour
             }
         }
         
+        for (int i = 0; i < choiceButtons.Count; i++)
+        {
+            var text = choiceButtons[i].GetComponentInChildren<TextMeshProUGUI>();
+            choiceButtonTexts.Add(text);
+        }
+
         tree.CreateTreeGraph();
         thisNode = tree.root; // 현재 위치한 노드
+
         // tree.root.type 맵 타입
         // tree.root.childrens 맵 순서
         // thisNode = tree.root.childrens[0]; 다음 노드 선택할 때 쓰는 것
@@ -162,6 +172,34 @@ public class TestBattleManager : MonoBehaviour
             yield break;
         }
     }
+
+    public virtual void SelectNextStage(int index)
+    {
+        int stageIndex = choiceButtons[index].choiceIndex;
+        thisNode = thisNode.childrens[stageIndex];
+
+        readyCount = useHeroes.Count;
+
+        for (int i = 0; i < choiceButtons.Count; i++)
+        {
+            choiceButtons[i].gameObject.SetActive(false);
+        }
+
+        // tree.root.type 맵 타입
+        // tree.root.childrens 맵 순서
+        // thisNode = tree.root.childrens[0]; 다음 노드 선택할 때 쓰는 것
+    }
+
+    protected void ChoiceNextStage()
+    {
+        for (int i = 0; i < thisNode.childrens.Count; i++)
+        {
+            choiceButtonTexts[i].text = thisNode.childrens[i].name;
+            choiceButtons[i].gameObject.SetActive(true);
+            choiceButtons[i].choiceIndex = i;
+        }
+    }
+
     public virtual void MoveNextStage(float timer)
     {
         coFade = StartCoroutine(CoFade());
@@ -194,7 +232,7 @@ public class TestBattleManager : MonoBehaviour
     // 길목 생성
     protected void CreateRoad(GameObject platform)
     {
-        //for (int i = 0; i < roadCount; i++)
+        //for (int i = 0; i < tree.root.childrens.Count; i++)
         //{
         //    ForkedRoad road = Instantiate(roadPrefab, platform.transform);
         //    Transform tr = roadTr;

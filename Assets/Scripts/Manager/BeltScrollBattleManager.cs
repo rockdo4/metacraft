@@ -65,13 +65,24 @@ public class BeltScrollBattleManager : TestBattleManager
         base.SetHeroReturnPositioning(pos);
     }
 
+    public override void SelectNextStage(int index)
+    {
+        base.SelectNextStage(index);
+        base.OnReady();
+        coMovingMap = StartCoroutine(CoMovingMap());
+    }
+
     public override void OnReady()
     {
         readyCount--;
 
         if (readyCount == 0)
         {
-            if (!triggers[currTriggerIndex].isStageEnd)
+            if (triggers[currTriggerIndex + 1].isStageEnd)
+            {
+                ChoiceNextStage();
+            }
+            else if (!triggers[currTriggerIndex].isStageEnd)
             {
                 readyCount = useHeroes.Count;
                 base.OnReady();

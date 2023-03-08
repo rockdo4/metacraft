@@ -1283,6 +1283,7 @@ GameObject:
   - component: {fileID: 408844220}
   - component: {fileID: 408844219}
   - component: {fileID: 408844221}
+  - component: {fileID: 408844222}
   m_Layer: 0
   m_Name: Road3
   m_TagString: Untagged
@@ -1392,7 +1393,32 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 408844219}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1544548416}
+        m_TargetAssemblyTypeName: BeltScrollBattleManager, Assembly-CSharp
+        m_MethodName: SelectNextStage
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 2
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &408844222
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 408844217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c28336b47d73d4d8e68e7cf60aceb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  choiceIndex: 0
 --- !u!1 &415143937
 GameObject:
   m_ObjectHideFlags: 0
@@ -1838,6 +1864,7 @@ GameObject:
   - component: {fileID: 766261437}
   - component: {fileID: 766261436}
   - component: {fileID: 766261438}
+  - component: {fileID: 766261439}
   m_Layer: 0
   m_Name: Road2
   m_TagString: Untagged
@@ -1947,7 +1974,32 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 766261436}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1544548416}
+        m_TargetAssemblyTypeName: BeltScrollBattleManager, Assembly-CSharp
+        m_MethodName: SelectNextStage
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &766261439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 766261434}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c28336b47d73d4d8e68e7cf60aceb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  choiceIndex: 0
 --- !u!1001 &798413510
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2728,6 +2780,11 @@ PrefabInstance:
       objectReference: {fileID: 2028977461}
     - target: {fileID: 6220465985192513146, guid: 735a93fcae6a38c4898fe28e4a908968,
         type: 3}
+      propertyPath: choiceButtons.Array.size
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6220465985192513146, guid: 735a93fcae6a38c4898fe28e4a908968,
+        type: 3}
       propertyPath: heroUiList.Array.data[0]
       value: 
       objectReference: {fileID: 1726036112}
@@ -2741,6 +2798,21 @@ PrefabInstance:
       propertyPath: heroUiList.Array.data[2]
       value: 
       objectReference: {fileID: 1726036109}
+    - target: {fileID: 6220465985192513146, guid: 735a93fcae6a38c4898fe28e4a908968,
+        type: 3}
+      propertyPath: choiceButtons.Array.data[0]
+      value: 
+      objectReference: {fileID: 1696328369}
+    - target: {fileID: 6220465985192513146, guid: 735a93fcae6a38c4898fe28e4a908968,
+        type: 3}
+      propertyPath: choiceButtons.Array.data[1]
+      value: 
+      objectReference: {fileID: 766261439}
+    - target: {fileID: 6220465985192513146, guid: 735a93fcae6a38c4898fe28e4a908968,
+        type: 3}
+      propertyPath: choiceButtons.Array.data[2]
+      value: 
+      objectReference: {fileID: 408844222}
     - target: {fileID: 6220465985192513146, guid: 735a93fcae6a38c4898fe28e4a908968,
         type: 3}
       propertyPath: startPositions.Array.data[0]
@@ -2909,6 +2981,7 @@ GameObject:
   - component: {fileID: 1696328367}
   - component: {fileID: 1696328366}
   - component: {fileID: 1696328368}
+  - component: {fileID: 1696328369}
   m_Layer: 0
   m_Name: Road1
   m_TagString: Untagged
@@ -3018,7 +3091,32 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1696328366}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1544548416}
+        m_TargetAssemblyTypeName: BeltScrollBattleManager, Assembly-CSharp
+        m_MethodName: SelectNextStage
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1696328369
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1696328364}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 38c28336b47d73d4d8e68e7cf60aceb5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  choiceIndex: 0
 --- !u!1001 &1726036104
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3885,6 +3983,21 @@ PrefabInstance:
       propertyPath: m_LocalPosition.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6135169207758169266, guid: f57215ec0653208478bbe72291266ecc,
+        type: 3}
+      propertyPath: m_Materials.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6135169207758169266, guid: f57215ec0653208478bbe72291266ecc,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: f66625c0d638e4441aad72b0e59126c2, type: 2}
+    - target: {fileID: 6135169207758169266, guid: f57215ec0653208478bbe72291266ecc,
+        type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: af0582a2d4252d44e947c6cffcd45186, type: 2}
     - target: {fileID: 6244140941895822285, guid: f57215ec0653208478bbe72291266ecc,
         type: 3}
       propertyPath: m_LocalPosition.x
