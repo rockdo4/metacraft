@@ -1,4 +1,3 @@
-using Mono.Cecil.Cil;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,6 +34,8 @@ public class BeltScrollBattleManager : TestBattleManager
 
         enemyCountTxt.Count = GetAllEnemyCount();
         CreateRoad(platform);
+        EnableRoad();
+        SetRoad();
     }
 
     private int GetCurrEnemyCount()
@@ -69,7 +70,8 @@ public class BeltScrollBattleManager : TestBattleManager
     {
         base.SelectNextStage(index);
         base.OnReady();
-        coMovingMap = StartCoroutine(CoMovingMap());
+        SetHeroReturnPositioning(enableRoads[nodeIndex].fadeTrigger.heroSettingPositions);
+        Logger.Debug(enableRoads[nodeIndex].fadeTrigger.heroSettingPositions);
     }
 
     public override void OnReady()
@@ -97,12 +99,17 @@ public class BeltScrollBattleManager : TestBattleManager
 
     IEnumerator CoMovingMap()
     {
+        if (triggers[currTriggerIndex + 1].isStageEnd)
+        {
+            yield break;
+        }
+
         yield return new WaitForSeconds(nextStageMoveTimer);
 
-        var curMaxZPos = platform.transform.position.z + 
+        float curMaxZPos = platform.transform.position.z +
             triggers[currTriggerIndex].heroSettingPositions.Max(transform => transform.position.z);
-        var nextMaxZPos = triggers[currTriggerIndex + 1].heroSettingPositions.Max(transform => transform.position.z);
-        var movePos = curMaxZPos - nextMaxZPos;
+        float nextMaxZPos = triggers[currTriggerIndex + 1].heroSettingPositions.Max(transform => transform.position.z);
+        float movePos = curMaxZPos - nextMaxZPos;
 
         currTriggerIndex++;
 
@@ -113,12 +120,9 @@ public class BeltScrollBattleManager : TestBattleManager
         }
 
         // 히어로들 배틀 상태로 전환
-        if (!triggers[currTriggerIndex].isStageEnd)
+        for (int i = 0; i < useHeroes.Count; i++)
         {
-            for (int i = 0; i < useHeroes.Count; i++)
-            {
-                useHeroes[i].ChangeUnitState(UnitState.Battle);
-            }
+            useHeroes[i].ChangeUnitState(UnitState.Battle);
         }
     }
 
@@ -140,6 +144,10 @@ public class BeltScrollBattleManager : TestBattleManager
             useHeroes[i].ResetData();
         }
 
+        DisableRoad();
+        EnableRoad();
+        SetRoad();
+
         platform.transform.position = Vector3.zero;
 
         // 여기에 에너미들 바꿔주는 거랑 마리수 조정
@@ -150,8 +158,6 @@ public class BeltScrollBattleManager : TestBattleManager
             Invoke(nameof(OnReady), 1f);
         }
         enemyCountTxt.Count = GetAllEnemyCount();
-        //DisableRoad();
-        // 보여질 길목들 다시 enable 해주기
 
         // 페이드 아웃
         coFadeOut = StartCoroutine(CoFadeOut());

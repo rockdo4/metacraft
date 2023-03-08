@@ -24,15 +24,17 @@ public class TestBattleManager : MonoBehaviour
     public TreeNodeObject thisNode;
 
     // Test Member
-    public List<ForkedRoad> roads = new();
+    public List<ForkedRoad> enableRoads = new();
+    public List<ForkedRoad> disableRoads = new();
     public ForkedRoad roadPrefab;
     public Transform roadTr;
-    public List<Vector3> roadRots = new List<Vector3> { new (0,-45,0), new (0,0,0), new (0,45,0) };
+    public List<Vector3> roadRots = new List<Vector3> { new (0,-45,0), new (0,45,0), new(0, 0, 0) };
     public int roadCount = 3;
     protected Coroutine coFadeIn;
     protected Coroutine coFadeOut;
     public List<RoadChoiceButton> choiceButtons;
     private List<TextMeshProUGUI> choiceButtonTexts = new();
+    protected int nodeIndex;
 
     private void Awake()
     {
@@ -170,7 +172,7 @@ public class TestBattleManager : MonoBehaviour
 
     public virtual void SelectNextStage(int index)
     {
-        int stageIndex = choiceButtons[index].choiceIndex;
+        int stageIndex = nodeIndex = choiceButtons[index].choiceIndex;
         thisNode = thisNode.childrens[stageIndex];
 
         readyCount = useHeroes.Count;
@@ -227,30 +229,45 @@ public class TestBattleManager : MonoBehaviour
     // 길목 생성
     protected void CreateRoad(GameObject platform)
     {
-        //for (int i = 0; i < tree.root.childrens.Count; i++)
-        //{
-        //    ForkedRoad road = Instantiate(roadPrefab, platform.transform);
-        //    Transform tr = roadTr;
-        //    tr.transform.localRotation = Quaternion.Euler(roadRots[i]);
-        //    road.SetRoadChangeAngle(tr);
-        //    roads.Add(road);
-        //    triggers.Add(roads[i].fadeTrigger);
-        //}
+        for (int i = 0; i < roadCount; i++)
+        {
+            ForkedRoad road = Instantiate(roadPrefab, platform.transform);
+            Transform tr = roadTr;
+            tr.transform.localRotation = Quaternion.Euler(roadRots[i]);
+            road.SetRoadChangeAngle(tr);
+            road.gameObject.SetActive(false);
+            disableRoads.Add(road);
+        }
+    }
 
-        ForkedRoad road = Instantiate(roadPrefab, platform.transform);
-        Transform tr = roadTr;
-        tr.transform.localRotation = Quaternion.Euler(roadRots[1]);
-        road.SetRoadChangeAngle(tr);
-        roads.Add(road);
-        triggers.Add(roads[0].fadeTrigger);
+    protected void SetRoad()
+    {
+        Logger.Debug(thisNode.childrens.Count);
+
+        for (int i = 0; i < thisNode.childrens.Count; i++)
+        {
+            enableRoads[i].gameObject.SetActive(true);
+        }
+    }
+
+    protected void EnableRoad()
+    {
+        for (int i = 0; i < thisNode.childrens.Count; i++)
+        {
+            enableRoads.Add(disableRoads[i]);
+            enableRoads[i].gameObject.SetActive(true);
+            triggers.Add(enableRoads[i].fadeTrigger);
+        }
     }
 
     protected void DisableRoad()
     {
-        for (int i = 0; i < roads.Count; i++)
+        for (int i = 0; i < enableRoads.Count; i++)
         {
-            roads[i].gameObject.SetActive(false);
+            triggers.Remove(enableRoads[i].fadeTrigger);
         }
+
+        enableRoads.Clear();
     }
 
     protected void ResetStage()
@@ -262,10 +279,6 @@ public class TestBattleManager : MonoBehaviour
         for (int i = 0; i < useHeroes.Count; i++)
         {
             Utils.CopyPositionAndRotation(useHeroes[i].gameObject, startPositions[i]);
-        }
-        for (int i = 0; i < roads.Count; i++)
-        {
-            roads[i].fadeTrigger.isEnter = false;
         }
     }
 }
