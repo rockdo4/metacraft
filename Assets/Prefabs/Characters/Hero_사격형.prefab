@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8489007089072879661}
   - component: {fileID: 2827228460232715386}
   - component: {fileID: 8489007089072879663}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: "Hero_\uC0AC\uACA9\uD615"
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -105,8 +105,11 @@ MonoBehaviour:
   target: {fileID: 0}
   heroList: []
   enemyList: []
+  citizenList: []
   unitState: 0
   battleState: 0
+  attackPos: {fileID: 0}
+  attackPref: {fileID: 0}
 --- !u!114 &8489007089072879663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -122,10 +125,9 @@ MonoBehaviour:
   originData: {fileID: 11400000, guid: 2fc8d164435b82a4e9aa48b86f95759d, type: 2}
   data:
     name: 
-    grade: 
+    grade: 0
+    maxGrade: 0
     job: 
-    maxGrade: 
-    energy: 0
     level: 0
     exp: 0
     likeability: 0
@@ -138,7 +140,7 @@ MonoBehaviour:
     criticalDmg: 2
     evasion: 0
     accuracy: 0.5
-    synergys: 
+    equipment: {fileID: 0}
   attack: {fileID: 11400000, guid: d5b9a7358e0855b46acac612b4428307, type: 2}
   activeSkill: {fileID: 11400000, guid: c9f64039ca8bd8146ae8d8344c554f5f, type: 2}
   passiveSkill: {fileID: 11400000, guid: 72914e2e9e922d84eb7b5c550ed005df, type: 2}

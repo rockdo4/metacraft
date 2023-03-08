@@ -21,6 +21,8 @@ public class CharacterSkill : ScriptableObject
     public SkillTargetType targetType;
     public EffectEnum effectEnum;
 
+    public string skillDescription;
+
     public virtual void OnActive()
     {
 
