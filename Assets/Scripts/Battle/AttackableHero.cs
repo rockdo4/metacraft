@@ -164,9 +164,9 @@ public class AttackableHero : AttackableUnit
     {
         base.ResetData();
         testRot = false;
-        UnitState = UnitState.None;
+        UnitState = UnitState.Idle;
         battleState = UnitBattleState.None;
-
+        
         lateReturn = false;
         lastActiveSkillTime = lastNormalAttackTime = lastNavTime = Time.time;
         target = null;

@@ -88,6 +88,8 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
             // 만든 이펙트 풀에 저장
             effectPool[effectListIndex].Add(effect);
         }
+
+        parent.transform.parent = GameObject.FindGameObjectWithTag("ParentFloor").transform;
     }
 
     // 현재 사용하고 있는 풀

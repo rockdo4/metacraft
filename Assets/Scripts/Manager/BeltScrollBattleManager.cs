@@ -11,6 +11,9 @@ public class BeltScrollBattleManager : TestBattleManager
     private int currTriggerIndex = 0;
     private float nextStageMoveTimer = 0f;
 
+    private Coroutine coMovingMap;
+    private Coroutine coResetMap;
+
     private void Start()
     {
         for (int i = 0; i < triggers.Count; i++)
@@ -23,20 +26,15 @@ public class BeltScrollBattleManager : TestBattleManager
             }
         }
 
-        // Test
+        CreateRoad(platform);
+        AddRoadTrigger();
+
         for (int i = 0; i < useHeroes.Count; i++)
         {
             Invoke(nameof(OnReady), 1f);
         }
 
         enemyCountTxt.Count = GetAllEnemyCount();
-    }
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            MoveNextStage();
-        }
     }
 
     private int GetCurrEnemyCount()
@@ -67,24 +65,29 @@ public class BeltScrollBattleManager : TestBattleManager
         base.SetHeroReturnPositioning(pos);
     }
 
+    public override void SelectNextStage(int index)
+    {
+        base.SelectNextStage(index);
+        base.OnReady();
+        SetHeroReturnPositioning(roads[nodeIndex].fadeTrigger.heroSettingPositions);
+        coMovingMap = StartCoroutine(CoMovingMap());
+    }
+
     public override void OnReady()
     {
         readyCount--;
 
         if (readyCount == 0)
         {
-            if (!triggers[currTriggerIndex].isStageEnd)
+            if (triggers[currTriggerIndex + 1] != null && triggers[currTriggerIndex + 1].isStageEnd)
+            {
+                ChoiceNextStage();
+            }
+            else if (!triggers[currTriggerIndex].isStageEnd)
             {
                 readyCount = useHeroes.Count;
                 base.OnReady();
-                StartCoroutine(MovingMap());
-            }
-            else if (triggers[currTriggerIndex].isStageEnd)
-            {
-                MoveNextStage();
-                platform.transform.position = Vector3.zero;
-                // test
-                //SetStageClear();
+                coMovingMap = StartCoroutine(CoMovingMap());
             }
             else if (triggers[currTriggerIndex].isMissionEnd)
             {
@@ -93,20 +96,35 @@ public class BeltScrollBattleManager : TestBattleManager
         }
     }
 
-    IEnumerator MovingMap()
+    IEnumerator CoMovingMap()
     {
+        float curMaxZPos = 0f;
+        float nextMaxZPos = 0f;
+        float movePos = 0f;
+        float platformMoveSpeedValue = 0f;
+
         yield return new WaitForSeconds(nextStageMoveTimer);
 
-        var curMaxZPos = platform.transform.position.z + 
+        curMaxZPos = platform.transform.position.z +
             triggers[currTriggerIndex].heroSettingPositions.Max(transform => transform.position.z);
-        var nextMaxZPos = triggers[currTriggerIndex + 1].heroSettingPositions.Max(transform => transform.position.z);
-        var movePos = curMaxZPos - nextMaxZPos;
 
+        if (triggers[currTriggerIndex + 1].isStageEnd)
+        {
+            platformMoveSpeedValue = 1f;
+            nextMaxZPos = roads[nodeIndex].fadeTrigger.heroSettingPositions.Max(transform => transform.position.z);
+        }
+        else
+        {
+            platformMoveSpeedValue = platformMoveSpeed;
+            nextMaxZPos = triggers[currTriggerIndex + 1].heroSettingPositions.Max(transform => transform.position.z);
+        }
+
+        movePos = curMaxZPos - nextMaxZPos;
         currTriggerIndex++;
 
         while (platform.transform.position.z >= movePos)
         {
-            platform.transform.Translate((Vector3.forward * platformMoveSpeed * Time.deltaTime) * -1);
+            platform.transform.Translate((Vector3.forward * platformMoveSpeedValue * Time.deltaTime) * -1);
             yield return null;
         }
 
@@ -115,5 +133,45 @@ public class BeltScrollBattleManager : TestBattleManager
         {
             useHeroes[i].ChangeUnitState(UnitState.Battle);
         }
+    }
+
+    public override void MoveNextStage(float timer)
+    {
+        StopCoroutine(coMovingMap);
+        base.MoveNextStage(timer);
+        coResetMap = StartCoroutine(CoResetMap(timer));
+    }
+    private IEnumerator CoResetMap(float timer)
+    {
+        currTriggerIndex = 0;
+        Logger.Debug("End!");
+
+        yield return new WaitForSeconds(timer / Time.timeScale);
+
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            useHeroes[i].ResetData();
+        }
+
+        platform.transform.position = Vector3.zero;
+
+        // 여기에 에너미들 바꿔주는 거랑 마리수 조정
+        // 일단은 다시 소환하는걸로
+        ResetStage();
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            Invoke(nameof(OnReady), 1f);
+        }
+        enemyCountTxt.Count = GetAllEnemyCount();
+
+        DestroyRoad();
+        RemoveRoadTrigger();
+        ResetRoads();
+        CreateRoad(platform);
+        AddRoadTrigger();
+
+        // 페이드 아웃
+        coFadeOut = StartCoroutine(CoFadeOut());
+        yield break;
     }
 }

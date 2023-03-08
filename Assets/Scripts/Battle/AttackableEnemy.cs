@@ -113,8 +113,8 @@ public class AttackableEnemy : AttackableUnit
         base.ResetData();
         UnitState = UnitState.None;
         battleState = UnitBattleState.None;
-
-        animator.Play("Default State");
+        UnitHp = characterData.data.healthPoint;
+        hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
         lastActiveSkillTime = lastNormalAttackTime = lastNavTime = Time.time;
         target = null;
         animator.Rebind();

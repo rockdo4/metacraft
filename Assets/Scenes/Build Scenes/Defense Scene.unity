@@ -1661,6 +1661,15 @@ MonoBehaviour:
   - {fileID: 7014321635573080319}
   fadePanel: {fileID: 1490594065}
   isFadeIn: 1
+  tree: {fileID: 0}
+  roads: []
+  roadPrefab: {fileID: 0}
+  roadTr: {fileID: 0}
+  roadRots:
+  - {x: 0, y: -45, z: 0}
+  - {x: 0, y: 0, z: 0}
+  - {x: 0, y: 45, z: 0}
+  roadCount: 3
 --- !u!1 &1332120397 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3984058621884256230, guid: 6efa22ad4f02a9c4a974c0373d41021f,
@@ -2236,7 +2245,8 @@ MonoBehaviour:
   m_fontAsset: {fileID: 11400000, guid: bdc64b4452911cf4faf0e62328b0082f, type: 2}
   m_sharedMaterial: {fileID: 4565134964853867374, guid: bdc64b4452911cf4faf0e62328b0082f,
     type: 2}
-  m_fontSharedMaterials: []
+  m_fontSharedMaterials:
+  - {fileID: 4565134964853867374, guid: bdc64b4452911cf4faf0e62328b0082f, type: 2}
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
