@@ -78,8 +78,8 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected List<Buff> buffList = new();
     protected BufferState bufferState = new();
-    protected int GetFixedDamage => (int)(characterData.data.baseDamage * bufferState.attackIncrease);
-    protected int GetFixedActiveDamage => (int)(characterData.data.baseDamage * bufferState.attackIncrease);
+    protected int GetFixedDamage => (int)(characterData.data.baseDamage * bufferState.power);
+    protected int GetFixedActiveDamage => (int)(characterData.data.baseDamage * bufferState.power);
 
     protected bool isAuto = true;
     public virtual bool IsAuto {
@@ -138,7 +138,7 @@ public abstract class AttackableUnit : MonoBehaviour
         nowUpdate?.Invoke();
         for (int i = buffList.Count - 1; i >= 0; i--)
         {
-            buffList[i].Update();
+            buffList[i].TimerUpdate();
         }
     }
 
@@ -209,7 +209,6 @@ public abstract class AttackableUnit : MonoBehaviour
         else
             SearchMinHealthTarget(targetList); //체력이 가장 적은 타겟 추적
     }
-
     protected void SupportSearch()
     {
         target = GetSearchMinHealthScaleTarget((normalAttackTargetType == UnitType.Hero) ? heroList : enemyList); //근거리 타겟 추적
@@ -291,7 +290,6 @@ public abstract class AttackableUnit : MonoBehaviour
         }
         target = tempTarget;
     }
-
     public AttackableUnit GetSearchNearbyTarget(List<AttackableUnit> list) 
     {
         AttackableUnit minTarget = null;
@@ -317,7 +315,6 @@ public abstract class AttackableUnit : MonoBehaviour
         }
         return minTarget;
     }
-
     public AttackableUnit GetSearchTargetInAround(List<AttackableUnit> list, float dis) 
     {
         AttackableUnit minTarget = GetSearchNearbyTarget(list);
@@ -328,7 +325,6 @@ public abstract class AttackableUnit : MonoBehaviour
         else
             return null;
     }
-
     protected void SearchMaxHealthTarget(List<AttackableUnit> list) 
     {
         AttackableUnit tempTarget = null;
@@ -360,7 +356,6 @@ public abstract class AttackableUnit : MonoBehaviour
         }
         target = tempTarget;
     }
-
     protected void SearchMinHealthTarget(List<AttackableUnit> list) 
     {
         AttackableUnit tempTarget = null;
@@ -392,7 +387,6 @@ public abstract class AttackableUnit : MonoBehaviour
 
         target = tempTarget;
     }
-
     protected AttackableUnit GetSearchMinHealthScaleTarget(List<AttackableUnit> list) 
     {
         AttackableUnit nowTarget = null;
@@ -424,7 +418,6 @@ public abstract class AttackableUnit : MonoBehaviour
 
         return nowTarget;
     }
-
     public List<AttackableUnit> GetNearestUnitList(List<AttackableUnit> list, int count)
     {
         List<AttackableUnit> tempList = new();
@@ -471,7 +464,6 @@ public abstract class AttackableUnit : MonoBehaviour
 
     // Test
     public abstract void OnDead(AttackableUnit unit);
-
     public void DestroyUnit()
     {
         // 이 부분 로테이션 이상할 시 바꿔야함
@@ -480,18 +472,29 @@ public abstract class AttackableUnit : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void SetBattleManager(TestBattleManager manager)
-    {
-        battleManager = manager;
-    }
-    public void SetEnabledPathFind(bool set)
-    {
-        pathFind.enabled = set;
-    }
+    public void SetBattleManager(TestBattleManager manager) => battleManager = manager;
+    public void SetEnabledPathFind(bool set) => pathFind.enabled = set;
 
     // 여기에 State 초기화랑 트리거 모두 해제하는 코드 작성
 
-    public abstract void AddBuff(BuffType type, float scale, float duration);
-    public abstract void RemoveBuff(Buff buff);
-
+    public virtual void AddBuff(BuffInfo info, BuffIcon icon = null)
+    {
+        var findBuff = buffList.Find(t => t.buffInfo.id == info.id);
+        if (findBuff != null)
+        {
+            findBuff.timer = info.duration;
+        }
+        else
+        {
+            Buff buff = new Buff(info, this, RemoveBuff, icon);
+            buffList.Add(buff);
+            bufferState.Buffer(info.type, info.buffScale);
+        }
+    }   
+    public void BuffDurationUpdate(string id, float dur) => buffList.Find(t => t.buffInfo.id == id).timer= dur;
+    public virtual void RemoveBuff(Buff buff)
+    {
+        buffList.Remove(buff);
+        bufferState.RemoveBuffer(buff.buffInfo.type, buff.buffInfo.buffScale);
+    }
 }
