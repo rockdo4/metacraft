@@ -1,7 +1,7 @@
 using UnityEngine;
 
 public class SkillFieldWithDuration : MonoBehaviour
-{
+{   
     public int DamageResult { set { damageResult = value; } }
     public float Duration { set { duration = value; } }
     public float HitInterval { set { hitInterval = value; } }
@@ -10,29 +10,28 @@ public class SkillFieldWithDuration : MonoBehaviour
     public SkillSearchType SearchType { set { searchType = value; } }   
     public EffectEnum Effect { set { effect = value; } }
 
-    private int damageResult;
-    private float duration;
-    private float hitInterval;
-    private Transform createLocation;
-    private SkillTargetType targetType;
-    private SkillSearchType searchType;
-    private EffectEnum effect;
-
-    private float lastHitTime = 0f;
-
-    private string offSkillFieldFuncName = nameof(OffSkillField);
-    private void OnEnable()
+    protected int damageResult;
+    protected float duration;
+    protected float hitInterval;
+    protected Transform createLocation;
+    protected SkillTargetType targetType;
+    protected SkillSearchType searchType;
+    protected EffectEnum effect;
+    
+    protected float lastHitTime = 0f;
+    
+    protected string offSkillFieldFuncName = nameof(OffSkillField);
+    protected void OnEnable()
     {
         Invoke(offSkillFieldFuncName, duration);
         EffectManager.Instance.Get(effect, transform);
     }
     private void OnTriggerStay(Collider other)
-    {        
+    {   
         if (Time.time - lastHitTime < hitInterval)
             return;
 
-        lastHitTime = Time.time;
-        transform.position = createLocation.position;
+        lastHitTime = Time.time;        
 
         switch (targetType)
         {

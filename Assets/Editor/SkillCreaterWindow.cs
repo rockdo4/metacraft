@@ -52,14 +52,6 @@ public class SkillCreaterWindow : EditorWindow
 
         return characterSkill;
     }
-    private int ValueToInt(object obj)
-    {
-        return int.Parse(obj.ToString());
-    }
-    private float ValueToFloat(object obj)
-    {
-        return float.Parse(obj.ToString());
-    }
     private void SetSkillValues(CharacterSkill characterSkill)
     {
         characterSkill.id          = ValueToInt(skillInfo["ID"]);
@@ -140,5 +132,13 @@ public class SkillCreaterWindow : EditorWindow
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
+    }
+    private int ValueToInt(object obj)
+    {
+        return int.Parse(obj.ToString());
+    }
+    private float ValueToFloat(object obj)
+    {
+        return float.Parse(obj.ToString());
     }
 }
