@@ -18,7 +18,6 @@ public class LiveData : IComparable<LiveData>
     public int Power
     {
         // 전투력 계산식
-        //private set { power = baseDamage + baseDefense + healthPoint * 10; }
         get { return baseDamage + baseDefense + healthPoint * 10; }
     }
 

@@ -312,20 +312,4 @@ public class AttackableEnemy : AttackableUnit
             return null;
     }
 
-    public override void AddBuff(BuffType type, float scale, float duration)
-    {
-        Buff buff = new()
-        {
-            type = type,
-            buffScale = scale,
-            duration = duration
-        };
-        buff.removeBuff += RemoveBuff;
-
-        buffList.Add(buff);
-    }
-    public override void RemoveBuff(Buff buff)
-    {
-        buffList.Remove(buff);
-    }
 }

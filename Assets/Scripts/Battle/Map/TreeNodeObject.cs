@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TreeNodeObject : MonoBehaviour, IComparable<TreeNodeObject>
 {
     public TextMeshProUGUI nodeNameText;
     public Transform head;
     public Transform tail;
+    public Button nodeButton;
 
     public string data;
     public TreeNodeTypes type;
@@ -22,6 +24,10 @@ public class TreeNodeObject : MonoBehaviour, IComparable<TreeNodeObject>
 
     public void AddChildren(TreeNodeObject node)
     {
+        int childrensCount = childrens.Count;
+        for (int i = 0; i < childrensCount; i++)
+            if (childrens[i].Equals(node))
+                return;
         childrens.Add(node);
     }
 

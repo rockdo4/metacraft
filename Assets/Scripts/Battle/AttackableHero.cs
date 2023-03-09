@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -417,37 +418,28 @@ public class AttackableHero : AttackableUnit
             BattleState = UnitBattleState.BattleIdle;
         }
     }
-    public override void AddBuff(BuffType type, float scale, float duration)
+    public override void AddBuff(BuffInfo info, BuffIcon icon = null)
     {
         int idx = 0;
         for (int i = buffList.Count - 1; i >= 0; i--)
         {
-            if (buffList[i].duration > duration)
+            if (buffList[i].buffInfo.duration > info.duration)
             {
                 idx = i;
                 break;
             }
         }
-        var icon = heroUI.AddIcon(type, duration, idx);
-        Buff buff = new()
-        {
-            type = type,
-            buffScale = scale,
-            duration = duration,
-            icon = icon
-        };
 
-        buff.removeBuff += RemoveBuff;
-        buffList.Add(buff);
+        if(buffList.Find(t=>t.buffInfo.id == info.id) == null)
+            base.AddBuff(info, icon);
+        else
+            BuffDurationUpdate(info.id, info.duration);
 
-        bufferState.Buffer(type, scale);
     }
     public override void RemoveBuff(Buff buff)
     {
+        base.RemoveBuff(buff);
         heroUI.RemoveBuff(buff.icon);
-        buffList.Remove(buff);
-
-        bufferState.Buffer(buff.type, -buff.buffScale);
     }
 
 }

@@ -187,7 +187,6 @@ public class MissionManager : View
         if (count > 0)
         {
             //gm.CreateBattleMap();
-
             switch (gm.currentSelectMission["Type"])
             {
                 case 0:

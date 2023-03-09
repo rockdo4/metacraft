@@ -40,11 +40,6 @@ public class GameManager : Singleton<GameManager>
 
     public List<Effect> effects; // 사용할 이펙트들
 
-    //public List<GameObject> battleManagerPrefabs;
-    //private List<GameObject> createdBattleManager = new();
-    //private List<TestBattleManager> battleManagers = new();
-    //public Canvas battleCanvas;
-
     public override void Awake()
     {
         base.Awake();
@@ -198,30 +193,30 @@ public class GameManager : Singleton<GameManager>
 
             Application.Quit();
         }
-        if (Input.GetKeyDown(KeyCode.Home)) // Navigator Home Button
-        {
-            // 홈버튼
-        }
-        if (Input.GetKeyDown(KeyCode.Menu)) // Navigator Menu Button
-        {
-            // 메뉴 버튼
-        }
+        //if (Input.GetKeyDown(KeyCode.Home)) // Navigator Home Button
+        //{
+        //    // 홈버튼
+        //}
+        //if (Input.GetKeyDown(KeyCode.Menu)) // Navigator Menu Button
+        //{
+        //    // 메뉴 버튼
+        //}
 
-        // Test Key Start
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            SaveAllData();
-        }
+        //// Test Key Start
+        //if (Input.GetKeyDown(KeyCode.K))
+        //{
+        //    SaveAllData();
+        //}
 
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            LoadAllData();
-        }
+        //if (Input.GetKeyDown(KeyCode.L))
+        //{
+        //    LoadAllData();
+        //}
 
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            AddOfficeExperience(300);
-        }
+        //if (Input.GetKeyDown(KeyCode.U))
+        //{
+        //    AddOfficeExperience(300);
+        //}
         // Test Key End
     }
 
@@ -242,7 +237,6 @@ public class GameManager : Singleton<GameManager>
             sb.AppendLine($"Hero_{data.name};{JsonUtility.ToJson(data)}");
         }
         File.WriteAllText(GetSaveFilePath(), sb.ToString());
-        Logger.Debug(sb);
     }
 
     public void LoadAllData()
@@ -274,7 +268,6 @@ public class GameManager : Singleton<GameManager>
                     Logger.Debug($"Load failed {heroName}");
                 }
             }
-            Logger.Debug($"{item["ID"]}:{item["Contents"]}");
         }
     }
 
@@ -404,34 +397,4 @@ public class GameManager : Singleton<GameManager>
             eventEffectNoTagInfoList.Add((string)eventEffectInfoList[i]["ID"], midList);
         }
     }
-
-    //public void CreateBattleMap()
-    //{
-    //    if (createdBattleManager.Count != 0)
-    //        return;
-
-    //    for (int i = 0; i < battleManagerPrefabs.Count; i++)
-    //    {
-    //        var btmgrPrefab = Instantiate(battleManagerPrefabs[i]);
-    //        var btMgr = btmgrPrefab.GetComponent<TestBattleManager>();
-    //        battleManagers.Add(btMgr);
-    //        createdBattleManager.Add(btmgrPrefab);
-    //        btmgrPrefab.gameObject.SetActive(false);
-    //    }
-    //}
-    //public void EnableBattleMap()
-    //{
-    //    switch (currentSelectMission["Type"])
-    //    {
-    //        case 0:
-    //        case 1:
-    //            createdBattleManager[1].SetActive(false);
-    //            createdBattleManager[0].SetActive(true);
-    //            break;
-    //        case 2:
-    //            createdBattleManager[0].SetActive(false);
-    //            createdBattleManager[1].SetActive(true);
-    //            break;
-    //    }
-    //}
 }
