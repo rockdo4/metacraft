@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8489007089072879661}
   - component: {fileID: 8489007089072879663}
   - component: {fileID: 2207327337837353173}
-  - component: {fileID: 6871864744367694780}
+  - component: {fileID: 6385733313752509365}
   m_Layer: 6
   m_Name: "Hero_\uC9C0\uC6D0\uD615 SD"
   m_TagString: Hero
@@ -142,7 +142,7 @@ MonoBehaviour:
   precomputeOutline: 0
   bakeKeys: []
   bakeValues: []
---- !u!114 &6871864744367694780
+--- !u!114 &6385733313752509365
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -151,7 +151,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 8489007089072879651}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cac9f999136d44847bf15a83a4310afe, type: 3}
+  m_Script: {fileID: 11500000, guid: 91e7eaca1cb538941a4bd68f0c716979, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   characterData: {fileID: 8489007089072879663}
@@ -166,8 +166,8 @@ MonoBehaviour:
   heroList: []
   enemyList: []
   citizenList: []
-  unitState: 0
-  battleState: 0
+  unitState: -1
+  battleState: -1
 --- !u!1001 &6280578665800921366
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -260,4 +260,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d32210bb7c1ee77498f0919b502ecaa9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unit: {fileID: 6871864744367694780}
+  unit: {fileID: 6385733313752509365}
