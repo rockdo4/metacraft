@@ -25,7 +25,7 @@ public class TestBattleManager : MonoBehaviour
 
     // Test Member
     public List<GameObject> roadPrefab;
-    protected List<ForkedRoad> roads;
+    protected List<ForkedRoad> roads = new();
     protected GameObject road;
     public Transform roadTr;
     protected Coroutine coFadeIn;
@@ -227,7 +227,9 @@ public class TestBattleManager : MonoBehaviour
     protected void CreateRoad(GameObject platform)
     {
         if (thisNode.childrens.Count == 0)
+        {
             return;
+        }
 
         road = Instantiate(roadPrefab[thisNode.childrens.Count - 1], platform.transform);
         road.transform.position = roadTr.transform.position;
@@ -242,7 +244,10 @@ public class TestBattleManager : MonoBehaviour
     protected void AddRoadTrigger()
     {
         if (roads == null)
+        {
             return;
+        }
+         
 
         for (int i = 0; i < roads.Count; i++)
         {

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI.Extensions;
-using static UnityEngine.UI.Extensions.ContentScrollSnapHorizontal.MoveInfo;
 
 public class GeneratePolynomialTreeMap : MonoBehaviour
 {
@@ -38,14 +37,14 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
     private List<List<(TreeNodeTypes nodeType, int branchCount)>> blueprint = new();
     private int nodeIndex = 0;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            Debug.Log("new graph");
-            CreateTreeGraph();
-        }
-    }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.L))
+    //    {
+    //        Debug.Log("new graph");
+    //        CreateTreeGraph();
+    //    }
+    //}
 
     public void CreateTreeGraph()
     {
@@ -158,13 +157,30 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
 
     private IEnumerator CoLinkNodes()
     {
-        // UI Layout Group에서 포지션을 배치하기 위한 시간이 필요해서 코루틴으로 실행 시간 차이를 줌
-        yield return null;
-
         int nodesLength = nodes.Count;
         for (int i = 0; i < nodesLength - 1; i++)
-        {
             LinkNodes(nodes[i], nodes[i + 1]);
+        
+        // UI Layout Group에서 포지션을 배치하기 위한 시간이 필요해서 코루틴으로 실행 시간 차이를 줌
+        yield return null;
+        DrawLineRenderer();
+    }
+
+    private void DrawLineRenderer()
+    {
+        int depth = nodes.Count;
+
+        for (int i = 0; i < depth; i++)
+        {
+            int bundleWidth = nodes[i].Count;
+            for (int j = 0; j < bundleWidth; j++)
+            {
+                int childCount = nodes[i][j].childrensCount;
+                for (int k = 0; k < childCount; k++)
+                {
+                    CreateNewLine(nodes[i][j].tail.position, nodes[i][j].childrens[k].head.position);
+                }
+            }
         }
     }
 
@@ -172,17 +188,36 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
     {
         int parentLength = parents.Count;
         int index = 0;
+
+        int restBranch = 0;
+        TreeNodeObject parent;
         for (int i = 0; i < parentLength; i++)
         {
-            TreeNodeObject parent = parents[i];
+            parent = parents[i];
+            int count = blueprint[parent.floor][parent.number].branchCount;
+            restBranch += count;
+        }
+
+        for (int i = 0; i < parentLength; i++)
+        {
+            parent = parents[i];
             int count = blueprint[parent.floor][parent.number].branchCount;
 
             for (int j = 0; j < count; j++)
             {
                 parents[i].AddChildren(childrens[index]);
-                CreateNewLine(parent.tail.position, childrens[index].head.position);
+                restBranch--;
                 if (index != childrens.Count - 1)
+                {
                     index++;
+                }
+            }
+
+            if (index != childrens.Count - 1 &&
+                count != 1 &&
+                restBranch > childrens.Count - index)
+            {
+                index--;
             }
         }
     }

@@ -1,18 +1,23 @@
-using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class AutoButton : MonoBehaviour
 {
+    public Image butonImage;
     public TextMeshProUGUI stateTxt;
-    Dictionary<bool, string> buttonText = new();
+    Dictionary<bool, Color> textColor = new();
+    Dictionary<bool, Color> burronColor = new();
     bool nowState = false;
 
     private void Awake()
     {
-        buttonText[true] = "TRUE";
-        buttonText[false] = "!TRUE";
+        textColor[true] = Color.green;
+        burronColor[true] = Color.white;
+
+        textColor[false] = new Color(0.2f, 0.2f, 0.2f);
+        burronColor[false] = new Color(0.5f, 0.5f, 0.5f);
     }
     public void ResetData()
     {
@@ -21,7 +26,8 @@ public class AutoButton : MonoBehaviour
     public void SetAutoState(bool state)
     {
         nowState = state;
-        stateTxt.text = buttonText[nowState];
+        butonImage.color = burronColor[nowState];
+        stateTxt.color = textColor[nowState];
 
         var characters = GameObject.FindObjectsOfType<AttackableUnit>();
 

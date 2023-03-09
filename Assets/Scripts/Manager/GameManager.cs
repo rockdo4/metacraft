@@ -172,25 +172,25 @@ public class GameManager : Singleton<GameManager>
 
             Application.Quit();
         }
-        if (Input.GetKeyDown(KeyCode.Home)) // Navigator Home Button
-        {
-            // 홈버튼
-        }
-        if (Input.GetKeyDown(KeyCode.Menu)) // Navigator Menu Button
-        {
-            // 메뉴 버튼
-        }
+        //if (Input.GetKeyDown(KeyCode.Home)) // Navigator Home Button
+        //{
+        //    // 홈버튼
+        //}
+        //if (Input.GetKeyDown(KeyCode.Menu)) // Navigator Menu Button
+        //{
+        //    // 메뉴 버튼
+        //}
 
         // Test Key Start
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            SaveAllData();
-        }
+        //if (Input.GetKeyDown(KeyCode.K))
+        //{
+        //    SaveAllData();
+        //}
 
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            LoadAllData();
-        }
+        //if (Input.GetKeyDown(KeyCode.L))
+        //{
+        //    LoadAllData();
+        //}
 
         if (Input.GetKeyDown(KeyCode.U))
         {
@@ -216,7 +216,6 @@ public class GameManager : Singleton<GameManager>
             sb.AppendLine($"Hero_{data.name};{JsonUtility.ToJson(data)}");
         }
         File.WriteAllText(GetSaveFilePath(), sb.ToString());
-        Logger.Debug(sb);
     }
 
     public void LoadAllData()
@@ -248,7 +247,6 @@ public class GameManager : Singleton<GameManager>
                     Logger.Debug($"Load failed {heroName}");
                 }
             }
-            Logger.Debug($"{item["ID"]}:{item["Contents"]}");
         }
     }
 
@@ -316,6 +314,7 @@ public class GameManager : Singleton<GameManager>
     public void NextDay()
     {
         playerData.currentDay = playerData.currentDay != DayOfWeek.일 ? playerData.currentDay + 1 : DayOfWeek.월;
+        playerData.cumulateGameDay++;
     }
 
     public void AddOfficeExperience(int exp)

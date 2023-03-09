@@ -1,0 +1,32 @@
+public enum BuffType
+{
+    None = -1, // 없음
+    PowerUp,
+    DefenseUp,
+    PowerDown,
+    DefenseDown,
+    DamageReceivedUp,
+    DamageDecreaseUp,
+    DamageReceivedDown,
+    DamageDecreaseDown,
+    CriticalProbabilityUp,
+    CriticalProbabilityDown,
+    CriticalDamageUp,
+    CriticalDamageDown,
+    Provoke,
+    Stealth,
+    Stun,
+    Silence,
+    Resistance,
+    Blind,
+    Burns,
+    Freeze,
+    AttackSpeedUp,
+    AttackSpeedDown,
+    MaxHealthIncrease,
+    Shield,
+    Bleed,
+    HealthRegen,
+    LifeSteal,
+    Count // 상태 이벤트의 수를 나타내는 값
+}
