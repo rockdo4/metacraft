@@ -1,4 +1,7 @@
 
+using System;
+
+[Serializable]
 public class BufferState
 {
     public int power = 0;         // °ø°Ý·Â
@@ -21,9 +24,6 @@ public class BufferState
 
     public int bleed = 0;      // ÃâÇ÷
     public bool isBleed = false;
-
-    public int healthRegen = 0;      // Ã¼·Â È¸º¹
-    public bool isHealtRegen = false;
 
     public int lifeSteal = 0;      // ÈíÇ÷
     public bool isLifeSteal = false;
@@ -100,9 +100,7 @@ public class BufferState
                 bleed += scale;
                 isBleed = isSet;
                 break;
-            case BuffType.HealthRegen:
-                healthRegen += scale;
-                isHealtRegen = isSet;
+            case BuffType.Heal:
                 break;
             case BuffType.LifeSteal:
                 lifeSteal += scale;

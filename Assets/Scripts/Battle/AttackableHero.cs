@@ -62,7 +62,6 @@ public class AttackableHero : AttackableUnit
                     pathFind.stoppingDistance = characterData.attack.distance;
 
                     battleManager.GetEnemyList(ref enemyList);
-                    battleManager.GetHeroList(ref heroList);
 
                     animator.SetFloat("Speed", 1);
 
@@ -137,7 +136,7 @@ public class AttackableHero : AttackableUnit
 
         unitState = UnitState.Idle;
 
-        lastNormalAttackTime = lastPassiveSkillTime = Time.time;
+        lastNormalAttackTime = Time.time;
     }
     private void Start()
     {
@@ -164,7 +163,6 @@ public class AttackableHero : AttackableUnit
 
     public override void ResetData()
     {
-        base.ResetData();
         testRot = false;
         UnitState = UnitState.Idle;
         battleState = UnitBattleState.None;
@@ -300,6 +298,11 @@ public class AttackableHero : AttackableUnit
                 }
                 break;
             case UnitBattleState.Stun:
+                stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+                if (stateInfo.IsName("Stun") && stateInfo.normalizedTime >= 1.0f)
+                {
+                    StunEnd();
+                }
                 break;
         }
     }
@@ -400,7 +403,8 @@ public class AttackableHero : AttackableUnit
     }
     public override void PassiveSkillEvent()
     {
-
+        battleManager.GetHeroList(ref heroList);
+        Logger.Debug("Passive Start");
     }
     public override void ActiveSkillEnd()
     {
@@ -418,7 +422,7 @@ public class AttackableHero : AttackableUnit
             BattleState = UnitBattleState.BattleIdle;
         }
     }
-    public override void AddBuff(BuffInfo info, BuffIcon icon = null)
+    public override void AddBuff(BuffInfo info, int anotherValue, BuffIcon icon = null)
     {
         int idx = 0;
         for (int i = buffList.Count - 1; i >= 0; i--)
@@ -430,16 +434,34 @@ public class AttackableHero : AttackableUnit
             }
         }
 
-        if(buffList.Find(t=>t.buffInfo.id == info.id) == null)
-            base.AddBuff(info, icon);
+        if (buffList.Find(t => t.buffInfo.id == info.id) == null)
+        {
+            if (info.fraction != 0)
+            {
+                icon = heroUI.AddIcon(info.type, info.duration, idx);
+            }
+            base.AddBuff(info, anotherValue, icon);
+        }
         else
             BuffDurationUpdate(info.id, info.duration);
 
     }
+    public override void StunEnd()
+    {
+        base.StunEnd();
+        if (lateReturn)
+        {
+            UnitState = UnitState.ReturnPosition;
+        }
+        else
+        {
+            BattleState = UnitBattleState.BattleIdle;
+        }
+    }
     public override void RemoveBuff(Buff buff)
     {
         base.RemoveBuff(buff);
-        heroUI.RemoveBuff(buff.icon);
+        if(buff != null)
+            heroUI.RemoveBuff(buff.icon);
     }
-
 }

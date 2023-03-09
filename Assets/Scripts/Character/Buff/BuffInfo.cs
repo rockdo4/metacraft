@@ -7,6 +7,7 @@ public class BuffInfo : ScriptableObject
     public int id;              //상태의 ID
     public string name;         //상태이상의 이름(스트링테이블 연결)
     public string info;         //상태이상의 설명(스트링테이블 연결)
+    public bool isPassive;
 
     [Space, Space]
     [Header("0:특수 상태이상(ex: 체력회복)")]
@@ -23,7 +24,7 @@ public class BuffInfo : ScriptableObject
     [Space, Space]
     public BuffType type;       //상태이상의 효과(우측 효과표 참조)
     [Header("상태이상의 효과값")]
-    public int buffValue;     //상태이상의 효과값
+    public int buffValue;       //상태이상의 효과값
     [Header("상태이상의 지속시간")]
     public float duration;      //상태이상의 지속시간
 

@@ -58,7 +58,10 @@ public class TestBattleManager : MonoBehaviour
                 useHeroes.Add(attackableHero);
             }
         }
-
+        foreach(var hero in useHeroes)
+        {
+            hero.PassiveSkillEvent();
+        }
         for (int i = 0; i < choiceButtons.Count; i++)
         {
             var text = choiceButtons[i].GetComponentInChildren<TextMeshProUGUI>();

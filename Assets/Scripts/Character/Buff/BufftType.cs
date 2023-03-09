@@ -26,7 +26,7 @@ public enum BuffType
     MaxHealthIncrease,
     Shield,
     Bleed,
-    HealthRegen,
+    Heal,
     LifeSteal,
     Count // 상태 이벤트의 수를 나타내는 값
 }
