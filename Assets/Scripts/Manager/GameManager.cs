@@ -216,7 +216,6 @@ public class GameManager : Singleton<GameManager>
             sb.AppendLine($"Hero_{data.name};{JsonUtility.ToJson(data)}");
         }
         File.WriteAllText(GetSaveFilePath(), sb.ToString());
-        Logger.Debug(sb);
     }
 
     public void LoadAllData()
@@ -248,7 +247,6 @@ public class GameManager : Singleton<GameManager>
                     Logger.Debug($"Load failed {heroName}");
                 }
             }
-            Logger.Debug($"{item["ID"]}:{item["Contents"]}");
         }
     }
 

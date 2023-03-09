@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SkillEffect : Effect
 {
-    public LiveData data;
+    public LiveData liveData;
     public CharacterSkill skill;
     public string targetTag;
 
@@ -10,7 +10,7 @@ public class SkillEffect : Effect
     {
         if(other.CompareTag(targetTag))
         {
-            int dmg = skill.CreateDamageResult(data);
+            int dmg = skill.CreateDamageResult(liveData);
             other.GetComponent<AttackableUnit>().OnDamage(dmg);
         }
     }
