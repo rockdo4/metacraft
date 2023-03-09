@@ -38,9 +38,6 @@ public class GameManager : Singleton<GameManager>
 
     public event Action<string> playerLevelUp;
 
-    public GeneratePolynomialTreeMap tree;
-    public TreeNodeObject thisNode;
-
     public override void Awake()
     {
         base.Awake();
