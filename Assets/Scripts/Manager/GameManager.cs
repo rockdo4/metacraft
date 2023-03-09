@@ -114,6 +114,7 @@ public class GameManager : Singleton<GameManager>
             "사격형",
             "지원형",
             "은밀형",
+            "하율",
         };
 
         foreach (string address in spriteAddress)

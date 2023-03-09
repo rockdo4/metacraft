@@ -154,6 +154,10 @@ public class BeltScrollBattleManager : TestBattleManager
             useHeroes[i].ResetData();
         }
 
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            useHeroes[i].PassiveSkillEvent();
+        }
         platform.transform.position = Vector3.zero;
 
         // 여기에 에너미들 바꿔주는 거랑 마리수 조정
