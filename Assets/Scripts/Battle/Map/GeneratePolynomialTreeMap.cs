@@ -37,14 +37,14 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
     private List<List<(TreeNodeTypes nodeType, int branchCount)>> blueprint = new();
     private int nodeIndex = 0;
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            Debug.Log("new graph");
-            CreateTreeGraph();
-        }
-    }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.L))
+    //    {
+    //        Debug.Log("new graph");
+    //        CreateTreeGraph();
+    //    }
+    //}
 
     public void CreateTreeGraph()
     {
@@ -217,7 +217,6 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
                 count != 1 &&
                 restBranch > childrens.Count - index)
             {
-                Debug.Log($"{parent.data} {count}");
                 index--;
             }
         }

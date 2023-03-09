@@ -28,6 +28,7 @@ public class BeltScrollBattleManager : TestBattleManager
 
         CreateRoad(platform);
         AddRoadTrigger();
+        tree.gameObject.SetActive(false);
 
         for (int i = 0; i < useHeroes.Count; i++)
         {
