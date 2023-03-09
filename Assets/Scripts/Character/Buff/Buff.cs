@@ -24,6 +24,9 @@ public class Buff
     }
     public void TimerUpdate()
     {
+        if (buffInfo.inf)
+            return;
+
         timer -= Time.deltaTime;
         if (timer <= 0)
             removeBuff(this);

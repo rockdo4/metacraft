@@ -17,13 +17,16 @@ public abstract class AttackableUnit : MonoBehaviour
     [Header("Ai 타입")]
     public UnitAiType aiType;
 
-    [Space, Header("일반공격 - 타겟, 시간, 증가량")]
+    [Space, Header("일반공격 타겟")]
     public UnitType normalAttackTargetType;
+    List<BufferState> normalbuffs;
+
     public Transform attackPos;
     public FireBallTest attackPref; //테스트용
 
-    [Space, Header("궁극기 - 타겟, 버프or디버프, 시간, 증가량")]
+    [Space, Header("궁극기 타겟")]
     public UnitType activeAttackTargetType;
+    List<BufferState> attackkbuffs;
 
     protected float searchDelay = 1f;
     protected float lastSearchTime;
@@ -78,8 +81,8 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected List<Buff> buffList = new();
     protected BufferState bufferState = new();
-    protected int GetFixedDamage => (int)(characterData.data.baseDamage * bufferState.power);
-    protected int GetFixedActiveDamage => (int)(characterData.data.baseDamage * bufferState.power);
+    protected int GetFixedDamage => (int)(characterData.data.baseDamage + (characterData.data.baseDamage * (bufferState.power/100f)));
+    protected int GetFixedActiveDamage => (int)(characterData.data.baseDamage + (characterData.data.baseDamage * (bufferState.power/100f)));
 
     protected bool isAuto = true;
     public virtual bool IsAuto {
@@ -488,13 +491,13 @@ public abstract class AttackableUnit : MonoBehaviour
         {
             Buff buff = new Buff(info, this, RemoveBuff, icon);
             buffList.Add(buff);
-            bufferState.Buffer(info.type, info.buffScale);
+            bufferState.Buffer(info.type, info.buffValue);
         }
     }   
-    public void BuffDurationUpdate(string id, float dur) => buffList.Find(t => t.buffInfo.id == id).timer= dur;
+    public void BuffDurationUpdate(int id, float dur) => buffList.Find(t => t.buffInfo.id == id).timer= dur;
     public virtual void RemoveBuff(Buff buff)
     {
         buffList.Remove(buff);
-        bufferState.RemoveBuffer(buff.buffInfo.type, buff.buffInfo.buffScale);
+        bufferState.RemoveBuffer(buff.buffInfo.type, buff.buffInfo.buffValue);
     }
 }
