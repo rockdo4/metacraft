@@ -1,7 +1,12 @@
 
+using System;
+
+[Serializable]
 public class BufferState
 {
-    public int power = 0;         // 공격력
+    public int damage = 0;         // 공격력
+    public int Damage => Math.Clamp(damage, -50, 300);
+
     public int defense = 0;      // 방어력
     public int damageReceived = 0;      // 받는 피해
     public int damageDecrease = 0;      // 주는 피해
@@ -22,9 +27,6 @@ public class BufferState
     public int bleed = 0;      // 출혈
     public bool isBleed = false;
 
-    public int healthRegen = 0;      // 체력 회복
-    public bool isHealtRegen = false;
-
     public int lifeSteal = 0;      // 흡혈
     public bool isLifeSteal = false;
 
@@ -40,10 +42,10 @@ public class BufferState
         switch (type)
         {
             case BuffType.PowerUp:
-                power += scale;
+                damage += scale;
                 break;
             case BuffType.PowerDown:
-                power -= scale;
+                damage -= scale;
                 break;
             case BuffType.DefenseUp:
                 defense += scale;
@@ -100,9 +102,7 @@ public class BufferState
                 bleed += scale;
                 isBleed = isSet;
                 break;
-            case BuffType.HealthRegen:
-                healthRegen += scale;
-                isHealtRegen = isSet;
+            case BuffType.Heal:
                 break;
             case BuffType.LifeSteal:
                 lifeSteal += scale;

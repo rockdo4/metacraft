@@ -10,8 +10,8 @@ public class SkillEffect : Effect
     {
         if(other.CompareTag(targetTag))
         {
-            int dmg = skill.CreateDamageResult(liveData);
-            other.GetComponent<AttackableUnit>().OnDamage(dmg);
+            //int dmg = skill.CreateDamageResult(liveData);
+            //other.GetComponent<AttackableUnit>().OnDamage(dmg, liveData);
         }
     }
 }

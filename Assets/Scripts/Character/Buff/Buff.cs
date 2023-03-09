@@ -24,7 +24,7 @@ public class Buff
     }
     public void TimerUpdate()
     {
-        if (buffInfo.inf)
+        if (buffInfo.inf && buffInfo.isPassive)
             return;
 
         timer -= Time.deltaTime;
