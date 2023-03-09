@@ -27,6 +27,10 @@ public class GameManager : Singleton<GameManager>
     public List<Dictionary<string, object>> dispatchInfoList;
     public List<Dictionary<string, object>> officeInfoList;
     public List<Dictionary<string, object>> eventInfoList;
+    public List<Dictionary<string, object>> eventEffectInfoList;
+    public Dictionary<string, List<Dictionary<string, string>>> eventEffectTagInfoList;
+    public Dictionary<string, List<Dictionary<string, float>>> eventEffectNoTagInfoList;
+
 
     // Office Select
     public GameObject currentSelectObject; // Hero Info
@@ -109,6 +113,18 @@ public class GameManager : Singleton<GameManager>
                 {
                     eventInfoList = CSVReader.SplitTextAsset(obj.Result);
                     Addressables.Release(obj);
+                };
+
+        // 이벤트 이펙트 테이블 로드
+        var eeit = Addressables.LoadAssetAsync<TextAsset>("EventEffectTable");
+
+        eeit.Completed +=
+                (AsyncOperationHandle<TextAsset> obj) =>
+                {
+                    eventEffectInfoList = CSVReader.SplitTextAsset(obj.Result,true, false);
+                    Addressables.Release(obj);
+
+                    FixEventEffectTable();
                 };
 
         List<AsyncOperationHandle> handles = new();
@@ -357,6 +373,39 @@ public class GameManager : Singleton<GameManager>
         playerData.stamina = (int)officeInfoList[level]["Stamina"];
         playerData.inventoryCount = (int)officeInfoList[level]["InventoryCount"];
         Logger.Debug($"현재 레벨 : {playerData.officeLevel}");
+    }
+
+    private void FixEventEffectTable()
+    {
+        eventEffectTagInfoList = new Dictionary<string,List<Dictionary<string,string>>>();
+        for (int i = 0; i < eventEffectInfoList.Count; i++)
+        {
+            var midList = new List<Dictionary<string,string>>();
+            for (int j = 0; j<10;j++)
+            {
+                var smallDic = new Dictionary<string,string>();
+                string tag = $"Tag{j+1}";
+                string beHaveTag = $"BeHaveTag{j + 1}";
+                smallDic.Add((string)eventEffectInfoList[i][tag], (string)eventEffectInfoList[i][beHaveTag]);
+                midList.Add(smallDic);
+            }
+            eventEffectTagInfoList.Add((string)eventEffectInfoList[i]["ID"], midList);
+        }
+
+        eventEffectNoTagInfoList = new Dictionary<string, List<Dictionary<string, float>>>();
+        for (int i = 0; i < eventEffectInfoList.Count; i++)
+        {
+            var midList = new List<Dictionary<string, float>>();
+            for (int j = 0; j < 3; j++)
+            {
+                var smallDic = new Dictionary<string, float>();
+                string text = $"NoTagsText{j + 1}";
+                string rate = $"NoTagsRate{j + 1}";
+                smallDic.Add(eventEffectInfoList[i][text].ToString(), float.Parse(eventEffectInfoList[i][rate].ToString()));
+                midList.Add(smallDic);
+            }
+            eventEffectNoTagInfoList.Add((string)eventEffectInfoList[i]["ID"], midList);
+        }
     }
 
     //public void CreateBattleMap()
