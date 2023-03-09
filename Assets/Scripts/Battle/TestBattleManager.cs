@@ -39,6 +39,7 @@ public class TestBattleManager : MonoBehaviour
     {
         List<GameObject> selectedHeroes = GameManager.Instance.GetSelectedHeroes();
         int count = selectedHeroes.Count;
+        tree.gameObject.SetActive(true);
 
         for (int i = 0; i < count; i++)
         {
@@ -57,7 +58,7 @@ public class TestBattleManager : MonoBehaviour
                 useHeroes.Add(attackableHero);
             }
         }
-        
+
         for (int i = 0; i < choiceButtons.Count; i++)
         {
             var text = choiceButtons[i].GetComponentInChildren<TextMeshProUGUI>();
@@ -65,7 +66,8 @@ public class TestBattleManager : MonoBehaviour
         }
 
         tree.CreateTreeGraph();
-        thisNode = tree.root; // 현재 위치한 노드
+        //thisNode = tree.root; // 현재 위치한 노드
+        SetThisNode(tree.root);
 
         // tree.root.type 맵 타입
         // tree.root.childrens 맵 순서
@@ -76,6 +78,12 @@ public class TestBattleManager : MonoBehaviour
 
         FindObjectOfType<AutoButton>().ResetData();
         evManager = FindObjectOfType<EventManager>();
+    }
+
+    protected void SetThisNode(TreeNodeObject node)
+    {
+        thisNode = node;
+        tree.SetNodeHighlighter(node);
     }
 
     public List<Transform> GetStartPosition()
@@ -131,7 +139,7 @@ public class TestBattleManager : MonoBehaviour
     {
         for (int i = 0; i < useHeroes.Count; i++)
         {
-            Logger.Debug("Return");
+            // Logger.Debug("Return");
             ((AttackableHero)useHeroes[i]).SetReturnPos(pos[i]);
             useHeroes[i].ChangeUnitState(UnitState.ReturnPosition);
         }
@@ -142,7 +150,7 @@ public class TestBattleManager : MonoBehaviour
         UIManager.Instance.ShowView(1);
         GameManager.Instance.NextDay();
         clearUi.SetData();
-        Logger.Debug("Clear!");
+        // Logger.Debug("Clear!");
     }
 
     protected IEnumerator CoFadeIn()
@@ -179,14 +187,37 @@ public class TestBattleManager : MonoBehaviour
 
     public virtual void SelectNextStage(int index)
     {
-        int stageIndex = nodeIndex = choiceButtons[index].choiceIndex;
-        thisNode = thisNode.childrens[stageIndex];
+        //int stageIndex = nodeIndex = index; // choiceButtons[index].choiceIndex;
+        //thisNode = thisNode.childrens[stageIndex];
 
+        nodeIndex = index;
+        TreeNodeObject prevNode = thisNode;
+        SetThisNode(thisNode.childrens[index]);
         readyCount = useHeroes.Count;
-
-        for (int i = 0; i < choiceButtons.Count; i++)
+        int childCount = prevNode.childrens.Count;
+        for (int i = 0; i< childCount; i++)
         {
-            choiceButtons[i].gameObject.SetActive(false);
+            prevNode.childrens[i].nodeButton.onClick.RemoveAllListeners();
+        }
+        tree.OffMovableHighlighters();
+
+        //for (int i = 0; i < choiceButtons.Count; i++)
+        //{
+        //    choiceButtons[i].gameObject.SetActive(false);
+        //}
+    }
+
+    protected void ChoiceNextStageByNode()
+    {
+        tree.gameObject.SetActive(true);
+
+        List<TreeNodeObject> childs = thisNode.childrens;
+        tree.SetMovableHighlighter(thisNode);
+        int count = childs.Count;
+        for (int i = 0; i < count; i++)
+        {
+            int num = i;
+            childs[i].nodeButton.onClick.AddListener(() => SelectNextStage(num));
         }
     }
 
@@ -228,7 +259,7 @@ public class TestBattleManager : MonoBehaviour
         Time.timeScale = 0;
         GameManager.Instance.NextDay();
         UIManager.Instance.ShowView(2);
-        Logger.Debug("Fail!");
+        // Logger.Debug("Fail!");
     }
 
     // 길목 생성
@@ -287,6 +318,7 @@ public class TestBattleManager : MonoBehaviour
         {
             Utils.CopyPositionAndRotation(useHeroes[i].gameObject, startPositions[i]);
         }
+        tree.gameObject.SetActive(false);
     }
 
     protected void OnStageComplete()

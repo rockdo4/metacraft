@@ -6,9 +6,9 @@ public class CharacterData : ScriptableObject, IComparable<CharacterData>
 {
     public new string   name;               // 이름
     [Range(1, 5)]
-    public int          grade = 1;              // 등급
+    public int          grade = 1;          // 등급
     [Range(1, 5)]
-    public int          maxGrade = 1;           // 승급 가능 최대 등급
+    public int          maxGrade = 1;       // 승급 가능 최대 등급
 
     public string       job;                // 직업, 특성
 
@@ -18,14 +18,14 @@ public class CharacterData : ScriptableObject, IComparable<CharacterData>
     [Range(0, 1000)]
     public int          likeability;        // 호감도
 
-    public int Power
-    {
-        // 전투력 계산식
-        private set { power = baseDamage + baseDefense + healthPoint * 10; }
-        get { return power; }
-    }
+    //public int Power
+    //{
+    //    // 전투력 계산식
+    //    private set { power = baseDamage + baseDefense + healthPoint * 10; }
+    //    get { return power; }
+    //}
 
-    private int power;              // 전투력
+    //private int power;              // 전투력
     public int baseDamage = 50;     // 일반 공격 데미지
     public int baseDefense = 0;     // 방어력
     public int healthPoint = 500;   // 최대 체력

@@ -28,20 +28,41 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
     public GameObject nodeBundlePrefab;
     public GameObject treeNodePrefab;
     public GameObject uiLineRendererPrefab;
+    public GameObject movableHighlighterPrefab;
+
     public Transform nodeTarget;
     public Transform lineRendererTarget;
+    public Transform movableHighlighterTarget;
+
+    public GameObject currentNodeHighlighter;
 
     private List<GameObject> bundles = new();
     private List<List<TreeNodeObject>> nodes = new();
     private List<GameObject> lines = new();
-    private List<List<(TreeNodeTypes nodeType, int branchCount)>> blueprint = new();
+    private List<List<TreeBlueprintData>> blueprint = new();
+    private List<GameObject> highlighters = new();
     private int nodeIndex = 0;
+
+    private struct TreeBlueprintData
+    {
+        public TreeNodeTypes nodeType;
+        public int branchCount;
+        public int floor;
+        public int number;
+
+        public TreeBlueprintData(TreeNodeTypes _type, int _count, int _floor, int _number)
+        {
+            nodeType = _type;
+            branchCount = _count;
+            floor = _floor;
+            number = _number;
+        }
+    }
 
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.L))
         {
-            Debug.Log("new graph");
             CreateTreeGraph();
         }
     }
@@ -50,10 +71,34 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
     {
         nodeIndex = 0;
         DestroyAllObjs();
-        CreateBundles(height - 2);      // 트리의 깊이 설정
+        InitSettings(height - 2);       // 트리의 깊이 설정, 필요한 오브젝트 생성
         CreateBlueprint();              // 설계도 생성
         CreateNodes();                  // 노드 생성
         StartCoroutine(CoLinkNodes());  // 노드 연결
+    }
+
+    public void SetNodeHighlighter(TreeNodeObject node)
+    {
+        currentNodeHighlighter.transform.position = node.transform.position;
+    }
+
+    public void SetMovableHighlighter(TreeNodeObject node)
+    {
+        List<TreeNodeObject> movableNodes = node.childrens;
+        int count = movableNodes.Count;
+        for (int i = 0; i < count; i++)
+        {
+            highlighters[i].transform.position = movableNodes[i].transform.position;
+            highlighters[i].SetActive(true);
+        }
+    }
+
+    public void OffMovableHighlighters()
+    {
+        for (int i = 0; i < width; i++)
+        {
+            highlighters[i].SetActive(false);
+        }
     }
 
     private void CreateBlueprint()
@@ -104,7 +149,8 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
                         randNum < branch3Prob ? 3 :
                         randNum < branch2Prob ? 2 : 1;
                 }
-                blueprint[i].Add((type != TreeNodeTypes.None ? type : SelectType(), branchCount));
+                TreeBlueprintData data = new(SelectType(type), branchCount, i, j);
+                blueprint[i].Add(data);
             }
         }
     }
@@ -113,18 +159,20 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
     {
         for (int i = 0; i < height; i++)
         {
-            int number = 0;
-            foreach ((TreeNodeTypes type, int branchCount) in blueprint[i])
+            foreach (TreeBlueprintData data in blueprint[i])
             {
-                CreateNewNodeInstance(bundles[i].transform, i, number++, $"{type}{nodeIndex++}", type);
+                CreateNewNodeInstance(bundles[i].transform, data);
             }
         }
         root = nodes[0][0].GetComponent<TreeNodeObject>();
         boss = nodes[height - 1][0].GetComponent<TreeNodeObject>();
     }
 
-    private TreeNodeTypes SelectType()
+    private TreeNodeTypes SelectType(TreeNodeTypes type)
     {
+        if (type != TreeNodeTypes.None)
+            return type;
+
         List<TreeNodeTypes> pool = new();
         if (localNormalCount > 0)
             pool.Add(TreeNodeTypes.Normal);
@@ -159,11 +207,13 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
     {
         int nodesLength = nodes.Count;
         for (int i = 0; i < nodesLength - 1; i++)
-            LinkNodes(nodes[i], nodes[i + 1]);
+            LinkNodes(i, nodes[i], nodes[i + 1]);
         
         // UI Layout Group에서 포지션을 배치하기 위한 시간이 필요해서 코루틴으로 실행 시간 차이를 줌
         yield return null;
         DrawLineRenderer();
+        SetNodeHighlighter(root);
+        gameObject.SetActive(false);
     }
 
     private void DrawLineRenderer()
@@ -175,7 +225,7 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
             int bundleWidth = nodes[i].Count;
             for (int j = 0; j < bundleWidth; j++)
             {
-                int childCount = nodes[i][j].childrensCount;
+                int childCount = nodes[i][j].childrens.Count;
                 for (int k = 0; k < childCount; k++)
                 {
                     CreateNewLine(nodes[i][j].tail.position, nodes[i][j].childrens[k].head.position);
@@ -184,24 +234,18 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
         }
     }
 
-    private void LinkNodes(List<TreeNodeObject> parents, List<TreeNodeObject> childrens)
+    private void LinkNodes(int floor, List<TreeNodeObject> parents, List<TreeNodeObject> childrens)
     {
         int parentLength = parents.Count;
         int index = 0;
 
         int restBranch = 0;
-        TreeNodeObject parent;
         for (int i = 0; i < parentLength; i++)
-        {
-            parent = parents[i];
-            int count = blueprint[parent.floor][parent.number].branchCount;
-            restBranch += count;
-        }
+            restBranch += blueprint[floor][i].branchCount;
 
         for (int i = 0; i < parentLength; i++)
         {
-            parent = parents[i];
-            int count = blueprint[parent.floor][parent.number].branchCount;
+            int count = blueprint[floor][i].branchCount;
 
             for (int j = 0; j < count; j++)
             {
@@ -217,7 +261,6 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
                 count != 1 &&
                 restBranch > childrens.Count - index)
             {
-                Debug.Log($"{parent.data} {count}");
                 index--;
             }
         }
@@ -233,16 +276,16 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
         lr.enabled = true;
     }
 
-    private GameObject CreateNewNodeInstance(Transform target, int hIndex, int wIndex, string data, TreeNodeTypes type)
+    private GameObject CreateNewNodeInstance(Transform target, TreeBlueprintData data)
     {
         GameObject instanceNode = Instantiate(treeNodePrefab, target);
         TreeNodeObject node = instanceNode.GetComponent<TreeNodeObject>();
-        node.SetInit(data, hIndex, wIndex, type);
-        nodes[hIndex].Add(node);
+        node.SetInit($"{data.nodeType}{nodeIndex++}", data.nodeType);
+        nodes[data.floor].Add(node);
         return instanceNode;
     }
 
-    public void CreateBundles(int depth)
+    public void InitSettings(int depth)
     {
         for (int i = 0; i < depth + 2; i++)
         {
@@ -250,6 +293,13 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
             bundle.name = $"bundle_{i}";
             nodes.Add(new());
             bundles.Add(bundle);
+        }
+
+        for (int i = 0; i < width; i++)
+        {
+            GameObject highlighterObj = Instantiate(movableHighlighterPrefab, movableHighlighterTarget);
+            highlighters.Add(highlighterObj);
+            highlighterObj.SetActive(false);
         }
     }
 
@@ -290,5 +340,13 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
                 Destroy(lines[i]);
         }
         lines.Clear();
+
+        int hcount = highlighters.Count;
+        for (int i = 0; i < hcount; i++)
+        {
+            if (highlighters[i] != null)
+                Destroy(highlighters[i]);
+        }
+        highlighters.Clear();
     }
 }

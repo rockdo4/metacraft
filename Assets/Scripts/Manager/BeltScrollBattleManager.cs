@@ -103,7 +103,8 @@ public class BeltScrollBattleManager : TestBattleManager
             }
             else if (triggers[currTriggerIndex + 1] != null && triggers[currTriggerIndex + 1].isStageEnd)
             {
-                ChoiceNextStage();
+                //ChoiceNextStage();
+                ChoiceNextStageByNode();
             }
             else if (!triggers[currTriggerIndex].isStageEnd)
             {
@@ -162,7 +163,7 @@ public class BeltScrollBattleManager : TestBattleManager
     private IEnumerator CoResetMap(float timer)
     {
         currTriggerIndex = 0;
-        Logger.Debug("End!");
+        // Logger.Debug("End!");
 
         yield return new WaitForSeconds(timer / Time.timeScale);
 
@@ -198,7 +199,7 @@ public class BeltScrollBattleManager : TestBattleManager
         CreateRoad(platform);
         AddRoadTrigger();
 
-        if (thisNode.nodeNameText.text == "Boss")
+        if (thisNode.type == TreeNodeTypes.Boss)
         {
             triggers.Last().isMissionEnd = true;
         }
