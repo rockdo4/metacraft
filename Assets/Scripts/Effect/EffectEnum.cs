@@ -4,5 +4,6 @@ public enum EffectEnum
     CFXRExplosion1,
     CFXR3MagicAuraARunic,
     CFXRImpactGlowingHDRBlue,
+    CFXR3LightGlowA,
     Count,
 }

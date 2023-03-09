@@ -155,6 +155,7 @@ public class ActiveSkillAOE : CharacterSkill
     }
     public void OffIndicatorsForOnActiveSkill()
     {
+        EffectManager.Instance.Get(indicatorEffect, indicatorTransform);
         skillAreaIndicator.Renderer.enabled = false;
         castRangeIndicator.SetActive(false);
     }
