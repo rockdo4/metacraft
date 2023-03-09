@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -19,12 +18,14 @@ public abstract class AttackableUnit : MonoBehaviour
 
     [Space, Header("ÀÏ¹Ý°ø°Ý Å¸°Ù")]
     public UnitType normalAttackTargetType;
+    List<BufferState> normalbuffs;
 
     public Transform attackPos;
     public FireBallTest attackPref; //Å×½ºÆ®¿ë
 
     [Space, Header("±Ã±Ø±â Å¸°Ù")]
     public UnitType activeAttackTargetType;
+    List<BufferState> attackkbuffs;
 
     protected float searchDelay = 1f;
     protected float lastSearchTime;
@@ -41,7 +42,7 @@ public abstract class AttackableUnit : MonoBehaviour
         get { return characterData.data.currentHp;  }
         set { characterData.data.currentHp = Mathf.Max(value, 0); }
     }
-    public float UnitHpScale => (float)characterData.data.currentHp / (float)characterData.data.healthPoint;
+    public float UnitHpScale => (float)characterData.data.currentHp / characterData.data.healthPoint;
 
     protected float lastNormalAttackTime;
     protected float lastPassiveSkillTime;
@@ -129,9 +130,9 @@ public abstract class AttackableUnit : MonoBehaviour
     {
         LiveData data = GetUnitData().data;
         LevelUpAdditional(
-            (int) (data.baseDamage * (1 + multipleDamage)),
-            (int) (data.baseDefense * (1 + multipleDefense)),
-            (int) (data.healthPoint * (1 + multipleHealthPoint)));
+            (int) (data.baseDamage * multipleDamage),
+            (int) (data.baseDefense * multipleDefense),
+            (int) (data.healthPoint * multipleHealthPoint));
     }
 
     protected void Update()
@@ -497,5 +498,10 @@ public abstract class AttackableUnit : MonoBehaviour
     {
         buffList.Remove(buff);
         bufferState.RemoveBuffer(buff.buffInfo.type, buff.buffInfo.buffValue);
+    }
+
+    public void SetMaxHp()
+    {
+        UnitHp = GetUnitData().data.healthPoint;
     }
 }

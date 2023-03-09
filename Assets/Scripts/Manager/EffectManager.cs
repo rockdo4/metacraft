@@ -89,7 +89,7 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
             effectPool[effectListIndex].Add(effect);
         }
 
-        parent.transform.parent = GameObject.FindGameObjectWithTag("ParentFloor").transform;
+        //parent.transform.parent = GameObject.FindGameObjectWithTag("ParentFloor").transform;
     }
 
     // 현재 사용하고 있는 풀
