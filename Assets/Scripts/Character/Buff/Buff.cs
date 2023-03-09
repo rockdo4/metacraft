@@ -1,28 +1,31 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "Buff", menuName = "Buff/info")]
-public class Buff : ScriptableObject
+public class Buff
 {
-    public string id;
+    public BuffInfo buffInfo;
+
     public AttackableUnit myCharacter;
-    public float duration; //ÃÑ Áö¼Ó½Ã°£
-    public BuffType type;
-    public float buffScale;
-    public BuffIcon icon;
-    public bool inf = false;
-    public Effect buffParticle;
-
     public Action<Buff> removeBuff;
+    public BuffIcon icon;
+    public float timer = 0;
 
+    public Buff(BuffInfo info, AttackableUnit character, Action<Buff> remove, BuffIcon icon = null)
+    {
+        buffInfo = info;
+        myCharacter = character;
+        removeBuff = remove;
+        this.icon = icon;
+        timer = buffInfo.duration;
+    }
     public void OnEffect()
     {
 
     }
     public void TimerUpdate()
     {
-        duration -= Time.deltaTime;
-        if (duration <= 0)
+        timer -= Time.deltaTime;
+        if (timer <= 0)
             removeBuff(this);
     }
 }

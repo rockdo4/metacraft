@@ -477,33 +477,24 @@ public abstract class AttackableUnit : MonoBehaviour
 
     // 여기에 State 초기화랑 트리거 모두 해제하는 코드 작성
 
-    public virtual void AddBuff(string id, BuffType type, float scale, float duration, BuffIcon icon = null)
+    public virtual void AddBuff(BuffInfo info, BuffIcon icon = null)
     {
-        var findBuff = buffList.Find(t => t.id == id);
+        var findBuff = buffList.Find(t => t.buffInfo.id == info.id);
         if (findBuff != null)
         {
-            findBuff.duration = duration;
+            findBuff.timer = info.duration;
         }
         else
         {
-            Buff buff = new()
-            {
-                id = id,
-                type = type,
-                buffScale = scale,
-                duration = duration,
-                icon = icon
-            };
-            buff.removeBuff += RemoveBuff;
+            Buff buff = new Buff(info, this, RemoveBuff, icon);
             buffList.Add(buff);
-            bufferState.Buffer(type, scale);
+            bufferState.Buffer(info.type, info.buffScale);
         }
-    }
-    public void BuffDurationUpdate(string id, float dur) => buffList.Find(t => t.id == id).duration = dur;
+    }   
+    public void BuffDurationUpdate(string id, float dur) => buffList.Find(t => t.buffInfo.id == id).timer= dur;
     public virtual void RemoveBuff(Buff buff)
     {
         buffList.Remove(buff);
-        bufferState.RemoveBuffer(buff.type, buff.buffScale);
+        bufferState.RemoveBuffer(buff.buffInfo.type, buff.buffInfo.buffScale);
     }
-
 }
