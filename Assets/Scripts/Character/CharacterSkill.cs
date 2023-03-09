@@ -20,8 +20,8 @@ public class CharacterSkill : ScriptableObject
 
     public SkillTargetType targetType;
     public SkillSearchType searchType;
-    public EffectEnum indicatorEffect;
-    public EffectEnum effectEnum;
+    public EffectEnum readyEffect;
+    public EffectEnum activeEffect;
 
     public bool isCriticalPossible;
     public bool isAuto;

@@ -15,6 +15,7 @@ public class SkillFieldWithDuraiontSector : SkillFieldWithDuration
         int enemyLayerMask = 1 << LayerMask.NameToLayer("Enemy");
         int heroLayerMask = 1 << LayerMask.NameToLayer("Hero");
         layerMask = isTargetEnemy ? enemyLayerMask : heroLayerMask;
+        colliders = new Collider[maxColliders];
     }
     private void Update()
     {
@@ -24,6 +25,7 @@ public class SkillFieldWithDuraiontSector : SkillFieldWithDuration
         lastHitTime = Time.time;
 
         maxColliders = Physics.OverlapSphereNonAlloc(transform.position, radius, colliders, layerMask);
+        
         for (int i = 0; i < maxColliders; i++)
         {
             if (IsInAngle(colliders[i]) && IsInRaidus(colliders[i].transform.position))

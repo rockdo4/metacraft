@@ -129,7 +129,7 @@ public class ActiveSkillAOE : CharacterSkill
     }
     public override void OnActiveSkill(LiveData data)
     {        
-        EffectManager.Instance.Get(effectEnum, indicatorTransform);
+        EffectManager.Instance.Get(activeEffect, indicatorTransform);
 
         var targets = skillAreaIndicator.GetUnitsInArea();
 
@@ -154,7 +154,7 @@ public class ActiveSkillAOE : CharacterSkill
     }
     public void readyEffectUntillOnActiveSkill()
     {
-        EffectManager.Instance.Get(indicatorEffect, indicatorTransform);
+        EffectManager.Instance.Get(readyEffect, indicatorTransform);
         skillAreaIndicator.Renderer.enabled = false;
         castRangeIndicator.SetActive(false);
     }

@@ -9,6 +9,7 @@ public class SkillFieldWithDuration : MonoBehaviour
     public SkillTargetType TargetType { set { targetType = value; } }
     public SkillSearchType SearchType { set { searchType = value; } }   
     public EffectEnum Effect { set { effect = value; } }
+    public bool IsInit = false;
 
     protected int damageResult;
     protected float duration;
@@ -22,9 +23,10 @@ public class SkillFieldWithDuration : MonoBehaviour
     
     protected string offSkillFieldFuncName = nameof(OffSkillField);
     protected void OnEnable()
-    {
+    {        
         Invoke(offSkillFieldFuncName, duration);
-        EffectManager.Instance.Get(effect, transform);
+        if(IsInit)
+            EffectManager.Instance.Get(effect, transform);
     }
     private void OnTriggerStay(Collider other)
     {   

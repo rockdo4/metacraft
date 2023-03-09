@@ -21,9 +21,10 @@ public class AOEWithDuration : ActiveSkillAOE
         skillField.SearchType = searchType;
         skillField.gameObject.SetActive(false);
         skillField.CreateLocation = indicatorTransform;
-        skillField.Duration= duration;
-        skillField.HitInterval= hitInterval;
-        skillField.Effect = effectEnum;
+        skillField.Duration = duration;
+        skillField.HitInterval = hitInterval;
+        skillField.Effect = activeEffect;
+        skillField.IsInit = true;
         SetFieldScale();
     }
 
