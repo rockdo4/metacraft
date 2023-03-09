@@ -112,6 +112,10 @@ public class AttackableHero : AttackableUnit
                     animator.ResetTrigger("AttackEnd");
                     break;
                 case UnitBattleState.Stun:
+                    pathFind.isStopped = true;
+                    animator.SetTrigger("Stun");
+                    animator.ResetTrigger("Attack");
+                    animator.ResetTrigger("AttackEnd");
                     break;
             }
         }
@@ -299,11 +303,6 @@ public class AttackableHero : AttackableUnit
                 }
                 break;
             case UnitBattleState.Stun:
-                stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-                if (stateInfo.IsName("Stun") && stateInfo.normalizedTime >= 1.0f)
-                {
-                    StunEnd();
-                }
                 break;
         }
     }

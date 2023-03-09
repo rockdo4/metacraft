@@ -164,13 +164,20 @@ public abstract class AttackableUnit : MonoBehaviour
     {
         if (BattleState == UnitBattleState.ActiveSkill)
             return;
+
+        bool isCritical = false;
+
         if ((characterData.attack.searchType != SkillSearchType.Healer
             && characterData.attack.searchType != SkillSearchType.Buffer))
         {
             if (characterData.attack.targetNumLimit == 1)
             {
-                bool isCritical = false;
                 target.OnDamage(CalculDamage(characterData.activeSkill, ref isCritical), characterData.data.level, isCritical);
+                foreach (var buff in normalbuffs)
+                {
+                    var value = CalculDamage(characterData.activeSkill, ref isCritical);
+                    target.AddBuff(buff, value, null);
+                }
                 return;
             }
 
@@ -195,17 +202,16 @@ public abstract class AttackableUnit : MonoBehaviour
 
             for (int i = 0; i < attackTargetList.Count; i++)
             {
-                bool isCritical = false;
                 attackTargetList[i].OnDamage(CalculDamage(characterData.activeSkill, ref isCritical), characterData.data.level, isCritical);
+                foreach (var buff in normalbuffs)
+                {
+                    var value = CalculDamage(characterData.activeSkill, ref isCritical);
+                    attackTargetList[i].AddBuff(buff, value, null);
+                }
             }
+
         }
 
-        foreach (var buff in normalbuffs)
-        {
-            bool isCritical = false;
-            var value = CalculDamage(characterData.activeSkill, ref isCritical);
-            target.AddBuff(buff, value, null);
-        }
     }
 
     protected void RushSearch()
@@ -500,13 +506,13 @@ public abstract class AttackableUnit : MonoBehaviour
         var nowCount = count;
         for (int i = 0; i < list.Count; i++)
         {
+            if (nowCount <= 0)
+                break;
             if (IsAlive(list[i]))
             {
                 nowCount--;
                 tempList.Add(list[i]);
             }
-            if (nowCount <= 0)
-                break;
         }
 
         return tempList;
@@ -547,11 +553,44 @@ public abstract class AttackableUnit : MonoBehaviour
             }
             else
             {
-                Buff buff = new Buff(info, this, RemoveBuff, icon);
+                Action endEvent = null;
+
+                switch (info.type)
+                {
+                    case BuffType.Provoke:
+                        break;
+                    case BuffType.Stealth:
+                        break;
+                    case BuffType.Stun:
+                        endEvent = StunEnd;
+                        BattleState = UnitBattleState.Stun;
+                        break;
+                    case BuffType.Silence:
+                        break;
+                    case BuffType.Resistance:
+                        break;
+                    case BuffType.Blind:
+                        break;
+                    case BuffType.Burns:
+                        break;
+                    case BuffType.Freeze:
+                        break;
+                    case BuffType.Shield:
+                        break;
+                    case BuffType.Bleed:
+                        break;
+                    case BuffType.LifeSteal:
+                        break;
+                    case BuffType.Count:
+                        break;
+                    default:
+                        break;
+                }
+                Buff buff = new Buff(info, this, RemoveBuff, icon, endEvent);
                 buffList.Add(buff);
                 bufferState.Buffer(info.type, info.buffValue);
 
-                if(buff.buffInfo.type == BuffType.MaxHealthIncrease)
+                if (buff.buffInfo.type == BuffType.MaxHealthIncrease)
                 {
                     SetMaxHp();
                 }
