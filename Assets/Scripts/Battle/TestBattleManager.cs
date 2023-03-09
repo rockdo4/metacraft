@@ -20,7 +20,7 @@ public class TestBattleManager : MonoBehaviour
 
     public Image fadePanel;
 
-    public GeneratePolynomialTreeMap tree;
+    public TreeMapSystem tree;
     public TreeNodeObject thisNode;
 
     // Test Member
@@ -39,7 +39,6 @@ public class TestBattleManager : MonoBehaviour
     {
         List<GameObject> selectedHeroes = GameManager.Instance.GetSelectedHeroes();
         int count = selectedHeroes.Count;
-        tree.gameObject.SetActive(true);
 
         for (int i = 0; i < count; i++)
         {
@@ -68,19 +67,16 @@ public class TestBattleManager : MonoBehaviour
             choiceButtonTexts.Add(text);
         }
 
-        tree.CreateTreeGraph();
-        //thisNode = tree.root; // 현재 위치한 노드
-        SetThisNode(tree.root);
-
-        // tree.root.type 맵 타입
-        // tree.root.childrens 맵 순서
-        // thisNode = tree.root.childrens[0]; 다음 노드 선택할 때 쓰는 것
-
         clearUi.SetHeroes(useHeroes);
         readyCount = useHeroes.Count;
 
         FindObjectOfType<AutoButton>().ResetData();
         evManager = FindObjectOfType<EventManager>();
+    }
+
+    protected virtual void Start()
+    {
+        SetThisNode(tree.root);
     }
 
     protected void SetThisNode(TreeNodeObject node)

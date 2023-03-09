@@ -5,8 +5,9 @@ public class DefenseBattleManager : TestBattleManager
 {
     private int enemyCount;
 
-    private void Start()
+    protected override void Start()
     {
+        // base.Start(); 노드를 건드리지 않게 실행 X
         StartFadeOut();
 
         GameStart();

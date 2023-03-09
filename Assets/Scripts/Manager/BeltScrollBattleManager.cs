@@ -26,8 +26,9 @@ public class BeltScrollBattleManager : TestBattleManager
         }
     }
 
-    private void Start()
+    protected override void Start()
     {
+        base.Start();
         StartFadeOut();
 
         for (int i = 0; i < triggers.Count; i++)
