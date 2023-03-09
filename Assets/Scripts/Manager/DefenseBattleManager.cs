@@ -7,7 +7,7 @@ public class DefenseBattleManager : TestBattleManager
 
     private void Start()
     {
-        curBattleMap = BattleMapEnum.Defense;
+        StartFadeOut();
 
         GameStart();
         enemyCount = GetAllEnemyCount();
