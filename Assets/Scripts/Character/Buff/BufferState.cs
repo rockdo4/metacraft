@@ -1,31 +1,31 @@
 
 public class BufferState
 {
-    public float power = 0;         // 공격력
-    public float defense = 0;      // 방어력
-    public float damageReceived = 0;      // 받는 피해
-    public float damageDecrease = 0;      // 주는 피해
-    public float criticalProbability = 0;      // 치명타 확률 
-    public float criticalDamage = 0;      // 치명타 피해량 증가
-    public float attackSpeed = 0;      // 공격속도 증가
-    public float maxHealthIncrease = 0;      // 최대 체력 증가
+    public int power = 0;         // 공격력
+    public int defense = 0;      // 방어력
+    public int damageReceived = 0;      // 받는 피해
+    public int damageDecrease = 0;      // 주는 피해
+    public int criticalProbability = 0;      // 치명타 확률 
+    public int criticalDamage = 0;      // 치명타 피해량 증가
+    public int attackSpeed = 0;      // 공격속도 증가
+    public int maxHealthIncrease = 0;      // 최대 체력 증가
 
-    public float burns = 0;      // 화상
+    public int burns = 0;      // 화상
     public bool isBurns = false;
 
-    public float freeze = 0;      // 빙결
+    public int freeze = 0;      // 빙결
     public bool isFreze = false;
 
-    public float shield = 0;      // 보호막
+    public int shield = 0;      // 보호막
     public bool isShield = false;
 
-    public float bleed = 0;      // 출혈
+    public int bleed = 0;      // 출혈
     public bool isBleed = false;
 
-    public float healthRegen = 0;      // 체력 회복
+    public int healthRegen = 0;      // 체력 회복
     public bool isHealtRegen = false;
 
-    public float lifeSteal = 0;      // 흡혈
+    public int lifeSteal = 0;      // 흡혈
     public bool isLifeSteal = false;
 
     public bool provoke = false; // 도발
@@ -35,7 +35,7 @@ public class BufferState
     public bool resistance = false; // 저항
     public bool blind = false; // 실명
 
-    public void Buffer(BuffType type, float scale, bool isSet = true)
+    public void Buffer(BuffType type, int scale, bool isSet = true)
     {
         switch (type)
         {
@@ -130,7 +130,7 @@ public class BufferState
                 break;
         }
     }
-    public void RemoveBuffer(BuffType type, float scale)
+    public void RemoveBuffer(BuffType type, int scale)
     {
         Buffer(type, -scale, false);
     }

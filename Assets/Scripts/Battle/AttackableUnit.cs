@@ -79,8 +79,8 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected List<Buff> buffList = new();
     protected BufferState bufferState = new();
-    protected int GetFixedDamage => (int)(characterData.data.baseDamage * bufferState.power);
-    protected int GetFixedActiveDamage => (int)(characterData.data.baseDamage * bufferState.power);
+    protected int GetFixedDamage => (int)(characterData.data.baseDamage + (characterData.data.baseDamage * (bufferState.power/100f)));
+    protected int GetFixedActiveDamage => (int)(characterData.data.baseDamage + (characterData.data.baseDamage * (bufferState.power/100f)));
 
     protected bool isAuto = true;
     public virtual bool IsAuto {
