@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -59,12 +58,13 @@ public class TestBattleManager : MonoBehaviour
                 useHeroes.Add(attackableHero);
             }
         }
-        
+
         for (int i = 0; i < choiceButtons.Count; i++)
         {
             var text = choiceButtons[i].GetComponentInChildren<TextMeshProUGUI>();
             choiceButtonTexts.Add(text);
         }
+
         tree.CreateTreeGraph();
         //thisNode = tree.root; // 현재 위치한 노드
         SetThisNode(tree.root);
@@ -82,7 +82,7 @@ public class TestBattleManager : MonoBehaviour
     protected void SetThisNode(TreeNodeObject node)
     {
         thisNode = node;
-        tree.SetHighlighter(node);
+        tree.SetNodeHighlighter(node);
     }
 
     public List<Transform> GetStartPosition()
@@ -181,15 +181,37 @@ public class TestBattleManager : MonoBehaviour
 
     public virtual void SelectNextStage(int index)
     {
-        int stageIndex = nodeIndex = choiceButtons[index].choiceIndex;
+        //int stageIndex = nodeIndex = index; // choiceButtons[index].choiceIndex;
         //thisNode = thisNode.childrens[stageIndex];
-        SetThisNode(thisNode.childrens[stageIndex]);
 
+        nodeIndex = index;
+        TreeNodeObject prevNode = thisNode;
+        SetThisNode(thisNode.childrens[index]);
         readyCount = useHeroes.Count;
-
-        for (int i = 0; i < choiceButtons.Count; i++)
+        int childCount = prevNode.childrens.Count;
+        for (int i = 0; i< childCount; i++)
         {
-            choiceButtons[i].gameObject.SetActive(false);
+            prevNode.childrens[i].nodeButton.onClick.RemoveAllListeners();
+        }
+        tree.OffMovableHighlighters();
+
+        //for (int i = 0; i < choiceButtons.Count; i++)
+        //{
+        //    choiceButtons[i].gameObject.SetActive(false);
+        //}
+    }
+
+    protected void ChoiceNextStageByNode()
+    {
+        tree.gameObject.SetActive(true);
+
+        List<TreeNodeObject> childs = thisNode.childrens;
+        tree.SetMovableHighlighter(thisNode);
+        int count = childs.Count;
+        for (int i = 0; i < count; i++)
+        {
+            int num = i;
+            childs[i].nodeButton.onClick.AddListener(() => SelectNextStage(num));
         }
     }
 
@@ -290,5 +312,6 @@ public class TestBattleManager : MonoBehaviour
         {
             Utils.CopyPositionAndRotation(useHeroes[i].gameObject, startPositions[i]);
         }
+        tree.gameObject.SetActive(false);
     }
 }

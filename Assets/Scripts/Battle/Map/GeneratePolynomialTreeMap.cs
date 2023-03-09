@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
 public class GeneratePolynomialTreeMap : MonoBehaviour
@@ -29,14 +28,19 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
     public GameObject nodeBundlePrefab;
     public GameObject treeNodePrefab;
     public GameObject uiLineRendererPrefab;
+    public GameObject movableHighlighterPrefab;
+
     public Transform nodeTarget;
     public Transform lineRendererTarget;
-    public GameObject highlighter;
+    public Transform movableHighlighterTarget;
+
+    public GameObject currentNodeHighlighter;
 
     private List<GameObject> bundles = new();
     private List<List<TreeNodeObject>> nodes = new();
     private List<GameObject> lines = new();
     private List<List<TreeBlueprintData>> blueprint = new();
+    private List<GameObject> highlighters = new();
     private int nodeIndex = 0;
 
     private struct TreeBlueprintData
@@ -67,15 +71,34 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
     {
         nodeIndex = 0;
         DestroyAllObjs();
-        CreateBundles(height - 2);      // 트리의 깊이 설정
+        InitSettings(height - 2);       // 트리의 깊이 설정, 필요한 오브젝트 생성
         CreateBlueprint();              // 설계도 생성
         CreateNodes();                  // 노드 생성
         StartCoroutine(CoLinkNodes());  // 노드 연결
     }
 
-    public void SetHighlighter(TreeNodeObject node)
+    public void SetNodeHighlighter(TreeNodeObject node)
     {
-        highlighter.transform.position = node.transform.position;
+        currentNodeHighlighter.transform.position = node.transform.position;
+    }
+
+    public void SetMovableHighlighter(TreeNodeObject node)
+    {
+        List<TreeNodeObject> movableNodes = node.childrens;
+        int count = movableNodes.Count;
+        for (int i = 0; i < count; i++)
+        {
+            highlighters[i].transform.position = movableNodes[i].transform.position;
+            highlighters[i].SetActive(true);
+        }
+    }
+
+    public void OffMovableHighlighters()
+    {
+        for (int i = 0; i < width; i++)
+        {
+            highlighters[i].SetActive(false);
+        }
     }
 
     private void CreateBlueprint()
@@ -189,7 +212,7 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
         // UI Layout Group에서 포지션을 배치하기 위한 시간이 필요해서 코루틴으로 실행 시간 차이를 줌
         yield return null;
         DrawLineRenderer();
-        SetHighlighter(root);
+        SetNodeHighlighter(root);
         gameObject.SetActive(false);
     }
 
@@ -262,7 +285,7 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
         return instanceNode;
     }
 
-    public void CreateBundles(int depth)
+    public void InitSettings(int depth)
     {
         for (int i = 0; i < depth + 2; i++)
         {
@@ -270,6 +293,13 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
             bundle.name = $"bundle_{i}";
             nodes.Add(new());
             bundles.Add(bundle);
+        }
+
+        for (int i = 0; i < width; i++)
+        {
+            GameObject highlighterObj = Instantiate(movableHighlighterPrefab, movableHighlighterTarget);
+            highlighters.Add(highlighterObj);
+            highlighterObj.SetActive(false);
         }
     }
 
@@ -310,5 +340,13 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
                 Destroy(lines[i]);
         }
         lines.Clear();
+
+        int hcount = highlighters.Count;
+        for (int i = 0; i < hcount; i++)
+        {
+            if (highlighters[i] != null)
+                Destroy(highlighters[i]);
+        }
+        highlighters.Clear();
     }
 }

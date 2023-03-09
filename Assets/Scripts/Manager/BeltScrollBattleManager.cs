@@ -100,7 +100,8 @@ public class BeltScrollBattleManager : TestBattleManager
             }
             else if (triggers[currTriggerIndex + 1] != null && triggers[currTriggerIndex + 1].isStageEnd)
             {
-                ChoiceNextStage();
+                //ChoiceNextStage();
+                ChoiceNextStageByNode();
             }
             else if (!triggers[currTriggerIndex].isStageEnd)
             {
