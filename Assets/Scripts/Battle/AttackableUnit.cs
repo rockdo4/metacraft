@@ -50,18 +50,6 @@ public abstract class AttackableUnit : MonoBehaviour
             characterData.data.currentHp = Mathf.Clamp(value, 0, MaxHp); 
         }
     }
-    //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)
-    public int AttackDamage {
-        get {
-            return characterData.attack.CreateDamageResult(characterData.data, bufferState);
-        }
-    }
-
-    public int ActiveDamage {
-        get {
-            return characterData.activeSkill.CreateDamageResult(characterData.data, bufferState);
-        }
-    }
 
     protected float lastNormalAttackTime;
     protected float lastActiveSkillTime;
@@ -165,7 +153,12 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public abstract void PassiveSkillEvent();
     public abstract void ReadyActiveSkill();
-    public virtual void OnActiveSkill() => characterData.activeSkill.OnActiveSkill(ActiveDamage, characterData.data.level);
+    public virtual void OnActiveSkill()
+    {
+
+        bool isCritical = false;
+        characterData.activeSkill.OnActiveSkill(CalculDamage(characterData.activeSkill, ref isCritical), characterData.data.level,isCritical);
+    }
 
     public virtual void NormalAttackOnDamage()
     {
@@ -176,7 +169,8 @@ public abstract class AttackableUnit : MonoBehaviour
         {
             if (characterData.attack.targetNumLimit == 1)
             {
-                target.OnDamage(AttackDamage, characterData.data.level, false);
+                bool isCritical = false;
+                target.OnDamage(CalculDamage(characterData.activeSkill, ref isCritical), characterData.data.level, isCritical);
                 return;
             }
 
@@ -201,13 +195,15 @@ public abstract class AttackableUnit : MonoBehaviour
 
             for (int i = 0; i < attackTargetList.Count; i++)
             {
-                attackTargetList[i].OnDamage(AttackDamage, characterData.data.level, false);
+                bool isCritical = false;
+                attackTargetList[i].OnDamage(CalculDamage(characterData.activeSkill, ref isCritical), characterData.data.level, isCritical);
             }
         }
 
         foreach (var buff in normalbuffs)
         {
-            var value = (int)(AttackDamage * (buff.buffValue / 100f));
+            bool isCritical = false;
+            var value = CalculDamage(characterData.activeSkill, ref isCritical);
             target.AddBuff(buff, value, null);
         }
     }
@@ -574,5 +570,17 @@ public abstract class AttackableUnit : MonoBehaviour
     public void SetMaxHp()
     {
         UnitHp = MaxHp;
+    }
+
+    public int CalculDamage(CharacterSkill skill, ref bool isCritical)
+    {
+        var buffDamage = skill.CreateDamageResult(characterData.data, bufferState);
+        isCritical = UnityEngine.Random.Range(0f, 1f) < characterData.data.critical + (bufferState.criticalProbability / 100f);
+        if (isCritical)
+        {
+            buffDamage = (int)(buffDamage * (characterData.data.criticalDmg + (bufferState.criticalDamage / 100f)));
+        }
+
+        return buffDamage;
     }
 }

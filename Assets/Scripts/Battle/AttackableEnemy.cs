@@ -270,7 +270,8 @@ public class AttackableEnemy : AttackableUnit
     {
         if (characterData.attack.targetNumLimit == 1)
         {
-            target.OnDamage(AttackDamage, characterData.data.level, false);
+            bool isCritical = false;
+            target.OnDamage(CalculDamage(characterData.activeSkill,ref isCritical), characterData.data.level, isCritical);
             return;
         }
 
@@ -295,7 +296,8 @@ public class AttackableEnemy : AttackableUnit
 
         for (int i = 0; i < attackTargetList.Count; i++)
         {
-            attackTargetList[i].OnDamage(AttackDamage,characterData.data.level, false);
+            bool isCritical = false;
+            attackTargetList[i].OnDamage(CalculDamage(characterData.attack, ref isCritical),characterData.data.level, isCritical);
         }
     }
     public override void ActiveSkillEnd()

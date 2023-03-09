@@ -54,10 +54,10 @@ public class CharacterSkill : ScriptableObject
                 result = (int)((data.currentHp + status.Damage) * coefficient);
                 break;
         }
-        if (targetType == SkillTargetType.Friendly)
-            result *= -1;
+        //if (targetType == SkillTargetType.Friendly)
+        //    result *= -1;
 
         return result;
     }
-    public virtual void OnActiveSkill(int damaage, int level) { }
+    public virtual void OnActiveSkill(int damaage, int level , bool isCritical) { }
 }
