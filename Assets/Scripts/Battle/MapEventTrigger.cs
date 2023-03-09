@@ -15,6 +15,8 @@ public class MapEventTrigger : MonoBehaviour
     [SerializeField, Header("마지막 스테이지일 때 체크해주세요")]
     public bool isMissionEnd = false;
 
+    private List<CapsuleCollider> enemyColls = new();
+
     public void OnDead(AttackableEnemy enemy)
     {
         enemys.Add(enemy);
@@ -57,8 +59,14 @@ public class MapEventTrigger : MonoBehaviour
         {
             enemys[i].ResetData();
             enemys[i].gameObject.SetActive(true);
+            enemyColls[i].enabled = true;
             enemys[i].gameObject.transform.position = enemySettingPositions[i].GetRespawnPos();
             enemys[i].SetEnabledPathFind(false);
         }
+    }
+
+    public void AddEnemyColliders(CapsuleCollider coll)
+    {
+        enemyColls.Add(coll);
     }
 }

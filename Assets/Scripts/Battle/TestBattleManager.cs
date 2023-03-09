@@ -34,6 +34,7 @@ public class TestBattleManager : MonoBehaviour
     public List<RoadChoiceButton> choiceButtons;
     protected List<TextMeshProUGUI> choiceButtonTexts = new();
     protected int nodeIndex;
+    public BattleMapEnum curBattleMap = BattleMapEnum.None;
 
     private void Awake()
     {
@@ -214,6 +215,7 @@ public class TestBattleManager : MonoBehaviour
         {
             Utils.CopyPositionAndRotation(useHeroes[i].gameObject, GameManager.Instance.heroSpawnTransform);
             useHeroes[i].ResetData();
+            useHeroes[i].SetMaxHp();
             useHeroes[i].SetEnabledPathFind(false);
             useHeroes[i].gameObject.SetActive(false);
         }
