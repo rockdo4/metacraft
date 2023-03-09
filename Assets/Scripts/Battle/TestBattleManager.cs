@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -38,6 +39,7 @@ public class TestBattleManager : MonoBehaviour
     {
         List<GameObject> selectedHeroes = GameManager.Instance.GetSelectedHeroes();
         int count = selectedHeroes.Count;
+        tree.gameObject.SetActive(true);
 
         for (int i = 0; i < count; i++)
         {
@@ -62,7 +64,6 @@ public class TestBattleManager : MonoBehaviour
             var text = choiceButtons[i].GetComponentInChildren<TextMeshProUGUI>();
             choiceButtonTexts.Add(text);
         }
-
         tree.CreateTreeGraph();
         //thisNode = tree.root; // 현재 위치한 노드
         SetThisNode(tree.root);

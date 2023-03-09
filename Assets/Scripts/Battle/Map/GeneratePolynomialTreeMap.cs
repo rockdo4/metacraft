@@ -1,8 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
-using static UnityEditor.LightingExplorerTableColumn;
 
 public class GeneratePolynomialTreeMap : MonoBehaviour
 {
@@ -190,6 +190,7 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
         yield return null;
         DrawLineRenderer();
         SetHighlighter(root);
+        gameObject.SetActive(false);
     }
 
     private void DrawLineRenderer()
