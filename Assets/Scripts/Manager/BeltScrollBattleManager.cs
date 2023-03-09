@@ -170,7 +170,7 @@ public class BeltScrollBattleManager : TestBattleManager
         CreateRoad(platform);
         AddRoadTrigger();
 
-        if (thisNode.nodeNameText.text == "Boss")
+        if (thisNode.type == TreeNodeTypes.Boss)
         {
             triggers.Last().isMissionEnd = true;
         }
