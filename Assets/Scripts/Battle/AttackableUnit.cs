@@ -17,12 +17,13 @@ public abstract class AttackableUnit : MonoBehaviour
     [Header("Ai Å¸ÀÔ")]
     public UnitAiType aiType;
 
-    [Space, Header("ÀÏ¹Ý°ø°Ý - Å¸°Ù, ½Ã°£, Áõ°¡·®")]
+    [Space, Header("ÀÏ¹Ý°ø°Ý Å¸°Ù")]
     public UnitType normalAttackTargetType;
+
     public Transform attackPos;
     public FireBallTest attackPref; //Å×½ºÆ®¿ë
 
-    [Space, Header("±Ã±Ø±â - Å¸°Ù, ¹öÇÁorµð¹öÇÁ, ½Ã°£, Áõ°¡·®")]
+    [Space, Header("±Ã±Ø±â Å¸°Ù")]
     public UnitType activeAttackTargetType;
 
     protected float searchDelay = 1f;
@@ -488,13 +489,13 @@ public abstract class AttackableUnit : MonoBehaviour
         {
             Buff buff = new Buff(info, this, RemoveBuff, icon);
             buffList.Add(buff);
-            bufferState.Buffer(info.type, info.buffScale);
+            bufferState.Buffer(info.type, info.buffValue);
         }
     }   
-    public void BuffDurationUpdate(string id, float dur) => buffList.Find(t => t.buffInfo.id == id).timer= dur;
+    public void BuffDurationUpdate(int id, float dur) => buffList.Find(t => t.buffInfo.id == id).timer= dur;
     public virtual void RemoveBuff(Buff buff)
     {
         buffList.Remove(buff);
-        bufferState.RemoveBuffer(buff.buffInfo.type, buff.buffInfo.buffScale);
+        bufferState.RemoveBuffer(buff.buffInfo.type, buff.buffInfo.buffValue);
     }
 }
