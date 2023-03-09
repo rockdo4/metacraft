@@ -6,6 +6,6 @@ public enum EffectEnum
     CFXRImpactGlowingHDRBlue,
     CFXR3LightGlowA,
     CFX3_Vortex_Ground,
-    FlameStream,
+    IceAttack,
     Count,
 }
