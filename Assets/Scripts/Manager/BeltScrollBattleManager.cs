@@ -28,6 +28,8 @@ public class BeltScrollBattleManager : TestBattleManager
 
     private void Start()
     {
+        curBattleMap = BattleMapEnum.BeltScroll;
+
         for (int i = 0; i < triggers.Count; i++)
         {
             for (int j = 0; j < triggers[i].enemySettingPositions.Count; j++)

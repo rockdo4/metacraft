@@ -33,6 +33,7 @@ public class TestBattleManager : MonoBehaviour
     public List<RoadChoiceButton> choiceButtons;
     protected List<TextMeshProUGUI> choiceButtonTexts = new();
     protected int nodeIndex;
+    public BattleMapEnum curBattleMap = BattleMapEnum.None;
 
     private void Awake()
     {

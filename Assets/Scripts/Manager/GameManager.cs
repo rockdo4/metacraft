@@ -35,10 +35,6 @@ public class GameManager : Singleton<GameManager>
 
     public List<Effect> effects; // 사용할 이펙트들
 
-    //public List<GameObject> battleManagerPrefabs;
-    //private List<GameObject> createdBattleManager = new();
-    //private List<TestBattleManager> battleManagers = new();
-    //public Canvas battleCanvas;
     public event Action<string> playerLevelUp;
 
     public override void Awake()
@@ -347,34 +343,4 @@ public class GameManager : Singleton<GameManager>
         playerData.inventoryCount = (int)officeInfoList[level]["InventoryCount"];
         Logger.Debug($"현재 레벨 : {playerData.officeLevel}");
     }
-
-    //public void CreateBattleMap()
-    //{
-    //    if (createdBattleManager.Count != 0)
-    //        return;
-
-    //    for (int i = 0; i < battleManagerPrefabs.Count; i++)
-    //    {
-    //        var btmgrPrefab = Instantiate(battleManagerPrefabs[i]);
-    //        var btMgr = btmgrPrefab.GetComponent<TestBattleManager>();
-    //        battleManagers.Add(btMgr);
-    //        createdBattleManager.Add(btmgrPrefab);
-    //        btmgrPrefab.gameObject.SetActive(false);
-    //    }
-    //}
-    //public void EnableBattleMap()
-    //{
-    //    switch (currentSelectMission["Type"])
-    //    {
-    //        case 0:
-    //        case 1:
-    //            createdBattleManager[1].SetActive(false);
-    //            createdBattleManager[0].SetActive(true);
-    //            break;
-    //        case 2:
-    //            createdBattleManager[0].SetActive(false);
-    //            createdBattleManager[1].SetActive(true);
-    //            break;
-    //    }
-    //}
 }
