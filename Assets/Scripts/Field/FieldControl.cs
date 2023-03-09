@@ -7,27 +7,17 @@ public class FieldControl : MonoBehaviour
 {
     public GameObject[] offices;
 
-    //public void OnEnable()
-    //{
-    //    SceneManager.sceneLoaded += OnSceneLoaded;
-    //}
-
-    //public void OnSceneLoaded(Scene OfficeScene, LoadSceneMode mode)
-    //{
-    //    OfficeChange();
-    //}
-
-    private void Start()
+    public void OnEnable()
     {
-        GameManager.Instance.playerLevelUp += OfficeChange;
+        SceneManager.sceneLoaded += OnSceneLoaded;
     }
 
-    private void OfficeChange(string objName)
+    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
     {
         for (int i = 0; i < offices.Length; i++)
         {
             offices[i].SetActive(false);
-            if(offices[i].name.Equals(objName))
+            if (offices[i].name.Equals(GameManager.Instance.playerData.officeImage))
             {
                 offices[i].SetActive(true);
             }

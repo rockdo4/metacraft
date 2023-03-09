@@ -22,6 +22,7 @@ public class PlayerData
     public int dispatchLevel;
     public int stamina;
     public int inventoryCount;
+    public string officeImage;
     [Range(1, 3)]
     public int battleSpeed = 1;
     public bool isAuto = false;
