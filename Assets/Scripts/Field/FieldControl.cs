@@ -7,12 +7,7 @@ public class FieldControl : MonoBehaviour
 {
     public GameObject[] offices;
 
-    public void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
-
-    void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    public void Start()
     {
         for (int i = 0; i < offices.Length; i++)
         {
