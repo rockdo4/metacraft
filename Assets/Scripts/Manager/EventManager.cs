@@ -20,9 +20,12 @@ public class EventManager : MonoBehaviour
     public List<GameObject> eventMaps;
     private List<TestBattleManager> battleManagerList = new();
     private List<CinemachineVirtualCamera> cinemachines = new();
+    private List<Dictionary<string, object>> eventInfoTable;
 
     private MapEventEnum curEvent = MapEventEnum.Normal;
     private GameObject curMap;
+
+    private GameManager gm;
 
     public void Awake()
     {
@@ -34,6 +37,10 @@ public class EventManager : MonoBehaviour
             cinemachines.Add(camera);
         }
 
+        gm = GameManager.Instance;
+        eventInfoTable = gm.eventInfoList;
+        // 이벤트 인포 테이블에서 가져오면 됨
+        // 예시) eventInfoTable[0]["Explanation"]
         StartEvent(curEvent);
     }
 
@@ -43,12 +50,16 @@ public class EventManager : MonoBehaviour
         // SetActiveEventMap 사용해서 해당 맵 true시키기
 
         curEvent = ev;
+        
+        // 이벤트 ui 설정
+        SetEventUiProperty(curEvent);
 
         // 각각 이벤트 발생하는거 넣어주기
         switch (ev)
         {
             case MapEventEnum.Normal:
                 curMap = eventMaps[0];
+
                 break;
             case MapEventEnum.Defense:
                 curMap = eventMaps[1];
@@ -86,5 +97,35 @@ public class EventManager : MonoBehaviour
     public void SetActiveEventMap(bool active) // 현재 이벤트 발생 맵 액티브 관리
     {
         curMap.SetActive(active);
+    }
+
+    public void SetEventUiProperty(MapEventEnum ev) // 이벤트의 내용 설정
+    {
+        if (ev == MapEventEnum.Normal || ev == MapEventEnum.Defense)
+            return;
+
+        switch (ev)
+        {
+            case MapEventEnum.CivilianRescue:
+                break;
+            case MapEventEnum.NewbieHeroRescue:
+                break;
+            case MapEventEnum.Roadblock:
+                break;
+            case MapEventEnum.FloodRescue:
+                break;
+            case MapEventEnum.BombTrap:
+                break;
+            case MapEventEnum.BlockDoor:
+                break;
+            case MapEventEnum.VillainsSafe:
+                break;
+            case MapEventEnum.LostChild:
+                break;
+            case MapEventEnum.MagicJean:
+                break;
+            case MapEventEnum.OperationBoard:
+                break;
+        }
     }
 }
