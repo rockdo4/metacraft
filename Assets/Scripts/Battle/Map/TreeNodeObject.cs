@@ -19,7 +19,16 @@ public class TreeNodeObject : MonoBehaviour, IComparable<TreeNodeObject>
     {
         this.data = data;
         this.type = type;
-        nodeNameText.text = data;
+        string str = type switch
+        {
+            TreeNodeTypes.Root => "사무소",
+            TreeNodeTypes.Threat => "강적",
+            TreeNodeTypes.Supply => "보급",
+            TreeNodeTypes.Event => "이벤트",
+            TreeNodeTypes.Boss => "빌런",
+            _ => "일반",
+        };
+        nodeNameText.text = str;
     }
 
     public void AddChildren(TreeNodeObject node)
