@@ -19,12 +19,14 @@ public abstract class AttackableUnit : MonoBehaviour
 
     [Space, Header("ÀÏ¹Ý°ø°Ý Å¸°Ù")]
     public UnitType normalAttackTargetType;
+    List<BufferState> normalbuffs;
 
     public Transform attackPos;
     public FireBallTest attackPref; //Å×½ºÆ®¿ë
 
     [Space, Header("±Ã±Ø±â Å¸°Ù")]
     public UnitType activeAttackTargetType;
+    List<BufferState> attackkbuffs;
 
     protected float searchDelay = 1f;
     protected float lastSearchTime;
