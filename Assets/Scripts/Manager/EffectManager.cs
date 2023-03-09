@@ -19,7 +19,7 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
             GameObject gm = new("Effects");
             parent = Instantiate(gm);
             DontDestroyOnLoad(parent);
-            effectPoolSize = 20;
+            effectPoolSize = 5;
             effectList = GameManager.Instance.effects;
             CreateAllEffects();
         }
@@ -89,7 +89,7 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
             effectPool[effectListIndex].Add(effect);
         }
 
-        parent.transform.parent = GameObject.FindGameObjectWithTag("ParentFloor").transform;
+        //parent.transform.parent = GameObject.FindGameObjectWithTag("ParentFloor").transform;
     }
 
     // 현재 사용하고 있는 풀

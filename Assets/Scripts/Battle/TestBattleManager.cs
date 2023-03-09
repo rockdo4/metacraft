@@ -21,7 +21,7 @@ public class TestBattleManager : MonoBehaviour
     public Image fadePanel;
 
     public GeneratePolynomialTreeMap tree;
-    protected TreeNodeObject thisNode;
+    public TreeNodeObject thisNode;
 
     // Test Member
     public List<GameObject> roadPrefab;
@@ -33,7 +33,7 @@ public class TestBattleManager : MonoBehaviour
     public List<RoadChoiceButton> choiceButtons;
     protected List<TextMeshProUGUI> choiceButtonTexts = new();
     protected int nodeIndex;
-    public BattleMapEnum curBattleMap = BattleMapEnum.None;
+    private EventManager evManager;
 
     private void Awake()
     {
@@ -75,6 +75,7 @@ public class TestBattleManager : MonoBehaviour
         readyCount = useHeroes.Count;
 
         FindObjectOfType<AutoButton>().ResetData();
+        evManager = FindObjectOfType<EventManager>();
     }
 
     public List<Transform> GetStartPosition()
@@ -169,6 +170,11 @@ public class TestBattleManager : MonoBehaviour
 
         fadePanel.gameObject.SetActive(false);
         yield break;
+    }
+
+    protected void StartFadeOut()
+    {
+        coFadeOut = StartCoroutine(CoFadeOut());
     }
 
     public virtual void SelectNextStage(int index)
@@ -281,5 +287,21 @@ public class TestBattleManager : MonoBehaviour
         {
             Utils.CopyPositionAndRotation(useHeroes[i].gameObject, startPositions[i]);
         }
+    }
+
+    protected void OnStageComplete()
+    {
+        evManager.EndEvent();
+    }
+    protected bool OnNextEvent()
+    {
+        if (thisNode.type == TreeNodeTypes.Event)
+        {
+            var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
+            evManager.StartEvent((MapEventEnum)randomEvent);
+            return true;
+        }
+
+        return false;
     }
 }

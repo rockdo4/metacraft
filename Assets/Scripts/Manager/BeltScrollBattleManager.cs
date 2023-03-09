@@ -28,13 +28,16 @@ public class BeltScrollBattleManager : TestBattleManager
 
     private void Start()
     {
-        curBattleMap = BattleMapEnum.BeltScroll;
+        StartFadeOut();
 
         for (int i = 0; i < triggers.Count; i++)
         {
             for (int j = 0; j < triggers[i].enemySettingPositions.Count; j++)
             {
-                var enemy = triggers[i].enemySettingPositions[j].SpawnEnemy();
+                var enemy = triggers[i].enemySettingPositions[j]?.SpawnEnemy();
+                if (enemy == null)
+                    break;
+
                 triggers[i].enemys.Add(enemy);
                 triggers[i].AddEnemyColliders(enemy.GetComponent<CapsuleCollider>());
                 triggers[i].enemys[j].SetEnabledPathFind(false);
@@ -163,9 +166,22 @@ public class BeltScrollBattleManager : TestBattleManager
 
         yield return new WaitForSeconds(timer / Time.timeScale);
 
+        // ∆‰¿ÃµÂ æ∆øÙ
+        StartFadeOut();
+        DestroyRoad();
+        RemoveRoadTrigger();
+        ResetRoads();
+
         for (int i = 0; i < useHeroes.Count; i++)
         {
             useHeroes[i].ResetData();
+        }
+
+        OnStageComplete();
+        if (OnNextEvent())
+        {
+            Logger.Debug("OnNextEvent");
+            yield break;
         }
 
         platform.transform.position = Vector3.zero;
@@ -179,9 +195,6 @@ public class BeltScrollBattleManager : TestBattleManager
         }
         enemyCountTxt.Count = GetAllEnemyCount();
 
-        DestroyRoad();
-        RemoveRoadTrigger();
-        ResetRoads();
         CreateRoad(platform);
         AddRoadTrigger();
 
@@ -190,8 +203,6 @@ public class BeltScrollBattleManager : TestBattleManager
             triggers.Last().isMissionEnd = true;
         }
 
-        // ∆‰¿ÃµÂ æ∆øÙ
-        coFadeOut = StartCoroutine(CoFadeOut());
         yield break;
     }
 }
