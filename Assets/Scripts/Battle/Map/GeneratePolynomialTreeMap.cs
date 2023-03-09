@@ -217,7 +217,6 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
                 count != 1 &&
                 restBranch > childrens.Count - index)
             {
-                Debug.Log($"{parent.data} {count}");
                 index--;
             }
         }
