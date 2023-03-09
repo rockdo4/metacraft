@@ -4,7 +4,9 @@ using System;
 [Serializable]
 public class BufferState
 {
-    public int power = 0;         // 공격력
+    public int damage = 0;         // 공격력
+    public int Damage => Math.Clamp(damage, -50, 300);
+
     public int defense = 0;      // 방어력
     public int damageReceived = 0;      // 받는 피해
     public int damageDecrease = 0;      // 주는 피해
@@ -40,10 +42,10 @@ public class BufferState
         switch (type)
         {
             case BuffType.PowerUp:
-                power += scale;
+                damage += scale;
                 break;
             case BuffType.PowerDown:
-                power -= scale;
+                damage -= scale;
                 break;
             case BuffType.DefenseUp:
                 defense += scale;

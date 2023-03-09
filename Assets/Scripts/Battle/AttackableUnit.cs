@@ -46,6 +46,18 @@ public abstract class AttackableUnit : MonoBehaviour
         get { return characterData.data.currentHp; }
         set { characterData.data.currentHp = Mathf.Max(value, 0); }
     }
+    //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)
+    public int AttackDamage {
+        get {
+            return characterData.attack.CreateDamageResult(characterData.data, bufferState);
+        }
+    }
+
+    public int ActiveDamage {
+        get {
+            return characterData.activeSkill.CreateDamageResult(characterData.data, bufferState);
+        }
+    }
     public float UnitHpScale => (float)characterData.data.currentHp / characterData.data.healthPoint;
 
     protected float lastNormalAttackTime;
@@ -84,8 +96,6 @@ public abstract class AttackableUnit : MonoBehaviour
     protected List<Buff> buffList = new();
     [SerializeField]
     protected BufferState bufferState = new();
-    protected int GetFixedDamage => (int)(characterData.data.baseDamage + (characterData.data.baseDamage * (bufferState.power / 100f)));
-    protected int GetFixedActiveDamage => (int)(characterData.data.baseDamage + (characterData.data.baseDamage * (bufferState.power / 100f)));
 
     protected bool isAuto = true;
     public virtual bool IsAuto {
@@ -152,7 +162,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public abstract void PassiveSkillEvent();
     public abstract void ReadyActiveSkill();
-    public virtual void OnActiveSkill() => characterData.activeSkill.OnActiveSkill(characterData.data);
+    public virtual void OnActiveSkill() => characterData.activeSkill.OnActiveSkill(ActiveDamage, characterData.data.level);
 
     public virtual void NormalAttackOnDamage()
     {
@@ -163,7 +173,7 @@ public abstract class AttackableUnit : MonoBehaviour
         {
             if (characterData.attack.targetNumLimit == 1)
             {
-                target.OnDamage(GetFixedDamage, false);
+                target.OnDamage(AttackDamage, characterData.data.level, false);
                 return;
             }
 
@@ -188,13 +198,13 @@ public abstract class AttackableUnit : MonoBehaviour
 
             for (int i = 0; i < attackTargetList.Count; i++)
             {
-                attackTargetList[i].OnDamage(GetFixedDamage, false);
+                attackTargetList[i].OnDamage(AttackDamage, characterData.data.level, false);
             }
         }
 
         foreach (var buff in normalbuffs)
         {
-            var value = (int)(GetFixedDamage * (buff.buffValue / 100f));
+            var value = (int)(AttackDamage * (buff.buffValue / 100f));
             target.AddBuff(buff, value, null);
         }
     }
@@ -293,8 +303,17 @@ public abstract class AttackableUnit : MonoBehaviour
     protected abstract void DieUpdate();
     protected abstract void MoveNextUpdate();
     protected abstract void ReturnPosUpdate();
+    //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)
+    public virtual void OnDamage(int dmg, int level, bool isCritical = false)
+    {
+        var defense = 100f / (100 + characterData.data.baseDefense + bufferState.defense);
+        var levelCorrection = 1 + Mathf.Clamp((level - characterData.data.level) / 100f, -0.4f, 0);
 
-    public abstract void OnDamage(int dmg, bool isCritical = false);
+        dmg = (int)(dmg * defense * levelCorrection);
+        UnitHp = Mathf.Max(UnitHp - dmg, 0);
+        if (UnitHp <= 0)
+            UnitState = UnitState.Die;
+    }
 
     public void SearchNearbyTarget(List<AttackableUnit> list) 
     {

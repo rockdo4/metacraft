@@ -365,14 +365,11 @@ public class AttackableHero : AttackableUnit
         BattleState = state;
     }
 
-    public override void OnDamage(int dmg, bool isCritical = false)
+    public override void OnDamage(int dmg,int level, bool isCritical = false)
     {
-        UnitHp = Mathf.Max(UnitHp - dmg, 0);
-
+        base.OnDamage(dmg,level,isCritical);
         heroUI.SetHp(UnitHp);
 
-        if (UnitHp <= 0)
-            UnitState = UnitState.Die;
     }
 
     public override void OnDead(AttackableUnit unit)

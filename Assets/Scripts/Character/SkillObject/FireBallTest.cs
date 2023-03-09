@@ -46,7 +46,7 @@ public class FireBallTest : MonoBehaviour
         if (other.CompareTag("Enemy"))
         {
             Destroy(gameObject);
-            other.transform.GetComponent<AttackableUnit>().OnDamage(characterData.data.baseDamage);
+            //other.transform.GetComponent<AttackableUnit>().OnDamage(characterData.AttackDamage);
         }
     }
 
