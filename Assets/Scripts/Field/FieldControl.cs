@@ -7,15 +7,15 @@ public class FieldControl : MonoBehaviour
 {
     public GameObject[] offices;
 
-    public void OnEnable()
-    {
-        SceneManager.sceneLoaded += OnSceneLoaded;
-    }
+    //public void OnEnable()
+    //{
+    //    SceneManager.sceneLoaded += OnSceneLoaded;
+    //}
 
-    public void OnSceneLoaded(Scene OfficeScene, LoadSceneMode mode)
-    {
-        OfficeChange();
-    }
+    //public void OnSceneLoaded(Scene OfficeScene, LoadSceneMode mode)
+    //{
+    //    OfficeChange();
+    //}
 
     private void Start()
     {

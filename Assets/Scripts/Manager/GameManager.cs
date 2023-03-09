@@ -26,6 +26,7 @@ public class GameManager : Singleton<GameManager>
     public List<Dictionary<string, object>> missionInfoList;
     public List<Dictionary<string, object>> dispatchInfoList;
     public List<Dictionary<string, object>> officeInfoList;
+    public List<Dictionary<string, object>> eventInfoList;
 
     // Office Select
     public GameObject currentSelectObject; // Hero Info
@@ -97,6 +98,16 @@ public class GameManager : Singleton<GameManager>
                 (AsyncOperationHandle<TextAsset> obj) =>
                 {
                     officeInfoList = CSVReader.SplitTextAsset(obj.Result);
+                    Addressables.Release(obj);
+                };
+
+        // 이벤트 테이블 로드
+        var eit = Addressables.LoadAssetAsync<TextAsset>("EventTable");
+
+        eit.Completed +=
+                (AsyncOperationHandle<TextAsset> obj) =>
+                {
+                    eventInfoList = CSVReader.SplitTextAsset(obj.Result);
                     Addressables.Release(obj);
                 };
 
