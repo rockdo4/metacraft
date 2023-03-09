@@ -42,9 +42,13 @@ public abstract class AttackableUnit : MonoBehaviour
     [SerializeField, Header("에너미 리스트")] protected List<AttackableUnit> enemyList;
     [SerializeField, Header("시민 리스트")] protected List<AttackableUnit> citizenList;
 
+    public int MaxHp => (int)(((bufferState.maxHealthIncrease / 100f) * characterData.data.healthPoint) + characterData.data.healthPoint);
+    public float UnitHpScale => (float)characterData.data.currentHp / MaxHp;
     public int UnitHp {
         get { return characterData.data.currentHp; }
-        set { characterData.data.currentHp = Mathf.Max(value, 0); }
+        set {
+            characterData.data.currentHp = Mathf.Clamp(value, 0, MaxHp); 
+        }
     }
     //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)
     public int AttackDamage {
@@ -58,7 +62,6 @@ public abstract class AttackableUnit : MonoBehaviour
             return characterData.activeSkill.CreateDamageResult(characterData.data, bufferState);
         }
     }
-    public float UnitHpScale => (float)characterData.data.currentHp / characterData.data.healthPoint;
 
     protected float lastNormalAttackTime;
     protected float lastActiveSkillTime;
@@ -551,6 +554,11 @@ public abstract class AttackableUnit : MonoBehaviour
                 Buff buff = new Buff(info, this, RemoveBuff, icon);
                 buffList.Add(buff);
                 bufferState.Buffer(info.type, info.buffValue);
+
+                if(buff.buffInfo.type == BuffType.MaxHealthIncrease)
+                {
+                    SetMaxHp();
+                }
             }
 
         }
@@ -564,6 +572,6 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public void SetMaxHp()
     {
-        UnitHp = GetUnitData().data.healthPoint;
+        UnitHp = MaxHp;
     }
 }

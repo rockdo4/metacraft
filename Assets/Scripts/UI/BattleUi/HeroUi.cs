@@ -20,7 +20,7 @@ public class HeroUi : MonoBehaviour
     {
         heroData = data;
         heroImage.sprite = GameManager.Instance.iconSprites[$"Icon_{heroData.data.name}"];
-        SetHp(heroData.data.currentHp);
+        SetHp(heroData.data.currentHp, heroData.data.healthPoint);
     }
 
     public void SetBuffList(ref List<BuffIcon> list)
@@ -47,9 +47,9 @@ public class HeroUi : MonoBehaviour
     {
         viewBuffList.OnClickPopUp();
     }
-    public void SetHp(int nowHp)
+    public void SetHp(int nowHp, int maxHp)
     {
-        hpBar.value = Mathf.Max((float)nowHp / (float)heroData.data.healthPoint);
+        hpBar.value = Mathf.Max((float)nowHp / (float)maxHp);
     }
 
     public void SetDieImage()

@@ -368,7 +368,7 @@ public class AttackableHero : AttackableUnit
     public override void OnDamage(int dmg,int level, bool isCritical = false)
     {
         base.OnDamage(dmg,level,isCritical);
-        heroUI.SetHp(UnitHp);
+        heroUI.SetHp(UnitHp,MaxHp);
 
     }
 
@@ -442,6 +442,11 @@ public class AttackableHero : AttackableUnit
         else
             BuffDurationUpdate(info.id, info.duration);
 
+        if (info.type == BuffType.MaxHealthIncrease)
+        {
+            heroUI.SetHp(UnitHp, MaxHp);
+        }
+
     }
     public override void StunEnd()
     {
@@ -458,7 +463,12 @@ public class AttackableHero : AttackableUnit
     public override void RemoveBuff(Buff buff)
     {
         base.RemoveBuff(buff);
-        if(buff != null)
+        if (buff != null)
             heroUI.RemoveBuff(buff.icon);
+
+        if (buff.buffInfo.type == BuffType.MaxHealthIncrease)
+        {
+            heroUI.SetHp(UnitHp, MaxHp);
+        }
     }
 }
