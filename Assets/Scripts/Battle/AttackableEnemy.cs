@@ -115,7 +115,6 @@ public class AttackableEnemy : AttackableUnit
     }
     public override void ResetData()
     {
-        base.ResetData();
         UnitState = UnitState.None;
         battleState = UnitBattleState.None;
         UnitHp = characterData.data.healthPoint;

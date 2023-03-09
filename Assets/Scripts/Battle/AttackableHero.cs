@@ -163,7 +163,6 @@ public class AttackableHero : AttackableUnit
 
     public override void ResetData()
     {
-        base.ResetData();
         testRot = false;
         UnitState = UnitState.Idle;
         battleState = UnitBattleState.None;
