@@ -6,20 +6,50 @@ public class AOEWithDuration : ActiveSkillAOE
     public float duration;
     public float hitInterval;
 
+    public SkillFieldWithDuration skillFieldPrefab;
+    private SkillFieldWithDuration skillField;
+
+    public override void OnActive()
+    {
+        base.OnActive();
+
+        if (skillField != null)
+            return;
+
+        skillField = Instantiate(skillFieldPrefab);
+        skillField.TargetType = targetType;
+        skillField.SearchType = searchType;
+        skillField.gameObject.SetActive(false);
+        skillField.CreateLocation = indicatorTransform;
+        skillField.Duration= duration;
+        skillField.HitInterval= hitInterval;
+        skillField.Effect = effectEnum;
+        SetFieldScale();
+    }
+
+    private void SetFieldScale()
+    {
+        switch (areaShapeType)
+        {
+            case SkillAreaShape.Sector:
+                skillField.SetScale(sectorRadius, sectorAngle);
+                break;
+            case SkillAreaShape.Rectangle:
+                skillField.SetScale(widthX, widthZ);
+                break;
+            case SkillAreaShape.Circle:
+                skillField.SetScale(sectorRadius * 2, sectorRadius * 2);
+                break;
+        }
+    }
     public override void OnActiveSkill(LiveData data)
     {
-        //EffectManager.Instance.Get(effectEnum, indicatorTransform);
+        skillField.transform.position = indicatorTransform.position;
+        skillField.gameObject.SetActive(true);
 
-        //var targets = skillAreaIndicator.GetUnitsInArea();
+        skillField.DamageResult = CreateDamageResult(data);
 
-        //var damage = CreateDamageResult(data);
-
-        //foreach (var target in targets)
-        //{
-        //    target.OnDamage(damage);
-        //}
-
-        //skillAreaIndicator.gameObject.SetActive(false);
-        //skillAreaIndicator.isTriggerEnter = false;
+        skillAreaIndicator.gameObject.SetActive(false);
+        skillAreaIndicator.isTriggerEnter = false;
     }
 }

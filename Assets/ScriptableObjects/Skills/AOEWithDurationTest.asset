@@ -9,26 +9,26 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c267fa0414501eb408668a75a7c3b73f, type: 3}
-  m_Name: AOEtest
+  m_Script: {fileID: 11500000, guid: 8ea31b1afcf37fb47b0432c9ffa1a68d, type: 3}
+  m_Name: AOEWithDurationTest
   m_EditorClassIdentifier: 
   id: 0
   skillName: 
   preCooldown: 0
-  cooldown: 5
+  cooldown: 3
   distance: 4
   targetNumLimit: 0
   angle: 0
   coefficientType: 0
-  coefficient: 1
+  coefficient: 0.1
   targetType: 1
   searchType: 0
   indicatorEffect: 3
-  effectEnum: 0
+  effectEnum: 4
   isCriticalPossible: 0
   isAuto: 0
   targetPos: {x: 0, y: 0, z: 0}
-  skillDescription: "\uD14C\uC2A4\uD2B8\uC785\uB2C8\uB2E4"
+  skillDescription: "\uAD11\uC5ED \uC9C0\uC18D\uB370\uBBF8\uC9C0 \uD14C\uC2A4\uD2B8"
   skillAreaIndicatorPrefab: {fileID: 6672067328229480615, guid: 0da645c26f09e074abad419ddc09fafb,
     type: 3}
   layerM:
@@ -37,8 +37,12 @@ MonoBehaviour:
   castRangeIndicatorPrefab: {fileID: 1572453404982893073, guid: 3eef904cc2b274c4dbec7f0543fc5a68,
     type: 3}
   areaShapeType: 2
-  sectorRadius: 2
-  sectorAngle: 0
-  widthZ: 0
-  widthX: 0
+  sectorRadius: 1
+  sectorAngle: 360
+  widthZ: 3
+  widthX: 3
   castRangeLimit: 10
+  duration: 3
+  hitInterval: 0.1
+  skillFieldPrefab: {fileID: 3682801926524696948, guid: c469a7224c2ee24408d5ee3d648151f3,
+    type: 3}

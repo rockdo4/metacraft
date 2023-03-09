@@ -22,7 +22,12 @@ MonoBehaviour:
   coefficientType: 0
   coefficient: 2
   targetType: 1
+  searchType: 0
+  indicatorEffect: 0
   effectEnum: 0
+  isCriticalPossible: 1
+  isAuto: 0
+  targetPos: {x: 0, y: 0, z: 0}
   skillDescription: "\uBCC4\uC758 \uAE30\uC6B4\uC744 \uC8FC\uBA39\uC5D0 \uBAA8\uC544
     \uC801\uC5D0\uAC8C \uAC15\uB825\uD55C \uD53C\uD574\uB97C \uC785\uD799\uB2C8\uB2E4.
     \uACF5\uACA9\uB825\uC758 n% \uD53C\uD574\uB97C \uC785\uD799\uB2C8\uB2E4"
@@ -33,11 +38,9 @@ MonoBehaviour:
     m_Bits: 256
   castRangeIndicatorPrefab: {fileID: 1572453404982893073, guid: 3eef904cc2b274c4dbec7f0543fc5a68,
     type: 3}
-  isAutoTargeting: 0
-  areaShapeType: 0
-  sectorRadius: 1
+  areaShapeType: 2
+  sectorRadius: 0.01
   sectorAngle: 360
   widthZ: -1
   widthX: -1
-  isCriticalPossible: 0
-  castRangeLimit: 180
+  castRangeLimit: 1.8

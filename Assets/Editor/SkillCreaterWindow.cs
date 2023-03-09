@@ -12,6 +12,7 @@ public class SkillCreaterWindow : EditorWindow
 
     private int lineNumber;
     private bool isActiveSkill;
+    private bool hasDuration;
 
     [MenuItem("Window/CustomEidtor/SkillCreater")]
     public static void ShowWindow()
@@ -35,8 +36,17 @@ public class SkillCreaterWindow : EditorWindow
     {        
         isActiveSkill = ValueToInt(skillInfo["Sort"]) == (int)SkillMainType.Active;
 
-        var characterSkill = isActiveSkill ?
-            CreateInstance<ActiveSkillAOE>() : CreateInstance<CharacterSkill>();
+        CharacterSkill characterSkill;
+
+        if(isActiveSkill)
+        {
+            hasDuration = ValueToInt(skillInfo["Duration"]) != -1;
+
+            characterSkill = hasDuration ?
+                CreateInstance<AOEWithDuration>() : CreateInstance<ActiveSkillAOE>();
+        }
+        else
+            characterSkill = CreateInstance<CharacterSkill>();
 
         SetSkillValues(characterSkill);
 
@@ -77,6 +87,13 @@ public class SkillCreaterWindow : EditorWindow
             activeSkill.sectorAngle  = ValueToInt(skillInfo["Angle"]);
             activeSkill.widthZ       = ValueToInt(skillInfo["LengthZ"]);
             activeSkill.widthX       = ValueToInt(skillInfo["LengthX"]);
+
+            if(hasDuration)
+            {
+                var aoeWithDuration         = activeSkill as AOEWithDuration;
+                aoeWithDuration.duration    = ValueToFloat(skillInfo["Duration"]);
+                aoeWithDuration.hitInterval = ValueToFloat(skillInfo["HitInterval"]);
+            }
         }
     }
     private void LoadIndicatorPrefab(ActiveSkillAOE activeSkillAOE)

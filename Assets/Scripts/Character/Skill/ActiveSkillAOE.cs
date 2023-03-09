@@ -28,7 +28,6 @@ public class ActiveSkillAOE : CharacterSkill
 
     public float castRangeLimit = 10f;
     private float sqrCastRangeLimit;
-
     public override void OnActive()
     {
         if (skillAreaIndicator != null &&
@@ -51,7 +50,7 @@ public class ActiveSkillAOE : CharacterSkill
 
         sqrCastRangeLimit = castRangeLimit * castRangeLimit;
     }
-    private void SetIndicatorScale()
+    protected virtual void SetIndicatorScale()
     {
         switch(areaShapeType)
         {
@@ -62,7 +61,7 @@ public class ActiveSkillAOE : CharacterSkill
                 skillAreaIndicator.SetScale(widthX, widthZ);
                 break;
             case SkillAreaShape.Circle:
-                skillAreaIndicator.SetScale(sectorRadius, sectorRadius);
+                skillAreaIndicator.SetScale(sectorRadius * 2, sectorRadius * 2);
                 break;
         }
     }
@@ -153,7 +152,7 @@ public class ActiveSkillAOE : CharacterSkill
     {
         skillAreaIndicator?.gameObject.SetActive(false);
     }
-    public void OffIndicatorsForOnActiveSkill()
+    public void readyEffectUntillOnActiveSkill()
     {
         EffectManager.Instance.Get(indicatorEffect, indicatorTransform);
         skillAreaIndicator.Renderer.enabled = false;
