@@ -4,7 +4,7 @@ public class Hayul : AttackableHero
 {
     public override void PassiveSkillEvent()
     {
-        base.PassiveSkillEvent();
+        base.PassiveSkillEvent(); //패시브 사용시 히어로 리스트 가져오기.
         Logger.Debug("하율등장");
         foreach (var hero in heroList)
         {

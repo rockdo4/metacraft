@@ -568,6 +568,7 @@ public abstract class AttackableUnit : MonoBehaviour
     {
         buffList.Remove(buff);
         bufferState.RemoveBuffer(buff.buffInfo.type, buff.buffInfo.buffValue);
+        UnitHp = UnitHp;
     }
 
     public void SetMaxHp()

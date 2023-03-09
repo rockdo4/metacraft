@@ -1,4 +1,5 @@
 using System;
+using TMPro;
 using UnityEngine;
 
 public class BuffIcon : MonoBehaviour
@@ -8,6 +9,7 @@ public class BuffIcon : MonoBehaviour
 
     public Action OnEnd;
     public GameObject popUpBuff;
+    public TextMeshProUGUI count;
 
     public void EndBuffIcon()
     {

@@ -61,6 +61,7 @@ public class AttackableHero : AttackableUnit
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.stoppingDistance = characterData.attack.distance;
 
+                    battleManager.GetHeroList(ref heroList);
                     battleManager.GetEnemyList(ref enemyList);
 
                     animator.SetFloat("Speed", 1);
@@ -401,7 +402,6 @@ public class AttackableHero : AttackableUnit
     public override void PassiveSkillEvent()
     {
         battleManager.GetHeroList(ref heroList);
-        Logger.Debug("Passive Start");
     }
     public override void ActiveSkillEnd()
     {
