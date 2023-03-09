@@ -64,7 +64,8 @@ public class TestBattleManager : MonoBehaviour
         }
 
         tree.CreateTreeGraph();
-        thisNode = tree.root; // 현재 위치한 노드
+        //thisNode = tree.root; // 현재 위치한 노드
+        SetThisNode(tree.root);
 
         // tree.root.type 맵 타입
         // tree.root.childrens 맵 순서
@@ -74,6 +75,12 @@ public class TestBattleManager : MonoBehaviour
         readyCount = useHeroes.Count;
 
         FindObjectOfType<AutoButton>().ResetData();
+    }
+
+    protected void SetThisNode(TreeNodeObject node)
+    {
+        thisNode = node;
+        tree.SetHighlighter(node);
     }
 
     public List<Transform> GetStartPosition()
@@ -173,7 +180,8 @@ public class TestBattleManager : MonoBehaviour
     public virtual void SelectNextStage(int index)
     {
         int stageIndex = nodeIndex = choiceButtons[index].choiceIndex;
-        thisNode = thisNode.childrens[stageIndex];
+        //thisNode = thisNode.childrens[stageIndex];
+        SetThisNode(thisNode.childrens[stageIndex]);
 
         readyCount = useHeroes.Count;
 
