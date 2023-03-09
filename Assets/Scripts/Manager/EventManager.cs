@@ -20,8 +20,6 @@ public class EventManager : MonoBehaviour
 {
     [Header("이벤트 발생 시 출력할 맵을 넣어주세요.")]
     public List<GameObject> eventMaps;
-    private List<TestBattleManager> battleManagerList = new();
-    private List<CinemachineVirtualCamera> cinemachines = new();
     private List<Dictionary<string, object>> eventInfoTable;
 
     private MapEventEnum curEvent = MapEventEnum.Normal;
@@ -41,14 +39,6 @@ public class EventManager : MonoBehaviour
 
     public void Awake()
     {
-        for (int i = 0; i < eventMaps.Count; i++)
-        {
-            var btMgr = eventMaps[i].GetComponent<TestBattleManager>();
-            var camera = eventMaps[i].GetComponent<CinemachineVirtualCamera>();
-            battleManagerList.Add(btMgr);
-            cinemachines.Add(camera);
-        }
-
         for (int i = 0; i < choiceButtons.Count; i++)
         {
             var text = choiceButtons[i].GetComponentInChildren<TextMeshProUGUI>();
