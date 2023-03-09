@@ -11,9 +11,9 @@ public class CSVReader
     static readonly char[] TRIM_CHARS = { '\"' };
 
     // New2. Split Text Asset
-    public static List<Dictionary<string, object>> SplitTextAsset(TextAsset asset, bool splitComma = true)
+    public static List<Dictionary<string, object>> SplitTextAsset(TextAsset asset, bool splitComma = true, bool tryParse = true)
     {
-        return SplitTokens(asset.text, splitComma);
+        return SplitTokens(asset.text, splitComma, tryParse);
     }
 
     // New1. Use File Path

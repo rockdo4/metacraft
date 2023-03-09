@@ -138,7 +138,7 @@ public class TestBattleManager : MonoBehaviour
     {
         for (int i = 0; i < useHeroes.Count; i++)
         {
-            Logger.Debug("Return");
+            // Logger.Debug("Return");
             ((AttackableHero)useHeroes[i]).SetReturnPos(pos[i]);
             useHeroes[i].ChangeUnitState(UnitState.ReturnPosition);
         }
@@ -149,7 +149,7 @@ public class TestBattleManager : MonoBehaviour
         UIManager.Instance.ShowView(1);
         GameManager.Instance.NextDay();
         clearUi.SetData();
-        Logger.Debug("Clear!");
+        // Logger.Debug("Clear!");
     }
 
     protected IEnumerator CoFadeIn()
@@ -253,7 +253,7 @@ public class TestBattleManager : MonoBehaviour
         Time.timeScale = 0;
         GameManager.Instance.NextDay();
         UIManager.Instance.ShowView(2);
-        Logger.Debug("Fail!");
+        // Logger.Debug("Fail!");
     }
 
     // 길목 생성

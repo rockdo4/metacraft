@@ -160,7 +160,7 @@ public class BeltScrollBattleManager : TestBattleManager
     private IEnumerator CoResetMap(float timer)
     {
         currTriggerIndex = 0;
-        Logger.Debug("End!");
+        // Logger.Debug("End!");
 
         yield return new WaitForSeconds(timer / Time.timeScale);
 
