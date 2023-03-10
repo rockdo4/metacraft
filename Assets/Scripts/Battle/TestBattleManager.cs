@@ -179,8 +179,8 @@ public class TestBattleManager : MonoBehaviour
         //thisNode = thisNode.childrens[stageIndex];
 
         nodeIndex = index;
-        TreeNodeObject prevNode = tree.GetCurrentNode();
-        tree.SetCurrentNode(prevNode.childrens[index]);
+        TreeNodeObject prevNode = tree.CurNode;
+        tree.CurNode = prevNode.childrens[index];
         readyCount = useHeroes.Count;
         int childCount = prevNode.childrens.Count;
         for (int i = 0; i< childCount; i++)
@@ -199,8 +199,8 @@ public class TestBattleManager : MonoBehaviour
     {
         tree.gameObject.SetActive(true);
 
-        List<TreeNodeObject> childs = tree.GetCurrentNode().childrens;
-        tree.SetMovableHighlighter(tree.GetCurrentNode());
+        List<TreeNodeObject> childs = tree.CurNode.childrens;
+        tree.SetMovableHighlighter(tree.CurNode);
         int count = childs.Count;
         for (int i = 0; i < count; i++)
         {
@@ -211,7 +211,7 @@ public class TestBattleManager : MonoBehaviour
 
     protected void ChoiceNextStage()
     {
-        TreeNodeObject thisNode = tree.GetCurrentNode();
+        TreeNodeObject thisNode = tree.CurNode;
         int count = thisNode.childrens.Count;
         for (int i = 0; i < count; i++)
         {
@@ -255,7 +255,7 @@ public class TestBattleManager : MonoBehaviour
     // 길목 생성
     protected void CreateRoad(GameObject platform)
     {
-        TreeNodeObject thisNode = tree.GetCurrentNode();
+        TreeNodeObject thisNode = tree.CurNode;
         if (thisNode.childrens.Count == 0)
         {
             return;
@@ -318,7 +318,7 @@ public class TestBattleManager : MonoBehaviour
     }
     protected bool OnNextEvent()
     {
-        if (tree.GetCurrentNode().type == TreeNodeTypes.Event)
+        if (tree.CurNode.type == TreeNodeTypes.Event)
         {
             var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
             evManager.StartEvent((MapEventEnum)randomEvent);

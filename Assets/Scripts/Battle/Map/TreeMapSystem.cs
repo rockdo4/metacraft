@@ -11,6 +11,15 @@ public class TreeMapSystem : MonoBehaviour
     public TreeNodeObject root;
     public TreeNodeObject boss;
     private TreeNodeObject curNode;
+    public TreeNodeObject CurNode
+    { 
+        get { return curNode; }
+        set
+        { 
+            curNode = value;
+            SetNodeHighlighter(value);
+        }
+    }
     public int height = 6;
     public int width = 5;
 
@@ -72,17 +81,6 @@ public class TreeMapSystem : MonoBehaviour
         {
             CreateTreeGraph();
         }
-    }
-
-    public void SetCurrentNode(TreeNodeObject node)
-    {
-        curNode = node;
-        SetNodeHighlighter(node);
-    }
-
-    public TreeNodeObject GetCurrentNode()
-    {
-        return curNode;
     }
 
     public void CreateTreeGraph()

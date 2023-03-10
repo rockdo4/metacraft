@@ -18,7 +18,7 @@ public class BeltScrollBattleManager : TestBattleManager
     {
         if (Input.GetKeyDown(KeyCode.B))
         {
-            tree.GetCurrentNode().type = TreeNodeTypes.Boss;
+            tree.CurNode.type = TreeNodeTypes.Boss;
             DestroyRoad();
             RemoveRoadTrigger();
             ResetRoads();
@@ -199,7 +199,7 @@ public class BeltScrollBattleManager : TestBattleManager
         CreateRoad(platform);
         AddRoadTrigger();
 
-        if (tree.GetCurrentNode().type == TreeNodeTypes.Boss)
+        if (tree.CurNode.type == TreeNodeTypes.Boss)
         {
             triggers.Last().isMissionEnd = true;
         }
