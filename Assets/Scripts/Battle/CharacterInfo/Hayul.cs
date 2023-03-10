@@ -1,7 +1,3 @@
-using System.Collections.Generic;
-using UnityEngine;
-using System;
-using UnityEditor.Experimental.GraphView;
 
 public class Hayul : AttackableHero
 {
