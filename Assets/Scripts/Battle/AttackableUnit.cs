@@ -313,6 +313,16 @@ public abstract class AttackableUnit : MonoBehaviour
 
         bool isCritical = false;
         var dmg = (int)(attackableUnit.CalculDamage(skill, ref isCritical) * defense * levelCorrection);
+
+
+        if(bufferState.isShield)
+        {
+            var shield =  (int)(dmg * (bufferState.shield/ 100f));
+
+            dmg -= shield;
+        }
+
+
         UnitHp = Mathf.Max(UnitHp - dmg, 0);
         if (UnitHp <= 0)
             UnitState = UnitState.Die;
