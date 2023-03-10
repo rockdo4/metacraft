@@ -560,6 +560,7 @@ public abstract class AttackableUnit : MonoBehaviour
                     case BuffType.Stealth:
                         break;
                     case BuffType.Stun:
+                        Logger.Debug("Stun");
                         endEvent = StunEnd;
                         BattleState = UnitBattleState.Stun;
                         break;
