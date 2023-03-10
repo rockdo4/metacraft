@@ -296,6 +296,7 @@ public class AttackableEnemy : AttackableUnit
     }
     public override void StunEnd()
     {
+        Logger.Debug("StunEnd");
         base.StunEnd();
         BattleState = UnitBattleState.BattleIdle;
     }
