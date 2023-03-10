@@ -18,22 +18,22 @@ using TMPro;
 
 public class EventManager : MonoBehaviour
 {
-    [Header("이벤트 발생 시 출력할 맵을 넣어주세요.")]
+    [Header("맵들 넣어주세요.")]
     public List<GameObject> eventMaps;
     private List<Dictionary<string, object>> eventInfoTable;
 
-    private MapEventEnum curEvent = MapEventEnum.Normal;
+    public MapEventEnum curEvent = MapEventEnum.Normal;
     private GameObject curMap;
 
     public GameObject eventUi;
-    [Header("선택지 버튼들")]
+    [Header("클릭할 버튼들 넣어주세요")]
     public List<GameObject> choiceButtons;
-    [Header("히어로 이미지가 들어갈 Ui")]
+    [Header("히어로 이미지 Ui")]
     public Image heroImage;
-    [Header("이벤트 설명이 들어갈 텍스트 오브젝트")]
+    [Header("설명 들어갈 텍스트")]
     public TextMeshProUGUI contentText;
 
-    private List<TextMeshProUGUI> buttonTexts = new(); // 버튼들 내부의 텍스트들
+    private List<TextMeshProUGUI> buttonTexts = new();
 
     private List<string> heroNames = new();
 
@@ -48,8 +48,6 @@ public class EventManager : MonoBehaviour
         GameManager gm = GameManager.Instance;
 
         eventInfoTable = gm.eventInfoList;
-        // 이벤트 인포 테이블에서 가져오면 됨
-        // 예시) eventInfoTable[0]["Explanation"]
 
         var useHeroes = gm.GetSelectedHeroes();
         for (int i = 0; i < useHeroes.Count; i++)
@@ -59,18 +57,15 @@ public class EventManager : MonoBehaviour
 
         StartEvent(curEvent);
     }
-    
-    public void StartEvent(MapEventEnum ev) // 이벤트 시작
+
+    public void StartEvent(MapEventEnum ev)
     {
-        // 이벤트 시작하면 해당 맵 활성화 및 curMap에 활성화된 맵 할당해주고
-        // SetActiveEventMap 사용해서 해당 맵 true시키기
         curEvent = ev;
 
-        // 이벤트 ui 및 맵 출력
         SetEventUiProperty(curEvent);
     }
 
-    public void EndEvent() // 이벤트 관련 ui 꺼주기, 뭐 할거 없으면 함수 지우기
+    public void EndEvent()
     {
         for (int i = 0; i < choiceButtons.Count; i++)
         {
@@ -79,12 +74,12 @@ public class EventManager : MonoBehaviour
         SetEventUiActive(false);
     }
 
-    public void SetActiveEventMap(bool active) // 현재 이벤트 발생 맵 액티브 관리
+    public void SetActiveEventMap(bool active)
     {
         curMap.SetActive(active);
     }
 
-    public void SetEventUiProperty(MapEventEnum ev) // 이벤트의 내용 설정
+    public void SetEventUiProperty(MapEventEnum ev)
     {
         if (curMap != null)
             SetActiveEventMap(false);
@@ -95,7 +90,7 @@ public class EventManager : MonoBehaviour
         }
         else if (ev == MapEventEnum.Defense)
         {
-            curMap = eventMaps[1];
+            curMap = eventMaps[0];
         }
         else
         {
@@ -120,7 +115,7 @@ public class EventManager : MonoBehaviour
         for (int i = 0; i < textCount; i++)
         {
             choiceButtons[i].SetActive(true);
-            string text = $"{eventInfoTable[(int)ev][$"Select{i+1}Text"]}";
+            string text = $"{eventInfoTable[(int)ev][$"Select{i + 1}Text"]}";
             buttonTexts[i].text = text;
         }
     }
