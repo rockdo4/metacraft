@@ -7,9 +7,6 @@ public class AttackableEnemy : AttackableUnit
     [SerializeField]
     public void SetTargetList(List<AttackableUnit> list) => heroList = list;
 
-    private AttackedDamageUI floatingDamageText;
-    private HpBarManager hpBarManager;
-
     protected override UnitState UnitState {
         get {
             return unitState;
@@ -108,9 +105,7 @@ public class AttackableEnemy : AttackableUnit
         unitState = UnitState.Idle;
         lastNormalAttackTime = Time.time;
 
-        floatingDamageText = GetComponent<AttackedDamageUI>();
-        hpBarManager = GetComponent<HpBarManager>();
-        hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+
 
     }
     public override void ResetData()
@@ -241,17 +236,8 @@ public class AttackableEnemy : AttackableUnit
 
     public override void OnDamage(AttackableUnit attackableUnit, CharacterSkill skill)
     {
-        base.OnDamage(attackableUnit, skill);
-        //TempShowHpBarAndDamageText(dmg, isCritical);
+        base.OnDamage(attackableUnit, skill);        
     }
-    public void TempShowHpBarAndDamageText(int dmg, bool isCritical = false)
-    {
-        floatingDamageText.OnAttack(dmg, isCritical, transform.position, DamageType.Normal);
-        hpBarManager.TestCode(dmg);
-        if (UnitHp <= 0)
-            hpBarManager.Die();
-    }
-
     public override void OnDead(AttackableUnit unit)
     {
         battleManager.OnDeadEnemy((AttackableEnemy)unit);

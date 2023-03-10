@@ -94,6 +94,11 @@ public abstract class AttackableUnit : MonoBehaviour
         set { isAuto = value; }
     }
 
+    [SerializeField]
+    protected bool isThereDamageUI = false;
+    protected AttackedDamageUI floatingDamageText;
+    protected HpBarManager hpBarManager;
+
     protected virtual void Awake()
     {
         var manager = FindObjectOfType<TestBattleManager>();
@@ -105,6 +110,13 @@ public abstract class AttackableUnit : MonoBehaviour
         unitSearchAi[UnitAiType.Range] = RangeSearch;
         unitSearchAi[UnitAiType.Assassin] = AssassinSearch;
         unitSearchAi[UnitAiType.Supprot] = SupportSearch;
+
+        if(isThereDamageUI)
+        {
+            floatingDamageText = GetComponent<AttackedDamageUI>();
+            hpBarManager = GetComponent<HpBarManager>();
+            hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+        }                
     }
 
     protected void SetData()
@@ -321,11 +333,23 @@ public abstract class AttackableUnit : MonoBehaviour
 
             dmg -= shield;
         }
-
+        ShowHpBarAndDamageText(dmg, isCritical);
 
         UnitHp = Mathf.Max(UnitHp - dmg, 0);
         if (UnitHp <= 0)
+        {
             UnitState = UnitState.Die;
+            hpBarManager.Die();
+        }
+    }
+
+    public void ShowHpBarAndDamageText(int dmg, bool isCritical = false)
+    {
+        if (!isThereDamageUI)
+            return;
+
+        floatingDamageText.OnAttack(dmg, isCritical, transform.position, DamageType.Normal);
+        hpBarManager.OnDamage(dmg);
     }
 
     public void SearchNearbyTarget(List<AttackableUnit> list) 
