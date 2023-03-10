@@ -152,7 +152,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a455c9656f631cc49b79eafc2cecce78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  heroList: {fileID: 392096440}
   heroUiList: []
   startPositions:
   - {fileID: 2034244606}
@@ -167,16 +166,11 @@ MonoBehaviour:
   - {fileID: 399183787}
   - {fileID: 1709996920}
   fadePanel: {fileID: 0}
-  isFadeIn: 1
   tree: {fileID: 0}
-  roads: []
-  roadPrefab: {fileID: 0}
+  roadPrefab:
+  - {fileID: 0}
   roadTr: {fileID: 0}
-  roadRots:
-  - {x: 0, y: -45, z: 0}
-  - {x: 0, y: 0, z: 0}
-  - {x: 0, y: 45, z: 0}
-  roadCount: 3
+  choiceButtons: []
   platform: {fileID: 588673997}
   platformMoveSpeed: 10
 --- !u!4 &11782230
