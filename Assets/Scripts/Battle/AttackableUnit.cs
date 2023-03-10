@@ -652,6 +652,7 @@ public abstract class AttackableUnit : MonoBehaviour
         {
             buffDamage = (int)(buffDamage * (characterData.data.criticalDmg + (bufferState.criticalDamage / 100f)));
         }
+        buffDamage = (int)(buffDamage * (100 + bufferState.damageDecrease) / 100f);
 
         return buffDamage;
     }
