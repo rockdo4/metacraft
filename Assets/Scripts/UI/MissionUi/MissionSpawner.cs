@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.Rendering.DebugUI;
 
 public class MissionSpawner : MonoBehaviour
 {
@@ -12,35 +7,23 @@ public class MissionSpawner : MonoBehaviour
 
     private List<int> randomNumbers;
 
-    //private void Awake()
-    //{
-    //    foreach (GameObject go in prefebs)
-    //    {
-    //        go.GetComponent<MissionMarkData>().OnOffMark(false);
-    //    }
-
-    //    randomNumbers = Utils.DistinctRandomNumbers(7, 4);
-
-    //    for (int i = 0; i < randomNumbers.Count; i++)
-    //    {
-    //        prefebs[i].GetComponent<MissionMarkData>().OnOffMark(true);
-    //    }
-    //}
-
-    private GameObject[] CreateMission(int count)
+    private void Awake()
     {
         foreach (GameObject go in prefebs)
         {
             go.GetComponent<MissionMarkData>().OnOffMark(false);
         }
 
-        randomNumbers = Utils.DistinctRandomNumbers(7, count);
+        randomNumbers = Utils.DistinctRandomNumbers(7, 4);
 
         for (int i = 0; i < randomNumbers.Count; i++)
         {
-            prefebs[i].GetComponent<MissionMarkData>().OnOffMark(true);
+            CreateMission(randomNumbers[i]);
         }
+    }
 
-        return prefebs;
+    private void CreateMission(int index)
+    {
+        prefebs[index].GetComponent<MissionMarkData>().OnOffMark(true);
     }
 }

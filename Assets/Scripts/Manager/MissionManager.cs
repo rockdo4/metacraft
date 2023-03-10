@@ -19,19 +19,11 @@ public class MissionManager : View
     //public TextMeshProUGUI deductionAP;
     public TextMeshProUGUI ProperCombatPower;
 
-    public Slider difficultyAdjustment;
-
     public GameObject missionPoints;
-    //private GameObject[] marks;
+    private GameObject[] marks;
     private List<Dictionary<string, object>> missionInfoTable;
-    private List<GameObject[]> marks;
-
     public List<GameObject> expectedRewards;
 
-    [Range(1,5)]
-    public int difficulty = 1;
-    [Range(1,7)]
-    public int markCount = 4;
     public delegate void clickmark(int num);
     //private int missionNum;
     private GameManager gm;
@@ -46,26 +38,23 @@ public class MissionManager : View
     {
         gm = GameManager.Instance;
         missionInfoTable = gm.missionInfoList;
+        var num = Utils.DistinctRandomNumbers(missionInfoTable.Count, 4);
+        marks = GetComponentInChildren<MissionSpawner>().prefebs;
 
         heroSlotsIndex = 0;
 
-        for (int i = 1; i < 6; i++)
+        int j = 0;
+        for (int i = 0; i < marks.Length; i++)
         {
-            marks[i] = GetComponentInChildren<MissionSpawner>().prefebs;
-            var num = Utils.DistinctRandomNumbers(missionInfoTable.Count, markCount);
-            int k = 0;
-            for (int j = 0; j < marks[i].Length; j++)
+            if (marks[i].GetComponent<MissionMarkData>().isMarkOn)
             {
-                if (marks[i][j].GetComponent<MissionMarkData>().isMarkOn)
-                {
-                    var index = k++;
-                    marks[i][j].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[num[index]]["Name"]}";
-                    marks[i][j].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(num[index]));
-                }
-                else
-                {
-                    marks[i][j].SetActive(false);
-                }
+                var index = j++;
+                marks[i].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[num[index]]["Name"]}";
+                marks[i].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(num[index]));
+            }
+            else
+            {
+                marks[i].SetActive(false);
             }
         }
     }
@@ -211,10 +200,5 @@ public class MissionManager : View
                     break;
             }
         }
-    }
-
-    public void OnAdjustmentDifficulty()
-    {
-        difficultyAdjustment.GetComponentInChildren<TextMeshProUGUI>().text = difficultyAdjustment.value.ToString();
     }
 }
