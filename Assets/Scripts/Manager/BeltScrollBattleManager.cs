@@ -44,8 +44,8 @@ public class BeltScrollBattleManager : TestBattleManager
             }
         }
 
-        CreateRoad(platform);
-        AddRoadTrigger();
+        //CreateRoad(platform);
+        //AddRoadTrigger();
 
         for (int i = 0; i < useHeroes.Count; i++)
         {

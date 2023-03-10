@@ -330,7 +330,10 @@ public abstract class AttackableUnit : MonoBehaviour
 
         UnitHp = Mathf.Max(UnitHp - dmg, 0);
         if (UnitHp <= 0)
+        {
             UnitState = UnitState.Die;
+            hpBarManager.Die();
+        }
     }
 
     public void ShowHpBarAndDamageText(int dmg, bool isCritical = false)
@@ -340,8 +343,6 @@ public abstract class AttackableUnit : MonoBehaviour
 
         floatingDamageText.OnAttack(dmg, isCritical, transform.position, DamageType.Normal);
         hpBarManager.OnDamage(dmg);
-        if (UnitHp <= 0)
-            hpBarManager.Die();
     }
 
     public void SearchNearbyTarget(List<AttackableUnit> list) 
