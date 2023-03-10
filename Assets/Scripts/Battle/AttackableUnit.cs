@@ -50,18 +50,6 @@ public abstract class AttackableUnit : MonoBehaviour
             characterData.data.currentHp = Mathf.Clamp(value, 0, MaxHp); 
         }
     }
-    //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)
-    public int AttackDamage {
-        get {
-            return characterData.attack.CreateDamageResult(characterData.data, bufferState);
-        }
-    }
-
-    public int ActiveDamage {
-        get {
-            return characterData.activeSkill.CreateDamageResult(characterData.data, bufferState);
-        }
-    }
 
     protected float lastNormalAttackTime;
     protected float lastActiveSkillTime;
@@ -106,6 +94,11 @@ public abstract class AttackableUnit : MonoBehaviour
         set { isAuto = value; }
     }
 
+    [SerializeField]
+    protected bool isThereDamageUI = false;
+    protected AttackedDamageUI floatingDamageText;
+    protected HpBarManager hpBarManager;
+
     protected virtual void Awake()
     {
         var manager = FindObjectOfType<TestBattleManager>();
@@ -117,6 +110,13 @@ public abstract class AttackableUnit : MonoBehaviour
         unitSearchAi[UnitAiType.Range] = RangeSearch;
         unitSearchAi[UnitAiType.Assassin] = AssassinSearch;
         unitSearchAi[UnitAiType.Supprot] = SupportSearch;
+
+        if(isThereDamageUI)
+        {
+            floatingDamageText = GetComponent<AttackedDamageUI>();
+            hpBarManager = GetComponent<HpBarManager>();
+            hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+        }                
     }
 
     protected void SetData()
@@ -165,51 +165,58 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public abstract void PassiveSkillEvent();
     public abstract void ReadyActiveSkill();
-    public virtual void OnActiveSkill() => characterData.activeSkill.OnActiveSkill(ActiveDamage, characterData.data.level);
+    public virtual void OnActiveSkill()
+    {
+        bool isCritical = false;
+        characterData.activeSkill.OnActiveSkill(this);
+    }
 
     public virtual void NormalAttackOnDamage()
     {
         if (BattleState == UnitBattleState.ActiveSkill)
             return;
-        if ((characterData.attack.searchType != SkillSearchType.Healer
-            && characterData.attack.searchType != SkillSearchType.Buffer))
+        if (characterData.attack.targetNumLimit == 1)
         {
-            if (characterData.attack.targetNumLimit == 1)
+            target.OnDamage(this, characterData.attack);
+            foreach (var buff in normalbuffs)
             {
-                target.OnDamage(AttackDamage, characterData.data.level, false);
-                return;
+                bool isCritical = false;
+                var value = CalculDamage(characterData.activeSkill, ref isCritical);
+                target.AddBuff(buff, value, null);
             }
+            return;
+        }
 
-            List<AttackableUnit> attackTargetList = new();
+        List<AttackableUnit> attackTargetList = new();
 
-            var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
-            foreach (var now_target in targetList)
+        var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
+        foreach (var now_target in targetList)
+        {
+            Vector3 interV = now_target.transform.position - transform.position;
+            if (interV.magnitude <= characterData.attack.distance)
             {
-                Vector3 interV = now_target.transform.position - transform.position;
-                if (interV.magnitude <= characterData.attack.distance)
-                {
-                    float angle = Vector3.Angle(transform.forward, interV);
+                float angle = Vector3.Angle(transform.forward, interV);
 
-                    if (Mathf.Abs(angle) < characterData.attack.angle / 2f)
-                    {
-                        attackTargetList.Add(now_target);
-                    }
+                if (Mathf.Abs(angle) < characterData.attack.angle / 2f)
+                {
+                    attackTargetList.Add(now_target);
                 }
             }
+        }
 
-            attackTargetList = GetNearestUnitList(attackTargetList, characterData.attack.targetNumLimit);
+        attackTargetList = GetNearestUnitList(attackTargetList, characterData.attack.targetNumLimit);
 
-            for (int i = 0; i < attackTargetList.Count; i++)
+        for (int i = 0; i < attackTargetList.Count; i++)
+        {
+            attackTargetList[i].OnDamage(this, characterData.attack);
+            foreach (var buff in normalbuffs)
             {
-                attackTargetList[i].OnDamage(AttackDamage, characterData.data.level, false);
+                bool isCritical = false;
+                var value = CalculDamage(characterData.activeSkill, ref isCritical);
+                attackTargetList[i].AddBuff(buff, value, null);
             }
         }
 
-        foreach (var buff in normalbuffs)
-        {
-            var value = (int)(AttackDamage * (buff.buffValue / 100f));
-            target.AddBuff(buff, value, null);
-        }
     }
 
     protected void RushSearch()
@@ -307,15 +314,35 @@ public abstract class AttackableUnit : MonoBehaviour
     protected abstract void MoveNextUpdate();
     protected abstract void ReturnPosUpdate();
     //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)
-    public virtual void OnDamage(int dmg, int level, bool isCritical = false)
+    public virtual void OnDamage(AttackableUnit attackableUnit, CharacterSkill skill)
     {
+        if ((skill.searchType == SkillSearchType.Healer || skill.searchType == SkillSearchType.Buffer))
+        {
+            return;
+        }
         var defense = 100f / (100 + characterData.data.baseDefense + bufferState.defense);
-        var levelCorrection = 1 + Mathf.Clamp((level - characterData.data.level) / 100f, -0.4f, 0);
+        var levelCorrection = 1 + Mathf.Clamp((attackableUnit.characterData.data.level - characterData.data.level) / 100f, -0.4f, 0);
 
-        dmg = (int)(dmg * defense * levelCorrection);
+        bool isCritical = false;
+        var dmg = (int)(attackableUnit.CalculDamage(skill, ref isCritical) * defense * levelCorrection);
+
+        ShowHpBarAndDamageText(dmg, isCritical);
+
         UnitHp = Mathf.Max(UnitHp - dmg, 0);
         if (UnitHp <= 0)
+        {
             UnitState = UnitState.Die;
+            hpBarManager.Die();
+        }
+    }
+
+    public void ShowHpBarAndDamageText(int dmg, bool isCritical = false)
+    {
+        if (!isThereDamageUI)
+            return;
+
+        floatingDamageText.OnAttack(dmg, isCritical, transform.position, DamageType.Normal);
+        hpBarManager.OnDamage(dmg);
     }
 
     public void SearchNearbyTarget(List<AttackableUnit> list) 
@@ -504,13 +531,13 @@ public abstract class AttackableUnit : MonoBehaviour
         var nowCount = count;
         for (int i = 0; i < list.Count; i++)
         {
+            if (nowCount <= 0)
+                break;
             if (IsAlive(list[i]))
             {
                 nowCount--;
                 tempList.Add(list[i]);
             }
-            if (nowCount <= 0)
-                break;
         }
 
         return tempList;
@@ -551,11 +578,45 @@ public abstract class AttackableUnit : MonoBehaviour
             }
             else
             {
-                Buff buff = new Buff(info, this, RemoveBuff, icon);
+                Action endEvent = null;
+
+                switch (info.type)
+                {
+                    case BuffType.Provoke:
+                        break;
+                    case BuffType.Stealth:
+                        break;
+                    case BuffType.Stun:
+                        Logger.Debug("Stun");
+                        endEvent = StunEnd;
+                        BattleState = UnitBattleState.Stun;
+                        break;
+                    case BuffType.Silence:
+                        break;
+                    case BuffType.Resistance:
+                        break;
+                    case BuffType.Blind:
+                        break;
+                    case BuffType.Burns:
+                        break;
+                    case BuffType.Freeze:
+                        break;
+                    case BuffType.Shield:
+                        break;
+                    case BuffType.Bleed:
+                        break;
+                    case BuffType.LifeSteal:
+                        break;
+                    case BuffType.Count:
+                        break;
+                    default:
+                        break;
+                }
+                Buff buff = new Buff(info, this, RemoveBuff, icon, endEvent);
                 buffList.Add(buff);
                 bufferState.Buffer(info.type, info.buffValue);
 
-                if(buff.buffInfo.type == BuffType.MaxHealthIncrease)
+                if (buff.buffInfo.type == BuffType.MaxHealthIncrease)
                 {
                     SetMaxHp();
                 }
@@ -568,10 +629,23 @@ public abstract class AttackableUnit : MonoBehaviour
     {
         buffList.Remove(buff);
         bufferState.RemoveBuffer(buff.buffInfo.type, buff.buffInfo.buffValue);
+        UnitHp = UnitHp;
     }
 
     public void SetMaxHp()
     {
         UnitHp = MaxHp;
+    }
+
+    public int CalculDamage(CharacterSkill skill, ref bool isCritical)
+    {
+        var buffDamage = skill.CreateDamageResult(characterData.data, bufferState);
+        isCritical = UnityEngine.Random.Range(0f, 1f) < characterData.data.critical + (bufferState.criticalProbability / 100f);
+        if (isCritical)
+        {
+            buffDamage = (int)(buffDamage * (characterData.data.criticalDmg + (bufferState.criticalDamage / 100f)));
+        }
+
+        return buffDamage;
     }
 }

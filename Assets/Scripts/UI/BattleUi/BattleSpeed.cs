@@ -4,13 +4,16 @@ using UnityEngine;
 public class BattleSpeed : MonoBehaviour
 {
     public TextMeshProUGUI speedTxt;
-    float[] speeds = new float[3] { 1f, 2f, 3f };
+    float[] speeds = new float[3] { 1f, 2f, 4f };
     string speedFormat = "{0:F1}x";
     public float GetSpeed => speeds[idx];
     int idx = 0;
 
+    public static BattleSpeed Instance { get; private set; }
+
     private void Awake()
     {
+        Instance = this;
         idx = GameManager.Instance.playerData.battleSpeed;
         SetBattleSpeed(idx);
     }

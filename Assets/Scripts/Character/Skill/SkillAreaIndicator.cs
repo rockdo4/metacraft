@@ -13,6 +13,11 @@ public class SkillAreaIndicator : MonoBehaviour
     {
         Renderer = GetComponent<MeshRenderer>();
     }
+
+    public virtual void SetScale(float x, float y, float z = 1f)
+    {
+        transform.localScale = new Vector3(x, y, z);        
+    }
     private void OnEnable()
     {
         //if(meshRenderer == null)

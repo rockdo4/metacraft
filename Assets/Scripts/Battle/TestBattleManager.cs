@@ -255,15 +255,15 @@ public class TestBattleManager : MonoBehaviour
     // 길목 생성
     protected void CreateRoad(GameObject platform)
     {
-        TreeNodeObject thisNode = tree.CurNode;
-        if (thisNode.childrens.Count == 0)
-        {
-            return;
-        }
+        //TreeNodeObject thisNode = tree.CurNode;
+        //if (thisNode.childrens.Count == 0)
+        //{
+        //    return;
+        //}
 
-        road = Instantiate(roadPrefab[thisNode.childrens.Count - 1], platform.transform);
-        road.transform.position = roadTr.transform.position;
-        roads = road.GetComponentsInChildren<ForkedRoad>().ToList();
+        //road = Instantiate(roadPrefab[thisNode.childrens.Count - 1], platform.transform);
+        //road.transform.position = roadTr.transform.position;
+        //roads = road.GetComponentsInChildren<ForkedRoad>().ToList();
     }
 
     protected void DestroyRoad()

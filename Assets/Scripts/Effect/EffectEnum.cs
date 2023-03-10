@@ -4,5 +4,8 @@ public enum EffectEnum
     CFXRExplosion1,
     CFXR3MagicAuraARunic,
     CFXRImpactGlowingHDRBlue,
+    CFXR3LightGlowA,
+    CFX3_Vortex_Ground,
+    IceAttack,
     Count,
 }
