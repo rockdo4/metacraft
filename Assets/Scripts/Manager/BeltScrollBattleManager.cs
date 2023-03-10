@@ -48,9 +48,12 @@ public class BeltScrollBattleManager : TestBattleManager
         CreateRoad(platform);
         AddRoadTrigger();
 
-        for (int i = 0; i < useHeroes.Count; i++)
+        if (thisNode.type == TreeNodeTypes.Normal || evManager.curEvent == MapEventEnum.Normal)
         {
-            Invoke(nameof(OnReady), 1f);
+            for (int i = 0; i < useHeroes.Count; i++)
+            {
+                Invoke(nameof(OnReady), 1f);
+            }
         }
 
         enemyCountTxt.Count = GetAllEnemyCount();
@@ -72,9 +75,11 @@ public class BeltScrollBattleManager : TestBattleManager
         triggers[currTriggerIndex].OnDead(enemy);
         if (triggers[currTriggerIndex].useEnemys.Count == 0)
         {
+            Logger.Debug("NextTrigger");
             SetHeroReturnPositioning(triggers[currTriggerIndex].heroSettingPositions);
         }
     }
+
     public override void OnDeadHero(AttackableHero hero)
     {
         base.OnDeadHero(hero);
@@ -89,7 +94,6 @@ public class BeltScrollBattleManager : TestBattleManager
         base.SelectNextStage(index);
         base.OnReady();
         SetHeroReturnPositioning(roads[nodeIndex].fadeTrigger.heroSettingPositions);
-        coMovingMap = StartCoroutine(CoMovingMap());
     }
 
     public override void OnReady()
@@ -104,7 +108,6 @@ public class BeltScrollBattleManager : TestBattleManager
             }
             else if (triggers[currTriggerIndex + 1] != null && triggers[currTriggerIndex + 1].isStageEnd)
             {
-                //ChoiceNextStage();
                 ChoiceNextStageByNode();
             }
             else if (!triggers[currTriggerIndex].isStageEnd)
@@ -121,37 +124,35 @@ public class BeltScrollBattleManager : TestBattleManager
         float curMaxZPos = 0f;
         float nextMaxZPos = 0f;
         float movePos = 0f;
-        float platformMoveSpeedValue = 0f;
 
         yield return new WaitForSeconds(nextStageMoveTimer);
 
         curMaxZPos = platform.transform.position.z +
             triggers[currTriggerIndex].heroSettingPositions.Max(transform => transform.position.z);
 
-        if (triggers[currTriggerIndex + 1].isStageEnd)
+        if (!triggers[currTriggerIndex + 1].isStageEnd)
         {
-            platformMoveSpeedValue = 1f;
-            nextMaxZPos = roads[nodeIndex].fadeTrigger.heroSettingPositions.Max(transform => transform.position.z);
-        }
-        else
-        {
-            platformMoveSpeedValue = platformMoveSpeed;
             nextMaxZPos = triggers[currTriggerIndex + 1].heroSettingPositions.Max(transform => transform.position.z);
-        }
+            movePos = curMaxZPos - nextMaxZPos;
+            while (platform.transform.position.z >= movePos)
+            {
+                platform.transform.Translate((Vector3.forward * platformMoveSpeed * Time.deltaTime) * -1);
+                yield return null;
+            }
 
-        movePos = curMaxZPos - nextMaxZPos;
-        currTriggerIndex++;
+            currTriggerIndex++;
 
-        while (platform.transform.position.z >= movePos)
-        {
-            platform.transform.Translate((Vector3.forward * platformMoveSpeedValue * Time.deltaTime) * -1);
-            yield return null;
-        }
+            // ????ε? ??? ???·? ???
+            for (int i = 0; i < useHeroes.Count; i++)
+            {
+                useHeroes[i].ChangeUnitState(UnitState.Battle);
+            }
 
-        // 히어로들 배틀 상태로 전환
-        for (int i = 0; i < useHeroes.Count; i++)
-        {
-            useHeroes[i].ChangeUnitState(UnitState.Battle);
+            if (triggers[currTriggerIndex].useEnemys.Count == 0)
+            {
+                Logger.Debug("NextTrigger");
+                ChoiceNextStageByNode();
+            }
         }
     }
 
@@ -164,33 +165,20 @@ public class BeltScrollBattleManager : TestBattleManager
     private IEnumerator CoResetMap(float timer)
     {
         currTriggerIndex = 0;
-        // Logger.Debug("End!");
 
         yield return new WaitForSeconds(timer / Time.timeScale);
 
-        // 페이드 아웃
-        StartFadeOut();
-        DestroyRoad();
-        RemoveRoadTrigger();
-        ResetRoads();
-
-        for (int i = 0; i < useHeroes.Count; i++)
+        if (OnNextStage())
         {
-            useHeroes[i].ResetData();
-        }
-
-        OnStageComplete();
-        if (OnNextEvent())
-        {
-            Logger.Debug("OnNextEvent");
+            Logger.Debug("OnNextStage");
             yield break;
         }
 
+        // ???? ?????? ?????? ??? ?????? ????
+        // ????? ??? ?????°??
         platform.transform.position = Vector3.zero;
-
-        // 여기에 에너미들 바꿔주는 거랑 마리수 조정
-        // 일단은 다시 소환하는걸로
         ResetStage();
+
         for (int i = 0; i < useHeroes.Count; i++)
         {
             Invoke(nameof(OnReady), 1f);
@@ -206,5 +194,13 @@ public class BeltScrollBattleManager : TestBattleManager
         }
 
         yield break;
+    }
+
+    public void TestOnReady()
+    {
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            Invoke(nameof(OnReady), 1f);
+        }
     }
 }

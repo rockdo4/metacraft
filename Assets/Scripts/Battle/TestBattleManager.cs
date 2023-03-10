@@ -33,7 +33,7 @@ public class TestBattleManager : MonoBehaviour
     public List<RoadChoiceButton> choiceButtons;
     protected List<TextMeshProUGUI> choiceButtonTexts = new();
     protected int nodeIndex;
-    private EventManager evManager;
+    protected EventManager evManager;
 
     private void Awake()
     {
@@ -57,7 +57,7 @@ public class TestBattleManager : MonoBehaviour
                 useHeroes.Add(attackableHero);
             }
         }
-        foreach(var hero in useHeroes)
+        foreach (var hero in useHeroes)
         {
             hero.PassiveSkillEvent();
         }
@@ -138,12 +138,12 @@ public class TestBattleManager : MonoBehaviour
     {
         for (int i = 0; i < useHeroes.Count; i++)
         {
-            // Logger.Debug("Return");
             ((AttackableHero)useHeroes[i]).SetReturnPos(pos[i]);
             useHeroes[i].ChangeUnitState(UnitState.ReturnPosition);
         }
+        Logger.Debug("Yes");
     }
-    // 클리어 시 호출할 함수 (Ui 업데이트)
+    // ????? ?? ????? ??? (Ui ???????)
     protected void SetStageClear()
     {
         UIManager.Instance.ShowView(1);
@@ -186,24 +186,16 @@ public class TestBattleManager : MonoBehaviour
 
     public virtual void SelectNextStage(int index)
     {
-        //int stageIndex = nodeIndex = index; // choiceButtons[index].choiceIndex;
-        //thisNode = thisNode.childrens[stageIndex];
-
         nodeIndex = index;
         TreeNodeObject prevNode = thisNode;
         SetThisNode(thisNode.childrens[index]);
         readyCount = useHeroes.Count;
         int childCount = prevNode.childrens.Count;
-        for (int i = 0; i< childCount; i++)
+        for (int i = 0; i < childCount; i++)
         {
             prevNode.childrens[i].nodeButton.onClick.RemoveAllListeners();
         }
         tree.OffMovableHighlighters();
-
-        //for (int i = 0; i < choiceButtons.Count; i++)
-        //{
-        //    choiceButtons[i].gameObject.SetActive(false);
-        //}
     }
 
     protected void ChoiceNextStageByNode()
@@ -235,7 +227,7 @@ public class TestBattleManager : MonoBehaviour
         coFadeIn = StartCoroutine(CoFadeIn());
     }
 
-    // 히어로들 안 보이는 위치로 옮기고 Active False 시키는 함수
+    // ????ε? ?? ????? ????? ???? Active False ????? ???
     public void ResetHeroes()
     {
         for (int i = 0; i < useHeroes.Count; i++)
@@ -261,7 +253,7 @@ public class TestBattleManager : MonoBehaviour
         // Logger.Debug("Fail!");
     }
 
-    // 길목 생성
+    // ??? ????
     protected void CreateRoad(GameObject platform)
     {
         if (thisNode.childrens.Count == 0)
@@ -285,7 +277,7 @@ public class TestBattleManager : MonoBehaviour
         {
             return;
         }
-         
+
 
         for (int i = 0; i < roads.Count; i++)
         {
@@ -317,15 +309,28 @@ public class TestBattleManager : MonoBehaviour
         {
             Utils.CopyPositionAndRotation(useHeroes[i].gameObject, startPositions[i]);
         }
-        tree.gameObject.SetActive(false);
     }
 
     protected void OnStageComplete()
     {
         evManager.EndEvent();
     }
-    protected bool OnNextEvent()
+    protected bool OnNextStage()
     {
+        tree.gameObject.SetActive(false);
+
+        StartFadeOut();
+        DestroyRoad();
+        RemoveRoadTrigger();
+        ResetRoads();
+
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            useHeroes[i].ResetData();
+        }
+
+        OnStageComplete();
+
         if (thisNode.type == TreeNodeTypes.Event)
         {
             var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
