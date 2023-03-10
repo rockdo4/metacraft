@@ -9,8 +9,11 @@ public class BattleSpeed : MonoBehaviour
     public float GetSpeed => speeds[idx];
     int idx = 0;
 
+    public static BattleSpeed Instance { get; private set; }
+
     private void Awake()
     {
+        Instance = this;
         idx = GameManager.Instance.playerData.battleSpeed;
         SetBattleSpeed(idx);
     }
