@@ -365,9 +365,9 @@ public class AttackableHero : AttackableUnit
         BattleState = state;
     }
 
-    public override void OnDamage(int dmg,int level, bool isCritical = false)
+    public override void OnDamage(AttackableUnit attackableUnit, CharacterSkill skill)
     {
-        base.OnDamage(dmg,level,isCritical);
+        base.OnDamage(attackableUnit, skill);
         heroUI.SetHp(UnitHp,MaxHp);
 
     }

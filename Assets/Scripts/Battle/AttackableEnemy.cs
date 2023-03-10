@@ -239,10 +239,10 @@ public class AttackableEnemy : AttackableUnit
         BattleState = state;
     }
 
-    public override void OnDamage(int dmg,int level, bool isCritical)
+    public override void OnDamage(AttackableUnit attackableUnit, CharacterSkill skill)
     {
-        base.OnDamage(dmg, level, isCritical);
-        TempShowHpBarAndDamageText(dmg, isCritical);
+        base.OnDamage(attackableUnit, skill);
+        //TempShowHpBarAndDamageText(dmg, isCritical);
     }
     public void TempShowHpBarAndDamageText(int dmg, bool isCritical = false)
     {
@@ -271,7 +271,7 @@ public class AttackableEnemy : AttackableUnit
         if (characterData.attack.targetNumLimit == 1)
         {
             bool isCritical = false;
-            target.OnDamage(CalculDamage(characterData.activeSkill,ref isCritical), characterData.data.level, isCritical);
+            target.OnDamage(this, characterData.activeSkill);
             return;
         }
 
@@ -297,7 +297,7 @@ public class AttackableEnemy : AttackableUnit
         for (int i = 0; i < attackTargetList.Count; i++)
         {
             bool isCritical = false;
-            attackTargetList[i].OnDamage(CalculDamage(characterData.attack, ref isCritical),characterData.data.level, isCritical);
+            attackTargetList[i].OnDamage(this, characterData.activeSkill);
         }
     }
     public override void ActiveSkillEnd()

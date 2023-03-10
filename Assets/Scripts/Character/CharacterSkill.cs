@@ -61,5 +61,5 @@ public class CharacterSkill : ScriptableObject
 
         return result;
     }
-    public virtual void OnActiveSkill(int damaage, int level , bool isCritical) { }
+    public virtual void OnActiveSkill(AttackableUnit unit) { }
 }

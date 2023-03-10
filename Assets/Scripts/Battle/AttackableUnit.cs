@@ -155,61 +155,54 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void ReadyActiveSkill();
     public virtual void OnActiveSkill()
     {
-
         bool isCritical = false;
-        characterData.activeSkill.OnActiveSkill(CalculDamage(characterData.activeSkill, ref isCritical), characterData.data.level,isCritical);
+        characterData.activeSkill.OnActiveSkill(this);
     }
 
     public virtual void NormalAttackOnDamage()
     {
         if (BattleState == UnitBattleState.ActiveSkill)
             return;
-
-        bool isCritical = false;
-
-        if ((characterData.attack.searchType != SkillSearchType.Healer
-            && characterData.attack.searchType != SkillSearchType.Buffer))
+        if (characterData.attack.targetNumLimit == 1)
         {
-            if (characterData.attack.targetNumLimit == 1)
+            target.OnDamage(this, characterData.attack);
+            foreach (var buff in normalbuffs)
             {
-                target.OnDamage(CalculDamage(characterData.activeSkill, ref isCritical), characterData.data.level, isCritical);
-                foreach (var buff in normalbuffs)
-                {
-                    var value = CalculDamage(characterData.activeSkill, ref isCritical);
-                    target.AddBuff(buff, value, null);
-                }
-                return;
+                bool isCritical = false;
+                var value = CalculDamage(characterData.activeSkill, ref isCritical);
+                target.AddBuff(buff, value, null);
             }
+            return;
+        }
 
-            List<AttackableUnit> attackTargetList = new();
+        List<AttackableUnit> attackTargetList = new();
 
-            var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
-            foreach (var now_target in targetList)
+        var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
+        foreach (var now_target in targetList)
+        {
+            Vector3 interV = now_target.transform.position - transform.position;
+            if (interV.magnitude <= characterData.attack.distance)
             {
-                Vector3 interV = now_target.transform.position - transform.position;
-                if (interV.magnitude <= characterData.attack.distance)
-                {
-                    float angle = Vector3.Angle(transform.forward, interV);
+                float angle = Vector3.Angle(transform.forward, interV);
 
-                    if (Mathf.Abs(angle) < characterData.attack.angle / 2f)
-                    {
-                        attackTargetList.Add(now_target);
-                    }
+                if (Mathf.Abs(angle) < characterData.attack.angle / 2f)
+                {
+                    attackTargetList.Add(now_target);
                 }
             }
+        }
 
-            attackTargetList = GetNearestUnitList(attackTargetList, characterData.attack.targetNumLimit);
+        attackTargetList = GetNearestUnitList(attackTargetList, characterData.attack.targetNumLimit);
 
-            for (int i = 0; i < attackTargetList.Count; i++)
+        for (int i = 0; i < attackTargetList.Count; i++)
+        {
+            attackTargetList[i].OnDamage(this, characterData.attack);
+            foreach (var buff in normalbuffs)
             {
-                attackTargetList[i].OnDamage(CalculDamage(characterData.activeSkill, ref isCritical), characterData.data.level, isCritical);
-                foreach (var buff in normalbuffs)
-                {
-                    var value = CalculDamage(characterData.activeSkill, ref isCritical);
-                    attackTargetList[i].AddBuff(buff, value, null);
-                }
+                bool isCritical = false;
+                var value = CalculDamage(characterData.activeSkill, ref isCritical);
+                attackTargetList[i].AddBuff(buff, value, null);
             }
-
         }
 
     }
@@ -311,10 +304,15 @@ public abstract class AttackableUnit : MonoBehaviour
     //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)
     public virtual void OnDamage(AttackableUnit attackableUnit, CharacterSkill skill)
     {
+        if ((skill.searchType == SkillSearchType.Healer || skill.searchType == SkillSearchType.Buffer))
+        {
+            return;
+        }
         var defense = 100f / (100 + characterData.data.baseDefense + bufferState.defense);
         var levelCorrection = 1 + Mathf.Clamp((attackableUnit.characterData.data.level - characterData.data.level) / 100f, -0.4f, 0);
 
-        var dmg = (int)(attackableUnit.CalculDamage() * defense * levelCorrection);
+        bool isCritical = false;
+        var dmg = (int)(attackableUnit.CalculDamage(skill, ref isCritical) * defense * levelCorrection);
         UnitHp = Mathf.Max(UnitHp - dmg, 0);
         if (UnitHp <= 0)
             UnitState = UnitState.Die;

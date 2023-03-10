@@ -127,7 +127,7 @@ public class ActiveSkillAOE : CharacterSkill
 
         return x * x + z * z < sqrCastRangeLimit;
     }
-    public override void OnActiveSkill(int damage, int level, bool isCritical)
+    public override void OnActiveSkill(AttackableUnit attackableUnit)
     {        
         EffectManager.Instance.Get(activeEffect, indicatorTransform);
 
@@ -135,7 +135,7 @@ public class ActiveSkillAOE : CharacterSkill
 
         foreach (var target in targets)
         {            
-            target.OnDamage(damage, level, isCritical);
+            target.OnDamage(attackableUnit, this);
         }
 
         skillAreaIndicator.gameObject.SetActive(false);
