@@ -36,6 +36,8 @@ public class TestBattleManager : MonoBehaviour
 
     private void Awake()
     {
+        GameManager.Instance.SetHeroesOrigin();
+
         List<GameObject> selectedHeroes = GameManager.Instance.GetSelectedHeroes();
         int count = selectedHeroes.Count;
 
@@ -247,7 +249,7 @@ public class TestBattleManager : MonoBehaviour
     protected void CreateRoad(GameObject platform)
     {
         TreeNodeObject thisNode = tree.CurNode;
-        if (thisNode.childrens.Count == 0)
+        if (thisNode.childrens.Count == 0)  
         {
             return;
         }

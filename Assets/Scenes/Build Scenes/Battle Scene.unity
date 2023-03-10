@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657868, g: 0.49641263, b: 0.57481706, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -710,6 +710,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38c28336b47d73d4d8e68e7cf60aceb5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &787698630 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8731140977315917163, guid: 60031cb1182094245a60912d595fa24f,
+    type: 3}
+  m_PrefabInstance: {fileID: 5253436415374884623}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &787698631 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 8731140976973948841, guid: 60031cb1182094245a60912d595fa24f,
+    type: 3}
+  m_PrefabInstance: {fileID: 5253436415374884623}
+  m_PrefabAsset: {fileID: 0}
+--- !u!224 &787698632 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5322900527160141011, guid: 60031cb1182094245a60912d595fa24f,
+    type: 3}
+  m_PrefabInstance: {fileID: 5253436415374884623}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &787698633 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5573176160188454795, guid: 60031cb1182094245a60912d595fa24f,
+    type: 3}
+  m_PrefabInstance: {fileID: 5253436415374884623}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &835729253 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1433662991179188445, guid: 8f253a3528522f7439545f0e3eeede52,
@@ -1688,6 +1712,50 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8731140977828254743, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: nodeTarget
+      value: 
+      objectReference: {fileID: 787698631}
+    - target: {fileID: 8731140977828254743, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: treeNodePrefab
+      value: 
+      objectReference: {fileID: 3574952780080813521, guid: 8eab5c49c50e8e4458a4d70e8f4465c2,
+        type: 3}
+    - target: {fileID: 8731140977828254743, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: nodeBundlePrefab
+      value: 
+      objectReference: {fileID: 318044227340278283, guid: 5b2ad751d73a05a4590268a56a2c9750,
+        type: 3}
+    - target: {fileID: 8731140977828254743, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: lineRendererTarget
+      value: 
+      objectReference: {fileID: 787698630}
+    - target: {fileID: 8731140977828254743, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: uiLineRendererPrefab
+      value: 
+      objectReference: {fileID: 1323086869407241751, guid: 672b30998e26e644b87cc272f08e6041,
+        type: 3}
+    - target: {fileID: 8731140977828254743, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: currentNodeHighlighter
+      value: 
+      objectReference: {fileID: 787698633}
+    - target: {fileID: 8731140977828254743, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: movableHighlighterPrefab
+      value: 
+      objectReference: {fileID: 3404894278822874483, guid: 43c45780daaae4e448ed04dbcc93b082,
+        type: 3}
+    - target: {fileID: 8731140977828254743, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: movableHighlighterTarget
+      value: 
+      objectReference: {fileID: 787698632}
     - target: {fileID: 9026762000784327531, guid: 60031cb1182094245a60912d595fa24f,
         type: 3}
       propertyPath: m_IsActive
