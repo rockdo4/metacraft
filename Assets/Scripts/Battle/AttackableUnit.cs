@@ -335,6 +335,9 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public void ShowHpBarAndDamageText(int dmg, bool isCritical = false)
     {
+        if (!isThereDamageUI)
+            return;
+
         floatingDamageText.OnAttack(dmg, isCritical, transform.position, DamageType.Normal);
         hpBarManager.OnDamage(dmg);
         if (UnitHp <= 0)
