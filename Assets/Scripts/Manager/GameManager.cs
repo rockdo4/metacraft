@@ -40,8 +40,6 @@ public class GameManager : Singleton<GameManager>
 
     public List<Effect> effects; // 사용할 이펙트들
 
-    public event Action<string> playerLevelUp;
-
     public override void Awake()
     {
         base.Awake();
@@ -348,10 +346,6 @@ public class GameManager : Singleton<GameManager>
             if (playerData.officeExperience <= (int)officeInfoList[i]["NeedExp"])
             {
                 PlayerInfoUpdate(i);
-                //if (playerLevelUp != null)
-                //{
-                //    playerLevelUp((string)officeInfoList[i]["OfficeImage"]);
-                //}
                 break;
             }
         }
@@ -367,9 +361,11 @@ public class GameManager : Singleton<GameManager>
         playerData.dispatchLevel = (int)officeInfoList[level]["DispatchLevel"];
         playerData.stamina = (int)officeInfoList[level]["Stamina"];
         playerData.inventoryCount = (int)officeInfoList[level]["InventoryCount"];
+        playerData.officeImage = (string)officeInfoList[level]["OfficeImage"];
         Logger.Debug($"현재 레벨 : {playerData.officeLevel}");
     }
 
+    // 이벤트 이팩트 테이블 분리
     private void FixEventEffectTable()
     {
         eventEffectTagInfoList = new Dictionary<string,List<Dictionary<string,string>>>();
