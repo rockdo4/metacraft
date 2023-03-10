@@ -328,6 +328,10 @@ public class TestBattleManager : MonoBehaviour
             evManager.StartEvent((MapEventEnum)randomEvent);
             return true;
         }
+        else
+        {
+            evManager.StartEvent(MapEventEnum.Normal);
+        }
 
         return false;
     }
