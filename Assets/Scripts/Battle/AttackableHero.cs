@@ -12,6 +12,7 @@ public class AttackableHero : AttackableUnit
     private Coroutine coOnIndicator;
 
     bool lateReturn = false;
+
     protected override UnitState UnitState {
         get {
             return unitState;
