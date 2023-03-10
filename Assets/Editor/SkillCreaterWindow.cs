@@ -58,14 +58,14 @@ public class SkillCreaterWindow : EditorWindow
         characterSkill.cooldown    = ValueToFloat(skillInfo["CoolTime"]);
         characterSkill.preCooldown = ValueToFloat(skillInfo["StartCoolTime"]);
 
-        characterSkill.targetType      = (SkillTargetType)ValueToInt(skillInfo["TargetType"]);
+        characterSkill.targetType      = (SkillTargetType)ValueToInt(skillInfo["DamageTarget"]);
         characterSkill.coefficientType = (SkillCoefficientType)ValueToInt(skillInfo["BaseStats"]);
         characterSkill.coefficient     = ValueToFloat(skillInfo["Coefficient"]);
         
         characterSkill.skillDescription = (string)skillInfo["SkillInfo"];
 
         characterSkill.isCriticalPossible = ValueToInt(skillInfo["CanCri"]) == 1;
-        //characterSkill.isAuto = ValueToInt(skillInfo["IsAutoTargeting"]) == 0;
+        characterSkill.isAuto = ValueToInt(skillInfo["IsAutoTargeting"]) == 1;
 
         if (isActiveSkill)
         {

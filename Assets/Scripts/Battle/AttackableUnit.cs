@@ -326,6 +326,13 @@ public abstract class AttackableUnit : MonoBehaviour
         bool isCritical = false;
         var dmg = (int)(attackableUnit.CalculDamage(skill, ref isCritical) * defense * levelCorrection);
 
+
+        if(bufferState.isShield)
+        {
+            var shield =  (int)(dmg * (bufferState.shield/ 100f));
+
+            dmg -= shield;
+        }
         ShowHpBarAndDamageText(dmg, isCritical);
 
         UnitHp = Mathf.Max(UnitHp - dmg, 0);
@@ -645,6 +652,7 @@ public abstract class AttackableUnit : MonoBehaviour
         {
             buffDamage = (int)(buffDamage * (characterData.data.criticalDmg + (bufferState.criticalDamage / 100f)));
         }
+        buffDamage = (int)(buffDamage * (100 + bufferState.damageDecrease) / 100f);
 
         return buffDamage;
     }
