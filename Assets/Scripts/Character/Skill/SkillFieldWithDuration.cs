@@ -11,6 +11,9 @@ public class SkillFieldWithDuration : MonoBehaviour
     public EffectEnum Effect { set { effect = value; } }
     public bool IsInit = false;
 
+    protected AttackableUnit attackableUnit;
+    protected CharacterSkill skill;
+
     protected int damageResult;
     protected float duration;
     protected float hitInterval;
@@ -28,6 +31,13 @@ public class SkillFieldWithDuration : MonoBehaviour
         if(IsInit)
             EffectManager.Instance.Get(effect, transform);
     }
+
+    public void SetAttackableData(ref AttackableUnit attackableUnit, ref CharacterSkill skill)
+    {
+        this.attackableUnit = attackableUnit;
+        this.skill = skill;
+    }
+
     private void OnTriggerStay(Collider other)
     {   
         if (Time.time - lastHitTime < hitInterval)

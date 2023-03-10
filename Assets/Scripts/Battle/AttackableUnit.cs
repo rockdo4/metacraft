@@ -309,12 +309,12 @@ public abstract class AttackableUnit : MonoBehaviour
     protected abstract void MoveNextUpdate();
     protected abstract void ReturnPosUpdate();
     //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)
-    public virtual void OnDamage(int dmg, int level, bool isCritical = false)
+    public virtual void OnDamage(AttackableUnit attackableUnit, CharacterSkill skill)
     {
         var defense = 100f / (100 + characterData.data.baseDefense + bufferState.defense);
-        var levelCorrection = 1 + Mathf.Clamp((level - characterData.data.level) / 100f, -0.4f, 0);
+        var levelCorrection = 1 + Mathf.Clamp((attackableUnit.characterData.data.level - characterData.data.level) / 100f, -0.4f, 0);
 
-        dmg = (int)(dmg * defense * levelCorrection);
+        var dmg = (int)(attackableUnit.CalculDamage() * defense * levelCorrection);
         UnitHp = Mathf.Max(UnitHp - dmg, 0);
         if (UnitHp <= 0)
             UnitState = UnitState.Die;
