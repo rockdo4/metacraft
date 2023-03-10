@@ -18,7 +18,7 @@ public class BeltScrollBattleManager : TestBattleManager
     {
         if (Input.GetKeyDown(KeyCode.B))
         {
-            thisNode.type = TreeNodeTypes.Boss;
+            tree.CurNode.type = TreeNodeTypes.Boss;
             DestroyRoad();
             RemoveRoadTrigger();
             ResetRoads();
@@ -26,9 +26,8 @@ public class BeltScrollBattleManager : TestBattleManager
         }
     }
 
-    protected override void Start()
+    protected void Start()
     {
-        base.Start();
         StartFadeOut();
 
         for (int i = 0; i < triggers.Count; i++)
@@ -48,7 +47,7 @@ public class BeltScrollBattleManager : TestBattleManager
         CreateRoad(platform);
         AddRoadTrigger();
 
-        if (thisNode.type == TreeNodeTypes.Normal || evManager.curEvent == MapEventEnum.Normal)
+        if (tree.CurNode.type == TreeNodeTypes.Normal || evManager.curEvent == MapEventEnum.Normal)
         {
             for (int i = 0; i < useHeroes.Count; i++)
             {
@@ -188,7 +187,7 @@ public class BeltScrollBattleManager : TestBattleManager
         CreateRoad(platform);
         AddRoadTrigger();
 
-        if (thisNode.type == TreeNodeTypes.Boss)
+        if (tree.CurNode.type == TreeNodeTypes.Boss)
         {
             triggers.Last().isMissionEnd = true;
         }

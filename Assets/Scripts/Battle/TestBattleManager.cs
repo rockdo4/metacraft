@@ -21,8 +21,7 @@ public class TestBattleManager : MonoBehaviour
     public Image fadePanel;
 
     public TreeMapSystem tree;
-    public TreeNodeObject thisNode;
-
+    
     // Test Member
     public List<GameObject> roadPrefab;
     protected List<ForkedRoad> roads = new();
@@ -72,17 +71,6 @@ public class TestBattleManager : MonoBehaviour
 
         FindObjectOfType<AutoButton>().ResetData();
         evManager = FindObjectOfType<EventManager>();
-    }
-
-    protected virtual void Start()
-    {
-        SetThisNode(tree.root);
-    }
-
-    protected void SetThisNode(TreeNodeObject node)
-    {
-        thisNode = node;
-        tree.SetNodeHighlighter(node);
     }
 
     public List<Transform> GetStartPosition()
@@ -187,8 +175,8 @@ public class TestBattleManager : MonoBehaviour
     public virtual void SelectNextStage(int index)
     {
         nodeIndex = index;
-        TreeNodeObject prevNode = thisNode;
-        SetThisNode(thisNode.childrens[index]);
+        TreeNodeObject prevNode = tree.CurNode;
+        tree.CurNode = prevNode.childrens[index];
         readyCount = useHeroes.Count;
         int childCount = prevNode.childrens.Count;
         for (int i = 0; i < childCount; i++)
@@ -202,8 +190,8 @@ public class TestBattleManager : MonoBehaviour
     {
         tree.gameObject.SetActive(true);
 
-        List<TreeNodeObject> childs = thisNode.childrens;
-        tree.SetMovableHighlighter(thisNode);
+        List<TreeNodeObject> childs = tree.CurNode.childrens;
+        tree.SetMovableHighlighter(tree.CurNode);
         int count = childs.Count;
         for (int i = 0; i < count; i++)
         {
@@ -214,7 +202,9 @@ public class TestBattleManager : MonoBehaviour
 
     protected void ChoiceNextStage()
     {
-        for (int i = 0; i < thisNode.childrens.Count; i++)
+        TreeNodeObject thisNode = tree.CurNode;
+        int count = thisNode.childrens.Count;
+        for (int i = 0; i < count; i++)
         {
             choiceButtonTexts[i].text = $"{thisNode.childrens[i].type}";
             choiceButtons[i].gameObject.SetActive(true);
@@ -256,6 +246,7 @@ public class TestBattleManager : MonoBehaviour
     // ??? ????
     protected void CreateRoad(GameObject platform)
     {
+        TreeNodeObject thisNode = tree.CurNode;
         if (thisNode.childrens.Count == 0)
         {
             return;
@@ -331,7 +322,7 @@ public class TestBattleManager : MonoBehaviour
 
         OnStageComplete();
 
-        if (thisNode.type == TreeNodeTypes.Event)
+        if (tree.CurNode.type == TreeNodeTypes.Event)
         {
             var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
             evManager.StartEvent((MapEventEnum)randomEvent);
