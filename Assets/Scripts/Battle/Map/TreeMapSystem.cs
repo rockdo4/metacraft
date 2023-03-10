@@ -10,6 +10,7 @@ public class TreeMapSystem : MonoBehaviour
     // 가지가 2개, 3개일 확률을 조정함
     public TreeNodeObject root;
     public TreeNodeObject boss;
+    private TreeNodeObject curNode;
     public int height = 6;
     public int width = 5;
 
@@ -73,6 +74,17 @@ public class TreeMapSystem : MonoBehaviour
         }
     }
 
+    public void SetCurrentNode(TreeNodeObject node)
+    {
+        curNode = node;
+        SetNodeHighlighter(node);
+    }
+
+    public TreeNodeObject GetCurrentNode()
+    {
+        return curNode;
+    }
+
     public void CreateTreeGraph()
     {
         nodeIndex = 0;
@@ -81,6 +93,7 @@ public class TreeMapSystem : MonoBehaviour
         CreateBlueprint();              // 설계도 생성
         CreateNodes();                  // 노드 생성
         StartCoroutine(CoLinkNodes());  // 노드 연결
+        curNode = root;
     }
 
     public void SetNodeHighlighter(TreeNodeObject node)
