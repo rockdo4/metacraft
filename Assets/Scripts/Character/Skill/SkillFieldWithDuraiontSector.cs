@@ -30,7 +30,7 @@ public class SkillFieldWithDuraiontSector : SkillFieldWithDuration
         {
             if (IsInAngle(colliders[i]) && IsInRaidus(colliders[i].transform.position))
             {
-                colliders[i].GetComponent<AttackableUnit>().OnDamage(damageResult);
+                colliders[i].GetComponent<AttackableUnit>().OnDamage(attackableUnit, skill);
             }
         }
     }

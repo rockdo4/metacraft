@@ -50,13 +50,13 @@ public class SkillFieldWithDuration : MonoBehaviour
             case SkillTargetType.Enemy:
                 if (other.CompareTag("Enemy"))
                 {
-                    other.GetComponent<AttackableUnit>().OnDamage(damageResult);
+                    other.GetComponent<AttackableUnit>().OnDamage(attackableUnit, skill);
                 }
                 break;
             case SkillTargetType.Friendly:
                 if (other.CompareTag("Hero"))
                 {
-                    other.GetComponent<AttackableUnit>().OnDamage(damageResult);
+                    other.GetComponent<AttackableUnit>().OnDamage(attackableUnit, skill);
                 }
                 break;
         }        

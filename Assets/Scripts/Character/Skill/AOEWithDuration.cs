@@ -43,12 +43,14 @@ public class AOEWithDuration : ActiveSkillAOE
                 break;
         }
     }
-    public override void OnActiveSkill(LiveData data)
+    public override void OnActiveSkill(AttackableUnit attackableUnit)
     {
         skillField.transform.position = indicatorTransform.position;
         skillField.gameObject.SetActive(true);
 
-        skillField.DamageResult = CreateDamageResult(data);
+        bool isCiritical = false;
+        skillField.DamageResult = attackableUnit.CalculDamage(this, ref isCiritical);
+        skillField.SetAttackableData(ref attackableUnit, ref attackableUnit.GetUnitData().activeSkill);
 
         skillAreaIndicator.gameObject.SetActive(false);
         skillAreaIndicator.isTriggerEnter = false;
