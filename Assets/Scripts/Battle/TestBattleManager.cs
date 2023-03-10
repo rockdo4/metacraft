@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using TreeEditor;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -20,9 +21,8 @@ public class TestBattleManager : MonoBehaviour
 
     public Image fadePanel;
 
-    public GeneratePolynomialTreeMap tree;
-    protected TreeNodeObject thisNode;
-
+    public TreeMapSystem tree;
+    
     // Test Member
     public List<GameObject> roadPrefab;
     protected List<ForkedRoad> roads = new();
@@ -33,13 +33,12 @@ public class TestBattleManager : MonoBehaviour
     public List<RoadChoiceButton> choiceButtons;
     protected List<TextMeshProUGUI> choiceButtonTexts = new();
     protected int nodeIndex;
-    public BattleMapEnum curBattleMap = BattleMapEnum.None;
+    private EventManager evManager;
 
     private void Awake()
     {
         List<GameObject> selectedHeroes = GameManager.Instance.GetSelectedHeroes();
         int count = selectedHeroes.Count;
-        tree.gameObject.SetActive(true);
 
         for (int i = 0; i < count; i++)
         {
@@ -58,31 +57,21 @@ public class TestBattleManager : MonoBehaviour
                 useHeroes.Add(attackableHero);
             }
         }
-
+        foreach(var hero in useHeroes)
+        {
+            hero.PassiveSkillEvent();
+        }
         for (int i = 0; i < choiceButtons.Count; i++)
         {
             var text = choiceButtons[i].GetComponentInChildren<TextMeshProUGUI>();
             choiceButtonTexts.Add(text);
         }
 
-        tree.CreateTreeGraph();
-        //thisNode = tree.root; // 현재 위치한 노드
-        SetThisNode(tree.root);
-
-        // tree.root.type 맵 타입
-        // tree.root.childrens 맵 순서
-        // thisNode = tree.root.childrens[0]; 다음 노드 선택할 때 쓰는 것
-
         clearUi.SetHeroes(useHeroes);
         readyCount = useHeroes.Count;
 
         FindObjectOfType<AutoButton>().ResetData();
-    }
-
-    protected void SetThisNode(TreeNodeObject node)
-    {
-        thisNode = node;
-        tree.SetNodeHighlighter(node);
+        evManager = FindObjectOfType<EventManager>();
     }
 
     public List<Transform> GetStartPosition()
@@ -179,14 +168,19 @@ public class TestBattleManager : MonoBehaviour
         yield break;
     }
 
+    protected void StartFadeOut()
+    {
+        coFadeOut = StartCoroutine(CoFadeOut());
+    }
+
     public virtual void SelectNextStage(int index)
     {
         //int stageIndex = nodeIndex = index; // choiceButtons[index].choiceIndex;
         //thisNode = thisNode.childrens[stageIndex];
 
         nodeIndex = index;
-        TreeNodeObject prevNode = thisNode;
-        SetThisNode(thisNode.childrens[index]);
+        TreeNodeObject prevNode = tree.CurNode;
+        tree.CurNode = prevNode.childrens[index];
         readyCount = useHeroes.Count;
         int childCount = prevNode.childrens.Count;
         for (int i = 0; i< childCount; i++)
@@ -205,8 +199,8 @@ public class TestBattleManager : MonoBehaviour
     {
         tree.gameObject.SetActive(true);
 
-        List<TreeNodeObject> childs = thisNode.childrens;
-        tree.SetMovableHighlighter(thisNode);
+        List<TreeNodeObject> childs = tree.CurNode.childrens;
+        tree.SetMovableHighlighter(tree.CurNode);
         int count = childs.Count;
         for (int i = 0; i < count; i++)
         {
@@ -217,7 +211,9 @@ public class TestBattleManager : MonoBehaviour
 
     protected void ChoiceNextStage()
     {
-        for (int i = 0; i < thisNode.childrens.Count; i++)
+        TreeNodeObject thisNode = tree.CurNode;
+        int count = thisNode.childrens.Count;
+        for (int i = 0; i < count; i++)
         {
             choiceButtonTexts[i].text = $"{thisNode.childrens[i].type}";
             choiceButtons[i].gameObject.SetActive(true);
@@ -259,6 +255,7 @@ public class TestBattleManager : MonoBehaviour
     // 길목 생성
     protected void CreateRoad(GameObject platform)
     {
+        TreeNodeObject thisNode = tree.CurNode;
         if (thisNode.childrens.Count == 0)
         {
             return;
@@ -313,5 +310,21 @@ public class TestBattleManager : MonoBehaviour
             Utils.CopyPositionAndRotation(useHeroes[i].gameObject, startPositions[i]);
         }
         tree.gameObject.SetActive(false);
+    }
+
+    protected void OnStageComplete()
+    {
+        evManager.EndEvent();
+    }
+    protected bool OnNextEvent()
+    {
+        if (tree.CurNode.type == TreeNodeTypes.Event)
+        {
+            var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
+            evManager.StartEvent((MapEventEnum)randomEvent);
+            return true;
+        }
+
+        return false;
     }
 }

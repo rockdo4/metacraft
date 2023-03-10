@@ -36,22 +36,22 @@ public class CharacterSkill : ScriptableObject
         yield break;  
     }
     //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)									
-    public virtual int CreateDamageResult(LiveData data)
+    public virtual int CreateDamageResult(LiveData data, BufferState status)
     {        
         var result = 0;
         switch (coefficientType)
-        { 
+        {
             case SkillCoefficientType.Attack:
-                result = (int)(data.baseDamage * coefficient);
+                result = (int)((data.baseDamage + status.Damage) * coefficient);
                 break;
             case SkillCoefficientType.Defense:
-                result = (int)(data.baseDefense * coefficient);
+                result = (int)((data.baseDefense + status.defense) * coefficient);
                 break;
             case SkillCoefficientType.MaxHealth:
-                result = (int)(data.healthPoint * coefficient);
+                result = (int)((data.healthPoint + (data.healthPoint * (status.maxHealthIncrease / 100f))) * coefficient);
                 break;
             case SkillCoefficientType.Health:
-                result = (int)(data.currentHp * coefficient);
+                result = (int)((data.currentHp + status.Damage) * coefficient);
                 break;
         }
         if (targetType == SkillTargetType.Friendly)
@@ -59,5 +59,5 @@ public class CharacterSkill : ScriptableObject
 
         return result;
     }
-    public virtual void OnActiveSkill(LiveData data) { }
+    public virtual void OnActiveSkill(int damaage, int level) { }
 }

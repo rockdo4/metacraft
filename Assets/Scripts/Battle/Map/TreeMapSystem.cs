@@ -3,15 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI.Extensions;
 
-public class GeneratePolynomialTreeMap : MonoBehaviour
+public class TreeMapSystem : MonoBehaviour
 {
     // Root, Boss 타입은 트리에 단 하나만 존재
     // 트리 가지의 수를 최소 1개, 최대 3개로 고정하고
     // 가지가 2개, 3개일 확률을 조정함
     public TreeNodeObject root;
     public TreeNodeObject boss;
-    public int height = 8;
-    public int width = 6;
+    private TreeNodeObject curNode;
+    public TreeNodeObject CurNode
+    { 
+        get { return curNode; }
+        set
+        { 
+            curNode = value;
+            SetNodeHighlighter(value);
+        }
+    }
+    public int height = 6;
+    public int width = 5;
 
     public int normalCount = 1;
     public int threatCount = 1;
@@ -59,6 +69,12 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
         }
     }
 
+    private void Awake()
+    {
+        // 이후 고정 노드 조건 확인등 검증도 여기서 함
+        CreateTreeGraph();
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.L))
@@ -75,6 +91,7 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
         CreateBlueprint();              // 설계도 생성
         CreateNodes();                  // 노드 생성
         StartCoroutine(CoLinkNodes());  // 노드 연결
+        curNode = root;
     }
 
     public void SetNodeHighlighter(TreeNodeObject node)
@@ -103,11 +120,6 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
 
     private void CreateBlueprint()
     {
-        localNormalCount = normalCount;
-        localThreatCount = threatCount;
-        localSupplyCount = supplyCount;
-        localEventCount = eventCount;
-
         blueprint = new(height);
         for (int i = 0; i < height; i++)
         {
@@ -287,6 +299,11 @@ public class GeneratePolynomialTreeMap : MonoBehaviour
 
     public void InitSettings(int depth)
     {
+        localNormalCount = normalCount;
+        localThreatCount = threatCount;
+        localSupplyCount = supplyCount;
+        localEventCount = eventCount;
+
         for (int i = 0; i < depth + 2; i++)
         {
             GameObject bundle = Instantiate(nodeBundlePrefab, nodeTarget);

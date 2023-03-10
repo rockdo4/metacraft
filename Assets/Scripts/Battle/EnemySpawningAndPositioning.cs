@@ -58,6 +58,9 @@ public class EnemySpawningAndPositioning : MonoBehaviour
 
     public AttackableEnemy SpawnEnemy()
     {
+        if (enemy == null)
+            return null;
+
         return Instantiate(enemy, tr.position, enemy.gameObject.transform.rotation, tr);
     }
     public void RespawnEnemy(ref List<AttackableUnit> enemyPool, float timer)

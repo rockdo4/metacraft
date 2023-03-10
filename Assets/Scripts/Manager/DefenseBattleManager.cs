@@ -5,9 +5,10 @@ public class DefenseBattleManager : TestBattleManager
 {
     private int enemyCount;
 
-    private void Start()
+    protected void Start()
     {
-        curBattleMap = BattleMapEnum.Defense;
+        // base.Start(); 노드를 건드리지 않게 실행 X
+        StartFadeOut();
 
         GameStart();
         enemyCount = GetAllEnemyCount();

@@ -36,6 +36,7 @@ public class AttackableEnemy : AttackableUnit
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.stoppingDistance = characterData.attack.distance;
 
+                    battleManager.GetEnemyList(ref enemyList);
                     battleManager.GetHeroList(ref heroList);
 
                     animator.SetFloat("Speed", 1);
@@ -86,6 +87,10 @@ public class AttackableEnemy : AttackableUnit
                     animator.ResetTrigger("AttackEnd");
                     break;
                 case UnitBattleState.Stun:
+                    pathFind.isStopped = true;
+                    animator.SetTrigger("Stun");
+                    animator.ResetTrigger("Attack");
+                    animator.ResetTrigger("AttackEnd");
                     break;
             }
         }
@@ -101,7 +106,7 @@ public class AttackableEnemy : AttackableUnit
         SetData();
 
         unitState = UnitState.Idle;
-        lastNormalAttackTime = lastPassiveSkillTime = Time.time;
+        lastNormalAttackTime = Time.time;
 
         floatingDamageText = GetComponent<AttackedDamageUI>();
         hpBarManager = GetComponent<HpBarManager>();
@@ -110,7 +115,6 @@ public class AttackableEnemy : AttackableUnit
     }
     public override void ResetData()
     {
-        base.ResetData();
         UnitState = UnitState.None;
         battleState = UnitBattleState.None;
         UnitHp = characterData.data.healthPoint;
@@ -203,6 +207,11 @@ public class AttackableEnemy : AttackableUnit
                 }
                 break;
             case UnitBattleState.Stun:
+                stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+                if (stateInfo.IsName("Stun") && stateInfo.normalizedTime >= 1.0f)
+                {
+                    StunEnd();
+                }
                 break;
         }
     }
@@ -230,12 +239,9 @@ public class AttackableEnemy : AttackableUnit
         BattleState = state;
     }
 
-    public override void OnDamage(int dmg, bool isCritical)
+    public override void OnDamage(int dmg,int level, bool isCritical)
     {
-        UnitHp = Mathf.Max(UnitHp - dmg, 0);
-        if (UnitHp <= 0)
-            UnitState = UnitState.Die;
-
+        base.OnDamage(dmg, level, isCritical);
         TempShowHpBarAndDamageText(dmg, isCritical);
     }
     public void TempShowHpBarAndDamageText(int dmg, bool isCritical = false)
@@ -260,14 +266,11 @@ public class AttackableEnemy : AttackableUnit
 
         BattleState = UnitBattleState.BattleIdle;
     }
-    public override void PassiveSkillEnd()
-    {
-    }
     public override void OnActiveSkill()    //테스트용
     {
         if (characterData.attack.targetNumLimit == 1)
         {
-            target.OnDamage(GetFixedDamage, false);
+            target.OnDamage(AttackDamage, characterData.data.level, false);
             return;
         }
 
@@ -292,7 +295,7 @@ public class AttackableEnemy : AttackableUnit
 
         for (int i = 0; i < attackTargetList.Count; i++)
         {
-            attackTargetList[i].OnDamage(GetFixedDamage, false);
+            attackTargetList[i].OnDamage(AttackDamage,characterData.data.level, false);
         }
     }
     public override void ActiveSkillEnd()
@@ -302,6 +305,11 @@ public class AttackableEnemy : AttackableUnit
         lastNormalAttackTime = Time.time;
         BattleState = UnitBattleState.BattleIdle;
         base.ActiveSkillEnd();
+    }
+    public override void StunEnd()
+    {
+        base.StunEnd();
+        BattleState = UnitBattleState.BattleIdle;
     }
 
     public AttackableEnemy TestGetIsBattle()

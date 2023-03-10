@@ -112,17 +112,15 @@ public class ActiveSkillAOE : CharacterSkill
 
         return x * x + z * z < sqrCastRangeLimit;
     }
-    public override void OnActiveSkill(LiveData data)
+    public override void OnActiveSkill(int damage, int level)
     {        
         EffectManager.Instance.Get(effectEnum, indicatorTransform);
 
         var targets = skillAreaIndicator.GetUnitsInArea();
 
-        var damage = CreateDamageResult(data);
-
         foreach (var target in targets)
         {            
-            target.OnDamage(damage);
+            target.OnDamage(damage, level);
         }
 
         skillAreaIndicator.gameObject.SetActive(false);
