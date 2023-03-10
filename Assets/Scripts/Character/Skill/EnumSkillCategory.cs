@@ -27,8 +27,8 @@ public enum SkillSearchType
 public enum SkillTargetType
 {
     None = -1,
-    Enemy,
     Friendly,
+    Enemy,
     Both,
     Count,
 }

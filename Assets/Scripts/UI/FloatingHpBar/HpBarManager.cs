@@ -113,7 +113,7 @@ public class HpBarManager : MonoBehaviour
         isOn = true;
         timer = 0f;
     }
-    public void TestCode(float damage)
+    public void OnDamage(float damage)
     {
         hpInfo.hp -= damage;
         ActiveHpBar();

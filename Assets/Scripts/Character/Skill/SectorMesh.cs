@@ -9,8 +9,8 @@ public class SectorMesh : MonoBehaviour
     [SerializeField]
     private int segments = 16;
 
-    public float Angle { get { return angle; } }
-    public float Radius { get { return radius; } }
+    public float Angle { set { angle = value; } get { return angle; } }
+    public float Radius { set { radius = value; } get { return radius; } }
 
     private MeshFilter meshFilter;
     private Mesh mesh;    

@@ -12,6 +12,7 @@ public class AttackableHero : AttackableUnit
     private Coroutine coOnIndicator;
 
     bool lateReturn = false;
+
     protected override UnitState UnitState {
         get {
             return unitState;
@@ -61,6 +62,7 @@ public class AttackableHero : AttackableUnit
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.stoppingDistance = characterData.attack.distance;
 
+                    battleManager.GetHeroList(ref heroList);
                     battleManager.GetEnemyList(ref enemyList);
 
                     animator.SetFloat("Speed", 1);
@@ -111,6 +113,10 @@ public class AttackableHero : AttackableUnit
                     animator.ResetTrigger("AttackEnd");
                     break;
                 case UnitBattleState.Stun:
+                    pathFind.isStopped = true;
+                    animator.SetTrigger("Stun");
+                    animator.ResetTrigger("Attack");
+                    animator.ResetTrigger("AttackEnd");
                     break;
             }
         }
@@ -199,7 +205,7 @@ public class AttackableHero : AttackableUnit
         BattleState = UnitBattleState.ActiveSkill;
         if (coOnIndicator != null)
         {
-            GetActiveSkillAOE().OffIndicatorsForOnActiveSkill();
+            GetActiveSkillAOE().readyEffectUntillOnActiveSkill();
             StopAOESkillCoroutine();
         }
     }
@@ -298,11 +304,6 @@ public class AttackableHero : AttackableUnit
                 }
                 break;
             case UnitBattleState.Stun:
-                stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-                if (stateInfo.IsName("Stun") && stateInfo.normalizedTime >= 1.0f)
-                {
-                    StunEnd();
-                }
                 break;
         }
     }
@@ -365,9 +366,9 @@ public class AttackableHero : AttackableUnit
         BattleState = state;
     }
 
-    public override void OnDamage(int dmg,int level, bool isCritical = false)
+    public override void OnDamage(AttackableUnit attackableUnit, CharacterSkill skill)
     {
-        base.OnDamage(dmg,level,isCritical);
+        base.OnDamage(attackableUnit, skill);
         heroUI.SetHp(UnitHp,MaxHp);
 
     }
@@ -401,7 +402,6 @@ public class AttackableHero : AttackableUnit
     public override void PassiveSkillEvent()
     {
         battleManager.GetHeroList(ref heroList);
-        Logger.Debug("Passive Start");
     }
     public override void ActiveSkillEnd()
     {

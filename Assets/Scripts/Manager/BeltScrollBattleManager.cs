@@ -44,8 +44,8 @@ public class BeltScrollBattleManager : TestBattleManager
             }
         }
 
-        CreateRoad(platform);
-        AddRoadTrigger();
+        //CreateRoad(platform);
+        //AddRoadTrigger();
 
         if (tree.CurNode.type == TreeNodeTypes.Normal || evManager.curEvent == MapEventEnum.Normal)
         {

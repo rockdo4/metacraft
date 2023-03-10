@@ -7,9 +7,6 @@ public class AttackableEnemy : AttackableUnit
     [SerializeField]
     public void SetTargetList(List<AttackableUnit> list) => heroList = list;
 
-    private AttackedDamageUI floatingDamageText;
-    private HpBarManager hpBarManager;
-
     protected override UnitState UnitState {
         get {
             return unitState;
@@ -108,9 +105,7 @@ public class AttackableEnemy : AttackableUnit
         unitState = UnitState.Idle;
         lastNormalAttackTime = Time.time;
 
-        floatingDamageText = GetComponent<AttackedDamageUI>();
-        hpBarManager = GetComponent<HpBarManager>();
-        hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+
 
     }
     public override void ResetData()
@@ -239,19 +234,10 @@ public class AttackableEnemy : AttackableUnit
         BattleState = state;
     }
 
-    public override void OnDamage(int dmg,int level, bool isCritical)
+    public override void OnDamage(AttackableUnit attackableUnit, CharacterSkill skill)
     {
-        base.OnDamage(dmg, level, isCritical);
-        TempShowHpBarAndDamageText(dmg, isCritical);
+        base.OnDamage(attackableUnit, skill);        
     }
-    public void TempShowHpBarAndDamageText(int dmg, bool isCritical = false)
-    {
-        floatingDamageText.OnAttack(dmg, isCritical, transform.position, DamageType.Normal);
-        hpBarManager.TestCode(dmg);
-        if (UnitHp <= 0)
-            hpBarManager.Die();
-    }
-
     public override void OnDead(AttackableUnit unit)
     {
         battleManager.OnDeadEnemy((AttackableEnemy)unit);
@@ -270,7 +256,8 @@ public class AttackableEnemy : AttackableUnit
     {
         if (characterData.attack.targetNumLimit == 1)
         {
-            target.OnDamage(AttackDamage, characterData.data.level, false);
+            bool isCritical = false;
+            target.OnDamage(this, characterData.activeSkill);
             return;
         }
 
@@ -295,7 +282,8 @@ public class AttackableEnemy : AttackableUnit
 
         for (int i = 0; i < attackTargetList.Count; i++)
         {
-            attackTargetList[i].OnDamage(AttackDamage,characterData.data.level, false);
+            bool isCritical = false;
+            attackTargetList[i].OnDamage(this, characterData.activeSkill);
         }
     }
     public override void ActiveSkillEnd()
@@ -308,6 +296,7 @@ public class AttackableEnemy : AttackableUnit
     }
     public override void StunEnd()
     {
+        Logger.Debug("StunEnd");
         base.StunEnd();
         BattleState = UnitBattleState.BattleIdle;
     }

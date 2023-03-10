@@ -20,8 +20,10 @@ public class CharacterSkill : ScriptableObject
 
     public SkillTargetType targetType;
     public SkillSearchType searchType;
-    public EffectEnum effectEnum;
+    public EffectEnum readyEffect;
+    public EffectEnum activeEffect;
 
+    public bool isCriticalPossible;
     public bool isAuto;
     public Vector3 targetPos;
     public string skillDescription;
@@ -54,10 +56,10 @@ public class CharacterSkill : ScriptableObject
                 result = (int)((data.currentHp + status.Damage) * coefficient);
                 break;
         }
-        if (targetType == SkillTargetType.Friendly)
-            result *= -1;
+        //if (targetType == SkillTargetType.Friendly)
+        //    result *= -1;
 
         return result;
     }
-    public virtual void OnActiveSkill(int damaage, int level) { }
+    public virtual void OnActiveSkill(AttackableUnit unit) { }
 }
