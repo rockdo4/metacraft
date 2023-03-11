@@ -138,11 +138,6 @@ public class BattleManager : MonoBehaviour
         eventInfoTable = gm.eventInfoList;
 
         var selectedHeroes = gm.GetSelectedHeroes();
-        for (int i = 0; i < selectedHeroes.Count; i++)
-        {
-            heroNames.Add(selectedHeroes[i].name);
-        }
-
         int count = selectedHeroes.Count;
 
         for (int i = 0; i < count; i++)
@@ -158,9 +153,10 @@ public class BattleManager : MonoBehaviour
                 useHeroes.Add(attackableHero);
             }
         }
-        foreach (var hero in useHeroes)
+        for (int i = 0; i < useHeroes.Count; i++)
         {
-            hero.PassiveSkillEvent();
+            heroNames.Add(useHeroes[i].name);
+            useHeroes[i].PassiveSkillEvent();
         }
         for (int i = 0; i < choiceButtons.Count; i++)
         {
