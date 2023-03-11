@@ -96,6 +96,9 @@ public abstract class AttackableUnit : MonoBehaviour
 
     [SerializeField]
     protected bool isThereDamageUI = false;
+    [SerializeField]
+    protected bool usingFloatingHpBar = false;
+
     protected AttackedDamageUI floatingDamageText;
     protected HpBarManager hpBarManager;
 
@@ -114,8 +117,12 @@ public abstract class AttackableUnit : MonoBehaviour
         if(isThereDamageUI)
         {
             floatingDamageText = GetComponent<AttackedDamageUI>();
-            hpBarManager = GetComponent<HpBarManager>();
-            hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+
+            if(usingFloatingHpBar)
+            {
+                hpBarManager = GetComponent<HpBarManager>();
+                hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+            }            
         }                
     }
 
@@ -326,14 +333,13 @@ public abstract class AttackableUnit : MonoBehaviour
         bool isCritical = false;
         var dmg = (int)(attackableUnit.CalculDamage(skill, ref isCritical) * defense * levelCorrection);
 
-        ShowHpBarAndDamageText(dmg, isCritical);
-
         UnitHp = Mathf.Max(UnitHp - dmg, 0);
         if (UnitHp <= 0)
         {
-            UnitState = UnitState.Die;
-            hpBarManager.Die();
+            UnitState = UnitState.Die;            
         }
+
+        ShowHpBarAndDamageText(dmg, isCritical);
     }
 
     public void ShowHpBarAndDamageText(int dmg, bool isCritical = false)
@@ -341,8 +347,17 @@ public abstract class AttackableUnit : MonoBehaviour
         if (!isThereDamageUI)
             return;
 
-        floatingDamageText.OnAttack(dmg, isCritical, transform.position, DamageType.Normal);
+        var type = isCritical ? DamageType.Critical : DamageType.Normal;
+        floatingDamageText.OnAttack(dmg, isCritical, transform.position, type);
+
+        if (!usingFloatingHpBar)
+            return;
+
         hpBarManager.OnDamage(dmg);
+        if (UnitHp <= 0)
+        {
+            hpBarManager.Die();
+        }        
     }
 
     public void SearchNearbyTarget(List<AttackableUnit> list) 
@@ -572,7 +587,14 @@ public abstract class AttackableUnit : MonoBehaviour
                 switch(info.type)
                 {
                     case BuffType.Heal:
-                        UnitHp += anotherValue;
+                        {
+                            UnitHp += anotherValue;
+                            if (isThereDamageUI)
+                            {
+                                Logger.Debug(111);
+                                floatingDamageText.OnAttack(anotherValue, false, transform.position, DamageType.Heal);
+                            }
+                        }                        
                         break;
                 }
             }

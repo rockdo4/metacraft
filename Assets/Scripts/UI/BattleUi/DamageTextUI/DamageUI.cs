@@ -32,8 +32,8 @@ public class DamageUI : MonoBehaviour
     }
     public void SetUI(int damage, Vector3 enemyPos, DamageType type, float heightAboveGround)
     {
-        textMeshPro.text = damage.ToString();
-        textMeshPro.color = damageTypeColors.colors[(int)type];
+        textMeshPro.text = damage.ToString();        
+        textMeshPro.color = damageTypeColors.colors[(int)type];        
         pos = enemyPos + Vector3.up * heightAboveGround;        
         transform.position = cam.WorldToScreenPoint(pos);        
         Invoke(releaseMethodName, lifeTime);  
