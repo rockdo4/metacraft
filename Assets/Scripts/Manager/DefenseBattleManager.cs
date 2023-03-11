@@ -3,58 +3,12 @@ using UnityEngine;
 
 public class DefenseBattleManager : TestBattleManager
 {
-    private int enemyCount;
-
-    protected void Start()
+    private void Start()
     {
-        // base.Start(); 노드를 건드리지 않게 실행 X
-        StartFadeOut();
-
+        battleMapType = BattleMapEnum.Defense;
         GameStart();
-        enemyCount = GetAllEnemyCount();
-        enemyCountTxt.Count = enemyCount;
     }
 
-    public override void OnDeadHero(AttackableHero hero)
-    {
-        base.OnDeadHero(hero);
-    }
-
-    public override void OnDeadEnemy(AttackableEnemy enemy)
-    {
-        base.OnDeadEnemy(enemy);
-        triggers[0].OnDead(enemy);
-
-        enemyCount--;
-        if (enemyCount == 0)
-        {
-            SetHeroReturnPositioning(startPositions);
-        }
-    }
-    public override void GetEnemyList(ref List<AttackableUnit> enemyList) 
-    {
-        enemyList = triggers[0].useEnemys;
-    }
-    public override void OnReady()
-    {
-        readyCount--;
-        if (readyCount == 0 && enemyCount == 0)
-        {
-            if (triggers[0].isMissionEnd)
-            {
-                SetStageClear();
-            }
-            else
-            {
-                // test
-                SetStageClear();
-            }
-        }
-    }
-    protected override void SetHeroReturnPositioning(List<Transform> pos)
-    {
-        base.SetHeroReturnPositioning(pos);
-    }
     private void GameStart()
     {
         triggers[0].SpawnAllEnemy();
