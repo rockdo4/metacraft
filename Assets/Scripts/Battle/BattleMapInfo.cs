@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TestBattleManager : MonoBehaviour
+public class BattleMapInfo : MonoBehaviour
 {
     public List<Transform> startPositions;
     public List<Transform> endPositions;
@@ -9,13 +9,13 @@ public class TestBattleManager : MonoBehaviour
     public List<MapEventTrigger> triggers;
 
     public Transform roadTr;
-    protected EventManager evManager;
+    protected BattleManager evManager;
     public GameObject platform;
     public BattleMapEnum battleMapType;
     
     private void Awake()
     {
-        evManager = FindObjectOfType<EventManager>();
+        evManager = FindObjectOfType<BattleManager>();
     }
 
     public List<Transform> GetStartPosition()

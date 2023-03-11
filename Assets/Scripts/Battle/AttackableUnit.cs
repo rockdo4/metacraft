@@ -5,7 +5,7 @@ using UnityEngine.AI;
 
 public abstract class AttackableUnit : MonoBehaviour
 {
-    protected EventManager battleManager;
+    protected BattleManager battleManager;
 
     [SerializeField, Header("캐릭터 데이터")]
     protected CharacterDataBundle characterData;
@@ -101,7 +101,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected virtual void Awake()
     {
-        var manager = FindObjectOfType<EventManager>();
+        var manager = FindObjectOfType<BattleManager>();
         if (manager != null)
             battleManager = manager;
 
@@ -553,7 +553,7 @@ public abstract class AttackableUnit : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    public void SetBattleManager(EventManager manager) => battleManager = manager;
+    public void SetBattleManager(BattleManager manager) => battleManager = manager;
     public void SetEnabledPathFind(bool set) => pathFind.enabled = set;
 
     // 여기에 State 초기화랑 트리거 모두 해제하는 코드 작성

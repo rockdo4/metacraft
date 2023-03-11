@@ -5,13 +5,13 @@ using TMPro;
 using System.Collections;
 using System.Linq;
 
-public class EventManager : MonoBehaviour
+public class BattleManager : MonoBehaviour
 {
     [Header("»ç¿ëÇÒ ¸Êµé")]
     public List<GameObject> eventMaps;
     private List<Dictionary<string, object>> eventInfoTable;
 
-    public MapEventEnum curEvent = MapEventEnum.Normal;
+    private MapEventEnum curEvent = MapEventEnum.Normal;
     private GameObject curMap;
 
     public GameObject eventUi;
@@ -51,21 +51,14 @@ public class EventManager : MonoBehaviour
     private Coroutine coMovingMap;
     private Coroutine coResetMap;
 
-    private TestBattleManager currBtMgr;
+    private BattleMapInfo currBtMgr;
     private List<MapEventTrigger> btMapTriggers = new();
 
 
     private void Awake()
     {
         Init();
-        StartEvent(curEvent);
-        coFadeOut = StartCoroutine(CoFadeOut());
-    }
-
-    private void StartEvent(MapEventEnum ev)
-    {
-        curEvent = ev;
-        SetEventUiProperty(curEvent);
+        StartNextStage(curEvent);
     }
 
     public void EndEvent()
@@ -77,16 +70,29 @@ public class EventManager : MonoBehaviour
         SetEventUiActive(false);
     }
 
-    private void SetActiveEventMap(bool active)
+    private void SetActiveCurrMap(bool active)
     {
         curMap.SetActive(active);
     }
 
-    private void SetEventUiProperty(MapEventEnum ev)
+    private void StartNextStage(MapEventEnum ev)
     {
-        if (curMap != null)
-            SetActiveEventMap(false);
+        curEvent = ev;
 
+        if (curMap != null)
+            SetActiveCurrMap(false);
+
+        SetStageEvent(ev);
+        StartStage();
+        if (currBtMgr.GetBattleMapType() == BattleMapEnum.BeltScroll && curEvent == MapEventEnum.Normal)
+        {
+            for (int i = 0; i < useHeroes.Count; i++)
+                Invoke(nameof(OnReady), 1f);
+        }
+    }
+
+    private void SetStageEvent(MapEventEnum ev)
+    {
         if (ev == MapEventEnum.Normal)
         {
             curMap = eventMaps[0];
@@ -100,13 +106,6 @@ public class EventManager : MonoBehaviour
             curMap = eventMaps[2];
             SetEventInfo(ev);
             SetEventUiActive(true);
-        }
-
-        StartStage();
-        if (currBtMgr.GetBattleMapType() == BattleMapEnum.BeltScroll && curEvent == MapEventEnum.Normal)
-        {
-            for (int i = 0; i < useHeroes.Count; i++)
-                Invoke(nameof(OnReady), 1f);
         }
     }
 
@@ -210,7 +209,7 @@ public class EventManager : MonoBehaviour
         {
             if (btMapTriggers[currTriggerIndex].isMissionEnd)
             {
-                SetStageClear();
+                MissionClear();
             }
             else if (btMapTriggers[currTriggerIndex + 1] != null && btMapTriggers[currTriggerIndex + 1].isStageEnd)
             {
@@ -252,7 +251,7 @@ public class EventManager : MonoBehaviour
             useHeroes[i].ChangeUnitState(UnitState.ReturnPosition);
         }
     }
-    private void SetStageClear()
+    private void MissionClear()
     {
         UIManager.Instance.ShowView(1);
         GameManager.Instance.NextDay();
@@ -265,10 +264,10 @@ public class EventManager : MonoBehaviour
         readyCount = useHeroes.Count;
         if (useHeroes.Count == 0)
         {
-            SetStageFail();
+            MissionFail();
         }
     }
-    private void SetStageFail()
+    private void MissionFail()
     {
         Time.timeScale = 0;
         GameManager.Instance.NextDay();
@@ -413,13 +412,13 @@ public class EventManager : MonoBehaviour
     {
         currTriggerIndex = 0;
 
-        currBtMgr = curMap.GetComponent<TestBattleManager>();
+        currBtMgr = curMap.GetComponent<BattleMapInfo>();
         enemyCountTxt.Count = currBtMgr.GetAllEnemyCount();
         btMapTriggers = currBtMgr.GetTriggers();
         platform = currBtMgr.GetPlatform();
         platform.transform.position = Vector3.zero;
 
-        SetActiveEventMap(true);
+        SetActiveCurrMap(true);
         CreateRoad();
         AddRoadTrigger();
 
@@ -463,12 +462,12 @@ public class EventManager : MonoBehaviour
         if (tree.CurNode.type == TreeNodeTypes.Event)
         {
             var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
-            StartEvent((MapEventEnum)randomEvent);
+            StartNextStage((MapEventEnum)randomEvent);
             return true;
         }
         else
         {
-            StartEvent(MapEventEnum.Normal);
+            StartNextStage(MapEventEnum.Normal);
         }
 
         return false;
@@ -544,7 +543,7 @@ public class EventManager : MonoBehaviour
         }
     }
 
-    public TestBattleManager GetCurrBtMgr()
+    public BattleMapInfo GetCurrBtMgr()
     {
         return currBtMgr;
     }

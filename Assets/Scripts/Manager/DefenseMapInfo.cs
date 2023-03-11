@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DefenseBattleManager : TestBattleManager
+public class DefenseMapInfo : BattleMapInfo
 {
     private void Start()
     {
