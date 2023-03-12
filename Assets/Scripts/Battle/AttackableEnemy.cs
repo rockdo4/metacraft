@@ -33,7 +33,7 @@ public class AttackableEnemy : AttackableUnit
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.stoppingDistance = characterData.attack.distance;
 
-                    battleManager.GetEnemyList(ref enemyList);
+                    battleManager.GetCurrBtMgr().GetEnemyList(ref enemyList);
                     battleManager.GetHeroList(ref heroList);
 
                     animator.SetFloat("Speed", 1);
@@ -113,7 +113,7 @@ public class AttackableEnemy : AttackableUnit
         UnitState = UnitState.None;
         battleState = UnitBattleState.None;
         UnitHp = characterData.data.healthPoint;
-        hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+        //hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
         lastActiveSkillTime = lastNormalAttackTime = lastNavTime = Time.time;
         target = null;
         animator.Rebind();

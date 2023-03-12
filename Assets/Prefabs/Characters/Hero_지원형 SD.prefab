@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8489007089072879663}
   - component: {fileID: 2207327337837353173}
   - component: {fileID: 6385733313752509365}
+  - component: {fileID: 6733667223863373298}
   m_Layer: 6
   m_Name: "Hero_\uC9C0\uC6D0\uD615 SD"
   m_TagString: Hero
@@ -162,7 +163,8 @@ MonoBehaviour:
   PassiveTargetType: 0
   passivekbuffs: []
   activeAttackTargetType: 0
-  attackkbuffs: []
+  attackkbuffs:
+  - {fileID: 11400000, guid: d396e1eb3755ef84bb1e3219cfc4cc12, type: 2}
   attackPos: {fileID: 0}
   attackPref: {fileID: 0}
   target: {fileID: 0}
@@ -172,6 +174,46 @@ MonoBehaviour:
   citizenList: []
   unitState: -1
   battleState: -1
+  bufferState:
+    damage: 0
+    defense: 0
+    damageReceived: 0
+    damageDecrease: 0
+    criticalProbability: 0
+    criticalDamage: 0
+    attackSpeed: 0
+    maxHealthIncrease: 0
+    burns: 0
+    isBurns: 0
+    freeze: 0
+    isFreze: 0
+    shield: 0
+    isShield: 0
+    bleed: 0
+    isBleed: 0
+    lifeSteal: 0
+    isLifeSteal: 0
+    provoke: 0
+    stealth: 0
+    stun: 0
+    silence: 0
+    resistance: 0
+    blind: 0
+  isThereDamageUI: 1
+  usingFloatingHpBar: 0
+--- !u!114 &6733667223863373298
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8489007089072879651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57b5116c7ad7e2b4ea4a025f97f2f5f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heightAboveGround: 3
 --- !u!1001 &6280578665800921366
 PrefabInstance:
   m_ObjectHideFlags: 0

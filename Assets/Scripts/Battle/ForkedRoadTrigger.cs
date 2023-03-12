@@ -2,12 +2,12 @@ using UnityEngine;
 
 public class ForkedRoadTrigger : MapEventTrigger
 {
-    private TestBattleManager manager;
+    private BattleManager manager;
     public bool isEnter = false;
 
     private void Awake()
     {
-        manager = FindObjectOfType<TestBattleManager>();
+        manager = FindObjectOfType<BattleManager>();
     }
 
     private void OnTriggerEnter(Collider other)

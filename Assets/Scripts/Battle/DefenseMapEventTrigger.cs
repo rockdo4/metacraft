@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DefenseMapEventTrigger : MapEventTrigger
 {
-    public TestBattleManager manager;
+    public BattleManager manager;
 
     private void OnTriggerEnter(Collider other)
     {
