@@ -369,7 +369,7 @@ public class AttackableHero : AttackableUnit
     public override void OnDamage(AttackableUnit attackableUnit, CharacterSkill skill)
     {
         base.OnDamage(attackableUnit, skill);
-        heroUI.SetHp(UnitHp,MaxHp);
+        heroUI.SetHp(UnitHp, MaxHp);
 
     }
 

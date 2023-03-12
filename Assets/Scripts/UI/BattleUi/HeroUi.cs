@@ -44,7 +44,7 @@ public class HeroUi : MonoBehaviour
     }
     public void SetHp(int nowHp, int maxHp)
     {
-        hpBar.value = Mathf.Max((float)nowHp / (float)maxHp);
+        hpBar.value = (float)nowHp / maxHp; // Mathf.Max((float)nowHp / maxHp); max 왜 쓴거임? - 진석
     }
 
     public void SetDieImage()

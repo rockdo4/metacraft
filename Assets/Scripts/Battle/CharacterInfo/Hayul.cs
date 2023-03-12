@@ -27,7 +27,7 @@ public class Hayul : AttackableHero
     {
         base.OnActiveSkill();
         var dmg = characterData.activeSkill.CreateDamageResult(characterData.data, bufferState);
-        dmg = (int)(dmg * (100 + bufferState.damageDecrease) / 100f);
+        dmg = (int)(dmg * (100 + bufferState.damageDecrease) * 0.01f);
         foreach (var hero in heroList)
         {
             foreach (var buff in attackkbuffs)
