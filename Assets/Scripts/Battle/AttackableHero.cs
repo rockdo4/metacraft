@@ -63,7 +63,7 @@ public class AttackableHero : AttackableUnit
                     pathFind.stoppingDistance = characterData.attack.distance;
 
                     battleManager.GetHeroList(ref heroList);
-                    battleManager.GetEnemyList(ref enemyList);
+                    battleManager.GetCurrBtMgr().GetEnemyList(ref enemyList);
 
                     animator.SetFloat("Speed", 1);
 

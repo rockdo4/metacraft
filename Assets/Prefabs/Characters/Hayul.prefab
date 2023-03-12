@@ -7541,6 +7541,7 @@ GameObject:
   - component: {fileID: 8489007089072879663}
   - component: {fileID: 2207327337837353173}
   - component: {fileID: 2724669837605546631}
+  - component: {fileID: 9199038694315059600}
   m_Layer: 6
   m_Name: Hayul
   m_TagString: Hero
@@ -7691,7 +7692,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 255f499c75ad8a1439a98b2c97d69f5c, type: 2}
   activeAttackTargetType: 0
   attackkbuffs:
-  - {fileID: 11400000, guid: 415d268e81e7c0a428537938ab29d12d, type: 2}
+  - {fileID: 11400000, guid: d396e1eb3755ef84bb1e3219cfc4cc12, type: 2}
   attackPos: {fileID: 0}
   attackPref: {fileID: 0}
   target: {fileID: 0}
@@ -7726,3 +7727,18 @@ MonoBehaviour:
     silence: 0
     resistance: 0
     blind: 0
+  isThereDamageUI: 1
+  usingFloatingHpBar: 0
+--- !u!114 &9199038694315059600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8489007089072879651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57b5116c7ad7e2b4ea4a025f97f2f5f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heightAboveGround: 3
