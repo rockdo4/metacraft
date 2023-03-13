@@ -204,6 +204,9 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public virtual void NormalAttackOnDamage()
     {
+        if (target == null)
+            return;
+
         if (BattleState == UnitBattleState.ActiveSkill)
             return;
         if (characterData.attack.targetNumLimit == 1)
