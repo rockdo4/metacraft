@@ -457,9 +457,9 @@ public class BattleManager : MonoBehaviour
 
         if (tree.CurNode.type == TreeNodeTypes.Event)
         {
-            //var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
-            //StartNextStage((MapEventEnum)randomEvent);
-            StartNextStage(MapEventEnum.Defense);
+            var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
+            StartNextStage((MapEventEnum)randomEvent);
+            //StartNextStage(MapEventEnum.Defense);
             return true;
         }
         else
