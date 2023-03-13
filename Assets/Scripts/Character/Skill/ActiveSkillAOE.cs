@@ -19,6 +19,9 @@ public class ActiveSkillAOE : CharacterSkill
     protected Transform indicatorTransform;
 
     public SkillAreaShape areaShapeType;
+    public SkillIndicatorTarget indicatorTarget;
+    public bool isAutoTarget;
+    private LayerMask targetMask;
 
     public float sectorRadius;
     public float sectorAngle;
@@ -28,6 +31,8 @@ public class ActiveSkillAOE : CharacterSkill
 
     public float castRangeLimit = 10f;
     private float sqrCastRangeLimit;
+
+    private bool skillStartFromCharacter;
     public override void OnActive()
     {
         if (skillAreaIndicator != null &&
@@ -49,6 +54,12 @@ public class ActiveSkillAOE : CharacterSkill
         cam = Camera.main;
 
         sqrCastRangeLimit = castRangeLimit * castRangeLimit;
+
+        if (areaShapeType.Equals(SkillAreaShape.Sector))
+            skillStartFromCharacter = true;
+
+        if(isAutoTarget)
+
     }
     protected virtual void SetIndicatorScale()
     {
@@ -74,12 +85,7 @@ public class ActiveSkillAOE : CharacterSkill
         while (true)
         {
             MoveCastRangeIndicator();
-
-            if (isAuto)
-                MoveSkillToTargetAreaIndicator();
-            else
-                MoveSkillAreaIndicator();
-
+            MoveSkillAreaIndicator();
             yield return null;
         }
     }
@@ -90,37 +96,77 @@ public class ActiveSkillAOE : CharacterSkill
     protected virtual void MoveSkillAreaIndicator()
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-
         if (Physics.Raycast(ray, out RaycastHit hit, 100.0f, layerM))
-        {            
-            if (IsMouseInSkillRange(hit.point))
-            {
-                indicatorTransform.position = hit.point + Vector3.up * 0.1f;                
-            }
+        {
+            if (!isAutoTarget)
+                WhenManualTarget(hit);
             else
-            {
-                Vector3 point
-                    = Utils.IntersectPointCircleCenterToOut(actorTransform.position, castRangeLimit, hit.point);
-                
-                indicatorTransform.position = point + Vector3.up * 0.1f;
-            }
+                WhenAutoTarget(hit);
         }
     }
-    protected virtual void MoveSkillToTargetAreaIndicator()
+    private void WhenManualTarget(RaycastHit hit)
     {
-        if (IsMouseInSkillRange(targetPos))
+        if (!skillStartFromCharacter)
+            IndicatorPosToMouse(hit);
+        else
+            IndicatorOnlyChangeRotation(hit);
+    }
+    private void SetAutoTargetLayer()
+    {
+        switch(indicatorTarget)
         {
-            indicatorTransform.position = targetPos + Vector3.up * 0.1f;
+            case SkillIndicatorTarget.Self:
+                break;
+            case SkillIndicatorTarget.Enemy:
+                targetMask = 1 << LayerMask.NameToLayer("Enemy");                
+                break;
+            case SkillIndicatorTarget.Friendly:
+                targetMask = 1 << LayerMask.NameToLayer("Hero");
+                break;
+        }
+    }
+    private void WhenAutoTarget(RaycastHit hit)
+    {        
+        switch(indicatorTarget)
+        {
+            case SkillIndicatorTarget.Self:
+                break;
+            case SkillIndicatorTarget.Enemy:                
+                break;
+            case SkillIndicatorTarget.Friendly:
+                break;
+        }
+    }
+    private void IndicatorPosAuto(RaycastHit hit)
+    {
+        
+    }
+
+    private void IndicatorPosToMouse(RaycastHit hit)
+    {
+        var target = isAuto ? targetPos : hit.point;
+
+        if (IsTargetInSkillRange(target))
+        {
+            indicatorTransform.position = target + Vector3.up * 0.1f;
         }
         else
         {
             Vector3 point
-                = Utils.IntersectPointCircleCenterToOut(actorTransform.position, castRangeLimit, targetPos);
+                = Utils.IntersectPointCircleCenterToOut(actorTransform.position, castRangeLimit, target);
 
             indicatorTransform.position = point + Vector3.up * 0.1f;
         }
     }
-    protected bool IsMouseInSkillRange(Vector3 hitPoint)
+    private void IndicatorOnlyChangeRotation(RaycastHit hit)
+    {
+        var target = isAuto ? targetPos : hit.point;
+
+        indicatorTransform.position = actorTransform.position + Vector3.up * 0.1f;
+        indicatorTransform.LookAt(target + Vector3.up * 0.1f);
+    }
+
+    protected bool IsTargetInSkillRange(Vector3 hitPoint)
     {
         var x = actorTransform.position.x - hitPoint.x;
         var z = actorTransform.position.z - hitPoint.z;

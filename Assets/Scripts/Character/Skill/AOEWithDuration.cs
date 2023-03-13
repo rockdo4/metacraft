@@ -45,7 +45,7 @@ public class AOEWithDuration : ActiveSkillAOE
     }
     public override void OnActiveSkill(AttackableUnit attackableUnit)
     {
-        skillField.transform.position = indicatorTransform.position;
+        skillField.transform.SetPositionAndRotation(indicatorTransform.position, indicatorTransform.rotation);
         skillField.gameObject.SetActive(true);
 
         bool isCiritical = false;

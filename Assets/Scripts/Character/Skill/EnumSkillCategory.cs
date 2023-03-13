@@ -41,3 +41,11 @@ public enum SkillCoefficientType
     Health,
     Count,
 }
+public enum SkillIndicatorTarget
+{
+    None = -1,
+    Self,
+    Enemy,
+    Friendly,
+    Count,
+}
