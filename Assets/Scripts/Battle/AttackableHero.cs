@@ -146,8 +146,6 @@ public class AttackableHero : AttackableUnit
     //}
     private void Awake()
     {
-        Debug.Log("Hero Awake");
-
         var activeSkill = characterData.activeSkill as ActiveSkillAOE;
         activeSkill.ActorTransform = transform;
 

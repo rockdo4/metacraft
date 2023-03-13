@@ -28,7 +28,6 @@ public class AutoButton : MonoBehaviour
     {
         if (textColor.Count == 0 || burronColor.Count == 0)
         {
-            Debug.Log("Auto Button Init");
             Init();
         }
 

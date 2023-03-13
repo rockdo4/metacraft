@@ -12,7 +12,8 @@ public class BattleMapInfo : MonoBehaviour
     protected BattleManager evManager;
     public GameObject platform;
     public BattleMapEnum battleMapType;
-    
+    public GameObject viewPoint;
+
     protected void FindEvManager()
     {
         evManager = FindObjectOfType<BattleManager>();
@@ -25,6 +26,11 @@ public class BattleMapInfo : MonoBehaviour
     public List<Transform> GetEndPosition()
     {
         return endPositions;
+    }
+
+    public GameObject GetViewPoint()
+    {
+        return viewPoint;
     }
 
     public int GetAllEnemyCount()

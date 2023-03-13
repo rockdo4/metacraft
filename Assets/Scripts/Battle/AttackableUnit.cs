@@ -34,7 +34,7 @@ public abstract class AttackableUnit : MonoBehaviour
     protected float searchDelay = 1f;
     protected float lastSearchTime;
 
-    protected NavMeshAgent pathFind;
+    public NavMeshAgent pathFind;
 
     [SerializeField, Header("ÇöÀç Å¸°Ù")] protected AttackableUnit target;
     [SerializeField, Header("±Ã±Ø±â Å¸°Ù")] protected AttackableUnit activeTarget;
@@ -697,5 +697,16 @@ public abstract class AttackableUnit : MonoBehaviour
         }
 
         return buffDamage;
+    }
+    public void MoveNext(Vector3 movePos)
+    {
+        SetNoneState();
+        pathFind.stoppingDistance = 0f;
+        pathFind.SetDestination(movePos);
+    }
+    public void SetNoneState()
+    {
+        unitState = UnitState.None;
+        battleState = UnitBattleState.None;
     }
 }
