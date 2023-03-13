@@ -105,7 +105,7 @@ public class AttackableEnemy : AttackableUnit
         unitState = UnitState.Idle;
         lastNormalAttackTime = Time.time;
 
-
+        hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
 
     }
     public override void ResetData()
@@ -113,7 +113,7 @@ public class AttackableEnemy : AttackableUnit
         UnitState = UnitState.None;
         battleState = UnitBattleState.None;
         UnitHp = characterData.data.healthPoint;
-        //hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+        hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
         lastActiveSkillTime = lastNormalAttackTime = lastNavTime = Time.time;
         target = null;
         animator.Rebind();
