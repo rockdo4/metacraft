@@ -59,6 +59,7 @@ public class BattleManager : MonoBehaviour
     private Vector3 viewPointInitPos;
 
     public CinemachineVirtualCamera cinemachine;
+    private int enemyTriggerIndex = 0;                          // 방어전에 쓰일것 (에너미 스폰하는 트리거)
 
     private void Start()
     {
@@ -84,12 +85,9 @@ public class BattleManager : MonoBehaviour
     {
         curEvent = ev;
 
-        //if (curMap != null)
-        //    SetActiveCurrMap(false);
-
         SetStageEvent(ev);
         StartStage();
-        if (currBtMgr.GetBattleMapType() == BattleMapEnum.BeltScroll && curEvent == MapEventEnum.Normal)
+        if (currBtMgr.GetBattleMapType() == BattleMapEnum.Normal && curEvent == MapEventEnum.Normal)
         {
             for (int i = 0; i < useHeroes.Count; i++)
                 Invoke(nameof(OnReady), 3f);
@@ -104,7 +102,7 @@ public class BattleManager : MonoBehaviour
         }
         else if (ev == MapEventEnum.Defense)
         {
-            curMap = eventMaps[0];
+            curMap = eventMaps[1];
         }
         else
         {
@@ -318,15 +316,8 @@ public class BattleManager : MonoBehaviour
 
         if (!btMapTriggers[currTriggerIndex].isMissionEnd)
         {
-            //for (int i = 0; i < useHeroes.Count; i++)
-            //{
-            //    useHeroes[i].ChangeUnitState(UnitState.Battle);
-            //}
-
             if (btMapTriggers[currTriggerIndex].isSkip)
             {
-                Logger.Debug($"{btMapTriggers[currTriggerIndex].useEnemys.Count}");
-                Logger.Debug("NextTrigger");
                 ChoiceNextStageByNode();
             }
         }
@@ -346,7 +337,6 @@ public class BattleManager : MonoBehaviour
 
         if (OnNextStage())
         {
-            Logger.Debug("OnNextStage");
             yield break;
         }
 
@@ -431,10 +421,12 @@ public class BattleManager : MonoBehaviour
             useHeroes[i].SetEnabledPathFind(true);
         }
 
-        for (int i = 0; i < btMapTriggers.Count; i++)
-        {
-            btMapTriggers[i].ResetEnemys();
-        }
+        //for (int i = 0; i < btMapTriggers.Count; i++)
+        //{
+        //    btMapTriggers[i].ResetEnemys();
+        //}
+
+        currBtMgr.GameStart();
     }
 
     private void EndStage() // 맵 꺼지기 직전에 실행
@@ -465,8 +457,9 @@ public class BattleManager : MonoBehaviour
 
         if (tree.CurNode.type == TreeNodeTypes.Event)
         {
-            var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
-            StartNextStage((MapEventEnum)randomEvent);
+            //var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
+            //StartNextStage((MapEventEnum)randomEvent);
+            StartNextStage(MapEventEnum.Defense);
             return true;
         }
         else
@@ -508,7 +501,7 @@ public class BattleManager : MonoBehaviour
         int count = 0;
         switch (currBtMgr.GetBattleMapType())
         {
-            case BattleMapEnum.BeltScroll:
+            case BattleMapEnum.Normal:
                 btMapTriggers[currTriggerIndex].OnDead(enemy);
                 count = btMapTriggers[currTriggerIndex].useEnemys.Count;
 
@@ -518,18 +511,8 @@ public class BattleManager : MonoBehaviour
                 }
                 break;
             case BattleMapEnum.Defense:
-                int index = 0;
-                for (int i = 0; i < btMapTriggers.Count; i++)
-                {
-                    if (btMapTriggers[i].enemys.Count > 0)
-                    {
-                        index = i;
-                        break;
-                    }
-                }
-
-                btMapTriggers[index].OnDead(enemy);
-                count = btMapTriggers[index].useEnemys.Count;
+                btMapTriggers[enemyTriggerIndex].OnDead(enemy);
+                count = btMapTriggers[enemyTriggerIndex].useEnemys.Count;
 
                 if (count == 0)
                 {
@@ -555,6 +538,11 @@ public class BattleManager : MonoBehaviour
     public void SetEnemyCountTxt(int count)
     {
         enemyCountTxt.Count = count;
+    }
+
+    public void SetEnemyTriggerIndex(int index)
+    {
+        index = enemyTriggerIndex;
     }
 
     private void Update()

@@ -22,14 +22,14 @@ public class AttackableEnemy : AttackableUnit
                     nowUpdate = null;
                     break;
                 case UnitState.Idle:
-                    pathFind.isStopped = true;
+                    //pathFind.isStopped = true;
 
                     animator.SetFloat("Speed", 0);
 
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
-                    pathFind.isStopped = false;
+                    //pathFind.isStopped = false;
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.stoppingDistance = characterData.attack.distance;
 
@@ -42,7 +42,7 @@ public class AttackableEnemy : AttackableUnit
                     nowUpdate = BattleUpdate;
                     break;
                 case UnitState.Die:
-                    pathFind.enabled = false;
+                    //pathFind.enabled = false;
                     gameObject.GetComponent<Collider>().enabled = false;
                     animator.SetTrigger("Die");
 
