@@ -717,12 +717,12 @@ public abstract class AttackableUnit : MonoBehaviour
                 nowAttack = attack;
                 if (skillClips.Length != 0)
                 {
-                    AnimatorOverrideController newController = new AnimatorOverrideController(animator.runtimeAnimatorController);
-                    newController["NormalAttack"] = skillClips[idx];
+                    //AnimatorOverrideController newController = new AnimatorOverrideController(animator.runtimeAnimatorController);
+                    //newController["NormalAttack"] = skillClips[idx];
 
-                    animator.runtimeAnimatorController = newController;
+                    //animator.runtimeAnimatorController = newController;
 
-                    animator.Update(Time.deltaTime);
+                    //animator.Update(Time.deltaTime);
                 }
                 return true;
             }
