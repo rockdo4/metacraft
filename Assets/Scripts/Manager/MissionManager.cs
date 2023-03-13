@@ -24,7 +24,7 @@ public class MissionManager : View
     public GameObject missionPoints;
     //private GameObject[] marks;
     private List<Dictionary<string, object>> missionInfoTable;
-    private List<GameObject[]> marks;
+    private GameObject[] marks;
 
     public List<GameObject> expectedRewards;
 
@@ -49,25 +49,22 @@ public class MissionManager : View
 
         heroSlotsIndex = 0;
 
-        for (int i = 1; i < 6; i++)
-        {
-            marks[i] = GetComponentInChildren<MissionSpawner>().prefebs;
+            marks = GetComponentInChildren<MissionSpawner>().prefebs;
             var num = Utils.DistinctRandomNumbers(missionInfoTable.Count, markCount);
             int k = 0;
-            for (int j = 0; j < marks[i].Length; j++)
+            for (int j = 0; j < marks.Length; j++)
             {
-                if (marks[i][j].GetComponent<MissionMarkData>().isMarkOn)
+                if (marks[j].GetComponent<MissionMarkData>().isMarkOn)
                 {
                     var index = k++;
-                    marks[i][j].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[num[index]]["Name"]}";
-                    marks[i][j].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(num[index]));
+                    marks[j].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[num[index]]["Name"]}";
+                    marks[j].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(num[index]));
                 }
                 else
                 {
-                    marks[i][j].SetActive(false);
+                    marks[j].SetActive(false);
                 }
             }
-        }
     }
 
     public void UpdateMissionDay()
