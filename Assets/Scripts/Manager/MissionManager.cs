@@ -1,3 +1,4 @@
+using Mono.Cecil;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -67,6 +68,22 @@ public class MissionManager : View
             }
     }
 
+    private void temp()
+    {
+        string a = "";
+        var list = CSVReader.ReadByPath(a);
+
+
+        int i = 0;
+        var id = list[i]["ID"];
+        var name = list[i]["NAME"];
+
+        Dictionary<int, string> aaaaaaaaa;
+
+        aaaaaaaaa.Add()
+    }
+
+
     public void UpdateMissionDay()
     {
         dayOfweek.text = $"{gm.playerData.currentDay}요일";
@@ -80,7 +97,7 @@ public class MissionManager : View
 
         portrait.sprite = gm.iconSprites[$"Icon_{dic["BossID"]}"];
         explanation.text = $"{dic["OperationDescription"]}";
-        ExpectedCost.text = $"{dic["ExpectedCostID"]}";
+        //삭제예정ExpectedCost.text = $"{dic["ExpectedCostID"]}";
         gm.ClearBattleGroups();
         for (int i = 0; i < heroSlots.Length; i++)
         {
@@ -88,7 +105,7 @@ public class MissionManager : View
         }
         for (int i = 0; i < fitProperties.Length; i++)
         {
-            var count = $"FitProperties{i + 1}";
+            var count = $"FitProperty{i + 1}";
             fitProperties[i].text = $"{dic[count]}";
             fitProperties[i].fontStyle = FontStyles.Normal;
             fitProperties[i].color = Color.white;
