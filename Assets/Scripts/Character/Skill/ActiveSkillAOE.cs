@@ -9,13 +9,13 @@ public class ActiveSkillAOE : CharacterSkill
     public LayerMask layerM;    
 
     public Transform ActorTransform { set { actorTransform = value; } }
-    private Transform actorTransform;
+    protected Transform actorTransform;
 
     public GameObject castRangeIndicatorPrefab;
     private GameObject castRangeIndicator;
     private Transform castRangeIndicatorTransform;
 
-    private Camera cam;
+    protected Camera cam;
     protected Transform indicatorTransform;
 
     public SkillAreaShape areaShapeType;
@@ -87,7 +87,7 @@ public class ActiveSkillAOE : CharacterSkill
     {
         castRangeIndicatorTransform.position = actorTransform.position + Vector3.up * 0.1f; ;
     }
-    private void MoveSkillAreaIndicator()
+    protected virtual void MoveSkillAreaIndicator()
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
 
@@ -106,7 +106,7 @@ public class ActiveSkillAOE : CharacterSkill
             }
         }
     }
-    private void MoveSkillToTargetAreaIndicator()
+    protected virtual void MoveSkillToTargetAreaIndicator()
     {
         if (IsMouseInSkillRange(targetPos))
         {
@@ -120,7 +120,7 @@ public class ActiveSkillAOE : CharacterSkill
             indicatorTransform.position = point + Vector3.up * 0.1f;
         }
     }
-    private bool IsMouseInSkillRange(Vector3 hitPoint)
+    protected bool IsMouseInSkillRange(Vector3 hitPoint)
     {
         var x = actorTransform.position.x - hitPoint.x;
         var z = actorTransform.position.z - hitPoint.z;

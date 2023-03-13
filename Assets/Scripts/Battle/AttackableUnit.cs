@@ -590,8 +590,7 @@ public abstract class AttackableUnit : MonoBehaviour
                         {
                             UnitHp += anotherValue;
                             if (isThereDamageUI)
-                            {
-                                Logger.Debug(111);
+                            {   
                                 floatingDamageText.OnAttack(anotherValue, false, transform.position, DamageType.Heal);
                             }
                         }                        
