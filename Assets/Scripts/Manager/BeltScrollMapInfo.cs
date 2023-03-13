@@ -4,6 +4,7 @@ public class BeltScrollMapInfo : BattleMapInfo
 {
     private void Start()
     {
+        FindEvManager();
         battleMapType = BattleMapEnum.BeltScroll;
 
         for (int i = 0; i < triggers.Count; i++)
@@ -15,6 +16,7 @@ public class BeltScrollMapInfo : BattleMapInfo
                     break;
 
                 triggers[i].enemys.Add(enemy);
+                triggers[i].enemys[j].SetPathFind();
                 triggers[i].AddEnemyColliders(enemy.GetComponent<CapsuleCollider>());
                 triggers[i].enemys[j].SetEnabledPathFind(false);
             }

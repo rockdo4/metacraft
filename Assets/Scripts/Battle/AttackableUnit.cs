@@ -88,7 +88,7 @@ public abstract class AttackableUnit : MonoBehaviour
     [SerializeField]
     protected BufferState bufferState = new();
 
-    protected bool isAuto = true;
+    protected bool isAuto = false;
     public virtual bool IsAuto {
         get { return isAuto; }
         set { isAuto = value; }
@@ -102,7 +102,31 @@ public abstract class AttackableUnit : MonoBehaviour
     protected AttackedDamageUI floatingDamageText;
     protected HpBarManager hpBarManager;
 
-    protected virtual void Awake()
+    //protected virtual void Awake()
+    //{
+    //    var manager = FindObjectOfType<BattleManager>();
+    //    if (manager != null)
+    //        battleManager = manager;
+
+    //    animator = GetComponentInChildren<Animator>();
+    //    unitSearchAi[UnitAiType.Rush] = RushSearch;
+    //    unitSearchAi[UnitAiType.Range] = RangeSearch;
+    //    unitSearchAi[UnitAiType.Assassin] = AssassinSearch;
+    //    unitSearchAi[UnitAiType.Supprot] = SupportSearch;
+
+    //    if (isThereDamageUI)
+    //    {
+    //        floatingDamageText = GetComponent<AttackedDamageUI>();
+
+    //        if (usingFloatingHpBar)
+    //        {
+    //            hpBarManager = GetComponent<HpBarManager>();
+    //            hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+    //        }
+    //    }
+    //}
+
+    protected void TempSetting()
     {
         var manager = FindObjectOfType<BattleManager>();
         if (manager != null)
@@ -114,16 +138,16 @@ public abstract class AttackableUnit : MonoBehaviour
         unitSearchAi[UnitAiType.Assassin] = AssassinSearch;
         unitSearchAi[UnitAiType.Supprot] = SupportSearch;
 
-        if(isThereDamageUI)
+        if (isThereDamageUI)
         {
             floatingDamageText = GetComponent<AttackedDamageUI>();
 
-            if(usingFloatingHpBar)
+            if (usingFloatingHpBar)
             {
                 hpBarManager = GetComponent<HpBarManager>();
                 hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
-            }            
-        }                
+            }
+        }
     }
 
     protected void SetData()
@@ -576,6 +600,10 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public void SetBattleManager(BattleManager manager) => battleManager = manager;
     public void SetEnabledPathFind(bool set) => pathFind.enabled = set;
+    public void SetPathFind()
+    {
+        pathFind = transform.GetComponent<NavMeshAgent>();
+    }
 
     // 여기에 State 초기화랑 트리거 모두 해제하는 코드 작성
 

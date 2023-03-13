@@ -95,25 +95,40 @@ public class AttackableEnemy : AttackableUnit
 
     public bool isMapTriggerEnter = false;
 
-    protected override void Awake()
+    //protected override void Awake()
+    //{
+    //    base.Awake();
+    //    pathFind = transform.GetComponent<NavMeshAgent>();
+    //    characterData.InitSetting();
+    //    SetData();
+
+    //    unitState = UnitState.Idle;
+    //    lastNormalAttackTime = Time.time;
+
+    //    hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+
+    //}
+
+    private void Awake()
     {
-        base.Awake();
-        pathFind = transform.GetComponent<NavMeshAgent>();
+        TempSetting();
+
+        SetPathFind();
         characterData.InitSetting();
         SetData();
 
         unitState = UnitState.Idle;
         lastNormalAttackTime = Time.time;
 
-
-
+        hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
     }
+
     public override void ResetData()
     {
         UnitState = UnitState.None;
         battleState = UnitBattleState.None;
         UnitHp = characterData.data.healthPoint;
-        //hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+        hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
         lastActiveSkillTime = lastNormalAttackTime = lastNavTime = Time.time;
         target = null;
         animator.Rebind();

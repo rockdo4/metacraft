@@ -13,7 +13,7 @@ public class BattleMapInfo : MonoBehaviour
     public GameObject platform;
     public BattleMapEnum battleMapType;
     
-    private void Awake()
+    protected void FindEvManager()
     {
         evManager = FindObjectOfType<BattleManager>();
     }
