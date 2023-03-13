@@ -5,6 +5,7 @@ public class DefenseMapInfo : BattleMapInfo
 {
     private void Start()
     {
+        FindEvManager();
         battleMapType = BattleMapEnum.Defense;
         GameStart();
     }

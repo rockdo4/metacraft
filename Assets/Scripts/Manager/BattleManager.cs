@@ -55,7 +55,7 @@ public class BattleManager : MonoBehaviour
     private List<MapEventTrigger> btMapTriggers = new();
 
 
-    private void Awake()
+    private void Start()
     {
         Init();
         StartNextStage(curEvent);
@@ -385,6 +385,9 @@ public class BattleManager : MonoBehaviour
     }
     private void CreateRoad()
     {
+        if (tree.CurNode == null)
+            tree.CreateTreeGraph();
+
         TreeNodeObject thisNode = tree.CurNode;
         if (thisNode.childrens.Count == 0)
         {

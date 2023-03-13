@@ -133,9 +133,26 @@ public class AttackableHero : AttackableUnit
         }
     }
 
-    protected override void Awake()
+    //protected override void Awake()
+    //{
+    //    base.Awake();
+    //    pathFind = transform.GetComponent<NavMeshAgent>();
+    //    characterData.InitSetting();
+    //    SetData();
+
+    //    unitState = UnitState.Idle;
+
+    //    lastNormalAttackTime = Time.time;
+    //}
+    private void Awake()
     {
-        base.Awake();
+        Debug.Log("Hero Awake");
+
+        var activeSkill = characterData.activeSkill as ActiveSkillAOE;
+        activeSkill.ActorTransform = transform;
+
+        // 어웨이크 에러땜에 임시로 추가함
+        TempSetting();
         pathFind = transform.GetComponent<NavMeshAgent>();
         characterData.InitSetting();
         SetData();
@@ -143,11 +160,6 @@ public class AttackableHero : AttackableUnit
         unitState = UnitState.Idle;
 
         lastNormalAttackTime = Time.time;
-    }
-    private void Start()
-    {
-        var activeSkill = characterData.activeSkill as ActiveSkillAOE;
-        activeSkill.ActorTransform = transform;
     }
 
     // Ui와 연결, Ui에 스킬 쿨타임 연결
