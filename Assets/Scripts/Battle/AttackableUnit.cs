@@ -33,8 +33,8 @@ public abstract class AttackableUnit : MonoBehaviour
 
     [Header("캐릭터 타입")]
     public UnitType unitType;
-    [Header("Ai 타입")]
-    public UnitAiType aiType;
+    //[Header("Ai 타입")]
+    //public CharacterJob aiType;
 
     [Space, Header("일반공격 타겟")]
     public UnitType normalAttackTargetType;
@@ -80,7 +80,7 @@ public abstract class AttackableUnit : MonoBehaviour
     protected Action nowUpdate;
 
     protected Action ActiveSkillAction;
-    private Dictionary<UnitAiType, Action> unitSearchAi = new();    //일반공격 타겟
+    private Dictionary<CharacterJob, Action> unitSearchAi = new();    //일반공격 타겟
     protected Action SearchAi;
 
     protected bool moveTarget;
@@ -135,10 +135,11 @@ public abstract class AttackableUnit : MonoBehaviour
     protected void InitData()
     {
         animator = GetComponentInChildren<Animator>();
-        unitSearchAi[UnitAiType.Rush] = RushSearch;
-        unitSearchAi[UnitAiType.Range] = RangeSearch;
-        unitSearchAi[UnitAiType.Assassin] = AssassinSearch;
-        unitSearchAi[UnitAiType.Supprot] = SupportSearch;
+        unitSearchAi[CharacterJob.Assult] = AssultSearch;
+        unitSearchAi[CharacterJob.Defence] = AssultSearch;
+        unitSearchAi[CharacterJob.Shooter] = ShooterSearch;
+        unitSearchAi[CharacterJob.Assassin] = AssassinSearch;
+        unitSearchAi[CharacterJob.Support] = SupportSearch;
 
         if (isThereDamageUI)
         {
@@ -175,7 +176,7 @@ public abstract class AttackableUnit : MonoBehaviour
     {
         pathFind.stoppingDistance = minAttackDis;
         ActiveSkillAction = ReadyActiveSkill;
-        SearchAi = unitSearchAi[aiType];
+        SearchAi = unitSearchAi[(CharacterJob)GetUnitData().data.job];
     }
 
     public void SetLevelExp(int newLevel, int newExp)
@@ -228,6 +229,8 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void ReadyActiveSkill();
     public virtual void OnActiveSkill()
     {
+        if (characterData.activeSkill.SkillEffectedUnits == null) //임시 코드. 영우형이 고칠 예정
+            return;
         characterData.activeSkill.OnActiveSkill(this);
 
         var units = characterData.activeSkill.SkillEffectedUnits;
@@ -293,18 +296,15 @@ public abstract class AttackableUnit : MonoBehaviour
 
     }
 
-    protected void RushSearch()
+    protected void AssultSearch()
     {
         SearchNearbyTarget((normalAttackTargetType == UnitType.Hero) ? heroList : enemyList); //근거리 타겟 추적
     }
-    protected void RangeSearch()
+    protected void ShooterSearch()
     {
-        if (nowAttack == null)
-            return;
-
         lastSearchTime = Time.time;
         var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
-        var minTarget = GetSearchTargetInAround(targetList, nowAttack.distance / 2);
+        var minTarget = GetSearchTargetInAround(targetList, 10);
 
         if (IsAlive(minTarget))
             target = minTarget;

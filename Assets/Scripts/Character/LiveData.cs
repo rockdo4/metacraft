@@ -11,7 +11,7 @@ public class LiveData : IComparable<LiveData>
     public int grade = 1;          // 등급
     public int maxGrade = 5;       // 승급 가능 최대 등급
 
-    public string job;             // 직업
+    public int job;                // 직업
     public List<string> tags;      // 태그(특성)
 
     public int level = 1;          // 레벨
