@@ -67,9 +67,12 @@ public class EnemySpawningAndPositioning : MonoBehaviour
         }
 
         // 리스폰 후 다시 코루틴 시작
-        enemys[spawnCount].SetEnabledPathFind(true);
-        enemys[spawnCount].gameObject.SetActive(true);
-        enemys[spawnCount].ChangeUnitState(UnitState.Battle);
+        for (int i = 0; i < enemys.Count; i++)
+        {
+            enemys[i].SetEnabledPathFind(true);
+            enemys[i].gameObject.SetActive(true);
+            enemys[i].ChangeUnitState(UnitState.Battle);
+        }
 
         spawnCount++;
         if (spawnCount == waveCount)

@@ -359,6 +359,11 @@ public class BattleManager : MonoBehaviour
     }
     private void ChoiceNextStageByNode()
     {
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            useHeroes[i].ChangeUnitState(UnitState.Idle);
+        }
+
         tree.gameObject.SetActive(true);
 
         List<TreeNodeObject> childs = tree.CurNode.childrens;
