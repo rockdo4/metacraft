@@ -7,18 +7,10 @@ public class AutoButton : MonoBehaviour
 {
     public Image butonImage;
     public TextMeshProUGUI stateTxt;
-    Dictionary<bool, Color> textColor = new();
-    Dictionary<bool, Color> burronColor = new();
+    Color[] textColors = { new Color(0.2f, 0.2f, 0.2f), Color.white };
+    Color[] burronColors = { new Color(0.5f, 0.5f, 0.5f), Color.green };
     bool nowState = false;
-
-    private void Init()
-    {
-        textColor[true] = Color.green;
-        burronColor[true] = Color.white;
-
-        textColor[false] = new Color(0.2f, 0.2f, 0.2f);
-        burronColor[false] = new Color(0.5f, 0.5f, 0.5f);
-    }
+    int Idx => !nowState ? 0 : 1;
 
     public void ResetData()
     {
@@ -26,14 +18,9 @@ public class AutoButton : MonoBehaviour
     }
     public void SetAutoState(bool state)
     {
-        if (textColor.Count == 0 || burronColor.Count == 0)
-        {
-            Init();
-        }
-
         nowState = state;
-        butonImage.color = burronColor[nowState];
-        stateTxt.color = textColor[nowState];
+        butonImage.color = burronColors[Idx];
+        stateTxt.color = textColors[Idx];
 
         var characters = GameObject.FindObjectsOfType<AttackableUnit>();
 

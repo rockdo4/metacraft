@@ -94,9 +94,9 @@ public class MissionManager : View
         {
             RewardItem ri = expectedRewards[i].GetComponent<RewardItem>();
             if (i == 0)
-                ri.SetData("골드", $"{dic["Compensation"]}");
+                ri.SetData(999,"골드", $"{dic["Compensation"]}"); // 임시로 id 정함
             else
-                ri.SetData($"아이템{i}");
+                ri.SetData(10+i,$"아이템{i}"); //임시로 id 정함
         }
     }
 

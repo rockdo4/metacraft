@@ -371,7 +371,7 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             choiceButtonTexts[i].text = $"{thisNode.childrens[i].type}";
-            choiceButtons[i].gameObject.SetActive(true);
+            choiceButtons[i].SetActive(true);
             //roadChoiceButtons[i].choiceIndex = i;
         }
     }
@@ -493,7 +493,7 @@ public class BattleManager : MonoBehaviour
     {
         enemyCountTxt.DieEnemy();
 
-        int count = 0;
+        int count;
         switch (currBtMgr.GetBattleMapType())
         {
             case BattleMapEnum.Normal:
