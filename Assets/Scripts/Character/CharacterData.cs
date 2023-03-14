@@ -12,7 +12,7 @@ public class CharacterData : ScriptableObject, IComparable<CharacterData>
     [Range(1, 5)]
     public int          maxGrade = 5;       // 승급 가능 최대 등급
 
-    public string       job;                // 직업
+    public int          job;                // 직업
     public List<string> tags;               // 태그(특성)
 
     [Range(1, 20)]
