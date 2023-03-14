@@ -23,13 +23,15 @@ public class GameManager : Singleton<GameManager>
     // Resources - Sprites, TextAsset + (Scriptable Objects, Sound etc)
     public Dictionary<string, Sprite> iconSprites = new();
     public Dictionary<string, Sprite> illustrationSprites = new();
-    public List<Dictionary<string, object>> missionInfoList;
-    public List<Dictionary<string, object>> dispatchInfoList;
-    public List<Dictionary<string, object>> officeInfoList;
-    public List<Dictionary<string, object>> eventInfoList;
+    public List<Dictionary<string, object>> missionInfoList; // 작전 정보
+    public List<Dictionary<string, object>> dispatchInfoList; // 파견 정보
+    public List<Dictionary<string, object>> officeInfoList;  // 사무소 레벨별 정보
+    public List<Dictionary<string, object>> eventInfoList; // 이벤트 노드 정보
     public List<Dictionary<string, object>> eventEffectInfoList;
     public Dictionary<string, List<Dictionary<string, string>>> eventEffectTagInfoList;
     public Dictionary<string, List<Dictionary<string, float>>> eventEffectNoTagInfoList;
+
+    public List<Dictionary<string, object>> compensationInfoList; // 보상 정보
 
 
     // Office Select
@@ -119,6 +121,16 @@ public class GameManager : Singleton<GameManager>
                     Addressables.Release(obj);
 
                     FixEventEffectTable();
+                };
+
+        // 보상 테이블 로드
+        var cit = Addressables.LoadAssetAsync<TextAsset>("CompensationTable");
+
+        eeit.Completed +=
+                (AsyncOperationHandle<TextAsset> obj) =>
+                {
+                    compensationInfoList = CSVReader.SplitTextAsset(obj.Result, true, false);
+                    Addressables.Release(obj);
                 };
 
         List<AsyncOperationHandle> handles = new();

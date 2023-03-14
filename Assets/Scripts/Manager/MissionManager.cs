@@ -1,4 +1,3 @@
-using Mono.Cecil;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -9,8 +8,10 @@ public class MissionManager : View
     public TextMeshProUGUI dayOfweek;
     // public Slider apGauge;
 
+    public Slider difficultySlider;
+
     public Image portrait;  //Boss portrait
-    public TextMeshProUGUI explanation;  //
+    public TextMeshProUGUI explanation;  // Mission explanation
 
     public TextMeshProUGUI ExpectedCost;
     public GameObject[] heroSlots;
@@ -23,18 +24,17 @@ public class MissionManager : View
     public Slider difficultyAdjustment;
 
     public GameObject missionPoints;
-    //private GameObject[] marks;
     private List<Dictionary<string, object>> missionInfoTable;
     private GameObject[] marks;
 
     public List<GameObject> expectedRewards;
 
-    [Range(1,5)]
+    [Range(1, 5)]
     public int difficulty = 1;
-    [Range(1,7)]
+    [Range(1, 7)]
     public int markCount = 4;
     public delegate void clickmark(int num);
-    //private int missionNum;
+
     private GameManager gm;
 
     private void OnEnable()
@@ -49,22 +49,23 @@ public class MissionManager : View
 
         heroSlotsIndex = 0;
 
-            marks = GetComponentInChildren<MissionSpawner>().prefebs;
-            var num = Utils.DistinctRandomNumbers(missionInfoTable.Count, markCount);
-            int k = 0;
-            for (int j = 0; j < marks.Length; j++)
+        marks = GetComponentInChildren<MissionSpawner>().prefebs;
+        var num = Utils.DistinctRandomNumbers(missionInfoTable.Count, markCount);
+        int k = 0;
+        for (int j = 0; j < marks.Length; j++)
+        {
+            if (marks[j].GetComponent<MissionMarkData>().isMarkOn)
             {
-                if (marks[j].GetComponent<MissionMarkData>().isMarkOn)
-                {
-                    var index = k++;
-                    marks[j].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[num[index]]["Name"]}";
-                    marks[j].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(num[index]));
-                }
-                else
-                {
-                    marks[j].SetActive(false);
-                }
+                var index = k++;
+                marks[j].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[num[index]]["Name"]}";
+                marks[j].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(num[index]));
+                marks[j].GetComponentInChildren<Button>().onClick.RemoveListener(() => UpdateMissionInfo(num[index]));
             }
+            else
+            {
+                marks[j].SetActive(false);
+            }
+        }
     }
 
     public void UpdateMissionDay()
