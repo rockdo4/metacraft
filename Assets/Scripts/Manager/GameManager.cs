@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -23,13 +24,16 @@ public class GameManager : Singleton<GameManager>
     // Resources - Sprites, TextAsset + (Scriptable Objects, Sound etc)
     public Dictionary<string, Sprite> iconSprites = new();
     public Dictionary<string, Sprite> illustrationSprites = new();
-    public List<Dictionary<string, object>> missionInfoList;
-    public List<Dictionary<string, object>> dispatchInfoList;
-    public List<Dictionary<string, object>> officeInfoList;
-    public List<Dictionary<string, object>> eventInfoList;
+    public List<Dictionary<string, object>> missionInfoList; // 작전 정보
+    public Dictionary<int,List<Dictionary<string, object>>> missionInfoDifficulty; // 작전 정보 난이도 키 추가
+    public List<Dictionary<string, object>> dispatchInfoList; // 파견 정보
+    public List<Dictionary<string, object>> officeInfoList;  // 사무소 레벨별 정보
+    public List<Dictionary<string, object>> eventInfoList; // 이벤트 노드 정보
     public List<Dictionary<string, object>> eventEffectInfoList;
     public Dictionary<string, List<Dictionary<string, string>>> eventEffectTagInfoList;
     public Dictionary<string, List<Dictionary<string, float>>> eventEffectNoTagInfoList;
+
+    public List<Dictionary<string, object>> compensationInfoList; // 보상 정보
 
 
     // Office Select
@@ -86,6 +90,7 @@ public class GameManager : Singleton<GameManager>
                 {
                     missionInfoList = CSVReader.SplitTextAsset(obj.Result);
                     Addressables.Release(obj);
+                    FixMissionTable();
                 };
 
         // 파견 테이블 로드
@@ -126,8 +131,18 @@ public class GameManager : Singleton<GameManager>
                 {
                     eventEffectInfoList = CSVReader.SplitTextAsset(obj.Result,true, false);
                     Addressables.Release(obj);
-
                     FixEventEffectTable();
+                };
+
+        // 보상 테이블 로드
+        var cit = Addressables.LoadAssetAsync<TextAsset>("CompensationTable");
+
+        cit.Completed +=
+                (AsyncOperationHandle<TextAsset> obj) =>
+                {
+                    compensationInfoList = CSVReader.SplitTextAsset(obj.Result, true, false);
+                    Addressables.Release(obj);
+
                 };
 
         List<AsyncOperationHandle> handles = new();
@@ -405,6 +420,37 @@ public class GameManager : Singleton<GameManager>
                 midList.Add(smallDic);
             }
             eventEffectNoTagInfoList.Add((string)eventEffectInfoList[i]["ID"], midList);
+        }
+    }
+
+    // 작전 테이블 난이도 구분
+    private void FixMissionTable()
+    {
+        missionInfoDifficulty = new Dictionary<int, List<Dictionary<string, object>>>();
+        for (int i = 1; i < 6; i++)
+        {
+            missionInfoDifficulty.Add(i,new List<Dictionary<string, object>>());
+        }
+        for (int i = 0; i < missionInfoList.Count; i++)
+        {
+            switch ((int)missionInfoList[i]["Difficulty"])
+            {
+                case 1:
+                    missionInfoDifficulty[1].Add(missionInfoList[i]);
+                    break;
+                case 2:
+                    missionInfoDifficulty[2].Add(missionInfoList[i]);
+                    break;
+                case 3:
+                    missionInfoDifficulty[3].Add(missionInfoList[i]);
+                    break;
+                case 4:
+                    missionInfoDifficulty[4].Add(missionInfoList[i]);
+                    break;
+                case 5:
+                    missionInfoDifficulty[5].Add(missionInfoList[i]);
+                    break;
+            }
         }
     }
 }
