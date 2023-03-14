@@ -4,7 +4,7 @@ using UnityEngine;
 public class StageEnemy : MonoBehaviour
 {
     public TextMeshProUGUI countTxt;
-    int count;
+    public int count;
 
     public int Count {
         get { return count; }

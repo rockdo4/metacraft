@@ -6,6 +6,9 @@ public class DefenseMapEventTrigger : MapEventTrigger
 
     private void OnTriggerEnter(Collider other)
     {
+        if (other.TryGetComponent<AttackableHero>(out var hero))
+            hero.ChangeUnitState(UnitState.Battle);
+
         if (other.CompareTag("Enemy"))
         {
             AttackableEnemy enemy = other.GetComponent<AttackableEnemy>();

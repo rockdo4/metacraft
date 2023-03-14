@@ -29,7 +29,7 @@ public class BattleManager : MonoBehaviour
 
     // TestBattleManager
     public List<HeroUi> heroUiList;
-    private List<AttackableUnit> useHeroes = new();
+    public List<AttackableUnit> useHeroes = new();
     public StageEnemy enemyCountTxt;
     public ClearUiController clearUi;
     public Image fadePanel;
@@ -47,7 +47,7 @@ public class BattleManager : MonoBehaviour
     // BeltScrollManager
     private GameObject platform;
     public float platformMoveSpeed = 5f;
-    private int currTriggerIndex = 0;
+    public int currTriggerIndex = 0;
     private float nextStageMoveTimer = 0f;
     private Coroutine coMovingMap;
     private Coroutine coResetMap;
@@ -221,6 +221,7 @@ public class BattleManager : MonoBehaviour
                 {
                     useHeroes[i].ChangeUnitState(UnitState.MoveNext);
                 }
+                Logger.Debug("Move!");
                 coMovingMap = StartCoroutine(CoMovingMap());
             }
         }
@@ -320,6 +321,11 @@ public class BattleManager : MonoBehaviour
             {
                 ChoiceNextStageByNode();
             }
+            //else
+            //{
+            //    if (curEvent == MapEventEnum.Defense)
+            //        SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
+            //}
         }
         else
         {
@@ -452,9 +458,9 @@ public class BattleManager : MonoBehaviour
 
         if (tree.CurNode.type == TreeNodeTypes.Event)
         {
-            var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
-            StartNextStage((MapEventEnum)randomEvent);
-            //StartNextStage(MapEventEnum.Defense);
+            //var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
+            //StartNextStage((MapEventEnum)randomEvent);
+            StartNextStage(MapEventEnum.Defense);
             return true;
         }
         else
@@ -493,27 +499,27 @@ public class BattleManager : MonoBehaviour
     {
         enemyCountTxt.DieEnemy();
 
-        int count;
+        int count = 0;
         switch (currBtMgr.GetBattleMapType())
         {
             case BattleMapEnum.Normal:
                 btMapTriggers[currTriggerIndex].OnDead(enemy);
                 count = btMapTriggers[currTriggerIndex].useEnemys.Count;
-
-                if (count == 0)
-                {
-                    SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
-                }
+                Test(count);
                 break;
             case BattleMapEnum.Defense:
                 btMapTriggers[enemyTriggerIndex].OnDead(enemy);
-                count = btMapTriggers[enemyTriggerIndex].useEnemys.Count;
-
-                if (count == 0)
-                {
-                    SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
-                }
+                count = enemyCountTxt.count;
+                Test(count);
                 break;
+        }
+    }
+
+    private void Test(int enemyCount)
+    {
+        if (enemyCount == 0)
+        {
+            SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
         }
     }
 
