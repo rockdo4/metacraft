@@ -9,16 +9,16 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 119712573433271650}
+  - component: {fileID: 119712573433271663}
   - component: {fileID: 8490853096526201997}
   - component: {fileID: 8395682835805498539}
   - component: {fileID: 119712573433271661}
-  - component: {fileID: 119712573433271663}
   - component: {fileID: 119712573433271648}
   - component: {fileID: 119712573433271649}
   - component: {fileID: 664094793414650169}
   - component: {fileID: 5451489805747354053}
   m_Layer: 7
-  m_Name: "Enemy_\uC810\uD551\uBABD\uD0A4\uD074\uB7FD\uB2E8\uC6D0_\uC0AC\uACA9\uD615"
+  m_Name: Enemy_JMC_Shooter
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -40,6 +40,41 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+--- !u!114 &119712573433271663
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 119712573433271651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8666468cbdf1927409dca387dd261c38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  originData: {fileID: 11400000, guid: 94755310a4f2dea45b72532c42a4ab27, type: 2}
+  data:
+    name: 
+    grade: 0
+    maxGrade: 0
+    job: 0
+    tags: []
+    level: 0
+    exp: 0
+    likeability: 0
+    baseDamage: 50
+    baseDefense: 0
+    healthPoint: 500
+    currentHp: 500
+    moveSpeed: 3
+    critical: 0
+    criticalDmg: 2
+    evasion: 0
+    accuracy: 0.5
+    equipment: {fileID: 0}
+  attacks:
+  - {fileID: 11400000, guid: 7a73cd6494c2fc448a4e18e57512a454, type: 2}
+  activeSkill: {fileID: 11400000, guid: 883aa1f614f7c2242916fd8d9a3fd0fe, type: 2}
 --- !u!136 &8490853096526201997
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -92,41 +127,6 @@ NavMeshAgent:
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
---- !u!114 &119712573433271663
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 119712573433271651}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8666468cbdf1927409dca387dd261c38, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  originData: {fileID: 11400000, guid: 94755310a4f2dea45b72532c42a4ab27, type: 2}
-  data:
-    name: 
-    grade: 0
-    maxGrade: 0
-    job: 
-    level: 0
-    exp: 0
-    likeability: 0
-    baseDamage: 50
-    baseDefense: 0
-    healthPoint: 500
-    currentHp: 500
-    moveSpeed: 3
-    critical: 0
-    criticalDmg: 2
-    evasion: 0
-    accuracy: 0.5
-    equipment: {fileID: 0}
-  attacks:
-  - {fileID: 11400000, guid: d5b9a7358e0855b46acac612b4428307, type: 2}
-  activeSkill: {fileID: 11400000, guid: 883aa1f614f7c2242916fd8d9a3fd0fe, type: 2}
-  passiveSkill: {fileID: 11400000, guid: 0835dcdb3becd4a48b30fa7c1680f849, type: 2}
 --- !u!114 &119712573433271648
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -188,13 +188,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterData: {fileID: 119712573433271663}
+  nowAttack: {fileID: 0}
+  skillClips: []
   unitType: 1
   aiType: 0
   normalAttackTargetType: 0
+  normalbuffs: []
   PassiveTargetType: 0
+  passivekbuffs: []
   activeAttackTargetType: 0
+  attackkbuffs: []
   attackPos: {fileID: 0}
   attackPref: {fileID: 0}
+  pathFind: {fileID: 0}
   target: {fileID: 0}
   activeTarget: {fileID: 0}
   heroList: []
