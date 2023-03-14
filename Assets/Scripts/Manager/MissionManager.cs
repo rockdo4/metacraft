@@ -8,8 +8,6 @@ public class MissionManager : View
     public TextMeshProUGUI dayOfweek;
     // public Slider apGauge;
 
-    public Slider difficultySlider;
-
     public Image portrait;  //Boss portrait
     public TextMeshProUGUI explanation;  // Mission explanation
 
@@ -24,7 +22,7 @@ public class MissionManager : View
     public Slider difficultyAdjustment;
 
     public GameObject missionPoints;
-    private List<Dictionary<string, object>> missionInfoTable;
+    private Dictionary<int,List<Dictionary<string, object>>> missionInfoTable;
     private GameObject[] marks;
 
     public List<GameObject> expectedRewards;
@@ -35,31 +33,41 @@ public class MissionManager : View
     public int markCount = 4;
     public delegate void clickmark(int num);
 
+    public List<List<int>> nums;
+
     private GameManager gm;
+
+    private void Awake()
+    {
+        gm = GameManager.Instance;
+        marks = GetComponentInChildren<MissionSpawner>().prefebs;
+    }
 
     private void OnEnable()
     {
-        gm = GameManager.Instance;
         UpdateMissionDay();
     }
 
     private void Start()
-    {
-        missionInfoTable = gm.missionInfoList;
+    {        
+        missionInfoTable = gm.missionInfoDifficulty;        
 
         heroSlotsIndex = 0;
+        nums = new List<List<int>>();
+        for(int i = 0; i<5; i++)
+        {
+            var num = Utils.DistinctRandomNumbers(missionInfoTable[i+1].Count, markCount);
+            nums.Add(num);
+        }
 
-        marks = GetComponentInChildren<MissionSpawner>().prefebs;
-        var num = Utils.DistinctRandomNumbers(missionInfoTable.Count, markCount);
         int k = 0;
         for (int j = 0; j < marks.Length; j++)
         {
             if (marks[j].GetComponent<MissionMarkData>().isMarkOn)
             {
                 var index = k++;
-                marks[j].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[num[index]]["Name"]}";
-                marks[j].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(num[index]));
-                marks[j].GetComponentInChildren<Button>().onClick.RemoveListener(() => UpdateMissionInfo(num[index]));
+                marks[j].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[difficulty][nums[difficulty][index]]["Name"]}";
+                marks[j].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(difficulty,nums[difficulty][index]));
             }
             else
             {
@@ -73,10 +81,10 @@ public class MissionManager : View
         dayOfweek.text = $"{gm.playerData.currentDay}요일";
     }
 
-    public void UpdateMissionInfo(int num)
+    public void UpdateMissionInfo(int difficulty, int num)
     {
         //missionNum = num;
-        var dic = missionInfoTable[num];
+        var dic = missionInfoTable[difficulty][num];
         gm.currentSelectMission = dic;
 
         //portrait.sprite = gm.iconSprites[$"Icon_{dic["BossID"]}"];  보스아이디 적 테이블에서 불러와야함
@@ -214,6 +222,22 @@ public class MissionManager : View
 
     public void OnAdjustmentDifficulty()
     {
-        difficultyAdjustment.GetComponentInChildren<TextMeshProUGUI>().text = difficultyAdjustment.value.ToString();
+        difficulty = (int)difficultyAdjustment.value;
+        difficultyAdjustment.GetComponentInChildren<TextMeshProUGUI>().text = difficulty.ToString();
+
+        int k = 0;
+        for (int j = 0; j < marks.Length; j++)
+        {
+            if (marks[j].GetComponent<MissionMarkData>().isMarkOn)
+            {
+                var index = k++;
+                marks[j].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[difficulty][nums[difficulty-1][index]]["Name"]}";
+                marks[j].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(difficulty, nums[difficulty-1][index]));
+            }
+            else
+            {
+                marks[j].SetActive(false);
+            }
+        }
     }
 }
