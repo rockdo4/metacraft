@@ -1,9 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "CharacterSkill", menuName = "Character/CharacterSkill")]
 public class CharacterSkill : ScriptableObject
 {
+    public List<AttackableUnit>     SkillEffectedUnits { get { return skillEffectedUnits; } }
+    protected List<AttackableUnit>  skillEffectedUnits;
+
     public int      id;
     public string   skillName;
     

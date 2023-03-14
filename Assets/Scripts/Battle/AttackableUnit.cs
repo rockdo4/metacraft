@@ -102,6 +102,11 @@ public abstract class AttackableUnit : MonoBehaviour
     protected AttackedDamageUI floatingDamageText;
     protected HpBarManager hpBarManager;
 
+    ////
+    bool hasOutline;
+    protected Outline outline;
+    ////
+
     protected virtual void Awake()
     {
         var manager = FindObjectOfType<BattleManager>();
@@ -123,7 +128,11 @@ public abstract class AttackableUnit : MonoBehaviour
                 hpBarManager = GetComponent<HpBarManager>();
                 hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
             }            
-        }                
+        }
+
+        //
+        hasOutline = TryGetComponent<Outline>(out outline);
+        //
     }
 
     protected void SetData()
@@ -173,9 +182,19 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void PassiveSkillEvent();
     public abstract void ReadyActiveSkill();
     public virtual void OnActiveSkill()
-    {
-        bool isCritical = false;
+    {   
         characterData.activeSkill.OnActiveSkill(this);
+        
+        var units = characterData.activeSkill.SkillEffectedUnits;        
+        for (int i = 0; i < units.Count; i++)
+        {   
+            foreach (var buff in attackkbuffs)
+            {
+                bool isCritical = false;
+                var value = CalculDamage(characterData.activeSkill, ref isCritical);
+                units[i].AddBuff(buff, value, null);                        
+            }
+        }
     }
 
     public virtual void NormalAttackOnDamage()
@@ -336,7 +355,9 @@ public abstract class AttackableUnit : MonoBehaviour
         UnitHp = Mathf.Max(UnitHp - dmg, 0);
         if (UnitHp <= 0)
         {
-            UnitState = UnitState.Die;            
+            UnitState = UnitState.Die;
+            if(hasOutline)
+                outline.enabled = false;
         }
 
         ShowHpBarAndDamageText(dmg, isCritical);

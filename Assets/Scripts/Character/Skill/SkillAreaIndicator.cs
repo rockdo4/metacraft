@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,9 +10,22 @@ public class SkillAreaIndicator : MonoBehaviour
     protected HashSet<Collider> unitsInArea = new();
 
     public bool isTriggerEnter = false;
+
+    public bool IsTrackTarget { set { isTrackTarget = value; } }
+    private bool isTrackTarget = false;
+    public Transform TrackTransform { set { trackTransform = value; } }
+    private Transform trackTransform;
+ 
     protected virtual void Awake()
     {
         Renderer = GetComponent<MeshRenderer>();
+    }
+    private void Update()
+    {
+        if (!isTrackTarget)
+            return;
+
+        transform.position = trackTransform.position + Vector3.up * 0.1f;
     }
 
     public virtual void SetScale(float x, float y, float z = 1f)
@@ -78,7 +92,7 @@ public class SkillAreaIndicator : MonoBehaviour
             unit.GetComponent<Outline>().enabled = false;
         }
         unitsInArea.Clear();
-    }
+    } 
     public List<AttackableUnit> GetUnitsInArea()
     {
         List<AttackableUnit> container = new(unitsInArea.Count);

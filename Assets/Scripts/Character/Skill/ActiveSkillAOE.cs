@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ActiveSkillAOE", menuName = "Character/ActiveSkill/AOE")]
@@ -19,9 +20,9 @@ public class ActiveSkillAOE : CharacterSkill
     protected Transform indicatorTransform;
 
     public SkillAreaShape areaShapeType;
-    public SkillIndicatorTarget indicatorTarget;
-    public bool isAutoTarget;
-    private LayerMask targetMask;
+    public SkillIndicatorTarget indicatorTargetWhenTrackTarget;
+    public bool isTrackTarget;
+    private LayerMask targetMaskWhenManualSkill;
 
     public float sectorRadius;
     public float sectorAngle;
@@ -33,6 +34,10 @@ public class ActiveSkillAOE : CharacterSkill
     private float sqrCastRangeLimit;
 
     private bool skillStartFromCharacter;
+
+    private Collider[] colliders;
+    public int maxColliders = 32;
+    private Transform closestEnemyTransformWhenTrackTarget;
     public override void OnActive()
     {
         if (skillAreaIndicator != null &&
@@ -58,8 +63,12 @@ public class ActiveSkillAOE : CharacterSkill
         if (areaShapeType.Equals(SkillAreaShape.Sector))
             skillStartFromCharacter = true;
 
-        if(isAutoTarget)
-
+        if (isTrackTarget)
+        {
+            InitTrackTargetLayerMaskSet();
+            colliders = new Collider[maxColliders];
+            skillAreaIndicator.IsTrackTarget = true;
+        }
     }
     protected virtual void SetIndicatorScale()
     {
@@ -98,10 +107,10 @@ public class ActiveSkillAOE : CharacterSkill
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out RaycastHit hit, 100.0f, layerM))
         {
-            if (!isAutoTarget)
+            if (!isTrackTarget)
                 WhenManualTarget(hit);
             else
-                WhenAutoTarget(hit);
+                WhenTrackTarget(hit);
         }
     }
     private void WhenManualTarget(RaycastHit hit)
@@ -111,42 +120,62 @@ public class ActiveSkillAOE : CharacterSkill
         else
             IndicatorOnlyChangeRotation(hit);
     }
-    private void SetAutoTargetLayer()
+    private void InitTrackTargetLayerMaskSet()
     {
-        switch(indicatorTarget)
+        switch(indicatorTargetWhenTrackTarget)
         {
             case SkillIndicatorTarget.Self:
                 break;
             case SkillIndicatorTarget.Enemy:
-                targetMask = 1 << LayerMask.NameToLayer("Enemy");                
+                targetMaskWhenManualSkill = 1 << LayerMask.NameToLayer("Enemy");                
                 break;
             case SkillIndicatorTarget.Friendly:
-                targetMask = 1 << LayerMask.NameToLayer("Hero");
+                targetMaskWhenManualSkill = 1 << LayerMask.NameToLayer("Hero");
                 break;
-        }
+        }        
     }
-    private void WhenAutoTarget(RaycastHit hit)
+    private void WhenTrackTarget(RaycastHit hit)
     {        
-        switch(indicatorTarget)
-        {
-            case SkillIndicatorTarget.Self:
-                break;
-            case SkillIndicatorTarget.Enemy:                
-                break;
-            case SkillIndicatorTarget.Friendly:
-                break;
-        }
+        //switch(indicatorTargetWhenAutoTarget)
+        //{
+        //    case SkillIndicatorTarget.Self:
+        //        break;
+        //    case SkillIndicatorTarget.Enemy:                
+        //        break;
+        //    case SkillIndicatorTarget.Friendly:
+        //        break;
+        //}
+        IndicatorPosTrack(hit);
     }
-    private void IndicatorPosAuto(RaycastHit hit)
+    private void IndicatorPosTrack(RaycastHit hit)
     {
+        var target = isAuto ? targetPos : hit.point;
+
+        maxColliders = Physics.OverlapSphereNonAlloc(actorTransform.position, castRangeLimit, colliders, targetMaskWhenManualSkill);
         
+        if (maxColliders.Equals(0))
+            return;
+
+        float closestDistance = Mathf.Infinity;
+
+        for (int i = 0; i < maxColliders; i++)
+        {
+            float distanceSQR = GetDistanceNoneSQRT(target, colliders[i].transform.position);
+            if (distanceSQR < closestDistance)
+            {
+                closestDistance = distanceSQR;
+                closestEnemyTransformWhenTrackTarget = colliders[i].transform;
+            }
+        }
+        
+        skillAreaIndicator.TrackTransform = closestEnemyTransformWhenTrackTarget;
     }
 
     private void IndicatorPosToMouse(RaycastHit hit)
     {
         var target = isAuto ? targetPos : hit.point;
 
-        if (IsTargetInSkillRange(target))
+        if (IsTargetInRange(target))
         {
             indicatorTransform.position = target + Vector3.up * 0.1f;
         }
@@ -166,20 +195,28 @@ public class ActiveSkillAOE : CharacterSkill
         indicatorTransform.LookAt(target + Vector3.up * 0.1f);
     }
 
-    protected bool IsTargetInSkillRange(Vector3 hitPoint)
+    protected bool IsTargetInRange(Vector3 hitPoint)
     {
         var x = actorTransform.position.x - hitPoint.x;
         var z = actorTransform.position.z - hitPoint.z;
 
         return x * x + z * z < sqrCastRangeLimit;
     }
+    protected float GetDistanceNoneSQRT(Vector3 pos1, Vector3 pos2)
+    {
+        var x = pos1.x - pos2.x;
+        var z = pos1.z - pos2.z;
+
+        return x * x + z * z;
+    }
+
     public override void OnActiveSkill(AttackableUnit attackableUnit)
-    {        
+    {
         EffectManager.Instance.Get(activeEffect, indicatorTransform);
 
-        var targets = skillAreaIndicator.GetUnitsInArea();
+        skillEffectedUnits = skillAreaIndicator.GetUnitsInArea();
 
-        foreach (var target in targets)
+        foreach (var target in skillEffectedUnits)
         {            
             target.OnDamage(attackableUnit, this);
         }
@@ -196,7 +233,7 @@ public class ActiveSkillAOE : CharacterSkill
     {
         skillAreaIndicator?.gameObject.SetActive(false);
     }
-    public void readyEffectUntillOnActiveSkill()
+    public void ReadyEffectUntillOnActiveSkill()
     {
         EffectManager.Instance.Get(readyEffect, indicatorTransform);
         skillAreaIndicator.Renderer.enabled = false;
