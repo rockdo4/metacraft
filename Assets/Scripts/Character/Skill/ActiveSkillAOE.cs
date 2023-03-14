@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ActiveSkillAOE", menuName = "Character/ActiveSkill/AOE")]
@@ -191,8 +190,13 @@ public class ActiveSkillAOE : CharacterSkill
     {
         var target = isAuto ? targetPos : hit.point;
 
-        indicatorTransform.position = actorTransform.position + Vector3.up * 0.1f;
-        indicatorTransform.LookAt(target + Vector3.up * 0.1f);
+        indicatorTransform.position = actorTransform.position + Vector3.up * 0.1f;        
+        
+        float currentRotationX = indicatorTransform.eulerAngles.x;        
+        indicatorTransform.LookAt(target + Vector3.up * 0.1f);        
+        Vector3 newRotation = indicatorTransform.eulerAngles;
+        newRotation.x = currentRotationX;
+        indicatorTransform.eulerAngles = newRotation;
     }
 
     protected bool IsTargetInRange(Vector3 hitPoint)
