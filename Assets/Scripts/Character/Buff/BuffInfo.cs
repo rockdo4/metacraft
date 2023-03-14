@@ -24,7 +24,7 @@ public class BuffInfo : ScriptableObject
     [Space, Space]
     public BuffType type;       //상태이상의 효과(우측 효과표 참조)
     [Header("상태이상의 효과값")]
-    public int buffValue;       //상태이상의 효과값
+    public float buffValue;       //상태이상의 효과값
     [Header("상태이상의 지속시간")]
     public float duration;      //상태이상의 지속시간
 

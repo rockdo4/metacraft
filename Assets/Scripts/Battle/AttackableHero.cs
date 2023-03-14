@@ -45,8 +45,6 @@ public class AttackableHero : AttackableUnit
                     BattleState = UnitBattleState.None;
                     nowUpdate = ReturnPosUpdate;
 
-                    foreach (CharacterSkill skill in characterData.attacks)
-                        lastNormalAttackTime[skill] = Time.time;
                     heroUI.heroSkill.CancleSkill();                    
 
                     target = null;
@@ -158,8 +156,7 @@ public class AttackableHero : AttackableUnit
 
         unitState = UnitState.Idle;
 
-        foreach (CharacterSkill skill in characterData.attacks)
-            lastNormalAttackTime[skill] = Time.time;
+        ResetCoolDown();
     }
     private void Start()
     {
@@ -193,8 +190,7 @@ public class AttackableHero : AttackableUnit
         
         lateReturn = false;
         lastActiveSkillTime  = lastNavTime = Time.time;
-        foreach (CharacterSkill skill in characterData.attacks)
-            lastNormalAttackTime[skill] = Time.time;
+        ResetCoolDown();
         target = null;
         animator.Rebind();
         UnitHp = characterData.data.currentHp;

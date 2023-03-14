@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class AttackableEnemy : AttackableUnit
 {
@@ -86,6 +85,8 @@ public class AttackableEnemy : AttackableUnit
     }
 
     public bool isMapTriggerEnter = false;
+    float attackDelay = 1f;
+    float attackDelayTimer = 0f;
 
     //protected override void Awake()
     //{
@@ -109,8 +110,7 @@ public class AttackableEnemy : AttackableUnit
         SetData();
 
         unitState = UnitState.Idle;
-        foreach (CharacterSkill skill in characterData.attacks) 
-            lastNormalAttackTime[skill] = Time.time;
+        ResetCoolDown();
 
         hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
     }
@@ -129,8 +129,7 @@ public class AttackableEnemy : AttackableUnit
         UnitHp = characterData.data.healthPoint;
         hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
         lastActiveSkillTime  = lastNavTime = Time.time;
-        foreach (CharacterSkill skill in characterData.attacks) 
-            lastNormalAttackTime[skill] = Time.time;
+        ResetCoolDown();
         target = null;
         animator.Rebind();
     }
@@ -149,6 +148,12 @@ public class AttackableEnemy : AttackableUnit
     }
     protected override void BattleUpdate()
     {
+        if(attackDelayTimer < attackDelay)
+        {
+            attackDelayTimer += Time.deltaTime;
+            return;
+        }
+
         switch (BattleState)
         {
             //타겟에게 이동중이거나, 공격 대기중에 타겟이 죽으면 재탐색
@@ -204,7 +209,14 @@ public class AttackableEnemy : AttackableUnit
                 stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime >= 1.0f)
                 {
+                    if(name.Contains("Test"))
+                    {
+                       // Logger.Debug("anime name : "  + animator.GetCurrentAnimatorClipInfo(0)[0].clip.);
+                        Logger.Debug(nowAttack.name + " End");
+                    }
                     NormalAttackEnd();
+                    attackDelayTimer = 0f;
+                    //StartCoroutine(TestAttackEnd());
                 }
                 break;
             case UnitBattleState.Stun:
@@ -254,11 +266,10 @@ public class AttackableEnemy : AttackableUnit
     {
         base.NormalAttackEnd();
         animator.SetTrigger("AttackEnd");
-        foreach (CharacterSkill skill in characterData.attacks)
-            lastNormalAttackTime[skill] = Time.time;
+        lastNormalAttackTime[nowAttack] = Time.time;
 
         BattleState = UnitBattleState.BattleIdle;
-    }
+    } 
     public override void OnActiveSkill()    //테스트용
     {
         if (nowAttack.targetNumLimit == 1)
@@ -297,8 +308,7 @@ public class AttackableEnemy : AttackableUnit
     {
         pathFind.isStopped = false;
         animator.SetTrigger("ActiveEnd");
-        foreach (CharacterSkill skill in characterData.attacks) 
-            lastNormalAttackTime[skill] = Time.time;
+        ResetCoolDown();
         BattleState = UnitBattleState.BattleIdle;
         base.ActiveSkillEnd();
     }
