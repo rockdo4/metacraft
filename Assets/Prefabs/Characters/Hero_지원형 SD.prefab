@@ -109,6 +109,7 @@ MonoBehaviour:
     grade: 0
     maxGrade: 0
     job: 
+    tags: []
     level: 0
     exp: 0
     likeability: 0
@@ -125,7 +126,6 @@ MonoBehaviour:
   attacks:
   - {fileID: 11400000, guid: b7a514f5ee0d222498257224607ac762, type: 2}
   activeSkill: {fileID: 11400000, guid: 5b1df609c37c83f4ca8107b1f58c3843, type: 2}
-  passiveSkill: {fileID: 11400000, guid: 72914e2e9e922d84eb7b5c550ed005df, type: 2}
 --- !u!114 &2207327337837353173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -157,13 +157,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterData: {fileID: 8489007089072879663}
+  nowAttack: {fileID: 0}
+  skillClips: []
   unitType: 0
   aiType: 3
   normalAttackTargetType: 0
+  normalbuffs: []
   PassiveTargetType: 0
+  passivekbuffs: []
   activeAttackTargetType: 0
+  attackkbuffs:
+  - {fileID: 11400000, guid: d396e1eb3755ef84bb1e3219cfc4cc12, type: 2}
   attackPos: {fileID: 0}
   attackPref: {fileID: 0}
+  pathFind: {fileID: 0}
   target: {fileID: 0}
   activeTarget: {fileID: 0}
   heroList: []
