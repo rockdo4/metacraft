@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -206,7 +205,7 @@ public class AttackableEnemy : AttackableUnit
                 {
                     if(name.Contains("Test"))
                     {
-                        Logger.Debug("anime name : "  + animator.GetCurrentAnimatorClipInfo(0).FirstOrDefault(clip => clip.clip.nameHash == clipNameHash).clip.name);
+                       // Logger.Debug("anime name : "  + animator.GetCurrentAnimatorClipInfo(0)[0].clip.);
                         Logger.Debug(nowAttack.name + " End");
                     }
                     NormalAttackEnd();
