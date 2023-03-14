@@ -83,7 +83,6 @@ public class MissionManager : View
 
     public void UpdateMissionInfo(int difficulty, int num)
     {
-        //missionNum = num;
         var dic = missionInfoTable[difficulty][num];
         gm.currentSelectMission = dic;
 
@@ -106,7 +105,7 @@ public class MissionManager : View
         //ProperCombatPower.text = $"0/{dic["ProperCombatPower"]}";
         ProperCombatPower.color = Color.white;
 
-        //보상 테이블 연결 필요
+        ////보상 테이블 연결 필요
         //int erCount = expectedRewards.Count;
         //for (int i = 0; i < erCount; i++)
         //{
