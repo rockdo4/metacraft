@@ -1,8 +1,21 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
+
+public class AnimationClipOverrides : List<KeyValuePair<AnimationClip, AnimationClip>>
+{
+    public AnimationClipOverrides(int capacity) : base(capacity) { }
+
+    public AnimationClip this[string name] {
+        get { return this.Find(x => x.Key.name.Equals(name)).Value; }
+        set {
+            int index = this.FindIndex(x => x.Key.name.Equals(name));
+            if (index != -1)
+                this[index] = new KeyValuePair<AnimationClip, AnimationClip>(this[index].Key, value);
+        }
+    }
+}
 
 public abstract class AttackableUnit : MonoBehaviour
 {
@@ -16,6 +29,7 @@ public abstract class AttackableUnit : MonoBehaviour
     protected CharacterSkill GetNowAttack() => nowAttack;
     protected float minAttackDis = float.MaxValue;
     public AnimationClip[] skillClips;
+
 
     [Header("캐릭터 타입")]
     public UnitType unitType;
@@ -73,6 +87,8 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected Animator animator;
     protected AnimatorStateInfo stateInfo;
+    protected AnimatorOverrideController animatorOverrideController;
+    protected AnimationClipOverrides clipOverrides;
 
     [SerializeField, Header("메인 상태패턴")]
     protected UnitState unitState;
@@ -144,6 +160,15 @@ public abstract class AttackableUnit : MonoBehaviour
                 minAttackDis = skill.distance;
             }
         }
+
+        animatorOverrideController = Instantiate(animator.runtimeAnimatorController as AnimatorOverrideController);
+        animator.runtimeAnimatorController = animatorOverrideController;
+
+        //animatorOverrideController = animator.runtimeAnimatorController as AnimatorOverrideController;
+        //animator.runtimeAnimatorController = animatorOverrideController;
+
+        clipOverrides = new AnimationClipOverrides(animatorOverrideController.overridesCount);
+        animatorOverrideController.GetOverrides(clipOverrides);
     }
 
     protected void SetData()
@@ -184,6 +209,15 @@ public abstract class AttackableUnit : MonoBehaviour
         for (int i = buffList.Count - 1; i >= 0; i--)
         {
             buffList[i].TimerUpdate();
+        }
+
+        if (Input.GetKeyDown(KeyCode.Insert))
+        {
+            if (name.Contains("Test"))
+            {
+                clipOverrides["NormalAttack"] = skillClips[0];
+                animatorOverrideController.ApplyOverrides(clipOverrides);
+            }
         }
     }
 
@@ -742,17 +776,9 @@ public abstract class AttackableUnit : MonoBehaviour
                 {
                     Logger.Debug(name + " " + skillClips[idx].name);
 
-                    if (animator.runtimeAnimatorController is AnimatorOverrideController overrideController)
-                    {
-                        var anims = new List<KeyValuePair<AnimationClip, AnimationClip>>();
-                        AnimationClip clipToReplace = animator.runtimeAnimatorController.animationClips.FirstOrDefault(x => x.name == "NormalAttack");
-                        //anims.Add(new KeyValuePair<AnimationClip, AnimationClip>(clipToReplace, skillClips[idx]));
+                    clipOverrides["NormalAttack"] = skillClips[idx];
+                    animatorOverrideController.ApplyOverrides(clipOverrides);
 
-
-                        overrideController.ApplyOverrides(anims);
-                        overrideController[clipToReplace] = skillClips[idx];
-                        animator.runtimeAnimatorController = overrideController;
-                    }
                 }
                 nowAttack = attack;
                 return true;
