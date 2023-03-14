@@ -36,7 +36,6 @@ public class AttackableHero : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.ReturnPosition: // 재배치
-                    Logger.Debug("ReturnPosition");
                     pathFind.isStopped = false;
                     pathFind.stoppingDistance = 0; //가까이 가기
                     pathFind.SetDestination(returnPos.position); //재배치 위치 설정
@@ -53,7 +52,6 @@ public class AttackableHero : AttackableUnit
                     testRot = false;
                     break;
                 case UnitState.MoveNext:
-                    Logger.Debug("MoveNext");
                     pathFind.isStopped = false;
                     pathFind.SetDestination(transform.position);
                     nowUpdate = MoveNextUpdate;
@@ -191,11 +189,13 @@ public class AttackableHero : AttackableUnit
         battleState = UnitBattleState.None;
         
         lateReturn = false;
-        lastActiveSkillTime  = lastNavTime = Time.time;
+        lastNavTime = Time.time;
         ResetCoolDown();
         target = null;
         animator.Rebind();
         UnitHp = characterData.data.currentHp;
+
+        heroUI.heroSkill.SetCoolTime(characterData.activeSkill.preCooldown);
     }
 
     public override void ReadyActiveSkill()

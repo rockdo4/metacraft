@@ -793,6 +793,8 @@ public abstract class AttackableUnit : MonoBehaviour
     public void ResetCoolDown()
     {
         foreach (CharacterSkill skill in characterData.attacks)
-            lastNormalAttackTime[skill] = Time.time;
+        {
+            lastNormalAttackTime[skill] = Time.time + skill.preCooldown;
+        }
     }
 }
