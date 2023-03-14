@@ -33,6 +33,12 @@ public class AttackableEnemy : AttackableUnit
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.stoppingDistance = minAttackDis;
 
+                    // 매니저 못 찾아서 임시로 추가
+                    {
+                        var manager = FindObjectOfType<BattleManager>();
+                        if (manager != null)
+                            battleManager = manager;
+                    }
                     battleManager.GetCurrBtMgr().GetEnemyList(ref enemyList);
                     battleManager.GetHeroList(ref heroList);
 

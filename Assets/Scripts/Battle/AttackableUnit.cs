@@ -254,6 +254,9 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     protected void RangeSearch()
     {
+        if (nowAttack == null)
+            return;
+
         lastSearchTime = Time.time;
         var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
         var minTarget = GetSearchTargetInAround(targetList, nowAttack.distance / 2);
