@@ -9,8 +9,8 @@ public class MissionManager : View
     public TextMeshProUGUI dayOfweek;
     // public Slider apGauge;
 
-    public Image portrait;
-    public TextMeshProUGUI explanation;
+    public Image portrait;  //Boss portrait
+    public TextMeshProUGUI explanation;  //
 
     public TextMeshProUGUI ExpectedCost;
     public GameObject[] heroSlots;
@@ -45,7 +45,6 @@ public class MissionManager : View
 
     private void Start()
     {
-        gm = GameManager.Instance;
         missionInfoTable = gm.missionInfoList;
 
         heroSlotsIndex = 0;
@@ -68,22 +67,6 @@ public class MissionManager : View
             }
     }
 
-    private void temp()
-    {
-        string a = "";
-        var list = CSVReader.ReadByPath(a);
-
-
-        int i = 0;
-        var id = list[i]["ID"];
-        var name = list[i]["NAME"];
-
-        Dictionary<int, string> aaaaaaaaa;
-
-        aaaaaaaaa.Add()
-    }
-
-
     public void UpdateMissionDay()
     {
         dayOfweek.text = $"{gm.playerData.currentDay}요일";
@@ -95,9 +78,9 @@ public class MissionManager : View
         var dic = missionInfoTable[num];
         gm.currentSelectMission = dic;
 
-        portrait.sprite = gm.iconSprites[$"Icon_{dic["BossID"]}"];
+        //portrait.sprite = gm.iconSprites[$"Icon_{dic["BossID"]}"];  보스아이디 적 테이블에서 불러와야함
         explanation.text = $"{dic["OperationDescription"]}";
-        //삭제예정ExpectedCost.text = $"{dic["ExpectedCostID"]}";
+        //ExpectedCost.text = $"{dic["ExpectedCostID"]}";  삭제예정
         gm.ClearBattleGroups();
         for (int i = 0; i < heroSlots.Length; i++)
         {
@@ -111,18 +94,19 @@ public class MissionManager : View
             fitProperties[i].color = Color.white;
         }
         //deductionAP.text = $"AP -{dic["ConsumptionBehavior"]}";
-        ProperCombatPower.text = $"0/{dic["ProperCombatPower"]}";
+        //ProperCombatPower.text = $"0/{dic["ProperCombatPower"]}";
         ProperCombatPower.color = Color.white;
 
-        int erCount = expectedRewards.Count;
-        for (int i = 0; i < erCount; i++)
-        {
-            RewardItem ri = expectedRewards[i].GetComponent<RewardItem>();
-            if (i == 0)
-                ri.SetData("골드", $"{dic["Compensation"]}");
-            else
-                ri.SetData($"아이템{i}");
-        }
+        //보상 테이블 연결 필요
+        //int erCount = expectedRewards.Count;
+        //for (int i = 0; i < erCount; i++)
+        //{
+        //    RewardItem ri = expectedRewards[i].GetComponent<RewardItem>();
+        //    if (i == 0)
+        //        ri.SetData("골드", $"{dic["Compensation"]}");
+        //    else
+        //        ri.SetData($"아이템{i}");
+        //}
     }
 
     // Mission Hero Info Button 에서 호출
@@ -152,7 +136,7 @@ public class MissionManager : View
         }
 
         PropertyMatchingCheck();
-        TotalPowerCheck();
+        //TotalPowerCheck(); 삭제 예정
     }
 
     // Hero Slot 에서 Index 전달
@@ -185,21 +169,21 @@ public class MissionManager : View
         }
     }
 
-    // 전투력 합계 체크
-    private void TotalPowerCheck()
-    {
-        var selectedHeroes = gm.GetSelectedHeroes();
+    //// 전투력 합계 체크  삭제 예정
+    //private void TotalPowerCheck()
+    //{
+    //    var selectedHeroes = gm.GetSelectedHeroes();
 
-        int totalPower = 0;
-        foreach (var hero in selectedHeroes)
-        {
-            if (hero != null)
-                totalPower += hero.GetComponent<CharacterDataBundle>().data.Power;
-        }
-        var properCombatPower = gm.currentSelectMission["ProperCombatPower"];
-        ProperCombatPower.text = $"{totalPower}/{properCombatPower}";
-        ProperCombatPower.color = totalPower < (int)properCombatPower ? Color.red : Color.white;
-    }
+    //    int totalPower = 0;
+    //    foreach (var hero in selectedHeroes)
+    //    {
+    //        if (hero != null)
+    //            totalPower += hero.GetComponent<CharacterDataBundle>().data.Power;
+    //    }
+    //    var properCombatPower = gm.currentSelectMission["ProperCombatPower"];
+    //    ProperCombatPower.text = $"{totalPower}/{properCombatPower}";
+    //    ProperCombatPower.color = totalPower < (int)properCombatPower ? Color.red : Color.white;
+    //}
 
     public void StartMission()
     {
