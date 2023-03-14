@@ -225,7 +225,7 @@ public class AttackableHero : AttackableUnit
         BattleState = UnitBattleState.ActiveSkill;
         if (coOnIndicator != null)
         {
-            GetActiveSkillAOE().readyEffectUntillOnActiveSkill();
+            GetActiveSkillAOE().ReadyEffectUntillOnActiveSkill();
             StopAOESkillCoroutine();
         }
     }

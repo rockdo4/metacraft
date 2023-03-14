@@ -193,8 +193,18 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void ReadyActiveSkill();
     public virtual void OnActiveSkill()
     {
-        bool isCritical = false;
         characterData.activeSkill.OnActiveSkill(this);
+
+        var units = characterData.activeSkill.SkillEffectedUnits;
+        for (int i = 0; i < units.Count; i++)
+        {
+            foreach (var buff in attackkbuffs)
+            {
+                bool isCritical = false;
+                var value = CalculDamage(characterData.activeSkill, ref isCritical);
+                units[i].AddBuff(buff, value, null);
+            }
+        }
     }
 
     public virtual void NormalAttackOnDamage()
@@ -620,8 +630,7 @@ public abstract class AttackableUnit : MonoBehaviour
                         {
                             UnitHp += anotherValue;
                             if (isThereDamageUI)
-                            {
-                                Logger.Debug(111);
+                            {   
                                 floatingDamageText.OnAttack(anotherValue, false, transform.position, DamageType.Heal);
                             }
                         }                        

@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerData
 {
     public string playerId = "000001";
-    public string playerName = "¸®¾ó½ºÅæ";
+    public string playerName = "default name";
     public DayOfWeek currentDay = DayOfWeek.¿ù;
     public int cumulateGameDay = 0;
     public int gold = 0;
