@@ -19,7 +19,7 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     private bool isMiddleBoss = false;
 
     private int spawnCount = 0;
-    public List<AttackableEnemy> enemys = new();
+    public List<List<AttackableEnemy>> enemys = new();
 
     // 임시
     public AttackableEnemy middleBoss;
@@ -51,28 +51,26 @@ public class EnemySpawningAndPositioning : MonoBehaviour
         for (int i = 0; i < spawn.Count; i++)
         {
             enemyPool.Add(spawn[i]);
-            enemys.Add(spawn[i]);
+            for (int j = 0; j < enemys.Count; j++)
+            {
+                enemys[j].Add(spawn[i]);
+            }
         }
     }
     private IEnumerator CoInfinityRespawn(float timer)
     {
-        if (isMiddleBoss)
-            yield break;
-
-        float saveTimer = timer;
-        while (timer >= 0f)
-        {
-            timer -= Time.deltaTime;
-            yield return new WaitForSeconds(Time.deltaTime);
-        }
+        yield return new WaitForSeconds(timer);
 
         // 리스폰 후 다시 코루틴 시작
-        for (int i = 0; i < enemys.Count; i++)
+        for (int i = 0; i < enemys[spawnCount].Count; i++)
         {
-            enemys[i].SetEnabledPathFind(true);
-            enemys[i].gameObject.SetActive(true);
-            enemys[i].ChangeUnitState(UnitState.Battle);
+            enemys[spawnCount][i].SetEnabledPathFind(true);
+            enemys[spawnCount][i].gameObject.SetActive(true);
+            enemys[spawnCount][i].ChangeUnitState(UnitState.Battle);
         }
+
+        if (isMiddleBoss)
+            yield break;
 
         spawnCount++;
         if (spawnCount == waveCount)
@@ -81,7 +79,7 @@ public class EnemySpawningAndPositioning : MonoBehaviour
             yield break;
         }
 
-        coInfinityRespawn = StartCoroutine(CoInfinityRespawn(saveTimer));
+        coInfinityRespawn = StartCoroutine(CoInfinityRespawn(timer));
     }
 
     public List<AttackableEnemy> SpawnEnemy()
@@ -111,9 +109,10 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     {
         Vector3 trPos = tr.position;
 
-        for (int i = 0; i < waveCount; i++)
+        for (int i = 0; i < waveCount; i++) // 4
         {
-            for (int j = 0; j < enemyPrefabs.Count; j++)
+            enemys.Add(new List<AttackableEnemy>());
+            for (int j = 0; j < enemyPrefabs.Count; j++) // 3
             {
                 Vector3 randomArea = UnityEngine.Random.insideUnitSphere * spawnRange;
                 randomArea.y = 0f;
@@ -122,7 +121,7 @@ public class EnemySpawningAndPositioning : MonoBehaviour
 
                 var e = Instantiate(enemyPrefabs[j], randomArea, enemyPrefabs[j].gameObject.transform.rotation, tr);
                 enemyPool.Add(e);
-                enemys.Add(e);
+                enemys[i].Add(e);
             }
 
             if (isMiddleBoss)
@@ -131,13 +130,16 @@ public class EnemySpawningAndPositioning : MonoBehaviour
 
         if (isMiddleBoss)
         {
-            int maxHp = enemys.Max(enemy => enemy.GetUnitData().data.healthPoint);
+            int maxHp = enemys.SelectMany(x => x).Max(enemy => enemy.GetUnitData().data.healthPoint);
             for (int i = 0; i < enemys.Count; i++)
             {
-                if (enemys[i].GetUnitData().data.healthPoint == maxHp)
+                for (int j = 0; j < enemys[i].Count; j++)
                 {
-                    middleBoss = enemys[i];
-                    break;
+                    if (enemys[i][j].GetUnitData().data.healthPoint == maxHp)
+                    {
+                        middleBoss = enemys[i][j];
+                        break;
+                    }
                 }
             }
         }
