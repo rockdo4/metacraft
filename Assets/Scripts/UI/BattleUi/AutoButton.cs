@@ -11,7 +11,7 @@ public class AutoButton : MonoBehaviour
     Dictionary<bool, Color> burronColor = new();
     bool nowState = false;
 
-    private void Awake()
+    private void Init()
     {
         textColor[true] = Color.green;
         burronColor[true] = Color.white;
@@ -19,12 +19,18 @@ public class AutoButton : MonoBehaviour
         textColor[false] = new Color(0.2f, 0.2f, 0.2f);
         burronColor[false] = new Color(0.5f, 0.5f, 0.5f);
     }
+
     public void ResetData()
     {
         SetAutoState(GameManager.Instance.playerData.isAuto);
     }
     public void SetAutoState(bool state)
     {
+        if (textColor.Count == 0 || burronColor.Count == 0)
+        {
+            Init();
+        }
+
         nowState = state;
         butonImage.color = burronColor[nowState];
         stateTxt.color = textColor[nowState];

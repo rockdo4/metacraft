@@ -1,4 +1,5 @@
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BattleSpeed : MonoBehaviour
@@ -9,7 +10,8 @@ public class BattleSpeed : MonoBehaviour
     public float GetSpeed => speeds[idx];
     int idx = 0;
 
-    public static BattleSpeed Instance { get; private set; }
+    public static BattleSpeed Instance 
+    { get; private set; }
 
     private void Awake()
     {
@@ -17,6 +19,7 @@ public class BattleSpeed : MonoBehaviour
         idx = GameManager.Instance.playerData.battleSpeed;
         SetBattleSpeed(idx);
     }
+
     public void SetBattleSpeed(int idx)
     {
         Time.timeScale = speeds[idx];

@@ -34,7 +34,7 @@ public abstract class AttackableUnit : MonoBehaviour
     protected float searchDelay = 1f;
     protected float lastSearchTime;
 
-    protected NavMeshAgent pathFind;
+    public NavMeshAgent pathFind;
 
     [SerializeField, Header("현재 타겟")] protected AttackableUnit target;
     [SerializeField, Header("궁극기 타겟")] protected AttackableUnit activeTarget;
@@ -42,14 +42,12 @@ public abstract class AttackableUnit : MonoBehaviour
     [SerializeField, Header("에너미 리스트")] protected List<AttackableUnit> enemyList;
     [SerializeField, Header("시민 리스트")] protected List<AttackableUnit> citizenList;
 
-    public int MaxHp => (int)((bufferState.maxHealthIncrease * characterData.data.healthPoint * 0.01f) + characterData.data.healthPoint);
+    public int MaxHp => (int)(((bufferState.maxHealthIncrease / 100f) * characterData.data.healthPoint) + characterData.data.healthPoint);
     public float UnitHpScale => (float)characterData.data.currentHp / MaxHp;
-    public int UnitHp
-    {
+    public int UnitHp {
         get { return characterData.data.currentHp; }
-        set
-        {
-            characterData.data.currentHp = Mathf.Clamp(value, 0, MaxHp);
+        set {
+            characterData.data.currentHp = Mathf.Clamp(value, 0, MaxHp); 
         }
     }
 
@@ -79,7 +77,7 @@ public abstract class AttackableUnit : MonoBehaviour
     protected virtual UnitBattleState BattleState { get; set; }
 
     public bool IsAlive(AttackableUnit unit) => (unit != null) && (unit.gameObject.activeSelf) && (unit.UnitHp > 0);
-    protected bool CanNormalAttackTime => (Time.time - lastNormalAttackTime) * ((100 + bufferState.attackSpeed) * 0.01f) > characterData.attack.cooldown;
+    protected bool CanNormalAttackTime => (Time.time - lastNormalAttackTime) * ((100 + bufferState.attackSpeed) / 100f) > characterData.attack.cooldown;
     protected bool InRangeNormalAttack => Vector3.Distance(target.transform.position, transform.position) < characterData.attack.distance;
     protected bool InRangeActiveAttack => Vector3.Distance(activeTarget.transform.position, transform.position) < characterData.activeSkill.distance;
     protected bool NonActiveSkill => battleState != UnitBattleState.ActiveSkill && battleState != UnitBattleState.Stun;
@@ -90,9 +88,8 @@ public abstract class AttackableUnit : MonoBehaviour
     [SerializeField]
     protected BufferState bufferState = new();
 
-    protected bool isAuto = true;
-    public virtual bool IsAuto
-    {
+    protected bool isAuto = false;
+    public virtual bool IsAuto {
         get { return isAuto; }
         set { isAuto = value; }
     }
@@ -105,7 +102,31 @@ public abstract class AttackableUnit : MonoBehaviour
     protected AttackedDamageUI floatingDamageText;
     protected HpBarManager hpBarManager;
 
-    protected virtual void Awake()
+    //protected virtual void Awake()
+    //{
+    //    var manager = FindObjectOfType<BattleManager>();
+    //    if (manager != null)
+    //        battleManager = manager;
+
+    //    animator = GetComponentInChildren<Animator>();
+    //    unitSearchAi[UnitAiType.Rush] = RushSearch;
+    //    unitSearchAi[UnitAiType.Range] = RangeSearch;
+    //    unitSearchAi[UnitAiType.Assassin] = AssassinSearch;
+    //    unitSearchAi[UnitAiType.Supprot] = SupportSearch;
+
+    //    if (isThereDamageUI)
+    //    {
+    //        floatingDamageText = GetComponent<AttackedDamageUI>();
+
+    //        if (usingFloatingHpBar)
+    //        {
+    //            hpBarManager = GetComponent<HpBarManager>();
+    //            hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+    //        }
+    //    }
+    //}
+
+    protected void TempSetting()
     {
         var manager = FindObjectOfType<BattleManager>();
         if (manager != null)
@@ -156,9 +177,9 @@ public abstract class AttackableUnit : MonoBehaviour
     {
         LiveData data = GetUnitData().data;
         LevelUpAdditional(
-            (int)(data.baseDamage * multipleDamage),
-            (int)(data.baseDefense * multipleDefense),
-            (int)(data.healthPoint * multipleHealthPoint));
+            (int) (data.baseDamage * multipleDamage),
+            (int) (data.baseDefense * multipleDefense),
+            (int) (data.healthPoint * multipleHealthPoint));
     }
 
     protected void Update()
@@ -312,7 +333,7 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     public void RemoveBuffers()
     {
-        foreach (var buff in buffList)
+        foreach(var buff in buffList)
         {
             buff.timer = 0;
         }
@@ -326,27 +347,20 @@ public abstract class AttackableUnit : MonoBehaviour
     //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)
     public virtual void OnDamage(AttackableUnit attackableUnit, CharacterSkill skill)
     {
-        if (skill.searchType == SkillSearchType.Healer || skill.searchType == SkillSearchType.Buffer)
+        if ((skill.searchType == SkillSearchType.Healer || skill.searchType == SkillSearchType.Buffer))
         {
             return;
         }
         var defense = 100f / (100 + characterData.data.baseDefense + bufferState.defense);
-        var levelCorrection = 1 + Mathf.Clamp((attackableUnit.characterData.data.level - characterData.data.level) * 0.01f, -0.4f, 0);
+        var levelCorrection = 1 + Mathf.Clamp((attackableUnit.characterData.data.level - characterData.data.level) / 100f, -0.4f, 0);
 
         bool isCritical = false;
         var dmg = (int)(attackableUnit.CalculDamage(skill, ref isCritical) * defense * levelCorrection);
 
-        if (bufferState.isShield)
-        {
-            var shield = (int)(dmg * (bufferState.shield * 0.01f));
-
-            dmg -= shield;
-        }
-        UnitHp -= dmg;
+        UnitHp = Mathf.Max(UnitHp - dmg, 0);
         if (UnitHp <= 0)
         {
-            UnitHp = 0;
-            UnitState = UnitState.Die;
+            UnitState = UnitState.Die;            
         }
 
         ShowHpBarAndDamageText(dmg, isCritical);
@@ -367,10 +381,10 @@ public abstract class AttackableUnit : MonoBehaviour
         if (UnitHp <= 0)
         {
             hpBarManager.Die();
-        }
+        }        
     }
 
-    public void SearchNearbyTarget(List<AttackableUnit> list)
+    public void SearchNearbyTarget(List<AttackableUnit> list) 
     {
         AttackableUnit tempTarget = null;
         if (list.Count == 0)
@@ -388,7 +402,7 @@ public abstract class AttackableUnit : MonoBehaviour
                 continue;
 
             var unitDis = Vector3.Distance(position, list[i].transform.position);
-            if (unitDis <= minDis)
+            if(unitDis <= minDis)
             {
                 minDis = unitDis;
                 tempTarget = list[i];
@@ -396,7 +410,7 @@ public abstract class AttackableUnit : MonoBehaviour
         }
         target = tempTarget;
     }
-    public AttackableUnit GetSearchNearbyTarget(List<AttackableUnit> list)
+    public AttackableUnit GetSearchNearbyTarget(List<AttackableUnit> list) 
     {
         AttackableUnit minTarget = null;
         if (list.Count == 0)
@@ -421,17 +435,17 @@ public abstract class AttackableUnit : MonoBehaviour
         }
         return minTarget;
     }
-    public AttackableUnit GetSearchTargetInAround(List<AttackableUnit> list, float dis)
+    public AttackableUnit GetSearchTargetInAround(List<AttackableUnit> list, float dis) 
     {
         AttackableUnit minTarget = GetSearchNearbyTarget(list);
         if (minTarget == null)
             return null;
-        else if (Vector3.Distance(minTarget.transform.position, transform.position) < dis)
-            return minTarget;
+        else if(Vector3.Distance(minTarget.transform.position, transform.position) < dis)
+                return minTarget;
         else
             return null;
     }
-    protected void SearchMaxHealthTarget(List<AttackableUnit> list)
+    protected void SearchMaxHealthTarget(List<AttackableUnit> list) 
     {
         AttackableUnit tempTarget = null;
         if (list.Count == 0)
@@ -448,7 +462,7 @@ public abstract class AttackableUnit : MonoBehaviour
             if (!IsAlive(list[i]))
                 continue;
 
-            if (maxHp == list[i].UnitHp)
+            if(maxHp == list[i].UnitHp)
             {
                 tempTarget = Vector3.Distance(transform.position, list[i].transform.position) < minDis ?
                     list[i] : tempTarget;
@@ -462,7 +476,7 @@ public abstract class AttackableUnit : MonoBehaviour
         }
         target = tempTarget;
     }
-    protected void SearchMinHealthTarget(List<AttackableUnit> list)
+    protected void SearchMinHealthTarget(List<AttackableUnit> list) 
     {
         AttackableUnit tempTarget = null;
         if (list.Count == 0)
@@ -493,7 +507,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
         target = tempTarget;
     }
-    protected AttackableUnit GetSearchMinHealthScaleTarget(List<AttackableUnit> list)
+    protected AttackableUnit GetSearchMinHealthScaleTarget(List<AttackableUnit> list) 
     {
         AttackableUnit nowTarget = null;
         if (list.Count == 0)
@@ -544,7 +558,10 @@ public abstract class AttackableUnit : MonoBehaviour
 
                 if (distOther < dist)
                 {
-                    (list[j], list[i]) = (list[i], list[j]);
+                    AttackableUnit temp = list[i];
+                    list[i] = list[j];
+                    list[j] = temp;
+
                     dist = distOther;
                 }
             }
@@ -577,10 +594,14 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public void SetBattleManager(BattleManager manager) => battleManager = manager;
     public void SetEnabledPathFind(bool set) => pathFind.enabled = set;
+    public void SetPathFind()
+    {
+        pathFind = transform.GetComponent<NavMeshAgent>();
+    }
 
     // 여기에 State 초기화랑 트리거 모두 해제하는 코드 작성
 
-    public virtual void AddBuff(BuffInfo info, int anotherValue, BuffIcon icon = null)
+    public virtual void AddBuff(BuffInfo info, int anotherValue , BuffIcon icon = null)
     {
         var findBuff = buffList.Find(t => t.buffInfo.id == info.id);
         if (findBuff != null)
@@ -591,7 +612,7 @@ public abstract class AttackableUnit : MonoBehaviour
         {
             if (info.fraction == 0)
             {
-                switch (info.type)
+                switch(info.type)
                 {
                     case BuffType.Heal:
                         {
@@ -601,7 +622,7 @@ public abstract class AttackableUnit : MonoBehaviour
                                 Logger.Debug(111);
                                 floatingDamageText.OnAttack(anotherValue, false, transform.position, DamageType.Heal);
                             }
-                        }
+                        }                        
                         break;
                 }
             }
@@ -641,7 +662,7 @@ public abstract class AttackableUnit : MonoBehaviour
                     default:
                         break;
                 }
-                Buff buff = new (info, this, RemoveBuff, icon, endEvent);
+                Buff buff = new Buff(info, this, RemoveBuff, icon, endEvent);
                 buffList.Add(buff);
                 bufferState.Buffer(info.type, info.buffValue);
 
@@ -652,13 +673,13 @@ public abstract class AttackableUnit : MonoBehaviour
             }
 
         }
-    }
-    public void BuffDurationUpdate(int id, float dur) => buffList.Find(t => t.buffInfo.id == id).timer = dur;
+    }   
+    public void BuffDurationUpdate(int id, float dur) => buffList.Find(t => t.buffInfo.id == id).timer= dur;
     public virtual void RemoveBuff(Buff buff)
     {
         buffList.Remove(buff);
         bufferState.RemoveBuffer(buff.buffInfo.type, buff.buffInfo.buffValue);
-        UnitHp = UnitHp; // ??
+        UnitHp = UnitHp;
     }
 
     public void SetMaxHp()
@@ -669,13 +690,23 @@ public abstract class AttackableUnit : MonoBehaviour
     public int CalculDamage(CharacterSkill skill, ref bool isCritical)
     {
         var buffDamage = skill.CreateDamageResult(characterData.data, bufferState);
-        isCritical = UnityEngine.Random.Range(0f, 1f) < characterData.data.critical + (bufferState.criticalProbability * 0.01f);
+        isCritical = UnityEngine.Random.Range(0f, 1f) < characterData.data.critical + (bufferState.criticalProbability / 100f);
         if (isCritical)
         {
-            buffDamage = (int)(buffDamage * (characterData.data.criticalDmg + (bufferState.criticalDamage * 0.01f)));
+            buffDamage = (int)(buffDamage * (characterData.data.criticalDmg + (bufferState.criticalDamage / 100f)));
         }
-        buffDamage = (int)(buffDamage * (100 + bufferState.damageDecrease) * 0.01f);
 
         return buffDamage;
+    }
+    public void MoveNext(Vector3 movePos)
+    {
+        SetNoneState();
+        pathFind.stoppingDistance = 0f;
+        pathFind.SetDestination(movePos);
+    }
+    public void SetNoneState()
+    {
+        unitState = UnitState.None;
+        battleState = UnitBattleState.None;
     }
 }

@@ -22,14 +22,14 @@ public class AttackableEnemy : AttackableUnit
                     nowUpdate = null;
                     break;
                 case UnitState.Idle:
-                    pathFind.isStopped = true;
+                    //pathFind.isStopped = true;
 
                     animator.SetFloat("Speed", 0);
 
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
-                    pathFind.isStopped = false;
+                    //pathFind.isStopped = false;
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.stoppingDistance = characterData.attack.distance;
 
@@ -42,7 +42,7 @@ public class AttackableEnemy : AttackableUnit
                     nowUpdate = BattleUpdate;
                     break;
                 case UnitState.Die:
-                    pathFind.enabled = false;
+                    //pathFind.enabled = false;
                     gameObject.GetComponent<Collider>().enabled = false;
                     animator.SetTrigger("Die");
 
@@ -95,25 +95,40 @@ public class AttackableEnemy : AttackableUnit
 
     public bool isMapTriggerEnter = false;
 
-    protected override void Awake()
+    //protected override void Awake()
+    //{
+    //    base.Awake();
+    //    pathFind = transform.GetComponent<NavMeshAgent>();
+    //    characterData.InitSetting();
+    //    SetData();
+
+    //    unitState = UnitState.Idle;
+    //    lastNormalAttackTime = Time.time;
+
+    //    hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+
+    //}
+
+    private void Awake()
     {
-        base.Awake();
-        pathFind = transform.GetComponent<NavMeshAgent>();
+        TempSetting();
+
+        SetPathFind();
         characterData.InitSetting();
         SetData();
 
         unitState = UnitState.Idle;
         lastNormalAttackTime = Time.time;
 
-
-
+        hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
     }
+
     public override void ResetData()
     {
         UnitState = UnitState.None;
         battleState = UnitBattleState.None;
         UnitHp = characterData.data.healthPoint;
-        //hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+        hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
         lastActiveSkillTime = lastNormalAttackTime = lastNavTime = Time.time;
         target = null;
         animator.Rebind();
