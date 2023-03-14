@@ -1,8 +1,6 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -42,7 +40,7 @@ public abstract class AttackableUnit : MonoBehaviour
     protected float searchDelay = 1f;
     protected float lastSearchTime;
 
-    protected NavMeshAgent pathFind;
+    public NavMeshAgent pathFind;
 
     [SerializeField, Header("ÇöÀç Å¸°Ù")] protected AttackableUnit target;
     [SerializeField, Header("±Ã±Ø±â Å¸°Ù")] protected AttackableUnit activeTarget;
@@ -196,8 +194,18 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void ReadyActiveSkill();
     public virtual void OnActiveSkill()
     {
-        bool isCritical = false;
         characterData.activeSkill.OnActiveSkill(this);
+
+        var units = characterData.activeSkill.SkillEffectedUnits;
+        for (int i = 0; i < units.Count; i++)
+        {
+            foreach (var buff in attackkbuffs)
+            {
+                bool isCritical = false;
+                var value = CalculDamage(characterData.activeSkill, ref isCritical);
+                units[i].AddBuff(buff, value, null);
+            }
+        }
     }
 
     public virtual void NormalAttackOnDamage()
@@ -372,11 +380,6 @@ public abstract class AttackableUnit : MonoBehaviour
         if (UnitHp <= 0)
         {
             UnitState = UnitState.Die;            
-        }
-
-        if(dmg < 0)
-        {
-            Logger.Debug("d");
         }
         ShowHpBarAndDamageText(dmg, isCritical);
     }
@@ -633,7 +636,7 @@ public abstract class AttackableUnit : MonoBehaviour
                         {
                             UnitHp += anotherValue;
                             if (isThereDamageUI)
-                            {
+                            {   
                                 floatingDamageText.OnAttack(anotherValue, false, transform.position, DamageType.Heal);
                             }
                         }                        
@@ -709,9 +712,23 @@ public abstract class AttackableUnit : MonoBehaviour
         {
             buffDamage = (int)(buffDamage * (characterData.data.criticalDmg + (bufferState.criticalDamage)));
         }
-        buffDamage = (int)(buffDamage * bufferState.damageDecrease);
+        else
+           buffDamage = (int)(buffDamage * bufferState.damageDecrease);
+
 
         return buffDamage;
+    }
+
+    public void MoveNext(Vector3 movePos)
+    {
+        SetNoneState();
+        pathFind.stoppingDistance = 0f;
+        pathFind.SetDestination(movePos);
+    }
+    public void SetNoneState()
+    {
+        unitState = UnitState.None;
+        battleState = UnitBattleState.None;
     }
 
     public bool FindNowAttack()

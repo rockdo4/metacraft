@@ -24,7 +24,7 @@ public class Utils
 
     public static void CopyTransform(GameObject gameObject, Transform dest)
     {
-        gameObject.transform.SetPositionAndRotation(dest.position, dest.rotation);
+        CopyPositionAndRotation(gameObject, dest);
         gameObject.transform.localScale = dest.localScale;
     }
 

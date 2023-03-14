@@ -1,4 +1,6 @@
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -22,14 +24,14 @@ public class AttackableEnemy : AttackableUnit
                     nowUpdate = null;
                     break;
                 case UnitState.Idle:
-                    pathFind.isStopped = true;
+                    //pathFind.isStopped = true;
 
                     animator.SetFloat("Speed", 0);
 
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
-                    pathFind.isStopped = false;
+                    //pathFind.isStopped = false;
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.stoppingDistance = minAttackDis;
 
@@ -42,7 +44,7 @@ public class AttackableEnemy : AttackableUnit
                     nowUpdate = BattleUpdate;
                     break;
                 case UnitState.Die:
-                    pathFind.enabled = false;
+                    //pathFind.enabled = false;
                     gameObject.GetComponent<Collider>().enabled = false;
                     animator.SetTrigger("Die");
 
@@ -202,7 +204,13 @@ public class AttackableEnemy : AttackableUnit
                 stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime >= 1.0f)
                 {
+                    if(name.Contains("Test"))
+                    {
+                        Logger.Debug("anime name : "  + animator.GetCurrentAnimatorClipInfo(0).FirstOrDefault(clip => clip.clip.nameHash == clipNameHash).clip.name);
+                        Logger.Debug(nowAttack.name + " End");
+                    }
                     NormalAttackEnd();
+                    //StartCoroutine(TestAttackEnd());
                 }
                 break;
             case UnitBattleState.Stun:
@@ -253,8 +261,10 @@ public class AttackableEnemy : AttackableUnit
         base.NormalAttackEnd();
         animator.SetTrigger("AttackEnd");
         lastNormalAttackTime[nowAttack] = Time.time;
+
         BattleState = UnitBattleState.BattleIdle;
     }
+
     public override void OnActiveSkill()    //테스트용
     {
         if (nowAttack.targetNumLimit == 1)

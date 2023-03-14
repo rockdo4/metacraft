@@ -1,18 +1,32 @@
-using System.Collections.Generic;
-using UnityEngine;
-
 public class DefenseMapInfo : BattleMapInfo
 {
-    private void Start()
+    public override void GameStart()
     {
-        FindEvManager();
+        base.GameStart();
         battleMapType = BattleMapEnum.Defense;
-        GameStart();
+
+        int index = 0;
+        for (int i = 0; i < triggers.Count; i++)
+        {
+            if (triggers[i].enemySettingPositions.Count > 0)
+            {
+                index = i;
+                break;
+            }
+        }
+
+        SettingMap(index);
+        battleMgr.SetEnemyTriggerIndex(index);
     }
 
-    private void GameStart()
+    private void SettingMap(int index)
     {
-        triggers[0].SpawnAllEnemy();
-        triggers[0].InfinityRespawnEnemy();
+        if (!init)
+        {
+            triggers[index].SpawnAllEnemy();
+            init = true;
+        }
+
+        triggers[index].InfinityRespawnEnemy();
     }
 }

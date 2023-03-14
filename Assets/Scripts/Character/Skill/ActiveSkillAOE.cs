@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ActiveSkillAOE", menuName = "Character/ActiveSkill/AOE")]
@@ -9,16 +10,19 @@ public class ActiveSkillAOE : CharacterSkill
     public LayerMask layerM;    
 
     public Transform ActorTransform { set { actorTransform = value; } }
-    private Transform actorTransform;
+    protected Transform actorTransform;
 
     public GameObject castRangeIndicatorPrefab;
     private GameObject castRangeIndicator;
     private Transform castRangeIndicatorTransform;
 
-    private Camera cam;
+    protected Camera cam;
     protected Transform indicatorTransform;
 
     public SkillAreaShape areaShapeType;
+    public SkillIndicatorTarget indicatorTargetWhenTrackTarget;
+    public bool isTrackTarget;
+    private LayerMask targetMaskWhenManualSkill;
 
     public float sectorRadius;
     public float sectorAngle;
@@ -28,6 +32,12 @@ public class ActiveSkillAOE : CharacterSkill
 
     public float castRangeLimit = 10f;
     private float sqrCastRangeLimit;
+
+    private bool skillStartFromCharacter;
+
+    private Collider[] colliders;
+    public int maxColliders = 32;
+    private Transform closestEnemyTransformWhenTrackTarget;
     public override void OnActive()
     {
         if (skillAreaIndicator != null &&
@@ -49,6 +59,16 @@ public class ActiveSkillAOE : CharacterSkill
         cam = Camera.main;
 
         sqrCastRangeLimit = castRangeLimit * castRangeLimit;
+
+        if (areaShapeType.Equals(SkillAreaShape.Sector))
+            skillStartFromCharacter = true;
+
+        if (isTrackTarget)
+        {
+            InitTrackTargetLayerMaskSet();
+            colliders = new Collider[maxColliders];
+            skillAreaIndicator.IsTrackTarget = true;
+        }
     }
     protected virtual void SetIndicatorScale()
     {
@@ -74,12 +94,7 @@ public class ActiveSkillAOE : CharacterSkill
         while (true)
         {
             MoveCastRangeIndicator();
-
-            if (isAuto)
-                MoveSkillToTargetAreaIndicator();
-            else
-                MoveSkillAreaIndicator();
-
+            MoveSkillAreaIndicator();
             yield return null;
         }
     }
@@ -87,53 +102,121 @@ public class ActiveSkillAOE : CharacterSkill
     {
         castRangeIndicatorTransform.position = actorTransform.position + Vector3.up * 0.1f; ;
     }
-    private void MoveSkillAreaIndicator()
+    protected virtual void MoveSkillAreaIndicator()
     {
         Ray ray = cam.ScreenPointToRay(Input.mousePosition);
-
         if (Physics.Raycast(ray, out RaycastHit hit, 100.0f, layerM))
-        {            
-            if (IsMouseInSkillRange(hit.point))
-            {
-                indicatorTransform.position = hit.point + Vector3.up * 0.1f;                
-            }
+        {
+            if (!isTrackTarget)
+                WhenManualTarget(hit);
             else
-            {
-                Vector3 point
-                    = Utils.IntersectPointCircleCenterToOut(actorTransform.position, castRangeLimit, hit.point);
-                
-                indicatorTransform.position = point + Vector3.up * 0.1f;
-            }
+                WhenTrackTarget(hit);
         }
     }
-    private void MoveSkillToTargetAreaIndicator()
+    private void WhenManualTarget(RaycastHit hit)
     {
-        if (IsMouseInSkillRange(targetPos))
+        if (!skillStartFromCharacter)
+            IndicatorPosToMouse(hit);
+        else
+            IndicatorOnlyChangeRotation(hit);
+    }
+    private void InitTrackTargetLayerMaskSet()
+    {
+        switch(indicatorTargetWhenTrackTarget)
         {
-            indicatorTransform.position = targetPos + Vector3.up * 0.1f;
+            case SkillIndicatorTarget.Self:
+                break;
+            case SkillIndicatorTarget.Enemy:
+                targetMaskWhenManualSkill = 1 << LayerMask.NameToLayer("Enemy");                
+                break;
+            case SkillIndicatorTarget.Friendly:
+                targetMaskWhenManualSkill = 1 << LayerMask.NameToLayer("Hero");
+                break;
+        }        
+    }
+    private void WhenTrackTarget(RaycastHit hit)
+    {        
+        //switch(indicatorTargetWhenAutoTarget)
+        //{
+        //    case SkillIndicatorTarget.Self:
+        //        break;
+        //    case SkillIndicatorTarget.Enemy:                
+        //        break;
+        //    case SkillIndicatorTarget.Friendly:
+        //        break;
+        //}
+        IndicatorPosTrack(hit);
+    }
+    private void IndicatorPosTrack(RaycastHit hit)
+    {
+        var target = isAuto ? targetPos : hit.point;
+
+        maxColliders = Physics.OverlapSphereNonAlloc(actorTransform.position, castRangeLimit, colliders, targetMaskWhenManualSkill);
+        
+        if (maxColliders.Equals(0))
+            return;
+
+        float closestDistance = Mathf.Infinity;
+
+        for (int i = 0; i < maxColliders; i++)
+        {
+            float distanceSQR = GetDistanceNoneSQRT(target, colliders[i].transform.position);
+            if (distanceSQR < closestDistance)
+            {
+                closestDistance = distanceSQR;
+                closestEnemyTransformWhenTrackTarget = colliders[i].transform;
+            }
+        }
+        
+        skillAreaIndicator.TrackTransform = closestEnemyTransformWhenTrackTarget;
+    }
+
+    private void IndicatorPosToMouse(RaycastHit hit)
+    {
+        var target = isAuto ? targetPos : hit.point;
+
+        if (IsTargetInRange(target))
+        {
+            indicatorTransform.position = target + Vector3.up * 0.1f;
         }
         else
         {
             Vector3 point
-                = Utils.IntersectPointCircleCenterToOut(actorTransform.position, castRangeLimit, targetPos);
+                = Utils.IntersectPointCircleCenterToOut(actorTransform.position, castRangeLimit, target);
 
             indicatorTransform.position = point + Vector3.up * 0.1f;
         }
     }
-    private bool IsMouseInSkillRange(Vector3 hitPoint)
+    private void IndicatorOnlyChangeRotation(RaycastHit hit)
+    {
+        var target = isAuto ? targetPos : hit.point;
+
+        indicatorTransform.position = actorTransform.position + Vector3.up * 0.1f;
+        indicatorTransform.LookAt(target + Vector3.up * 0.1f);
+    }
+
+    protected bool IsTargetInRange(Vector3 hitPoint)
     {
         var x = actorTransform.position.x - hitPoint.x;
         var z = actorTransform.position.z - hitPoint.z;
 
         return x * x + z * z < sqrCastRangeLimit;
     }
+    protected float GetDistanceNoneSQRT(Vector3 pos1, Vector3 pos2)
+    {
+        var x = pos1.x - pos2.x;
+        var z = pos1.z - pos2.z;
+
+        return x * x + z * z;
+    }
+
     public override void OnActiveSkill(AttackableUnit attackableUnit)
-    {        
+    {
         EffectManager.Instance.Get(activeEffect, indicatorTransform);
 
-        var targets = skillAreaIndicator.GetUnitsInArea();
+        skillEffectedUnits = skillAreaIndicator.GetUnitsInArea();
 
-        foreach (var target in targets)
+        foreach (var target in skillEffectedUnits)
         {            
             target.OnDamage(attackableUnit, this);
         }
@@ -150,7 +233,7 @@ public class ActiveSkillAOE : CharacterSkill
     {
         skillAreaIndicator?.gameObject.SetActive(false);
     }
-    public void readyEffectUntillOnActiveSkill()
+    public void ReadyEffectUntillOnActiveSkill()
     {
         EffectManager.Instance.Get(readyEffect, indicatorTransform);
         skillAreaIndicator.Renderer.enabled = false;

@@ -145,8 +145,6 @@ public class AttackableHero : AttackableUnit
     //}
     private void Awake()
     {
-        Debug.Log("Hero Awake");
-
         var activeSkill = characterData.activeSkill as ActiveSkillAOE;
         activeSkill.ActorTransform = transform;
 
@@ -223,7 +221,7 @@ public class AttackableHero : AttackableUnit
         BattleState = UnitBattleState.ActiveSkill;
         if (coOnIndicator != null)
         {
-            GetActiveSkillAOE().readyEffectUntillOnActiveSkill();
+            GetActiveSkillAOE().ReadyEffectUntillOnActiveSkill();
             StopAOESkillCoroutine();
         }
     }
@@ -393,7 +391,7 @@ public class AttackableHero : AttackableUnit
     public override void OnDamage(AttackableUnit attackableUnit, CharacterSkill skill)
     {
         base.OnDamage(attackableUnit, skill);
-        heroUI.SetHp(UnitHp,MaxHp);
+        heroUI.SetHp(UnitHp, MaxHp);
 
     }
 
