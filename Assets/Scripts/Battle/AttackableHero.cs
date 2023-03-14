@@ -36,6 +36,7 @@ public class AttackableHero : AttackableUnit
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.ReturnPosition: // 재배치
+                    Logger.Debug("ReturnPosition");
                     pathFind.isStopped = false;
                     pathFind.stoppingDistance = 0; //가까이 가기
                     pathFind.SetDestination(returnPos.position); //재배치 위치 설정
@@ -52,6 +53,7 @@ public class AttackableHero : AttackableUnit
                     testRot = false;
                     break;
                 case UnitState.MoveNext:
+                    Logger.Debug("MoveNext");
                     pathFind.isStopped = false;
                     pathFind.SetDestination(transform.position);
                     nowUpdate = MoveNextUpdate;

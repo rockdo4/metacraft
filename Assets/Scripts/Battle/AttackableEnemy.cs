@@ -148,7 +148,7 @@ public class AttackableEnemy : AttackableUnit
     }
     protected override void BattleUpdate()
     {
-        if(attackDelayTimer < attackDelay)
+        if(attackDelayTimer < attackDelay || UnitState == UnitState.Die)
         {
             attackDelayTimer += Time.deltaTime;
             return;
