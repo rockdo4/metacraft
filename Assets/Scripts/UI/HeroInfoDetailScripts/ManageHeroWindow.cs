@@ -13,7 +13,7 @@ public class ManageHeroWindow : View
     {
         SetList();
 
-        int count = GameManager.Instance.playerData.characterCount;
+        int count = GameManager.Instance.heroDatabase.Count;
         for (int i = 0; i < count; i++)
         {
             GameObject obj = Instantiate(heroInfoPrefab, contents);
@@ -72,7 +72,7 @@ public class ManageHeroWindow : View
             count++;
         }
 
-        int max = GameManager.Instance.playerData.characterCount;
+        int max = GameManager.Instance.heroDatabase.Count;
         for (int index = count; index < max; index++)
         {
             heroInfos[index].gameObject.SetActive(false);
