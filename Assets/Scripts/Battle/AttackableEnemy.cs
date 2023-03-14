@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.AI;
 
 public class AttackableEnemy : AttackableUnit
 {
@@ -87,6 +85,8 @@ public class AttackableEnemy : AttackableUnit
     }
 
     public bool isMapTriggerEnter = false;
+    float attackDelay = 1f;
+    float attackDelayTimer = 0f;
 
     //protected override void Awake()
     //{
@@ -148,6 +148,12 @@ public class AttackableEnemy : AttackableUnit
     }
     protected override void BattleUpdate()
     {
+        if(attackDelayTimer < attackDelay)
+        {
+            attackDelayTimer += Time.deltaTime;
+            return;
+        }
+
         switch (BattleState)
         {
             //타겟에게 이동중이거나, 공격 대기중에 타겟이 죽으면 재탐색
@@ -209,6 +215,7 @@ public class AttackableEnemy : AttackableUnit
                         Logger.Debug(nowAttack.name + " End");
                     }
                     NormalAttackEnd();
+                    attackDelayTimer = 0f;
                     //StartCoroutine(TestAttackEnd());
                 }
                 break;
@@ -262,8 +269,7 @@ public class AttackableEnemy : AttackableUnit
         lastNormalAttackTime[nowAttack] = Time.time;
 
         BattleState = UnitBattleState.BattleIdle;
-    }
-
+    } 
     public override void OnActiveSkill()    //테스트용
     {
         if (nowAttack.targetNumLimit == 1)
