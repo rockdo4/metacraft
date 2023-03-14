@@ -1,38 +1,35 @@
 ﻿using System;
 using UnityEngine;
 using System.Text;
+using System.Collections.Generic;
 
 [Serializable]
 public class LiveData : IComparable<LiveData>
 {
+    // 정보
     public string name;            // 이름
-    public int grade;              // 등급
-    public int maxGrade;           // 승급 가능 최대 등급
+    public int grade = 1;          // 등급
+    public int maxGrade = 5;       // 승급 가능 최대 등급
 
-    public string job;             // 직업, 특성
+    public string job;             // 직업
+    public List<string> tags;      // 태그(특성)
 
     public int level = 1;          // 레벨
-    public int exp;                // 경험치
-    public int likeability;        // 호감도
+    public int exp = 0;            // 경험치
+    public int likeability = 0;    // 호감도
 
-    public int Power
-    {
-        // 전투력 계산식
-        get { return baseDamage + baseDefense + healthPoint * 10; }
-    }
-
-    //private int power;              // 전투력
+    // 스텟
     public int baseDamage = 50;     // 일반 공격 데미지
     public int baseDefense = 0;     // 방어력
     public int healthPoint = 500;   // 최대 체력
-    public int currentHp = 500;   // 현재 체력
-    public int moveSpeed = 3;        // 이동 속도. 범위, 초기값 설정 필요
-    public float critical = 0f;      // 크리티컬 확률
-    public float criticalDmg = 2f;   // 크리티컬 데미지 배율
-    public float evasion = 0f;       // 회피율
-    public float accuracy = 1f;    // 명중률
+    public int currentHp = 500;     // 현재 체력
+    public int moveSpeed = 3;       // 이동 속도. 범위, 초기값 설정 필요
+    public float critical = 0f;     // 크리티컬 확률
+    public float criticalDmg = 2f;  // 크리티컬 데미지 배율
+    public float evasion = 0f;      // 회피율
+    public float accuracy = 1f;     // 명중률
 
-    public GameObject equipment; // 장비
+    public GameObject equipment;    // 장비
 
     public int CompareTo(LiveData other)
     {
@@ -101,3 +98,11 @@ public class LiveData : IComparable<LiveData>
         Logger.Debug(sb);
     }
 }
+
+//public int Power
+//{
+//    // 전투력 계산식
+//    get { return baseDamage + baseDefense + healthPoint * 10; }
+//}
+
+//private int power;              // 전투력

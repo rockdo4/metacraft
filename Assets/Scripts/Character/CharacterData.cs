@@ -1,16 +1,19 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "CharacterData", menuName = "Character/CharacterData")]
 public class CharacterData : ScriptableObject, IComparable<CharacterData>
 {
+    // 정보
     public new string   name;               // 이름
     [Range(1, 5)]
     public int          grade = 1;          // 등급
     [Range(1, 5)]
     public int          maxGrade = 5;       // 승급 가능 최대 등급
 
-    public string       job;                // 직업, 특성
+    public string       job;                // 직업
+    public List<string> tags;               // 태그(특성)
 
     [Range(1, 20)]
     public int          level = 1;          // 레벨
@@ -18,14 +21,7 @@ public class CharacterData : ScriptableObject, IComparable<CharacterData>
     [Range(0, 1000)]
     public int          likeability = 0;    // 호감도
 
-    //public int Power
-    //{
-    //    // 전투력 계산식
-    //    private set { power = baseDamage + baseDefense + healthPoint * 10; }
-    //    get { return power; }
-    //}
-
-    //private int power;            // 전투력
+    // 스텟
     public int baseDamage = 50;     // 일반 공격 데미지
     public int baseDefense = 0;     // 방어력
     public int healthPoint = 500;   // 최대 체력
