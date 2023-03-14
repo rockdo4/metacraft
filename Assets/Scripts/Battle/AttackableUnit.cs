@@ -10,6 +10,11 @@ public abstract class AttackableUnit : MonoBehaviour
     [SerializeField, Header("캐릭터 데이터")]
     protected CharacterDataBundle characterData;
     public CharacterDataBundle GetUnitData() => characterData;
+    [SerializeField, Header("현재 스킬")]
+    protected CharacterSkill nowAttack;
+    protected CharacterSkill GetNowAttack() => nowAttack;
+    protected float minAttackDis = float.MaxValue;
+    public AnimationClip[] skillClips;
 
     [Header("캐릭터 타입")]
     public UnitType unitType;
@@ -34,7 +39,7 @@ public abstract class AttackableUnit : MonoBehaviour
     protected float searchDelay = 1f;
     protected float lastSearchTime;
 
-    protected NavMeshAgent pathFind;
+    public NavMeshAgent pathFind;
 
     [SerializeField, Header("현재 타겟")] protected AttackableUnit target;
     [SerializeField, Header("궁극기 타겟")] protected AttackableUnit activeTarget;
@@ -51,7 +56,7 @@ public abstract class AttackableUnit : MonoBehaviour
         }
     }
 
-    protected float lastNormalAttackTime;
+    protected Dictionary<CharacterSkill, float> lastNormalAttackTime = new();
     protected float lastActiveSkillTime;
 
     protected float lastNavTime;
@@ -77,8 +82,9 @@ public abstract class AttackableUnit : MonoBehaviour
     protected virtual UnitBattleState BattleState { get; set; }
 
     public bool IsAlive(AttackableUnit unit) => (unit != null) && (unit.gameObject.activeSelf) && (unit.UnitHp > 0);
-    protected bool CanNormalAttackTime => (Time.time - lastNormalAttackTime) * ((100 + bufferState.attackSpeed) / 100f) > characterData.attack.cooldown;
-    protected bool InRangeNormalAttack => Vector3.Distance(target.transform.position, transform.position) < characterData.attack.distance;
+    protected bool CanNormalAttackTime(CharacterSkill skill) => (Time.time - lastNormalAttackTime[skill]) * ((100 + bufferState.attackSpeed) / 100f) > skill.cooldown;
+    protected bool InRangeNormalAttack(CharacterSkill skill) => Vector3.Distance(target.transform.position, transform.position) < skill.distance;
+    protected bool InRangeMinNormalAttack => Vector3.Distance(target.transform.position, transform.position) < minAttackDis;
     protected bool InRangeActiveAttack => Vector3.Distance(activeTarget.transform.position, transform.position) < characterData.activeSkill.distance;
     protected bool NonActiveSkill => battleState != UnitBattleState.ActiveSkill && battleState != UnitBattleState.Stun;
     //나중에는 NonActiveSkill 상태일시에 스킬버튼을 비활성화 하기
@@ -88,7 +94,7 @@ public abstract class AttackableUnit : MonoBehaviour
     [SerializeField]
     protected BufferState bufferState = new();
 
-    protected bool isAuto = true;
+    protected bool isAuto = false;
     public virtual bool IsAuto {
         get { return isAuto; }
         set { isAuto = value; }
@@ -102,42 +108,46 @@ public abstract class AttackableUnit : MonoBehaviour
     protected AttackedDamageUI floatingDamageText;
     protected HpBarManager hpBarManager;
 
-    ////
-    bool hasOutline;
-    protected Outline outline;
-    ////
-
-    protected virtual void Awake()
+    private void Start()
     {
         var manager = FindObjectOfType<BattleManager>();
         if (manager != null)
             battleManager = manager;
+    }
 
+    protected void InitData()
+    {
         animator = GetComponentInChildren<Animator>();
         unitSearchAi[UnitAiType.Rush] = RushSearch;
         unitSearchAi[UnitAiType.Range] = RangeSearch;
         unitSearchAi[UnitAiType.Assassin] = AssassinSearch;
         unitSearchAi[UnitAiType.Supprot] = SupportSearch;
 
-        if(isThereDamageUI)
+        if (isThereDamageUI)
         {
             floatingDamageText = GetComponent<AttackedDamageUI>();
 
-            if(usingFloatingHpBar)
+            if (usingFloatingHpBar)
             {
                 hpBarManager = GetComponent<HpBarManager>();
                 hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
-            }            
+            }
         }
 
-        //
-        hasOutline = TryGetComponent<Outline>(out outline);
-        //
+        nowAttack = characterData.attacks[0];
+        foreach (CharacterSkill skill in characterData.attacks)
+        {
+            lastNormalAttackTime[skill] = Time.time;
+            if (skill.distance < minAttackDis)
+            {
+                minAttackDis = skill.distance;
+            }
+        }
     }
 
     protected void SetData()
     {
-        pathFind.stoppingDistance = characterData.attack.distance;
+        pathFind.stoppingDistance = minAttackDis;
         ActiveSkillAction = ReadyActiveSkill;
         SearchAi = unitSearchAi[aiType];
     }
@@ -182,28 +192,21 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void PassiveSkillEvent();
     public abstract void ReadyActiveSkill();
     public virtual void OnActiveSkill()
-    {   
+    {
+        bool isCritical = false;
         characterData.activeSkill.OnActiveSkill(this);
-        
-        var units = characterData.activeSkill.SkillEffectedUnits;        
-        for (int i = 0; i < units.Count; i++)
-        {   
-            foreach (var buff in attackkbuffs)
-            {
-                bool isCritical = false;
-                var value = CalculDamage(characterData.activeSkill, ref isCritical);
-                units[i].AddBuff(buff, value, null);                        
-            }
-        }
     }
 
     public virtual void NormalAttackOnDamage()
     {
+        if (target == null)
+            return;
+
         if (BattleState == UnitBattleState.ActiveSkill)
             return;
-        if (characterData.attack.targetNumLimit == 1)
+        if (nowAttack.targetNumLimit == 1)
         {
-            target.OnDamage(this, characterData.attack);
+            target.OnDamage(this, nowAttack);
             foreach (var buff in normalbuffs)
             {
                 bool isCritical = false;
@@ -219,22 +222,22 @@ public abstract class AttackableUnit : MonoBehaviour
         foreach (var now_target in targetList)
         {
             Vector3 interV = now_target.transform.position - transform.position;
-            if (interV.magnitude <= characterData.attack.distance)
+            if (interV.magnitude <= nowAttack.distance)
             {
                 float angle = Vector3.Angle(transform.forward, interV);
 
-                if (Mathf.Abs(angle) < characterData.attack.angle / 2f)
+                if (Mathf.Abs(angle) < nowAttack.angle / 2f)
                 {
                     attackTargetList.Add(now_target);
                 }
             }
         }
 
-        attackTargetList = GetNearestUnitList(attackTargetList, characterData.attack.targetNumLimit);
+        attackTargetList = GetNearestUnitList(attackTargetList, nowAttack.targetNumLimit);
 
         for (int i = 0; i < attackTargetList.Count; i++)
         {
-            attackTargetList[i].OnDamage(this, characterData.attack);
+            attackTargetList[i].OnDamage(this, nowAttack);
             foreach (var buff in normalbuffs)
             {
                 bool isCritical = false;
@@ -253,7 +256,7 @@ public abstract class AttackableUnit : MonoBehaviour
     {
         lastSearchTime = Time.time;
         var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
-        var minTarget = GetSearchTargetInAround(targetList, characterData.attack.distance / 2);
+        var minTarget = GetSearchTargetInAround(targetList, nowAttack.distance / 2);
 
         if (IsAlive(minTarget))
             target = minTarget;
@@ -310,12 +313,13 @@ public abstract class AttackableUnit : MonoBehaviour
         animator.SetTrigger("StunEnd");
         target = null;
         pathFind.isStopped = false;
-        lastNormalAttackTime = Time.time;
+        foreach (CharacterSkill skill in characterData.attacks) lastNormalAttackTime[skill] = Time.time;
     }
 
     public virtual void ResetData()
     {
         RemoveBuffers();
+        nowAttack = characterData.attacks[0];
     }
     public void ResetBuffers()
     {
@@ -355,9 +359,7 @@ public abstract class AttackableUnit : MonoBehaviour
         UnitHp = Mathf.Max(UnitHp - dmg, 0);
         if (UnitHp <= 0)
         {
-            UnitState = UnitState.Die;
-            if(hasOutline)
-                outline.enabled = false;
+            UnitState = UnitState.Die;            
         }
 
         ShowHpBarAndDamageText(dmg, isCritical);
@@ -591,6 +593,10 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public void SetBattleManager(BattleManager manager) => battleManager = manager;
     public void SetEnabledPathFind(bool set) => pathFind.enabled = set;
+    public void SetPathFind()
+    {
+        pathFind = transform.GetComponent<NavMeshAgent>();
+    }
 
     // 여기에 State 초기화랑 트리거 모두 해제하는 코드 작성
 
@@ -611,7 +617,8 @@ public abstract class AttackableUnit : MonoBehaviour
                         {
                             UnitHp += anotherValue;
                             if (isThereDamageUI)
-                            {   
+                            {
+                                Logger.Debug(111);
                                 floatingDamageText.OnAttack(anotherValue, false, transform.position, DamageType.Heal);
                             }
                         }                        
@@ -689,5 +696,44 @@ public abstract class AttackableUnit : MonoBehaviour
         }
 
         return buffDamage;
+    }
+
+    public void MoveNext(Vector3 movePos)
+    {
+        SetNoneState();
+        pathFind.stoppingDistance = 0f;
+        pathFind.SetDestination(movePos);
+    }
+    public void SetNoneState()
+    {
+        unitState = UnitState.None;
+        battleState = UnitBattleState.None;
+    }
+
+    public bool FindNowAttack()
+    {
+        int idx = 0;
+        foreach (var attack in characterData.attacks)
+        {
+            if (InRangeNormalAttack(attack) && CanNormalAttackTime(attack))
+            {
+                nowAttack = attack;
+                if (skillClips.Length != 0)
+                {
+                    //AnimatorOverrideController newController = new AnimatorOverrideController(animator.runtimeAnimatorController);
+                    //newController["NormalAttack"] = skillClips[idx];
+
+                    //animator.runtimeAnimatorController = newController;
+
+                    //animator.Update(Time.deltaTime);
+                }
+                return true;
+            }
+            idx++;
+
+        }
+
+        nowAttack = null;
+        return false;
     }
 }

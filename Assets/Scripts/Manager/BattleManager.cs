@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using System.Collections;
 using System.Linq;
+using Cinemachine;
 
 public class BattleManager : MonoBehaviour
 {
@@ -45,7 +46,7 @@ public class BattleManager : MonoBehaviour
 
     // BeltScrollManager
     private GameObject platform;
-    public float platformMoveSpeed = 10f;
+    public float platformMoveSpeed = 5f;
     private int currTriggerIndex = 0;
     private float nextStageMoveTimer = 0f;
     private Coroutine coMovingMap;
@@ -54,8 +55,13 @@ public class BattleManager : MonoBehaviour
     private BattleMapInfo currBtMgr;
     private List<MapEventTrigger> btMapTriggers = new();
 
+    private GameObject viewPoint;
+    private Vector3 viewPointInitPos;
 
-    private void Awake()
+    public CinemachineVirtualCamera cinemachine;
+    private int enemyTriggerIndex = 0;                          // 방어전에 쓰일것 (에너미 스폰하는 트리거)
+
+    private void Start()
     {
         Init();
         StartNextStage(curEvent);
@@ -79,15 +85,12 @@ public class BattleManager : MonoBehaviour
     {
         curEvent = ev;
 
-        if (curMap != null)
-            SetActiveCurrMap(false);
-
         SetStageEvent(ev);
         StartStage();
-        if (currBtMgr.GetBattleMapType() == BattleMapEnum.BeltScroll && curEvent == MapEventEnum.Normal)
+        if (currBtMgr.GetBattleMapType() == BattleMapEnum.Normal && curEvent == MapEventEnum.Normal)
         {
             for (int i = 0; i < useHeroes.Count; i++)
-                Invoke(nameof(OnReady), 1f);
+                Invoke(nameof(OnReady), 3f);
         }
     }
 
@@ -99,7 +102,7 @@ public class BattleManager : MonoBehaviour
         }
         else if (ev == MapEventEnum.Defense)
         {
-            curMap = eventMaps[0];
+            curMap = eventMaps[1];
         }
         else
         {
@@ -292,48 +295,38 @@ public class BattleManager : MonoBehaviour
     }
     private IEnumerator CoMovingMap()
     {
-        float curMaxZPos = 0f;
-        float nextMaxZPos = 0f;
-        float movePos = 0f;
-
         yield return new WaitForSeconds(nextStageMoveTimer);
 
-        curMaxZPos = platform.transform.position.z +
-            btMapTriggers[currTriggerIndex].heroSettingPositions.Max(transform => transform.position.z);
+        float curMaxZPos = viewPoint.transform.position.z;
+        float nextMaxZPos = btMapTriggers[currTriggerIndex + 1].heroSettingPositions.Max(transform => transform.position.z);
 
-        if (!btMapTriggers[currTriggerIndex + 1].isStageEnd)
+        currTriggerIndex++;
+        for (int i = 0; i < useHeroes.Count; i++)
         {
-            nextMaxZPos = btMapTriggers[currTriggerIndex + 1].heroSettingPositions.Max(transform => transform.position.z);
-            movePos = curMaxZPos - nextMaxZPos;
-            while (platform.transform.position.z >= movePos)
+            var pos = btMapTriggers[currTriggerIndex].heroSettingPositions[i];
+            useHeroes[i].MoveNext(pos.transform.position);
+        }
+
+        // 플랫폼 무브 스피드 히어로 무브 스피드로 바꾸기
+        while (viewPoint.transform.position.z <= nextMaxZPos)
+        {
+            viewPoint.transform.Translate(Vector3.forward * platformMoveSpeed * Time.deltaTime);
+            yield return null;
+        }
+
+        if (!btMapTriggers[currTriggerIndex].isMissionEnd)
+        {
+            if (btMapTriggers[currTriggerIndex].isSkip)
             {
-                platform.transform.Translate((Vector3.forward * platformMoveSpeed * Time.deltaTime) * -1);
-                yield return null;
+                ChoiceNextStageByNode();
             }
-
-            currTriggerIndex++;
-
-
-            if (!btMapTriggers[currTriggerIndex].isMissionEnd)
+        }
+        else
+        {
+            for (int i = 0; i < useHeroes.Count; i++)
             {
-                for (int i = 0; i < useHeroes.Count; i++)
-                {
-                    useHeroes[i].ChangeUnitState(UnitState.Battle);
-                }
-
-                if (btMapTriggers[currTriggerIndex].useEnemys.Count == 0 && currTriggerIndex != 0)
-                {
-                    Logger.Debug("NextTrigger");
-                    ChoiceNextStageByNode();
-                }
-            }
-            else
-            {
-                for (int i = 0; i < useHeroes.Count; i++)
-                {
-                    useHeroes[i].ChangeUnitState(UnitState.Idle);
-                    OnReady();
-                }
+                useHeroes[i].ChangeUnitState(UnitState.Idle);
+                OnReady();
             }
         }
     }
@@ -344,7 +337,6 @@ public class BattleManager : MonoBehaviour
 
         if (OnNextStage())
         {
-            Logger.Debug("OnNextStage");
             yield break;
         }
 
@@ -379,12 +371,15 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             choiceButtonTexts[i].text = $"{thisNode.childrens[i].type}";
-            choiceButtons[i].gameObject.SetActive(true);
+            choiceButtons[i].SetActive(true);
             //roadChoiceButtons[i].choiceIndex = i;
         }
     }
     private void CreateRoad()
     {
+        if (tree.CurNode == null)
+            tree.CreateTreeGraph();
+
         TreeNodeObject thisNode = tree.CurNode;
         if (thisNode.childrens.Count == 0)
         {
@@ -407,14 +402,14 @@ public class BattleManager : MonoBehaviour
     private void StartStage()
     {
         currTriggerIndex = 0;
-
         currBtMgr = curMap.GetComponent<BattleMapInfo>();
         enemyCountTxt.Count = currBtMgr.GetAllEnemyCount();
         btMapTriggers = currBtMgr.GetTriggers();
         platform = currBtMgr.GetPlatform();
-        platform.transform.position = Vector3.zero;
+        viewPoint = currBtMgr.GetViewPoint();
+        viewPointInitPos = viewPoint.transform.position;
+        cinemachine.Follow = viewPoint.transform;
 
-        SetActiveCurrMap(true);
         CreateRoad();
         AddRoadTrigger();
 
@@ -426,20 +421,25 @@ public class BattleManager : MonoBehaviour
             useHeroes[i].SetEnabledPathFind(true);
         }
 
-        for (int i = 0; i < btMapTriggers.Count; i++)
-        {
-            btMapTriggers[i].ResetEnemys();
-        }
+        //for (int i = 0; i < btMapTriggers.Count; i++)
+        //{
+        //    btMapTriggers[i].ResetEnemys();
+        //}
+
+        currBtMgr.GameStart();
     }
 
     private void EndStage() // 맵 꺼지기 직전에 실행
     {
+        viewPoint.transform.position = viewPointInitPos;
+        cinemachine.Follow = viewPoint.transform;
         DestroyRoad();
         RemoveRoadTrigger();
         ResetRoads();
         for (int i = 0; i < useHeroes.Count; i++)
         {
             useHeroes[i].ResetData();
+            useHeroes[i].SetEnabledPathFind(false);
         }
     }
     private void RemoveRoadTrigger()
@@ -459,6 +459,7 @@ public class BattleManager : MonoBehaviour
         {
             var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
             StartNextStage((MapEventEnum)randomEvent);
+            //StartNextStage(MapEventEnum.Defense);
             return true;
         }
         else
@@ -497,10 +498,10 @@ public class BattleManager : MonoBehaviour
     {
         enemyCountTxt.DieEnemy();
 
-        int count = 0;
+        int count;
         switch (currBtMgr.GetBattleMapType())
         {
-            case BattleMapEnum.BeltScroll:
+            case BattleMapEnum.Normal:
                 btMapTriggers[currTriggerIndex].OnDead(enemy);
                 count = btMapTriggers[currTriggerIndex].useEnemys.Count;
 
@@ -510,18 +511,8 @@ public class BattleManager : MonoBehaviour
                 }
                 break;
             case BattleMapEnum.Defense:
-                int index = 0;
-                for (int i = 0; i < btMapTriggers.Count; i++)
-                {
-                    if (btMapTriggers[i].enemys.Count > 0)
-                    {
-                        index = i;
-                        break;
-                    }
-                }
-
-                btMapTriggers[index].OnDead(enemy);
-                count = btMapTriggers[index].useEnemys.Count;
+                btMapTriggers[enemyTriggerIndex].OnDead(enemy);
+                count = btMapTriggers[enemyTriggerIndex].useEnemys.Count;
 
                 if (count == 0)
                 {
@@ -547,6 +538,11 @@ public class BattleManager : MonoBehaviour
     public void SetEnemyCountTxt(int count)
     {
         enemyCountTxt.Count = count;
+    }
+
+    public void SetEnemyTriggerIndex(int index)
+    {
+        index = enemyTriggerIndex;
     }
 
     private void Update()

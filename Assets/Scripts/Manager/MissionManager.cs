@@ -1,3 +1,4 @@
+using Mono.Cecil;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -8,8 +9,8 @@ public class MissionManager : View
     public TextMeshProUGUI dayOfweek;
     // public Slider apGauge;
 
-    public Image portrait;
-    public TextMeshProUGUI explanation;
+    public Image portrait;  //Boss portrait
+    public TextMeshProUGUI explanation;  //
 
     public TextMeshProUGUI ExpectedCost;
     public GameObject[] heroSlots;
@@ -19,11 +20,19 @@ public class MissionManager : View
     //public TextMeshProUGUI deductionAP;
     public TextMeshProUGUI ProperCombatPower;
 
+    public Slider difficultyAdjustment;
+
     public GameObject missionPoints;
-    private GameObject[] marks;
+    //private GameObject[] marks;
     private List<Dictionary<string, object>> missionInfoTable;
+    private GameObject[] marks;
+
     public List<GameObject> expectedRewards;
 
+    [Range(1,5)]
+    public int difficulty = 1;
+    [Range(1,7)]
+    public int markCount = 4;
     public delegate void clickmark(int num);
     //private int missionNum;
     private GameManager gm;
@@ -36,27 +45,26 @@ public class MissionManager : View
 
     private void Start()
     {
-        gm = GameManager.Instance;
         missionInfoTable = gm.missionInfoList;
-        var num = Utils.DistinctRandomNumbers(missionInfoTable.Count, 4);
-        marks = GetComponentInChildren<MissionSpawner>().prefebs;
 
         heroSlotsIndex = 0;
 
-        int j = 0;
-        for (int i = 0; i < marks.Length; i++)
-        {
-            if (marks[i].GetComponent<MissionMarkData>().isMarkOn)
+            marks = GetComponentInChildren<MissionSpawner>().prefebs;
+            var num = Utils.DistinctRandomNumbers(missionInfoTable.Count, markCount);
+            int k = 0;
+            for (int j = 0; j < marks.Length; j++)
             {
-                var index = j++;
-                marks[i].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[num[index]]["Name"]}";
-                marks[i].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(num[index]));
+                if (marks[j].GetComponent<MissionMarkData>().isMarkOn)
+                {
+                    var index = k++;
+                    marks[j].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[num[index]]["Name"]}";
+                    marks[j].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(num[index]));
+                }
+                else
+                {
+                    marks[j].SetActive(false);
+                }
             }
-            else
-            {
-                marks[i].SetActive(false);
-            }
-        }
     }
 
     public void UpdateMissionDay()
@@ -70,9 +78,9 @@ public class MissionManager : View
         var dic = missionInfoTable[num];
         gm.currentSelectMission = dic;
 
-        portrait.sprite = gm.iconSprites[$"Icon_{dic["BossID"]}"];
+        //portrait.sprite = gm.iconSprites[$"Icon_{dic["BossID"]}"];  보스아이디 적 테이블에서 불러와야함
         explanation.text = $"{dic["OperationDescription"]}";
-        ExpectedCost.text = $"{dic["ExpectedCostID"]}";
+        //ExpectedCost.text = $"{dic["ExpectedCostID"]}";  삭제예정
         gm.ClearBattleGroups();
         for (int i = 0; i < heroSlots.Length; i++)
         {
@@ -80,24 +88,25 @@ public class MissionManager : View
         }
         for (int i = 0; i < fitProperties.Length; i++)
         {
-            var count = $"FitProperties{i + 1}";
+            var count = $"FitProperty{i + 1}";
             fitProperties[i].text = $"{dic[count]}";
             fitProperties[i].fontStyle = FontStyles.Normal;
             fitProperties[i].color = Color.white;
         }
         //deductionAP.text = $"AP -{dic["ConsumptionBehavior"]}";
-        ProperCombatPower.text = $"0/{dic["ProperCombatPower"]}";
+        //ProperCombatPower.text = $"0/{dic["ProperCombatPower"]}";
         ProperCombatPower.color = Color.white;
 
-        int erCount = expectedRewards.Count;
-        for (int i = 0; i < erCount; i++)
-        {
-            RewardItem ri = expectedRewards[i].GetComponent<RewardItem>();
-            if (i == 0)
-                ri.SetData("골드", $"{dic["Compensation"]}");
-            else
-                ri.SetData($"아이템{i}");
-        }
+        //보상 테이블 연결 필요
+        //int erCount = expectedRewards.Count;
+        //for (int i = 0; i < erCount; i++)
+        //{
+        //    RewardItem ri = expectedRewards[i].GetComponent<RewardItem>();
+        //    if (i == 0)
+        //        ri.SetData("골드", $"{dic["Compensation"]}");
+        //    else
+        //        ri.SetData($"아이템{i}");
+        //}
     }
 
     // Mission Hero Info Button 에서 호출
@@ -127,7 +136,7 @@ public class MissionManager : View
         }
 
         PropertyMatchingCheck();
-        TotalPowerCheck();
+        //TotalPowerCheck(); 삭제 예정
     }
 
     // Hero Slot 에서 Index 전달
@@ -160,21 +169,21 @@ public class MissionManager : View
         }
     }
 
-    // 전투력 합계 체크
-    private void TotalPowerCheck()
-    {
-        var selectedHeroes = gm.GetSelectedHeroes();
+    //// 전투력 합계 체크  삭제 예정
+    //private void TotalPowerCheck()
+    //{
+    //    var selectedHeroes = gm.GetSelectedHeroes();
 
-        int totalPower = 0;
-        foreach (var hero in selectedHeroes)
-        {
-            if (hero != null)
-                totalPower += hero.GetComponent<CharacterDataBundle>().data.Power;
-        }
-        var properCombatPower = gm.currentSelectMission["ProperCombatPower"];
-        ProperCombatPower.text = $"{totalPower}/{properCombatPower}";
-        ProperCombatPower.color = totalPower < (int)properCombatPower ? Color.red : Color.white;
-    }
+    //    int totalPower = 0;
+    //    foreach (var hero in selectedHeroes)
+    //    {
+    //        if (hero != null)
+    //            totalPower += hero.GetComponent<CharacterDataBundle>().data.Power;
+    //    }
+    //    var properCombatPower = gm.currentSelectMission["ProperCombatPower"];
+    //    ProperCombatPower.text = $"{totalPower}/{properCombatPower}";
+    //    ProperCombatPower.color = totalPower < (int)properCombatPower ? Color.red : Color.white;
+    //}
 
     public void StartMission()
     {
@@ -200,5 +209,10 @@ public class MissionManager : View
                     break;
             }
         }
+    }
+
+    public void OnAdjustmentDifficulty()
+    {
+        difficultyAdjustment.GetComponentInChildren<TextMeshProUGUI>().text = difficultyAdjustment.value.ToString();
     }
 }

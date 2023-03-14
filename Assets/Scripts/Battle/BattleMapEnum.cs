@@ -1,7 +1,7 @@
 public enum BattleMapEnum
 {
     None = -1,
-    BeltScroll,
+    Normal,
     Defense,
     Count,
 }

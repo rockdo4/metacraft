@@ -6,16 +6,20 @@ public class BattleMapInfo : MonoBehaviour
     public List<Transform> startPositions;
     public List<Transform> endPositions;
 
-    public List<MapEventTrigger> triggers;
+    public List<MapEventTrigger> triggers = new();
 
     public Transform roadTr;
-    protected BattleManager evManager;
+    protected BattleManager battleMgr;
     public GameObject platform;
     public BattleMapEnum battleMapType;
-    
-    private void Awake()
+    public GameObject viewPoint;
+    protected bool init = false;
+
+    public virtual void GameStart() { FindBattleManager(); }
+
+    protected void FindBattleManager()
     {
-        evManager = FindObjectOfType<BattleManager>();
+        battleMgr = FindObjectOfType<BattleManager>();
     }
 
     public List<Transform> GetStartPosition()
@@ -25,6 +29,11 @@ public class BattleMapInfo : MonoBehaviour
     public List<Transform> GetEndPosition()
     {
         return endPositions;
+    }
+
+    public GameObject GetViewPoint()
+    {
+        return viewPoint;
     }
 
     public int GetAllEnemyCount()
@@ -40,12 +49,12 @@ public class BattleMapInfo : MonoBehaviour
 
     public int GetCurrEnemyCount()
     {
-        return triggers[evManager.GetCurrTriggerIndex()].useEnemys.Count;
+        return triggers[battleMgr.GetCurrTriggerIndex()].useEnemys.Count;
     }
 
     public void GetEnemyList(ref List<AttackableUnit> enemyList)
     {
-        enemyList = triggers[evManager.GetCurrTriggerIndex()].useEnemys;
+        enemyList = triggers[battleMgr.GetCurrTriggerIndex()].useEnemys;
     }
 
     public ref List<MapEventTrigger> GetTriggers()
@@ -71,5 +80,12 @@ public class BattleMapInfo : MonoBehaviour
     public BattleMapEnum GetBattleMapType()
     {
         return battleMapType;
+    }
+    protected void ResetAllTriggerEnemys()
+    {
+        for (int i = 0; i < triggers.Count; i++)
+        {
+            triggers[i].ResetEnemys();
+        }
     }
 }

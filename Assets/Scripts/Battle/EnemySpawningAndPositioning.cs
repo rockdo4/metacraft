@@ -51,7 +51,10 @@ public class EnemySpawningAndPositioning : MonoBehaviour
 
         spawnCount++;
         if (spawnCount == enemyCount)
+        {
+            spawnCount = 0;
             yield break;
+        }
 
         StartCoroutine(CoInfinityRespawn(saveTimer));
     }

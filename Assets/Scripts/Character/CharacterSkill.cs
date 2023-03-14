@@ -1,13 +1,9 @@
 using UnityEngine;
 using System.Collections;
-using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "CharacterSkill", menuName = "Character/CharacterSkill")]
 public class CharacterSkill : ScriptableObject
 {
-    public List<AttackableUnit>     SkillEffectedUnits { get { return skillEffectedUnits; } }
-    protected List<AttackableUnit>  skillEffectedUnits;
-
     public int      id;
     public string   skillName;
     
@@ -43,19 +39,27 @@ public class CharacterSkill : ScriptableObject
     }
     //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)									
     public virtual int CreateDamageResult(LiveData data, BufferState status)
-    {   
+    {        
+        var result = 0;
         switch (coefficientType)
         {
             case SkillCoefficientType.Attack:
-                return (int)((data.baseDamage + status.Damage) * coefficient);                
+                result = (int)((data.baseDamage + status.Damage) * coefficient);
+                break;
             case SkillCoefficientType.Defense:
-                return (int)((data.baseDefense + status.defense) * coefficient);                
+                result = (int)((data.baseDefense + status.defense) * coefficient);
+                break;
             case SkillCoefficientType.MaxHealth:
-                return (int)((data.healthPoint + (data.healthPoint * (status.maxHealthIncrease / 100f))) * coefficient);            
+                result = (int)((data.healthPoint + (data.healthPoint * (status.maxHealthIncrease * 0.01f))) * coefficient);
+                break;
             case SkillCoefficientType.Health:
-                return (int)((data.currentHp + status.Damage) * coefficient);
+                result = (int)((data.currentHp + status.Damage) * coefficient);
+                break;
         }
-        return 0;
+        //if (targetType == SkillTargetType.Friendly)
+        //    result *= -1;
+
+        return result;
     }
     public virtual void OnActiveSkill(AttackableUnit unit) { }
 }

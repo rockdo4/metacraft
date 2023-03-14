@@ -69,11 +69,11 @@ public class TreeMapSystem : MonoBehaviour
         }
     }
 
-    private void Awake()
-    {
+    //private void Awake()
+    //{
         // 이후 고정 노드 조건 확인등 검증도 여기서 함
-        CreateTreeGraph();
-    }
+        //CreateTreeGraph();
+    //}
 
     private void Update()
     {
