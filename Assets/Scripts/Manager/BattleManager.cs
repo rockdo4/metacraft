@@ -12,7 +12,7 @@ public class BattleManager : MonoBehaviour
     public List<GameObject> eventMaps;
     private List<Dictionary<string, object>> eventInfoTable;
 
-    private MapEventEnum curEvent = MapEventEnum.Normal;
+    public MapEventEnum curEvent = MapEventEnum.Normal;
     private GameObject curMap;
 
     public GameObject eventUi;
@@ -221,7 +221,7 @@ public class BattleManager : MonoBehaviour
                 {
                     useHeroes[i].ChangeUnitState(UnitState.MoveNext);
                 }
-                Logger.Debug("Move!");
+
                 coMovingMap = StartCoroutine(CoMovingMap());
             }
         }
@@ -505,21 +505,20 @@ public class BattleManager : MonoBehaviour
             case BattleMapEnum.Normal:
                 btMapTriggers[currTriggerIndex].OnDead(enemy);
                 count = btMapTriggers[currTriggerIndex].useEnemys.Count;
-                Test(count);
+                if (count == 0)
+                {
+                    SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
+                }
                 break;
             case BattleMapEnum.Defense:
                 btMapTriggers[enemyTriggerIndex].OnDead(enemy);
-                count = enemyCountTxt.count;
-                Test(count);
+                //count = enemyCountTxt.count;
+                count = btMapTriggers[enemyTriggerIndex].useEnemys.Count;
+                if (count == 0)
+                {
+                    SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
+                }
                 break;
-        }
-    }
-
-    private void Test(int enemyCount)
-    {
-        if (enemyCount == 0)
-        {
-            SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
         }
     }
 
@@ -555,6 +554,33 @@ public class BattleManager : MonoBehaviour
             RemoveRoadTrigger();
             ResetRoads();
             btMapTriggers.Last().isMissionEnd = true;
+        }
+    }
+
+    /*********************************************  임시  **********************************************/
+    // Attackable Hero 스크립트의 ReturnPosUpdate 함수 내에서 사용하고 있음
+    // 여기 어케 바꿀지 생각해봐야함
+    public bool TempReturnPos()
+    {
+        for (int i = 0; i < btMapTriggers[enemyTriggerIndex].enemySettingPositions.Count; i++)
+        {
+            if (!btMapTriggers[enemyTriggerIndex].enemySettingPositions[i].GetMiddleBossIsAlive())
+            {
+                Logger.Debug("Next!");
+                //KillAllEnemy(enemyTriggerIndex);
+                return true;
+            }
+        }
+
+        return false;
+    }
+    private void KillAllEnemy(int index)
+    {
+        int count = btMapTriggers[index].useEnemys.Count;
+
+        for (int i = 0; i < count; i++)
+        {
+            OnDeadEnemy((AttackableEnemy)btMapTriggers[index].useEnemys[i]);
         }
     }
 }

@@ -748,4 +748,8 @@ public abstract class AttackableUnit : MonoBehaviour
         nowAttack = null;
         return false;
     }
+    public UnitState GetUnitState()
+    {
+        return UnitState;
+    }
 }

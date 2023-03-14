@@ -1,23 +1,28 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
-using static UnityEngine.EventSystems.EventTrigger;
 
 public class EnemySpawningAndPositioning : MonoBehaviour
 {
     private Transform tr;
     [Header("생성할 적 프리펩들을 넣어주세요")]
     public List<AttackableEnemy> enemyPrefabs;
-    [SerializeField, Header("생성할 몬스터 마리수를 넣어주세요.")]
-    public int enemyCount;
+    [SerializeField, Header("리스폰할 몬스터 웨이브 수를 넣어주세요.")]
+    public int waveCount;
     [SerializeField, Header("해당 구역의 크기를 정해주세요.")]
     private int spawnRange;
     [Range(1, 20), Header("리스폰 시간을 설정해주세요.")]
     public float respawnTimer;
+    [SerializeField, Header("중간보스가 포함되어 있으면 선택해주세요.")]
+    private bool isMiddleBoss = false;
 
     private int spawnCount = 0;
     public List<AttackableEnemy> enemys = new();
+
+    // 임시
+    public AttackableEnemy middleBoss;
 
     private void Awake()
     {
@@ -29,6 +34,8 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     public void SetEnemy(AttackableEnemy enemy, int index) => enemyPrefabs[index] = enemy;
     public void SetAllEnemy(List<AttackableEnemy> enemys) => enemyPrefabs = enemys;
     public List<AttackableEnemy> GetEnemy() => enemyPrefabs;
+
+    private Coroutine coInfinityRespawn;
 
     private IEnumerator CoRespawn(List<AttackableUnit> enemyPool, float timer)
     {
@@ -49,6 +56,9 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     }
     private IEnumerator CoInfinityRespawn(float timer)
     {
+        if (isMiddleBoss)
+            yield break;
+
         float saveTimer = timer;
         while (timer >= 0f)
         {
@@ -62,13 +72,13 @@ public class EnemySpawningAndPositioning : MonoBehaviour
         enemys[spawnCount].ChangeUnitState(UnitState.Battle);
 
         spawnCount++;
-        if (spawnCount == enemyCount)
+        if (spawnCount == waveCount)
         {
             spawnCount = 0;
-            //yield break;
+            yield break;
         }
 
-        StartCoroutine(CoInfinityRespawn(saveTimer));
+        coInfinityRespawn = StartCoroutine(CoInfinityRespawn(saveTimer));
     }
 
     public List<AttackableEnemy> SpawnEnemy()
@@ -92,18 +102,62 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     }
     public void InfinityRespawn()
     {
-        StartCoroutine(CoInfinityRespawn(respawnTimer));
+        coInfinityRespawn = StartCoroutine(CoInfinityRespawn(respawnTimer));
     }
     public void SpawnAllEnemy(ref List<AttackableUnit> enemyPool)
     {
-        for (int i = 0; i < enemyCount; i++)
+        Vector3 trPos = tr.position;
+
+        for (int i = 0; i < waveCount; i++)
         {
             for (int j = 0; j < enemyPrefabs.Count; j++)
             {
-                var e = Instantiate(enemyPrefabs[i], tr.position, enemyPrefabs[i].gameObject.transform.rotation, tr);
+                Vector3 randomArea = UnityEngine.Random.insideUnitSphere * spawnRange;
+                randomArea.y = 0f;
+                randomArea.x += trPos.x;
+                randomArea.z += trPos.z;
+
+                var e = Instantiate(enemyPrefabs[j], randomArea, enemyPrefabs[j].gameObject.transform.rotation, tr);
                 enemyPool.Add(e);
                 enemys.Add(e);
             }
+
+            if (isMiddleBoss)
+                break;
+        }
+
+        if (isMiddleBoss)
+        {
+            int maxHp = enemys.Max(enemy => enemy.GetUnitData().data.healthPoint);
+            for (int i = 0; i < enemys.Count; i++)
+            {
+                if (enemys[i].GetUnitData().data.healthPoint == maxHp)
+                {
+                    middleBoss = enemys[i];
+                    break;
+                }
+            }
+        }
+    }
+
+    // 임시 함수들
+    public AttackableEnemy GetMiddleBoss()
+    {
+        return middleBoss;
+    }
+    public bool GetMiddleBossIsAlive()
+    {
+        if (middleBoss == null)
+            return true;
+
+        if (middleBoss.GetUnitState() == UnitState.Die)
+        {
+            Logger.Debug($"{middleBoss.UnitHp}");
+            return false;
+        }
+        else
+        {
+            return true;
         }
     }
 }
