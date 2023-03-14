@@ -1,33 +1,32 @@
 
 using System;
 
-[Serializable]
 public class BufferState
 {
-    public int damage = 0;         // 공격력
-    public int Damage => Math.Clamp(damage, -50, 300);
+    public float damage = 1;         // 공격력
+    public float Damage => Math.Clamp(damage, -50, 300);
 
-    public int defense = 0;      // 방어력
-    public int damageReceived = 0;      // 받는 피해
-    public int damageDecrease = 0;      // 주는 피해
-    public int criticalProbability = 0;      // 치명타 확률 
-    public int criticalDamage = 0;      // 치명타 피해량 증가
-    public int attackSpeed = 0;      // 공격속도 증가
-    public int maxHealthIncrease = 0;      // 최대 체력 증가
+    public float defense = 1;      // 방어력
+    public float damageReceived = 1;      // 받는 피해
+    public float damageDecrease = 1;      // 주는 피해
+    public float criticalProbability = 1;      // 치명타 확률 
+    public float criticalDamage = 1;      // 치명타 피해량 증가
+    public float attackSpeed = 1;      // 공격속도 증가
+    public float maxHealthIncrease = 1;      // 최대 체력 증가
 
-    public int burns = 0;      // 화상
+    public float burns = 1;      // 화상
     public bool isBurns = false;
 
-    public int freeze = 0;      // 빙결
+    public float freeze = 1;      // 빙결
     public bool isFreze = false;
 
-    public int shield = 0;      // 보호막
+    public float shield = 0;      // 보호막
     public bool isShield = false;
 
-    public int bleed = 0;      // 출혈
+    public float bleed = 1;      // 출혈
     public bool isBleed = false;
 
-    public int lifeSteal = 0;      // 흡혈
+    public float lifeSteal = 1;      // 흡혈
     public bool isLifeSteal = false;
 
     public bool provoke = false; // 도발
@@ -37,7 +36,7 @@ public class BufferState
     public bool resistance = false; // 저항
     public bool blind = false; // 실명
 
-    public void Buffer(BuffType type, int scale, bool isSet = true)
+    public void Buffer(BuffType type, float scale, bool isSet = true)
     {
         switch (type)
         {
@@ -130,7 +129,7 @@ public class BufferState
                 break;
         }
     }
-    public void RemoveBuffer(BuffType type, int scale)
+    public void RemoveBuffer(BuffType type, float scale)
     {
         Buffer(type, -scale, false);
     }

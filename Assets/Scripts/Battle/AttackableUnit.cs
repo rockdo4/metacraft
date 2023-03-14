@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
@@ -49,7 +50,7 @@ public abstract class AttackableUnit : MonoBehaviour
     [SerializeField, Header("에너미 리스트")] protected List<AttackableUnit> enemyList;
     [SerializeField, Header("시민 리스트")] protected List<AttackableUnit> citizenList;
 
-    public int MaxHp => (int)(((bufferState.maxHealthIncrease / 100f) * characterData.data.healthPoint) + characterData.data.healthPoint);
+    public int MaxHp => (int)((bufferState.maxHealthIncrease * characterData.data.healthPoint) + characterData.data.healthPoint);
     public float UnitHpScale => (float)characterData.data.currentHp / MaxHp;
     public int UnitHp {
         get { return characterData.data.currentHp; }
@@ -84,7 +85,7 @@ public abstract class AttackableUnit : MonoBehaviour
     protected virtual UnitBattleState BattleState { get; set; }
 
     public bool IsAlive(AttackableUnit unit) => (unit != null) && (unit.gameObject.activeSelf) && (unit.UnitHp > 0);
-    protected bool CanNormalAttackTime(CharacterSkill skill) => (Time.time - lastNormalAttackTime[skill]) * ((100 + bufferState.attackSpeed) / 100f) > skill.cooldown;
+    protected bool CanNormalAttackTime(CharacterSkill skill) => (Time.time - lastNormalAttackTime[skill]) * bufferState.attackSpeed > skill.cooldown;
     protected bool InRangeNormalAttack(CharacterSkill skill) => Vector3.Distance(target.transform.position, transform.position) < skill.distance;
     protected bool InRangeMinNormalAttack => Vector3.Distance(target.transform.position, transform.position) < minAttackDis;
     protected bool InRangeActiveAttack => Vector3.Distance(activeTarget.transform.position, transform.position) < characterData.activeSkill.distance;
@@ -256,6 +257,9 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     protected void RangeSearch()
     {
+        if (nowAttack == null)
+            return;
+
         lastSearchTime = Time.time;
         var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
         var minTarget = GetSearchTargetInAround(targetList, nowAttack.distance / 2);
@@ -315,7 +319,7 @@ public abstract class AttackableUnit : MonoBehaviour
         animator.SetTrigger("StunEnd");
         target = null;
         pathFind.isStopped = false;
-        foreach (CharacterSkill skill in characterData.attacks) lastNormalAttackTime[skill] = Time.time;
+        ResetCoolDown();
     }
 
     public virtual void ResetData()
@@ -360,7 +364,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
         if(bufferState.isShield)
         {
-            var shield =  (int)(dmg * (bufferState.shield/ 100f));
+            var shield =  (int)(dmg * bufferState.shield);
 
             dmg -= shield;
         }
@@ -370,6 +374,10 @@ public abstract class AttackableUnit : MonoBehaviour
             UnitState = UnitState.Die;            
         }
 
+        if(dmg < 0)
+        {
+            Logger.Debug("d");
+        }
         ShowHpBarAndDamageText(dmg, isCritical);
     }
 
@@ -626,7 +634,6 @@ public abstract class AttackableUnit : MonoBehaviour
                             UnitHp += anotherValue;
                             if (isThereDamageUI)
                             {
-                                Logger.Debug(111);
                                 floatingDamageText.OnAttack(anotherValue, false, transform.position, DamageType.Heal);
                             }
                         }                        
@@ -697,12 +704,12 @@ public abstract class AttackableUnit : MonoBehaviour
     public int CalculDamage(CharacterSkill skill, ref bool isCritical)
     {
         var buffDamage = skill.CreateDamageResult(characterData.data, bufferState);
-        isCritical = UnityEngine.Random.Range(0f, 1f) < characterData.data.critical + (bufferState.criticalProbability / 100f);
+        isCritical = UnityEngine.Random.Range(0f, 1f) < characterData.data.critical + (bufferState.criticalProbability);
         if (isCritical)
         {
-            buffDamage = (int)(buffDamage * (characterData.data.criticalDmg + (bufferState.criticalDamage / 100f)));
+            buffDamage = (int)(buffDamage * (characterData.data.criticalDmg + (bufferState.criticalDamage)));
         }
-        buffDamage = (int)(buffDamage * (100 + bufferState.damageDecrease) / 100f);
+        buffDamage = (int)(buffDamage * bufferState.damageDecrease);
 
         return buffDamage;
     }
@@ -714,16 +721,23 @@ public abstract class AttackableUnit : MonoBehaviour
         {
             if (InRangeNormalAttack(attack) && CanNormalAttackTime(attack))
             {
-                nowAttack = attack;
                 if (skillClips.Length != 0)
                 {
-                    //AnimatorOverrideController newController = new AnimatorOverrideController(animator.runtimeAnimatorController);
-                    //newController["NormalAttack"] = skillClips[idx];
+                    Logger.Debug(name + " " + skillClips[idx].name);
 
-                    //animator.runtimeAnimatorController = newController;
+                    if (animator.runtimeAnimatorController is AnimatorOverrideController overrideController)
+                    {
+                        var anims = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+                        AnimationClip clipToReplace = animator.runtimeAnimatorController.animationClips.FirstOrDefault(x => x.name == "NormalAttack");
+                        //anims.Add(new KeyValuePair<AnimationClip, AnimationClip>(clipToReplace, skillClips[idx]));
 
-                    //animator.Update(Time.deltaTime);
+
+                        overrideController.ApplyOverrides(anims);
+                        overrideController[clipToReplace] = skillClips[idx];
+                        animator.runtimeAnimatorController = overrideController;
+                    }
                 }
+                nowAttack = attack;
                 return true;
             }
             idx++;
@@ -732,5 +746,10 @@ public abstract class AttackableUnit : MonoBehaviour
 
         nowAttack = null;
         return false;
+    }
+    public void ResetCoolDown()
+    {
+        foreach (CharacterSkill skill in characterData.attacks)
+            lastNormalAttackTime[skill] = Time.time;
     }
 }

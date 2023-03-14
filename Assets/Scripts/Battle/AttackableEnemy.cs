@@ -109,8 +109,7 @@ public class AttackableEnemy : AttackableUnit
         SetData();
 
         unitState = UnitState.Idle;
-        foreach (CharacterSkill skill in characterData.attacks) 
-            lastNormalAttackTime[skill] = Time.time;
+        ResetCoolDown();
 
         hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
     }
@@ -129,8 +128,7 @@ public class AttackableEnemy : AttackableUnit
         UnitHp = characterData.data.healthPoint;
         hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
         lastActiveSkillTime  = lastNavTime = Time.time;
-        foreach (CharacterSkill skill in characterData.attacks) 
-            lastNormalAttackTime[skill] = Time.time;
+        ResetCoolDown();
         target = null;
         animator.Rebind();
     }
@@ -254,9 +252,7 @@ public class AttackableEnemy : AttackableUnit
     {
         base.NormalAttackEnd();
         animator.SetTrigger("AttackEnd");
-        foreach (CharacterSkill skill in characterData.attacks)
-            lastNormalAttackTime[skill] = Time.time;
-
+        lastNormalAttackTime[nowAttack] = Time.time;
         BattleState = UnitBattleState.BattleIdle;
     }
     public override void OnActiveSkill()    //테스트용
@@ -297,8 +293,7 @@ public class AttackableEnemy : AttackableUnit
     {
         pathFind.isStopped = false;
         animator.SetTrigger("ActiveEnd");
-        foreach (CharacterSkill skill in characterData.attacks) 
-            lastNormalAttackTime[skill] = Time.time;
+        ResetCoolDown();
         BattleState = UnitBattleState.BattleIdle;
         base.ActiveSkillEnd();
     }
