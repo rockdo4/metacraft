@@ -421,11 +421,6 @@ public class BattleManager : MonoBehaviour
             useHeroes[i].SetEnabledPathFind(true);
         }
 
-        //for (int i = 0; i < btMapTriggers.Count; i++)
-        //{
-        //    btMapTriggers[i].ResetEnemys();
-        //}
-
         currBtMgr.GameStart();
     }
 
@@ -457,9 +452,9 @@ public class BattleManager : MonoBehaviour
 
         if (tree.CurNode.type == TreeNodeTypes.Event)
         {
-            var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
-            StartNextStage((MapEventEnum)randomEvent);
-            //StartNextStage(MapEventEnum.Defense);
+            //var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
+            //StartNextStage((MapEventEnum)randomEvent);
+            StartNextStage(MapEventEnum.Defense);
             return true;
         }
         else
@@ -542,7 +537,7 @@ public class BattleManager : MonoBehaviour
 
     public void SetEnemyTriggerIndex(int index)
     {
-        index = enemyTriggerIndex;
+        enemyTriggerIndex = index;
     }
 
     private void Update()

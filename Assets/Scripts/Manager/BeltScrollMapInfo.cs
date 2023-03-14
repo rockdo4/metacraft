@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BeltScrollMapInfo : BattleMapInfo
@@ -36,5 +37,10 @@ public class BeltScrollMapInfo : BattleMapInfo
         {
             ResetAllTriggerEnemys();
         }
+    }
+
+    public override void GetEnemyList(ref List<AttackableUnit> enemyList)
+    {
+        enemyList = triggers[battleMgr.GetCurrTriggerIndex()].useEnemys;
     }
 }
