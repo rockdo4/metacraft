@@ -1,9 +1,13 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 [CreateAssetMenu(fileName = "CharacterSkill", menuName = "Character/CharacterSkill")]
 public class CharacterSkill : ScriptableObject
 {
+    public List<AttackableUnit>     SkillEffectedUnits { get { return skillEffectedUnits; } }
+    protected List<AttackableUnit>  skillEffectedUnits;
+
     public int      id;
     public string   skillName;
     
@@ -20,8 +24,10 @@ public class CharacterSkill : ScriptableObject
 
     public SkillTargetType targetType;
     public SkillSearchType searchType;
-    public EffectEnum effectEnum;
+    public EffectEnum readyEffect;
+    public EffectEnum activeEffect;
 
+    public bool isCriticalPossible;
     public bool isAuto;
     public Vector3 targetPos;
     public string skillDescription;
@@ -48,16 +54,16 @@ public class CharacterSkill : ScriptableObject
                 result = (int)((data.baseDefense + status.defense) * coefficient);
                 break;
             case SkillCoefficientType.MaxHealth:
-                result = (int)((data.healthPoint + (data.healthPoint * (status.maxHealthIncrease / 100f))) * coefficient);
+                result = (int)((data.healthPoint + (data.healthPoint * (status.maxHealthIncrease * 0.01f))) * coefficient);
                 break;
             case SkillCoefficientType.Health:
                 result = (int)((data.currentHp + status.Damage) * coefficient);
                 break;
         }
-        if (targetType == SkillTargetType.Friendly)
-            result *= -1;
+        //if (targetType == SkillTargetType.Friendly)
+        //    result *= -1;
 
         return result;
     }
-    public virtual void OnActiveSkill(int damaage, int level) { }
+    public virtual void OnActiveSkill(AttackableUnit unit) { }
 }

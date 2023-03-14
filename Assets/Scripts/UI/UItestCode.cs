@@ -14,12 +14,12 @@ public class UItestCode : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Z))
         {
             attacked.OnAttack(10, false, transform.position, DamageType.Normal);
-            hpBarManager.TestCode(10f);
+            hpBarManager.OnDamage(10f);
         }
         if (Input.GetKeyDown(KeyCode.X))
         {
             attacked.OnAttack(10, false, transform.position, DamageType.Heal);
-            hpBarManager.TestCode( - 10f);
+            hpBarManager.OnDamage( - 10f);
         }
     }
 }

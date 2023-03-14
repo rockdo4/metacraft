@@ -24,12 +24,10 @@ public class CSVReader
     }
     public static List<Dictionary<string, object>> ReadByStreamReaderPath(string path, bool splitComma = true, bool tryParse = true)
     {
-        using (var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-        using (var reader = new StreamReader(stream))
-        {
-            string str = reader.ReadToEnd();
-            return SplitTokens(str, splitComma, tryParse);
-        }
+        using var stream = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+        using var reader = new StreamReader(stream);
+        string str = reader.ReadToEnd();
+        return SplitTokens(str, splitComma, tryParse);
     }
 
     // Legacy. Use Resource folder
@@ -57,7 +55,7 @@ public class CSVReader
                 string value = values[j];
                 value = value.TrimStart(TRIM_CHARS).TrimEnd(TRIM_CHARS).Replace("\\", "");
                 object finalvalue = value;
-                if(tryParse)
+                if (tryParse)
                 {
                     if (int.TryParse(value, out int n))
                     {

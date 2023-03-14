@@ -42,7 +42,7 @@ public class HeroSkill : MonoBehaviour
         this.coolDown = coolDown;
         this.skillDescription = skillDescription;
 
-        prevTimeScale = GameObject.FindObjectOfType<BattleSpeed>().GetSpeed;
+        prevTimeScale = BattleSpeed.Instance.GetSpeed;
         coolDownTimer = 0;
         CoolDownFill = coolDownTimer / coolDown;
     }
@@ -74,16 +74,16 @@ public class HeroSkill : MonoBehaviour
             SetActiveSkillGUIs(true);
             isPointerInSkillActivePanel = false;
 
-            prevTimeScale = GameObject.FindObjectOfType<BattleSpeed>().GetSpeed;
+            prevTimeScale = BattleSpeed.Instance.GetSpeed;            
             Time.timeScale = 0.25f;
         }
     }
     public void CancleSkill()
     {
-        Time.timeScale = GameObject.FindObjectOfType<BattleSpeed>().GetSpeed;
+        Time.timeScale = BattleSpeed.Instance.GetSpeed;
         cancle();
         SetActiveSkillGUIs(false);
-        Time.timeScale = GameObject.FindObjectOfType<BattleSpeed>().GetSpeed;
+        Time.timeScale = BattleSpeed.Instance.GetSpeed;
     }
     public void OnUpSkillActive()
     {
@@ -98,7 +98,7 @@ public class HeroSkill : MonoBehaviour
 
         action();
         SetActiveSkillGUIs(false);
-        Time.timeScale = GameObject.FindObjectOfType<BattleSpeed>().GetSpeed;
+        Time.timeScale = BattleSpeed.Instance.GetSpeed;
         CoolDownFill = 1;
         coolDownTimer = coolDown;
     }
@@ -107,7 +107,7 @@ public class HeroSkill : MonoBehaviour
         ready();
         action();
         SetActiveSkillGUIs(false);
-        Time.timeScale = GameObject.FindObjectOfType<BattleSpeed>().GetSpeed;
+        Time.timeScale = BattleSpeed.Instance.GetSpeed;
         CoolDownFill = 1;
         coolDownTimer = coolDown;
     }

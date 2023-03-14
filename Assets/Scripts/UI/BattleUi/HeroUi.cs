@@ -11,7 +11,6 @@ public class HeroUi : MonoBehaviour
 
     [SerializeField]
     private BuffList viewBuffList;
-    private List<BuffIcon> buffList;
     public UnitState heroState;
 
     CharacterDataBundle heroData;
@@ -23,10 +22,6 @@ public class HeroUi : MonoBehaviour
         SetHp(heroData.data.currentHp, heroData.data.healthPoint);
     }
 
-    public void SetBuffList(ref List<BuffIcon> list)
-    {
-        buffList = list;
-    }
 
     public BuffIcon AddIcon(BuffType type, float duration, int idx)
     {
@@ -49,7 +44,7 @@ public class HeroUi : MonoBehaviour
     }
     public void SetHp(int nowHp, int maxHp)
     {
-        hpBar.value = Mathf.Max((float)nowHp / (float)maxHp);
+        hpBar.value = (float)nowHp / maxHp; // Mathf.Max((float)nowHp / maxHp); max 왜 쓴거임? - 진석
     }
 
     public void SetDieImage()

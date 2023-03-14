@@ -29,7 +29,7 @@ public class RewardManager : MonoBehaviour
             GameObject reward = Instantiate(rewardPref, rewardTr);
             RewardItem item = reward.GetComponent<RewardItem>();
             int rewardGold = (int)GameManager.Instance.currentSelectMission["Compensation"];
-            item.SetData("골드", $"{rewardGold}");
+            item.SetData(-1,"골드", $"{rewardGold}");// 임시로 id 정함
             GameManager.Instance.playerData.gold += rewardGold;
         }
 
@@ -37,7 +37,9 @@ public class RewardManager : MonoBehaviour
         {
             GameObject reward = Instantiate(rewardPref, rewardTr);
             RewardItem item = reward.GetComponent<RewardItem>();
-            item.SetData(rewardTable[Random.Range(0, rewardTable.Count)],
+
+            var idx = Random.Range(0, rewardTable.Count); // 임시로 id 정함
+            item.SetData(idx,rewardTable[idx],
                 $"x{Random.Range(1, 10)}");
 
             count--;

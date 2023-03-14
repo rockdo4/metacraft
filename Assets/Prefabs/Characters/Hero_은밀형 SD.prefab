@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 8489007089072879663}
   - component: {fileID: -6316505954286571692}
   - component: {fileID: 4251690106525898415}
+  - component: {fileID: -7482379678466336324}
   m_Layer: 6
   m_Name: "Hero_\uC740\uBC00\uD615 SD"
   m_TagString: Hero
@@ -121,8 +122,9 @@ MonoBehaviour:
     evasion: 0
     accuracy: 0.5
     equipment: {fileID: 0}
-  attack: {fileID: 11400000, guid: d5b9a7358e0855b46acac612b4428307, type: 2}
-  activeSkill: {fileID: 11400000, guid: c9f64039ca8bd8146ae8d8344c554f5f, type: 2}
+  attacks:
+  - {fileID: 11400000, guid: d5b9a7358e0855b46acac612b4428307, type: 2}
+  activeSkill: {fileID: 11400000, guid: a1111afd3a225954092137716102fc69, type: 2}
   passiveSkill: {fileID: 11400000, guid: 72914e2e9e922d84eb7b5c550ed005df, type: 2}
 --- !u!114 &-6316505954286571692
 MonoBehaviour:
@@ -158,9 +160,10 @@ MonoBehaviour:
   unitType: 0
   aiType: 2
   normalAttackTargetType: 1
+  PassiveTargetType: 0
+  activeAttackTargetType: 1
   attackPos: {fileID: 0}
   attackPref: {fileID: 0}
-  activeAttackTargetType: 1
   target: {fileID: 0}
   activeTarget: {fileID: 0}
   heroList: []
@@ -168,6 +171,46 @@ MonoBehaviour:
   citizenList: []
   unitState: -1
   battleState: -1
+  bufferState:
+    damage: 0
+    defense: 0
+    damageReceived: 0
+    damageDecrease: 0
+    criticalProbability: 0
+    criticalDamage: 0
+    attackSpeed: 0
+    maxHealthIncrease: 0
+    burns: 0
+    isBurns: 0
+    freeze: 0
+    isFreze: 0
+    shield: 0
+    isShield: 0
+    bleed: 0
+    isBleed: 0
+    lifeSteal: 0
+    isLifeSteal: 0
+    provoke: 0
+    stealth: 0
+    stun: 0
+    silence: 0
+    resistance: 0
+    blind: 0
+  isThereDamageUI: 1
+  usingFloatingHpBar: 0
+--- !u!114 &-7482379678466336324
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8489007089072879651}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57b5116c7ad7e2b4ea4a025f97f2f5f1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heightAboveGround: 3
 --- !u!1001 &970483107669232990
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -1,10 +1,5 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEngine.Rendering.DebugUI;
 
 public class MissionSpawner : MonoBehaviour
 {
@@ -23,7 +18,12 @@ public class MissionSpawner : MonoBehaviour
 
         for (int i = 0; i < randomNumbers.Count; i++)
         {
-            prefebs[i].GetComponent<MissionMarkData>().OnOffMark(true);
+            CreateMission(randomNumbers[i]);
         }
+    }
+
+    private void CreateMission(int index)
+    {
+        prefebs[index].GetComponent<MissionMarkData>().OnOffMark(true);
     }
 }

@@ -27,8 +27,8 @@ public enum SkillSearchType
 public enum SkillTargetType
 {
     None = -1,
-    Enemy,
     Friendly,
+    Enemy,
     Both,
     Count,
 }
@@ -39,5 +39,13 @@ public enum SkillCoefficientType
     Defense,
     MaxHealth,
     Health,
+    Count,
+}
+public enum SkillIndicatorTarget
+{
+    None = -1,
+    Self,
+    Enemy,
+    Friendly,
     Count,
 }

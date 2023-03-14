@@ -12,6 +12,7 @@ public class SkillCreaterWindow : EditorWindow
 
     private int lineNumber;
     private bool isActiveSkill;
+    private bool hasDuration;
 
     [MenuItem("Window/CustomEidtor/SkillCreater")]
     public static void ShowWindow()
@@ -35,20 +36,21 @@ public class SkillCreaterWindow : EditorWindow
     {        
         isActiveSkill = ValueToInt(skillInfo["Sort"]) == (int)SkillMainType.Active;
 
-        var characterSkill = isActiveSkill ?
-            CreateInstance<ActiveSkillAOE>() : CreateInstance<CharacterSkill>();
+        CharacterSkill characterSkill;
+
+        if(isActiveSkill)
+        {
+            hasDuration = ValueToInt(skillInfo["Duration"]) != -1;
+
+            characterSkill = hasDuration ?
+                CreateInstance<AOEWithDuration>() : CreateInstance<ActiveSkillAOE>();
+        }
+        else
+            characterSkill = CreateInstance<CharacterSkill>();
 
         SetSkillValues(characterSkill);
 
         return characterSkill;
-    }
-    private int ValueToInt(object obj)
-    {
-        return int.Parse(obj.ToString());
-    }
-    private float ValueToFloat(object obj)
-    {
-        return float.Parse(obj.ToString());
     }
     private void SetSkillValues(CharacterSkill characterSkill)
     {
@@ -56,24 +58,34 @@ public class SkillCreaterWindow : EditorWindow
         characterSkill.cooldown    = ValueToFloat(skillInfo["CoolTime"]);
         characterSkill.preCooldown = ValueToFloat(skillInfo["StartCoolTime"]);
 
-        characterSkill.targetType      = (SkillTargetType)ValueToInt(skillInfo["TargetType"]);
+        characterSkill.targetType      = (SkillTargetType)ValueToInt(skillInfo["DamageTarget"]);
         characterSkill.coefficientType = (SkillCoefficientType)ValueToInt(skillInfo["BaseStats"]);
         characterSkill.coefficient     = ValueToFloat(skillInfo["Coefficient"]);
         
         characterSkill.skillDescription = (string)skillInfo["SkillInfo"];
+
+        characterSkill.isCriticalPossible = ValueToInt(skillInfo["CanCri"]) == 1;
+        characterSkill.isAuto = ValueToInt(skillInfo["IsAutoTargeting"]) == 1;
 
         if (isActiveSkill)
         {
             var activeSkill = characterSkill as ActiveSkillAOE;
 
             activeSkill.layerM         = 1 << LayerMask.NameToLayer("Floor");
-            activeSkill.castRangeLimit = ValueToInt(skillInfo["Range"]);
+            activeSkill.castRangeLimit = ValueToInt(skillInfo["Range"]) / 100f;
 
             LoadIndicatorPrefab(activeSkill);
-            activeSkill.sectorRadius = ValueToInt(skillInfo["Radius"]);
+            activeSkill.sectorRadius = ValueToInt(skillInfo["Radius"]) / 100f;
             activeSkill.sectorAngle  = ValueToInt(skillInfo["Angle"]);
             activeSkill.widthZ       = ValueToInt(skillInfo["LengthZ"]);
             activeSkill.widthX       = ValueToInt(skillInfo["LengthX"]);
+
+            if(hasDuration)
+            {
+                var aoeWithDuration         = activeSkill as AOEWithDuration;
+                aoeWithDuration.duration    = ValueToFloat(skillInfo["Duration"]);
+                aoeWithDuration.hitInterval = ValueToFloat(skillInfo["HitInterval"]);
+            }
         }
     }
     private void LoadIndicatorPrefab(ActiveSkillAOE activeSkillAOE)
@@ -89,10 +101,16 @@ public class SkillCreaterWindow : EditorWindow
                     bool isCircle      = ValueToInt(skillInfo["Angle"]) == 360;                    
                     string prefab      = isCircle ? "CircleIndicator.prefab" : "SectorIndicator.prefab";
                     skillAreaIndicator = prefabPath + prefab;
+
+                    activeSkillAOE.areaShapeType = isCircle ?
+                        SkillAreaShape.Circle : SkillAreaShape.Sector;
                 }                
                 break;
-            case SkillAreaShape.Rectangle:                
-                skillAreaIndicator = prefabPath + "SquareIndicator.prefab";
+            case SkillAreaShape.Rectangle:
+                {
+                    skillAreaIndicator = prefabPath + "SquareIndicator.prefab";
+                    activeSkillAOE.areaShapeType = SkillAreaShape.Rectangle;
+                }                
                 break;
         }
         castRangeIndicator = prefabPath + "CastRangeIndicator.prefab";
@@ -114,5 +132,13 @@ public class SkillCreaterWindow : EditorWindow
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
+    }
+    private int ValueToInt(object obj)
+    {
+        return int.Parse(obj.ToString());
+    }
+    private float ValueToFloat(object obj)
+    {
+        return float.Parse(obj.ToString());
     }
 }

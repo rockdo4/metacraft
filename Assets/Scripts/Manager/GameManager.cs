@@ -56,6 +56,15 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
+    public void SetHeroesOrigin()
+    {
+        int count = myHeroes.Count;
+        for (int i = 0; i < count; i++)
+        {
+            Utils.CopyPositionAndRotation(myHeroes[i], heroSpawnTransform);
+        }
+    }
+
     public List<GameObject> GetSelectedHeroes()
     {
         List<GameObject> selectedHeroes = new();

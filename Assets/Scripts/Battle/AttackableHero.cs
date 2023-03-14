@@ -12,6 +12,7 @@ public class AttackableHero : AttackableUnit
     private Coroutine coOnIndicator;
 
     bool lateReturn = false;
+
     protected override UnitState UnitState {
         get {
             return unitState;
@@ -44,7 +45,8 @@ public class AttackableHero : AttackableUnit
                     BattleState = UnitBattleState.None;
                     nowUpdate = ReturnPosUpdate;
 
-                    lastNormalAttackTime = Time.time;
+                    foreach (CharacterSkill skill in characterData.attacks)
+                        lastNormalAttackTime[skill] = Time.time;
                     heroUI.heroSkill.CancleSkill();                    
 
                     target = null;
@@ -59,9 +61,10 @@ public class AttackableHero : AttackableUnit
                 case UnitState.Battle:
                     pathFind.isStopped = false;
                     pathFind.speed = characterData.data.moveSpeed;
-                    pathFind.stoppingDistance = characterData.attack.distance;
+                    pathFind.stoppingDistance = minAttackDis;
 
-                    battleManager.GetEnemyList(ref enemyList);
+                    battleManager.GetHeroList(ref heroList);
+                    battleManager.GetCurrBtMgr().GetEnemyList(ref enemyList);
 
                     animator.SetFloat("Speed", 1);
 
@@ -111,6 +114,10 @@ public class AttackableHero : AttackableUnit
                     animator.ResetTrigger("AttackEnd");
                     break;
                 case UnitBattleState.Stun:
+                    pathFind.isStopped = true;
+                    animator.SetTrigger("Stun");
+                    animator.ResetTrigger("Attack");
+                    animator.ResetTrigger("AttackEnd");
                     break;
             }
         }
@@ -127,21 +134,38 @@ public class AttackableHero : AttackableUnit
         }
     }
 
-    protected override void Awake()
+    //protected override void Awake()
+    //{
+    //    base.Awake();
+    //    pathFind = transform.GetComponent<NavMeshAgent>();
+    //    characterData.InitSetting();
+    //    SetData();
+
+    //    unitState = UnitState.Idle;
+
+    //    lastNormalAttackTime = Time.time;
+    //}
+    private void Awake()
     {
-        base.Awake();
+        var activeSkill = characterData.activeSkill as ActiveSkillAOE;
+        activeSkill.ActorTransform = transform;
+
+        // 어웨이크 에러땜에 임시로 추가함
+        InitData();
         pathFind = transform.GetComponent<NavMeshAgent>();
         characterData.InitSetting();
         SetData();
 
         unitState = UnitState.Idle;
 
-        lastNormalAttackTime = Time.time;
+        foreach (CharacterSkill skill in characterData.attacks)
+            lastNormalAttackTime[skill] = Time.time;
     }
     private void Start()
     {
-        var activeSkill = characterData.activeSkill as ActiveSkillAOE;
-        activeSkill.ActorTransform = transform;
+        var manager = FindObjectOfType<BattleManager>();
+        if (manager != null)
+            battleManager = manager;
     }
 
     // Ui와 연결, Ui에 스킬 쿨타임 연결
@@ -168,7 +192,9 @@ public class AttackableHero : AttackableUnit
         battleState = UnitBattleState.None;
         
         lateReturn = false;
-        lastActiveSkillTime = lastNormalAttackTime = lastNavTime = Time.time;
+        lastActiveSkillTime  = lastNavTime = Time.time;
+        foreach (CharacterSkill skill in characterData.attacks)
+            lastNormalAttackTime[skill] = Time.time;
         target = null;
         animator.Rebind();
         UnitHp = characterData.data.currentHp;
@@ -199,7 +225,7 @@ public class AttackableHero : AttackableUnit
         BattleState = UnitBattleState.ActiveSkill;
         if (coOnIndicator != null)
         {
-            GetActiveSkillAOE().OffIndicatorsForOnActiveSkill();
+            GetActiveSkillAOE().ReadyEffectUntillOnActiveSkill();
             StopAOESkillCoroutine();
         }
     }
@@ -255,7 +281,7 @@ public class AttackableHero : AttackableUnit
                     SearchAi();
                     if (IsAlive(target))
                     {
-                        if (InRangeNormalAttack && CanNormalAttackTime)
+                        if (FindNowAttack())
                             BattleState = UnitBattleState.NormalAttack;
                         else
                             BattleState = UnitBattleState.MoveToTarget;
@@ -269,8 +295,14 @@ public class AttackableHero : AttackableUnit
         switch (BattleState)
         {
             case UnitBattleState.MoveToTarget: //타겟에게 이동중 타겟 거리 계산.
-                if (InRangeNormalAttack)
-                    BattleState = CanNormalAttackTime ? UnitBattleState.NormalAttack : UnitBattleState.BattleIdle;
+                if (FindNowAttack())
+                {
+                    BattleState = UnitBattleState.NormalAttack;
+                }
+                else if (InRangeMinNormalAttack)
+                {
+                    BattleState = UnitBattleState.BattleIdle;
+                }
                 else if (Time.time - lastNavTime > navDelay) //일반공격, 패시브 사용 불가 거리일시 이동
                 {
                     lastNavTime = Time.time;
@@ -278,10 +310,10 @@ public class AttackableHero : AttackableUnit
                 }
                 break;
             case UnitBattleState.BattleIdle:
-                if (!InRangeNormalAttack)
-                    BattleState = UnitBattleState.MoveToTarget;
-                else if (InRangeNormalAttack && CanNormalAttackTime)
+                if (FindNowAttack())
                     BattleState = UnitBattleState.NormalAttack;
+                else if (!InRangeMinNormalAttack)
+                    BattleState = UnitBattleState.MoveToTarget;
                 break;
             case UnitBattleState.NormalAttack:
                 stateInfo = animator.GetCurrentAnimatorStateInfo(0);
@@ -298,11 +330,6 @@ public class AttackableHero : AttackableUnit
                 }
                 break;
             case UnitBattleState.Stun:
-                stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-                if (stateInfo.IsName("Stun") && stateInfo.normalizedTime >= 1.0f)
-                {
-                    StunEnd();
-                }
                 break;
         }
     }
@@ -365,10 +392,10 @@ public class AttackableHero : AttackableUnit
         BattleState = state;
     }
 
-    public override void OnDamage(int dmg,int level, bool isCritical = false)
+    public override void OnDamage(AttackableUnit attackableUnit, CharacterSkill skill)
     {
-        base.OnDamage(dmg,level,isCritical);
-        heroUI.SetHp(UnitHp,MaxHp);
+        base.OnDamage(attackableUnit, skill);
+        heroUI.SetHp(UnitHp, MaxHp);
 
     }
 
@@ -387,7 +414,7 @@ public class AttackableHero : AttackableUnit
         animator.SetTrigger("AttackEnd");
         base.NormalAttackEnd();
 
-        lastNormalAttackTime = Time.time;
+        lastNormalAttackTime[nowAttack] = Time.time;
 
         if (lateReturn)
         {
@@ -401,13 +428,11 @@ public class AttackableHero : AttackableUnit
     public override void PassiveSkillEvent()
     {
         battleManager.GetHeroList(ref heroList);
-        Logger.Debug("Passive Start");
     }
     public override void ActiveSkillEnd()
     {
         pathFind.isStopped = false;
         animator.SetTrigger("ActiveEnd");
-        lastNormalAttackTime = Time.time;
         base.ActiveSkillEnd();
 
         if (lateReturn)

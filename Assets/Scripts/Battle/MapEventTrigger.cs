@@ -4,18 +4,28 @@ using UnityEngine;
 public class MapEventTrigger : MonoBehaviour
 {
     public List<Transform> heroSettingPositions;
-    [Header("적을 소환할 위치를 넣어주세요.")]
+    [Header("적을 소환할 위치")]
     public List<EnemySpawningAndPositioning> enemySettingPositions;
 
     public List<AttackableUnit> enemys = new();        // 생성할 Enemy들
     public List<AttackableUnit> useEnemys = new();     // 현재 생성된 Enemy들
 
-    [SerializeField, Header("스테이지 선택 구간일 때 체크해주세요")]
+    [Header("스테이지 선택 트리거")]
     public bool isStageEnd = false;
-    [SerializeField, Header("마지막 스테이지일 때 체크해주세요")]
+    [Header("미션 종료 트리거")]
     public bool isMissionEnd = false;
+    [Header("스킵할 트리거")]
+    public bool isSkip = false;
+    [Header("길목 트리거")]
+    public bool isForkedRoad = false;
 
     private List<CapsuleCollider> enemyColls = new();
+
+    private void Start()
+    {
+        if (enemySettingPositions.Count == 0)
+            isSkip = true;
+    }
 
     public void OnDead(AttackableEnemy enemy)
     {
