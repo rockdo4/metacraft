@@ -243,6 +243,8 @@ public class BattleManager : MonoBehaviour
                 attackableHero.ResetData();
                 heroUiList[i].SetHeroInfo(attackableHero.GetUnitData());
                 heroUiList[i].gameObject.SetActive(true);
+                var coll = attackableHero.GetComponent<CapsuleCollider>();
+                coll.enabled = true;
                 useHeroes.Add(attackableHero);
 
                 supplyEventHeroImages[i].SetHeroInfo(attackableHero.GetUnitData());
