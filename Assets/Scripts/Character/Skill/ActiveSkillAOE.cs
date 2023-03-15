@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ActiveSkillAOE", menuName = "Character/ActiveSkill/AOE")]
@@ -7,8 +6,7 @@ public class ActiveSkillAOE : CharacterSkill
 {
     public SkillAreaIndicator skillAreaIndicatorPrefab;
     protected SkillAreaIndicator skillAreaIndicator;
-    public LayerMask layerM;    
-
+    public LayerMask layerM;
     public Transform ActorTransform { set { actorTransform = value; } }
     protected Transform actorTransform;
 
@@ -191,8 +189,13 @@ public class ActiveSkillAOE : CharacterSkill
     {
         var target = isAuto ? targetPos : hit.point;
 
-        indicatorTransform.position = actorTransform.position + Vector3.up * 0.1f;
-        indicatorTransform.LookAt(target + Vector3.up * 0.1f);
+        indicatorTransform.position = actorTransform.position + Vector3.up * 0.1f;        
+        
+        float currentRotationX = indicatorTransform.eulerAngles.x;        
+        indicatorTransform.LookAt(target + Vector3.up * 0.1f);        
+        Vector3 newRotation = indicatorTransform.eulerAngles;
+        newRotation.x = currentRotationX;
+        indicatorTransform.eulerAngles = newRotation;
     }
 
     protected bool IsTargetInRange(Vector3 hitPoint)
@@ -212,7 +215,10 @@ public class ActiveSkillAOE : CharacterSkill
 
     public override void OnActiveSkill(AttackableUnit attackableUnit)
     {
-        EffectManager.Instance.Get(activeEffect, indicatorTransform);
+        if(skillStartFromCharacter)
+            EffectManager.Instance.Get(activeEffect, indicatorTransform, indicatorTransform.rotation);
+        else
+            EffectManager.Instance.Get(activeEffect, indicatorTransform);
 
         skillEffectedUnits = skillAreaIndicator.GetUnitsInArea();
 

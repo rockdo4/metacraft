@@ -240,7 +240,7 @@ public abstract class AttackableUnit : MonoBehaviour
             {
                 bool isCritical = false;
                 var value = CalculDamage(characterData.activeSkill, ref isCritical);
-                units[i].AddBuff(buff, value, null);
+                units[i].AddBuff(buff, value, null);          
             }
         }
     }
