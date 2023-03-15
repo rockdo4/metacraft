@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class RecruitmentClick : MonoBehaviour
 {
@@ -7,7 +8,9 @@ public class RecruitmentClick : MonoBehaviour
 
     public void OnMouseDown()
     {
-        uiMgr.ShowView(7);
-        Logger.Debug("RecruitmentClick");
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            uiMgr.ShowView(7);
+        }
     }
 }

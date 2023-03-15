@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class DispatchClick : MonoBehaviour
 {
@@ -7,7 +8,9 @@ public class DispatchClick : MonoBehaviour
 
     public void OnMouseDown()
     {
-        uiMgr.ShowView(6);
-        Logger.Debug("DispatchClick");
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            uiMgr.ShowView(6);
+        }
     }
 }
