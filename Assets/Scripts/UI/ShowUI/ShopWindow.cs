@@ -19,7 +19,6 @@ public class ShopWindow : View
         GameObject newHero = Instantiate(gm.heroDatabase[count], gm.heroSpawnTransform);
         gm.myHeroes.Add(newHero);
         newHero.SetActive(false);
-        gm.playerData.characterCount++;
 
         LiveData data = newHero.GetComponent<AttackableUnit>().GetUnitData().data;
         portrait.sprite = gm.GetSpriteByAddress($"Illur_{data.name}");
@@ -28,7 +27,7 @@ public class ShopWindow : View
         stringBuilder.Append($"공격력 : {data.baseDamage}\n");
         stringBuilder.Append($"방어력 : {data.baseDefense}\n");
         stringBuilder.Append($"체력 : {data.healthPoint}\n");
-        stringBuilder.Append($"타입 : {data.job}\n");
+        stringBuilder.Append($"타입 : {(CharacterJob)data.job}\n");
         stringBuilder.Append($"치명타 확률 : {data.critical}\n");
         stringBuilder.Append($"치명타 배율 : {data.criticalDmg}\n");
         stringBuilder.Append($"이동 속도 : {data.moveSpeed}\n");

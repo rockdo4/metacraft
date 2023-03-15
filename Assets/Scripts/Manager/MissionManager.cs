@@ -83,7 +83,6 @@ public class MissionManager : View
 
     public void UpdateMissionInfo(int difficulty, int num)
     {
-        //missionNum = num;
         var dic = missionInfoTable[difficulty][num];
         gm.currentSelectMission = dic;
 
@@ -106,7 +105,7 @@ public class MissionManager : View
         //ProperCombatPower.text = $"0/{dic["ProperCombatPower"]}";
         ProperCombatPower.color = Color.white;
 
-        //보상 테이블 연결 필요
+        ////보상 테이블 연결 필요
         //int erCount = expectedRewards.Count;
         //for (int i = 0; i < erCount; i++)
         //{
@@ -204,19 +203,7 @@ public class MissionManager : View
         }
         if (count > 0)
         {
-            //gm.CreateBattleMap();
-            switch (gm.currentSelectMission["Type"])
-            {
-                case 0:
-                case 1:
-                    gm.LoadScene((int)SceneIndex.Battle);
-                    //gm.EnableBattleMap();
-                    break;
-                case 2:
-                    gm.LoadScene((int)SceneIndex.Defense);
-                    //gm.EnableBattleMap();
-                    break;
-            }
+            gm.LoadScene((int)SceneIndex.Battle);
         }
     }
 
