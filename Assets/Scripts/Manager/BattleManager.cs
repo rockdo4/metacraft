@@ -13,7 +13,7 @@ public class BattleManager : MonoBehaviour
     public List<GameObject> eventMaps;
     private List<Dictionary<string, object>> eventInfoTable;            // 이벤트 테이블
     private List<Dictionary<string, object>> supplyInfoTable;           // 보급 테이블
-    private List<Dictionary<string, object>> missionInfoTable;          // 작전 테이블
+    private Dictionary<string, object> currentSelectMissionTable;       // 작전 테이블
 
     public MapEventEnum curEvent = MapEventEnum.Normal;
     private GameObject curMap;
@@ -174,7 +174,7 @@ public class BattleManager : MonoBehaviour
         if (tree.CurNode.type == TreeNodeTypes.Supply)
         {
             // 작전 테이블에서 보급 id 찾고
-            string supplyId = $"{missionInfoTable[0]["SupplyID"]}";
+            string supplyId = $"{currentSelectMissionTable["SupplyID"]}";
 
             // 보급 테이블에서 같은 ID 찾아서 해당 줄의 인덱스 저장
             int index = 0;
@@ -228,7 +228,7 @@ public class BattleManager : MonoBehaviour
         GameManager gm = GameManager.Instance;
         eventInfoTable = gm.eventInfoList;
         supplyInfoTable = gm.supplyInfoList;
-        missionInfoTable = gm.missionInfoList;
+        currentSelectMissionTable = gm.currentSelectMission;
 
         var selectedHeroes = gm.GetSelectedHeroes();
         int count = selectedHeroes.Count;
@@ -669,7 +669,9 @@ public class BattleManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Q))
         {
             // 작전 테이블에서 보급 id 찾고
-            string supplyId = $"{missionInfoTable[0]["SupplyID"]}";
+            if (currentSelectMissionTable == null)
+                Logger.Debug("Null");
+            string supplyId = $"{currentSelectMissionTable["SupplyID"]}";
 
             // 보급 테이블에서 같은 ID 찾아서 해당 줄의 인덱스 저장
             int index = 0;
