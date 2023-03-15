@@ -11,6 +11,14 @@ public class AttackableHero : AttackableUnit
     private Coroutine coOnIndicator;
 
     bool lateReturn = false;
+    public override int UnitHp {
+        get {  return base.UnitHp; }
+        set {
+            base.UnitHp = value;
+            heroUI.SetHp(UnitHp, MaxHp);
+
+        }
+    }
 
     protected override UnitState UnitState {
         get {
@@ -188,11 +196,13 @@ public class AttackableHero : AttackableUnit
         battleState = UnitBattleState.None;
         
         lateReturn = false;
-        lastActiveSkillTime  = lastNavTime = Time.time;
+        lastNavTime = Time.time;
         ResetCoolDown();
         target = null;
         animator.Rebind();
         UnitHp = characterData.data.currentHp;
+
+        heroUI.heroSkill.SetCoolTime(characterData.activeSkill.preCooldown);
     }
 
     public override void ReadyActiveSkill()

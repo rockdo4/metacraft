@@ -64,7 +64,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public int MaxHp => (int)((bufferState.maxHealthIncrease * characterData.data.healthPoint) + characterData.data.healthPoint);
     public float UnitHpScale => (float)characterData.data.currentHp / MaxHp;
-    public int UnitHp {
+    public virtual int UnitHp {
         get { return characterData.data.currentHp; }
         set {
             characterData.data.currentHp = Mathf.Clamp(value, 0, MaxHp); 
@@ -140,6 +140,7 @@ public abstract class AttackableUnit : MonoBehaviour
         unitSearchAi[CharacterJob.Shooter] = ShooterSearch;
         unitSearchAi[CharacterJob.Assassin] = AssassinSearch;
         unitSearchAi[CharacterJob.Support] = SupportSearch;
+        unitSearchAi[CharacterJob.Villain] = AssultSearch;
 
         if (isThereDamageUI)
         {
@@ -800,6 +801,8 @@ public abstract class AttackableUnit : MonoBehaviour
     public void ResetCoolDown()
     {
         foreach (CharacterSkill skill in characterData.attacks)
-            lastNormalAttackTime[skill] = Time.time;
+        {
+            lastNormalAttackTime[skill] = Time.time + skill.preCooldown;
+        }
     }
 }
