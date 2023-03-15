@@ -642,7 +642,7 @@ public abstract class AttackableUnit : MonoBehaviour
     {
         // 이 부분 로테이션 이상할 시 바꿔야함
         //Utils.CopyPositionAndRotation(gameObject, gameObject.transform.parent);
-        pathFind.enabled = false;
+        //pathFind.enabled = false;
         gameObject.SetActive(false);
     }
 

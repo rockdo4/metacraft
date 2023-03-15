@@ -417,6 +417,7 @@ public class AttackableHero : AttackableUnit
     {
         battleManager.OnDeadHero((AttackableHero)unit);
         heroUI.SetDieImage();
+        enemyList.Clear();
 
         SkillCancle();      
     }
