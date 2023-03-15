@@ -29,7 +29,7 @@ public class SkillCreaterWindow : EditorWindow
     private void CreateGUIFields()
     {
         skillTable = EditorGUILayout.TextField("SkillTable", skillTable);        
-        buffTablePath = EditorGUILayout.TextField("StateTable", buffTablePath);
+        buffTablePath = EditorGUILayout.TextField("BuffTable", buffTablePath);
         BuffScriptableName = EditorGUILayout.TextField("BuffName", BuffScriptableName);
         skillCreatePath = EditorGUILayout.TextField("SkillCreatePath", skillCreatePath);
         BuffCreatePath = EditorGUILayout.TextField("BuffCreatePath", BuffCreatePath);
@@ -100,6 +100,8 @@ public class SkillCreaterWindow : EditorWindow
         characterSkill.skillDescription = (string)skillInfo["SkillInfo"];
 
         characterSkill.isCriticalPossible = ValueToInt(skillInfo["CanCri"]) == 1;
+
+        characterSkill.targetNumLimit = ValueToInt(skillInfo["DamageTargetLimit"]);
 
         //characterSkill.buffTypeAndValue = new(3);
         //for(int i = 0; i < 3; i++)
@@ -191,10 +193,16 @@ public class SkillCreaterWindow : EditorWindow
     }
     private int ValueToInt(object obj)
     {
-        return int.Parse(obj.ToString());
+        var debug = int.TryParse(obj.ToString(), out int result);
+        if (!debug)
+            Debug.Log("Int ÆÄ½Ì ½ÇÆÐ");
+        return result;
     }
     private float ValueToFloat(object obj)
     {
-        return float.Parse(obj.ToString());
+        var debug = float.TryParse(obj.ToString(), out float result);
+        if (!debug)
+            Debug.Log("Float ÆÄ½Ì ½ÇÆÐ");
+        return result;
     }
 }

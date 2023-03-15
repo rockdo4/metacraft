@@ -229,8 +229,6 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void ReadyActiveSkill();
     public virtual void OnActiveSkill()
     {
-        //if (characterData.activeSkill.SkillEffectedUnits == null) //임시 코드. 영우형이 고칠 예정
-        //    return;
         characterData.activeSkill.OnActiveSkill(this);
 
         var units = characterData.activeSkill.SkillEffectedUnits;
