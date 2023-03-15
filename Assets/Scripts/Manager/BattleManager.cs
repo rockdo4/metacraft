@@ -5,31 +5,46 @@ using TMPro;
 using System.Collections;
 using System.Linq;
 using Cinemachine;
+using Unity.VisualScripting;
 
 public class BattleManager : MonoBehaviour
 {
     [Header("사용할 맵들")]
     public List<GameObject> eventMaps;
-    private List<Dictionary<string, object>> eventInfoTable;
+    private List<Dictionary<string, object>> eventInfoTable;            // 이벤트 테이블
+    private List<Dictionary<string, object>> supplyInfoTable;           // 보급 테이블
+    private List<Dictionary<string, object>> missionInfoTable;          // 작전 테이블
 
     public MapEventEnum curEvent = MapEventEnum.Normal;
     private GameObject curMap;
 
+    [Header("이벤트 Ui")]
     public GameObject eventUi;
     [Header("이벤트 발생 시 클릭할 버튼들")]
     public List<GameObject> choiceButtons;
-    [Header("히어로 이미지 Ui")]
-    public Image heroImage;
+    [Header("이벤트맵 히어로 이미지 Ui")]
+    public Image battleEventHeroImage;
     [Header("이벤트 설명 들어갈 텍스트")]
     public TextMeshProUGUI contentText;
 
+    [Header("보급 Ui")]
+    public GameObject supplyUi;
+    [Header("보급맵 발생 시 클릭할 버튼들")]
+    public List<GameObject> supplyButtons;
+    [Header("보급맵 히어로 이미지 Ui")]
+    public List<HeroUi> supplyEventHeroImages;
+    [Header("보급 설명 들어갈 텍스트")]
+    public TextMeshProUGUI supplyContentText;
+
     private List<TextMeshProUGUI> buttonTexts = new();
+    private List<TextMeshProUGUI> supplyButtonTexts = new();
 
     private List<string> heroNames = new();
 
     // TestBattleManager
     public List<HeroUi> heroUiList;
     public List<AttackableUnit> useHeroes = new();
+    public List<AttackableUnit> unuseHeroes = new();
     public StageEnemy enemyCountTxt;
     public ClearUiController clearUi;
     public Image fadePanel;
@@ -68,13 +83,26 @@ public class BattleManager : MonoBehaviour
         StartNextStage(curEvent);
     }
 
+    private void CloseUi(GameObject ui, List<GameObject> buttons)
+    {
+        for (int i = 0; i < buttons.Count; i++)
+        {
+            buttons[i].SetActive(false);
+        }
+        SetEventUiActive(ui, false);
+    }
+
     public void EndEvent()
     {
-        for (int i = 0; i < choiceButtons.Count; i++)
+        CloseUi(eventUi, choiceButtons);
+    }
+    public void EndSupply()
+    {
+        CloseUi(supplyUi, supplyButtons);
+        for (int i = 0; i < heroUiList.Count; i++)
         {
-            choiceButtons[i].SetActive(false);
+            heroUiList[i].gameObject.SetActive(true);
         }
-        SetEventUiActive(false);
     }
 
     private void StartNextStage(MapEventEnum ev)
@@ -116,25 +144,71 @@ public class BattleManager : MonoBehaviour
         {
             curMap = eventMaps[2];
             OnLigth(2);
+
+            if (tree.CurNode.type == TreeNodeTypes.Supply)
+            {
+                SetEventUiActive(supplyUi, true);
+                SetActiveHeroUiList();
+            }
+            else
+            {
+                SetEventUiActive(eventUi, true);
+            }
+
             SetEventInfo(ev);
-            SetEventUiActive(true);
         }
     }
 
-    private void SetEventUiActive(bool active) => eventUi.SetActive(active);
+    private void SetEventUiActive(GameObject ui, bool active) => ui.SetActive(active);
+
+    private void SetActiveHeroUiList()
+    {
+        for (int i = 0; i < heroUiList.Count; i++)
+        {
+            heroUiList[i].gameObject.SetActive(false);
+        }
+    }
 
     private void SetEventInfo(MapEventEnum ev)
     {
-        int heroNameIndex = Random.Range(0, heroNames.Count);
-        heroImage.sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{heroNames[heroNameIndex]}");
-        contentText.text = $"{eventInfoTable[(int)ev]["Explanation"]}";
-
-        int textCount = (int)eventInfoTable[(int)ev][$"TextCount"];
-        for (int i = 0; i < textCount; i++)
+        if (tree.CurNode.type == TreeNodeTypes.Supply)
         {
-            choiceButtons[i].SetActive(true);
-            string text = $"{eventInfoTable[(int)ev][$"Select{i + 1}Text"]}";
-            buttonTexts[i].text = text;
+            // 작전 테이블에서 보급 id 찾고
+            string supplyId = $"{missionInfoTable[0]["SupplyID"]}";
+
+            // 보급 테이블에서 같은 ID 찾아서 해당 줄의 인덱스 저장
+            int index = 0;
+            for (int i = 0; i < supplyInfoTable.Count; i++)
+            {
+                if (supplyInfoTable[i][supplyId].Equals(supplyId))
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            // 찾은 인덱스로 해당 줄의 데이터들을 불러옴
+            supplyContentText.text = $"{supplyInfoTable[index]["supply_text"]}";
+            for (int i = 0; i < supplyButtons.Count; i++)
+            {
+                choiceButtons[i].SetActive(true);
+                string text = $"{supplyInfoTable[index][$"choice{i}_text"]}";
+                supplyButtonTexts[i].text = text;
+            }
+        }
+        else
+        {
+            int heroNameIndex = Random.Range(0, heroNames.Count);
+            battleEventHeroImage.sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{heroNames[heroNameIndex]}");
+            contentText.text = $"{eventInfoTable[(int)ev]["Explanation"]}";
+
+            int textCount = (int)eventInfoTable[(int)ev][$"TextCount"];
+            for (int i = 0; i < textCount; i++)
+            {
+                choiceButtons[i].SetActive(true);
+                string text = $"{eventInfoTable[(int)ev][$"Select{i + 1}Text"]}";
+                buttonTexts[i].text = text;
+            }
         }
     }
 
@@ -145,9 +219,16 @@ public class BattleManager : MonoBehaviour
             var text = choiceButtons[i].GetComponentInChildren<TextMeshProUGUI>();
             buttonTexts.Add(text);
         }
+        for (int i = 0; i < supplyButtons.Count; i++)
+        {
+            var text = supplyButtons[i].GetComponentInChildren<TextMeshProUGUI>();
+            supplyButtonTexts.Add(text);
+        }
 
         GameManager gm = GameManager.Instance;
         eventInfoTable = gm.eventInfoList;
+        supplyInfoTable = gm.supplyInfoList;
+        missionInfoTable = gm.missionInfoList;
 
         var selectedHeroes = gm.GetSelectedHeroes();
         int count = selectedHeroes.Count;
@@ -163,6 +244,8 @@ public class BattleManager : MonoBehaviour
                 heroUiList[i].SetHeroInfo(attackableHero.GetUnitData());
                 heroUiList[i].gameObject.SetActive(true);
                 useHeroes.Add(attackableHero);
+
+                supplyEventHeroImages[i].SetHeroInfo(attackableHero.GetUnitData());
             }
         }
         for (int i = 0; i < useHeroes.Count; i++)
@@ -279,6 +362,7 @@ public class BattleManager : MonoBehaviour
 
     public void OnDeadHero(AttackableHero hero)
     {
+        unuseHeroes.Add(hero);
         useHeroes.Remove(hero);
         readyCount = useHeroes.Count;
         if (useHeroes.Count == 0)
@@ -305,6 +389,15 @@ public class BattleManager : MonoBehaviour
             useHeroes[i].SetMaxHp();
             useHeroes[i].SetEnabledPathFind(false);
             useHeroes[i].gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < unuseHeroes.Count; i++)
+        {
+            Utils.CopyPositionAndRotation(unuseHeroes[i].gameObject, GameManager.Instance.heroSpawnTransform);
+            unuseHeroes[i].ResetData();
+            unuseHeroes[i].SetMaxHp();
+            unuseHeroes[i].SetEnabledPathFind(false);
+            unuseHeroes[i].gameObject.SetActive(false);
         }
     }
     public void MoveNextStage(float timer)
@@ -575,15 +668,28 @@ public class BattleManager : MonoBehaviour
         
         if (Input.GetKeyDown(KeyCode.Q))
         {
-            OnLigth(0);
-        }
-        if (Input.GetKeyDown(KeyCode.W))
-        {
-            OnLigth(1);
-        }
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            OnLigth(2);
+            // 작전 테이블에서 보급 id 찾고
+            string supplyId = $"{missionInfoTable[0]["SupplyID"]}";
+
+            // 보급 테이블에서 같은 ID 찾아서 해당 줄의 인덱스 저장
+            int index = 0;
+            for (int i = 0; i < supplyInfoTable.Count; i++)
+            {
+                if (supplyInfoTable[i][supplyId].Equals(supplyId))
+                {
+                    index = i;
+                    break;
+                }
+            }
+
+            // 찾은 인덱스로 해당 줄의 데이터들을 불러옴
+            supplyContentText.text = $"{supplyInfoTable[index]["supply_text"]}";
+            for (int i = 0; i < supplyButtons.Count; i++)
+            {
+                choiceButtons[i].SetActive(true);
+                string text = $"{supplyInfoTable[index][$"choice{i}_text"]}";
+                supplyButtonTexts[i].text = text;
+            }
         }
     }
 

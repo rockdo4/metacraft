@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -35,6 +34,7 @@ public class GameManager : Singleton<GameManager>
 
     public List<Dictionary<string, object>> compensationInfoList; // 보상 정보
 
+    public List<Dictionary<string, object>> supplyInfoList; // 보급 노드 정보
 
     // Office Select
     public GameObject currentSelectObject; // Hero Info
@@ -143,6 +143,17 @@ public class GameManager : Singleton<GameManager>
                 (AsyncOperationHandle<TextAsset> obj) =>
                 {
                     compensationInfoList = CSVReader.SplitTextAsset(obj.Result, true, false);
+                    Addressables.Release(obj);
+
+                };
+
+        // 보급 테이블 로드
+        var sit = Addressables.LoadAssetAsync<TextAsset>("SupplyTable");
+
+        sit.Completed +=
+                (AsyncOperationHandle<TextAsset> obj) =>
+                {
+                    supplyInfoList = CSVReader.SplitTextAsset(obj.Result, true, false);
                     Addressables.Release(obj);
 
                 };
@@ -459,7 +470,6 @@ public class GameManager : Singleton<GameManager>
     /************************************* Minu *******************************************/
     public void SetDifferentColor()
     {
-        // 이거 왜 안됨?
         if (currMapColor.Equals(Color.white))
         {
             currMapColor = mapLigthColors[0];
