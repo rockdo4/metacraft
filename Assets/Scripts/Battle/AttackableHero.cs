@@ -335,6 +335,11 @@ public class AttackableHero : AttackableUnit
                 }
                 break;
             case UnitBattleState.Stun:
+                stateInfo = animator.GetCurrentAnimatorStateInfo(0);
+                if (stateInfo.IsName("Stun") && stateInfo.normalizedTime >= 1.0f)
+                {
+                    StunEnd();
+                }
                 break;
         }
     }

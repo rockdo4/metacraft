@@ -38,6 +38,8 @@ public class CharacterSkill : ScriptableObject
     public Vector3 targetPos;
     public string skillDescription;
 
+    public List<BuffInfo> buffInfos;
+
     public virtual void OnActive()
     {
 
