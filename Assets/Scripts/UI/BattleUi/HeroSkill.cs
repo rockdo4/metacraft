@@ -67,6 +67,11 @@ public class HeroSkill : MonoBehaviour
             CoolDownFill = coolDownTimer / coolDown;
         }
     }
+    public void SetCoolTime(float sec)
+    {
+        coolDownTimer = sec;
+    }
+
     public void OnDownSkill()
     {
         if (IsCoolDown)
