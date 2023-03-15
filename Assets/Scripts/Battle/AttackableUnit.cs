@@ -140,6 +140,7 @@ public abstract class AttackableUnit : MonoBehaviour
         unitSearchAi[CharacterJob.Shooter] = ShooterSearch;
         unitSearchAi[CharacterJob.Assassin] = AssassinSearch;
         unitSearchAi[CharacterJob.Support] = SupportSearch;
+        unitSearchAi[CharacterJob.Villain] = AssultSearch;
 
         if (isThereDamageUI)
         {
