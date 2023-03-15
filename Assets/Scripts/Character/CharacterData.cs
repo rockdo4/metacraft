@@ -34,7 +34,7 @@ public class CharacterData : ScriptableObject, IComparable<CharacterData>
     public int          level = 1;          // 레벨
     public int          exp = 0;            // 경험치
     [Range(0, 1000)]
-    public int          likeability = 0;    // 호감도
+    public int          likeAbility = 0;    // 호감도
 
 
     public int CompareTo(CharacterData other)
