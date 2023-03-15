@@ -677,7 +677,7 @@ public class BattleManager : MonoBehaviour
             int index = 0;
             for (int i = 0; i < supplyInfoTable.Count; i++)
             {
-                if (supplyInfoTable[i][supplyId].Equals(supplyId))
+                if (supplyInfoTable[i]["ID"].Equals(supplyId))
                 {
                     index = i;
                     break;
@@ -689,7 +689,7 @@ public class BattleManager : MonoBehaviour
             for (int i = 0; i < supplyButtons.Count; i++)
             {
                 choiceButtons[i].SetActive(true);
-                string text = $"{supplyInfoTable[index][$"choice{i}_text"]}";
+                string text = $"{supplyInfoTable[index][$"choice{i + 1}_text"]}";
                 supplyButtonTexts[i].text = text;
             }
         }
