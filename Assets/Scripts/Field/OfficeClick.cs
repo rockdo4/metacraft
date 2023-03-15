@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class OfficeClick : MonoBehaviour
 {
@@ -7,7 +8,9 @@ public class OfficeClick : MonoBehaviour
 
     public void OnMouseDown()
     {
-        uiMgr.ShowView(2);
-        Logger.Debug("Clicked");
+        if(!EventSystem.current.IsPointerOverGameObject())
+        {
+            uiMgr.ShowView(2);
+        }
     }
 }

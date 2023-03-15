@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class StoreClick : MonoBehaviour
 {
@@ -7,7 +8,9 @@ public class StoreClick : MonoBehaviour
 
     public void OnMouseDown()
     {
-        uiMgr.ShowView(5);
-        Logger.Debug("StoreClick");
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            uiMgr.ShowView(5);
+        }
     }
 }

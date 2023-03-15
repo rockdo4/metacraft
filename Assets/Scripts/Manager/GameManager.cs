@@ -1,10 +1,7 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Text;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -37,6 +34,7 @@ public class GameManager : Singleton<GameManager>
 
     public List<Dictionary<string, object>> compensationInfoList; // 보상 정보
 
+    public List<Dictionary<string, object>> supplyInfoList; // 보급 노드 정보
 
     // Office Select
     public GameObject currentSelectObject; // Hero Info
@@ -88,6 +86,7 @@ public class GameManager : Singleton<GameManager>
     {
         Dictionary<string, AsyncOperationHandle> handles = new();
 
+        // Resources 테이블로 뺄 예정
         List<string> tableNames = new()
         {
             "MissionInfoTable",
@@ -96,6 +95,7 @@ public class GameManager : Singleton<GameManager>
             "OfficeTable",
             "EventTable",
             "CompensationTable",
+            "SupplyTable",
         };
 
         // Load TextAssets
@@ -141,6 +141,7 @@ public class GameManager : Singleton<GameManager>
         officeInfoList = CSVReader.SplitTextAsset(handles["OfficeTable"].Result as TextAsset);
         eventInfoList = CSVReader.SplitTextAsset(handles["EventTable"].Result as TextAsset);
         compensationInfoList = CSVReader.SplitTextAsset(handles["CompensationTable"].Result as TextAsset);
+        supplyInfoList = CSVReader.SplitTextAsset(handles["SupplyTable"].Result as TextAsset);
 
         count = heroNames.Count;
         for (int i = 0; i < count; i++)
@@ -389,7 +390,6 @@ public class GameManager : Singleton<GameManager>
     /************************************* Minu *******************************************/
     public void SetDifferentColor()
     {
-        // 이거 왜 안됨?
         if (currMapColor.Equals(Color.white))
         {
             currMapColor = mapLigthColors[0];
