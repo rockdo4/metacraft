@@ -88,8 +88,9 @@ public class SkillAreaIndicator : MonoBehaviour
     private void OnDisable()
     {
         foreach (var unit in unitsInArea)
-        {
-            unit.GetComponent<Outline>().enabled = false;
+        {       
+            if(unit != null)
+                unit.GetComponent<Outline>().enabled = false;
         }
         unitsInArea.Clear();
     } 
