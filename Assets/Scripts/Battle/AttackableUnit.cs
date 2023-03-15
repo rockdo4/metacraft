@@ -365,16 +365,20 @@ public abstract class AttackableUnit : MonoBehaviour
         }
     }
 
-    public virtual void NormalAttackEnd() => target = (IsAlive(target)) ? null : target;
+    public virtual void NormalAttackEnd() => target = (!IsAlive(target)) ? null : target;
     public virtual void PassiveSkillEnd() { }
-    public virtual void ActiveSkillEnd() => target = (IsAlive(target)) ? null : target;
+    public virtual void ActiveSkillEnd() => target = (!IsAlive(target)) ? null : target;
     public virtual void StunEnd()
     {
         animator.SetTrigger("StunEnd");
         target = null;
         pathFind.isStopped = false;
     }
-    public virtual void ProvokeEnd() => target = null;
+    public virtual void ProvokeEnd()
+    {
+        target = null;
+        Logger.Debug("Provoke End");
+    }
     public virtual void ResetData()
     {
         RemoveBuffers();
