@@ -297,10 +297,14 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected void AssultSearch()
     {
+        if (bufferState.provoke)
+            return;
         SearchNearbyTarget((normalAttackTargetType == UnitType.Hero) ? heroList : enemyList); //근거리 타겟 추적
     }
     protected void ShooterSearch()
     {
+        if (bufferState.provoke)
+            return;
         if (nowAttack == null)
             return;
 
@@ -315,6 +319,8 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     protected void AssassinSearch()
     {
+        if (bufferState.provoke)
+            return;
         var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
         if (targetList.Count == 1)
             SearchNearbyTarget(targetList); //근거리 타겟 추적
@@ -323,11 +329,15 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     protected void SupportSearch()
     {
+        if (bufferState.provoke)
+            return;
         target = GetSearchMinHealthScaleTarget((normalAttackTargetType == UnitType.Hero) ? heroList : enemyList); //근거리 타겟 추적
     }
 
     protected void SearchActiveTarget()
     {
+        if (bufferState.provoke)
+            return;
         var targetList = (activeAttackTargetType == UnitType.Hero) ? heroList : enemyList;
         var teamList = (unitType == UnitType.Hero) ? heroList : enemyList;
         switch (characterData.activeSkill.searchType)
