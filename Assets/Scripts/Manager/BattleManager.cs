@@ -180,7 +180,7 @@ public class BattleManager : MonoBehaviour
             int index = 0;
             for (int i = 0; i < supplyInfoTable.Count; i++)
             {
-                if (supplyInfoTable[i][supplyId].Equals(supplyId))
+                if (supplyInfoTable[i]["ID"].Equals(supplyId))
                 {
                     index = i;
                     break;
@@ -192,7 +192,7 @@ public class BattleManager : MonoBehaviour
             for (int i = 0; i < supplyButtons.Count; i++)
             {
                 choiceButtons[i].SetActive(true);
-                string text = $"{supplyInfoTable[index][$"choice{i}_text"]}";
+                string text = $"{supplyInfoTable[index][$"choice{i + 1}_text"]}";
                 supplyButtonTexts[i].text = text;
             }
         }
@@ -384,20 +384,20 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 0; i < useHeroes.Count; i++)
         {
-            Utils.CopyPositionAndRotation(useHeroes[i].gameObject, GameManager.Instance.heroSpawnTransform);
             useHeroes[i].ResetData();
             useHeroes[i].SetMaxHp();
             useHeroes[i].SetEnabledPathFind(false);
             useHeroes[i].gameObject.SetActive(false);
+            Utils.CopyPositionAndRotation(useHeroes[i].gameObject, GameManager.Instance.heroSpawnTransform);
         }
 
         for (int i = 0; i < unuseHeroes.Count; i++)
         {
-            Utils.CopyPositionAndRotation(unuseHeroes[i].gameObject, GameManager.Instance.heroSpawnTransform);
             unuseHeroes[i].ResetData();
             unuseHeroes[i].SetMaxHp();
             unuseHeroes[i].SetEnabledPathFind(false);
             unuseHeroes[i].gameObject.SetActive(false);
+            Utils.CopyPositionAndRotation(unuseHeroes[i].gameObject, GameManager.Instance.heroSpawnTransform);
         }
     }
     public void MoveNextStage(float timer)
@@ -664,34 +664,6 @@ public class BattleManager : MonoBehaviour
             RemoveRoadTrigger();
             ResetRoads();
             btMapTriggers.Last().isMissionEnd = true;
-        }
-        
-        if (Input.GetKeyDown(KeyCode.Q))
-        {
-            // 작전 테이블에서 보급 id 찾고
-            if (currentSelectMissionTable == null)
-                Logger.Debug("Null");
-            string supplyId = $"{currentSelectMissionTable["SupplyID"]}";
-
-            // 보급 테이블에서 같은 ID 찾아서 해당 줄의 인덱스 저장
-            int index = 0;
-            for (int i = 0; i < supplyInfoTable.Count; i++)
-            {
-                if (supplyInfoTable[i]["ID"].Equals(supplyId))
-                {
-                    index = i;
-                    break;
-                }
-            }
-
-            // 찾은 인덱스로 해당 줄의 데이터들을 불러옴
-            supplyContentText.text = $"{supplyInfoTable[index]["supply_text"]}";
-            for (int i = 0; i < supplyButtons.Count; i++)
-            {
-                choiceButtons[i].SetActive(true);
-                string text = $"{supplyInfoTable[index][$"choice{i + 1}_text"]}";
-                supplyButtonTexts[i].text = text;
-            }
         }
     }
 

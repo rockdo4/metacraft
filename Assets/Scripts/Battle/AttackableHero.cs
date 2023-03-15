@@ -194,6 +194,7 @@ public class AttackableHero : AttackableUnit
         testRot = false;
         UnitState = UnitState.Idle;
         battleState = UnitBattleState.None;
+        pathFind.stoppingDistance = 0f;
         
         lateReturn = false;
         lastNavTime = Time.time;
