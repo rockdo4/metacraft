@@ -37,8 +37,7 @@ public class MapEventTrigger : MonoBehaviour
     {
         for (int i = 0; i < enemySettingPositions.Count; i++)
         {
-            float timer = Random.Range(1f, 2f);
-            enemySettingPositions[i].InfinityRespawn(timer);
+            enemySettingPositions[i].InfinityRespawn();
         }
     }
 

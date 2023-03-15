@@ -240,7 +240,7 @@ public abstract class AttackableUnit : MonoBehaviour
             {
                 bool isCritical = false;
                 var value = CalculDamage(characterData.activeSkill, ref isCritical);
-                units[i].AddBuff(buff, value, null);
+                units[i].AddBuff(buff, value, null);          
             }
         }
     }
@@ -302,6 +302,9 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     protected void ShooterSearch()
     {
+        if (nowAttack == null)
+            return;
+
         lastSearchTime = Time.time;
         var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
         var minTarget = GetSearchTargetInAround(targetList, 10);
@@ -790,6 +793,12 @@ public abstract class AttackableUnit : MonoBehaviour
         nowAttack = null;
         return false;
     }
+
+    public UnitState GetUnitState()
+    {
+        return UnitState;
+    }
+
     public void ResetCoolDown()
     {
         foreach (CharacterSkill skill in characterData.attacks)

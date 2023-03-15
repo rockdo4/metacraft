@@ -14,12 +14,19 @@ public class BattleMapInfo : MonoBehaviour
     public BattleMapEnum battleMapType;
     public GameObject viewPoint;
     protected bool init = false;
+    public Light lighting;
 
     public virtual void GameStart() { FindBattleManager(); }
 
     protected void FindBattleManager()
     {
-        battleMgr = FindObjectOfType<BattleManager>();
+        if (battleMgr == null)
+            battleMgr = FindObjectOfType<BattleManager>();
+    }
+
+    public Light GetLight()
+    {
+        return lighting;
     }
 
     public List<Transform> GetStartPosition()
@@ -52,10 +59,7 @@ public class BattleMapInfo : MonoBehaviour
         return triggers[battleMgr.GetCurrTriggerIndex()].useEnemys.Count;
     }
 
-    public void GetEnemyList(ref List<AttackableUnit> enemyList)
-    {
-        enemyList = triggers[battleMgr.GetCurrTriggerIndex()].useEnemys;
-    }
+    public virtual void GetEnemyList(ref List<AttackableUnit> enemyList) {}
 
     public ref List<MapEventTrigger> GetTriggers()
     {

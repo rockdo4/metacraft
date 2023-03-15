@@ -368,8 +368,16 @@ public class AttackableHero : AttackableUnit
                 {
                     testRot = false;
                     UnitState = UnitState.Idle;
-                    battleManager.OnReady();
 
+                    if (battleManager.curEvent == MapEventEnum.Defense)
+                    {
+                        if (!battleManager.TempReturnPos())
+                        {
+                            break;
+                        }
+                    }
+
+                    battleManager.OnReady();
                 }
                 break;
             case false:

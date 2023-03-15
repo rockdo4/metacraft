@@ -12,7 +12,7 @@ public class BattleManager : MonoBehaviour
     public List<GameObject> eventMaps;
     private List<Dictionary<string, object>> eventInfoTable;
 
-    private MapEventEnum curEvent = MapEventEnum.Normal;
+    public MapEventEnum curEvent = MapEventEnum.Normal;
     private GameObject curMap;
 
     public GameObject eventUi;
@@ -29,7 +29,7 @@ public class BattleManager : MonoBehaviour
 
     // TestBattleManager
     public List<HeroUi> heroUiList;
-    private List<AttackableUnit> useHeroes = new();
+    public List<AttackableUnit> useHeroes = new();
     public StageEnemy enemyCountTxt;
     public ClearUiController clearUi;
     public Image fadePanel;
@@ -47,7 +47,7 @@ public class BattleManager : MonoBehaviour
     // BeltScrollManager
     private GameObject platform;
     public float platformMoveSpeed = 5f;
-    private int currTriggerIndex = 0;
+    public int currTriggerIndex = 0;
     private float nextStageMoveTimer = 0f;
     private Coroutine coMovingMap;
     private Coroutine coResetMap;
@@ -60,6 +60,7 @@ public class BattleManager : MonoBehaviour
 
     public CinemachineVirtualCamera cinemachine;
     private int enemyTriggerIndex = 0;                          // 방어전에 쓰일것 (에너미 스폰하는 트리거)
+    private List<Light> lights = new();
 
     private void Start()
     {
@@ -76,11 +77,6 @@ public class BattleManager : MonoBehaviour
         SetEventUiActive(false);
     }
 
-    private void SetActiveCurrMap(bool active)
-    {
-        curMap.SetActive(active);
-    }
-
     private void StartNextStage(MapEventEnum ev)
     {
         curEvent = ev;
@@ -94,19 +90,32 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    private void OnLigth(int index)
+    {
+        for (int i = 0; i < lights.Count; i++)
+        {
+            lights[i].gameObject.SetActive(false);
+        }
+
+        lights[index].gameObject.SetActive(true);
+    }
+
     private void SetStageEvent(MapEventEnum ev)
     {
         if (ev == MapEventEnum.Normal)
         {
             curMap = eventMaps[0];
+            OnLigth(0);
         }
         else if (ev == MapEventEnum.Defense)
         {
             curMap = eventMaps[1];
+            OnLigth(1);
         }
         else
         {
             curMap = eventMaps[2];
+            OnLigth(2);
             SetEventInfo(ev);
             SetEventUiActive(true);
         }
@@ -171,6 +180,16 @@ public class BattleManager : MonoBehaviour
         readyCount = useHeroes.Count;
 
         FindObjectOfType<AutoButton>().ResetData();
+
+        gm.SetDifferentColor();
+        for (int i = 0; i < eventMaps.Count; i++)
+        {
+            BattleMapInfo battleMap = eventMaps[i].GetComponent<BattleMapInfo>();
+            Light battleMapLigth = battleMap.GetLight();
+            battleMapLigth.color = gm.GetMapLightColor();
+            battleMapLigth.gameObject.SetActive(false);
+            lights.Add(battleMapLigth);
+        }
     }
 
     private IEnumerator CoFadeIn()
@@ -221,6 +240,7 @@ public class BattleManager : MonoBehaviour
                 {
                     useHeroes[i].ChangeUnitState(UnitState.MoveNext);
                 }
+
                 coMovingMap = StartCoroutine(CoMovingMap());
             }
         }
@@ -353,6 +373,11 @@ public class BattleManager : MonoBehaviour
     }
     private void ChoiceNextStageByNode()
     {
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            useHeroes[i].ChangeUnitState(UnitState.Idle);
+        }
+
         tree.gameObject.SetActive(true);
 
         List<TreeNodeObject> childs = tree.CurNode.childrens;
@@ -420,11 +445,6 @@ public class BattleManager : MonoBehaviour
             Utils.CopyPositionAndRotation(useHeroes[i].gameObject, startPositions[i]);
             useHeroes[i].SetEnabledPathFind(true);
         }
-
-        //for (int i = 0; i < btMapTriggers.Count; i++)
-        //{
-        //    btMapTriggers[i].ResetEnemys();
-        //}
 
         currBtMgr.GameStart();
     }
@@ -498,27 +518,24 @@ public class BattleManager : MonoBehaviour
     {
         enemyCountTxt.DieEnemy();
 
-        int count;
         switch (currBtMgr.GetBattleMapType())
         {
             case BattleMapEnum.Normal:
-                btMapTriggers[currTriggerIndex].OnDead(enemy);
-                count = btMapTriggers[currTriggerIndex].useEnemys.Count;
-
-                if (count == 0)
-                {
-                    SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
-                }
+                EnemyCountCheck(enemy, currTriggerIndex);
                 break;
             case BattleMapEnum.Defense:
-                btMapTriggers[enemyTriggerIndex].OnDead(enemy);
-                count = btMapTriggers[enemyTriggerIndex].useEnemys.Count;
-
-                if (count == 0)
-                {
-                    SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
-                }
+                EnemyCountCheck(enemy , enemyTriggerIndex);
                 break;
+        }
+    }
+
+    private void EnemyCountCheck(AttackableEnemy enemy ,int triggerIndex)
+    {
+        btMapTriggers[triggerIndex].OnDead(enemy);
+        int count = btMapTriggers[triggerIndex].useEnemys.Count;
+        if (count == 0)
+        {
+            SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
         }
     }
 
@@ -542,7 +559,7 @@ public class BattleManager : MonoBehaviour
 
     public void SetEnemyTriggerIndex(int index)
     {
-        index = enemyTriggerIndex;
+        enemyTriggerIndex = index;
     }
 
     private void Update()
@@ -554,6 +571,46 @@ public class BattleManager : MonoBehaviour
             RemoveRoadTrigger();
             ResetRoads();
             btMapTriggers.Last().isMissionEnd = true;
+        }
+        
+        if (Input.GetKeyDown(KeyCode.Q))
+        {
+            OnLigth(0);
+        }
+        if (Input.GetKeyDown(KeyCode.W))
+        {
+            OnLigth(1);
+        }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            OnLigth(2);
+        }
+    }
+
+    /*********************************************  임시  **********************************************/
+    // Attackable Hero 스크립트의 ReturnPosUpdate 함수 내에서 사용하고 있음
+    // 여기 어케 바꿀지 생각해봐야함
+    public bool TempReturnPos()
+    {
+        for (int i = 0; i < btMapTriggers[enemyTriggerIndex].enemySettingPositions.Count; i++)
+        {
+            if (!btMapTriggers[enemyTriggerIndex].enemySettingPositions[i].GetMiddleBossIsAlive())
+            {
+                Logger.Debug("Next!");
+                //KillAllEnemy(enemyTriggerIndex);
+                return true;
+            }
+        }
+
+        return false;
+    }
+    private void KillAllEnemy(int index)
+    {
+        int count = btMapTriggers[index].useEnemys.Count;
+
+        for (int i = 0; i < count; i++)
+        {
+            OnDeadEnemy((AttackableEnemy)btMapTriggers[index].useEnemys[i]);
         }
     }
 }

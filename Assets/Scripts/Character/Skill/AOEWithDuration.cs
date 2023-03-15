@@ -45,6 +45,8 @@ public class AOEWithDuration : ActiveSkillAOE
     }
     public override void OnActiveSkill(AttackableUnit attackableUnit)
     {
+        skillEffectedUnits = skillAreaIndicator.GetUnitsInArea();
+
         skillField.transform.SetPositionAndRotation(indicatorTransform.position, indicatorTransform.rotation);
         skillField.gameObject.SetActive(true);
 
