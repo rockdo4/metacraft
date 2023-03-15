@@ -134,7 +134,7 @@ public class AttackableEnemy : AttackableUnit
         battleState = UnitBattleState.None;
         UnitHp = characterData.data.healthPoint;
         hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
-        lastActiveSkillTime  = lastNavTime = Time.time;
+        lastNavTime = Time.time;
         ResetCoolDown();
         target = null;
         animator.Rebind();
@@ -154,11 +154,9 @@ public class AttackableEnemy : AttackableUnit
     }
     protected override void BattleUpdate()
     {
-        if(attackDelayTimer < attackDelay)
-        {
+
+        if (attackDelayTimer < attackDelay)
             attackDelayTimer += Time.deltaTime;
-            return;
-        }
 
         switch (BattleState)
         {
@@ -177,7 +175,7 @@ public class AttackableEnemy : AttackableUnit
                     SearchAi();
                     if (IsAlive(target))
                     {
-                        if (FindNowAttack())
+                        if (attackDelayTimer >= attackDelay && FindNowAttack())
                             BattleState = UnitBattleState.NormalAttack;
                         else
                             BattleState = UnitBattleState.MoveToTarget;
@@ -191,7 +189,7 @@ public class AttackableEnemy : AttackableUnit
         switch (BattleState)
         {
             case UnitBattleState.MoveToTarget: //타겟에게 이동중 타겟 거리 계산.
-                if(FindNowAttack())
+                if(attackDelayTimer >= attackDelay && FindNowAttack())
                 {
                     BattleState = UnitBattleState.NormalAttack;
                 }
@@ -201,12 +199,13 @@ public class AttackableEnemy : AttackableUnit
                 }
                 else if (Time.time - lastNavTime > navDelay) //일반공격, 패시브 사용 불가 거리일시 이동
                 {
-                    lastNavTime = Time.time;
+                    lastNavTime = Time.time; 
+
                     pathFind.SetDestination(target.transform.position);
                 }
                 break;
             case UnitBattleState.BattleIdle:
-                if (FindNowAttack())
+                if (attackDelayTimer >= attackDelay && FindNowAttack())
                     BattleState = UnitBattleState.NormalAttack;
                 else if (!InRangeMinNormalAttack)
                     BattleState = UnitBattleState.MoveToTarget;

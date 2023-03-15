@@ -1,13 +1,20 @@
 using UnityEngine;
 using UnityEditor;
 using System.Collections.Generic;
+using Codice.Client.Commands;
 
 public class SkillCreaterWindow : EditorWindow
 {
     private Dictionary<string, object> skillInfo;
+    private Dictionary<string, object> buffInfo;
+    //private Dictionary<int, (int sort, float value)> stateInfo; //id°¡ key°ª
 
-    private string sourcePath = "";
-    private string createPath = "Assets/ScriptableObjects/Skills";
+    private string skillTable = "";    
+    private string buffTablePath = "";
+    private string skillCreatePath = "Assets/ScriptableObjects/Skills";
+    private string BuffCreatePath = "Assets/ScriptableObjects/Buff";
+    private string BuffScriptableName = "";
+
     private string objectName = "";
 
     private int lineNumber;
@@ -21,18 +28,31 @@ public class SkillCreaterWindow : EditorWindow
     }
     private void CreateGUIFields()
     {
-        sourcePath = EditorGUILayout.TextField("SourcePath", sourcePath);
-        createPath = EditorGUILayout.TextField("CreatePath", createPath);
+        skillTable = EditorGUILayout.TextField("SkillTable", skillTable);        
+        buffTablePath = EditorGUILayout.TextField("BuffTable", buffTablePath);
+        BuffScriptableName = EditorGUILayout.TextField("BuffName", BuffScriptableName);
+        skillCreatePath = EditorGUILayout.TextField("SkillCreatePath", skillCreatePath);
+        BuffCreatePath = EditorGUILayout.TextField("BuffCreatePath", BuffCreatePath);
         lineNumber = EditorGUILayout.IntField("LineNumber", lineNumber);
     }
-    private void LoadLine()
-    {
-        var loadedFile = CSVReader.ReadByStreamReaderPath(sourcePath, true, false);
+    private void LoadSkillTable()
+    {        
+        var loadedFile = CSVReader.ReadByStreamReaderPath(skillTable, true, false);
 
         skillInfo = loadedFile[lineNumber - 2];
         objectName = (string)skillInfo["Name"];        
     }
-    private CharacterSkill CreateScriptableObject()
+    private void LoadStateTable()
+    {
+        var loadedFile = CSVReader.ReadByStreamReaderPath(buffTablePath, true, false);
+        buffInfo = loadedFile[lineNumber - 2];
+        
+        //foreach(var lines in loadedFile)
+        //{
+        //    stateInfo.Add(ValueToInt(lines["ID"]), (sort: ValueToInt(lines["sort"]), value: ValueToFloat(lines["Value"])));
+        //}
+    }
+    private CharacterSkill CreateSkillScriptableObject()
     {        
         isActiveSkill = ValueToInt(skillInfo["Sort"]) == (int)SkillMainType.Active;
 
@@ -52,6 +72,21 @@ public class SkillCreaterWindow : EditorWindow
 
         return characterSkill;
     }
+    private BuffInfo CreateBuffScriptableObject()
+    {
+        BuffInfo buff = CreateInstance<BuffInfo>();
+        
+        buff.id = ValueToInt(buffInfo["ID"]);
+        buff.name = buffInfo["Name"].ToString();
+        buff.info = buffInfo["info"].ToString();
+        buff.fraction = ValueToInt(buffInfo["fraction"]);
+        buff.inf = buffInfo["Duration"].ToString().Equals("-");
+        buff.type = (BuffType)ValueToInt(buffInfo["sort"]);
+        buff.buffValue = ValueToInt(buffInfo["Value"]);
+        float.TryParse(buffInfo["Duration"].ToString(), out buff.duration);
+
+        return buff;
+    }
     private void SetSkillValues(CharacterSkill characterSkill)
     {
         characterSkill.id          = ValueToInt(skillInfo["ID"]);
@@ -65,7 +100,20 @@ public class SkillCreaterWindow : EditorWindow
         characterSkill.skillDescription = (string)skillInfo["SkillInfo"];
 
         characterSkill.isCriticalPossible = ValueToInt(skillInfo["CanCri"]) == 1;
-        characterSkill.isAuto = ValueToInt(skillInfo["IsAutoTargeting"]) == 1;
+
+        characterSkill.targetNumLimit = ValueToInt(skillInfo["DamageTargetLimit"]);
+
+        //characterSkill.buffTypeAndValue = new(3);
+        //for(int i = 0; i < 3; i++)
+        //{
+        //    string stateNum = "State" + (i + 1).ToString();
+        //    if (!ValueToInt(skillInfo[stateNum]).Equals(-1))
+        //    {
+        //        var tuple = stateInfo[ValueToInt(skillInfo[stateNum])];
+        //        (BuffType, float) buffInfo = ((BuffType)tuple.sort, tuple.value);
+        //        characterSkill.buffTypeAndValue.Add(buffInfo);
+        //    }
+        //}
 
         if (isActiveSkill)
         {
@@ -79,15 +127,16 @@ public class SkillCreaterWindow : EditorWindow
             activeSkill.sectorAngle  = ValueToInt(skillInfo["Angle"]);
             activeSkill.widthZ       = ValueToInt(skillInfo["LengthZ"]);
             activeSkill.widthX       = ValueToInt(skillInfo["LengthX"]);
+            activeSkill.isTrackTarget = ValueToInt(skillInfo["IsAutoTargeting"]) == 1;
 
-            if(hasDuration)
+            if (hasDuration)
             {
                 var aoeWithDuration         = activeSkill as AOEWithDuration;
                 aoeWithDuration.duration    = ValueToFloat(skillInfo["Duration"]);
                 aoeWithDuration.hitInterval = ValueToFloat(skillInfo["HitInterval"]);
             }
         }
-    }
+    }    
     private void LoadIndicatorPrefab(ActiveSkillAOE activeSkillAOE)
     {
         string prefabPath = "Assets/Prefabs/Battle/SkillIndicator/";
@@ -124,21 +173,36 @@ public class SkillCreaterWindow : EditorWindow
     {
         CreateGUIFields();        
 
-        if (GUILayout.Button("Create Scriptable Object"))
+        if (GUILayout.Button("Create Skill Scriptable Object"))
         {
-            LoadLine();            
+            LoadSkillTable();            
 
-            AssetDatabase.CreateAsset(CreateScriptableObject(), $"{createPath}/{objectName}.asset");
+            AssetDatabase.CreateAsset(CreateSkillScriptableObject(), $"{skillCreatePath}/{objectName}.asset");
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
+        if (GUILayout.Button("Create Buff Scriptable Object"))
+        {
+            LoadStateTable();
+
+            AssetDatabase.CreateAsset(CreateBuffScriptableObject(), $"{BuffCreatePath}/{BuffScriptableName}.asset");
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
     }
     private int ValueToInt(object obj)
     {
-        return int.Parse(obj.ToString());
+        var debug = int.TryParse(obj.ToString(), out int result);
+        if (!debug)
+            Debug.Log("Int ÆÄ½Ì ½ÇÆÐ");
+        return result;
     }
     private float ValueToFloat(object obj)
     {
-        return float.Parse(obj.ToString());
+        var debug = float.TryParse(obj.ToString(), out float result);
+        if (!debug)
+            Debug.Log("Float ÆÄ½Ì ½ÇÆÐ");
+        return result;
     }
 }

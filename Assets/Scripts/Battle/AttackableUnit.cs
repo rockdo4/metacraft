@@ -64,7 +64,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public int MaxHp => (int)((bufferState.maxHealthIncrease * characterData.data.healthPoint) + characterData.data.healthPoint);
     public float UnitHpScale => (float)characterData.data.currentHp / MaxHp;
-    public int UnitHp {
+    public virtual int UnitHp {
         get { return characterData.data.currentHp; }
         set {
             characterData.data.currentHp = Mathf.Clamp(value, 0, MaxHp); 
@@ -230,8 +230,6 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void ReadyActiveSkill();
     public virtual void OnActiveSkill()
     {
-        if (characterData.activeSkill.SkillEffectedUnits == null) //임시 코드. 영우형이 고칠 예정
-            return;
         characterData.activeSkill.OnActiveSkill(this);
 
         var units = characterData.activeSkill.SkillEffectedUnits;
@@ -241,7 +239,7 @@ public abstract class AttackableUnit : MonoBehaviour
             {
                 bool isCritical = false;
                 var value = CalculDamage(characterData.activeSkill, ref isCritical);
-                units[i].AddBuff(buff, value, null);
+                units[i].AddBuff(buff, value, null);          
             }
         }
     }
@@ -803,6 +801,8 @@ public abstract class AttackableUnit : MonoBehaviour
     public void ResetCoolDown()
     {
         foreach (CharacterSkill skill in characterData.attacks)
-            lastNormalAttackTime[skill] = Time.time;
+        {
+            lastNormalAttackTime[skill] = Time.time + skill.preCooldown;
+        }
     }
 }
