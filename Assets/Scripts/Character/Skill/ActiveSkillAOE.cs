@@ -223,6 +223,10 @@ public class ActiveSkillAOE : CharacterSkill
         foreach (var target in skillEffectedUnits)
         {            
             target.OnDamage(attackableUnit, this);
+            foreach (var buff in buffInfos)
+            {
+                target.AddValueBuff(buff, 0);
+            }
         }
 
         skillAreaIndicator.gameObject.SetActive(false);
