@@ -14,6 +14,7 @@ public class BattleMapInfo : MonoBehaviour
     public BattleMapEnum battleMapType;
     public GameObject viewPoint;
     protected bool init = false;
+    public Light lighting;
 
     public virtual void GameStart() { FindBattleManager(); }
 
@@ -21,6 +22,11 @@ public class BattleMapInfo : MonoBehaviour
     {
         if (battleMgr == null)
             battleMgr = FindObjectOfType<BattleManager>();
+    }
+
+    public Light GetLight()
+    {
+        return lighting;
     }
 
     public List<Transform> GetStartPosition()

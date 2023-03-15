@@ -39,6 +39,13 @@ public class GameManager : Singleton<GameManager>
     // Dispatch Select
 
     public List<Effect> effects; // 사용할 이펙트들
+    public Color currMapColor;
+    public Color[] mapLigthColors =  
+        { 
+            new Color(255f/255f, 255f/255f, 255f/255f, 60f/255f),
+            new Color(190f/255f, 120f/255f, 50f/255f, 60f/255f),
+            new Color(0f/255f, 60f/255f, 255f/255f, 60f/255f)
+        };
 
     public override void Awake()
     {
@@ -406,5 +413,42 @@ public class GameManager : Singleton<GameManager>
             }
             eventEffectNoTagInfoList.Add((string)eventEffectInfoList[i]["ID"], midList);
         }
+    }
+
+    /************************************* Minu *******************************************/
+    public void SetDifferentColor()
+    {
+        // 이거 왜 안됨?
+        if (currMapColor.Equals(Color.white))
+        {
+            currMapColor = mapLigthColors[0];
+            return;
+        }
+
+        int randomRange = UnityEngine.Random.Range(0, 101);
+        Color prevColor;
+        do
+        {
+            prevColor = currMapColor;
+
+            if (randomRange >= 60)
+            {                
+                currMapColor = mapLigthColors[0];
+            }
+            else if (randomRange >= 20)
+            {                
+                currMapColor = mapLigthColors[1];
+            }
+            else if (randomRange >= 0)
+            {
+                currMapColor = mapLigthColors[2];
+            }
+
+        } while (currMapColor.Equals(prevColor));
+    }
+
+    public Color GetMapLightColor()
+    {
+        return currMapColor;
     }
 }
