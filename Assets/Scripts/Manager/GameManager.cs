@@ -44,12 +44,7 @@ public class GameManager : Singleton<GameManager>
 
     public List<Effect> effects; // 사용할 이펙트들
     public Color currMapColor;
-    public Color[] mapLigthColors =  
-        { 
-            new Color(255f/255f, 255f/255f, 255f/255f, 60f/255f),
-            new Color(190f/255f, 120f/255f, 50f/255f, 60f/255f),
-            new Color(0f/255f, 60f/255f, 255f/255f, 60f/255f)
-        };
+    public List<Color> mapLigthColors;
 
     public override void Awake()
     {
@@ -471,10 +466,10 @@ public class GameManager : Singleton<GameManager>
             return;
         }
 
-        int randomRange = UnityEngine.Random.Range(0, 101);
         Color prevColor;
         do
         {
+            int randomRange = UnityEngine.Random.Range(0, 101);
             prevColor = currMapColor;
 
             if (randomRange >= 60)
