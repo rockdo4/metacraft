@@ -25,6 +25,9 @@ public class SkillAreaIndicator : MonoBehaviour
         if (!isTrackTarget)
             return;
 
+        if (trackTransform.Equals(null))
+            return;
+
         transform.position = trackTransform.position + Vector3.up * 0.1f;
     }
 

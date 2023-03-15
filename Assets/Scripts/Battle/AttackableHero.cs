@@ -150,11 +150,13 @@ public class AttackableHero : AttackableUnit
 
     //    lastNormalAttackTime = Time.time;
     //}
-    private void Awake()
+    protected void Awake()
     {
-        var activeSkill = characterData.activeSkill as ActiveSkillAOE;
-        activeSkill.ActorTransform = transform;
+        //base.Awake();
 
+        var active = characterData.activeSkill as ActiveSkillAOE;
+        active.ActorTransform = transform;
+        //characterData.activeSkill.ActorTransform = transform;
         // 어웨이크 에러땜에 임시로 추가함
         InitData();
         pathFind = transform.GetComponent<NavMeshAgent>();

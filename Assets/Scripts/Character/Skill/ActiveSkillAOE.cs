@@ -4,11 +4,14 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ActiveSkillAOE", menuName = "Character/ActiveSkill/AOE")]
 public class ActiveSkillAOE : CharacterSkill
 {
+    public Transform ActorTransform { set { actorTransform = value; } }
+    protected Transform actorTransform;
+
     public SkillAreaIndicator skillAreaIndicatorPrefab;
     protected SkillAreaIndicator skillAreaIndicator;
     public LayerMask layerM;
-    public Transform ActorTransform { set { actorTransform = value; } }
-    protected Transform actorTransform;
+    //public Transform ActorTransform { set { actorTransform = value; } }
+    //protected Transform actorTransform;
 
     public GameObject castRangeIndicatorPrefab;
     private GameObject castRangeIndicator;

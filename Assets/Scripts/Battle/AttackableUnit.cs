@@ -204,6 +204,10 @@ public abstract class AttackableUnit : MonoBehaviour
             (int) (data.baseDefense * multipleDefense),
             (int) (data.healthPoint * multipleHealthPoint));
     }
+    protected virtual void Awake()
+    {
+        characterData.activeSkill.ActorTransform = transform;
+    }
 
     protected void Update()
     {
@@ -228,6 +232,10 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public abstract void PassiveSkillEvent();
     public abstract void ReadyActiveSkill();
+    public virtual void OnNormalAttack()
+    {
+        nowAttack.OnNormalAttack();
+    }
     public virtual void OnActiveSkill()
     {
         characterData.activeSkill.OnActiveSkill(this);

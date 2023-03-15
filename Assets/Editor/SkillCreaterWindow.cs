@@ -91,6 +91,7 @@ public class SkillCreaterWindow : EditorWindow
         characterSkill.id          = ValueToInt(skillInfo["ID"]);
         characterSkill.cooldown    = ValueToFloat(skillInfo["CoolTime"]);
         characterSkill.preCooldown = ValueToFloat(skillInfo["StartCoolTime"]);
+        characterSkill.distance = ValueToInt(skillInfo["Range"]) / 100f;
 
         characterSkill.targetType      = (SkillTargetType)ValueToInt(skillInfo["DamageTarget"]);
         characterSkill.coefficientType = (SkillCoefficientType)ValueToInt(skillInfo["BaseStats"]);

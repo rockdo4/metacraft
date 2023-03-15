@@ -5,6 +5,8 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "CharacterSkill", menuName = "Character/CharacterSkill")]
 public class CharacterSkill : ScriptableObject
 {
+    public Transform ActorTransform { set { actorTransform = value; } }
+    protected Transform actorTransform;
     public List<AttackableUnit> SkillEffectedUnits { get { return skillEffectedUnits; } }
     protected List<AttackableUnit> skillEffectedUnits;
 
@@ -32,6 +34,7 @@ public class CharacterSkill : ScriptableObject
     public SkillSearchType searchType;
     public EffectEnum readyEffect;
     public EffectEnum activeEffect;
+    public EffectEnum hitEffect;
 
     public bool isCriticalPossible;
     public bool isAuto;
@@ -70,6 +73,10 @@ public class CharacterSkill : ScriptableObject
         //    result *= -1;
 
         return result;
+    }
+    public virtual void OnNormalAttack()
+    {
+        //EffectManager.Instance.Get(activeEffect, );
     }
     public virtual void OnActiveSkill(AttackableUnit unit) { }
 }
