@@ -29,7 +29,7 @@ public class SkillCreaterWindow : EditorWindow
     private void CreateGUIFields()
     {
         skillTable = EditorGUILayout.TextField("SkillTable", skillTable);        
-        buffTablePath = EditorGUILayout.TextField("StateTable", buffTablePath);
+        buffTablePath = EditorGUILayout.TextField("BuffTable", buffTablePath);
         BuffScriptableName = EditorGUILayout.TextField("BuffName", BuffScriptableName);
         skillCreatePath = EditorGUILayout.TextField("SkillCreatePath", skillCreatePath);
         BuffCreatePath = EditorGUILayout.TextField("BuffCreatePath", BuffCreatePath);
