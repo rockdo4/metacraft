@@ -200,13 +200,13 @@ public class BattleManager : MonoBehaviour
         {
             int heroNameIndex = Random.Range(0, heroNames.Count);
             battleEventHeroImage.sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{heroNames[heroNameIndex]}");
-            contentText.text = $"{eventInfoTable[(int)ev]["Explanation"]}";
+            contentText.text = $"{eventInfoTable[(int)ev]["Eventtext"]}";
 
             int textCount = (int)eventInfoTable[(int)ev][$"TextCount"];
             for (int i = 0; i < textCount; i++)
             {
                 choiceButtons[i].SetActive(true);
-                string text = $"{eventInfoTable[(int)ev][$"Select{i + 1}Text"]}";
+                string text = $"{eventInfoTable[(int)ev][$"Text{i + 1}"]}";
                 buttonTexts[i].text = text;
             }
         }

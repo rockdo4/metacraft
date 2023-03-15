@@ -11,8 +11,8 @@ public class PlayerData
     public int gold = 0;
 
     [Range(1, 30)]
-    public int officeLevel;
-    public int officeExperience;
+    public int officeLevel = 1;
+    public int officeExperience = 0;
     public int missionDifficulty;
     public int isTrainingOpen;
     public int isDispatchOpen;
@@ -20,8 +20,8 @@ public class PlayerData
     public int dispatchLevel;
     public int stamina;
     public int inventoryCount;
-    public string officeImage;
-    [Range(1, 3)]
+    public string officeImage = "Container";
+    [Range(1, 4)]
     public int battleSpeed = 1;
     public bool isAuto = false;
 }
