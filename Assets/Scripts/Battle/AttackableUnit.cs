@@ -363,7 +363,6 @@ public abstract class AttackableUnit : MonoBehaviour
         animator.SetTrigger("StunEnd");
         target = null;
         pathFind.isStopped = false;
-        ResetCoolDown();
     }
 
     public virtual void ResetData()

@@ -121,6 +121,7 @@ public class AttackableHero : AttackableUnit
                 case UnitBattleState.Stun:
                     pathFind.isStopped = true;
                     animator.SetTrigger("Stun");
+                    Logger.Debug("Stun Trigger");
                     animator.ResetTrigger("Attack");
                     animator.ResetTrigger("AttackEnd");
                     break;
@@ -192,7 +193,7 @@ public class AttackableHero : AttackableUnit
     public override void ResetData()
     {
         testRot = false;
-        UnitState = UnitState.Idle;
+        UnitState = UnitState.None;
         battleState = UnitBattleState.None;
         
         lateReturn = false;
@@ -335,11 +336,6 @@ public class AttackableHero : AttackableUnit
                 }
                 break;
             case UnitBattleState.Stun:
-                stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-                if (stateInfo.IsName("Stun") && stateInfo.normalizedTime >= 1.0f)
-                {
-                    StunEnd();
-                }
                 break;
         }
     }
@@ -398,9 +394,9 @@ public class AttackableHero : AttackableUnit
 
     public override void ChangeUnitState(UnitState state)
     {
-        if (BattleState == UnitBattleState.ActiveSkill || BattleState == UnitBattleState.NormalAttack)
+        if (BattleState == UnitBattleState.ActiveSkill || BattleState == UnitBattleState.NormalAttack || BattleState == UnitBattleState.Stun)
         {
-            lateReturn = (state == UnitState.ReturnPosition);
+            lateReturn = true;
             return;
         }
         UnitState = state;
@@ -502,6 +498,7 @@ public class AttackableHero : AttackableUnit
         {
             BattleState = UnitBattleState.BattleIdle;
         }
+        Logger.Debug("Stun End");
     }
     public override void RemoveBuff(Buff buff)
     {

@@ -30,6 +30,7 @@ public class BattleManager : MonoBehaviour
     // TestBattleManager
     public List<HeroUi> heroUiList;
     public List<AttackableUnit> useHeroes = new();
+    public List<AttackableUnit> unuseHeroes = new();
     public StageEnemy enemyCountTxt;
     public ClearUiController clearUi;
     public Image fadePanel;
@@ -279,6 +280,7 @@ public class BattleManager : MonoBehaviour
 
     public void OnDeadHero(AttackableHero hero)
     {
+        unuseHeroes.Add(hero);
         useHeroes.Remove(hero);
         readyCount = useHeroes.Count;
         if (useHeroes.Count == 0)
@@ -305,6 +307,15 @@ public class BattleManager : MonoBehaviour
             useHeroes[i].SetMaxHp();
             useHeroes[i].SetEnabledPathFind(false);
             useHeroes[i].gameObject.SetActive(false);
+        }
+
+        for (int i = 0; i < unuseHeroes.Count; i++)
+        {
+            Utils.CopyPositionAndRotation(unuseHeroes[i].gameObject, GameManager.Instance.heroSpawnTransform);
+            unuseHeroes[i].ResetData();
+            unuseHeroes[i].SetMaxHp();
+            unuseHeroes[i].SetEnabledPathFind(false);
+            unuseHeroes[i].gameObject.SetActive(false);
         }
     }
     public void MoveNextStage(float timer)

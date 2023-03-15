@@ -27,16 +27,13 @@ public class BuffManager : MonoBehaviour
 
     private void Update()
     {
-        //if(Input.GetKeyDown(KeyCode.KeypadPlus))
-        //{
-        //    List<AttackableUnit> players = new();
-        //    GameObject.FindObjectOfType<BattleManager>().GetHeroList(ref players);
+        if (Input.GetKeyDown(KeyCode.KeypadPlus))
+        {
+            List<AttackableUnit> players = new();
+            GameObject.FindObjectOfType<BattleManager>().GetHeroList(ref players);
 
-        //    foreach (var player in players)
-        //    {
-        //        player.AddBuff(GetBuff(1),100);
-        //    }
-        //}
+            players[0].AddBuff(GetBuff(6), 0);
+        }
     }
 }
 

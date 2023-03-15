@@ -25,7 +25,8 @@ public class SkillAreaIndicator : MonoBehaviour
         if (!isTrackTarget)
             return;
 
-        transform.position = trackTransform.position + Vector3.up * 0.1f;
+        if(trackTransform != null) //임시코드 영우형이 확인 예정
+            transform.position = trackTransform.position + Vector3.up * 0.1f;
     }
 
     public virtual void SetScale(float x, float y, float z = 1f)
