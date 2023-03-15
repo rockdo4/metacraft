@@ -151,12 +151,7 @@ public class AttackableHero : AttackableUnit
     //    lastNormalAttackTime = Time.time;
     //}
     protected void Awake()
-    {
-        //base.Awake();
-
-        var active = characterData.activeSkill as ActiveSkillAOE;
-        active.ActorTransform = transform;
-        //characterData.activeSkill.ActorTransform = transform;
+    {   
         // 어웨이크 에러땜에 임시로 추가함
         InitData();
         pathFind = transform.GetComponent<NavMeshAgent>();
@@ -169,6 +164,13 @@ public class AttackableHero : AttackableUnit
     }
     private void Start()
     {
+        foreach (var attack in characterData.attacks)
+        {
+            attack.SkillHolderTransform = effectCreateTransform;
+            attack.ActorTransform = transform;
+        }
+        characterData.activeSkill.ActorTransform = transform;
+
         var manager = FindObjectOfType<BattleManager>();
         if (manager != null)
             battleManager = manager;

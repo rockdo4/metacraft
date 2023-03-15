@@ -11,6 +11,7 @@ public enum EffectEnum
     Burst_rings,
     Area_generic_green_outbreak,
     Shield_gold,
+    Archer_Explosion_Ice,
     Hit11,
     Prick5,
     Effect_06_Explosion_02,

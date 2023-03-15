@@ -7,8 +7,12 @@ public class CharacterSkill : ScriptableObject
 {
     public Transform ActorTransform { set { actorTransform = value; } }
     protected Transform actorTransform;
+
+    public Transform SkillHolderTransform { set { skillHolderTransform = value; } }
+    protected Transform skillHolderTransform;
+
     public List<AttackableUnit> SkillEffectedUnits { get { return skillEffectedUnits; } }
-    protected List<AttackableUnit> skillEffectedUnits;
+    protected List<AttackableUnit> skillEffectedUnits;    
 
     //public List<(BuffType bufftype, float value)> buffTypeAndValue;
 
@@ -74,9 +78,12 @@ public class CharacterSkill : ScriptableObject
 
         return result;
     }
-    public virtual void OnNormalAttack()
+    public virtual void NormalAttackOnDamage()
     {
-        //EffectManager.Instance.Get(activeEffect, );
+        if (activeEffect.Equals(EffectEnum.None))
+            return;
+
+        EffectManager.Instance.Get(activeEffect, skillHolderTransform, actorTransform.rotation);
     }
     public virtual void OnActiveSkill(AttackableUnit unit) { }
 }
