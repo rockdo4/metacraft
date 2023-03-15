@@ -1,5 +1,6 @@
 
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class StorageClick : MonoBehaviour
 {
@@ -7,7 +8,9 @@ public class StorageClick : MonoBehaviour
 
     public void OnMouseDown()
     {
-        //uiMgr.ShowView(6);
-        Logger.Debug("StorageClick");
+        if (!EventSystem.current.IsPointerOverGameObject())
+        {
+            //uiMgr.ShowView(6);
+        }
     }
 }
