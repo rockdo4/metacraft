@@ -30,7 +30,7 @@ public class GameManager : Singleton<GameManager>
     public List<Dictionary<string, object>> eventEffectInfoList;
     public Dictionary<string, List<Dictionary<string, string>>> eventEffectTagInfoList;
     public Dictionary<string, List<Dictionary<string, float>>> eventEffectNoTagInfoList;
-    public List<Dictionary<string, object>> stringTable;
+    public List<Dictionary<string, object>> stringTable = new ();
 
     public List<Dictionary<string, object>> compensationInfoList; // 보상 정보
 
@@ -96,6 +96,10 @@ public class GameManager : Singleton<GameManager>
             "EventTable",
             "CompensationTable",
             "SupplyTable",
+            "StringTable_Desc",
+            "StringTable_Event",
+            "StringTable_Proper",
+            "StringTable_UI",
         };
 
         // Load TextAssets
@@ -142,6 +146,11 @@ public class GameManager : Singleton<GameManager>
         eventInfoList = CSVReader.SplitTextAsset(handles["EventTable"].Result as TextAsset);
         compensationInfoList = CSVReader.SplitTextAsset(handles["CompensationTable"].Result as TextAsset);
         supplyInfoList = CSVReader.SplitTextAsset(handles["SupplyTable"].Result as TextAsset);
+
+        stringTable.AddRange(CSVReader.SplitTextAsset(handles["StringTable_Desc"].Result as TextAsset));
+        stringTable.AddRange(CSVReader.SplitTextAsset(handles["StringTable_Event"].Result as TextAsset));
+        stringTable.AddRange(CSVReader.SplitTextAsset(handles["StringTable_Proper"].Result as TextAsset));
+        stringTable.AddRange(CSVReader.SplitTextAsset(handles["StringTable_UI"].Result as TextAsset));
 
         count = heroNames.Count;
         for (int i = 0; i < count; i++)
