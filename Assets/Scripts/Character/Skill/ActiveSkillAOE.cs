@@ -227,7 +227,7 @@ public class ActiveSkillAOE : CharacterSkill
             target.OnDamage(attackableUnit, this);
             foreach (var buff in buffInfos)
             {
-                target.AddBuff(buff, 0);
+                target.AddValueBuff(buff, 0);
             }
         }
 

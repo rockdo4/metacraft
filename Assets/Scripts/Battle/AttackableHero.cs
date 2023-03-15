@@ -458,7 +458,7 @@ public class AttackableHero : AttackableUnit
             BattleState = UnitBattleState.BattleIdle;
         }
     }
-    public override void AddBuff(BuffInfo info, int anotherValue, BuffIcon icon = null)
+    public override void AddValueBuff(BuffInfo info, int anotherValue = 0, BuffIcon icon = null)
     {
         int idx = 0;
         for (int i = buffList.Count - 1; i >= 0; i--)
@@ -476,17 +476,41 @@ public class AttackableHero : AttackableUnit
             {
                 icon = heroUI.AddIcon(info.type, info.duration, idx);
             }
-            base.AddBuff(info, anotherValue, icon);
         }
         else
             BuffDurationUpdate(info.id, info.duration);
 
+        base.AddValueBuff(info, anotherValue, icon);
         if (info.type == BuffType.MaxHealthIncrease)
         {
             heroUI.SetHp(UnitHp, MaxHp);
         }
-
     }
+    public override void AddStateBuff(BuffInfo info, AttackableUnit attackableUnit = null, BuffIcon icon = null)
+    {
+        int idx = 0;
+        for (int i = buffList.Count - 1; i >= 0; i--)
+        {
+            if (buffList[i].buffInfo.duration > info.duration)
+            {
+                idx = i;
+                break;
+            }
+        }
+
+        if (buffList.Find(t => t.buffInfo.id == info.id) == null)
+        {
+            if (info.fraction != 0)
+            {
+                icon = heroUI.AddIcon(info.type, info.duration, idx);
+            }
+        }
+        else
+            BuffDurationUpdate(info.id, info.duration);
+
+        base.AddStateBuff(info, attackableUnit, icon);
+    }
+
     public override void StunEnd()
     {
         base.StunEnd();

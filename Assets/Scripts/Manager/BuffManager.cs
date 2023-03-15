@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using UnityEditor;
+using System.Linq;
 
 public class BuffManager : MonoBehaviour
 {
@@ -31,8 +32,10 @@ public class BuffManager : MonoBehaviour
         {
             List<AttackableUnit> players = new();
             GameObject.FindObjectOfType<BattleManager>().GetHeroList(ref players);
+            List<AttackableUnit> enemies = new();
+            GameObject.FindObjectOfType<BattleManager>().GetCurrBtMgr().GetEnemyList(ref enemies);
 
-            players[0].AddBuff(GetBuff(6), 0);
+            enemies[0].AddStateBuff(GetBuff(7), enemies.Last());
         }
     }
 }

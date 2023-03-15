@@ -9,7 +9,7 @@ public class Hayul : AttackableHero
             foreach(var buff in passivekbuffs)
             {
                 Logger.Debug("하율 버프사용");
-                hero.AddBuff(buff, 0);
+                hero.AddValueBuff(buff);
             }
         }
     }
@@ -22,12 +22,12 @@ public class Hayul : AttackableHero
     {
         base.OnActiveSkill();
         var dmg = characterData.activeSkill.CreateDamageResult(characterData.data, bufferState);
-        dmg = (int)(dmg * (100 + bufferState.damageDecrease) * 0.01f);
+        dmg = (int)(dmg * bufferState.damageDecrease);
         foreach (var hero in heroList)
         {
             foreach (var buff in attackkbuffs)
             {
-                hero.AddBuff(buff, dmg);
+                hero.AddValueBuff(buff, dmg);
             }
         }
     }

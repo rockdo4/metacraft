@@ -56,16 +56,16 @@ public class CharacterSkill : ScriptableObject
         switch (coefficientType)
         {
             case SkillCoefficientType.Attack:
-                result = (int)((data.baseDamage + status.Damage) * coefficient);
+                result = (int)((data.baseDamage * status.Damage) * coefficient);
                 break;
             case SkillCoefficientType.Defense:
-                result = (int)((data.baseDefense + status.defense) * coefficient);
+                result = (int)((data.baseDefense * status.defense) * coefficient);
                 break;
             case SkillCoefficientType.MaxHealth:
-                result = (int)((data.healthPoint + (data.healthPoint * (status.maxHealthIncrease * 0.01f))) * coefficient);
+                result = (int)((data.healthPoint * status.maxHealthIncrease) * coefficient);
                 break;
             case SkillCoefficientType.Health:
-                result = (int)((data.currentHp + status.Damage) * coefficient);
+                result = (int)(data.currentHp * coefficient);
                 break;
         }
         //if (targetType == SkillTargetType.Friendly)
