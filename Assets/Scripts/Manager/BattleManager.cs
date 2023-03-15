@@ -399,6 +399,15 @@ public class BattleManager : MonoBehaviour
             unuseHeroes[i].gameObject.SetActive(false);
             Utils.CopyPositionAndRotation(unuseHeroes[i].gameObject, GameManager.Instance.heroSpawnTransform);
         }
+
+        for (int i = 0; i < unuseHeroes.Count; i++)
+        {
+            Utils.CopyPositionAndRotation(unuseHeroes[i].gameObject, GameManager.Instance.heroSpawnTransform);
+            unuseHeroes[i].ResetData();
+            unuseHeroes[i].SetMaxHp();
+            unuseHeroes[i].SetEnabledPathFind(false);
+            unuseHeroes[i].gameObject.SetActive(false);
+        }
     }
     public void MoveNextStage(float timer)
     {

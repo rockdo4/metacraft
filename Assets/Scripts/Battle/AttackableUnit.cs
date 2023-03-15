@@ -62,7 +62,7 @@ public abstract class AttackableUnit : MonoBehaviour
     [SerializeField, Header("에너미 리스트")] protected List<AttackableUnit> enemyList;
     [SerializeField, Header("시민 리스트")] protected List<AttackableUnit> citizenList;
 
-    public int MaxHp => (int)((bufferState.maxHealthIncrease * characterData.data.healthPoint) + characterData.data.healthPoint);
+    public int MaxHp => (int)(bufferState.maxHealthIncrease * characterData.data.healthPoint);
     public float UnitHpScale => (float)characterData.data.currentHp / MaxHp;
     public virtual int UnitHp {
         get { return characterData.data.currentHp; }
@@ -247,7 +247,7 @@ public abstract class AttackableUnit : MonoBehaviour
             {
                 bool isCritical = false;
                 var value = CalculDamage(characterData.activeSkill, ref isCritical);
-                units[i].AddBuff(buff, value, null);          
+                units[i].AddValueBuff(buff, value, null);          
             }
         }
     }
@@ -266,7 +266,7 @@ public abstract class AttackableUnit : MonoBehaviour
             {
                 bool isCritical = false;
                 var value = CalculDamage(characterData.activeSkill, ref isCritical);
-                target.AddBuff(buff, value, null);
+                target.AddValueBuff(buff, value, null);
             }
             return;
         }
@@ -297,7 +297,7 @@ public abstract class AttackableUnit : MonoBehaviour
             {
                 bool isCritical = false;
                 var value = CalculDamage(characterData.activeSkill, ref isCritical);
-                attackTargetList[i].AddBuff(buff, value, null);
+                attackTargetList[i].AddValueBuff(buff, value, null);
             }
         }
 
@@ -371,9 +371,8 @@ public abstract class AttackableUnit : MonoBehaviour
         animator.SetTrigger("StunEnd");
         target = null;
         pathFind.isStopped = false;
-        ResetCoolDown();
     }
-
+    public virtual void ProvokeEnd() => target = null;
     public virtual void ResetData()
     {
         RemoveBuffers();
@@ -408,7 +407,7 @@ public abstract class AttackableUnit : MonoBehaviour
         {
             return;
         }
-        var defense = 100f / (100 + characterData.data.baseDefense + bufferState.defense);
+        var defense = 100f / (100 + characterData.data.baseDefense * bufferState.defense);
         var levelCorrection = 1 + Mathf.Clamp((attackableUnit.characterData.data.level - characterData.data.level) / 100f, -0.4f, 0);
 
         bool isCritical = false;
@@ -663,7 +662,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     // 여기에 State 초기화랑 트리거 모두 해제하는 코드 작성
 
-    public virtual void AddBuff(BuffInfo info, int anotherValue , BuffIcon icon = null)
+    public virtual void AddValueBuff(BuffInfo info, int anotherValue = 0 , BuffIcon icon = null)
     {
         var findBuff = buffList.Find(t => t.buffInfo.id == info.id);
         if (findBuff != null)
@@ -694,6 +693,8 @@ public abstract class AttackableUnit : MonoBehaviour
                 switch (info.type)
                 {
                     case BuffType.Provoke:
+                        Logger.Debug("Provoke");
+                        endEvent = ProvokeEnd;
                         break;
                     case BuffType.Stealth:
                         break;
@@ -732,9 +733,41 @@ public abstract class AttackableUnit : MonoBehaviour
                     SetMaxHp();
                 }
             }
-
         }
-    }   
+    }
+
+    public virtual void AddStateBuff(BuffInfo info, AttackableUnit attackableUnit = null, BuffIcon icon = null)
+    {
+        var findBuff = buffList.Find(t => t.buffInfo.id == info.id);
+        if (findBuff != null)
+        {
+            findBuff.timer = info.duration;
+        }
+        else
+        {
+            Action endEvent = null;
+
+            switch (info.type)
+            {
+                case BuffType.Provoke:
+                    Logger.Debug("Provoke");
+                    target = attackableUnit;
+                    endEvent = ProvokeEnd;
+                    break;
+                case BuffType.Stun:
+                    Logger.Debug("Stun");
+                    endEvent = StunEnd;
+                    BattleState = UnitBattleState.Stun;
+                    break;
+                case BuffType.Silence:
+                    break;
+
+            }
+            Buff buff = new Buff(info, this, RemoveBuff, icon, endEvent);
+            buffList.Add(buff);
+            bufferState.Buffer(info.type, info.buffValue);
+        }
+    }
     public void BuffDurationUpdate(int id, float dur) => buffList.Find(t => t.buffInfo.id == id).timer= dur;
     public virtual void RemoveBuff(Buff buff)
     {
@@ -754,7 +787,7 @@ public abstract class AttackableUnit : MonoBehaviour
         isCritical = UnityEngine.Random.Range(0f, 1f) < characterData.data.critical + (bufferState.criticalProbability);
         if (isCritical)
         {
-            buffDamage = (int)(buffDamage * (characterData.data.criticalDmg + (bufferState.criticalDamage)));
+            buffDamage = (int)(buffDamage * (characterData.data.criticalDmg * bufferState.criticalDamage));
         }
         else
            buffDamage = (int)(buffDamage * bufferState.damageDecrease);
@@ -813,4 +846,5 @@ public abstract class AttackableUnit : MonoBehaviour
             lastNormalAttackTime[skill] = Time.time + skill.preCooldown;
         }
     }
+
 }

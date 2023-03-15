@@ -4,26 +4,26 @@ using System;
 public class BufferState
 {
     public float damage = 1;         // 공격력
-    public float Damage => Math.Clamp(damage, -50, 300);
+    public float Damage => Math.Clamp(damage, -0.5f, 3f);
 
     public float defense = 1;      // 방어력
     public float damageReceived = 1;      // 받는 피해
     public float damageDecrease = 1;      // 주는 피해
-    public float criticalProbability = 1;      // 치명타 확률 
+    public float criticalProbability = 0;      // 치명타 확률 
     public float criticalDamage = 1;      // 치명타 피해량 증가
     public float attackSpeed = 1;      // 공격속도 증가
     public float maxHealthIncrease = 1;      // 최대 체력 증가
 
-    public float burns = 1;      // 화상
+    public float burns = 0;      // 화상
     public bool isBurns = false;
 
-    public float freeze = 1;      // 빙결
+    public float freeze = 0;      // 빙결
     public bool isFreze = false;
 
     public float shield = 0;      // 보호막
     public bool isShield = false;
 
-    public float bleed = 1;      // 출혈
+    public float bleed = 0;      // 출혈
     public bool isBleed = false;
 
     public float lifeSteal = 1;      // 흡혈
