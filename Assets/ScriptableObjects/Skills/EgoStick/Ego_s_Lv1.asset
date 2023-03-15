@@ -10,19 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c267fa0414501eb408668a75a7c3b73f, type: 3}
-  m_Name: Star_s_Lv1
+  m_Name: Ego_s_Lv1
   m_EditorClassIdentifier: 
   animationClip: {fileID: 0}
   skillLevel: 1
-  id: 7032001
+  id: 7033001
   skillName: 
-  preCooldown: 3
-  cooldown: 15
+  preCooldown: 2.4
+  cooldown: 12
   distance: 0
-  targetNumLimit: -1
+  targetNumLimit: 10
   angle: 0
   coefficientType: 0
-  coefficient: 5
+  coefficient: 3
   targetType: 1
   searchType: 0
   readyEffect: 0
@@ -30,7 +30,7 @@ MonoBehaviour:
   isCriticalPossible: 1
   isAuto: 0
   targetPos: {x: 0, y: 0, z: 0}
-  skillDescription: skillinfo_Star_s
+  skillDescription: skillinfo_ego_s
   skillAreaIndicatorPrefab: {fileID: 6672067328229480615, guid: 0da645c26f09e074abad419ddc09fafb,
     type: 3}
   layerM:
@@ -40,10 +40,10 @@ MonoBehaviour:
     type: 3}
   areaShapeType: 2
   indicatorTargetWhenTrackTarget: 0
-  isTrackTarget: 1
-  sectorRadius: 0
+  isTrackTarget: 0
+  sectorRadius: 8
   sectorAngle: 360
   widthZ: -1
   widthX: -1
-  castRangeLimit: 2.2
+  castRangeLimit: 10
   maxColliders: 32

@@ -9,20 +9,20 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c267fa0414501eb408668a75a7c3b73f, type: 3}
-  m_Name: Star_s_Lv1
+  m_Script: {fileID: 11500000, guid: 8ea31b1afcf37fb47b0432c9ffa1a68d, type: 3}
+  m_Name: Seoeun_s_Lv1
   m_EditorClassIdentifier: 
   animationClip: {fileID: 0}
   skillLevel: 1
-  id: 7032001
+  id: 7035002
   skillName: 
-  preCooldown: 3
-  cooldown: 15
+  preCooldown: 5
+  cooldown: 60
   distance: 0
-  targetNumLimit: -1
+  targetNumLimit: 10
   angle: 0
   coefficientType: 0
-  coefficient: 5
+  coefficient: 0.1
   targetType: 1
   searchType: 0
   readyEffect: 0
@@ -30,20 +30,23 @@ MonoBehaviour:
   isCriticalPossible: 1
   isAuto: 0
   targetPos: {x: 0, y: 0, z: 0}
-  skillDescription: skillinfo_Star_s
-  skillAreaIndicatorPrefab: {fileID: 6672067328229480615, guid: 0da645c26f09e074abad419ddc09fafb,
+  skillDescription: skillinfo_southsilver_s
+  skillAreaIndicatorPrefab: {fileID: 6672067328229480615, guid: 37555f8a38e89384caaf60fcba51d46f,
     type: 3}
   layerM:
     serializedVersion: 2
     m_Bits: 256
   castRangeIndicatorPrefab: {fileID: 1572453404982893073, guid: 3eef904cc2b274c4dbec7f0543fc5a68,
     type: 3}
-  areaShapeType: 2
+  areaShapeType: 1
   indicatorTargetWhenTrackTarget: 0
-  isTrackTarget: 1
-  sectorRadius: 0
-  sectorAngle: 360
-  widthZ: -1
-  widthX: -1
-  castRangeLimit: 2.2
+  isTrackTarget: 0
+  sectorRadius: -0.01
+  sectorAngle: -1
+  widthZ: 800
+  widthX: 1200
+  castRangeLimit: 10
   maxColliders: 32
+  duration: 30
+  hitInterval: 1
+  skillFieldPrefab: {fileID: 0}
