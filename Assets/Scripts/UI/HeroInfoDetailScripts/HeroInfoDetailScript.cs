@@ -18,7 +18,7 @@ public class HeroInfoDetailScript : View
     private void SetHeroStatInfoText()
     {
         LiveData data = GameManager.Instance.currentSelectObject.GetComponent<AttackableUnit>().GetUnitData().data;
-        portrait.sprite = GameManager.Instance.GetSpriteByAddress($"Illur_{data.name}");
+        portrait.sprite = GameManager.Instance.GetSpriteByAddress($"Illu_{data.name}");
 
         gradeInfoInLeftPanel.text = $"{(CharacterGrade)data.grade}";
         levelInfoInfoInLeftPanel.text = data.level.ToString();
