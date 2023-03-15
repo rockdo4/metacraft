@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BeltScrollMapInfo : BattleMapInfo
@@ -23,10 +24,13 @@ public class BeltScrollMapInfo : BattleMapInfo
                     if (enemy == null)
                         break;
 
-                    triggers[i].enemys.Add(enemy);
-                    triggers[i].enemys[j].SetPathFind();
-                    triggers[i].AddEnemyColliders(enemy.GetComponent<CapsuleCollider>());
-                    triggers[i].enemys[j].SetEnabledPathFind(false);
+                    for (int k = 0; k < enemy.Count; k++)
+                    {
+                        triggers[i].enemys.Add(enemy[k]);
+                        triggers[i].enemys[j].SetPathFind();
+                        triggers[i].AddEnemyColliders(enemy[k].GetComponent<CapsuleCollider>());
+                        triggers[i].enemys[j].SetEnabledPathFind(false);
+                    }
                 }
             }
 
@@ -36,5 +40,10 @@ public class BeltScrollMapInfo : BattleMapInfo
         {
             ResetAllTriggerEnemys();
         }
+    }
+
+    public override void GetEnemyList(ref List<AttackableUnit> enemyList)
+    {
+        enemyList = triggers[battleMgr.GetCurrTriggerIndex()].useEnemys;
     }
 }

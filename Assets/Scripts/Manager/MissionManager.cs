@@ -1,4 +1,3 @@
-using Mono.Cecil;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -10,7 +9,7 @@ public class MissionManager : View
     // public Slider apGauge;
 
     public Image portrait;  //Boss portrait
-    public TextMeshProUGUI explanation;  //
+    public TextMeshProUGUI explanation;  // Mission explanation
 
     public TextMeshProUGUI ExpectedCost;
     public GameObject[] heroSlots;
@@ -23,48 +22,58 @@ public class MissionManager : View
     public Slider difficultyAdjustment;
 
     public GameObject missionPoints;
-    //private GameObject[] marks;
-    private List<Dictionary<string, object>> missionInfoTable;
+    private Dictionary<int,List<Dictionary<string, object>>> missionInfoTable;
     private GameObject[] marks;
 
     public List<GameObject> expectedRewards;
 
-    [Range(1,5)]
+    [Range(1, 5)]
     public int difficulty = 1;
-    [Range(1,7)]
+    [Range(1, 7)]
     public int markCount = 4;
     public delegate void clickmark(int num);
-    //private int missionNum;
+
+    public List<List<int>> nums;
+
     private GameManager gm;
+
+    private void Awake()
+    {
+        gm = GameManager.Instance;
+        marks = GetComponentInChildren<MissionSpawner>().prefebs;
+    }
 
     private void OnEnable()
     {
-        gm = GameManager.Instance;
         UpdateMissionDay();
     }
 
     private void Start()
-    {
-        missionInfoTable = gm.missionInfoList;
+    {        
+        missionInfoTable = gm.missionInfoDifficulty;        
 
         heroSlotsIndex = 0;
+        nums = new List<List<int>>();
+        for(int i = 0; i<5; i++)
+        {
+            var num = Utils.DistinctRandomNumbers(missionInfoTable[i+1].Count, markCount);
+            nums.Add(num);
+        }
 
-            marks = GetComponentInChildren<MissionSpawner>().prefebs;
-            var num = Utils.DistinctRandomNumbers(missionInfoTable.Count, markCount);
-            int k = 0;
-            for (int j = 0; j < marks.Length; j++)
+        int k = 0;
+        for (int j = 0; j < marks.Length; j++)
+        {
+            if (marks[j].GetComponent<MissionMarkData>().isMarkOn)
             {
-                if (marks[j].GetComponent<MissionMarkData>().isMarkOn)
-                {
-                    var index = k++;
-                    marks[j].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[num[index]]["Name"]}";
-                    marks[j].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(num[index]));
-                }
-                else
-                {
-                    marks[j].SetActive(false);
-                }
+                var index = k++;
+                marks[j].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[difficulty][nums[difficulty][index]]["Name"]}";
+                marks[j].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(difficulty,nums[difficulty][index]));
             }
+            else
+            {
+                marks[j].SetActive(false);
+            }
+        }
     }
 
     public void UpdateMissionDay()
@@ -72,10 +81,9 @@ public class MissionManager : View
         dayOfweek.text = $"{gm.playerData.currentDay}요일";
     }
 
-    public void UpdateMissionInfo(int num)
+    public void UpdateMissionInfo(int difficulty, int num)
     {
-        //missionNum = num;
-        var dic = missionInfoTable[num];
+        var dic = missionInfoTable[difficulty][num];
         gm.currentSelectMission = dic;
 
         //portrait.sprite = gm.iconSprites[$"Icon_{dic["BossID"]}"];  보스아이디 적 테이블에서 불러와야함
@@ -97,7 +105,7 @@ public class MissionManager : View
         //ProperCombatPower.text = $"0/{dic["ProperCombatPower"]}";
         ProperCombatPower.color = Color.white;
 
-        //보상 테이블 연결 필요
+        ////보상 테이블 연결 필요
         //int erCount = expectedRewards.Count;
         //for (int i = 0; i < erCount; i++)
         //{
@@ -195,24 +203,28 @@ public class MissionManager : View
         }
         if (count > 0)
         {
-            //gm.CreateBattleMap();
-            switch (gm.currentSelectMission["Type"])
-            {
-                case 0:
-                case 1:
-                    gm.LoadScene((int)SceneIndex.Battle);
-                    //gm.EnableBattleMap();
-                    break;
-                case 2:
-                    gm.LoadScene((int)SceneIndex.Defense);
-                    //gm.EnableBattleMap();
-                    break;
-            }
+            gm.LoadScene((int)SceneIndex.Battle);
         }
     }
 
     public void OnAdjustmentDifficulty()
     {
-        difficultyAdjustment.GetComponentInChildren<TextMeshProUGUI>().text = difficultyAdjustment.value.ToString();
+        difficulty = (int)difficultyAdjustment.value;
+        difficultyAdjustment.GetComponentInChildren<TextMeshProUGUI>().text = difficulty.ToString();
+
+        int k = 0;
+        for (int j = 0; j < marks.Length; j++)
+        {
+            if (marks[j].GetComponent<MissionMarkData>().isMarkOn)
+            {
+                var index = k++;
+                marks[j].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[difficulty][nums[difficulty-1][index]]["Name"]}";
+                marks[j].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(difficulty, nums[difficulty-1][index]));
+            }
+            else
+            {
+                marks[j].SetActive(false);
+            }
+        }
     }
 }

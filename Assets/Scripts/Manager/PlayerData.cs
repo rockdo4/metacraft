@@ -9,7 +9,6 @@ public class PlayerData
     public DayOfWeek currentDay = DayOfWeek.¿ù;
     public int cumulateGameDay = 0;
     public int gold = 0;
-    public int characterCount = 3;
 
     [Range(1, 30)]
     public int officeLevel;

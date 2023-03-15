@@ -1,5 +1,9 @@
+using System.Collections.Generic;
+
 public class DefenseMapInfo : BattleMapInfo
 {
+    private int enemyTriggetIndex;
+
     public override void GameStart()
     {
         base.GameStart();
@@ -15,8 +19,11 @@ public class DefenseMapInfo : BattleMapInfo
             }
         }
 
-        SettingMap(index);
-        battleMgr.SetEnemyTriggerIndex(index);
+        enemyTriggetIndex = index;
+        SettingMap(enemyTriggetIndex);
+        battleMgr.SetEnemyTriggerIndex(enemyTriggetIndex);
+        int count = GetAllEnemyCount();
+        battleMgr.SetEnemyCountTxt(count);
     }
 
     private void SettingMap(int index)
@@ -28,5 +35,11 @@ public class DefenseMapInfo : BattleMapInfo
         }
 
         triggers[index].InfinityRespawnEnemy();
+        triggers[index].isSkip = true;
+    }
+
+    public override void GetEnemyList(ref List<AttackableUnit> enemyList)
+    {
+        enemyList = triggers[enemyTriggetIndex].useEnemys;
     }
 }
