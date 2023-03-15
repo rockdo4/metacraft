@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -24,13 +23,14 @@ public class GameManager : Singleton<GameManager>
     public Dictionary<string, Sprite> iconSprites = new();
     public Dictionary<string, Sprite> illustrationSprites = new();
     public List<Dictionary<string, object>> missionInfoList; // 작전 정보
-    public Dictionary<int,List<Dictionary<string, object>>> missionInfoDifficulty; // 작전 정보 난이도 키 추가
+    public Dictionary<int, List<Dictionary<string, object>>> missionInfoDifficulty; // 작전 정보 난이도 키 추가
     public List<Dictionary<string, object>> dispatchInfoList; // 파견 정보
     public List<Dictionary<string, object>> officeInfoList;  // 사무소 레벨별 정보
     public List<Dictionary<string, object>> eventInfoList; // 이벤트 노드 정보
     public List<Dictionary<string, object>> eventEffectInfoList;
     public Dictionary<string, List<Dictionary<string, string>>> eventEffectTagInfoList;
     public Dictionary<string, List<Dictionary<string, float>>> eventEffectNoTagInfoList;
+    public List<Dictionary<string, object>> stringTable;
 
     public List<Dictionary<string, object>> compensationInfoList; // 보상 정보
 
@@ -84,126 +84,48 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator LoadAllResources()
     {
-        // 미션 테이블 로드
-        var mit = Addressables.LoadAssetAsync<TextAsset>("MissionInfoTable");
-
-        mit.Completed +=
-                (AsyncOperationHandle<TextAsset> obj) =>
-                {
-                    missionInfoList = CSVReader.SplitTextAsset(obj.Result);
-                    Addressables.Release(obj);
-                    FixMissionTable();
-                };
-
-        // 파견 테이블 로드
-        var dit = Addressables.LoadAssetAsync<TextAsset>("DispatchInfoTable");
-
-        dit.Completed +=
-                (AsyncOperationHandle<TextAsset> obj) =>
-                {
-                    dispatchInfoList = CSVReader.SplitTextAsset(obj.Result);
-                    Addressables.Release(obj);
-                };
-
-        // 오피스 테이블 로드
-        var oit = Addressables.LoadAssetAsync<TextAsset>("OfficeTable");
-
-        oit.Completed +=
-                (AsyncOperationHandle<TextAsset> obj) =>
-                {
-                    officeInfoList = CSVReader.SplitTextAsset(obj.Result);
-                    Addressables.Release(obj);
-                };
-
-        // 이벤트 테이블 로드
-        var eit = Addressables.LoadAssetAsync<TextAsset>("EventTable");
-
-        eit.Completed +=
-                (AsyncOperationHandle<TextAsset> obj) =>
-                {
-                    eventInfoList = CSVReader.SplitTextAsset(obj.Result);
-                    Addressables.Release(obj);
-                };
-
-        // 이벤트 이펙트 테이블 로드
-        var eeit = Addressables.LoadAssetAsync<TextAsset>("EventEffectTable");
-
-        eeit.Completed +=
-                (AsyncOperationHandle<TextAsset> obj) =>
-                {
-                    eventEffectInfoList = CSVReader.SplitTextAsset(obj.Result,true, false);
-                    Addressables.Release(obj);
-                    FixEventEffectTable();
-                };
-
-        // 보상 테이블 로드
-        var cit = Addressables.LoadAssetAsync<TextAsset>("CompensationTable");
-
-        cit.Completed +=
-                (AsyncOperationHandle<TextAsset> obj) =>
-                {
-                    compensationInfoList = CSVReader.SplitTextAsset(obj.Result, true, false);
-                    Addressables.Release(obj);
-
-                };
-
-        // 보급 테이블 로드
-        var sit = Addressables.LoadAssetAsync<TextAsset>("SupplyTable");
-
-        sit.Completed +=
-                (AsyncOperationHandle<TextAsset> obj) =>
-                {
-                    supplyInfoList = CSVReader.SplitTextAsset(obj.Result, true, false);
-                    Addressables.Release(obj);
-
-                };
-
-        List<AsyncOperationHandle> handles = new();
+        Dictionary<string, AsyncOperationHandle> handles = new();
 
         // Resources 테이블로 뺄 예정
-        List<string> spriteAddress = new()
+        List<string> tableNames = new()
         {
-            "다인",
-            "신하루",
-            "이수빈",
-            "한서은",
-            "돌격형",
-            "방어형",
-            "사격형",
-            "은밀형",
-            "지원형",
-            "하율",
+            "MissionInfoTable",
+            "EventEffectTable",
+            "DispatchInfoTable",
+            "OfficeTable",
+            "EventTable",
+            "CompensationTable",
+            "SupplyTable",
         };
 
-        foreach (string address in spriteAddress)
-        {
-            string iconKey = $"Icon_{address}";
-            Addressables.LoadAssetAsync<Sprite>(iconKey).Completed +=
-                (AsyncOperationHandle<Sprite> obj) =>
-                {
-                    iconSprites.Add(iconKey, obj.Result);
-                    handles.Add(obj);
-                };
+        // Load TextAssets
+        int count = tableNames.Count;
+        for (int i = 0; i < count; i++)
+            handles.Add(tableNames[i], Addressables.LoadAssetAsync<TextAsset>(tableNames[i]));
 
-            string illurKey = $"Illur_{address}";
-            Addressables.LoadAssetAsync<Sprite>(illurKey).Completed +=
-                (AsyncOperationHandle<Sprite> obj) =>
-                {
-                    illustrationSprites.Add(illurKey, obj.Result);
-                    handles.Add(obj);
-                };
+        // Load Sprites
+        List<string> heroNames = new();
+
+        count = heroDatabase.Count;
+        for (int i = 0; i < count; i++)
+        {
+            string address = heroDatabase[i].GetComponent<CharacterDataBundle>().originData.name;
+            string iconAddress = $"Icon_{address}";
+            string IllurAddress = $"Illu_{address}";
+            handles.Add(iconAddress, Addressables.LoadAssetAsync<Sprite>(iconAddress));
+            handles.Add(IllurAddress, Addressables.LoadAssetAsync<Sprite>(IllurAddress));
+            heroNames.Add(address);
         }
 
+        // 스프라이트 리소스 로드 대기
         bool loadAll = false;
-        int count = 0;
-        // 스프라이트 리소스 로드
         while (!loadAll)
         {
             count = 0;
             loadAll = true;
             foreach (var handle in handles)
             {
-                if (!handle.IsDone)
+                if (!handle.Value.IsDone)
                 {
                     loadAll = false;
                     break;
@@ -212,15 +134,38 @@ public class GameManager : Singleton<GameManager>
             }
             yield return null;
         }
+
+        missionInfoList = CSVReader.SplitTextAsset(handles["MissionInfoTable"].Result as TextAsset);
+        eventEffectInfoList = CSVReader.SplitTextAsset(handles["EventEffectTable"].Result as TextAsset);
+        dispatchInfoList = CSVReader.SplitTextAsset(handles["DispatchInfoTable"].Result as TextAsset);
+        officeInfoList = CSVReader.SplitTextAsset(handles["OfficeTable"].Result as TextAsset);
+        eventInfoList = CSVReader.SplitTextAsset(handles["EventTable"].Result as TextAsset);
+        compensationInfoList = CSVReader.SplitTextAsset(handles["CompensationTable"].Result as TextAsset);
+        supplyInfoList = CSVReader.SplitTextAsset(handles["SupplyTable"].Result as TextAsset);
+
+        count = heroNames.Count;
+        for (int i = 0; i < count; i++)
+        {
+            string iconKey = $"Icon_{heroNames[i]}";
+            iconSprites.Add(iconKey, handles[iconKey].Result as Sprite);
+            string illuKey = $"Illu_{heroNames[i]}";
+            illustrationSprites.Add(illuKey, handles[illuKey].Result as Sprite);
+        }
+
         ReleaseAddressable(handles);
+        handles.Clear();
 
         LoadAllData();
+        FixMissionTable();
+        FixEventEffectTable();
     }
 
-    public void ReleaseAddressable(List<AsyncOperationHandle> handles)
+    public void ReleaseAddressable(Dictionary<string, AsyncOperationHandle> handles)
     {
-        foreach (var handle in handles)
-            Addressables.Release(handle);
+        foreach (var elem in handles.Values)
+        {
+            Addressables.Release(elem);
+        }
     }
 
     private void Update()
@@ -231,31 +176,6 @@ public class GameManager : Singleton<GameManager>
 
             Application.Quit();
         }
-        //if (Input.GetKeyDown(KeyCode.Home)) // Navigator Home Button
-        //{
-        //    // 홈버튼
-        //}
-        //if (Input.GetKeyDown(KeyCode.Menu)) // Navigator Menu Button
-        //{
-        //    // 메뉴 버튼
-        //}
-
-        //// Test Key Start
-        //if (Input.GetKeyDown(KeyCode.K))
-        //{
-        //    SaveAllData();
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.L))
-        //{
-        //    LoadAllData();
-        //}
-
-        //if (Input.GetKeyDown(KeyCode.U))
-        //{
-        //    AddOfficeExperience(300);
-        //}
-        // Test Key End
     }
 
     public void OnApplicationQuit()
@@ -405,14 +325,14 @@ public class GameManager : Singleton<GameManager>
     // 이벤트 이팩트 테이블 분리
     private void FixEventEffectTable()
     {
-        eventEffectTagInfoList = new Dictionary<string,List<Dictionary<string,string>>>();
+        eventEffectTagInfoList = new Dictionary<string, List<Dictionary<string, string>>>();
         for (int i = 0; i < eventEffectInfoList.Count; i++)
         {
-            var midList = new List<Dictionary<string,string>>();
-            for (int j = 0; j<10;j++)
+            var midList = new List<Dictionary<string, string>>();
+            for (int j = 0; j < 10; j++)
             {
-                var smallDic = new Dictionary<string,string>();
-                string tag = $"Tag{j+1}";
+                var smallDic = new Dictionary<string, string>();
+                string tag = $"Tag{j + 1}";
                 string beHaveTag = $"BeHaveTag{j + 1}";
                 smallDic.Add((string)eventEffectInfoList[i][tag], (string)eventEffectInfoList[i][beHaveTag]);
                 midList.Add(smallDic);
@@ -442,7 +362,7 @@ public class GameManager : Singleton<GameManager>
         missionInfoDifficulty = new Dictionary<int, List<Dictionary<string, object>>>();
         for (int i = 1; i < 6; i++)
         {
-            missionInfoDifficulty.Add(i,new List<Dictionary<string, object>>());
+            missionInfoDifficulty.Add(i, new List<Dictionary<string, object>>());
         }
         for (int i = 0; i < missionInfoList.Count; i++)
         {

@@ -75,13 +75,13 @@ public class TreeMapSystem : MonoBehaviour
         //CreateTreeGraph();
     //}
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            CreateTreeGraph();
-        }
-    }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.L))
+    //    {
+    //        CreateTreeGraph();
+    //    }
+    //}
 
     public void CreateTreeGraph()
     {
