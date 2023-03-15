@@ -22,6 +22,10 @@ public class Effect : MonoBehaviour
     {
         this.startPos = startPos;
     }
+    public void SetRotation(Quaternion rot)
+    {
+        gameObject.transform.rotation = rot;
+    }
     // 종료 지점 변경하게 될 수도 있을거 같아서 추가
     public void SetEndPos(Transform endPos)
     {

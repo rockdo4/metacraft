@@ -5,10 +5,14 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "CharacterSkill", menuName = "Character/CharacterSkill")]
 public class CharacterSkill : ScriptableObject
 {
-    AnimationClip animation;
- 
-    public List<AttackableUnit>     SkillEffectedUnits { get { return skillEffectedUnits; } }
-    protected List<AttackableUnit>  skillEffectedUnits;
+    public List<AttackableUnit> SkillEffectedUnits { get { return skillEffectedUnits; } }
+    protected List<AttackableUnit> skillEffectedUnits;
+
+    //public List<(BuffType bufftype, float value)> buffTypeAndValue;
+
+    public AnimationClip animationClip;
+
+    public int      skillLevel = 1;
 
     public int      id;
     public string   skillName;
