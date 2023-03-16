@@ -192,8 +192,11 @@ public class GameManager : Singleton<GameManager>
         {
             _ => "Contents",
         };
-        Logger.Debug($"key [{key}], languageKey [{languageKey}], result : [{stringTable[key][languageKey]}]");
-        return $"{stringTable[key][languageKey]}";
+        // Logger.Debug($"key [{key}], languageKey [{languageKey}], result : [{stringTable[key][languageKey]}]");
+        if (stringTable[key].ContainsKey(languageKey))
+            return $"{stringTable[key][languageKey]}";
+        else
+            return $"Load fail to string table. key [{key}], languageKey [{languageKey}], result : [{stringTable[key][languageKey]}";
     }
 
     public void ReleaseAddressable(Dictionary<string, AsyncOperationHandle> handles)
