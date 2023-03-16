@@ -104,6 +104,7 @@ public class BattleManager : MonoBehaviour
     public void EndEvent()
     {
         SetActiveUi(eventUi, choiceButtons, false, choiceButtons.Count);
+        NodeClearReward();
     }
     public void EndSupply()
     {
@@ -112,6 +113,7 @@ public class BattleManager : MonoBehaviour
         {
             heroUiList[i].gameObject.SetActive(true);
         }
+        NodeClearReward();
     }
 
     private void StartNextStage(MapEventEnum ev)
@@ -362,6 +364,7 @@ public class BattleManager : MonoBehaviour
         {
             if (btMapTriggers[currTriggerIndex].isMissionEnd)
             {
+                NodeClearReward();
                 MissionClear();
             }
             else if (btMapTriggers[currTriggerIndex + 1] != null && btMapTriggers[currTriggerIndex + 1].isStageEnd)
@@ -528,7 +531,9 @@ public class BattleManager : MonoBehaviour
     private void ChoiceNextStageByNode()
     {
         stageReward.gameObject.SetActive(true);
-        NodeClearReward();
+        
+        if (tree.CurNode.type != TreeNodeTypes.Event && tree.CurNode.type != TreeNodeTypes.Supply)
+            NodeClearReward();
 
         for (int i = 0; i < useHeroes.Count; i++)
         {
@@ -763,7 +768,6 @@ public class BattleManager : MonoBehaviour
 
     public void NodeClearReward()
     {
-        GameManager gm = GameManager.Instance;
         var influence = gm.currentSelectMission["Influence"];//세력
         int difficulty = (int)gm.currentSelectMission["Difficulty"]; //난이도
         var nodeType = tree.CurNode.type; //노드타입
@@ -797,10 +801,19 @@ public class BattleManager : MonoBehaviour
                 colomId = "ClearReward";
                 collomWeight = "CWeight";
                 itemCount = 3;
+                Logger.Debug("SupplyMapReward");
                 break;
             case TreeNodeTypes.Event:
+                colomId = "ClearReward";
+                collomWeight = "CWeight";
+                itemCount = 3;
+                Logger.Debug("EventMapReward");
                 return;
             case TreeNodeTypes.Boss:
+                colomId = "HardReward";
+                collomWeight = "HWeight";
+                itemCount = 5;
+                Logger.Debug("BossReward");
                 return;
             default:
                 break;
