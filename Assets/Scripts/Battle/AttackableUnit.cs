@@ -125,12 +125,10 @@ public abstract class AttackableUnit : MonoBehaviour
     protected AttackedDamageUI floatingDamageText;
     protected HpBarManager hpBarManager;
 
-<<<<<<< HEAD
     public bool isAlive = false;
-=======
+
     public Transform effectCreateTransform;
     public Transform hitTransform;
->>>>>>> develop
 
     private void Start()
     {
@@ -660,14 +658,8 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void OnDead(AttackableUnit unit);
     public void DestroyUnit()
     {
-        // 이 부분 로테이션 이상할 시 바꿔야함
-<<<<<<< HEAD
         //Utils.CopyPositionAndRotation(gameObject, gameObject.transform.parent);
         //pathFind.enabled = false;
-=======
-        Utils.CopyPositionAndRotation(gameObject, gameObject.transform.parent);
-        pathFind.enabled = false;
->>>>>>> develop
         gameObject.SetActive(false);
         isAlive = false;
     }

@@ -13,7 +13,7 @@ public class BattleManager : MonoBehaviour
     private List<Dictionary<string, object>> eventInfoTable;            // 이벤트 테이블
     private List<Dictionary<string, object>> supplyInfoTable;           // 보급 테이블
     private Dictionary<string, object> currentSelectMissionTable;       // 작전 테이블
-    private List<Dictionary<string, object>> stringTable;               // 스트링 테이블
+    //private List<Dictionary<string, object>> stringTable;               // 스트링 테이블
 
     public MapEventEnum curEvent = MapEventEnum.None;
     private GameObject curMap;
@@ -193,6 +193,8 @@ public class BattleManager : MonoBehaviour
     {
         if (tree.CurNode.type == TreeNodeTypes.Supply)
         {
+            GameManager gm = GameManager.Instance;
+
             // 작전 테이블에서 보급 id 찾기
             string supplyId = $"{currentSelectMissionTable["SupplyID"]}";
 
@@ -208,16 +210,7 @@ public class BattleManager : MonoBehaviour
             }
 
             string supplyTextId = $"{supplyInfoTable[index]["supply_text"]}";
-            int stringTableIDIndex = 0;
-            for (int i = 0; i < stringTable.Count; i++)
-            {
-                if (stringTable[i]["ID"].Equals(supplyTextId))
-                {
-                    stringTableIDIndex = i;
-                    break;
-                }
-            }
-            string findStringTable = $"{stringTable[stringTableIDIndex]["Contents"]}";
+            string findStringTable = gm.GetStringByTable(supplyTextId);
             supplyContentText.text = findStringTable;
 
             // 찾은 인덱스로 해당 줄의 데이터들을 불러옴
@@ -226,17 +219,8 @@ public class BattleManager : MonoBehaviour
                 supplyButtons[i].SetActive(true);
 
                 string textId = $"{supplyInfoTable[index][$"choice{i + 1}_text"]}";
-                int stringTableTextIndex = 0;
-                for (int j = 0; j < stringTable.Count; j++)
-                {
-                    if (stringTable[j]["ID"].Equals(textId))
-                    {
-                        stringTableTextIndex = j;
-                        break;
-                    }
-                }
 
-                string stringTableChoiceText = $"{stringTable[stringTableTextIndex]["Contents"]}";
+                string stringTableChoiceText = gm.GetStringByTable(textId);
                 supplyButtonTexts[i].text = stringTableChoiceText;
             }
         }
@@ -276,7 +260,7 @@ public class BattleManager : MonoBehaviour
         eventInfoTable = gm.eventInfoList;
         supplyInfoTable = gm.supplyInfoList;
         currentSelectMissionTable = gm.currentSelectMission;
-        stringTable = gm.stringTable;
+        //stringTable = gm.stringTable;
 
         var selectedHeroes = gm.GetSelectedHeroes();
         int count = selectedHeroes.Count;
