@@ -20,6 +20,7 @@ public class EnemySpawningAndPositioning : MonoBehaviour
 
     private int spawnCount = 0;
     public List<List<AttackableEnemy>> enemys = new();
+    private bool isInfinityRespawn = true;
 
     // 임시
     public AttackableEnemy middleBoss;
@@ -59,14 +60,13 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     }
     private IEnumerator CoInfinityRespawn(float timer)
     {
-        yield return new WaitForSeconds(timer);
-
         // 리스폰 후 다시 코루틴 시작
         for (int i = 0; i < enemys[spawnCount].Count; i++)
         {
             enemys[spawnCount][i].SetEnabledPathFind(true);
             enemys[spawnCount][i].gameObject.SetActive(true);
             enemys[spawnCount][i].ChangeUnitState(UnitState.Battle);
+            enemys[spawnCount][i].isAlive = true;
         }
 
         if (isMiddleBoss)
@@ -79,7 +79,15 @@ public class EnemySpawningAndPositioning : MonoBehaviour
             yield break;
         }
 
-        coInfinityRespawn = StartCoroutine(CoInfinityRespawn(timer));
+        yield return new WaitForSeconds(timer);
+
+        if (isInfinityRespawn)
+            coInfinityRespawn = StartCoroutine(CoInfinityRespawn(timer));
+    }
+
+    public void StopInfinityRespawn()
+    {
+        isInfinityRespawn = false;
     }
 
     public List<AttackableEnemy> SpawnEnemy()
@@ -88,7 +96,6 @@ public class EnemySpawningAndPositioning : MonoBehaviour
             return null;
 
         List<AttackableEnemy> enemys = new();
-
         for (int i = 0; i < enemyPrefabs.Count; i++)
         {
             var enemy = Instantiate(enemyPrefabs[i], tr.position, enemyPrefabs[i].gameObject.transform.rotation, tr);
@@ -157,7 +164,6 @@ public class EnemySpawningAndPositioning : MonoBehaviour
 
         if (middleBoss.GetUnitState() == UnitState.Die)
         {
-            Logger.Debug($"{middleBoss.UnitHp}");
             return false;
         }
         else

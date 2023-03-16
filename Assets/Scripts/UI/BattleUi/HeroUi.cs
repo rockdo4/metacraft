@@ -7,12 +7,23 @@ public class HeroUi : MonoBehaviour
     public Image heroImage;
     public Slider hpBar;
     public Image dieImage;
+    public Image silenceImage;
 
     [SerializeField]
     private BuffList viewBuffList;
     public UnitState heroState;
 
     CharacterDataBundle heroData;
+    public bool isAuto;
+    public void SetAuto(ref bool state) => isAuto = state;
+    public bool isSilence;
+    public bool IsSilence {
+        get { return isSilence;   }
+        set {
+            isSilence = value;
+            silenceImage.gameObject.SetActive(value);
+        }
+    }
 
     public void SetHeroInfo(CharacterDataBundle data)
     {
@@ -33,8 +44,10 @@ public class HeroUi : MonoBehaviour
 
     public void OnClickHeroSkill()
     {
-        if(heroState == UnitState.Battle)
+        if (heroState == UnitState.Battle && !isAuto) 
+        {
             heroSkill.OnDownSkill();
+        }
     }
 
     public void OnClickPopUp()
@@ -46,6 +59,10 @@ public class HeroUi : MonoBehaviour
         hpBar.value = nowHp / maxHp; // Mathf.Max((float)nowHp / maxHp); max 왜 쓴거임? - 진석 
                                             // 그러게요..? 여기다 쓸 이유가 없는데.. 최대체력 넘지 못하게 하는 코드
                                             //  작업하면서 무지성으로 복붙한거 같아요- 정연
+    }
+    public void SetCurrHp()
+    {
+        SetHp(heroData.data.currentHp, heroData.data.healthPoint);
     }
 
     public void SetDieImage()

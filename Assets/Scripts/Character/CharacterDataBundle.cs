@@ -13,7 +13,8 @@ public class CharacterDataBundle : MonoBehaviour, IComparable<CharacterDataBundl
     {
         InitSetting();
 
-        activeSkill = Instantiate(activeSkill);
+        if(activeSkill != null)
+            activeSkill = Instantiate(activeSkill);
     }
 
     public void InitSetting()

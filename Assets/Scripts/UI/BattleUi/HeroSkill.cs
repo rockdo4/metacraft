@@ -12,7 +12,7 @@ public class HeroSkill : MonoBehaviour
     [SerializeField]
     private GameObject skillActivedPanel;
     [SerializeField]
-    private TextMeshProUGUI skillDescriptionText;
+    //private TextMeshProUGUI skillDescriptionText;
 
     private float prevTimeScale ;
 
@@ -121,7 +121,7 @@ public class HeroSkill : MonoBehaviour
     {
         skillActivedHighlight.SetActive(active);
         skillActivedPanel.SetActive(active);
-        skillDescriptionText.text = skillDescription;
+        //skillDescriptionText.text = skillDescription;
     }
 
     public void IsPointerInSkillActivePanel(bool isIn)

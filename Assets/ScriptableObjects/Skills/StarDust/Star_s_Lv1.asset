@@ -12,26 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c267fa0414501eb408668a75a7c3b73f, type: 3}
   m_Name: Star_s_Lv1
   m_EditorClassIdentifier: 
-  animationClip: {fileID: 0}
+  animationClip: {fileID: 7400000, guid: b713f49fd445eec468b7fe49e7983cff, type: 2}
   skillLevel: 1
   id: 7032001
   skillName: 
   preCooldown: 3
   cooldown: 15
-  distance: 0
-  targetNumLimit: -1
+  distance: 2.2
+  targetNumLimit: 1
   angle: 0
   coefficientType: 0
   coefficient: 5
   targetType: 1
   searchType: 0
-  readyEffect: 0
-  activeEffect: 0
+  readyEffect: -1
+  activeEffect: 13
+  hitEffect: 6
   isCriticalPossible: 1
   isAuto: 0
   targetPos: {x: 0, y: 0, z: 0}
   skillDescription: skillinfo_Star_s
-  skillAreaIndicatorPrefab: {fileID: 6672067328229480615, guid: 0da645c26f09e074abad419ddc09fafb,
+  buffInfos: []
+  skillAreaIndicatorPrefab: {fileID: 6672067328229480615, guid: e9f23d40a5aff774da9fb014b21b0c87,
     type: 3}
   layerM:
     serializedVersion: 2
@@ -39,7 +41,7 @@ MonoBehaviour:
   castRangeIndicatorPrefab: {fileID: 1572453404982893073, guid: 3eef904cc2b274c4dbec7f0543fc5a68,
     type: 3}
   areaShapeType: 2
-  indicatorTargetWhenTrackTarget: 0
+  indicatorTargetWhenTrackTarget: 1
   isTrackTarget: 1
   sectorRadius: 0
   sectorAngle: 360

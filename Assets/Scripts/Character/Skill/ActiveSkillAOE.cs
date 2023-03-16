@@ -7,8 +7,6 @@ public class ActiveSkillAOE : CharacterSkill
     public SkillAreaIndicator skillAreaIndicatorPrefab;
     protected SkillAreaIndicator skillAreaIndicator;
     public LayerMask layerM;
-    public Transform ActorTransform { set { actorTransform = value; } }
-    protected Transform actorTransform;
 
     public GameObject castRangeIndicatorPrefab;
     private GameObject castRangeIndicator;
@@ -158,7 +156,7 @@ public class ActiveSkillAOE : CharacterSkill
 
         for (int i = 0; i < maxColliders; i++)
         {
-            float distanceSQR = GetDistanceNoneSQRT(target, colliders[i].transform.position);
+            float distanceSQR = GetDistanceUseSqr(target, colliders[i].transform.position);
             if (distanceSQR < closestDistance)
             {
                 closestDistance = distanceSQR;
@@ -205,7 +203,7 @@ public class ActiveSkillAOE : CharacterSkill
 
         return x * x + z * z < sqrCastRangeLimit;
     }
-    protected float GetDistanceNoneSQRT(Vector3 pos1, Vector3 pos2)
+    protected float GetDistanceUseSqr(Vector3 pos1, Vector3 pos2)
     {
         var x = pos1.x - pos2.x;
         var z = pos1.z - pos2.z;
@@ -225,6 +223,10 @@ public class ActiveSkillAOE : CharacterSkill
         foreach (var target in skillEffectedUnits)
         {            
             target.OnDamage(attackableUnit, this);
+            foreach (var buff in buffInfos)
+            {
+                target.AddValueBuff(buff, 0);
+            }
         }
 
         skillAreaIndicator.gameObject.SetActive(false);

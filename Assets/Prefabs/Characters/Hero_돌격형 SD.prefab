@@ -108,7 +108,7 @@ MonoBehaviour:
     name: 
     grade: 0
     maxGrade: 0
-    job: 
+    job: 0
     tags: []
     level: 0
     exp: 0
@@ -124,8 +124,8 @@ MonoBehaviour:
     accuracy: 0.5
     equipment: {fileID: 0}
   attacks:
-  - {fileID: 11400000, guid: d5b9a7358e0855b46acac612b4428307, type: 2}
-  activeSkill: {fileID: 11400000, guid: c3cdc95e516a81448985ba0b5dca31db, type: 2}
+  - {fileID: 11400000, guid: 55b151b58dd9f1d4f8d7813b47571f1b, type: 2}
+  activeSkill: {fileID: 11400000, guid: c348b91dd3ba7da41b47409e23d4ea07, type: 2}
 --- !u!114 &-7466577227708873861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -160,7 +160,6 @@ MonoBehaviour:
   nowAttack: {fileID: 0}
   skillClips: []
   unitType: 0
-  aiType: 0
   normalAttackTargetType: 1
   normalbuffs: []
   PassiveTargetType: 0
@@ -177,33 +176,10 @@ MonoBehaviour:
   citizenList: []
   unitState: -1
   battleState: -1
-  bufferState:
-    damage: 0
-    defense: 0
-    damageReceived: 0
-    damageDecrease: 0
-    criticalProbability: 0
-    criticalDamage: 0
-    attackSpeed: 0
-    maxHealthIncrease: 0
-    burns: 0
-    isBurns: 0
-    freeze: 0
-    isFreze: 0
-    shield: 0
-    isShield: 0
-    bleed: 0
-    isBleed: 0
-    lifeSteal: 0
-    isLifeSteal: 0
-    provoke: 0
-    stealth: 0
-    stun: 0
-    silence: 0
-    resistance: 0
-    blind: 0
   isThereDamageUI: 1
   usingFloatingHpBar: 0
+  effectCreateTransform: {fileID: 1871948219450084698}
+  hitTransform: {fileID: 0}
 --- !u!114 &-4882604841128722060
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -227,6 +203,34 @@ PrefabInstance:
     - target: {fileID: 1194394832456452, guid: 0276fd68d2eb8e64aa562b0c13ae1bf9, type: 3}
       propertyPath: m_Name
       value: F06
+      objectReference: {fileID: 0}
+    - target: {fileID: 1214476145441766, guid: 0276fd68d2eb8e64aa562b0c13ae1bf9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1361839893851328, guid: 0276fd68d2eb8e64aa562b0c13ae1bf9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1456580765362602, guid: 0276fd68d2eb8e64aa562b0c13ae1bf9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1597915327440528, guid: 0276fd68d2eb8e64aa562b0c13ae1bf9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1622765723340248, guid: 0276fd68d2eb8e64aa562b0c13ae1bf9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1750134099932814, guid: 0276fd68d2eb8e64aa562b0c13ae1bf9, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1947853803392526, guid: 0276fd68d2eb8e64aa562b0c13ae1bf9, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4220219224533934, guid: 0276fd68d2eb8e64aa562b0c13ae1bf9, type: 3}
       propertyPath: m_RootOrder
@@ -326,3 +330,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unit: {fileID: 3891346124845554436}
+--- !u!4 &1871948219450084698 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4626168375867636, guid: 0276fd68d2eb8e64aa562b0c13ae1bf9,
+    type: 3}
+  m_PrefabInstance: {fileID: 1867324258704274862}
+  m_PrefabAsset: {fileID: 0}

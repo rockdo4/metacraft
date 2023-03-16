@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ea31b1afcf37fb47b0432c9ffa1a68d, type: 3}
   m_Name: Sooa_s_Lv1
   m_EditorClassIdentifier: 
-  animationClip: {fileID: 0}
+  animationClip: {fileID: 7400000, guid: 3786af6d5c5c1d9428e200bec8f83155, type: 2}
   skillLevel: 1
   id: 7035003
   skillName: 
@@ -25,12 +25,14 @@ MonoBehaviour:
   coefficient: 0.55
   targetType: 0
   searchType: 0
-  readyEffect: 0
-  activeEffect: 0
+  readyEffect: 3
+  activeEffect: 28
+  hitEffect: 8
   isCriticalPossible: 0
   isAuto: 0
   targetPos: {x: 0, y: 0, z: 0}
   skillDescription: skillinfo_forth_s
+  buffInfos: []
   skillAreaIndicatorPrefab: {fileID: 6672067328229480615, guid: 0da645c26f09e074abad419ddc09fafb,
     type: 3}
   layerM:
@@ -49,4 +51,5 @@ MonoBehaviour:
   maxColliders: 32
   duration: 10
   hitInterval: 1
-  skillFieldPrefab: {fileID: 0}
+  skillFieldPrefab: {fileID: 3682801926524696948, guid: c469a7224c2ee24408d5ee3d648151f3,
+    type: 3}

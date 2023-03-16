@@ -138,6 +138,7 @@ public class AttackableEnemy : AttackableUnit
         ResetCoolDown();
         target = null;
         animator.Rebind();
+        base.ResetData();
     }
 
     public override void PassiveSkillEvent()
@@ -225,11 +226,6 @@ public class AttackableEnemy : AttackableUnit
                 }
                 break;
             case UnitBattleState.Stun:
-                stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-                if (stateInfo.IsName("Stun") && stateInfo.normalizedTime >= 1.0f)
-                {
-                    StunEnd();
-                }
                 break;
         }
     }
