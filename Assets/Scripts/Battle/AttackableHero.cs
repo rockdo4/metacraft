@@ -188,6 +188,8 @@ public class AttackableHero : AttackableUnit
             PlayActiveSkillAnimation,
             OffSkillAreaIndicator,
             SkillCancle);
+
+        heroUI.SetAuto(ref isAuto);
     }
 
     public override void ResetData()
@@ -252,7 +254,7 @@ public class AttackableHero : AttackableUnit
     
     protected override void BattleUpdate()
     {
-        if (isAuto && heroUI.heroSkill.IsCoolDown)
+        if (isAuto && heroUI.heroSkill.IsCoolDown && !bufferState.silence)
         {
             SearchActiveTarget();
             if (activeTarget != null && InRangeActiveAttack)
@@ -510,6 +512,11 @@ public class AttackableHero : AttackableUnit
         else
             BuffDurationUpdate(info.id, info.duration);
 
+        if(info.type == BuffType.Silence)
+        {
+            heroUI.IsSilence = true;
+        }
+
         base.AddStateBuff(info, attackableUnit, icon);
     }
 
@@ -535,6 +542,10 @@ public class AttackableHero : AttackableUnit
         if (buff.buffInfo.type == BuffType.MaxHealthIncrease)
         {
             heroUI.SetHp(UnitHp, MaxHp);
+        }
+        if (buff.buffInfo.type == BuffType.Silence)
+        {
+            heroUI.IsSilence = false;
         }
     }
 }

@@ -766,6 +766,7 @@ public abstract class AttackableUnit : MonoBehaviour
                     BattleState = UnitBattleState.Stun;
                     break;
                 case BuffType.Silence:
+                    Logger.Debug("Stun");
                     break;
 
             }

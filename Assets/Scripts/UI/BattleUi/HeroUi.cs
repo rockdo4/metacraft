@@ -7,12 +7,23 @@ public class HeroUi : MonoBehaviour
     public Image heroImage;
     public Slider hpBar;
     public Image dieImage;
+    public Image silenceImage;
 
     [SerializeField]
     private BuffList viewBuffList;
     public UnitState heroState;
 
     CharacterDataBundle heroData;
+    public bool isAuto;
+    public void SetAuto(ref bool state) => isAuto = state;
+    public bool isSilence;
+    public bool IsSilence {
+        get { return isSilence;   }
+        set {
+            isSilence = value;
+            silenceImage.gameObject.SetActive(value);
+        }
+    }
 
     public void SetHeroInfo(CharacterDataBundle data)
     {
@@ -33,8 +44,10 @@ public class HeroUi : MonoBehaviour
 
     public void OnClickHeroSkill()
     {
-        if(heroState == UnitState.Battle)
+        if (heroState == UnitState.Battle && !isAuto) 
+        {
             heroSkill.OnDownSkill();
+        }
     }
 
     public void OnClickPopUp()
