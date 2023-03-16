@@ -25,8 +25,6 @@ public class Effect : MonoBehaviour
     public void SetRotation(Quaternion rot)
     {
         gameObject.transform.rotation = rot;
-        Logger.Debug(1);
-        Logger.Debug(transform.forward, gameObject);
     }
     // 종료 지점 변경하게 될 수도 있을거 같아서 추가
     public void SetEndPos(Transform endPos)

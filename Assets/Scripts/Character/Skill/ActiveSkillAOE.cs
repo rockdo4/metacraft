@@ -29,11 +29,12 @@ public class ActiveSkillAOE : CharacterSkill
     public float castRangeLimit = 10f;
     private float sqrCastRangeLimit;
 
-    private bool skillStartFromCharacter;
+    private bool skillStartFromCharacter;    
 
     private Collider[] colliders;
     public int maxColliders = 32;
     private Transform closestEnemyTransformWhenTrackTarget;
+
     public override void OnActive()
     {
         if (skillAreaIndicator != null &&
@@ -131,19 +132,24 @@ public class ActiveSkillAOE : CharacterSkill
         }        
     }
     private void WhenTrackTarget(RaycastHit hit)
-    {        
-        //switch(indicatorTargetWhenAutoTarget)
-        //{
-        //    case SkillIndicatorTarget.Self:
-        //        break;
-        //    case SkillIndicatorTarget.Enemy:                
-        //        break;
-        //    case SkillIndicatorTarget.Friendly:
-        //        break;
-        //}
-        IndicatorPosTrack(hit);
+    {
+        switch (indicatorTargetWhenTrackTarget)
+        {
+            case SkillIndicatorTarget.Self:
+                IndicatorPosTrackSelf();
+                break;
+            case SkillIndicatorTarget.Enemy:
+                IndicatorPosTrackEnemy(hit);
+                break;
+            case SkillIndicatorTarget.Friendly:
+                break;
+        }        
     }
-    private void IndicatorPosTrack(RaycastHit hit)
+    private void IndicatorPosTrackSelf()
+    {
+        skillAreaIndicator.TrackTransform = actorTransform;
+    }
+    private void IndicatorPosTrackEnemy(RaycastHit hit)
     {
         var target = isAuto ? targetPos : hit.point;
 

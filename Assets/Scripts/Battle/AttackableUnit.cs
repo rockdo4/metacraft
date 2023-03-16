@@ -434,6 +434,9 @@ public abstract class AttackableUnit : MonoBehaviour
         {
             UnitState = UnitState.Die;            
         }
+
+        if (!skill.hitEffect.Equals(EffectEnum.None))
+            EffectManager.Instance.Get(skill.hitEffect, transform);
         ShowHpBarAndDamageText(dmg, isCritical);
     }
 
