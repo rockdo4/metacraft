@@ -584,18 +584,27 @@ public class BattleManager : MonoBehaviour
         // 임시 빌드용 코드
         if (tree.CurNode.type == TreeNodeTypes.Boss)
         {
-            //Logger.Debug(btMapTriggers.Count - 1);
-            //btMapTriggers[^-1].enemySettingPositions[1].enemys.Clear();
+            currBtMgr.battleMapType = BattleMapEnum.Normal;
+            Logger.Debug(btMapTriggers[^2].name);
 
-            //btMapTriggers[^-1].enemySettingPositions[1].enemyPrefabs[0] = bossPrefab;
-            //var enemy = btMapTriggers[^-1].enemySettingPositions[1].SpawnEnemy();
+            btMapTriggers[^2].enemys.Clear();
+            btMapTriggers[^2].enemyColls.Clear();
+            btMapTriggers[^2].enemySettingPositions[1].enemyPrefabs[0] = bossPrefab;
+            for (int i = 0; i < btMapTriggers[^2].enemySettingPositions.Count; i++)
+            {
+                btMapTriggers[^2].enemySettingPositions[i].ClearTempEnemyList();
+                var enemy = btMapTriggers[^2].enemySettingPositions[i].SpawnEnemy();
 
-            //btMapTriggers[^-1].enemys.Add(enemy[0]);
-            //btMapTriggers[^-1].enemys[0].SetPathFind();
-            //btMapTriggers[^-1].AddEnemyColliders(enemy[0].GetComponent<CapsuleCollider>());
-            //btMapTriggers[^-1].enemys[0].SetEnabledPathFind(false);
+                for (int j = 0; j < enemy.Count; j++)
+                {
+                    btMapTriggers[^2].enemys.Add(enemy[j]);
+                    btMapTriggers[^2].enemys[j].SetPathFind();
+                    btMapTriggers[^2].AddEnemyColliders(enemy[j].GetComponent<CapsuleCollider>());
+                    btMapTriggers[^2].enemys[j].SetEnabledPathFind(false);
+                }
+            }
 
-            //btMapTriggers[^-1].ResetEnemys();
+            btMapTriggers[^2].ResetEnemys();
         }
 
         CreateRoad();
@@ -699,7 +708,8 @@ public class BattleManager : MonoBehaviour
     private void EnemyCountCheck(AttackableEnemy enemy ,int triggerIndex)
     {
         btMapTriggers[triggerIndex].OnDead(enemy);
-        if (enemy.GetUnitData().data.job == (int)CharacterJob.Villain)
+        if (enemy.GetUnitData().data.job == (int)CharacterJob.Villain &&
+            tree.CurNode.type == TreeNodeTypes.Threat)
         {
             DeadMiddleBoss();
             SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
@@ -748,23 +758,31 @@ public class BattleManager : MonoBehaviour
             btMapTriggers.Last().isMissionEnd = true;
         }
 
-        //if (Input.GetKeyDown(KeyCode.V))
-        //{
-        //    Logger.Debug(btMapTriggers[^4].name);
-        //    //btMapTriggers[^4].enemySettingPositions[1].enemys.Clear();
+        // 임시 보스 교체용 코드
+        if (Input.GetKeyDown(KeyCode.V))
+        {
+            currBtMgr.battleMapType = BattleMapEnum.Normal;
+            Logger.Debug(btMapTriggers[^2].name);
 
-        //    btMapTriggers[^4].enemySettingPositions[1].enemyPrefabs[0] = bossPrefab;
-        //    var enemy = btMapTriggers[^4].enemySettingPositions[1].SpawnEnemy();
+            btMapTriggers[^2].enemys.Clear();
+            btMapTriggers[^2].enemyColls.Clear();
+            btMapTriggers[^2].enemySettingPositions[1].enemyPrefabs[0] = bossPrefab;
+            for (int i = 0; i < btMapTriggers[^2].enemySettingPositions.Count; i++)
+            {
+                btMapTriggers[^2].enemySettingPositions[i].ClearTempEnemyList();
+                var enemy = btMapTriggers[^2].enemySettingPositions[i].SpawnEnemy();
 
-        //    btMapTriggers[^4].enemyColls.Clear();
-        //    btMapTriggers[^4].enemys.Add(enemy[0]);
-        //    btMapTriggers[^4].enemys[0].SetPathFind();
-        //    btMapTriggers[^4].enemyColls.Clear();
-        //    btMapTriggers[^4].AddEnemyColliders(enemy[0].GetComponent<CapsuleCollider>());
-        //    btMapTriggers[^4].enemys[0].SetEnabledPathFind(false);
+                for (int j = 0; j < enemy.Count; j++)
+                {
+                    btMapTriggers[^2].enemys.Add(enemy[j]);
+                    btMapTriggers[^2].enemys[j].SetPathFind();
+                    btMapTriggers[^2].AddEnemyColliders(enemy[j].GetComponent<CapsuleCollider>());
+                    btMapTriggers[^2].enemys[j].SetEnabledPathFind(false);
+                }
+            }
 
-        //    btMapTriggers[^4].ResetEnemys();
-        //}
+            btMapTriggers[^2].ResetEnemys();
+        }
     }
 
     /*********************************************  임시  **********************************************/
