@@ -253,6 +253,9 @@ public abstract class AttackableUnit : MonoBehaviour
 
         if (BattleState == UnitBattleState.ActiveSkill)
             return;
+
+        nowAttack.NormalAttackOnDamage();
+
         if (nowAttack.targetNumLimit == 1)
         {
             target.OnDamage(this, nowAttack);
