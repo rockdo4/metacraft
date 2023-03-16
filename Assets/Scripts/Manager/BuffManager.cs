@@ -32,10 +32,8 @@ public class BuffManager : MonoBehaviour
         {
             List<AttackableUnit> players = new();
             GameObject.FindObjectOfType<BattleManager>().GetHeroList(ref players);
-            List<AttackableUnit> enemies = new();
-            GameObject.FindObjectOfType<BattleManager>().GetCurrBtMgr().GetEnemyList(ref enemies);
 
-            enemies[0].AddStateBuff(GetBuff(7), enemies.Last());
+            players[0].AddStateBuff(GetBuff(8));
         }
     }
 }

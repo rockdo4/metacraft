@@ -12,10 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c267fa0414501eb408668a75a7c3b73f, type: 3}
   m_Name: AOERangeTest
   m_EditorClassIdentifier: 
+  animationClip: {fileID: 0}
+  skillLevel: 1
   id: 0
   skillName: 
-  preCooldown: 0
-  cooldown: 5
+  preCooldown: 450
+  cooldown: 500
   distance: 15
   targetNumLimit: 0
   angle: 0
@@ -29,6 +31,7 @@ MonoBehaviour:
   isAuto: 0
   targetPos: {x: 0, y: 0, z: 0}
   skillDescription: "\uBC94\uC704\uACF5\uACA9\uC785\uB2C8\uB2E4"
+  buffInfos: []
   skillAreaIndicatorPrefab: {fileID: 6672067328229480615, guid: 37555f8a38e89384caaf60fcba51d46f,
     type: 3}
   layerM:
@@ -37,8 +40,11 @@ MonoBehaviour:
   castRangeIndicatorPrefab: {fileID: 1572453404982893073, guid: 3eef904cc2b274c4dbec7f0543fc5a68,
     type: 3}
   areaShapeType: 1
+  indicatorTargetWhenTrackTarget: 0
+  isTrackTarget: 0
   sectorRadius: 0
   sectorAngle: 0
   widthZ: 5
   widthX: 2
   castRangeLimit: 10
+  maxColliders: 32

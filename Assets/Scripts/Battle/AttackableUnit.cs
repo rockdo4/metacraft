@@ -310,11 +310,13 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected void AssultSearch()
     {
+        if (bufferState.provoke)
+            return;
         SearchNearbyTarget((normalAttackTargetType == UnitType.Hero) ? heroList : enemyList); //근거리 타겟 추적
     }
     protected void ShooterSearch()
     {
-        if (nowAttack == null)
+        if (bufferState.provoke)
             return;
 
         lastSearchTime = Time.time;
@@ -328,6 +330,8 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     protected void AssassinSearch()
     {
+        if (bufferState.provoke)
+            return;
         var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
         if (targetList.Count == 1)
             SearchNearbyTarget(targetList); //근거리 타겟 추적
@@ -336,11 +340,15 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     protected void SupportSearch()
     {
+        if (bufferState.provoke)
+            return;
         target = GetSearchMinHealthScaleTarget((normalAttackTargetType == UnitType.Hero) ? heroList : enemyList); //근거리 타겟 추적
     }
 
     protected void SearchActiveTarget()
     {
+        if (bufferState.provoke)
+            return;
         var targetList = (activeAttackTargetType == UnitType.Hero) ? heroList : enemyList;
         var teamList = (unitType == UnitType.Hero) ? heroList : enemyList;
         switch (characterData.activeSkill.searchType)
@@ -368,20 +376,25 @@ public abstract class AttackableUnit : MonoBehaviour
         }
     }
 
-    public virtual void NormalAttackEnd() => target = (IsAlive(target)) ? null : target;
+    public virtual void NormalAttackEnd() => target = (!IsAlive(target)) ? null : target;
     public virtual void PassiveSkillEnd() { }
-    public virtual void ActiveSkillEnd() => target = (IsAlive(target)) ? null : target;
+    public virtual void ActiveSkillEnd() => target = (!IsAlive(target)) ? null : target;
     public virtual void StunEnd()
     {
         animator.SetTrigger("StunEnd");
         target = null;
         pathFind.isStopped = false;
     }
-    public virtual void ProvokeEnd() => target = null;
+    public virtual void ProvokeEnd()
+    {
+        target = null;
+        Logger.Debug("Provoke End");
+    }
     public virtual void ResetData()
     {
         RemoveBuffers();
         nowAttack = characterData.attacks[0];
+        animator.SetFloat("Speed",0);
     }
     public void ResetBuffers()
     {
@@ -657,8 +670,13 @@ public abstract class AttackableUnit : MonoBehaviour
     public void DestroyUnit()
     {
         // 이 부분 로테이션 이상할 시 바꿔야함
+<<<<<<< HEAD
         Utils.CopyPositionAndRotation(gameObject, gameObject.transform.parent);
         pathFind.enabled = false;
+=======
+        //Utils.CopyPositionAndRotation(gameObject, gameObject.transform.parent);
+        //pathFind.enabled = false;
+>>>>>>> feature/BattleSceneUi
         gameObject.SetActive(false);
     }
 
@@ -769,6 +787,7 @@ public abstract class AttackableUnit : MonoBehaviour
                     BattleState = UnitBattleState.Stun;
                     break;
                 case BuffType.Silence:
+                    Logger.Debug("Stun");
                     break;
 
             }

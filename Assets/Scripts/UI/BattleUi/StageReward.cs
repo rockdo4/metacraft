@@ -14,6 +14,10 @@ public class StageReward : MonoBehaviour
     {
         rewardPage.SetActive(false);
     }
+    private void OnEnable()
+    {
+        rewardPage.SetActive(false);
+    }
 
     private void Update()
     {
@@ -35,9 +39,13 @@ public class StageReward : MonoBehaviour
         }
     }
 
-    public void OnClickOnOff()
+    public void OnClickOn()
     {
-        rewardPage.SetActive(!rewardPage.activeSelf);
+        rewardPage.SetActive(true);
+    }
+    public void OnClickOff()
+    {
+        rewardPage.SetActive(false);
     }
 
     public void AddItem(int id, string text, string count)
