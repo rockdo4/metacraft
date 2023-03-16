@@ -801,14 +801,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 4670982534711238929}
-        m_TargetAssemblyTypeName: LoadSceneButton, Assembly-CSharp
-        m_MethodName: LoadSceneByIndex
-        m_Mode: 3
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: TestBattleManager, Assembly-CSharp
+        m_MethodName: ResetHeroes
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -817,6 +817,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: BattleUi, Assembly-CSharp
         m_MethodName: ResetGame
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 4670982534711238929}
+        m_TargetAssemblyTypeName: LoadSceneButton, Assembly-CSharp
+        m_MethodName: LoadSceneByIndex
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -963,18 +975,7 @@ MonoBehaviour:
   rewardTr: {fileID: 5972141754183687073}
   rewardPref: {fileID: 680712899289382879, guid: 90e931212f71add4bb73ba37e161b4c0,
     type: 3}
-  rewardTable:
-  - "\uC7A1\uB3D9\uC0AC\uB2C81"
-  - "\uC7A1\uB3D9\uC0AC\uB2C82"
-  - "\uC7A1\uB3D9\uC0AC\uB2C83"
-  - "\uC7A1\uB3D9\uC0AC\uB2C84"
-  - "\uC7A1\uB3D9\uC0AC\uB2C85"
-  - "\uC7A1\uB3D9\uC0AC\uB2C86"
-  - "\uC7A1\uB3D9\uC0AC\uB2C87"
-  - "\uC4F8\uB9CC\uD55C\uAC831"
-  - "\uC4F8\uB9CC\uD55C\uAC832"
-  - "\uC4F8\uB9CC\uD55C\uAC833"
-  - "\uC88B\uC740\uC544\uC774\uD15C"
+  stageReward: {fileID: 0}
 --- !u!1 &5972141755762443169
 GameObject:
   m_ObjectHideFlags: 0

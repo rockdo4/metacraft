@@ -9,38 +9,26 @@ public class RewardManager : MonoBehaviour
 
     public Transform rewardTr;
     public GameObject rewardPref;
-
-    public List<string> rewardTable;
+    public StageReward stageReward;
 
     public void SetReward()
     {
-        var currentMission = GameManager.Instance.currentSelectMission;
-        int rewardRangeMin = (int)currentMission["RewardRangeMin"];
-        int rewardRangeMax = (int)currentMission["RewardRangeMax"];
-        count = Random.Range(rewardRangeMin, rewardRangeMax + 1);
         StartCoroutine(CoSetReward());
     }
 
     public IEnumerator CoSetReward()
     {
+        var rewards = stageReward.rewards;
+
         WaitForSeconds wfs = new (0.3f);
+        count = rewards.Count;
 
+        foreach (var reward in rewards)
         {
-            GameObject reward = Instantiate(rewardPref, rewardTr);
-            RewardItem item = reward.GetComponent<RewardItem>();
-            int rewardGold = (int)GameManager.Instance.currentSelectMission["Compensation"];
-            item.SetData(-1,"골드", $"{rewardGold}");// 임시로 id 정함
-            GameManager.Instance.playerData.gold += rewardGold;
-        }
+            GameObject itemPref = Instantiate(rewardPref, rewardTr);
+            RewardItem item = itemPref.GetComponent<RewardItem>();
 
-        while (count != 0)
-        {
-            GameObject reward = Instantiate(rewardPref, rewardTr);
-            RewardItem item = reward.GetComponent<RewardItem>();
-
-            var idx = Random.Range(0, rewardTable.Count); // 임시로 id 정함
-            item.SetData(idx,rewardTable[idx],
-                $"x{Random.Range(1, 10)}");
+            item.SetData(reward.Id, reward.itemNameText.text, reward.itemCountText.text);
 
             count--;
             yield return wfs;

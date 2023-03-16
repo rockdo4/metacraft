@@ -125,6 +125,8 @@ public abstract class AttackableUnit : MonoBehaviour
     protected AttackedDamageUI floatingDamageText;
     protected HpBarManager hpBarManager;
 
+    public bool isAlive = false;
+
     public Transform effectCreateTransform;
 
     private void Start()
@@ -660,10 +662,10 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void OnDead(AttackableUnit unit);
     public void DestroyUnit()
     {
-        // 이 부분 로테이션 이상할 시 바꿔야함
         //Utils.CopyPositionAndRotation(gameObject, gameObject.transform.parent);
         //pathFind.enabled = false;
         gameObject.SetActive(false);
+        isAlive = false;
     }
 
     public void SetBattleManager(BattleManager manager) => battleManager = manager;

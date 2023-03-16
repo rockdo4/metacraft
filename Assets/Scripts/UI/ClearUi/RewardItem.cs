@@ -4,8 +4,8 @@ using UnityEngine.UI;
 
 public class RewardItem : MonoBehaviour
 {
-    int id;
-    public int Id {
+    string id;
+    public string Id {
         get {
             return id;
         }
@@ -14,7 +14,7 @@ public class RewardItem : MonoBehaviour
     public TextMeshProUGUI itemCountText;
     public Image itemImage;
 
-    public void SetData(int id, string itemName, string itemCount = null)
+    public void SetData(string id, string itemName, string itemCount = null)
     {
         this.id = id;
         itemNameText.text = itemName;

@@ -8,7 +8,16 @@ public class StageReward : MonoBehaviour
 
     public RewardItem item;
     public Transform rewardTr;
-    public List<RewardItem> items;
+    public List<RewardItem> rewards;
+    public int golds = 0;
+    public List<Dictionary<string, object>> itemInfoList; // 아이템 정보
+    string goldId;
+
+    private void Start()
+    {
+        itemInfoList = GameManager.Instance.itemInfoList;
+        goldId = itemInfoList.Find(t => (t["Name"].ToString().CompareTo("item_gold") == 0)).ToString();
+    }
 
     private void OnDisable()
     {
@@ -19,26 +28,6 @@ public class StageReward : MonoBehaviour
         rewardPage.SetActive(false);
     }
 
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Insert))
-        {
-            AddItem(0, "Test0", "5");
-        }
-        if (Input.GetKeyDown(KeyCode.Home))
-        {
-            AddItem(1, "Test1", "5");
-        }
-        if (Input.GetKeyDown(KeyCode.PageUp))
-        {
-            AddItem(2, "Test2", "5");
-        }
-        if (Input.GetKeyDown(KeyCode.Delete))
-        {
-            SortAll();
-        }
-    }
-
     public void OnClickOn()
     {
         rewardPage.SetActive(true);
@@ -47,28 +36,32 @@ public class StageReward : MonoBehaviour
     {
         rewardPage.SetActive(false);
     }
-
-    public void AddItem(int id, string text, string count)
+    public void AddGold(string value)
     {
-        for (int i = 0; i < items.Count; i++)
+        AddItem(goldId, value);
+    }
+    public void AddItem(string id, string count)
+    {
+
+        for (int i = 0; i < rewards.Count; i++)
         {
-            if (items[i].Id == id)
+            if (rewards[i].Id == id)
             {
-                items[i].AddCount(count);
+                rewards[i].AddCount(count);
                 return;
             }
         }
 
         var newItem = Instantiate(item, rewardTr);
-        newItem.SetData(id, text, count);
-        items.Add(newItem);
+        newItem.SetData(id, "", count);
+        rewards.Add(newItem);
     }
 
     public void Sort(RewardItem item)
     {
-        for (int i = 0; i < items.Count; i++)
+        for (int i = 0; i < rewards.Count; i++)
         {
-            if (item.Id < items[i].Id)
+            if (item.Id.CompareTo(rewards[i].Id) < 0)
             {
                 item.transform.SetSiblingIndex(i);
                 return;
@@ -78,23 +71,23 @@ public class StageReward : MonoBehaviour
 
     public void SortAll()
     {
-        for (int i = 0; i < items.Count - 1; i++)
+        for (int i = 0; i < rewards.Count - 1; i++)
         {
-            for (int j = i + 1; j < items.Count; j++)
+            for (int j = i + 1; j < rewards.Count; j++)
             {
-                if (items[i].Id > items[j].Id)
+                if (rewards[i].Id.CompareTo(rewards[j].Id) < 0)
                 {
-                    var temp = items[i];
-                    items[i] = items[j];
-                    items[j] = temp;
+                    var temp = rewards[i];
+                    rewards[i] = rewards[j];
+                    rewards[j] = temp;
                 }
             }
         }
 
         // 각각의 아이템에 SetSiblingIndex를 호출해서 인덱스를 설정해줌
-        for (int i = 0; i < items.Count; i++)
+        for (int i = 0; i < rewards.Count; i++)
         {
-            items[i].transform.SetSiblingIndex(i);
+            rewards[i].transform.SetSiblingIndex(i);
         }
     }
 }
