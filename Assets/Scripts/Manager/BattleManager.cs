@@ -291,7 +291,6 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < useHeroes.Count; i++)
         {
             heroNames.Add(useHeroes[i].name);
-            useHeroes[i].PassiveSkillEvent();
         }
         for (int i = 0; i < choiceButtons.Count; i++)
         {

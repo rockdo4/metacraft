@@ -38,15 +38,12 @@ public abstract class AttackableUnit : MonoBehaviour
 
     [Space, Header("ÀÏ¹Ý°ø°Ý Å¸°Ù")]
     public UnitType normalAttackTargetType;
-    public List<BuffInfo> normalbuffs;
 
     [Space, Header("ÆÐ½Ãºê Å¸°Ù")]
     public UnitType PassiveTargetType;
-    public List<BuffInfo> passivekbuffs;
 
     [Space, Header("±Ã±Ø±â Å¸°Ù")]
     public UnitType activeAttackTargetType;
-    public List<BuffInfo> attackkbuffs;
 
     public Transform attackPos;
     public FireBallTest attackPref; //Å×½ºÆ®¿ë
@@ -230,22 +227,21 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void ChangeUnitState(UnitState state);
     public abstract void ChangeBattleState(UnitBattleState status);
 
-    public abstract void PassiveSkillEvent();
     public abstract void ReadyActiveSkill();
     public virtual void OnActiveSkill()
     {
         characterData.activeSkill.OnActiveSkill(this);
 
-        var units = characterData.activeSkill.SkillEffectedUnits;
-        for (int i = 0; i < units.Count; i++)
-        {
-            foreach (var buff in attackkbuffs)
-            {
-                bool isCritical = false;
-                var value = CalculDamage(characterData.activeSkill, ref isCritical);
-                units[i].AddValueBuff(buff, value, null);          
-            }
-        }
+        //var units = characterData.activeSkill.SkillEffectedUnits;
+        //for (int i = 0; i < units.Count; i++)
+        //{
+        //    foreach (var buff in attackkbuffs)
+        //    {
+        //        bool isCritical = false;
+        //        var value = CalculDamage(characterData.activeSkill, ref isCritical);
+        //        units[i].AddValueBuff(buff, value, null);          
+        //    }
+        //}
     }
 
     public virtual void NormalAttackOnDamage()
@@ -261,12 +257,12 @@ public abstract class AttackableUnit : MonoBehaviour
         if (nowAttack.targetNumLimit == 1)
         {
             target.OnDamage(this, nowAttack);
-            foreach (var buff in normalbuffs)
-            {
-                bool isCritical = false;
-                var value = CalculDamage(characterData.activeSkill, ref isCritical);
-                target.AddValueBuff(buff, value, null);
-            }
+            //foreach (var buff in normalbuffs)
+            //{
+            //    bool isCritical = false;
+            //    var value = CalculDamage(characterData.activeSkill, ref isCritical);
+            //    target.AddValueBuff(buff, value, null);
+            //}
             return;
         }
 
@@ -287,18 +283,18 @@ public abstract class AttackableUnit : MonoBehaviour
             }
         }
 
-        attackTargetList = GetNearestUnitList(attackTargetList, nowAttack.targetNumLimit);
+        //attackTargetList = GetNearestUnitList(attackTargetList, nowAttack.targetNumLimit);
 
-        for (int i = 0; i < attackTargetList.Count; i++)
-        {
-            attackTargetList[i].OnDamage(this, nowAttack);
-            foreach (var buff in normalbuffs)
-            {
-                bool isCritical = false;
-                var value = CalculDamage(characterData.activeSkill, ref isCritical);
-                attackTargetList[i].AddValueBuff(buff, value, null);
-            }
-        }
+        //for (int i = 0; i < attackTargetList.Count; i++)
+        //{
+        //    attackTargetList[i].OnDamage(this, nowAttack);
+        //    foreach (var buff in normalbuffs)
+        //    {
+        //        bool isCritical = false;
+        //        var value = CalculDamage(characterData.activeSkill, ref isCritical);
+        //        attackTargetList[i].AddValueBuff(buff, value, null);
+        //    }
+        //}
 
     }
 
@@ -389,6 +385,8 @@ public abstract class AttackableUnit : MonoBehaviour
         RemoveBuffers();
         nowAttack = characterData.attacks[0];
         animator.SetFloat("Speed",0);
+
+        characterData.passiveSkill?.OnActiveSkill(this);
     }
     public void ResetBuffers()
     {
@@ -697,7 +695,7 @@ public abstract class AttackableUnit : MonoBehaviour
                             {   
                                 floatingDamageText.OnAttack(anotherValue, false, transform.position, DamageType.Heal);
                             }
-                        }                        
+                        }        
                         break;
                 }
             }
@@ -707,19 +705,6 @@ public abstract class AttackableUnit : MonoBehaviour
 
                 switch (info.type)
                 {
-                    case BuffType.Provoke:
-                        Logger.Debug("Provoke");
-                        endEvent = ProvokeEnd;
-                        break;
-                    case BuffType.Stealth:
-                        break;
-                    case BuffType.Stun:
-                        Logger.Debug("Stun");
-                        endEvent = StunEnd;
-                        BattleState = UnitBattleState.Stun;
-                        break;
-                    case BuffType.Silence:
-                        break;
                     case BuffType.Resistance:
                         break;
                     case BuffType.Blind:
@@ -733,6 +718,9 @@ public abstract class AttackableUnit : MonoBehaviour
                     case BuffType.Bleed:
                         break;
                     case BuffType.LifeSteal:
+                        break;
+                    case BuffType.energyCharging:
+                        Logger.Debug("energyCharging");
                         break;
                     case BuffType.Count:
                         break;

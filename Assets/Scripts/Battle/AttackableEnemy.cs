@@ -141,10 +141,6 @@ public class AttackableEnemy : AttackableUnit
         base.ResetData();
     }
 
-    public override void PassiveSkillEvent()
-    {
-
-    }
     public override void ReadyActiveSkill()
     {
     }

@@ -452,10 +452,6 @@ public class AttackableHero : AttackableUnit
             BattleState = UnitBattleState.BattleIdle;
         }
     }
-    public override void PassiveSkillEvent()
-    {
-        battleManager.GetHeroList(ref heroList);
-    }
     public override void ActiveSkillEnd()
     {
         pathFind.isStopped = false;
@@ -491,7 +487,10 @@ public class AttackableHero : AttackableUnit
             }
         }
         else
+        {
             BuffDurationUpdate(info.id, info.duration);
+        }
+
 
         base.AddValueBuff(info, anotherValue, icon);
         if (info.type == BuffType.MaxHealthIncrease)
