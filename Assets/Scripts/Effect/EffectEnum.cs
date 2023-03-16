@@ -30,5 +30,6 @@ public enum EffectEnum
     SwordSlash3,
     Orbs_fire,
     Regeneration_mana_area_loop,
+    Shadow_s,
     Count,
 }
