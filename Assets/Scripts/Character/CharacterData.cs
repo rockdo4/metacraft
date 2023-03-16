@@ -14,9 +14,12 @@ public class CharacterData : ScriptableObject, IComparable<CharacterData>
     public int          job;                // 직업
 
     // 스텟
-    public int          baseDamage = 50;    // 일반 공격 데미지
-    public int          baseDefense = 0;    // 방어력
-    public int          healthPoint = 500;  // 최대 체력
+    public float        baseDamage = 0;    // 일반 공격 데미지
+    public float        damageLevelCoefficient = 0; // 데미지 레벨업 계수
+    public float        baseDefense = 0;    // 방어력
+    public float        defenseLevelCoefficient = 0; //방어력 레벨업 계수
+    public float        healthPoint = 0;  // 최대 체력
+    public float        healthPointLevelCoefficient = 0; // 최대 체력 레벨업 계수
     [Range(0f, 1f)]
     public float        critical = 0f;      // 크리티컬 확률
     [Range(1f, 10f)]
@@ -29,7 +32,7 @@ public class CharacterData : ScriptableObject, IComparable<CharacterData>
     public List<string> tags;               // 태그(특성)
 
     //LiveData
-    public int          currentHp = 500;    // 현재 체력
+    public int          currentHp = 0;    // 현재 체력
     [Range(1, 50)]
     public int          level = 1;          // 레벨
     public int          exp = 0;            // 경험치

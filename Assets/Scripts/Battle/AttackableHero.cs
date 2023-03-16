@@ -11,7 +11,7 @@ public class AttackableHero : AttackableUnit
     private Coroutine coOnIndicator;
 
     bool lateReturn = false;
-    public override int UnitHp {
+    public override float UnitHp {
         get {  return base.UnitHp; }
         set {
             base.UnitHp = value;

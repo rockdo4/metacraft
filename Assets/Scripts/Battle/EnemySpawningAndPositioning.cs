@@ -137,7 +137,7 @@ public class EnemySpawningAndPositioning : MonoBehaviour
 
         if (isMiddleBoss)
         {
-            int maxHp = enemys.SelectMany(x => x).Max(enemy => enemy.GetUnitData().data.healthPoint);
+            float maxHp = enemys.SelectMany(x => x).Max(enemy => enemy.GetUnitData().data.healthPoint);
             for (int i = 0; i < enemys.Count; i++)
             {
                 for (int j = 0; j < enemys[i].Count; j++)
