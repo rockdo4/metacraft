@@ -125,6 +125,8 @@ public abstract class AttackableUnit : MonoBehaviour
     protected AttackedDamageUI floatingDamageText;
     protected HpBarManager hpBarManager;
 
+    public Transform effectCreateTransform;
+
     private void Start()
     {
         var manager = FindObjectOfType<BattleManager>();

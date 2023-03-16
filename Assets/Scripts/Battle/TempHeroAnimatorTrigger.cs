@@ -16,10 +16,6 @@ public class TempHeroAnimatorTrigger : MonoBehaviour
     {
         unit.DestroyUnit();
     }
-    public void OnNormalAttack(AnimationEvent ev)
-    {
-        unit.OnNormalAttack();
-    }
     public void OnActiveSkill(AnimationEvent ev)
     {
         unit.OnActiveSkill();

@@ -168,7 +168,7 @@ public class AttackableHero : AttackableUnit
     {
         foreach (var attack in characterData.attacks)
         {
-            attack.SkillHolderTransform = effectCreateTransform;
+            attack.SkillHolderTransform = effectCreateTransform ?? transform;
             attack.ActorTransform = transform;
         }
         characterData.activeSkill.ActorTransform = transform;
