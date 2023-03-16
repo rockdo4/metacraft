@@ -151,15 +151,15 @@ public class BattleManager : MonoBehaviour
             case TreeNodeTypes.Normal:
             case TreeNodeTypes.Root:
                 curMap = eventMaps[0];
-                OnLight(0);
+                //OnLight(0);
                 break;
             case TreeNodeTypes.Threat:
                 curMap = eventMaps[1];
-                OnLight(1);
+                //OnLight(1);
                 break;
             case TreeNodeTypes.Supply:
                 curMap = eventMaps[2];
-                OnLight(2);
+                //OnLight(2);
                 for (int i = 0; i < supplyEventHeroImages.Count; i++)
                 {
                     supplyEventHeroImages[i].SetCurrHp();
@@ -170,14 +170,25 @@ public class BattleManager : MonoBehaviour
                 break;
             case TreeNodeTypes.Event:
                 curMap = eventMaps[2];
-                OnLight(2);
+                //OnLight(2);
                 SetActiveUi(eventUi, true);
                 SetEventInfo(ev);
                 break;
             case TreeNodeTypes.Boss:
                 curMap = eventMaps[0];
-                OnLight(0);
+                //OnLight(0);
                 break;
+        }
+
+        DisabledAllMap();
+        curMap.SetActive(true);
+    }
+
+    private void DisabledAllMap()
+    {
+        for (int i = 0; i < eventMaps.Count; i++)
+        {
+            eventMaps[i].SetActive(false);
         }
     }
 
@@ -309,9 +320,11 @@ public class BattleManager : MonoBehaviour
             BattleMapInfo battleMap = eventMaps[i].GetComponent<BattleMapInfo>();
             Light battleMapLigth = battleMap.GetLight();
             battleMapLigth.color = gm.GetMapLightColor();
-            battleMapLigth.gameObject.SetActive(false);
+            //battleMapLigth.gameObject.SetActive(false);
             lights.Add(battleMapLigth);
         }
+
+        DisabledAllMap();
     }
 
     private IEnumerator CoFadeIn()
