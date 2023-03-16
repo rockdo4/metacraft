@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -31,7 +30,8 @@ public class GameManager : Singleton<GameManager>
     public List<Dictionary<string, object>> eventEffectInfoList;
     public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectTagInfoList;
     public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectNoTagInfoList;
-    public List<Dictionary<string, object>> stringTable;
+    private Dictionary<string, Dictionary<string, object>> stringTable = new();
+    private int languageIndex = 0; // kor
 
     public List<Dictionary<string, object>> compensationInfoList; // 보상 정보
 
@@ -97,6 +97,10 @@ public class GameManager : Singleton<GameManager>
             "EventTable",
             "CompensationTable",
             "SupplyTable",
+            "StringTable_Desc",
+            "StringTable_Event",
+            "StringTable_Proper",
+            "StringTable_UI",
         };
 
         // Load TextAssets
@@ -153,12 +157,43 @@ public class GameManager : Singleton<GameManager>
             illustrationSprites.Add(illuKey, handles[illuKey].Result as Sprite);
         }
 
-        ReleaseAddressable(handles);
-        handles.Clear();
-
         LoadAllData();
         FixMissionTable();
         FixEventEffectTable();
+        AppendStringTable(CSVReader.SplitTextAsset(handles["StringTable_Desc"].Result as TextAsset), "StringTable_Desc");
+        AppendStringTable(CSVReader.SplitTextAsset(handles["StringTable_Event"].Result as TextAsset), "StringTable_Event");
+        AppendStringTable(CSVReader.SplitTextAsset(handles["StringTable_Proper"].Result as TextAsset), "StringTable_Proper");
+        AppendStringTable(CSVReader.SplitTextAsset(handles["StringTable_UI"].Result as TextAsset), "StringTable_UI");
+        
+        ReleaseAddressable(handles);
+        handles.Clear();
+    }
+
+    private void AppendStringTable(List<Dictionary<string, object>> rawData, string tableName)
+    {
+        int count = rawData.Count;
+        for (int i = 0; i < count; i++)
+        {
+            var copy = rawData[i];
+            string id = $"{rawData[i]["ID"]}";
+            copy.Remove("ID");
+            if (stringTable.ContainsKey(id))
+            {
+                Logger.Debug($"중복 키 : {tableName}, {id}");
+            }
+            else
+                stringTable.Add($"{id}", copy);
+        }
+    }
+
+    public string GetStringByTable(string key)
+    {
+        string languageKey = languageIndex switch
+        {
+            _ => "Contents",
+        };
+        Logger.Debug($"key [{key}], languageKey [{languageKey}], result : [{stringTable[key][languageKey]}]");
+        return $"{stringTable[key][languageKey]}";
     }
 
     public void ReleaseAddressable(Dictionary<string, AsyncOperationHandle> handles)
