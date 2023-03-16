@@ -34,6 +34,7 @@ public class GameManager : Singleton<GameManager>
     private int languageIndex = 0; // kor
 
     public List<Dictionary<string, object>> compensationInfoList; // 보상 정보
+    public List<Dictionary<string, object>> itemInfoList; // 아이템 정보
 
     public List<Dictionary<string, object>> supplyInfoList; // 보급 노드 정보
 
@@ -101,6 +102,7 @@ public class GameManager : Singleton<GameManager>
             "StringTable_Event",
             "StringTable_Proper",
             "StringTable_UI",
+            "ItemInfoTable",
         };
 
         // Load TextAssets
@@ -147,6 +149,7 @@ public class GameManager : Singleton<GameManager>
         eventInfoList = CSVReader.SplitTextAsset(handles["EventTable"].Result as TextAsset);
         compensationInfoList = CSVReader.SplitTextAsset(handles["CompensationTable"].Result as TextAsset);
         supplyInfoList = CSVReader.SplitTextAsset(handles["SupplyTable"].Result as TextAsset);
+        itemInfoList = CSVReader.SplitTextAsset(handles["ItemInfoTable"].Result as TextAsset);
 
         count = heroNames.Count;
         for (int i = 0; i < count; i++)

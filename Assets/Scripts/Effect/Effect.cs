@@ -60,6 +60,7 @@ public class Effect : MonoBehaviour
         for (int i = 0; i < particles.Count; i++)
         {
             particles[i].transform.position = startPos.position;
+            particles[i].gameObject.SetActive(true);
             particles[i].Play();
         }
 

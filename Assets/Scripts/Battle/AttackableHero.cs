@@ -194,7 +194,7 @@ public class AttackableHero : AttackableUnit
             OffSkillAreaIndicator,
             SkillCancle);
 
-        heroUI.SetAuto(ref isAuto);
+        //heroUI.SetAuto(ref isAuto);
     }
 
     public override void ResetData()

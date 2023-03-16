@@ -12,7 +12,7 @@ public class SkillAreaIndicator : MonoBehaviour
 
     public bool IsTrackTarget { set { isTrackTarget = value; } }
     private bool isTrackTarget = false;
-    public Transform TrackTransform { set { trackTransform = value; } }
+    public Transform TrackTransform { get { return trackTransform; } set { trackTransform = value; } }
     private Transform trackTransform;
  
     protected virtual void Awake()
