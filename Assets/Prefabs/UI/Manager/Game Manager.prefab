@@ -48,7 +48,7 @@ MonoBehaviour:
   currentScene: 0
   playerData:
     playerId: 000001
-    playerName: "\uB9AC\uC5BC\uC2A4\uD1A4"
+    playerName: default name
     currentDay: 0
     cumulateGameDay: 0
     gold: 0
@@ -61,7 +61,7 @@ MonoBehaviour:
     dispatchLevel: 0
     stamina: 0
     inventoryCount: 5
-    officeImage: 
+    officeImage: Container
     battleSpeed: 1
     isAuto: 0
   heroDatabase:
@@ -70,6 +70,7 @@ MonoBehaviour:
   - {fileID: 8489007089072879651, guid: 0563de661f5790646bf8570d2b220ef4, type: 3}
   - {fileID: 8489007089072879651, guid: 08993236d6ea67347928a88f30bcf609, type: 3}
   - {fileID: 8489007089072879651, guid: 5b3a72d9710f0e543a6dd3beecdace4e, type: 3}
+  - {fileID: 8489007089072879651, guid: b72729a1659527441802fb30bbb8bdbe, type: 3}
   myHeroes: []
   heroSpawnTransform: {fileID: 5615748898615288287}
   currentSelectObject: {fileID: 0}
@@ -86,7 +87,6 @@ MonoBehaviour:
   - {fileID: 7999364428399169344, guid: d2fcd7273190edf4da4ebfc79e434c85, type: 3}
   - {fileID: 7999364428399169344, guid: 60c2ec2af3caae9448d755a4cde5d8ce, type: 3}
   - {fileID: 7999364428399169344, guid: db715ff9e412d714ca410fe30c623429, type: 3}
-  - {fileID: 7999364428399169344, guid: 92f1bee6a1f8c664ea16ee6c65aceabe, type: 3}
   - {fileID: 7999364428399169344, guid: 7fe6236f746ecf345a87489b488ea6a2, type: 3}
   - {fileID: 7999364428399169344, guid: e91354ad40fd7e3489fb455bbb846480, type: 3}
   - {fileID: 7999364428399169344, guid: afb6486f998a0de4489da3f0b4312525, type: 3}
@@ -103,12 +103,11 @@ MonoBehaviour:
   - {fileID: 7999364428399169344, guid: 4bc5f69db6cc581448a5365095e2bee7, type: 3}
   - {fileID: 7999364428399169344, guid: 7b4d7370bbb89f64f8af48a10b6a5809, type: 3}
   - {fileID: 7999364428399169344, guid: 04dba8b99e84fca4981e8559d42fde96, type: 3}
-  - {fileID: 7999364428399169344, guid: 110e7585b9d29824b9482f30c29b6606, type: 3}
-  currMapColor: {r: 0, g: 0, b: 0, a: 0}
+  currMapColor: {r: 1, g: 1, b: 1, a: 1}
   mapLigthColors:
-  - {r: 1, g: 1, b: 1, a: 0.23529412}
-  - {r: 0.74509805, g: 0.47058824, b: 0.19607843, a: 0.23529412}
-  - {r: 0, g: 0.23529412, b: 1, a: 0.23529412}
+  - {r: 0.99607843, g: 0.99607843, b: 0.99607843, a: 1}
+  - {r: 0.74509805, g: 0.47058824, b: 0.19607843, a: 1}
+  - {r: 0.078431375, g: 0.23529412, b: 0.39215687, a: 1}
 --- !u!1 &8765714158279966740
 GameObject:
   m_ObjectHideFlags: 0

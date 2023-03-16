@@ -1,11 +1,11 @@
-﻿ID,Name,MinDifficulty,MaxDifficulty,MissionType,Weight,Influence,TextCount,Explanation,Select1Text,Select2Text,Select3Text,Select1Effect,Select2Effect,Select3Effect
-1201001,구조,0,6,1,1,0,3,잔해에 깔린 시민이 있다!,구조를 시도한다 ,"구급대를 부른다 <골드 소모(소), 보상 : 소> ",무시하고 지나간다,EFT_1201001_001,EFT_1201001_002,EFT_1201001_003
-1201002,신참 히어로,0,6,1,1,0,3,힘들게 싸우는 히어로가 보인다!,"함께 싸운다 <전투 개시, 난이도에 따라 C~B등급의 히어로 하나를 획득. 중복일 경우 승급재료…>","육탄돌파! <모든 히어로의 HP 15% 감소, 난이도에 따라 C~B등급의 히어로 하나를 획득. 중복일 경우 승급재료…>",무시하고 작전을 속행한다,EFT_1201002_001,EFT_1201002_002,EFT_1201002_003
-1201003,길막,0,6,1,1,0,1,돌더미가 길을 막고있다,어떻게든 돌파한다.,,,EFT_1201003_001,,
-1201004,침수 구조,0,6,1,1,0,2,물 속에 빠진 시민이 있다!,구조를 시도한다,"구조대를 부른다 <골드 소모(소), 보상 : 소> ",무시하고 지나간다,EFT_1201004_001,EFT_1201004_002,EFT_1201004_003
-1201005,폭탄 함정,0,6,1,1,0,3,폭탄이 있다!,해체를 시도한다 ,"해체팀을 부른다 <골드 소모(소), 보상 : 소> ",멀리 떨어져서 폭발할 때 까지 기다린다,EFT_1201005_001,EFT_1201005_002,EFT_1201005_003
-1201006,차단문,0,6,1,1,0,1,빌런의 보안 차단문이 있다! 이 너머로 가야 하는데…,돌파를 시도한다,,,EFT_1201006_001,,
-1201007,빌런의 금고,0,6,1,1,0,2,"커다란 금고다! 주변에도 이런저런 물건들이 있지만, 분명 이 금고 안에 빌런의 보물들이 있을 것이다.",금고를 조사한다.,주변의 물자만 챙겨서 떠난다. < 보상 : 소 >,,EFT_1201007_001,EFT_1201007_002,
-1201008,길 잃은 아이,0,6,1,1,0,2,꼬마아이 하나가 엉엉 울고 있다!,안전지대로 옮겨준다.,"구조대를 호출한다. <골드 소모(소), 보상 : 소> ",,EFT_1201008_001,EFT_1201008_002,
-1201009,이상한 마법진,0,6,1,1,5,2,"아무것도 없는 곳 같은데, 자세히 보니 주변에 월광교의 마법진이 눈에 보인다.",마법진을 변조해서 우리가 이용해본다,마법진을 파괴한다 <보상 없음>,,EFT_1201009_001,EFT_1201009_002,
-1201010,작전보드,0,6,1,1,0,2,작은 보드가 눈에 띈다. 작전보드인가?,작전보드를 분석한다,회수해서 나중에 분석해본다 <보상 소>,,EFT_1201010_001,EFT_1201010_002,
+﻿ID,Name,MinDifficulty,MaxDifficulty,Sort,Weight,Faction,TextCount,Eventtext,Text1,TextEffect1,Text2,TextEffect2,Text3,TextEffect3,Image
+1201001,구조,0,6,1,1,0,3,event_rescue_start,event_rescue_choice01,EFT_1201001_001,event_rescue_choice02,EFT_1201001_002,event_rescue_choice03,EFT_1201001_003,event1_save.png
+1201002,신참 히어로,0,6,1,1,0,3,event_newbiehero_start,event_newbiehero_choice01,EFT_1201002_001,event_newbiehero_choice02,EFT_1201002_002,event_newbiehero_choice03,EFT_1201002_003,event2_freshman.png
+1201003,길막,0,6,1,1,0,1,event_rockfall_start,event_rockfall_choice01,EFT_1201003_001,,,,,event3_traffic.png
+1201004,침수 구조,0,6,1,1,0,3,event_flood_start,event_flood_choice01,EFT_1201004_001,event_flood_choice02,EFT_1201004_002,event_flood_choice03,EFT_1201004_003,event4_watersave.png
+1201005,폭탄 함정,0,6,1,1,0,3,event_explosive_start,event_explosive_choice01,EFT_1201005_001,event_explosive_choice02,EFT_1201005_002,event_explosive_choice03,EFT_1201005_003,event5_bomb.png
+1201006,차단문,0,6,1,1,0,1,event_blockingdoor_start,event_blockingdoor_choice01,EFT_1201006_001,,,,,event6_closedgate.png
+1201007,빌런의 금고,0,6,1,1,0,2,event_safetylock_start,event_safetylock_choice01,EFT_1201007_001,event_safetylock_choice02,EFT_1201007_002,,,event7_strongbox.png
+1201008,길 잃은 아이,0,6,1,1,0,2,event_missingchild_start,event_missingchild_choice01,EFT_1201008_001,event_missingchild_choice02,EFT_1201008_002,,,event8_missingchild.png
+1201009,이상한 마법진,0,6,1,1,5,2,event_magic_start,event_magic_choice01,EFT_1201009_001,event_magic_choice02,EFT_1201009_002,,,event9_weirdcircle.png
+1201010,작전보드,0,6,1,1,0,2,event_board_start,event_board_choice01,EFT_1201010_001,event_board_choice02,EFT_1201010_002,,,event10_board.png
