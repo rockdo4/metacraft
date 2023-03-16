@@ -125,6 +125,8 @@ public abstract class AttackableUnit : MonoBehaviour
     protected AttackedDamageUI floatingDamageText;
     protected HpBarManager hpBarManager;
 
+    public bool isAlive = false;
+
     private void Start()
     {
         var manager = FindObjectOfType<BattleManager>();
@@ -644,6 +646,7 @@ public abstract class AttackableUnit : MonoBehaviour
         //Utils.CopyPositionAndRotation(gameObject, gameObject.transform.parent);
         //pathFind.enabled = false;
         gameObject.SetActive(false);
+        isAlive = false;
     }
 
     public void SetBattleManager(BattleManager manager) => battleManager = manager;

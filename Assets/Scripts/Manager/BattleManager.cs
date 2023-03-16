@@ -5,7 +5,6 @@ using TMPro;
 using System.Collections;
 using System.Linq;
 using Cinemachine;
-using Unity.VisualScripting;
 
 public class BattleManager : MonoBehaviour
 {
@@ -14,6 +13,7 @@ public class BattleManager : MonoBehaviour
     private List<Dictionary<string, object>> eventInfoTable;            // 이벤트 테이블
     private List<Dictionary<string, object>> supplyInfoTable;           // 보급 테이블
     private Dictionary<string, object> currentSelectMissionTable;       // 작전 테이블
+    private List<Dictionary<string, object>> stringTable;               // 스트링 테이블
 
     public MapEventEnum curEvent = MapEventEnum.None;
     private GameObject curMap;
@@ -76,6 +76,7 @@ public class BattleManager : MonoBehaviour
     public CinemachineVirtualCamera cinemachine;
     private int enemyTriggerIndex = 0;                          // 방어전에 쓰일것 (에너미 스폰하는 트리거)
     private List<Light> lights = new();
+    public bool isMiddleBossAlive = false;
 
     private void Start()
     {
@@ -128,7 +129,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void OnLigth(int index)
+    private void OnLight(int index)
     {
         for (int i = 0; i < lights.Count; i++)
         {
@@ -140,35 +141,37 @@ public class BattleManager : MonoBehaviour
 
     private void SetStageEvent(MapEventEnum ev)
     {
-        Logger.Debug(tree.CurNode.type);
-
         switch (tree.CurNode.type)
         {
             case TreeNodeTypes.Normal:
             case TreeNodeTypes.Root:
                 curMap = eventMaps[0];
-                OnLigth(0);
+                OnLight(0);
                 break;
             case TreeNodeTypes.Threat:
                 curMap = eventMaps[1];
-                OnLigth(1);
+                OnLight(1);
                 break;
             case TreeNodeTypes.Supply:
                 curMap = eventMaps[2];
-                OnLigth(2);
+                OnLight(2);
+                for (int i = 0; i < supplyEventHeroImages.Count; i++)
+                {
+                    supplyEventHeroImages[i].SetCurrHp();
+                }
                 SetActiveUi(supplyUi, supplyButtons, true, supplyButtons.Count);
                 SetActiveHeroUiList(false);
                 SetEventInfo(ev);
                 break;
             case TreeNodeTypes.Event:
                 curMap = eventMaps[2];
-                OnLigth(2);
+                OnLight(2);
                 SetActiveUi(eventUi, true);
                 SetEventInfo(ev);
                 break;
             case TreeNodeTypes.Boss:
                 curMap = eventMaps[0];
-                OnLigth(0);
+                OnLight(0);
                 break;
         }
     }
@@ -181,11 +184,16 @@ public class BattleManager : MonoBehaviour
         }
     }
 
+    private void ExecutionBuff(int id)
+    {
+        BuffManager.instance.GetBuff(id);
+    }
+
     private void SetEventInfo(MapEventEnum ev)
     {
         if (tree.CurNode.type == TreeNodeTypes.Supply)
         {
-            // 작전 테이블에서 보급 id 찾고
+            // 작전 테이블에서 보급 id 찾기
             string supplyId = $"{currentSelectMissionTable["SupplyID"]}";
 
             // 보급 테이블에서 같은 ID 찾아서 해당 줄의 인덱스 저장
@@ -199,13 +207,37 @@ public class BattleManager : MonoBehaviour
                 }
             }
 
+            string supplyTextId = $"{supplyInfoTable[index]["supply_text"]}";
+            int stringTableIDIndex = 0;
+            for (int i = 0; i < stringTable.Count; i++)
+            {
+                if (stringTable[i]["ID"].Equals(supplyTextId))
+                {
+                    stringTableIDIndex = i;
+                    break;
+                }
+            }
+            string findStringTable = $"{stringTable[stringTableIDIndex]["Contents"]}";
+            supplyContentText.text = findStringTable;
+
             // 찾은 인덱스로 해당 줄의 데이터들을 불러옴
-            supplyContentText.text = $"{supplyInfoTable[index]["supply_text"]}";
             for (int i = 0; i < supplyButtons.Count; i++)
             {
                 supplyButtons[i].SetActive(true);
-                string text = $"{supplyInfoTable[index][$"choice{i + 1}_text"]}";
-                supplyButtonTexts[i].text = text;
+
+                string textId = $"{supplyInfoTable[index][$"choice{i + 1}_text"]}";
+                int stringTableTextIndex = 0;
+                for (int j = 0; j < stringTable.Count; j++)
+                {
+                    if (stringTable[j]["ID"].Equals(textId))
+                    {
+                        stringTableTextIndex = j;
+                        break;
+                    }
+                }
+
+                string stringTableChoiceText = $"{stringTable[stringTableTextIndex]["Contents"]}";
+                supplyButtonTexts[i].text = stringTableChoiceText;
             }
         }
         else
@@ -244,6 +276,7 @@ public class BattleManager : MonoBehaviour
         eventInfoTable = gm.eventInfoList;
         supplyInfoTable = gm.supplyInfoList;
         currentSelectMissionTable = gm.currentSelectMission;
+        stringTable = gm.stringTable;
 
         var selectedHeroes = gm.GetSelectedHeroes();
         int count = selectedHeroes.Count;
@@ -265,6 +298,7 @@ public class BattleManager : MonoBehaviour
                 supplyEventHeroImages[i].SetHeroInfo(attackableHero.GetUnitData());
             }
         }
+
         for (int i = 0; i < useHeroes.Count; i++)
         {
             heroNames.Add(useHeroes[i].name);
@@ -387,7 +421,7 @@ public class BattleManager : MonoBehaviour
             MissionFail();
         }
     }
-    private void MissionFail()
+    public void MissionFail()
     {
         Time.timeScale = 0;
         GameManager.Instance.NextDay();
@@ -534,7 +568,12 @@ public class BattleManager : MonoBehaviour
     {
         currTriggerIndex = 0;
         currBtMgr = curMap.GetComponent<BattleMapInfo>();
-        enemyCountTxt.Count = currBtMgr.GetAllEnemyCount();
+
+        if (tree.CurNode.type == TreeNodeTypes.Threat)
+            enemyCountTxt.StartTimer();
+        else
+            enemyCountTxt.Count = currBtMgr.GetAllEnemyCount();
+
         btMapTriggers = currBtMgr.GetTriggers();
         platform = currBtMgr.GetPlatform();
         viewPoint = currBtMgr.GetViewPoint();
@@ -626,11 +665,10 @@ public class BattleManager : MonoBehaviour
 
     public void OnDeadEnemy(AttackableEnemy enemy)
     {
-        enemyCountTxt.DieEnemy();
-
         switch (currBtMgr.GetBattleMapType())
         {
             case BattleMapEnum.Normal:
+                enemyCountTxt.DieEnemy();
                 EnemyCountCheck(enemy, currTriggerIndex);
                 break;
             case BattleMapEnum.Defense:
@@ -642,10 +680,18 @@ public class BattleManager : MonoBehaviour
     private void EnemyCountCheck(AttackableEnemy enemy ,int triggerIndex)
     {
         btMapTriggers[triggerIndex].OnDead(enemy);
-        int count = btMapTriggers[triggerIndex].useEnemys.Count;
-        if (count == 0)
+        if (enemy.GetUnitData().data.job == (int)CharacterJob.Villain)
         {
+            DeadMiddleBoss();
             SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
+        }
+        else
+        {
+            int count = btMapTriggers[triggerIndex].useEnemys.Count;
+            if (count == 0)
+            {
+                SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
+            }
         }
     }
 
@@ -685,29 +731,42 @@ public class BattleManager : MonoBehaviour
     }
 
     /*********************************************  임시  **********************************************/
-    // Attackable Hero 스크립트의 ReturnPosUpdate 함수 내에서 사용하고 있음
-    // 여기 어케 바꿀지 생각해봐야함
-    public bool TempReturnPos()
+    private void DeadMiddleBoss()
     {
         for (int i = 0; i < btMapTriggers[enemyTriggerIndex].enemySettingPositions.Count; i++)
         {
             if (!btMapTriggers[enemyTriggerIndex].enemySettingPositions[i].GetMiddleBossIsAlive())
             {
                 Logger.Debug("Next!");
-                //KillAllEnemy(enemyTriggerIndex);
-                return true;
+                KillAllEnemy(enemyTriggerIndex);
+                enemyCountTxt.StopTimer();
+                isMiddleBossAlive = true;
+                break;
             }
         }
-
-        return false;
     }
+
     private void KillAllEnemy(int index)
     {
-        int count = btMapTriggers[index].useEnemys.Count;
-
-        for (int i = 0; i < count; i++)
+        for (int i = 0; i < btMapTriggers[index].enemySettingPositions.Count; i++)
         {
-            OnDeadEnemy((AttackableEnemy)btMapTriggers[index].useEnemys[i]);
+            btMapTriggers[index].enemySettingPositions[i].StopInfinityRespawn();
+        }
+
+        int useCount = btMapTriggers[index].useEnemys.Count;
+        for (int i = 0; i < useCount; i++)
+        {
+            if (btMapTriggers[index].useEnemys[i].isAlive)
+                OnDeadEnemy((AttackableEnemy)btMapTriggers[index].enemys[i]);
+        }
+
+        int unuseCount = btMapTriggers[index].enemys.Count;
+        for (int i = 0; i < unuseCount; i++)
+        {
+            if (btMapTriggers[index].enemys[i].isAlive)
+            {
+                btMapTriggers[index].enemys[i].gameObject.SetActive(false);
+            }
         }
     }
 }

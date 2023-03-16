@@ -369,16 +369,17 @@ public class AttackableHero : AttackableUnit
                     testRot = false;
                     UnitState = UnitState.Idle;
 
-                    //if (battleManager.curEvent == MapEventEnum.Defense)
                     if (battleManager.tree.CurNode.type == TreeNodeTypes.Threat)
                     {
-                        if (!battleManager.TempReturnPos())
+                        if (battleManager.isMiddleBossAlive)
                         {
-                            break;
+                            battleManager.OnReady();
                         }
                     }
-
-                    battleManager.OnReady();
+                    else
+                    {
+                        battleManager.OnReady();
+                    }
                 }
                 break;
             case false:
