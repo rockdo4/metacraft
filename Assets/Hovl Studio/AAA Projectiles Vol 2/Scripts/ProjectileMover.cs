@@ -7,8 +7,8 @@ public class ProjectileMover : MonoBehaviour
     public float hitOffset = 0f;
     public bool UseFirePointRotation;
     public Vector3 rotationOffset = new Vector3(0, 0, 0);
-    public GameObject hit;
-    private GameObject hitInstaiated;
+    //public GameObject hit;
+    //private GameObject hitInstaiated;
     public GameObject flash;
     private Rigidbody rb;
     public GameObject[] Detached;
@@ -26,8 +26,8 @@ public class ProjectileMover : MonoBehaviour
 
     void Start()
     {
-        hitInstaiated = Instantiate(hit);
-        hitInstaiated.SetActive(false);
+        //hitInstaiated = Instantiate(hit);
+        //hitInstaiated.SetActive(false);
         //if (flash != null)
         //{
         //    var flashInstance = Instantiate(flash, transform.position, Quaternion.identity);
@@ -61,8 +61,7 @@ public class ProjectileMover : MonoBehaviour
     {
         //hitInstaiated.transform.position = other.ClosestPoint();
         //hitInstaiated.SetActive(true);
-        //hitInstaiated.GetComponent<ParticleSystem>().Play();
-
+        //hitInstaiated.GetComponent<ParticleSystem>().Play();        
         gameObject.SetActive(false);
     }
 

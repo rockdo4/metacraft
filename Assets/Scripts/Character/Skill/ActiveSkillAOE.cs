@@ -227,8 +227,10 @@ public class ActiveSkillAOE : CharacterSkill
         skillEffectedUnits = skillAreaIndicator.GetUnitsInArea();
 
         foreach (var target in skillEffectedUnits)
-        {            
-            target.OnDamage(attackableUnit, this);
+        {           
+            if(target.gameObject.activeSelf)
+                target.OnDamage(attackableUnit, this);
+
             foreach (var buff in buffInfos)
             {
                 target.AddValueBuff(buff, 0);

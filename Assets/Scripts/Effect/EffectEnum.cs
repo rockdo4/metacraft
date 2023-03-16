@@ -31,5 +31,8 @@ public enum EffectEnum
     Orbs_fire,
     Regeneration_mana_area_loop,
     Shadow_s,
+    Projectiles_dark_magic,
+    Projectiles_water,
+    top_down_ice_line,
     Count,
 }

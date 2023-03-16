@@ -11,10 +11,10 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
     private GameObject parent;
 
     private EffectEnum currEffect;
-    public void Get(EffectEnum index, Transform startPos, Quaternion rot = default)
+    public Effect Get(EffectEnum index, Transform startPos, Quaternion rot = default)
     {
         if (index.Equals(EffectEnum.None))
-            return;
+            return null;
 
         if (effectPool.Count == 0)
         {
@@ -31,6 +31,8 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
         // index = 뽑고 싶은 이펙트가 저장된 풀의 이름 (Enum)
         int poolIndex = (int)index;
 
+        var effect = effectPool[poolIndex][effectPoolIndex[poolIndex]];
+
         // effectPool의 [풀 번호][이펙트인덱스[번호]] 활성화
         effectPool[poolIndex][effectPoolIndex[poolIndex]].SetStartPos(startPos);
         effectPool[poolIndex][effectPoolIndex[poolIndex]].SetRotation(rot);
@@ -41,6 +43,8 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
             effectPoolIndex[poolIndex]++;
         else
             effectPoolIndex[poolIndex] = 0;
+
+        return effect;
     }
 
     public Effect GetCurrEffect()

@@ -16,8 +16,6 @@ public class CharacterSkill : ScriptableObject
 
     //public List<(BuffType bufftype, float value)> buffTypeAndValue;
 
-    public AnimationClip animationClip;
-
     public int      skillLevel = 1;
 
     public int      id;
@@ -46,6 +44,8 @@ public class CharacterSkill : ScriptableObject
     public string skillDescription;
 
     public List<BuffInfo> buffInfos;
+
+    public int priority;
 
     public virtual void OnActive()
     {

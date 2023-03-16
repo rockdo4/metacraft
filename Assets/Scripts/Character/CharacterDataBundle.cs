@@ -13,6 +13,11 @@ public class CharacterDataBundle : MonoBehaviour, IComparable<CharacterDataBundl
     {
         InitSetting();
 
+        for(int i = 0; i < attacks.Length; i++)
+        {
+            attacks[i] = Instantiate(attacks[i]);
+        }      
+
         if(activeSkill != null)
             activeSkill = Instantiate(activeSkill);
     }
