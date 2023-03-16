@@ -45,7 +45,7 @@ public class LiveData : IComparable<LiveData>
         
         level = 1;
         exp = 0;
-        likeability = originData.likeability;
+        likeability = originData.likeAbility;
 
         baseDamage = originData.baseDamage;
         baseDefense = originData.baseDefense;

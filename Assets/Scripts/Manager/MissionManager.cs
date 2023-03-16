@@ -22,7 +22,7 @@ public class MissionManager : View
     public Slider difficultyAdjustment;
 
     public GameObject missionPoints;
-    private Dictionary<int,List<Dictionary<string, object>>> missionInfoTable;
+    private Dictionary<int, List<Dictionary<string, object>>> missionInfoTable;
     private GameObject[] marks;
 
     public List<GameObject> expectedRewards;
@@ -49,25 +49,31 @@ public class MissionManager : View
     }
 
     private void Start()
-    {        
-        missionInfoTable = gm.missionInfoDifficulty;        
+    {
+        missionInfoTable = gm.missionInfoDifficulty;
 
         heroSlotsIndex = 0;
         nums = new List<List<int>>();
-        for(int i = 0; i<5; i++)
+        for (int i = 0; i < 5; i++)
         {
-            var num = Utils.DistinctRandomNumbers(missionInfoTable[i+1].Count, markCount);
+            var num = Utils.DistinctRandomNumbers(missionInfoTable[i + 1].Count, markCount);
             nums.Add(num);
         }
+        difficulty = 1;
+        UpdateMissionNameText();
+    }
 
+    private void UpdateMissionNameText()
+    {
         int k = 0;
         for (int j = 0; j < marks.Length; j++)
         {
             if (marks[j].GetComponent<MissionMarkData>().isMarkOn)
             {
-                var index = k++;
-                marks[j].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[difficulty][nums[difficulty][index]]["Name"]}";
-                marks[j].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(difficulty,nums[difficulty][index]));
+                int index = k++;
+                var missionName = missionInfoTable[difficulty][nums[difficulty - 1][index]]["Name"];
+                marks[j].GetComponentInChildren<TextMeshProUGUI>().text = gm.GetStringByTable($"{missionName}");
+                marks[j].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(difficulty, nums[difficulty - 1][index]));
             }
             else
             {
@@ -210,21 +216,7 @@ public class MissionManager : View
     public void OnAdjustmentDifficulty()
     {
         difficulty = (int)difficultyAdjustment.value;
-        difficultyAdjustment.GetComponentInChildren<TextMeshProUGUI>().text = difficulty.ToString();
-
-        int k = 0;
-        for (int j = 0; j < marks.Length; j++)
-        {
-            if (marks[j].GetComponent<MissionMarkData>().isMarkOn)
-            {
-                var index = k++;
-                marks[j].GetComponentInChildren<TextMeshProUGUI>().text = $"{missionInfoTable[difficulty][nums[difficulty-1][index]]["Name"]}";
-                marks[j].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(difficulty, nums[difficulty-1][index]));
-            }
-            else
-            {
-                marks[j].SetActive(false);
-            }
-        }
+        difficultyAdjustment.GetComponentInChildren<TextMeshProUGUI>().text = $"{difficulty}";
+        UpdateMissionNameText();
     }
 }

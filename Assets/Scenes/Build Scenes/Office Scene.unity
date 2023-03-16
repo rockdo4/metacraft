@@ -1002,64 +1002,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 7
   m_LocalEulerAnglesHint: {x: 0, y: 225.09, z: 0}
---- !u!1 &1654627756 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 3434143924244662562, guid: 3a856a5491f13b44d80edbcc5ae6c240,
-    type: 3}
-  m_PrefabInstance: {fileID: 8187287353758975539}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1654627758 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3434143924244662564, guid: 3a856a5491f13b44d80edbcc5ae6c240,
-    type: 3}
-  m_PrefabInstance: {fileID: 8187287353758975539}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1654627756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!114 &1654627760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1654627756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 56eb0353ae6e5124bb35b17aff880f16, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_StringReference:
-    m_TableReference:
-      m_TableCollectionName: GUID:c0a077909bad96a4ebe82aa2074965b5
-    m_TableEntryReference:
-      m_KeyId: 0
-      m_Key: 
-    m_FallbackState: 0
-    m_WaitForCompletion: 0
-    m_LocalVariables: []
-  m_FormatArguments: []
-  m_UpdateString:
-    m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 1654627758}
-        m_TargetAssemblyTypeName: TMPro.TMP_Text, Unity.TextMeshPro
-        m_MethodName: set_text
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 1
-  references:
-    version: 2
-    RefIds: []
 --- !u!114 &1777428043 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1422008090, guid: 934b1155e81040945b6b6571c095f08c,
@@ -2107,7 +2049,9 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 5943262512620865348}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 296635406, guid: 2e42f0bf2e50645468519ff8b1cf00de, type: 3}
+    - {fileID: 1763220461, guid: 2e42f0bf2e50645468519ff8b1cf00de, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 2e42f0bf2e50645468519ff8b1cf00de, type: 3}
 --- !u!114 &1701406474169190235 stripped
 MonoBehaviour:

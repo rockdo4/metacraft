@@ -14,6 +14,9 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
 
     public void Get(EffectEnum index, Transform startPos, Quaternion rot = default)
     {
+        if (index.Equals(EffectEnum.None))
+            return;
+
         if (effectPool.Count == 0)
         {
             GameObject gm = new("Effects");
@@ -57,14 +60,13 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
         effect.name = effectName;
 
         var particles = effectList[effectListIndex].data.particles;
-        var particleList = effect.particles;
 
         for (int i = 0; i < particles.Count; i++)
         {
             var particleData = Instantiate(particles[i], effect.transform);
 
-            if (particleList.Count == 0)
-                particleList.Add(particleData.GetComponentInChildren<ParticleSystem>());
+            if (effect.particles.Count == 0)
+                effect.particles.Add(particleData.GetComponentInChildren<ParticleSystem>());
         }
 
         return effect;

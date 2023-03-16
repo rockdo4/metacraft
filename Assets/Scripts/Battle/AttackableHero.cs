@@ -121,6 +121,7 @@ public class AttackableHero : AttackableUnit
                 case UnitBattleState.Stun:
                     pathFind.isStopped = true;
                     animator.SetTrigger("Stun");
+                    Logger.Debug("Stun Trigger");
                     animator.ResetTrigger("Attack");
                     animator.ResetTrigger("AttackEnd");
                     break;
@@ -150,11 +151,8 @@ public class AttackableHero : AttackableUnit
 
     //    lastNormalAttackTime = Time.time;
     //}
-    private void Awake()
-    {
-        var activeSkill = characterData.activeSkill as ActiveSkillAOE;
-        activeSkill.ActorTransform = transform;
-
+    protected void Awake()
+    {   
         // 어웨이크 에러땜에 임시로 추가함
         InitData();
         pathFind = transform.GetComponent<NavMeshAgent>();
@@ -167,6 +165,13 @@ public class AttackableHero : AttackableUnit
     }
     private void Start()
     {
+        foreach (var attack in characterData.attacks)
+        {
+            attack.SkillHolderTransform = effectCreateTransform;
+            attack.ActorTransform = transform;
+        }
+        characterData.activeSkill.ActorTransform = transform;
+
         var manager = FindObjectOfType<BattleManager>();
         if (manager != null)
             battleManager = manager;
@@ -192,7 +197,7 @@ public class AttackableHero : AttackableUnit
     public override void ResetData()
     {
         testRot = false;
-        UnitState = UnitState.Idle;
+        UnitState = UnitState.None;
         battleState = UnitBattleState.None;
         pathFind.stoppingDistance = 0f;
         
@@ -396,9 +401,9 @@ public class AttackableHero : AttackableUnit
 
     public override void ChangeUnitState(UnitState state)
     {
-        if (BattleState == UnitBattleState.ActiveSkill || BattleState == UnitBattleState.NormalAttack)
+        if (BattleState == UnitBattleState.ActiveSkill || BattleState == UnitBattleState.NormalAttack || BattleState == UnitBattleState.Stun)
         {
-            lateReturn = (state == UnitState.ReturnPosition);
+            lateReturn = true;
             return;
         }
         UnitState = state;
@@ -461,7 +466,7 @@ public class AttackableHero : AttackableUnit
             BattleState = UnitBattleState.BattleIdle;
         }
     }
-    public override void AddBuff(BuffInfo info, int anotherValue, BuffIcon icon = null)
+    public override void AddValueBuff(BuffInfo info, int anotherValue = 0, BuffIcon icon = null)
     {
         int idx = 0;
         for (int i = buffList.Count - 1; i >= 0; i--)
@@ -479,17 +484,41 @@ public class AttackableHero : AttackableUnit
             {
                 icon = heroUI.AddIcon(info.type, info.duration, idx);
             }
-            base.AddBuff(info, anotherValue, icon);
         }
         else
             BuffDurationUpdate(info.id, info.duration);
 
+        base.AddValueBuff(info, anotherValue, icon);
         if (info.type == BuffType.MaxHealthIncrease)
         {
             heroUI.SetHp(UnitHp, MaxHp);
         }
-
     }
+    public override void AddStateBuff(BuffInfo info, AttackableUnit attackableUnit = null, BuffIcon icon = null)
+    {
+        int idx = 0;
+        for (int i = buffList.Count - 1; i >= 0; i--)
+        {
+            if (buffList[i].buffInfo.duration > info.duration)
+            {
+                idx = i;
+                break;
+            }
+        }
+
+        if (buffList.Find(t => t.buffInfo.id == info.id) == null)
+        {
+            if (info.fraction != 0)
+            {
+                icon = heroUI.AddIcon(info.type, info.duration, idx);
+            }
+        }
+        else
+            BuffDurationUpdate(info.id, info.duration);
+
+        base.AddStateBuff(info, attackableUnit, icon);
+    }
+
     public override void StunEnd()
     {
         base.StunEnd();
@@ -501,6 +530,7 @@ public class AttackableHero : AttackableUnit
         {
             BattleState = UnitBattleState.BattleIdle;
         }
+        Logger.Debug("Stun End");
     }
     public override void RemoveBuff(Buff buff)
     {
