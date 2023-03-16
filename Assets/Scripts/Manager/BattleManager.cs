@@ -194,10 +194,10 @@ public class BattleManager : MonoBehaviour
 
     private void SetEventInfo(MapEventEnum ev)
     {
+        GameManager gm = GameManager.Instance;
+
         if (tree.CurNode.type == TreeNodeTypes.Supply)
         {
-            GameManager gm = GameManager.Instance;
-
             // 작전 테이블에서 보급 id 찾기
             string supplyId = $"{currentSelectMissionTable["SupplyID"]}";
 
@@ -231,14 +231,16 @@ public class BattleManager : MonoBehaviour
         {
             int heroNameIndex = Random.Range(0, heroNames.Count);
             battleEventHeroImage.sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{heroNames[heroNameIndex]}");
-            contentText.text = $"{eventInfoTable[(int)ev]["Eventtext"]}";
+            string contentTextKey = $"{eventInfoTable[(int)ev]["Eventtext"]}";
+            contentText.text = gm.GetStringByTable(contentTextKey);
 
             int textCount = (int)eventInfoTable[(int)ev][$"TextCount"];
             for (int i = 0; i < textCount; i++)
             {
                 choiceButtons[i].SetActive(true);
-                string text = $"{eventInfoTable[(int)ev][$"Text{i + 1}"]}";
-                buttonTexts[i].text = text;
+                string choiceTextKey = $"{eventInfoTable[(int)ev][$"Text{i + 1}"]}";
+                string buttonText = gm.GetStringByTable(choiceTextKey);
+                buttonTexts[i].text = buttonText;
             }
         }
     }
