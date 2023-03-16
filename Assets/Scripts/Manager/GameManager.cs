@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
 using UnityEngine.ResourceManagement.AsyncOperations;
@@ -28,9 +29,9 @@ public class GameManager : Singleton<GameManager>
     public List<Dictionary<string, object>> officeInfoList;  // 사무소 레벨별 정보
     public List<Dictionary<string, object>> eventInfoList; // 이벤트 노드 정보
     public List<Dictionary<string, object>> eventEffectInfoList;
-    public Dictionary<string, List<Dictionary<string, string>>> eventEffectTagInfoList;
-    public Dictionary<string, List<Dictionary<string, float>>> eventEffectNoTagInfoList;
-    public List<Dictionary<string, object>> stringTable = new ();
+    public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectTagInfoList;
+    public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectNoTagInfoList;
+    public List<Dictionary<string, object>> stringTable;
 
     public List<Dictionary<string, object>> compensationInfoList; // 보상 정보
 
@@ -96,10 +97,6 @@ public class GameManager : Singleton<GameManager>
             "EventTable",
             "CompensationTable",
             "SupplyTable",
-            "StringTable_Desc",
-            "StringTable_Event",
-            "StringTable_Proper",
-            "StringTable_UI",
         };
 
         // Load TextAssets
@@ -146,11 +143,6 @@ public class GameManager : Singleton<GameManager>
         eventInfoList = CSVReader.SplitTextAsset(handles["EventTable"].Result as TextAsset);
         compensationInfoList = CSVReader.SplitTextAsset(handles["CompensationTable"].Result as TextAsset);
         supplyInfoList = CSVReader.SplitTextAsset(handles["SupplyTable"].Result as TextAsset);
-
-        stringTable.AddRange(CSVReader.SplitTextAsset(handles["StringTable_Desc"].Result as TextAsset));
-        stringTable.AddRange(CSVReader.SplitTextAsset(handles["StringTable_Event"].Result as TextAsset));
-        stringTable.AddRange(CSVReader.SplitTextAsset(handles["StringTable_Proper"].Result as TextAsset));
-        stringTable.AddRange(CSVReader.SplitTextAsset(handles["StringTable_UI"].Result as TextAsset));
 
         count = heroNames.Count;
         for (int i = 0; i < count; i++)
@@ -334,31 +326,43 @@ public class GameManager : Singleton<GameManager>
     // 이벤트 이팩트 테이블 분리
     private void FixEventEffectTable()
     {
-        eventEffectTagInfoList = new Dictionary<string, List<Dictionary<string, string>>>();
+        eventEffectTagInfoList = new Dictionary<string, List<Dictionary<string, List<string>>>>();
         for (int i = 0; i < eventEffectInfoList.Count; i++)
         {
-            var midList = new List<Dictionary<string, string>>();
+            var midList = new List<Dictionary<string, List<string>>>();
             for (int j = 0; j < 10; j++)
             {
-                var smallDic = new Dictionary<string, string>();
-                string tag = $"Tag{j + 1}";
-                string beHaveTag = $"BeHaveTag{j + 1}";
-                smallDic.Add((string)eventEffectInfoList[i][tag], (string)eventEffectInfoList[i][beHaveTag]);
+                var smallDic = new Dictionary<string, List<string>>();
+                var list = new List<string>();
+                string priorityTag = $"PriorityTag{j + 1}";
+                string priorityText = $"PriorityText{j + 1}";
+                string priorityRewardType = $"PriorityRewardType{j + 1}";
+                string priorityReward = $"PriorityReward{j + 1}";
+                list.Add(priorityText);
+                list.Add(priorityRewardType);
+                list.Add(priorityReward);
+                smallDic.Add((string)eventEffectInfoList[i][priorityTag], list);
                 midList.Add(smallDic);
             }
             eventEffectTagInfoList.Add((string)eventEffectInfoList[i]["ID"], midList);
         }
 
-        eventEffectNoTagInfoList = new Dictionary<string, List<Dictionary<string, float>>>();
+        eventEffectNoTagInfoList = new Dictionary<string, List<Dictionary<string, List<string>>>>();
         for (int i = 0; i < eventEffectInfoList.Count; i++)
         {
-            var midList = new List<Dictionary<string, float>>();
+            var midList = new List<Dictionary<string, List<string>>>();
             for (int j = 0; j < 3; j++)
             {
-                var smallDic = new Dictionary<string, float>();
-                string text = $"NoTagsText{j + 1}";
-                string rate = $"NoTagsRate{j + 1}";
-                smallDic.Add(eventEffectInfoList[i][text].ToString(), float.Parse(eventEffectInfoList[i][rate].ToString()));
+                var smallDic = new Dictionary<string, List<string>>();
+                var list = new List<string>();
+                string text = $"NormalvalueText{j + 1}";
+                string rate = $"Normalvalue{j + 1}";
+                string rewardType = $"NormalRewardType{j + 1}";
+                string reward = $"NormalReward{j + 1}";
+                list.Add(rate);
+                list.Add(rewardType);
+                list.Add(reward);
+                smallDic.Add(eventEffectInfoList[i][text].ToString(), list);
                 midList.Add(smallDic);
             }
             eventEffectNoTagInfoList.Add((string)eventEffectInfoList[i]["ID"], midList);

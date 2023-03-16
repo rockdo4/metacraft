@@ -15,6 +15,7 @@ public class FieldControl : MonoBehaviour
             if (offices[i].name.Equals(GameManager.Instance.playerData.officeImage))
             {
                 offices[i].SetActive(true);
+                break;
             }
         }
     }
