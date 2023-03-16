@@ -516,6 +516,7 @@ public class BattleManager : MonoBehaviour
     private void ChoiceNextStageByNode()
     {
         stageReward.gameObject.SetActive(true);
+        NodeClearReward();
 
         for (int i = 0; i < useHeroes.Count; i++)
         {
@@ -722,18 +723,84 @@ public class BattleManager : MonoBehaviour
     public void NodeClearReward()
     {
         GameManager gm = GameManager.Instance;
-        int influence = (int)gm.currentSelectMission["Influence"];//세력
+        var influence = gm.currentSelectMission["Influence"];//세력
         int difficulty = (int)gm.currentSelectMission["Difficulty"]; //난이도
-
         var nodeType = tree.CurNode.type; //노드타입
 
+        var missionInfoDifficulty = gm.missionInfoDifficulty[difficulty];
+        var data = missionInfoDifficulty.Find(t => t["Influence"].Equals(influence));
 
+        string colomId = string.Empty;
+        string collomWeight = string.Empty;
+        int itemCount = 0;
+        switch (nodeType)
+        {
+            case TreeNodeTypes.None:
+                break;
+            case TreeNodeTypes.Root:
+                colomId = "WinReward";
+                collomWeight = "Weight";
+                itemCount = 8;
+                break;
+            case TreeNodeTypes.Normal:
+                colomId = "WinReward";
+                collomWeight = "Weight";
+                itemCount = 8;
+                break;
+            case TreeNodeTypes.Threat:
+                colomId = "HardReward";
+                collomWeight = "HWeight";
+                itemCount = 5;
+                break;
+            case TreeNodeTypes.Supply:
+                colomId = "ClearReward";
+                collomWeight = "CWeight";
+                itemCount = 3;
+                break;
+            case TreeNodeTypes.Event:
+                return;
+            case TreeNodeTypes.Boss:
+                return;
+            default:
+                break;
+        }
 
+        int weight = 0;
 
+        List<string> allItems = new();
+        for (int i = 1; i < itemCount+1; i++)
+        {
+            string itemWeight = collomWeight + i.ToString();
+            string itemKey = colomId + i.ToString();
+            var value = (int)data[itemWeight];
+            if (value == -1)
+                continue;
+            allItems.AddRange(Enumerable.Repeat(itemKey, value));
+            weight += value;
+        }
+
+        var rewardsCode = data[allItems[Random.Range(0, weight)]];
+        var rewardData = gm.compensationInfoList.Find(t => t["ID"].Equals(rewardsCode));
+
+        int maxItemCount = 10;
+        string keyItem = "Item";
+        string keyValue = "Value";
+        for (int i = 1; i < maxItemCount+1; i++)
+        {
+            if ((int)rewardData[$"{keyValue}{i}"] == -1)
+                continue;
+            stageReward.AddItem(rewardData[$"{keyItem}{i}"].ToString(), rewardData[$"{keyValue}{i}"].ToString());
+        }
+        if ((int)rewardData["Gold"] != -1)
+            stageReward.AddGold(rewardData["Gold"].ToString());
     }
 
     private void Update()
     {
+        if (Input.GetKeyDown(KeyCode.Keypad5))
+        {
+            NodeClearReward();
+        }
         if (Input.GetKeyDown(KeyCode.B))
         {
             tree.CurNode.type = TreeNodeTypes.Boss;
