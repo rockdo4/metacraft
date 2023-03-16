@@ -18,6 +18,8 @@ public class MapEventTrigger : MonoBehaviour
     public bool isSkip = false;
     [Header("길목 트리거")]
     public bool isForkedRoad = false;
+    [Header("마지막 트리거")] 
+    public bool isLastTrigger = false;
 
     private List<CapsuleCollider> enemyColls = new();
 
