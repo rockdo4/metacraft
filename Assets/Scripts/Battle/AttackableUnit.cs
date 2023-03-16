@@ -125,9 +125,6 @@ public abstract class AttackableUnit : MonoBehaviour
     protected AttackedDamageUI floatingDamageText;
     protected HpBarManager hpBarManager;
 
-    public Transform effectCreateTransform;
-    public Transform hitTransform;
-
     private void Start()
     {
         var manager = FindObjectOfType<BattleManager>();
@@ -207,10 +204,6 @@ public abstract class AttackableUnit : MonoBehaviour
             (int) (data.baseDefense * multipleDefense),
             (int) (data.healthPoint * multipleHealthPoint));
     }
-    //protected virtual void Awake()
-    //{
-    //    characterData.activeSkill.ActorTransform = transform;
-    //}
 
     protected void Update()
     {
@@ -235,10 +228,6 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public abstract void PassiveSkillEvent();
     public abstract void ReadyActiveSkill();
-    public virtual void OnNormalAttack()
-    {
-        nowAttack.NormalAttackOnDamage();
-    }
     public virtual void OnActiveSkill()
     {
         characterData.activeSkill.OnActiveSkill(this);
@@ -262,9 +251,6 @@ public abstract class AttackableUnit : MonoBehaviour
 
         if (BattleState == UnitBattleState.ActiveSkill)
             return;
-
-        nowAttack.NormalAttackOnDamage();
-
         if (nowAttack.targetNumLimit == 1)
         {
             target.OnDamage(this, nowAttack);
@@ -305,7 +291,8 @@ public abstract class AttackableUnit : MonoBehaviour
                 var value = CalculDamage(characterData.activeSkill, ref isCritical);
                 attackTargetList[i].AddValueBuff(buff, value, null);
             }
-        }        
+        }
+
     }
 
     protected void AssultSearch()
@@ -442,10 +429,6 @@ public abstract class AttackableUnit : MonoBehaviour
         {
             UnitState = UnitState.Die;            
         }
-        if(!skill.hitEffect.Equals(EffectEnum.None))
-        {            
-            EffectManager.Instance.Get(skill.hitEffect, hitTransform ?? transform);
-        }            
         ShowHpBarAndDamageText(dmg, isCritical);
     }
 
@@ -670,13 +653,8 @@ public abstract class AttackableUnit : MonoBehaviour
     public void DestroyUnit()
     {
         // 이 부분 로테이션 이상할 시 바꿔야함
-<<<<<<< HEAD
-        Utils.CopyPositionAndRotation(gameObject, gameObject.transform.parent);
-        pathFind.enabled = false;
-=======
         //Utils.CopyPositionAndRotation(gameObject, gameObject.transform.parent);
         //pathFind.enabled = false;
->>>>>>> feature/BattleSceneUi
         gameObject.SetActive(false);
     }
 
