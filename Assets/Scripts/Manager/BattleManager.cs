@@ -13,7 +13,6 @@ public class BattleManager : MonoBehaviour
     private List<Dictionary<string, object>> eventInfoTable;            // 이벤트 테이블
     private List<Dictionary<string, object>> supplyInfoTable;           // 보급 테이블
     private Dictionary<string, object> currentSelectMissionTable;       // 작전 테이블
-    //private List<Dictionary<string, object>> stringTable;               // 스트링 테이블
 
     public MapEventEnum curEvent = MapEventEnum.None;
     private GameObject curMap;
@@ -80,6 +79,7 @@ public class BattleManager : MonoBehaviour
     private int enemyTriggerIndex = 0;                          // 방어전에 쓰일것 (에너미 스폰하는 트리거)
     private List<Light> lights = new();
     public bool isMiddleBossAlive = false;
+    private GameManager gm;
 
     private void Start()
     {
@@ -194,8 +194,6 @@ public class BattleManager : MonoBehaviour
 
     private void SetEventInfo(MapEventEnum ev)
     {
-        GameManager gm = GameManager.Instance;
-
         if (tree.CurNode.type == TreeNodeTypes.Supply)
         {
             // 작전 테이블에서 보급 id 찾기
@@ -230,7 +228,7 @@ public class BattleManager : MonoBehaviour
         else
         {
             int heroNameIndex = Random.Range(0, heroNames.Count);
-            battleEventHeroImage.sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{heroNames[heroNameIndex]}");
+            battleEventHeroImage.sprite = gm.GetSpriteByAddress($"Icon_{heroNames[heroNameIndex]}");
             string contentTextKey = $"{eventInfoTable[(int)ev]["Eventtext"]}";
             contentText.text = gm.GetStringByTable(contentTextKey);
 
@@ -261,11 +259,10 @@ public class BattleManager : MonoBehaviour
             supplyButtonTexts.Add(text);
         }
 
-        GameManager gm = GameManager.Instance;
+        gm = GameManager.Instance;
         eventInfoTable = gm.eventInfoList;
         supplyInfoTable = gm.supplyInfoList;
         currentSelectMissionTable = gm.currentSelectMission;
-        //stringTable = gm.stringTable;
 
         var selectedHeroes = gm.GetSelectedHeroes();
         int count = selectedHeroes.Count;
@@ -396,7 +393,7 @@ public class BattleManager : MonoBehaviour
     private void MissionClear()
     {
         UIManager.Instance.ShowView(1);
-        GameManager.Instance.NextDay();
+        gm.NextDay();
         clearUi.SetData();
     }
 
@@ -413,7 +410,7 @@ public class BattleManager : MonoBehaviour
     public void MissionFail()
     {
         Time.timeScale = 0;
-        GameManager.Instance.NextDay();
+        gm.NextDay();
         UIManager.Instance.ShowView(2);
     }
     private void OnDestroy()
@@ -428,7 +425,7 @@ public class BattleManager : MonoBehaviour
             useHeroes[i].SetMaxHp();
             useHeroes[i].SetEnabledPathFind(false);
             useHeroes[i].gameObject.SetActive(false);
-            Utils.CopyPositionAndRotation(useHeroes[i].gameObject, GameManager.Instance.heroSpawnTransform);
+            Utils.CopyPositionAndRotation(useHeroes[i].gameObject, gm.heroSpawnTransform);
         }
 
         for (int i = 0; i < unuseHeroes.Count; i++)
@@ -437,12 +434,12 @@ public class BattleManager : MonoBehaviour
             unuseHeroes[i].SetMaxHp();
             unuseHeroes[i].SetEnabledPathFind(false);
             unuseHeroes[i].gameObject.SetActive(false);
-            Utils.CopyPositionAndRotation(unuseHeroes[i].gameObject, GameManager.Instance.heroSpawnTransform);
+            Utils.CopyPositionAndRotation(unuseHeroes[i].gameObject, gm.heroSpawnTransform);
         }
 
         for (int i = 0; i < unuseHeroes.Count; i++)
         {
-            Utils.CopyPositionAndRotation(unuseHeroes[i].gameObject, GameManager.Instance.heroSpawnTransform);
+            Utils.CopyPositionAndRotation(unuseHeroes[i].gameObject, gm.heroSpawnTransform);
             unuseHeroes[i].ResetData();
             unuseHeroes[i].SetMaxHp();
             unuseHeroes[i].SetEnabledPathFind(false);
@@ -579,6 +576,7 @@ public class BattleManager : MonoBehaviour
         viewPoint = currBtMgr.GetViewPoint();
         viewPointInitPos = viewPoint.transform.position;
         cinemachine.Follow = viewPoint.transform;
+        btMapTriggers.Last().isLastTrigger = true;
 
         CreateRoad();
         AddRoadTrigger();
