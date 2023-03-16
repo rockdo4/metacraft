@@ -1640,7 +1640,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3644388837600894853}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1671,7 +1671,7 @@ Transform:
   - {fileID: 270394894682115755}
   m_Father: {fileID: 8140470842622187795}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!95 &4490671050741181350
 Animator:
   serializedVersion: 5
@@ -1682,7 +1682,7 @@ Animator:
   m_GameObject: {fileID: 3644388837600894853}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: d9b155d656a64f02adc39213c8d11c86, type: 3}
-  m_Controller: {fileID: 9100000, guid: e8892ed92f9a4079a3a789e7863095e6, type: 2}
+  m_Controller: {fileID: 22100000, guid: b89e92946df65b445b3e12ffcbd788ae, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -20839,7 +20839,7 @@ GameObject:
   - component: {fileID: 8675859606169347400}
   - component: {fileID: 4248614025479534004}
   m_Layer: 7
-  m_Name: Enemy_Fanatic_Support
+  m_Name: Enemy_Fanatic_Assist
   m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -20873,7 +20873,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8666468cbdf1927409dca387dd261c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originData: {fileID: 0}
+  originData: {fileID: 11400000, guid: 2dc4f093422b76644a4e0bc29379ef4a, type: 2}
   data:
     name: 
     grade: 0
@@ -20883,15 +20883,15 @@ MonoBehaviour:
     level: 0
     exp: 0
     likeability: 0
-    baseDamage: 50
+    baseDamage: 0
     baseDefense: 0
-    healthPoint: 500
-    currentHp: 500
-    moveSpeed: 3
+    healthPoint: 0
+    currentHp: 0
+    moveSpeed: 0
     critical: 0
-    criticalDmg: 2
+    criticalDmg: 0
     evasion: 0
-    accuracy: 0.5
+    accuracy: 0
     equipment: {fileID: 0}
   attacks:
   - {fileID: 0}
@@ -21030,6 +21030,8 @@ MonoBehaviour:
   battleState: 0
   isThereDamageUI: 1
   usingFloatingHpBar: 1
+  isAlive: 0
+  effectCreateTransform: {fileID: 0}
   isMapTriggerEnter: 0
 --- !u!1 &8150431939502365910
 GameObject:
