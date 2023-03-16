@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SkillFieldWithDuration : MonoBehaviour
@@ -9,6 +10,8 @@ public class SkillFieldWithDuration : MonoBehaviour
     public SkillTargetType TargetType { set { targetType = value; } }
     public SkillSearchType SearchType { set { searchType = value; } }   
     public EffectEnum Effect { set { effect = value; } }
+    public bool IsTrackTarget { set { isTrackTarget = value; } }
+    public Transform TrackTransform { set { trackTransform = value; } }
     public bool IsInit = false;
 
     protected AttackableUnit attackableUnit;
@@ -21,45 +24,84 @@ public class SkillFieldWithDuration : MonoBehaviour
     protected SkillTargetType targetType;
     protected SkillSearchType searchType;
     protected EffectEnum effect;
-    
+    private bool isTrackTarget;
+    private Transform trackTransform;
+
     protected float lastHitTime = 0f;
     
     protected string offSkillFieldFuncName = nameof(OffSkillField);
+
+    private HashSet<Collider> colliders = new HashSet<Collider>();
+    private string tagName;
+
     protected void OnEnable()
     {        
         Invoke(offSkillFieldFuncName, duration);
         if(IsInit)
+        {
             EffectManager.Instance.Get(effect, transform);
+            if (isTrackTarget)
+                EffectManager.Instance.GetCurrEffect().transform.parent = transform;
+        }
+            
     }
-
+    private void Start()
+    {
+        switch (targetType)
+        {
+            case SkillTargetType.Enemy:
+                tagName = "Enemy";
+                break;
+            case SkillTargetType.Friendly:
+                tagName = "Hero";
+                break;
+        }
+    }
     public void SetAttackableData(ref AttackableUnit attackableUnit, ref CharacterSkill skill)
     {
         this.attackableUnit = attackableUnit;
         this.skill = skill;
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag(tagName))
+        {
+            colliders.Add(other);
+        }
+    }
 
-    private void OnTriggerStay(Collider other)
-    {   
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag(tagName))
+        {
+            colliders.Remove(other);
+        }
+    }
+
+    private void Update()
+    {
+        TrackTarget();
+        OnDamage();
+    }
+    private void TrackTarget()
+    {
+        if(!isTrackTarget) 
+            return;
+
+        transform.position = trackTransform.position;
+    }
+    private void OnDamage()
+    {
         if (Time.time - lastHitTime < hitInterval)
             return;
 
-        lastHitTime = Time.time;        
+        lastHitTime = Time.time;
 
-        switch (targetType)
+        foreach (Collider collider in colliders)
         {
-            case SkillTargetType.Enemy:
-                if (other.CompareTag("Enemy"))
-                {
-                    other.GetComponent<AttackableUnit>().OnDamage(attackableUnit, skill);
-                }
-                break;
-            case SkillTargetType.Friendly:
-                if (other.CompareTag("Hero"))
-                {
-                    other.GetComponent<AttackableUnit>().OnDamage(attackableUnit, skill);
-                }
-                break;
-        }        
+            if(collider.gameObject.activeSelf)
+                collider.GetComponent<AttackableUnit>().OnDamage(attackableUnit, skill);
+        }
     }
     public virtual void SetScale(float x, float y, float z = 1f)
     {

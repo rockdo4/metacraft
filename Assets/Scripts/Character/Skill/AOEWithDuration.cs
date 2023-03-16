@@ -25,6 +25,9 @@ public class AOEWithDuration : ActiveSkillAOE
         skillField.HitInterval = hitInterval;
         skillField.Effect = activeEffect;
         skillField.IsInit = true;
+
+        skillField.IsTrackTarget = isTrackTarget;        
+
         SetFieldScale();
     }
 
@@ -48,6 +51,7 @@ public class AOEWithDuration : ActiveSkillAOE
         skillEffectedUnits = skillAreaIndicator.GetUnitsInArea();
 
         skillField.transform.SetPositionAndRotation(indicatorTransform.position, indicatorTransform.rotation);
+        skillField.TrackTransform = skillAreaIndicator.TrackTransform;
         skillField.gameObject.SetActive(true);
 
         bool isCiritical = false;
