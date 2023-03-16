@@ -36,6 +36,9 @@ public class BattleManager : MonoBehaviour
     [Header("보급 설명 들어갈 텍스트")]
     public TextMeshProUGUI supplyContentText;
 
+    [Header("스테이지 보상 Ui")]
+    public StageReward stageReward;
+
     private List<TextMeshProUGUI> buttonTexts = new();
     private List<TextMeshProUGUI> supplyButtonTexts = new();
 
@@ -492,6 +495,8 @@ public class BattleManager : MonoBehaviour
     }
     private void ChoiceNextStageByNode()
     {
+        stageReward.gameObject.SetActive(true);
+
         for (int i = 0; i < useHeroes.Count; i++)
         {
             useHeroes[i].ChangeUnitState(UnitState.Idle);
@@ -587,6 +592,7 @@ public class BattleManager : MonoBehaviour
     private bool OnNextStage()
     {
         tree.gameObject.SetActive(false);
+        stageReward.gameObject.SetActive(false);
 
         coFadeOut = StartCoroutine(CoFadeOut());
 

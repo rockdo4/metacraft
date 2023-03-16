@@ -33,6 +33,7 @@ public class AttackableHero : AttackableUnit
             switch (unitState)
             {
                 case UnitState.None:
+                    lateReturn = false;
                     nowUpdate = null;
                     break;
                 case UnitState.Idle:
@@ -207,6 +208,7 @@ public class AttackableHero : AttackableUnit
         UnitHp = characterData.data.currentHp;
 
         heroUI.heroSkill.SetCoolTime(characterData.activeSkill.preCooldown);
+        base.ResetData();
     }
 
     public override void ReadyActiveSkill()
@@ -398,6 +400,7 @@ public class AttackableHero : AttackableUnit
 
     public override void ChangeUnitState(UnitState state)
     {
+        Logger.Debug(state);
         if (BattleState == UnitBattleState.ActiveSkill || BattleState == UnitBattleState.NormalAttack || BattleState == UnitBattleState.Stun)
         {
             lateReturn = true;

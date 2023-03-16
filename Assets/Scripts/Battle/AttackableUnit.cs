@@ -305,8 +305,6 @@ public abstract class AttackableUnit : MonoBehaviour
     {
         if (bufferState.provoke)
             return;
-        if (nowAttack == null)
-            return;
 
         lastSearchTime = Time.time;
         var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
@@ -383,6 +381,7 @@ public abstract class AttackableUnit : MonoBehaviour
     {
         RemoveBuffers();
         nowAttack = characterData.attacks[0];
+        animator.SetFloat("Speed",0);
     }
     public void ResetBuffers()
     {

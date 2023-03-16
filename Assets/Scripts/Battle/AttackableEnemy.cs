@@ -138,6 +138,7 @@ public class AttackableEnemy : AttackableUnit
         ResetCoolDown();
         target = null;
         animator.Rebind();
+        base.ResetData();
     }
 
     public override void PassiveSkillEvent()
