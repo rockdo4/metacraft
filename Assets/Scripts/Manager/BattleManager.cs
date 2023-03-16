@@ -11,6 +11,7 @@ public class BattleManager : MonoBehaviour
     [Header("사용할 맵들")]
     public List<GameObject> eventMaps;
     private List<Dictionary<string, object>> eventInfoTable;            // 이벤트 테이블
+    private List<Dictionary<string, object>> eventEffectInfoTable;      // 이벤트 이펙트 테이블
     private List<Dictionary<string, object>> supplyInfoTable;           // 보급 테이블
     private Dictionary<string, object> currentSelectMissionTable;       // 작전 테이블
 
@@ -20,7 +21,7 @@ public class BattleManager : MonoBehaviour
     [Header("이벤트 Ui")]
     public GameObject eventUi;
     [Header("이벤트 발생 시 클릭할 버튼들")]
-    public List<GameObject> choiceButtons;
+    public List<Button> choiceButtons;
     [Header("이벤트맵 히어로 이미지 Ui")]
     public Image battleEventHeroImage;
     [Header("이벤트 설명 들어갈 텍스트")]
@@ -82,6 +83,7 @@ public class BattleManager : MonoBehaviour
     private GameManager gm;
 
     public AttackableEnemy bossPrefab;
+    public Button eventExitButton;
 
     private void Start()
     {
@@ -90,6 +92,7 @@ public class BattleManager : MonoBehaviour
     }
 
     private void SetActiveUi(GameObject ui, bool set) => ui.SetActive(set);
+    private void SetActiveUi(Button ui, bool set) => ui.gameObject.SetActive(set);
 
     private void SetActiveUi(GameObject ui, List<GameObject> buttons, bool set, int buttonOnCount)
     {
@@ -100,11 +103,20 @@ public class BattleManager : MonoBehaviour
 
         ui.SetActive(set);
     }
+    private void SetActiveUi(GameObject ui, List<Button> buttons, bool set, int buttonOnCount)
+    {
+        for (int i = 0; i < buttonOnCount; i++)
+        {
+            buttons[i].gameObject.SetActive(set);
+        }
 
+        ui.SetActive(set);
+    }
     public void EndEvent()
     {
+        eventExitButton.gameObject.SetActive(false);
         SetActiveUi(eventUi, choiceButtons, false, choiceButtons.Count);
-        NodeClearReward();
+        SetHeroesReady();
     }
     public void EndSupply()
     {
@@ -250,12 +262,87 @@ public class BattleManager : MonoBehaviour
             int textCount = (int)eventInfoTable[(int)ev][$"TextCount"];
             for (int i = 0; i < textCount; i++)
             {
-                choiceButtons[i].SetActive(true);
+                choiceButtons[i].gameObject.SetActive(true);
                 string choiceTextKey = $"{eventInfoTable[(int)ev][$"Text{i + 1}"]}";
                 string buttonText = gm.GetStringByTable(choiceTextKey);
                 buttonTexts[i].text = buttonText;
             }
         }
+    }
+
+    public void OnClickEventChoiceButton(int index)
+    {
+        //SetActiveUi(eventUi, choiceButtons, false, choiceButtons.Count);
+
+        for (int i = 0; i < choiceButtons.Count; i++)
+        {
+            choiceButtons[i].gameObject.SetActive(false);
+        }
+        SetEventEffectReward((int)curEvent, index + 1, contentText);
+        eventExitButton.gameObject.SetActive(true);
+    }
+
+    private void SetEventEffectReward(int column, int index, TextMeshProUGUI contentText)
+    {
+        string textEffect = $"{eventInfoTable[column][$"TextEffect{index}"]}";
+
+        // 테스트로 노멀 이펙트만 가져옴
+        int effectColumn = 0;
+        for (int i = 0; i < eventEffectInfoTable.Count; i++)
+        {
+            if (eventEffectInfoTable[i]["ID"].Equals(textEffect))
+            {
+                effectColumn = i;
+                break;
+            }
+        }
+
+        //float normalValue1 = (float)eventEffectInfoTable[effectColumn]["Normalvalue1"];
+        //float normalValue2 = (float)eventEffectInfoTable[effectColumn]["Normalvalue2"];
+        string normalValue1 = $"{eventEffectInfoTable[effectColumn]["Normalvalue1"]}";
+        string normalValue2 = $"{eventEffectInfoTable[effectColumn]["Normalvalue2"]}";
+        string value1Text = $"{eventEffectInfoTable[effectColumn]["NormalvalueText1"]}";
+        string value2Text = $"{eventEffectInfoTable[effectColumn]["NormalvalueText2"]}";
+        string normalReward1 = $"{eventEffectInfoTable[effectColumn]["NormalReward1"]}";
+        string normalReward2 = $"{eventEffectInfoTable[effectColumn]["NormalReward2"]}";
+
+
+        string normalValueKey = string.Empty;
+        string normalRewardKey = string.Empty;
+
+        normalValueKey = value1Text;
+        normalRewardKey = normalReward1;
+
+        //if (normalValue1.Equals(1f))
+        //{
+        //    normalValueKey = value1Text;
+        //    normalRewardKey = normalReward1;
+        //}
+        //else if (normalValue2.Equals(1f))
+        //{
+        //    normalValueKey = value2Text;
+        //    normalRewardKey = normalReward2;
+        //}
+        //else if (normalValue1.Equals(normalValue2))
+        //{
+        //    float randomValue = Random.Range(0f, 1f);
+        //    normalValueKey = randomValue >= 0.5f ? value1Text : value2Text;
+        //    normalRewardKey = normalValueKey.Equals(value1Text) ? normalReward1 : normalReward2;
+        //}
+        //else
+        //{
+        //    normalValueKey = normalValue1 > normalValue2 ? value1Text : value2Text;
+        //    normalRewardKey = normalValueKey.Equals(value1Text) ? normalReward1 : normalReward2;
+        //}
+
+        if (normalValueKey.Equals("-1"))
+        {
+            return;
+        }
+
+        contentText.text = gm.GetStringByTable(normalValueKey);
+        object rewardKey = normalRewardKey;
+        AddReward(rewardKey);
     }
 
     private void Init()
@@ -278,6 +365,7 @@ public class BattleManager : MonoBehaviour
         eventInfoTable = gm.eventInfoList;
         supplyInfoTable = gm.supplyInfoList;
         currentSelectMissionTable = gm.currentSelectMission;
+        eventEffectInfoTable = gm.eventEffectInfoList;
 
         var selectedHeroes = gm.GetSelectedHeroes();
         int count = selectedHeroes.Count;
@@ -384,7 +472,7 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void SelectNextStage(int index)
+    public void SelectNextStage(int index)
     {
         nodeIndex = index;
         TreeNodeObject prevNode = tree.CurNode;
@@ -558,7 +646,7 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < count; i++)
         {
             choiceButtonTexts[i].text = $"{thisNode.childrens[i].type}";
-            choiceButtons[i].SetActive(true);
+            choiceButtons[i].gameObject.SetActive(true);
             //roadChoiceButtons[i].choiceIndex = i;
         }
     }
@@ -834,13 +922,33 @@ public class BattleManager : MonoBehaviour
         }
 
         var rewardsCode = data[allItems[Random.Range(0, weight)]];
-        var rewardData = gm.compensationInfoList.Find(t => t["ID"].Equals(rewardsCode));
+        //var rewardData = gm.compensationInfoList.Find(t => t["ID"].Equals(rewardsCode));
+
+        //int maxItemCount = 10;
+        //string keyItem = "Item";
+        //string keyValue = "Value";
+        //for (int i = 1; i < maxItemCount+1; i++)
+        //{
+        //    if ((int)rewardData[$"{keyValue}{i}"] == -1)
+        //        continue;
+        //    stageReward.AddItem(rewardData[$"{keyItem}{i}"].ToString(), rewardData[$"{keyValue}{i}"].ToString());
+        //}
+        //if ((int)rewardData["Gold"] != -1)
+        //    stageReward.AddGold(rewardData["Gold"].ToString());
+        AddReward(rewardsCode);
+    }
+
+    private void AddReward(object key)
+    {
+        //var rewardData = gm.compensationInfoList.Find(t => t["ID"].Equals(key));
+        Dictionary<string, object> rewardData = gm.compensationInfoList.Find(t => t["ID"].Equals(key));
 
         int maxItemCount = 10;
         string keyItem = "Item";
         string keyValue = "Value";
-        for (int i = 1; i < maxItemCount+1; i++)
+        for (int i = 1; i < maxItemCount + 1; i++)
         {
+            //if ((int)rewardData[$"{keyValue}{i}"] == -1)
             if ((int)rewardData[$"{keyValue}{i}"] == -1)
                 continue;
             stageReward.AddItem(rewardData[$"{keyItem}{i}"].ToString(), rewardData[$"{keyValue}{i}"].ToString());
@@ -888,6 +996,11 @@ public class BattleManager : MonoBehaviour
             }
 
             btMapTriggers[^2].ResetEnemys();
+        }
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            SetEventEffectReward((int)MapEventEnum.CivilianRescue, 1, contentText);
         }
     }
 
