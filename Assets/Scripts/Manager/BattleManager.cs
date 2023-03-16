@@ -719,6 +719,19 @@ public class BattleManager : MonoBehaviour
         enemyTriggerIndex = index;
     }
 
+    public void NodeClearReward()
+    {
+        GameManager gm = GameManager.Instance;
+        int influence = (int)gm.currentSelectMission["Influence"];//세력
+        int difficulty = (int)gm.currentSelectMission["Difficulty"]; //난이도
+
+        var nodeType = tree.CurNode.type; //노드타입
+
+
+
+
+    }
+
     private void Update()
     {
         if (Input.GetKeyDown(KeyCode.B))
