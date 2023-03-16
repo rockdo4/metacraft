@@ -21,7 +21,7 @@ public class MapEventTrigger : MonoBehaviour
     [Header("마지막 트리거")] 
     public bool isLastTrigger = false;
 
-    private List<CapsuleCollider> enemyColls = new();
+    public List<CapsuleCollider> enemyColls = new();
 
     private void Start()
     {
