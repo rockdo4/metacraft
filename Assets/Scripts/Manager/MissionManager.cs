@@ -30,7 +30,7 @@ public class MissionManager : View
     [Range(1, 5)]
     public int difficulty = 1;
     [Range(1, 7)]
-    public int markCount = 4;
+    public int markCount = 3;
     public delegate void clickmark(int num);
 
     public List<List<int>> nums;
@@ -71,7 +71,7 @@ public class MissionManager : View
             if (marks[j].GetComponent<MissionMarkData>().isMarkOn)
             {
                 int index = k++;
-                var missionName = missionInfoTable[difficulty][nums[difficulty - 1][index]]["Name"];
+                var missionName = missionInfoTable[difficulty][nums[difficulty - 1][index]]["NameString"];
                 marks[j].GetComponentInChildren<TextMeshProUGUI>().text = gm.GetStringByTable($"{missionName}");
                 marks[j].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(difficulty, nums[difficulty - 1][index]));
             }
@@ -93,7 +93,7 @@ public class MissionManager : View
         gm.currentSelectMission = dic;
 
         //portrait.sprite = gm.iconSprites[$"Icon_{dic["BossID"]}"];  보스아이디 적 테이블에서 불러와야함
-        explanation.text = $"{dic["OperationDescription"]}";
+        explanation.text = gm.GetStringByTable($"{dic["TooltipID"]}");
         //ExpectedCost.text = $"{dic["ExpectedCostID"]}";  삭제예정
         gm.ClearBattleGroups();
         for (int i = 0; i < heroSlots.Length; i++)
@@ -102,8 +102,8 @@ public class MissionManager : View
         }
         for (int i = 0; i < fitProperties.Length; i++)
         {
-            var count = $"FitProperty{i + 1}";
-            fitProperties[i].text = $"{dic[count]}";
+            var count = $"BonusType{i + 1}";
+            fitProperties[i].text = gm.GetStringByTable($"{dic[count]}");
             fitProperties[i].fontStyle = FontStyles.Normal;
             fitProperties[i].color = Color.white;
         }

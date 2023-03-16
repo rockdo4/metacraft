@@ -14,7 +14,7 @@ public class MissionSpawner : MonoBehaviour
             go.GetComponent<MissionMarkData>().OnOffMark(false);
         }
 
-        randomNumbers = Utils.DistinctRandomNumbers(7, 4);
+        randomNumbers = Utils.DistinctRandomNumbers(7, 3);
 
         for (int i = 0; i < randomNumbers.Count; i++)
         {
