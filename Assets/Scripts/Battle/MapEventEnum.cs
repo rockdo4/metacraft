@@ -1,8 +1,6 @@
 public enum MapEventEnum
 {
-    None = -3,
-    Normal = -2,        // 아무 이벤트 X, 맵 출력용
-    Defense = -1,       // 아무 이벤트 X, 맵 출력용
+    None = -1,
     CivilianRescue,     // 시민구조
     NewbieHeroRescue,   // 히어로 구조
     Roadblock,          // 길막

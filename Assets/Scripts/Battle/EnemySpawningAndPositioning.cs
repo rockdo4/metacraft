@@ -88,7 +88,6 @@ public class EnemySpawningAndPositioning : MonoBehaviour
             return null;
 
         List<AttackableEnemy> enemys = new();
-
         for (int i = 0; i < enemyPrefabs.Count; i++)
         {
             var enemy = Instantiate(enemyPrefabs[i], tr.position, enemyPrefabs[i].gameObject.transform.rotation, tr);
@@ -157,7 +156,6 @@ public class EnemySpawningAndPositioning : MonoBehaviour
 
         if (middleBoss.GetUnitState() == UnitState.Die)
         {
-            Logger.Debug($"{middleBoss.UnitHp}");
             return false;
         }
         else
