@@ -511,8 +511,10 @@ public class BattleManager : MonoBehaviour
         if (useHeroes.Count == 0)
         {
             MissionFail();
+            return;
         }
     }
+
     public void MissionFail()
     {
         Time.timeScale = 0;
@@ -565,9 +567,12 @@ public class BattleManager : MonoBehaviour
             useHeroes[i].SetMoveSpeed(platformMoveSpeed);
         }
 
-        //while (viewPoint.transform.position.z <= nextMaxZPos)
+        float nextMaxZPos = btMapTriggers[currTriggerIndex].heroSettingPositions.Max(transform => transform.position.z);
         while (!btMapTriggers[currTriggerIndex].isTriggerEnter)
         {
+            if (viewPoint.transform.position.z <= nextMaxZPos)
+                viewPoint.transform.Translate(platform.transform.forward * platformMoveSpeed * Time.deltaTime);
+
             yield return null;
         }
 
@@ -810,6 +815,7 @@ public class BattleManager : MonoBehaviour
         if (enemy.GetUnitData().data.job == (int)CharacterJob.villain &&
             tree.CurNode.type == TreeNodeTypes.Threat)
         {
+            Logger.Debug("Middle Boss Dead");
             DeadMiddleBoss();
             SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
         }
@@ -827,7 +833,8 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 0; i < useHeroes.Count; i++)
         {
-            useHeroes[i].ChangeUnitState(UnitState.Battle);
+            if (!useHeroes[i].GetUnitState().Equals(UnitState.Battle))
+                useHeroes[i].ChangeUnitState(UnitState.Battle);
         }
     }
 
@@ -980,15 +987,6 @@ public class BattleManager : MonoBehaviour
         {
             SetEventEffectReward((int)MapEventEnum.CivilianRescue, 1, contentText);
         }
-    }
-
-    private void LateUpdate()
-    {
-        Vector3 heroPos = useHeroes[0].gameObject.transform.position;
-        heroPos.x = viewPoint.transform.position.x;
-        heroPos.y = viewPoint.transform.position.y;
-
-        viewPoint.transform.position = heroPos;
     }
 
     /*********************************************  юс╫ц  **********************************************/
