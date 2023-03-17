@@ -13,7 +13,8 @@ public class AttackableEnemy : AttackableUnit
         set {
             if (unitState == value)
                 return;
-
+            if (unitState == UnitState.Die)
+                return;
             unitState = value;
             switch (unitState)
             {
@@ -48,9 +49,12 @@ public class AttackableEnemy : AttackableUnit
                     break;
                 case UnitState.Die:
                     //pathFind.enabled = false;
+                    ResetBuffers();
+                    BattleState = UnitBattleState.None;
                     gameObject.GetComponent<Collider>().enabled = false;
                     animator.SetTrigger("Die");
 
+                    Logger.Debug("Enemy Die");
                     nowUpdate = DieUpdate;
                     break;
                 default:
@@ -66,11 +70,14 @@ public class AttackableEnemy : AttackableUnit
         set {
             if (value == battleState)
                 return;
+            if (unitState == UnitState.Die)
+                return;
 
             battleState = value;
             switch (battleState)
             {
                 case UnitBattleState.MoveToTarget:
+                    Logger.Debug(transform.parent.parent.parent.name);
                     pathFind.isStopped = false;
                     break;
                 case UnitBattleState.BattleIdle:
@@ -319,6 +326,11 @@ public class AttackableEnemy : AttackableUnit
     }
     public override void StunEnd()
     {
+        if (unitState == UnitState.Die)
+        {
+            animator.SetTrigger("Die");
+            return;
+        }
         Logger.Debug("StunEnd");
         base.StunEnd();
         BattleState = UnitBattleState.BattleIdle;

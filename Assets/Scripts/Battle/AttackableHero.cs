@@ -267,7 +267,7 @@ public class AttackableHero : AttackableUnit
                 heroUI.heroSkill.OnDownSkill();
                 characterData.activeSkill.targetPos = activeTarget.transform.position;
 
-                StartCoroutine(heroUI.heroSkill.OnAutoSkillActive());
+                StartCoroutine(heroUI.heroSkill.OnAutoSkillActive(characterData.activeSkill));
             }
         }
         //타겟이 없을때 타겟을 찾으면 타겟으로 가기

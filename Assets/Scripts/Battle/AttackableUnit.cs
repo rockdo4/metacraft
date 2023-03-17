@@ -675,6 +675,7 @@ public abstract class AttackableUnit : MonoBehaviour
     {
         //Utils.CopyPositionAndRotation(gameObject, gameObject.transform.parent);
         //pathFind.enabled = false;
+        Logger.Debug("DestroyUnit");
         gameObject.SetActive(false);
         isAlive = false;
     }
