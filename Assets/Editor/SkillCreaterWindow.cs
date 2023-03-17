@@ -39,7 +39,7 @@ public class SkillCreaterWindow : EditorWindow
         var loadedFile = CSVReader.ReadByStreamReaderPath(skillTable, true, false);
 
         skillInfo = loadedFile[lineNumber - 2];
-        objectName = (string)skillInfo["Name"];        
+        objectName = (string)skillInfo["ID"];        
     }
     private void LoadStateTable()
     {
@@ -88,10 +88,11 @@ public class SkillCreaterWindow : EditorWindow
     }
     private void SetSkillValues(CharacterSkill characterSkill)
     {
-        characterSkill.id          = ValueToInt(skillInfo["ID"]);
-        characterSkill.cooldown    = ValueToFloat(skillInfo["CoolTime"]);
-        characterSkill.preCooldown = ValueToFloat(skillInfo["StartCoolTime"]);
-        characterSkill.distance = ValueToInt(skillInfo["Range"]) / 100f;
+        characterSkill.skillName        = (string)skillInfo["Name"];
+        characterSkill.id               = ValueToInt(skillInfo["ID"]);
+        characterSkill.cooldown         = ValueToFloat(skillInfo["CoolTime"]);
+        characterSkill.preCooldown      = ValueToFloat(skillInfo["StartCoolTime"]);
+        characterSkill.distance         = ValueToInt(skillInfo["Range"]) / 100f;
 
         characterSkill.targetType      = (SkillTargetType)ValueToInt(skillInfo["DamageTarget"]);
         characterSkill.coefficientType = (SkillCoefficientType)ValueToInt(skillInfo["BaseStats"]);
