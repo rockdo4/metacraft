@@ -11,20 +11,21 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
     private GameObject parent;
 
     private EffectEnum currEffect;
+
+    public void CreateEffectManager()
+    {
+        GameObject gm = new("Effects");
+        parent = Instantiate(gm);
+        DontDestroyOnLoad(parent);
+        effectPoolSize = 5;
+        effectList = GameManager.Instance.effects;
+        CreateAllEffects();
+    }
+
     public Effect Get(EffectEnum index, Transform startPos, Quaternion rot = default)
     {
         if (index.Equals(EffectEnum.None))
             return null;
-
-        if (effectPool.Count == 0)
-        {
-            GameObject gm = new("Effects");
-            parent = Instantiate(gm);
-            DontDestroyOnLoad(parent);
-            effectPoolSize = 5;
-            effectList = GameManager.Instance.effects;
-            CreateAllEffects();
-        }
 
         currEffect = index;
         
@@ -45,6 +46,18 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
             effectPoolIndex[poolIndex] = 0;
 
         return effect;
+    }
+
+    public void DisabledAllEffect()
+    {
+        for (int i = 0; i < effectPool.Count; i++)
+        {
+            for (int j = 0; j < effectPool[i].Count; j++)
+            {
+                effectPool[i][j].SetParticlesActive(false);
+                effectPool[i][j].gameObject.SetActive(false);
+            }
+        }
     }
 
     public Effect GetCurrEffect()
