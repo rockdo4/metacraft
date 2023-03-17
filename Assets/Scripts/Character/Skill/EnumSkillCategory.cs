@@ -27,6 +27,14 @@ public enum SkillSearchType
 public enum SkillTargetType
 {
     None = -1,
+    Friendly,
+    Enemy,
+    Both,
+    Count,
+}
+public enum BufferTargetType
+{
+    None = -1,
     Self,
     Friendly,
     Enemy,

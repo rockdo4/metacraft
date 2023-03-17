@@ -12,13 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ea31b1afcf37fb47b0432c9ffa1a68d, type: 3}
   m_Name: Seoeun_s_Lv1
   m_EditorClassIdentifier: 
-  animationClip: {fileID: 7400000, guid: edd49a5764ebce141aec88491bee5a81, type: 2}
   skillLevel: 1
   id: 7035002
   skillName: 
   preCooldown: 5
   cooldown: 60
-  distance: 0
+  distance: 10
   targetNumLimit: 10
   angle: 0
   coefficientType: 0
@@ -33,6 +32,10 @@ MonoBehaviour:
   targetPos: {x: 0, y: 0, z: 0}
   skillDescription: skillinfo_southsilver_s
   buffInfos: []
+  buffRadius: 0
+  buffTargetType: 0
+  buffTargetCnt: 0
+  priority: 0
   skillAreaIndicatorPrefab: {fileID: 6672067328229480615, guid: 37555f8a38e89384caaf60fcba51d46f,
     type: 3}
   layerM:
@@ -49,6 +52,7 @@ MonoBehaviour:
   widthX: 1200
   castRangeLimit: 10
   maxColliders: 32
+  hasDuration: 0
   duration: 30
   hitInterval: 1
   skillFieldPrefab: {fileID: 7662128405540511673, guid: a5de04fdb6d5b3547869b1e07933c82b,
