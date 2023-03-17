@@ -60,5 +60,8 @@ public class AOEWithDuration : ActiveSkillAOE
 
         skillAreaIndicator.gameObject.SetActive(false);
         skillAreaIndicator.isTriggerEnter = false;
+
+        base.OnActiveSkill(attackableUnit);
+
     }
 }

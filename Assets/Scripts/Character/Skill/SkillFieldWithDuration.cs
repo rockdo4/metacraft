@@ -39,9 +39,9 @@ public class SkillFieldWithDuration : MonoBehaviour
         Invoke(offSkillFieldFuncName, duration);
         if(IsInit)
         {
-            EffectManager.Instance.Get(effect, transform);
+            var currEffect = EffectManager.Instance.Get(effect, transform);
             if (isTrackTarget)
-                EffectManager.Instance.GetCurrEffect().transform.parent = transform;
+                currEffect.transform.parent = transform;
         }
             
     }

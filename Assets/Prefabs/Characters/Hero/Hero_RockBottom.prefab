@@ -10831,8 +10831,9 @@ MonoBehaviour:
     accuracy: 0.5
     equipment: {fileID: 0}
   attacks:
-  - {fileID: 11400000, guid: d5b9a7358e0855b46acac612b4428307, type: 2}
-  activeSkill: {fileID: 11400000, guid: c9f64039ca8bd8146ae8d8344c554f5f, type: 2}
+  - {fileID: 11400000, guid: 2c95e3d1f3f6ed448a1f4a8e9ba5940d, type: 2}
+  activeSkill: {fileID: 11400000, guid: 7b959c62859744b41b89f08b6bce6e42, type: 2}
+  passiveSkill: {fileID: 11400000, guid: 7d8742fa52e6edb42b37f88fece1c7b6, type: 2}
 --- !u!114 &9201995438626304765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10868,11 +10869,8 @@ MonoBehaviour:
   skillClips: []
   unitType: 0
   normalAttackTargetType: 1
-  normalbuffs: []
   PassiveTargetType: 0
-  passivekbuffs: []
   activeAttackTargetType: 1
-  attackkbuffs: []
   attackPos: {fileID: 0}
   attackPref: {fileID: 0}
   pathFind: {fileID: 0}
@@ -10885,6 +10883,8 @@ MonoBehaviour:
   battleState: -1
   isThereDamageUI: 1
   usingFloatingHpBar: 0
+  isAlive: 0
+  effectCreateTransform: {fileID: 0}
 --- !u!114 &1118583365738082026
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -14690,7 +14690,7 @@ Animator:
   m_GameObject: {fileID: 6947418932732697259}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: d9b155d656a64f02adc39213c8d11c86, type: 3}
-  m_Controller: {fileID: 22100000, guid: aad3b93321cf9f04ba7b4c768ad34290, type: 2}
+  m_Controller: {fileID: 22100000, guid: 0bbbcd0005124fd49be8588102fd8403, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

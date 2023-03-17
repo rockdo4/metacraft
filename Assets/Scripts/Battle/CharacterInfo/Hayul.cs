@@ -1,34 +1,34 @@
 public class Hayul : AttackableHero
 {
-    public override void PassiveSkillEvent()
-    {
-        base.PassiveSkillEvent(); //패시브 사용시 히어로 리스트 가져오기.
-        Logger.Debug("하율등장");
-        foreach (var hero in heroList)
-        {
-            foreach(var buff in passivekbuffs)
-            {
-                Logger.Debug("하율 버프사용");
-                hero.AddValueBuff(buff);
-            }
-        }
-    }
-    public override void NormalAttackOnDamage()
-    {
-        base.NormalAttackOnDamage();
-    }
+    //public override void PassiveSkillEvent()
+    //{
+    //    base.PassiveSkillEvent(); //패시브 사용시 히어로 리스트 가져오기.
+    //    Logger.Debug("하율등장");
+    //    foreach (var hero in heroList)
+    //    {
+    //        foreach(var buff in passivekbuffs)
+    //        {
+    //            Logger.Debug("하율 버프사용");
+    //            hero.AddValueBuff(buff);
+    //        }
+    //    }
+    //}
+    //public override void NormalAttackOnDamage()
+    //{
+    //    base.NormalAttackOnDamage();
+    //}
 
-    public override void OnActiveSkill()
-    {
-        base.OnActiveSkill();
-        var dmg = characterData.activeSkill.CreateDamageResult(characterData.data, bufferState);
-        dmg = (int)(dmg * bufferState.damageDecrease);
-        foreach (var hero in heroList)
-        {
-            foreach (var buff in attackkbuffs)
-            {
-                hero.AddValueBuff(buff, dmg);
-            }
-        }
-    }
+    //public override void OnActiveSkill()
+    //{
+    //    base.OnActiveSkill();
+    //    var dmg = characterData.activeSkill.CreateDamageResult(characterData.data, bufferState);
+    //    dmg = (int)(dmg * bufferState.damageDecrease);
+    //    foreach (var hero in heroList)
+    //    {
+    //        foreach (var buff in attackkbuffs)
+    //        {
+    //            hero.AddValueBuff(buff, dmg);
+    //        }
+    //    }
+    //}
 }
