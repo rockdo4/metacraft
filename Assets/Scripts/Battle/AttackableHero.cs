@@ -365,15 +365,16 @@ public class AttackableHero : AttackableUnit
         switch (testRot)
         {
             case true:
-                transform.rotation = Quaternion.Lerp(transform.rotation, returnPos.rotation, Time.deltaTime * 5);
-                float angle = Quaternion.Angle(transform.rotation, returnPos.rotation);
+                //transform.rotation = Quaternion.Lerp(transform.rotation, returnPos.rotation, Time.deltaTime * 5);
+                //float angle = Quaternion.Angle(transform.rotation, returnPos.rotation);
 
-                var nowSpeed = animator.GetFloat("Speed");
-                var downSpeed = Mathf.Lerp(0, 1, Time.deltaTime * 10f);
-                animator.SetFloat("Speed", nowSpeed - downSpeed);
+                //var nowSpeed = animator.GetFloat("Speed");
+                //var downSpeed = Mathf.Lerp(0, 1, Time.deltaTime * 10f);
+                //animator.SetFloat("Speed", nowSpeed - downSpeed);
 
-                if (angle <= 0)
+                //if (angle <= 0)
                 {
+                    transform.rotation = returnPos.rotation;
                     testRot = false;
                     UnitState = UnitState.Idle;
 
