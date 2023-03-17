@@ -5,6 +5,8 @@ using TMPro;
 using System.Collections;
 using System.Linq;
 using Cinemachine;
+using UnityEditor.ShaderGraph.Internal;
+using Unity.VisualScripting;
 
 public class BattleManager : MonoBehaviour
 {
@@ -511,8 +513,10 @@ public class BattleManager : MonoBehaviour
         if (useHeroes.Count == 0)
         {
             MissionFail();
+            return;
         }
     }
+
     public void MissionFail()
     {
         Time.timeScale = 0;
@@ -567,9 +571,11 @@ public class BattleManager : MonoBehaviour
 
         float nextMaxZPos = btMapTriggers[currTriggerIndex].heroSettingPositions.Max(transform => transform.position.z);
 
-        //while (viewPoint.transform.position.z <= nextMaxZPos)
         while (!btMapTriggers[currTriggerIndex].isTriggerEnter)
         {
+            if (viewPoint.transform.position.z <= nextMaxZPos)
+                viewPoint.transform.Translate(platform.transform.forward * platformMoveSpeed * Time.deltaTime);
+
             yield return null;
         }
 
@@ -982,15 +988,6 @@ public class BattleManager : MonoBehaviour
         {
             SetEventEffectReward((int)MapEventEnum.CivilianRescue, 1, contentText);
         }
-    }
-
-    private void LateUpdate()
-    {
-        Vector3 heroPos = useHeroes[0].gameObject.transform.position;
-        heroPos.x = viewPoint.transform.position.x;
-        heroPos.y = viewPoint.transform.position.y;
-
-        viewPoint.transform.position = heroPos;
     }
 
     /*********************************************  юс╫ц  **********************************************/
