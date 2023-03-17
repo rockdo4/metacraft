@@ -525,6 +525,8 @@ public class BattleManager : MonoBehaviour
     }
     public void ResetHeroes()
     {
+        EffectManager.Instance.DisabledAllEffect();
+
         for (int i = 0; i < useHeroes.Count; i++)
         {
             useHeroes[i].ResetData();
@@ -541,15 +543,6 @@ public class BattleManager : MonoBehaviour
             unuseHeroes[i].SetEnabledPathFind(false);
             unuseHeroes[i].gameObject.SetActive(false);
             Utils.CopyPositionAndRotation(unuseHeroes[i].gameObject, gm.heroSpawnTransform);
-        }
-
-        for (int i = 0; i < unuseHeroes.Count; i++)
-        {
-            Utils.CopyPositionAndRotation(unuseHeroes[i].gameObject, gm.heroSpawnTransform);
-            unuseHeroes[i].ResetData();
-            unuseHeroes[i].SetMaxHp();
-            unuseHeroes[i].SetEnabledPathFind(false);
-            unuseHeroes[i].gameObject.SetActive(false);
         }
     }
     public void MoveNextStage(float timer)
@@ -571,8 +564,6 @@ public class BattleManager : MonoBehaviour
             useHeroes[i].MoveNext(pos.transform.position);
             useHeroes[i].SetMoveSpeed(platformMoveSpeed);
         }
-
-        float nextMaxZPos = btMapTriggers[currTriggerIndex].heroSettingPositions.Max(transform => transform.position.z);
 
         //while (viewPoint.transform.position.z <= nextMaxZPos)
         while (!btMapTriggers[currTriggerIndex].isTriggerEnter)
