@@ -79,20 +79,4 @@ public class LiveData : IComparable<LiveData>
         evasion = parseData.evasion;
         accuracy = parseData.accuracy;
     }
-
-    public void TestPrint()
-    {
-        StringBuilder sb = new();
-        sb.Append($"히어로 명 : {GameManager.Instance.GetStringByTable(name)}\n");
-        sb.Append($"공격력 : {baseDamage}\n");
-        sb.Append($"방어력 : {baseDefense}\n");
-        sb.Append($"체력 : {healthPoint}\n");
-        sb.Append($"이동 속도 : {moveSpeed}\n");
-        sb.Append($"타입 : {job}\n");
-        sb.Append($"치명타 확률 : {critical}\n");
-        sb.Append($"치명타 배율 : {criticalDmg}\n");
-        sb.Append($"명중률 : {accuracy}\n");
-        sb.Append($"회피율 : {evasion}\n");
-        Logger.Debug(sb);
-    }
 }
