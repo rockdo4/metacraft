@@ -17,6 +17,15 @@ public class Effect : MonoBehaviour
         gameObject.SetActive(false);
     }
 
+    public void SetParticlesActive(bool set)
+    {
+        for (int i = 0; i < particles.Count; i++)
+        {
+            particles[i].Stop();
+            particles[i].gameObject.SetActive(false);
+        }
+    }
+
     // 시작 지점 변경하게 될 수도 있을거 같아서 추가
     public void SetStartPos(Transform startPos)
     {

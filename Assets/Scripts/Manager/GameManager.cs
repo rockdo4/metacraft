@@ -52,6 +52,7 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
         StartCoroutine(LoadAllResources());
+        EffectManager.Instance.CreateEffectManager();
     }
 
     private void Start()

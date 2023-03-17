@@ -498,6 +498,7 @@ public class BattleManager : MonoBehaviour
     }
     private void MissionClear()
     {
+        EffectManager.Instance.DisabledAllEffect();
         UIManager.Instance.ShowView(1);
         gm.NextDay();
         clearUi.SetData();
@@ -515,6 +516,8 @@ public class BattleManager : MonoBehaviour
     }
     public void MissionFail()
     {
+        EffectManager.Instance.DisabledAllEffect();
+
         Time.timeScale = 0;
         gm.NextDay();
         UIManager.Instance.ShowView(2);
