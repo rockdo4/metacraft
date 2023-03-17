@@ -64,7 +64,7 @@ public class BattleManager : MonoBehaviour
 
     // BeltScrollManager
     private GameObject platform;
-    private float platformMoveSpeed = 20f;
+    private float platformMoveSpeed = 7f;
     public int currTriggerIndex = 0;
     private float nextStageMoveTimer = 0f;
     private Coroutine coMovingMap;
