@@ -64,7 +64,7 @@ public class BattleManager : MonoBehaviour
 
     // BeltScrollManager
     private GameObject platform;
-    public float platformMoveSpeed = 5f;
+    private float platformMoveSpeed = 20f;
     public int currTriggerIndex = 0;
     private float nextStageMoveTimer = 0f;
     private Coroutine coMovingMap;
@@ -176,7 +176,8 @@ public class BattleManager : MonoBehaviour
                 //OnLight(2);
                 for (int i = 0; i < supplyEventHeroImages.Count; i++)
                 {
-                    supplyEventHeroImages[i].SetCurrHp();
+                    if (supplyEventHeroImages[i].heroData != null)
+                        supplyEventHeroImages[i].SetCurrHp();
                 }
                 SetActiveUi(supplyUi, supplyButtons, true, supplyButtons.Count);
                 SetActiveHeroUiList(false);
@@ -569,6 +570,7 @@ public class BattleManager : MonoBehaviour
         {
             var pos = btMapTriggers[currTriggerIndex].heroSettingPositions[i];
             useHeroes[i].MoveNext(pos.transform.position);
+            useHeroes[i].SetMoveSpeed(platformMoveSpeed);
         }
 
         // 플랫폼 무브 스피드 히어로 무브 스피드로 바꾸기

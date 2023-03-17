@@ -851,4 +851,8 @@ public abstract class AttackableUnit : MonoBehaviour
         }
     }
 
+    public void SetMoveSpeed(float speed)
+    {
+        pathFind.speed = speed;
+    }
 }

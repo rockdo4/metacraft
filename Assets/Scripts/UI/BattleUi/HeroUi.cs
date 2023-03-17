@@ -13,7 +13,7 @@ public class HeroUi : MonoBehaviour
     private BuffList viewBuffList;
     public UnitState heroState;
 
-    CharacterDataBundle heroData;
+    public CharacterDataBundle heroData;
     public bool isAuto;
     public void SetAuto(ref bool state) => isAuto = state;
     public bool isSilence;
