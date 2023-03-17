@@ -333,7 +333,6 @@ public class AttackableEnemy : AttackableUnit
             animator.SetTrigger("Die");
             return;
         }
-        Logger.Debug("StunEnd");
         base.StunEnd();
         BattleState = UnitBattleState.BattleIdle;
     }

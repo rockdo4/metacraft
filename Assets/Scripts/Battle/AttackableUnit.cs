@@ -312,7 +312,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
         lastSearchTime = Time.time;
         var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
-        var minTarget = GetSearchTargetInAround(targetList, 10);
+        var minTarget = GetSearchTargetInAround(targetList, 3);
 
         if (IsAlive(minTarget))
             target = minTarget;
@@ -388,6 +388,10 @@ public abstract class AttackableUnit : MonoBehaviour
         animator.SetFloat("Speed",0);
 
         characterData.passiveSkill?.OnActiveSkill(this);
+
+        unitState = UnitState.None;
+        battleState = UnitBattleState.None;
+        nowUpdate = null;
     }
     public void ResetBuffers()
     {

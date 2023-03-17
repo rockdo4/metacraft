@@ -28,6 +28,8 @@ public class AttackableHero : AttackableUnit
             if (unitState == value)
                 return;
 
+            if (unitState == UnitState.Die)
+                return;
             unitState = value;
             heroUI.heroState = unitState;
             switch (unitState)
@@ -94,6 +96,8 @@ public class AttackableHero : AttackableUnit
         }
         set {
             if (value == battleState)
+                return;
+            if (unitState == UnitState.Die)
                 return;
             battleState = value;
 
@@ -531,6 +535,11 @@ public class AttackableHero : AttackableUnit
 
     public override void StunEnd()
     {
+        if (unitState == UnitState.Die)
+        {
+            animator.SetTrigger("Die");
+            return;
+        }
         base.StunEnd();
         if (lateReturn)
         {
