@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3246809103817041341}
   - component: {fileID: 6987207221279503906}
   - component: {fileID: 7167603407847262495}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: lines
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4844,7 +4844,7 @@ GameObject:
   - component: {fileID: 8548756130749573864}
   - component: {fileID: 860652284509218905}
   - component: {fileID: 2655322039323293080}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: head_shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9726,7 +9726,10 @@ GameObject:
   - component: {fileID: 3995925170779068669}
   - component: {fileID: 3995925170779068671}
   - component: {fileID: 3995925170779068668}
-  m_Layer: 0
+  - component: {fileID: 2534097617615110838}
+  - component: {fileID: 1208159770615884249}
+  - component: {fileID: 2245787248886971248}
+  m_Layer: 10
   m_Name: Projectiles_dark_magic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -14603,6 +14606,53 @@ ParticleSystemRenderer:
   m_MeshWeighting2: 1
   m_MeshWeighting3: 1
   m_MaskInteraction: 0
+--- !u!114 &2534097617615110838
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3995925170779068658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 605a456cfc02f6b499a64717539a27e8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speed: 60
+  hitOffset: 0.1
+  UseFirePointRotation: 0
+  rotationOffset: {x: 0, y: 0, z: 0}
+  flash: {fileID: 0}
+  Detached: []
+--- !u!54 &1208159770615884249
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3995925170779068658}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!135 &2245787248886971248
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3995925170779068658}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 0.5
+  m_Center: {x: 0, y: 0, z: 0}
 --- !u!1 &3995925171221605181
 GameObject:
   m_ObjectHideFlags: 0
@@ -14614,7 +14664,7 @@ GameObject:
   - component: {fileID: 3995925171221605180}
   - component: {fileID: 3995925171221605182}
   - component: {fileID: 3995925171221605183}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: flares
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -19465,7 +19515,7 @@ GameObject:
   - component: {fileID: 3995925171287458368}
   - component: {fileID: 3995925171287458370}
   - component: {fileID: 3995925171287458371}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: head
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24364,7 +24414,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6557065084153029527}
   - component: {fileID: 8984170824746472473}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: trail_shadow
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -24505,7 +24555,7 @@ GameObject:
   - component: {fileID: 7484993422307180523}
   - component: {fileID: 7484993422307180521}
   - component: {fileID: 7484993422307180522}
-  m_Layer: 0
+  m_Layer: 10
   m_Name: electric
   m_TagString: Untagged
   m_Icon: {fileID: 0}
