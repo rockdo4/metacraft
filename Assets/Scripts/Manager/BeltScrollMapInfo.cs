@@ -39,6 +39,7 @@ public class BeltScrollMapInfo : BattleMapInfo
         else
         {
             ResetAllTriggerEnemys();
+            AllTriggerEnterReset();
         }
     }
 

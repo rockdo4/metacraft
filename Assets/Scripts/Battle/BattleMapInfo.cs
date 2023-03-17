@@ -92,4 +92,11 @@ public class BattleMapInfo : MonoBehaviour
             triggers[i].ResetEnemys();
         }
     }
+    protected void AllTriggerEnterReset()
+    {
+        for (int i = 0; i < triggers.Count; i++)
+        {
+            triggers[i].isTriggerEnter = false;
+        }
+    }
 }

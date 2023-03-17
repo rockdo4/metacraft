@@ -20,6 +20,7 @@ public class MapEventTrigger : MonoBehaviour
     public bool isForkedRoad = false;
     [Header("마지막 트리거")] 
     public bool isLastTrigger = false;
+    public bool isTriggerEnter = false;
 
     public List<CapsuleCollider> enemyColls = new();
 
