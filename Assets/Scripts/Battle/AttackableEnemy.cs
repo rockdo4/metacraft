@@ -52,6 +52,8 @@ public class AttackableEnemy : AttackableUnit
                     ResetBuffers();
                     BattleState = UnitBattleState.None;
                     gameObject.GetComponent<Collider>().enabled = false;
+                    animator.ResetTrigger("Stun");
+                    animator.ResetTrigger("StunEnd");
                     animator.SetTrigger("Die");
 
                     Logger.Debug("Enemy Die");

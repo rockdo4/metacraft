@@ -755,6 +755,10 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public virtual void AddStateBuff(BuffInfo info, AttackableUnit attackableUnit = null, BuffIcon icon = null)
     {
+        if (UnitState == UnitState.Die)
+        {
+            return;
+        }
         var findBuff = buffList.Find(t => t.buffInfo.id == info.id);
         if (findBuff != null)
         {
