@@ -10,29 +10,31 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 1d19c22e4165b6c42be3c92365da44e5, type: 3}
-  m_Name: Sooa_a_Lv1
+  m_Name: Seola_p_Lv1
   m_EditorClassIdentifier: 
   skillLevel: 1
-  id: 7015003
+  id: 0
   skillName: 
   preCooldown: 0
-  cooldown: 1
-  distance: 8
-  targetNumLimit: 1
+  cooldown: 0
+  distance: 0
+  targetNumLimit: 0
   angle: 0
-  coefficientType: 0
-  coefficient: 0.55
+  coefficientType: -1
+  coefficient: 1
   targetType: -1
   searchType: 0
   readyEffect: -1
-  activeEffect: 25
-  hitEffect: 11
-  isCriticalPossible: 1
+  activeEffect: -1
+  hitEffect: -1
+  isCriticalPossible: 0
   isAuto: 0
   targetPos: {x: 0, y: 0, z: 0}
-  skillDescription: skillinfo_forth_a
-  buffInfos: []
-  buffRadius: 0
-  buffTargetType: 0
-  buffTargetCnt: 0
+  skillDescription: 
+  buffInfos:
+  - list:
+    - {fileID: 11400000, guid: ad690241b8261af41848c6d8bd7bc057, type: 2}
+  buffRadius: 800
+  buffTargetType: 2
+  buffTargetCnt: 1
   priority: 0

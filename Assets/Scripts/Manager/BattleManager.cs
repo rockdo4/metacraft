@@ -176,7 +176,8 @@ public class BattleManager : MonoBehaviour
                 //OnLight(2);
                 for (int i = 0; i < supplyEventHeroImages.Count; i++)
                 {
-                    supplyEventHeroImages[i].SetCurrHp();
+                    if (supplyEventHeroImages[i].heroData != null)
+                        supplyEventHeroImages[i].SetCurrHp();
                 }
                 SetActiveUi(supplyUi, supplyButtons, true, supplyButtons.Count);
                 SetActiveHeroUiList(false);
@@ -303,12 +304,12 @@ public class BattleManager : MonoBehaviour
         string normalValue2 = $"{eventEffectInfoTable[effectColumn]["Normalvalue2"]}";
         string value1Text = $"{eventEffectInfoTable[effectColumn]["NormalvalueText1"]}";
         string value2Text = $"{eventEffectInfoTable[effectColumn]["NormalvalueText2"]}";
-        string normalReward1 = $"{eventEffectInfoTable[effectColumn]["NormalReward1"]}";
-        string normalReward2 = $"{eventEffectInfoTable[effectColumn]["NormalReward2"]}";
+        int normalReward1 = (int)eventEffectInfoTable[effectColumn]["NormalReward1"];
+        int normalReward2 = (int)eventEffectInfoTable[effectColumn]["NormalReward2"];
 
 
         string normalValueKey = string.Empty;
-        string normalRewardKey = string.Empty;
+        int normalRewardKey = 0;
 
         normalValueKey = value1Text;
         normalRewardKey = normalReward1;
@@ -921,26 +922,12 @@ public class BattleManager : MonoBehaviour
         }
 
         var rewardsCode = data[allItems[Random.Range(0, weight)]];
-        //var rewardData = gm.compensationInfoList.Find(t => t["ID"].Equals(rewardsCode));
-
-        //int maxItemCount = 10;
-        //string keyItem = "Item";
-        //string keyValue = "Value";
-        //for (int i = 1; i < maxItemCount+1; i++)
-        //{
-        //    if ((int)rewardData[$"{keyValue}{i}"] == -1)
-        //        continue;
-        //    stageReward.AddItem(rewardData[$"{keyItem}{i}"].ToString(), rewardData[$"{keyValue}{i}"].ToString());
-        //}
-        //if ((int)rewardData["Gold"] != -1)
-        //    stageReward.AddGold(rewardData["Gold"].ToString());
         AddReward(rewardsCode);
     }
 
     private void AddReward(object key)
     {
-        //var rewardData = gm.compensationInfoList.Find(t => t["ID"].Equals(key));
-        Dictionary<string, object> rewardData = gm.compensationInfoList.Find(t => t["ID"].Equals(key));
+        var rewardData = gm.compensationInfoList.Find(t => t["ID"].Equals(key));
 
         int maxItemCount = 10;
         string keyItem = "Item";

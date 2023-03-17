@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d19c22e4165b6c42be3c92365da44e5, type: 3}
   m_Name: Hayul_a_Lv1
   m_EditorClassIdentifier: 
-  animationClip: {fileID: 7400000, guid: d95123ab2a5ec7c4b876e4e9c1f14d45, type: 2}
   skillLevel: 1
   id: 7015001
   skillName: 
@@ -23,7 +22,7 @@ MonoBehaviour:
   angle: 360
   coefficientType: 0
   coefficient: 0.45
-  targetType: 0
+  targetType: 1
   searchType: 3
   readyEffect: -1
   activeEffect: 17
@@ -32,4 +31,10 @@ MonoBehaviour:
   isAuto: 0
   targetPos: {x: 0, y: 0, z: 0}
   skillDescription: skillinfo_Hayul_a
-  buffInfos: []
+  buffInfos:
+  - list:
+    - {fileID: 11400000, guid: 47841f8d0e5ebf44ea9cff5fe16407e0, type: 2}
+  buffRadius: 0
+  buffTargetType: 1
+  buffTargetCnt: 0
+  priority: 0
