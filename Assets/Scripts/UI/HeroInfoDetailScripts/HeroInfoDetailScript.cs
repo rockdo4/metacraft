@@ -28,8 +28,8 @@ public class HeroInfoDetailScript : View
         stringBuilder.Append($"공격력 : {data.baseDamage}\n");
         stringBuilder.Append($"방어력 : {data.baseDefense}\n");
         stringBuilder.Append($"체력 : {data.healthPoint}\n");
-        stringBuilder.Append($"타입 : {(CharacterJob)data.job}\n");
-        stringBuilder.Append($"치명타 확률 : {data.critical * 100:2}\n");
+        stringBuilder.Append($"타입 : {GameManager.Instance.GetStringByTable($"herotype_{(CharacterJob)data.job}")}\n");
+        stringBuilder.Append($"치명타 확률 : {data.critical * 100:.0}%\n");
         stringBuilder.Append($"치명타 배율 : {data.criticalDmg * 100:00.0}%\n");
         stringBuilder.Append($"이동 속도 : {data.moveSpeed}\n");
         statDetail.text = stringBuilder.ToString();

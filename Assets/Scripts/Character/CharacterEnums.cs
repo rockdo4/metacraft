@@ -19,12 +19,12 @@ public enum UnitType
 public enum CharacterJob
 {
     None = 0,
-    Assult,
-    Defence,
-    Shooter,
-    Assassin,
-    Support,
-    Villain,
+    assult,
+    defence,
+    shooter,
+    assassin,
+    assist,
+    villain,
     Count
 }
 // 돌격, 방어, 사격, 은밀, 지원, 빌런
