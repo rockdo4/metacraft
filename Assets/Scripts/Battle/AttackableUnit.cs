@@ -424,12 +424,17 @@ public abstract class AttackableUnit : MonoBehaviour
         bool isCritical = false;
         var dmg = (int)(attackableUnit.CalculDamage(skill, ref isCritical) * defense * levelCorrection);
 
-        if(bufferState.isShield)
+        if (bufferState.isShield)
         {
             var shield =  (int)(dmg * bufferState.shield);
 
             dmg -= shield;
         }
+
+        //힐링관련 함수
+        if (skill.targetType.Equals(SkillTargetType.Friendly))
+            dmg = - (int)attackableUnit.CalculDamage(skill, ref isCritical);
+
         UnitHp = Mathf.Max(UnitHp - dmg, 0);
         if (UnitHp <= 0)
         {
@@ -447,6 +452,13 @@ public abstract class AttackableUnit : MonoBehaviour
             return;
 
         var type = isCritical ? DamageType.Critical : DamageType.Normal;
+
+        if (dmg < 0)
+        {
+            dmg *= -1;
+            type = DamageType.Heal;
+        }            
+
         floatingDamageText.OnAttack(dmg, isCritical, transform.position, type);
 
         if (!usingFloatingHpBar)

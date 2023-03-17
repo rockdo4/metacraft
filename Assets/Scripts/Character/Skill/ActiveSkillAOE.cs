@@ -235,7 +235,7 @@ public class ActiveSkillAOE : CharacterSkill
         foreach (var target in skillEffectedUnits)
         {
             if (target.gameObject.activeSelf)
-                target.OnDamage(attackableUnit, this);   
+                target.OnDamage(attackableUnit, this);
         }
 
         skillAreaIndicator.gameObject.SetActive(false);
