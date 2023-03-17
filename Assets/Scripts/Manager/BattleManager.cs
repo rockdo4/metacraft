@@ -498,7 +498,6 @@ public class BattleManager : MonoBehaviour
     }
     private void MissionClear()
     {
-        EffectManager.Instance.DisabledAllEffect();
         UIManager.Instance.ShowView(1);
         gm.NextDay();
         clearUi.SetData();
@@ -516,8 +515,6 @@ public class BattleManager : MonoBehaviour
     }
     public void MissionFail()
     {
-        EffectManager.Instance.DisabledAllEffect();
-
         Time.timeScale = 0;
         gm.NextDay();
         UIManager.Instance.ShowView(2);
@@ -528,6 +525,8 @@ public class BattleManager : MonoBehaviour
     }
     public void ResetHeroes()
     {
+        EffectManager.Instance.DisabledAllEffect();
+
         for (int i = 0; i < useHeroes.Count; i++)
         {
             useHeroes[i].ResetData();
@@ -544,15 +543,6 @@ public class BattleManager : MonoBehaviour
             unuseHeroes[i].SetEnabledPathFind(false);
             unuseHeroes[i].gameObject.SetActive(false);
             Utils.CopyPositionAndRotation(unuseHeroes[i].gameObject, gm.heroSpawnTransform);
-        }
-
-        for (int i = 0; i < unuseHeroes.Count; i++)
-        {
-            Utils.CopyPositionAndRotation(unuseHeroes[i].gameObject, gm.heroSpawnTransform);
-            unuseHeroes[i].ResetData();
-            unuseHeroes[i].SetMaxHp();
-            unuseHeroes[i].SetEnabledPathFind(false);
-            unuseHeroes[i].gameObject.SetActive(false);
         }
     }
     public void MoveNextStage(float timer)
