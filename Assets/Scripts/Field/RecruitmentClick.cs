@@ -1,14 +1,13 @@
-
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class RecruitmentClick : MonoBehaviour
+public class RecruitmentClick : MonoBehaviour, IPointerDownHandler
 {
     public UIManager uiMgr;
 
-    public void OnMouseDown()
+    public void OnPointerDown(PointerEventData eventData)
     {
-        if (!EventSystem.current.IsPointerOverGameObject())
+        if (!EventSystem.current.IsPointerOverGameObject(eventData.pointerId))
         {
             uiMgr.ShowView(7);
         }
