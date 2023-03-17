@@ -380,7 +380,7 @@ public class AttackableHero : AttackableUnit
 
                     if (battleManager.tree.CurNode.type == TreeNodeTypes.Threat)
                     {
-                        if (battleManager.isMiddleBossAlive)
+                        if (!battleManager.isMiddleBossAlive)
                         {
                             battleManager.OnReady();
                         }
