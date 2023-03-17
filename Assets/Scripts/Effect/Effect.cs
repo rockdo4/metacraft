@@ -19,11 +19,7 @@ public class Effect : MonoBehaviour
 
     public void SetParticlesActive(bool set)
     {
-        for (int i = 0; i < particles.Count; i++)
-        {
-            particles[i].Stop();
-            particles[i].gameObject.SetActive(false);
-        }
+        gameObject.SetActive(set);
     }
 
     // 시작 지점 변경하게 될 수도 있을거 같아서 추가
