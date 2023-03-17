@@ -103,6 +103,8 @@ public class SkillCreaterWindow : EditorWindow
 
         characterSkill.targetNumLimit = ValueToInt(skillInfo["DamageTargetLimit"]);
 
+        characterSkill.priority = ValueToInt(skillInfo["Priority"]);
+
         //characterSkill.buffTypeAndValue = new(3);
         //for(int i = 0; i < 3; i++)
         //{

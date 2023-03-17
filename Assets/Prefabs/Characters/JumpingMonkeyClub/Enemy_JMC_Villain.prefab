@@ -52,7 +52,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8666468cbdf1927409dca387dd261c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originData: {fileID: 11400000, guid: 904d5c8ce6774ec45815a82c76d1591e, type: 2}
+  originData: {fileID: 11400000, guid: 7dea5617a32fe6a42bf679dd839a278c, type: 2}
   data:
     name: 
     grade: 0
@@ -85,10 +85,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.49082834
-  m_Height: 2.0499868
+  m_Radius: 0.6265865
+  m_Height: 3.5703094
   m_Direction: 1
-  m_Center: {x: -0.015165806, y: 0.9035442, z: 0.064696014}
+  m_Center: {x: -0.015165806, y: 1.6637055, z: 0.20045418}
 --- !u!54 &8395682835805498539
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -209,6 +209,8 @@ MonoBehaviour:
   battleState: 0
   isThereDamageUI: 1
   usingFloatingHpBar: 1
+  isAlive: 0
+  effectCreateTransform: {fileID: 0}
   isMapTriggerEnter: 0
 --- !u!1 &3875931855908864222
 GameObject:
@@ -418,7 +420,7 @@ Transform:
   m_GameObject: {fileID: 4154032768275661190}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4154032768275242416}
@@ -437,7 +439,7 @@ Animator:
   m_GameObject: {fileID: 4154032768275661190}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: ad4bb82bd843da1479ee67de1f1804c5, type: 3}
-  m_Controller: {fileID: 22100000, guid: 78e990ddf1f795142ac4676a7812aedf, type: 2}
+  m_Controller: {fileID: 22100000, guid: 7accecf4d1c178b479ec0b12e3c8a1b5, type: 2}
   m_CullingMode: 2
   m_UpdateMode: 0
   m_ApplyRootMotion: 1

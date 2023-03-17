@@ -1089,6 +1089,8 @@ MonoBehaviour:
   battleState: -1
   isThereDamageUI: 1
   usingFloatingHpBar: 0
+  isAlive: 0
+  effectCreateTransform: {fileID: 0}
 --- !u!114 &555501356713611775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2502,6 +2504,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7955503765868708883}
   - component: {fileID: 7632785510435205449}
+  - component: {fileID: 5547527206218857079}
   m_Layer: 0
   m_Name: FemaleCharacterPBR
   m_TagString: Untagged
@@ -2539,7 +2542,7 @@ Animator:
   m_GameObject: {fileID: 7290325226780581545}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: 0308cf4e83cf517488b60af58b290fe0, type: 3}
-  m_Controller: {fileID: 22100000, guid: aad3b93321cf9f04ba7b4c768ad34290, type: 2}
+  m_Controller: {fileID: 22100000, guid: 0b2ac8820fc218a4ebb5053d72abb2bd, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -2549,6 +2552,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &5547527206218857079
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7290325226780581545}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32210bb7c1ee77498f0919b502ecaa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unit: {fileID: 169427862001031096}
 --- !u!1 &7306252813724477024
 GameObject:
   m_ObjectHideFlags: 0

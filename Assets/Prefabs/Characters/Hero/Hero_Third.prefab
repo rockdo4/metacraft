@@ -2483,6 +2483,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5294981524613840489}
   - component: {fileID: 5688385915227607280}
+  - component: {fileID: 465403378703002074}
   m_Layer: 0
   m_Name: MC17
   m_TagString: Untagged
@@ -2539,7 +2540,7 @@ Animator:
   m_GameObject: {fileID: 4769414294736299219}
   m_Enabled: 1
   m_Avatar: {fileID: 9000000, guid: d9b155d656a64f02adc39213c8d11c86, type: 3}
-  m_Controller: {fileID: 22100000, guid: aad3b93321cf9f04ba7b4c768ad34290, type: 2}
+  m_Controller: {fileID: 22100000, guid: 35b3f5ffb84c7694b8f50f10eb3b65f4, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
   m_ApplyRootMotion: 1
@@ -2549,6 +2550,19 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
+--- !u!114 &465403378703002074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4769414294736299219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d32210bb7c1ee77498f0919b502ecaa9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  unit: {fileID: 3190841479753767128}
 --- !u!1 &4789907076702854170
 GameObject:
   m_ObjectHideFlags: 0
@@ -21034,6 +21048,8 @@ MonoBehaviour:
   battleState: -1
   isThereDamageUI: 1
   usingFloatingHpBar: 0
+  isAlive: 0
+  effectCreateTransform: {fileID: 0}
 --- !u!114 &2771247595109384872
 MonoBehaviour:
   m_ObjectHideFlags: 0
