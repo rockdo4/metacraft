@@ -199,7 +199,7 @@ public class GameManager : Singleton<GameManager>
         if (stringTable.ContainsKey(key))
             return $"{stringTable[key][languageKey]}";
         else
-            return $"Load fail to string table. key [{key}], languageKey [{languageKey}], result : [{stringTable[key][languageKey]}";
+            return $"Load fail to string table. key [{key}], languageKey [{languageKey}]";
     }
 
     public void ReleaseAddressable(Dictionary<string, AsyncOperationHandle> handles)
