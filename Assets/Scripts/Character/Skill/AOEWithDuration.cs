@@ -52,7 +52,7 @@ public class AOEWithDuration : ActiveSkillAOE
 
         skillField.transform.SetPositionAndRotation(indicatorTransform.position, indicatorTransform.rotation);
         skillField.TrackTransform = skillAreaIndicator.TrackTransform;
-        skillField.gameObject.SetActive(true);
+        skillField.gameObject.SetActive(true);        
 
         bool isCiritical = false;
         skillField.DamageResult = attackableUnit.CalculDamage(this, ref isCiritical);
@@ -60,8 +60,8 @@ public class AOEWithDuration : ActiveSkillAOE
 
         skillAreaIndicator.gameObject.SetActive(false);
         skillAreaIndicator.isTriggerEnter = false;
-
-        base.OnActiveSkill(attackableUnit);
+        
+        OnActiveSkilThroughToLastChild(attackableUnit);
 
     }
 }
