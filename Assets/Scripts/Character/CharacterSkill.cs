@@ -104,10 +104,10 @@ public class CharacterSkill : ScriptableObject
 
         EffectManager.Instance.Get(activeEffect, skillHolderTransform ?? actorTransform, actorTransform.rotation);
     }
-    public void OnActiveSkilThroughToLastChild(AttackableUnit unit)
-    {
-        OnActiveSkill(unit);
-    }
+    //public void OnActiveSkilThroughToLastChild(AttackableUnit unit)
+    //{
+    //    OnActiveSkill(unit);
+    //}
     public virtual void OnActiveSkill(AttackableUnit unit)
     {
         switch (buffTargetType)

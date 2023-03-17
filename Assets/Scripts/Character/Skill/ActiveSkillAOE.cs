@@ -35,6 +35,7 @@ public class ActiveSkillAOE : CharacterSkill
     public int maxColliders = 32;
     private Transform closestEnemyTransformWhenTrackTarget;
 
+    public bool hasDuration = false;
     public override void OnActive()
     {
         if (skillAreaIndicator != null &&
@@ -219,7 +220,12 @@ public class ActiveSkillAOE : CharacterSkill
 
     public override void OnActiveSkill(AttackableUnit attackableUnit)
     {
-        if(skillStartFromCharacter)
+        base.OnActiveSkill(attackableUnit);
+
+        if (hasDuration)
+            return;
+
+        if (skillStartFromCharacter)
             EffectManager.Instance.Get(activeEffect, indicatorTransform, indicatorTransform.rotation);
         else
             EffectManager.Instance.Get(activeEffect, indicatorTransform);
@@ -239,9 +245,7 @@ public class ActiveSkillAOE : CharacterSkill
         //}
 
         skillAreaIndicator.gameObject.SetActive(false);
-        skillAreaIndicator.isTriggerEnter = false;
-
-        base.OnActiveSkill(attackableUnit);
+        skillAreaIndicator.isTriggerEnter = false;        
     }
     public void SetActiveIndicators(bool active)
     {
