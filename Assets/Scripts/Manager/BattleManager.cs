@@ -176,7 +176,8 @@ public class BattleManager : MonoBehaviour
                 //OnLight(2);
                 for (int i = 0; i < supplyEventHeroImages.Count; i++)
                 {
-                    supplyEventHeroImages[i].SetCurrHp();
+                    if (supplyEventHeroImages[i].heroData != null)
+                        supplyEventHeroImages[i].SetCurrHp();
                 }
                 SetActiveUi(supplyUi, supplyButtons, true, supplyButtons.Count);
                 SetActiveHeroUiList(false);

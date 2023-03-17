@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8ea31b1afcf37fb47b0432c9ffa1a68d, type: 3}
   m_Name: Sooa_s_Lv1
   m_EditorClassIdentifier: 
-  animationClip: {fileID: 7400000, guid: 3786af6d5c5c1d9428e200bec8f83155, type: 2}
   skillLevel: 1
   id: 7035003
   skillName: 
@@ -32,7 +31,13 @@ MonoBehaviour:
   isAuto: 0
   targetPos: {x: 0, y: 0, z: 0}
   skillDescription: skillinfo_forth_s
-  buffInfos: []
+  buffInfos:
+  - list:
+    - {fileID: 11400000, guid: 05b24affd7a263e47a4344ff6b0c1b00, type: 2}
+  buffRadius: 8
+  buffTargetType: 2
+  buffTargetCnt: 1
+  priority: 0
   skillAreaIndicatorPrefab: {fileID: 6672067328229480615, guid: 0da645c26f09e074abad419ddc09fafb,
     type: 3}
   layerM:
