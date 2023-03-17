@@ -70,11 +70,11 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
         var effect = Instantiate(effectList[effectListIndex], parentsObject);
         effect.name = effectName;
 
-        var particles = effectList[effectListIndex].data.particles;
+        var particles = effectList[effectListIndex].data.particles;        
 
         for (int i = 0; i < particles.Count; i++)
         {
-            var particleData = Instantiate(particles[i], effect.transform);
+            var particleData = Instantiate(particles[i], effect.transform);            
 
             if (effect.particles.Count == 0)
                 effect.particles.Add(particleData.GetComponentInChildren<ParticleSystem>());

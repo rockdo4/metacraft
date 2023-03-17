@@ -64,7 +64,7 @@ public class BattleManager : MonoBehaviour
 
     // BeltScrollManager
     private GameObject platform;
-    public float platformMoveSpeed = 5f;
+    private float platformMoveSpeed = 7f;
     public int currTriggerIndex = 0;
     private float nextStageMoveTimer = 0f;
     private Coroutine coMovingMap;
@@ -176,7 +176,8 @@ public class BattleManager : MonoBehaviour
                 //OnLight(2);
                 for (int i = 0; i < supplyEventHeroImages.Count; i++)
                 {
-                    supplyEventHeroImages[i].SetCurrHp();
+                    if (supplyEventHeroImages[i].heroData != null)
+                        supplyEventHeroImages[i].SetCurrHp();
                 }
                 SetActiveUi(supplyUi, supplyButtons, true, supplyButtons.Count);
                 SetActiveHeroUiList(false);
@@ -303,12 +304,12 @@ public class BattleManager : MonoBehaviour
         string normalValue2 = $"{eventEffectInfoTable[effectColumn]["Normalvalue2"]}";
         string value1Text = $"{eventEffectInfoTable[effectColumn]["NormalvalueText1"]}";
         string value2Text = $"{eventEffectInfoTable[effectColumn]["NormalvalueText2"]}";
-        string normalReward1 = $"{eventEffectInfoTable[effectColumn]["NormalReward1"]}";
-        string normalReward2 = $"{eventEffectInfoTable[effectColumn]["NormalReward2"]}";
+        int normalReward1 = (int)eventEffectInfoTable[effectColumn]["NormalReward1"];
+        int normalReward2 = (int)eventEffectInfoTable[effectColumn]["NormalReward2"];
 
 
         string normalValueKey = string.Empty;
-        string normalRewardKey = string.Empty;
+        int normalRewardKey = 0;
 
         normalValueKey = value1Text;
         normalRewardKey = normalReward1;
@@ -335,7 +336,7 @@ public class BattleManager : MonoBehaviour
         //    normalRewardKey = normalValueKey.Equals(value1Text) ? normalReward1 : normalReward2;
         //}
 
-        if (normalValueKey.Equals("-1"))
+        if (normalRewardKey == -1)
         {
             return;
         }
@@ -562,19 +563,20 @@ public class BattleManager : MonoBehaviour
         yield return new WaitForSeconds(nextStageMoveTimer);
 
         float curMaxZPos = viewPoint.transform.position.z;
-        float nextMaxZPos = btMapTriggers[currTriggerIndex + 1].heroSettingPositions.Max(transform => transform.position.z);
 
         currTriggerIndex++;
         for (int i = 0; i < useHeroes.Count; i++)
         {
             var pos = btMapTriggers[currTriggerIndex].heroSettingPositions[i];
             useHeroes[i].MoveNext(pos.transform.position);
+            useHeroes[i].SetMoveSpeed(platformMoveSpeed);
         }
 
-        // 플랫폼 무브 스피드 히어로 무브 스피드로 바꾸기
-        while (viewPoint.transform.position.z <= nextMaxZPos)
+        float nextMaxZPos = btMapTriggers[currTriggerIndex].heroSettingPositions.Max(transform => transform.position.z);
+
+        //while (viewPoint.transform.position.z <= nextMaxZPos)
+        while (!btMapTriggers[currTriggerIndex].isTriggerEnter)
         {
-            viewPoint.transform.Translate(Vector3.forward * platformMoveSpeed * Time.deltaTime);
             yield return null;
         }
 
@@ -921,26 +923,12 @@ public class BattleManager : MonoBehaviour
         }
 
         var rewardsCode = data[allItems[Random.Range(0, weight)]];
-        //var rewardData = gm.compensationInfoList.Find(t => t["ID"].Equals(rewardsCode));
-
-        //int maxItemCount = 10;
-        //string keyItem = "Item";
-        //string keyValue = "Value";
-        //for (int i = 1; i < maxItemCount+1; i++)
-        //{
-        //    if ((int)rewardData[$"{keyValue}{i}"] == -1)
-        //        continue;
-        //    stageReward.AddItem(rewardData[$"{keyItem}{i}"].ToString(), rewardData[$"{keyValue}{i}"].ToString());
-        //}
-        //if ((int)rewardData["Gold"] != -1)
-        //    stageReward.AddGold(rewardData["Gold"].ToString());
         AddReward(rewardsCode);
     }
 
     private void AddReward(object key)
     {
-        //var rewardData = gm.compensationInfoList.Find(t => t["ID"].Equals(key));
-        Dictionary<string, object> rewardData = gm.compensationInfoList.Find(t => t["ID"].Equals(key));
+        var rewardData = gm.compensationInfoList.Find(t => t["ID"].Equals(key));
 
         int maxItemCount = 10;
         string keyItem = "Item";
@@ -1001,6 +989,15 @@ public class BattleManager : MonoBehaviour
         {
             SetEventEffectReward((int)MapEventEnum.CivilianRescue, 1, contentText);
         }
+    }
+
+    private void LateUpdate()
+    {
+        Vector3 heroPos = useHeroes[0].gameObject.transform.position;
+        heroPos.x = viewPoint.transform.position.x;
+        heroPos.y = viewPoint.transform.position.y;
+
+        viewPoint.transform.position = heroPos;
     }
 
     /*********************************************  임시  **********************************************/

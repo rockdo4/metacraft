@@ -17702,7 +17702,7 @@ Animator:
   m_Controller: {fileID: 22100000, guid: c681c3e839a8b664f9d56dcaa3cedc71, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -17973,10 +17973,10 @@ MonoBehaviour:
     criticalDmg: 2
     evasion: 0
     accuracy: 0.5
-    equipment: {fileID: 0}
   attacks:
-  - {fileID: 11400000, guid: d5b9a7358e0855b46acac612b4428307, type: 2}
-  activeSkill: {fileID: 11400000, guid: ecc00f6d73514c24b89e28f07ee21535, type: 2}
+  - {fileID: 11400000, guid: 5991a4a3f84d0ae44ba55b74d9c8e7cf, type: 2}
+  activeSkill: {fileID: 11400000, guid: 12d14e97f68231b42b13e6affbe6f6a7, type: 2}
+  passiveSkill: {fileID: 11400000, guid: 8fbce8a86b540de42ad10e04f1e64b06, type: 2}
 --- !u!114 &1298548128481952343
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -18012,11 +18012,8 @@ MonoBehaviour:
   skillClips: []
   unitType: 0
   normalAttackTargetType: 1
-  normalbuffs: []
   PassiveTargetType: 0
-  passivekbuffs: []
   activeAttackTargetType: 1
-  attackkbuffs: []
   attackPos: {fileID: 545845540085320050}
   attackPref: {fileID: 695655192863215371, guid: 14958f7d3c88c4d4abe0ea8dc27cce43,
     type: 3}
@@ -18031,7 +18028,7 @@ MonoBehaviour:
   isThereDamageUI: 1
   usingFloatingHpBar: 0
   isAlive: 0
-  effectCreateTransform: {fileID: 0}
+  effectCreateTransform: {fileID: 5644434057481451560}
 --- !u!114 &4371563829749626744
 MonoBehaviour:
   m_ObjectHideFlags: 0
