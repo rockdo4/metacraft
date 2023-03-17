@@ -23,16 +23,14 @@ public class ShopWindow : View
         LiveData data = newHero.GetComponent<AttackableUnit>().GetUnitData().data;
         portrait.sprite = gm.GetSpriteByAddress($"Illu_{data.name}");
         StringBuilder stringBuilder = new();
-        stringBuilder.Append($"히어로 명 : {data.name}\n");
+        stringBuilder.Append($"히어로 명 : {gm.GetStringByTable(data.name)}\n");
         stringBuilder.Append($"공격력 : {data.baseDamage}\n");
         stringBuilder.Append($"방어력 : {data.baseDefense}\n");
         stringBuilder.Append($"체력 : {data.healthPoint}\n");
         stringBuilder.Append($"타입 : {(CharacterJob)data.job}\n");
-        stringBuilder.Append($"치명타 확률 : {data.critical}\n");
-        stringBuilder.Append($"치명타 배율 : {data.criticalDmg}\n");
+        stringBuilder.Append($"치명타 확률 : {data.critical * 100:2}\n");
+        stringBuilder.Append($"치명타 배율 : {data.criticalDmg * 100:00.0}%\n");
         stringBuilder.Append($"이동 속도 : {data.moveSpeed}\n");
-        stringBuilder.Append($"명중률 : {data.accuracy}\n");
-        stringBuilder.Append($"회피율 : {data.evasion}\n");
         explainText.text = stringBuilder.ToString();
     }
 

@@ -31,15 +31,6 @@ public class CharacterData : ScriptableObject, IComparable<CharacterData>
     public float        evasion = 0f;       // 회피율
     public List<string> tags;               // 태그(특성)
 
-    //LiveData
-    public int          currentHp = 0;    // 현재 체력
-    [Range(1, 50)]
-    public int          level = 1;          // 레벨
-    public int          exp = 0;            // 경험치
-    [Range(0, 1000)]
-    public int          likeAbility = 0;    // 호감도
-
-
     public int CompareTo(CharacterData other)
     {
         return name.CompareTo(other.name);

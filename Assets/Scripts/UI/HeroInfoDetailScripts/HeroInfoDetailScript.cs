@@ -17,22 +17,21 @@ public class HeroInfoDetailScript : View
 
     private void SetHeroStatInfoText()
     {
-        LiveData data = GameManager.Instance.currentSelectObject.GetComponent<AttackableUnit>().GetUnitData().data;
-        portrait.sprite = GameManager.Instance.GetSpriteByAddress($"Illu_{data.name}");
+        GameManager gm = GameManager.Instance;
+        LiveData data = gm.currentSelectObject.GetComponent<AttackableUnit>().GetUnitData().data;
+        portrait.sprite = gm.GetSpriteByAddress($"Illu_{data.name}");
 
         gradeInfoInLeftPanel.text = $"{(CharacterGrade)data.grade}";
         levelInfoInfoInLeftPanel.text = data.level.ToString();
         StringBuilder stringBuilder = new();
-        stringBuilder.Append($"히어로 명 : {data.name}\n");
+        stringBuilder.Append($"히어로 명 : {gm.GetStringByTable(data.name)}\n");
         stringBuilder.Append($"공격력 : {data.baseDamage}\n");
         stringBuilder.Append($"방어력 : {data.baseDefense}\n");
         stringBuilder.Append($"체력 : {data.healthPoint}\n");
-        stringBuilder.Append($"타입 : {data.job}\n");
-        stringBuilder.Append($"치명타 확률 : {data.critical}\n");
-        stringBuilder.Append($"치명타 배율 : {data.criticalDmg}\n");
+        stringBuilder.Append($"타입 : {(CharacterJob)data.job}\n");
+        stringBuilder.Append($"치명타 확률 : {data.critical * 100:2}\n");
+        stringBuilder.Append($"치명타 배율 : {data.criticalDmg * 100:00.0}%\n");
         stringBuilder.Append($"이동 속도 : {data.moveSpeed}\n");
-        stringBuilder.Append($"명중률 : {data.accuracy}\n");
-        stringBuilder.Append($"회피율 : {data.evasion}\n");
         statDetail.text = stringBuilder.ToString();
     }
 
