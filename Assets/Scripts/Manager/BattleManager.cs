@@ -64,7 +64,7 @@ public class BattleManager : MonoBehaviour
 
     // BeltScrollManager
     private GameObject platform;
-    private float platformMoveSpeed = 20f;
+    private float platformMoveSpeed = 7f;
     public int currTriggerIndex = 0;
     private float nextStageMoveTimer = 0f;
     private Coroutine coMovingMap;
@@ -574,7 +574,7 @@ public class BattleManager : MonoBehaviour
         }
 
         // 플랫폼 무브 스피드 히어로 무브 스피드로 바꾸기
-        while (viewPoint.transform.position.z <= nextMaxZPos)
+        while (Mathf.Abs(viewPoint.transform.position.z - nextMaxZPos) < 0.1f)
         {
             //viewPoint.transform.Translate(Vector3.forward * platformMoveSpeed * Time.deltaTime);
             yield return null;
