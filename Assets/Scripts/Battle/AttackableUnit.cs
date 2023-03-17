@@ -136,12 +136,12 @@ public abstract class AttackableUnit : MonoBehaviour
     protected void InitData()
     {
         animator = GetComponentInChildren<Animator>();
-        unitSearchAi[CharacterJob.Assult] = AssultSearch;
-        unitSearchAi[CharacterJob.Defence] = AssultSearch;
-        unitSearchAi[CharacterJob.Shooter] = ShooterSearch;
-        unitSearchAi[CharacterJob.Assassin] = AssassinSearch;
-        unitSearchAi[CharacterJob.Support] = SupportSearch;
-        unitSearchAi[CharacterJob.Villain] = AssultSearch;
+        unitSearchAi[CharacterJob.assult] = AssultSearch;
+        unitSearchAi[CharacterJob.defence] = AssultSearch;
+        unitSearchAi[CharacterJob.shooter] = ShooterSearch;
+        unitSearchAi[CharacterJob.assassin] = AssassinSearch;
+        unitSearchAi[CharacterJob.assist] = SupportSearch;
+        unitSearchAi[CharacterJob.villain] = AssultSearch;
 
         if (isThereDamageUI)
         {

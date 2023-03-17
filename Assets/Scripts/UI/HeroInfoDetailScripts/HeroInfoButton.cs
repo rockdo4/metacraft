@@ -1,3 +1,4 @@
+using System.Text;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,7 +19,7 @@ public class HeroInfoButton : MonoBehaviour
         data = dataBundle.data;
         heroNameText.text = GameManager.Instance.GetStringByTable(data.name);
         gradeText.text = $"{(CharacterGrade)data.grade}";
-        jobText.text = $"{(CharacterJob)data.job}";
+        jobText.text = GameManager.Instance.GetStringByTable($"herotype_{(CharacterJob)data.job}");
         levelText.text = $"{data.level}";
         icon.sprite = GameManager.Instance.iconSprites[$"Icon_{data.name}"];
     }
