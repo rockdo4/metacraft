@@ -47,6 +47,7 @@ public class SkillFieldWithDuration : MonoBehaviour
     }
     private void Start()
     {
+        tagName = string.Empty;
         switch (targetType)
         {
             case SkillTargetType.Enemy:

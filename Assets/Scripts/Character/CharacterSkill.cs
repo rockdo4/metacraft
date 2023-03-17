@@ -58,7 +58,7 @@ public class CharacterSkill : ScriptableObject
 
     public List<BuffLevel> buffInfos;
     public int buffRadius;
-    public SkillTargetType buffTargetType;
+    public BufferTargetType buffTargetType;
     public int buffTargetCnt;
 
 
@@ -112,9 +112,9 @@ public class CharacterSkill : ScriptableObject
     {
         switch (buffTargetType)
         {
-            case SkillTargetType.None:
+            case BufferTargetType.None:
                 break;
-            case SkillTargetType.Self:
+            case BufferTargetType.Self:
                 foreach (var buff in buffInfos)
                 {
                     if (buff[skillLevel - 1].type == BuffType.Provoke
@@ -125,8 +125,8 @@ public class CharacterSkill : ScriptableObject
                         unit.AddValueBuff(buff[skillLevel - 1]);
                 }
                 break;
-            case SkillTargetType.Friendly:
-            case SkillTargetType.Enemy:
+            case BufferTargetType.Friendly:
+            case BufferTargetType.Enemy:
                 {
                     var finalTargets = FindTargetInArea(unit);
                     for (int i = 0; i < finalTargets.Count; i++)
@@ -143,9 +143,9 @@ public class CharacterSkill : ScriptableObject
                     }
                 }
                 break;
-            case SkillTargetType.Both:
+            case BufferTargetType.Both:
                 break;
-            case SkillTargetType.Count:
+            case BufferTargetType.Count:
                 break;
             default:
                 break;

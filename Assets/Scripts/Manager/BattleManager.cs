@@ -570,7 +570,6 @@ public class BattleManager : MonoBehaviour
         }
 
         float nextMaxZPos = btMapTriggers[currTriggerIndex].heroSettingPositions.Max(transform => transform.position.z);
-
         while (!btMapTriggers[currTriggerIndex].isTriggerEnter)
         {
             if (viewPoint.transform.position.z <= nextMaxZPos)
