@@ -59,7 +59,7 @@ public abstract class AttackableUnit : MonoBehaviour
     [SerializeField, Header("에너미 리스트")] protected List<AttackableUnit> enemyList;
     [SerializeField, Header("시민 리스트")] protected List<AttackableUnit> citizenList;
 
-    public float MaxHp => ((bufferState.maxHealthIncrease * characterData.data.healthPoint) + characterData.data.healthPoint);
+    public float MaxHp => ((bufferState.maxHealthIncrease * characterData.data.healthPoint));
     public float UnitHpScale => characterData.data.currentHp / MaxHp;
     public virtual float UnitHp {
         get { return characterData.data.currentHp; }
