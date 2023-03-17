@@ -64,7 +64,7 @@ public class BattleManager : MonoBehaviour
 
     // BeltScrollManager
     private GameObject platform;
-    private float platformMoveSpeed = 5f;
+    private float platformMoveSpeed = 20f;
     public int currTriggerIndex = 0;
     private float nextStageMoveTimer = 0f;
     private Coroutine coMovingMap;
@@ -576,7 +576,7 @@ public class BattleManager : MonoBehaviour
         // 플랫폼 무브 스피드 히어로 무브 스피드로 바꾸기
         while (viewPoint.transform.position.z <= nextMaxZPos)
         {
-            viewPoint.transform.Translate(Vector3.forward * platformMoveSpeed * Time.deltaTime);
+            //viewPoint.transform.Translate(Vector3.forward * platformMoveSpeed * Time.deltaTime);
             yield return null;
         }
 
@@ -989,6 +989,15 @@ public class BattleManager : MonoBehaviour
         {
             SetEventEffectReward((int)MapEventEnum.CivilianRescue, 1, contentText);
         }
+    }
+
+    private void LateUpdate()
+    {
+        Vector3 heroPos = useHeroes[0].gameObject.transform.position;
+        heroPos.x = 0f;
+        heroPos.y = 0f;
+
+        viewPoint.transform.position = heroPos;
     }
 
     /*********************************************  임시  **********************************************/
