@@ -815,6 +815,7 @@ public class BattleManager : MonoBehaviour
         if (enemy.GetUnitData().data.job == (int)CharacterJob.villain &&
             tree.CurNode.type == TreeNodeTypes.Threat)
         {
+            Logger.Debug("Middle Boss Dead");
             DeadMiddleBoss();
             SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
         }
@@ -832,7 +833,8 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 0; i < useHeroes.Count; i++)
         {
-            useHeroes[i].ChangeUnitState(UnitState.Battle);
+            if (!useHeroes[i].GetUnitState().Equals(UnitState.Battle))
+                useHeroes[i].ChangeUnitState(UnitState.Battle);
         }
     }
 
