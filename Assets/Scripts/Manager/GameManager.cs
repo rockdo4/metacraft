@@ -20,8 +20,8 @@ public class GameManager : Singleton<GameManager>
     public Transform heroSpawnTransform;
 
     // Resources - Sprites, TextAsset + (Scriptable Objects, Sound etc)
-    public Dictionary<string, Sprite> iconSprites = new();
-    public Dictionary<string, Sprite> illustrationSprites = new();
+    private Dictionary<string, Sprite> iconSprites = new();
+    private Dictionary<string, Sprite> illustrationSprites = new();
     public List<Dictionary<string, object>> missionInfoList; // 작전 정보
     public Dictionary<int, List<Dictionary<string, object>>> missionInfoDifficulty; // 작전 정보 난이도 키 추가
     public List<Dictionary<string, object>> dispatchInfoList; // 파견 정보
@@ -52,6 +52,7 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
         StartCoroutine(LoadAllResources());
+        EffectManager.Instance.CreateEffectManager();
     }
 
     private void Start()
