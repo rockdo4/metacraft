@@ -232,7 +232,6 @@ public class ActiveSkillAOE : CharacterSkill
 
         skillEffectedUnits = skillAreaIndicator.GetUnitsInArea();
 
-
         foreach (var target in skillEffectedUnits)
         {
             if (target.gameObject.activeSelf)
