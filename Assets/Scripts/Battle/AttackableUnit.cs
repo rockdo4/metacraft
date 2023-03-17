@@ -125,6 +125,7 @@ public abstract class AttackableUnit : MonoBehaviour
     public bool isAlive = false;
 
     public Transform effectCreateTransform;
+    public Transform hitEffectTransform;
 
     private void Start()
     {
@@ -436,7 +437,7 @@ public abstract class AttackableUnit : MonoBehaviour
         }
 
         if (!skill.hitEffect.Equals(EffectEnum.None))
-            EffectManager.Instance.Get(skill.hitEffect, transform);
+            EffectManager.Instance.Get(skill.hitEffect, hitEffectTransform != null ? hitEffectTransform : transform);
         ShowHpBarAndDamageText(dmg, isCritical);
     }
 
