@@ -1375,6 +1375,11 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 360557360518258872, guid: 15b301ea3536fd643904b1bd9f79c619,
+        type: 3}
+      propertyPath: triggers.Array.data[2]
+      value: 
+      objectReference: {fileID: 5599946666464110524}
     - target: {fileID: 5599946666547968844, guid: 15b301ea3536fd643904b1bd9f79c619,
         type: 3}
       propertyPath: m_Name
@@ -1435,6 +1440,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 0}
+      propertyPath: heroSettingPositions.Array.data[0]
+      value: 
+      objectReference: {fileID: 5599946666464110521}
     - target: {fileID: 8676633783421198247, guid: 15b301ea3536fd643904b1bd9f79c619,
         type: 3}
       propertyPath: manager
@@ -1442,6 +1455,58 @@ PrefabInstance:
       objectReference: {fileID: 911248487}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15b301ea3536fd643904b1bd9f79c619, type: 3}
+--- !u!4 &5599946666464110520 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1631263656307073913, guid: 15b301ea3536fd643904b1bd9f79c619,
+    type: 3}
+  m_PrefabInstance: {fileID: 5599946666464110518}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5599946666464110521 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7947313839550393558, guid: 15b301ea3536fd643904b1bd9f79c619,
+    type: 3}
+  m_PrefabInstance: {fileID: 5599946666464110518}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &5599946666464110522 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5079532454988078191, guid: 15b301ea3536fd643904b1bd9f79c619,
+    type: 3}
+  m_PrefabInstance: {fileID: 5599946666464110518}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5599946666464110523 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7988441393566073475, guid: 15b301ea3536fd643904b1bd9f79c619,
+    type: 3}
+  m_PrefabInstance: {fileID: 5599946666464110518}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5599946666464110524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5599946666464110523}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eb57492b387a6bd4a89af0ecfe29738b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  heroSettingPositions:
+  - {fileID: 5599946666464110522}
+  - {fileID: 5599946666464110521}
+  - {fileID: 5599946666464110520}
+  enemySettingPositions: []
+  enemys: []
+  useEnemys: []
+  isStageEnd: 0
+  isMissionEnd: 0
+  isSkip: 0
+  isForkedRoad: 0
+  isLastTrigger: 1
+  isTriggerEnter: 0
+  enemyColls: []
+  isEnemyTrigger: 0
+  manager: {fileID: 0}
 --- !u!1 &6091534090283364645 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1819023420537198227, guid: 15b301ea3536fd643904b1bd9f79c619,

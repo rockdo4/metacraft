@@ -157,24 +157,6 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     }
 
     // 임시 함수들
-    public AttackableEnemy GetMiddleBoss()
-    {
-        return middleBoss;
-    }
-    public bool GetMiddleBossIsAlive()
-    {
-        if (middleBoss == null)
-            return true;
-
-        if (middleBoss.GetUnitState() == UnitState.Die)
-        {
-            return false;
-        }
-        else
-        {
-            return true;
-        }
-    }
 
     public void ClearTempEnemyList()
     {
