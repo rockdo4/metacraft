@@ -1192,7 +1192,7 @@ Animator:
   m_Controller: {fileID: 22100000, guid: d42d3c655605d684e843b3244fb32c76, type: 2}
   m_CullingMode: 1
   m_UpdateMode: 0
-  m_ApplyRootMotion: 1
+  m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_WarningMessage: 
@@ -9443,10 +9443,10 @@ MonoBehaviour:
     criticalDmg: 0
     evasion: 0
     accuracy: 0
-    equipment: {fileID: 0}
   attacks:
   - {fileID: 0}
   activeSkill: {fileID: 0}
+  passiveSkill: {fileID: 0}
 --- !u!136 &5321978814047551523
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -9564,11 +9564,8 @@ MonoBehaviour:
   skillClips: []
   unitType: 1
   normalAttackTargetType: 0
-  normalbuffs: []
   PassiveTargetType: 0
-  passivekbuffs: []
   activeAttackTargetType: 0
-  attackkbuffs: []
   attackPos: {fileID: 0}
   attackPref: {fileID: 0}
   pathFind: {fileID: 0}

@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class BeltScrollMapEventTrigger : MapEventTrigger
@@ -7,12 +8,17 @@ public class BeltScrollMapEventTrigger : MapEventTrigger
         if (!isLastTrigger && other.TryGetComponent<AttackableHero>(out var hero))
             hero.ChangeUnitState(UnitState.Battle);
 
-        for (int i = 0; i < enemys.Count; i++)
+        if (!isTriggerEnter)
         {
-            enemys[i].SetEnabledPathFind(true);
-            enemys[i].ChangeUnitState(UnitState.Battle);
-            AddUseEnemyList(enemys[i]);
+            for (int i = 0; i < enemys.Count; i++)
+            {
+                enemys[i].SetEnabledPathFind(true);
+                enemys[i].ChangeUnitState(UnitState.Battle);
+                AddUseEnemyList(enemys[i]);
+            }
+            enemys.Clear();
+
+            isTriggerEnter = true;
         }
-        enemys.Clear();
     }
 }

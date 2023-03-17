@@ -40,7 +40,6 @@ public class AttackableHero : AttackableUnit
                     pathFind.isStopped = true;
 
                     animator.SetFloat("Speed", 0);
-
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.ReturnPosition: // Àç¹èÄ¡

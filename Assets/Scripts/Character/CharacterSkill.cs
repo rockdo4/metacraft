@@ -102,7 +102,11 @@ public class CharacterSkill : ScriptableObject
         if (activeEffect.Equals(EffectEnum.None))
             return;
 
-        EffectManager.Instance.Get(activeEffect, skillHolderTransform, actorTransform.rotation);
+        EffectManager.Instance.Get(activeEffect, skillHolderTransform ?? actorTransform, actorTransform.rotation);
+    }
+    public void OnActiveSkilThroughToLastChild(AttackableUnit unit)
+    {
+        OnActiveSkill(unit);
     }
     public virtual void OnActiveSkill(AttackableUnit unit)
     {

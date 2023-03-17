@@ -41,7 +41,7 @@ public class SkillFieldWithDuration : MonoBehaviour
         {
             var currEffect = EffectManager.Instance.Get(effect, transform);
             if (isTrackTarget)
-                currEffect.transform.parent = transform;
+                currEffect.transform.SetParent(transform, true);
         }
             
     }
