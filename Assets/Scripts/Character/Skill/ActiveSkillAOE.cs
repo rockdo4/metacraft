@@ -230,19 +230,13 @@ public class ActiveSkillAOE : CharacterSkill
         else
             EffectManager.Instance.Get(activeEffect, indicatorTransform);
 
-        //skillEffectedUnits = skillAreaIndicator.GetUnitsInArea();
+        skillEffectedUnits = skillAreaIndicator.GetUnitsInArea();
 
-
-        //foreach (var target in skillEffectedUnits)
-        //{           
-        //    if(target.gameObject.activeSelf)
-        //        target.OnDamage(attackableUnit, this);
-
-        //    foreach (var buff in buffInfos)
-        //    {
-        //        target.AddValueBuff(buff, 0);
-        //    }
-        //}
+        foreach (var target in skillEffectedUnits)
+        {
+            if (target.gameObject.activeSelf)
+                target.OnDamage(attackableUnit, this);
+        }
 
         skillAreaIndicator.gameObject.SetActive(false);
         skillAreaIndicator.isTriggerEnter = false;        

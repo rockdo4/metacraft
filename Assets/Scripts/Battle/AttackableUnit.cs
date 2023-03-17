@@ -125,6 +125,7 @@ public abstract class AttackableUnit : MonoBehaviour
     public bool isAlive = false;
 
     public Transform effectCreateTransform;
+    public Transform hitEffectTransform;
 
     private void Start()
     {
@@ -423,12 +424,17 @@ public abstract class AttackableUnit : MonoBehaviour
         bool isCritical = false;
         var dmg = (int)(attackableUnit.CalculDamage(skill, ref isCritical) * defense * levelCorrection);
 
-        if(bufferState.isShield)
+        if (bufferState.isShield)
         {
             var shield =  (int)(dmg * bufferState.shield);
 
             dmg -= shield;
         }
+
+        //힐링관련 함수
+        if (skill.targetType.Equals(SkillTargetType.Friendly))
+            dmg = - (int)attackableUnit.CalculDamage(skill, ref isCritical);
+
         UnitHp = Mathf.Max(UnitHp - dmg, 0);
         if (UnitHp <= 0)
         {
@@ -436,7 +442,7 @@ public abstract class AttackableUnit : MonoBehaviour
         }
 
         if (!skill.hitEffect.Equals(EffectEnum.None))
-            EffectManager.Instance.Get(skill.hitEffect, transform);
+            EffectManager.Instance.Get(skill.hitEffect, hitEffectTransform != null ? hitEffectTransform : transform);
         ShowHpBarAndDamageText(dmg, isCritical);
     }
 
@@ -446,6 +452,13 @@ public abstract class AttackableUnit : MonoBehaviour
             return;
 
         var type = isCritical ? DamageType.Critical : DamageType.Normal;
+
+        if (dmg < 0)
+        {
+            dmg *= -1;
+            type = DamageType.Heal;
+        }            
+
         floatingDamageText.OnAttack(dmg, isCritical, transform.position, type);
 
         if (!usingFloatingHpBar)
