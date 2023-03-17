@@ -123,6 +123,14 @@ public class AttackableEnemy : AttackableUnit
 
     private void Start()
     {
+        foreach (var attack in characterData.attacks)
+        {
+            attack.SkillHolderTransform = effectCreateTransform ?? transform;
+            attack.ActorTransform = transform;
+        }
+        if(characterData.activeSkill != null)
+            characterData.activeSkill.ActorTransform = transform;
+
         var manager = FindObjectOfType<BattleManager>();
         if (manager != null)
             battleManager = manager;
