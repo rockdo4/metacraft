@@ -814,7 +814,7 @@ public class BattleManager : MonoBehaviour
     private void EnemyCountCheck(AttackableEnemy enemy ,int triggerIndex)
     {
         btMapTriggers[triggerIndex].OnDead(enemy);
-        if (enemy.GetUnitData().data.job == (int)CharacterJob.Villain &&
+        if (enemy.GetUnitData().data.job == (int)CharacterJob.villain &&
             tree.CurNode.type == TreeNodeTypes.Threat)
         {
             DeadMiddleBoss();

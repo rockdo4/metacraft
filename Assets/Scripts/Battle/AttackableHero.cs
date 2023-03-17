@@ -277,7 +277,7 @@ public class AttackableHero : AttackableUnit
             case UnitBattleState.MoveToTarget:
             case UnitBattleState.BattleIdle:
                 animator.SetFloat("Speed", pathFind.velocity.magnitude / characterData.data.moveSpeed);
-                if ((CharacterJob)GetUnitData().data.job == CharacterJob.Shooter)
+                if ((CharacterJob)GetUnitData().data.job == CharacterJob.shooter)
                 {
                     if (Time.time - lastSearchTime >= searchDelay)
                     {
