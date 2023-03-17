@@ -26,7 +26,9 @@ public class AOEWithDuration : ActiveSkillAOE
         skillField.Effect = activeEffect;
         skillField.IsInit = true;
 
-        skillField.IsTrackTarget = isTrackTarget;        
+        skillField.IsTrackTarget = isTrackTarget;
+
+        hasDuration = true;
 
         SetFieldScale();
     }
@@ -61,7 +63,7 @@ public class AOEWithDuration : ActiveSkillAOE
         skillAreaIndicator.gameObject.SetActive(false);
         skillAreaIndicator.isTriggerEnter = false;
         
-        OnActiveSkilThroughToLastChild(attackableUnit);
+        //OnActiveSkilThroughToLastChild(attackableUnit);
 
     }
 }
