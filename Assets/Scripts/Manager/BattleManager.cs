@@ -563,7 +563,6 @@ public class BattleManager : MonoBehaviour
         yield return new WaitForSeconds(nextStageMoveTimer);
 
         float curMaxZPos = viewPoint.transform.position.z;
-        float nextMaxZPos = btMapTriggers[currTriggerIndex + 1].heroSettingPositions.Max(transform => transform.position.z);
 
         currTriggerIndex++;
         for (int i = 0; i < useHeroes.Count; i++)
@@ -573,10 +572,9 @@ public class BattleManager : MonoBehaviour
             useHeroes[i].SetMoveSpeed(platformMoveSpeed);
         }
 
-        // 플랫폼 무브 스피드 히어로 무브 스피드로 바꾸기
-        while (Mathf.Abs(viewPoint.transform.position.z - nextMaxZPos) < 0.1f)
+        //while (viewPoint.transform.position.z <= nextMaxZPos)
+        while (!btMapTriggers[currTriggerIndex].isTriggerEnter)
         {
-            //viewPoint.transform.Translate(Vector3.forward * platformMoveSpeed * Time.deltaTime);
             yield return null;
         }
 
@@ -994,8 +992,8 @@ public class BattleManager : MonoBehaviour
     private void LateUpdate()
     {
         Vector3 heroPos = useHeroes[0].gameObject.transform.position;
-        heroPos.x = 0f;
-        heroPos.y = 0f;
+        heroPos.x = viewPoint.transform.position.x;
+        heroPos.y = viewPoint.transform.position.y;
 
         viewPoint.transform.position = heroPos;
     }
