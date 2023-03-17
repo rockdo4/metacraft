@@ -19,10 +19,10 @@ public class LiveData : IComparable<LiveData>
     public int likeability = 0;    // 호감도
 
     // 스텟
-    public int baseDamage = 50;     // 일반 공격 데미지
-    public int baseDefense = 0;     // 방어력
-    public int healthPoint = 500;   // 최대 체력
-    public int currentHp = 500;     // 현재 체력
+    public float baseDamage = 50;     // 일반 공격 데미지
+    public float baseDefense = 0;     // 방어력
+    public float healthPoint = 500;   // 최대 체력
+    public float currentHp = 500;     // 현재 체력
     public int moveSpeed = 3;       // 이동 속도. 범위, 초기값 설정 필요
     public float critical = 0f;     // 크리티컬 확률
     public float criticalDmg = 2f;  // 크리티컬 데미지 배율
