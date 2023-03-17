@@ -5,8 +5,6 @@ using TMPro;
 using System.Collections;
 using System.Linq;
 using Cinemachine;
-using UnityEditor.ShaderGraph.Internal;
-using Unity.VisualScripting;
 
 public class BattleManager : MonoBehaviour
 {
