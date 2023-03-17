@@ -196,7 +196,7 @@ public class GameManager : Singleton<GameManager>
             _ => "Contents",
         };
         // Logger.Debug($"key [{key}], languageKey [{languageKey}], result : [{stringTable[key][languageKey]}]");
-        if (stringTable[key].ContainsKey(languageKey))
+        if (stringTable.ContainsKey(key))
             return $"{stringTable[key][languageKey]}";
         else
             return $"Load fail to string table. key [{key}], languageKey [{languageKey}], result : [{stringTable[key][languageKey]}";
