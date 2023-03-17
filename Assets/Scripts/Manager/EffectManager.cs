@@ -35,9 +35,10 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
         var effect = effectPool[poolIndex][effectPoolIndex[poolIndex]];
 
         // effectPool의 [풀 번호][이펙트인덱스[번호]] 활성화
-        effectPool[poolIndex][effectPoolIndex[poolIndex]].SetStartPos(startPos);
-        effectPool[poolIndex][effectPoolIndex[poolIndex]].SetRotation(rot);
-        effectPool[poolIndex][effectPoolIndex[poolIndex]].StartEffect();
+        //effectPool[poolIndex][effectPoolIndex[poolIndex]].SetStartPos(startPos);
+        effect.SetStartPos(startPos);
+        effect.SetRotation(rot);
+        effect.StartEffect();
 
         // index가 프리펩의 최대 개수를 넘어가면 0으로 초기화
         if (effectPoolIndex[poolIndex] < effectPool[poolIndex].Count - 1)
