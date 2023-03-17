@@ -11,12 +11,12 @@ public class StageReward : MonoBehaviour
     public List<RewardItem> rewards;
     public int golds = 0;
     public List<Dictionary<string, object>> itemInfoList; // 아이템 정보
-    string goldId;
+
+    public string goldId;
 
     private void Start()
     {
         itemInfoList = GameManager.Instance.itemInfoList;
-        goldId = itemInfoList.Find(t => (t["Name"].ToString().CompareTo("item_gold") == 0)).ToString();
     }
 
     private void OnDisable()
@@ -45,7 +45,7 @@ public class StageReward : MonoBehaviour
 
         for (int i = 0; i < rewards.Count; i++)
         {
-            if (rewards[i].Id == id)
+            if (rewards[i].Id.CompareTo(id) == 0)
             {
                 rewards[i].AddCount(count);
                 return;

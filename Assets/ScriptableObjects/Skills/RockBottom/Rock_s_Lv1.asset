@@ -18,12 +18,12 @@ MonoBehaviour:
   skillName: 
   preCooldown: 4
   cooldown: 20
-  distance: 0
+  distance: 5
   targetNumLimit: 10
   angle: 0
   coefficientType: 0
   coefficient: 1.05
-  targetType: 1
+  targetType: 2
   searchType: 0
   readyEffect: 3
   activeEffect: 19
@@ -32,7 +32,21 @@ MonoBehaviour:
   isAuto: 0
   targetPos: {x: 0, y: 0, z: 0}
   skillDescription: skillinfo_Rockbottom_s
-  buffInfos: []
+  buffInfos:
+  - list:
+    - {fileID: 11400000, guid: c82677fbf0d2c594bb64ca7c3de18ae3, type: 2}
+    - {fileID: 11400000, guid: 571a5b0dcd858c848ad11ca616d7d214, type: 2}
+    - {fileID: 11400000, guid: fda44ac3696b7bf45a4d3a1dfcff9631, type: 2}
+    - {fileID: 11400000, guid: 902eb7cfbba9dbe469dfe841bef74dda, type: 2}
+    - {fileID: 11400000, guid: b89904fd19cbb4848bd933c45545f560, type: 2}
+    - {fileID: 11400000, guid: 5c04a7f649913ba41b11db7b7a6a04c9, type: 2}
+    - {fileID: 11400000, guid: afebae67e11cc9942a918315cb774f1e, type: 2}
+    - {fileID: 11400000, guid: 300e324130ef40948835a4205ea545f4, type: 2}
+    - {fileID: 11400000, guid: cd58eca954d1f154a8e24738779bc3db, type: 2}
+    - {fileID: 11400000, guid: 794350886e45de048b077d8e1a7a1751, type: 2}
+  buffRadius: 5
+  buffTargetType: 2
+  buffTargetCnt: 10
   skillAreaIndicatorPrefab: {fileID: 6672067328229480615, guid: 0da645c26f09e074abad419ddc09fafb,
     type: 3}
   layerM:

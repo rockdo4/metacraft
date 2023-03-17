@@ -29,8 +29,6 @@ public class LiveData : IComparable<LiveData>
     public float evasion = 0f;      // 회피율
     public float accuracy = 1f;     // 명중률
 
-    public GameObject equipment;    // 장비
-
     public int CompareTo(LiveData other)
     {
         return name.CompareTo(other.name);
@@ -45,7 +43,7 @@ public class LiveData : IComparable<LiveData>
         
         level = 1;
         exp = 0;
-        likeability = originData.likeAbility;
+        likeability = 0;
 
         baseDamage = originData.baseDamage;
         baseDefense = originData.baseDefense;
@@ -85,7 +83,7 @@ public class LiveData : IComparable<LiveData>
     public void TestPrint()
     {
         StringBuilder sb = new();
-        sb.Append($"히어로 명 : {name}\n");
+        sb.Append($"히어로 명 : {GameManager.Instance.GetStringByTable(name)}\n");
         sb.Append($"공격력 : {baseDamage}\n");
         sb.Append($"방어력 : {baseDefense}\n");
         sb.Append($"체력 : {healthPoint}\n");
@@ -98,11 +96,3 @@ public class LiveData : IComparable<LiveData>
         Logger.Debug(sb);
     }
 }
-
-//public int Power
-//{
-//    // 전투력 계산식
-//    get { return baseDamage + baseDefense + healthPoint * 10; }
-//}
-
-//private int power;              // 전투력

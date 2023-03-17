@@ -25,6 +25,9 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     // 임시
     public AttackableEnemy middleBoss;
 
+    // 진짜진짜진짜 임시 무조건 삭제
+    public List<AttackableEnemy> tempEnemyList = new();
+
     private void Awake()
     {
         tr = gameObject.transform;
@@ -102,6 +105,7 @@ public class EnemySpawningAndPositioning : MonoBehaviour
             enemys.Add(enemy);
         }
 
+        tempEnemyList = enemys; // 임시 임시 임시 임시 임시
         return enemys;
     }
     public void RespawnEnemy(ref List<AttackableUnit> enemyPool, float timer)
@@ -170,5 +174,15 @@ public class EnemySpawningAndPositioning : MonoBehaviour
         {
             return true;
         }
+    }
+
+    public void ClearTempEnemyList()
+    {
+        for (int i = 0; i < tempEnemyList.Count; i++)
+        {
+            Destroy(tempEnemyList[i].gameObject);
+        }
+
+        tempEnemyList.Clear();
     }
 }

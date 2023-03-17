@@ -1,6 +1,8 @@
 
 using System;
+using UnityEngine;
 
+[SerializeField]
 public class BufferState
 {
     public float damage = 1;         // 공격력
@@ -35,6 +37,7 @@ public class BufferState
     public bool silence = false; // 침묵
     public bool resistance = false; // 저항
     public bool blind = false; // 실명
+    public int energyCnt = 0;
 
     public void Buffer(BuffType type, float scale, bool isSet = true)
     {
@@ -124,6 +127,17 @@ public class BufferState
                 break;
             case BuffType.Blind:
                 blind = isSet;
+                break;
+            default:
+                break;
+        }
+    }
+    public void Buffer(BuffType type, int value)
+    {
+        switch (type)
+        {
+            case BuffType.energyCharging:
+                energyCnt += value;
                 break;
             default:
                 break;

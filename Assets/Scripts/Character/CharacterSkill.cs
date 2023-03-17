@@ -1,6 +1,19 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
+using System.Linq;
+
+[Serializable]
+public class BuffLevel
+{
+    public List<BuffInfo> list;
+
+    public BuffInfo this[int index] {
+        get { return list[index]; }
+        set { list[index] = value; }
+    }
+}
 
 [CreateAssetMenu(fileName = "CharacterSkill", menuName = "Character/CharacterSkill")]
 public class CharacterSkill : ScriptableObject
@@ -43,7 +56,11 @@ public class CharacterSkill : ScriptableObject
     public Vector3 targetPos;
     public string skillDescription;
 
-    public List<BuffInfo> buffInfos;
+    public List<BuffLevel> buffInfos;
+    public int buffRadius;
+    public SkillTargetType buffTargetType;
+    public int buffTargetCnt;
+
 
     public int priority;
 
@@ -87,5 +104,94 @@ public class CharacterSkill : ScriptableObject
 
         EffectManager.Instance.Get(activeEffect, skillHolderTransform, actorTransform.rotation);
     }
-    public virtual void OnActiveSkill(AttackableUnit unit) { }
+    public virtual void OnActiveSkill(AttackableUnit unit)
+    {
+        switch (buffTargetType)
+        {
+            case SkillTargetType.None:
+                break;
+            case SkillTargetType.Self:
+                foreach (var buff in buffInfos)
+                {
+                    if (buff[skillLevel - 1].type == BuffType.Provoke
+                        || buff[skillLevel - 1].type == BuffType.Stun
+                        || buff[skillLevel - 1].type == BuffType.Silence)
+                        unit.AddStateBuff(buff[skillLevel - 1]);
+                    else
+                        unit.AddValueBuff(buff[skillLevel - 1]);
+                }
+                break;
+            case SkillTargetType.Friendly:
+            case SkillTargetType.Enemy:
+                {
+                    var finalTargets = FindTargetInArea(unit);
+                    for (int i = 0; i < finalTargets.Count; i++)
+                    {
+                        foreach (var buff in buffInfos)
+                        {
+                            if (buff[skillLevel - 1].type == BuffType.Provoke
+                                || buff[skillLevel - 1].type == BuffType.Stun
+                                || buff[skillLevel - 1].type == BuffType.Silence)
+                                finalTargets[i].AddStateBuff(buff[skillLevel - 1], unit);
+                            else
+                                finalTargets[i].AddValueBuff(buff[skillLevel - 1]);
+                        }
+                    }
+                }
+                break;
+            case SkillTargetType.Both:
+                break;
+            case SkillTargetType.Count:
+                break;
+            default:
+                break;
+        }
+    }
+
+    public List<AttackableUnit> FindTargetInArea(AttackableUnit unit)
+    {
+        List<AttackableUnit> closeTargets = new List<AttackableUnit>();
+
+        var searchTarget = targetType == SkillTargetType.Friendly ? UnitType.Hero : UnitType.Enemy; 
+        List<AttackableUnit> targets = Physics.OverlapSphere(unit.transform.position, buffRadius).Select(t=>t.GetComponent<AttackableUnit>()).ToList();
+
+        foreach (var target in targets)
+        {
+            if (target == null)
+                continue;
+            if (target.unitType == searchTarget &&
+                Vector3.Distance(unit.transform.position, target.transform.position) <= buffRadius)
+            {
+                closeTargets.Add(target);
+            }
+        }
+
+        // 선택된 대상들을 거리가 가까운 순으로 정렬합니다.
+        for (int i = 0; i < closeTargets.Count - 1; i++)
+        {
+            for (int j = i + 1; j < closeTargets.Count; j++)
+            {
+                float distance1 = Vector3.Distance(unit.transform.position, closeTargets[i].transform.position);
+                float distance2 = Vector3.Distance(unit.transform.position, closeTargets[j].transform.position);
+
+                if (distance2 < distance1)
+                {
+                    AttackableUnit temp = closeTargets[i];
+                    closeTargets[i] = closeTargets[j];
+                    closeTargets[j] = temp;
+                }
+            }
+        }
+
+        // 최대 maxTargets 개수까지의 대상만 선택합니다.
+        List<AttackableUnit> finalTargets = new List<AttackableUnit>();
+        var finalTargetCount = Mathf.Min(closeTargets.Count, buffTargetCnt);
+        for (int i = 0; i < finalTargetCount; i++)
+        {
+            finalTargets.Add(closeTargets[i]);
+        }
+
+
+        return finalTargets;
+    }
 }

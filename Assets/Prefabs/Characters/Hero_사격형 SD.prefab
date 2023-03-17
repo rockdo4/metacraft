@@ -156,8 +156,9 @@ MonoBehaviour:
     accuracy: 0.5
     equipment: {fileID: 0}
   attacks:
-  - {fileID: 11400000, guid: 0a5416f85278db745acddeaed4dc02c5, type: 2}
-  activeSkill: {fileID: 11400000, guid: ecc00f6d73514c24b89e28f07ee21535, type: 2}
+  - {fileID: 11400000, guid: e5e1c4084371878419124fa155610bcd, type: 2}
+  activeSkill: {fileID: 11400000, guid: 26bc465c01f37b344a8a96bd1eb867b5, type: 2}
+  passiveSkill: {fileID: 11400000, guid: 8265f0cfcc9cc51448f3798f35f50b90, type: 2}
 --- !u!114 &-523186184073718746
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,11 +194,8 @@ MonoBehaviour:
   skillClips: []
   unitType: 0
   normalAttackTargetType: 1
-  normalbuffs: []
   PassiveTargetType: 0
-  passivekbuffs: []
   activeAttackTargetType: 1
-  attackkbuffs: []
   attackPos: {fileID: 7866418510217010947}
   attackPref: {fileID: 695655192863215371, guid: 14958f7d3c88c4d4abe0ea8dc27cce43,
     type: 3}
@@ -211,6 +209,8 @@ MonoBehaviour:
   battleState: -1
   isThereDamageUI: 1
   usingFloatingHpBar: 0
+  isAlive: 0
+  effectCreateTransform: {fileID: 0}
 --- !u!114 &-3021088032659693303
 MonoBehaviour:
   m_ObjectHideFlags: 0
