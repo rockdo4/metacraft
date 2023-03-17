@@ -48,7 +48,7 @@ public class ProjectileMover : MonoBehaviour
     private void OnEnable()
     {
         rb.velocity = transform.parent.forward * speed;
-        Invoke(activeOffFuncName, 0.5f);
+        Invoke(activeOffFuncName, 0.2f);
     }
 
     private void OnDisable()
