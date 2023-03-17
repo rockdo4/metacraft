@@ -64,7 +64,7 @@ public class BattleManager : MonoBehaviour
 
     // BeltScrollManager
     private GameObject platform;
-    private float platformMoveSpeed = 20f;
+    private float platformMoveSpeed = 5f;
     public int currTriggerIndex = 0;
     private float nextStageMoveTimer = 0f;
     private Coroutine coMovingMap;
@@ -336,7 +336,7 @@ public class BattleManager : MonoBehaviour
         //    normalRewardKey = normalValueKey.Equals(value1Text) ? normalReward1 : normalReward2;
         //}
 
-        if (normalValueKey.Equals("-1"))
+        if (normalRewardKey == -1)
         {
             return;
         }
