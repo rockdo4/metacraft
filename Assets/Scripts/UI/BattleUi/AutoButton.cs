@@ -11,12 +11,14 @@ public class AutoButton : MonoBehaviour
     Color[] burronColors = { new Color(0.5f, 0.5f, 0.5f), Color.green };
     bool nowState = false;
     int Idx => !nowState ? 0 : 1;
+    List<AttackableUnit> heroList = new();
 
-    public void ResetData(List<AttackableUnit> heroList)
+    public void ResetData(ref List<AttackableUnit> heroList)
     {
-        SetAutoState(GameManager.Instance.playerData.isAuto, heroList);
+        this.heroList = heroList;
+        SetAutoState(GameManager.Instance.playerData.isAuto);
     }
-    public void SetAutoState(bool state, List<AttackableUnit> heroList = null)
+    public void SetAutoState(bool state)
     {
         nowState = state;
         butonImage.color = burronColors[Idx];
