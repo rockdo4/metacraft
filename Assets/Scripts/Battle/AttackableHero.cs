@@ -28,7 +28,7 @@ public class AttackableHero : AttackableUnit
             if (unitState == value)
                 return;
 
-            if (unitState == UnitState.Die)
+            if (unitState == UnitState.Die && value != UnitState.None)
                 return;
             unitState = value;
             heroUI.heroState = unitState;
@@ -48,8 +48,7 @@ public class AttackableHero : AttackableUnit
                     pathFind.isStopped = false;
                     pathFind.stoppingDistance = 0; //가까이 가기
                     pathFind.SetDestination(returnPos.position); //재배치 위치 설정
-
-                    animator.ResetTrigger("Attack");
+                    animator.Rebind();
 
                     BattleState = UnitBattleState.None;
                     nowUpdate = ReturnPosUpdate;
@@ -81,6 +80,7 @@ public class AttackableHero : AttackableUnit
                     break;
                 case UnitState.Die:
                     pathFind.enabled = false;
+                    OnDead(this);
                     gameObject.GetComponent<Collider>().enabled = false;
                     animator.SetTrigger("Die");
 
@@ -97,7 +97,7 @@ public class AttackableHero : AttackableUnit
         set {
             if (value == battleState)
                 return;
-            if (unitState == UnitState.Die)
+            if (unitState == UnitState.Die && value != UnitBattleState.None)
                 return;
             battleState = value;
 
