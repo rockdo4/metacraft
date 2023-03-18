@@ -1014,11 +1014,11 @@ public class BattleManager : MonoBehaviour
         int useCount = btMapTriggers[index].useEnemys.Count;
         for (int i = 0; i < useCount; i++)
         {
-            if (btMapTriggers[index].useEnemys[i].isAlive)
-            {
+            //if (btMapTriggers[index].useEnemys[i].isAlive)
+            //{
                 btMapTriggers[index].useEnemys[i].ChangeUnitState(UnitState.Die);
                 //OnDeadEnemy((AttackableEnemy)btMapTriggers[index].useEnemys[i]);
-            }
+            //}
         }
 
         int unuseCount = btMapTriggers[index].enemys.Count;
