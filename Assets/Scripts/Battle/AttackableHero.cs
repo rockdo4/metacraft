@@ -286,7 +286,7 @@ public class AttackableHero : AttackableUnit
             {
                 heroUI.heroSkill.OnDownSkill();
                 characterData.activeSkill.targetPos = activeTarget.transform.position;
-
+                    
                 coOnAutoSkill = StartCoroutine(heroUI.heroSkill.OnAutoSkillActive(characterData.activeSkill));
             }
         }

@@ -132,12 +132,18 @@ public class HeroSkill : MonoBehaviour
 
     public void IsPointerInSkillActivePanel(bool isIn)
     {
+        if (isAuto)
+        {
+            offAreaIndicator();
+            return;
+        }
+
         isPointerInSkillActivePanel = isIn;
 
         if (!skillActivedHighlight.activeSelf)
             return;
 
-        if (isIn && !isAuto)
+        if (isIn)
             ready();
         else
             offAreaIndicator();
