@@ -108,6 +108,7 @@ public class CharacterSkill : ScriptableObject
     //{
     //    OnActiveSkill(unit);
     //}
+
     public virtual void OnActiveSkill(AttackableUnit unit)
     {
         switch (buffTargetType)

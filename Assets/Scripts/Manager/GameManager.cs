@@ -377,7 +377,7 @@ public class GameManager : Singleton<GameManager>
         playerData.stamina = (int)officeInfoList[level]["Stamina"];
         playerData.inventoryCount = (int)officeInfoList[level]["InventoryCount"];
         playerData.officeImage = (string)officeInfoList[level]["OfficeImage"];
-        Logger.Debug($"현재 레벨 : {playerData.officeLevel}");
+        //Logger.Debug($"현재 레벨 : {playerData.officeLevel}");
     }
 
     // 이벤트 이팩트 테이블 분리
