@@ -55,7 +55,7 @@ public class HeroSkill : MonoBehaviour
         this.offAreaIndicator = offAreaIndicator;
         this.cancle = cancle;
     }
-    private void FixedUpdate()
+    private void Update()
     {
         CoolDownUpdate();
     }
