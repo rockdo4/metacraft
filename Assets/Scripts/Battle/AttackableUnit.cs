@@ -237,7 +237,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public virtual void OnActiveSkill()
     {
-        characterData.activeSkill.OnActiveSkill(this);
+        characterData.activeSkill.OnActiveSkill(this, enemyList, heroList);
 
         //var units = characterData.activeSkill.SkillEffectedUnits;
         //for (int i = 0; i < units.Count; i++)
@@ -388,14 +388,15 @@ public abstract class AttackableUnit : MonoBehaviour
         target = null;
         //Logger.Debug("Provoke End");
     }
-
+    public void OnPassiveSkill(List<AttackableUnit> enemies, List<AttackableUnit> heros)
+    {
+        characterData.passiveSkill?.OnActiveSkill(this, enemies, heros);
+    }
     public virtual void ResetData()
     {
         ResetBuffTimer();
         nowAttack = characterData.attacks[0];
         animator.SetFloat("Speed", 0);
-
-        characterData.passiveSkill?.OnActiveSkill(this);
 
         unitState = UnitState.None;
         battleState = UnitBattleState.None;

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "ActiveSkillAOE", menuName = "Character/ActiveSkill/AOE")]
@@ -219,9 +220,9 @@ public class ActiveSkillAOE : CharacterSkill
         return x * x + z * z;
     }
 
-    public override void OnActiveSkill(AttackableUnit attackableUnit)
+    public override void OnActiveSkill(AttackableUnit attackableUnit, List<AttackableUnit> enemies, List<AttackableUnit> heros)
     {
-        base.OnActiveSkill(attackableUnit);
+        base.OnActiveSkill(attackableUnit,enemies, heros);
 
         if (hasDuration)
             return;

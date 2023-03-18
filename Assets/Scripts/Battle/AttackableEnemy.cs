@@ -49,6 +49,7 @@ public class AttackableEnemy : AttackableUnit
 
                     BattleState = UnitBattleState.MoveToTarget;
                     nowUpdate = BattleUpdate;
+                    OnPassiveSkill(enemyList, heroList);
                     break;
                 case UnitState.Die:
                     //pathFind.enabled = false;
