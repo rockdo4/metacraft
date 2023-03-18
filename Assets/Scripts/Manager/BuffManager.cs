@@ -31,7 +31,7 @@ public class BuffManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.KeypadPlus))
         {
             List<AttackableUnit> players = new();
-            GameObject.FindObjectOfType<BattleManager>().GetHeroList(ref players);
+            FindObjectOfType<BattleManager>().GetHeroList(ref players);
 
             players[0].AddStateBuff(GetBuff(8));
         }

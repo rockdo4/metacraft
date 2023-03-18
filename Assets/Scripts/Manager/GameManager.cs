@@ -12,9 +12,6 @@ public class GameManager : Singleton<GameManager>
     public SceneIndex currentScene = SceneIndex.Title;
     public PlayerData playerData;
 
-    // Origin Database - Set Prefab & Scriptable Objects
-    public List<GameObject> heroDatabase = new();
-
     // MyData - Craft, Load & Save to this data
     public List<GameObject> myHeroes = new();
     public Transform heroSpawnTransform;
@@ -22,12 +19,10 @@ public class GameManager : Singleton<GameManager>
     // Resources - Sprites, TextAsset + (Scriptable Objects, Sound etc)
     private Dictionary<string, Sprite> iconSprites = new();
     private Dictionary<string, Sprite> illustrationSprites = new();
-    public List<Dictionary<string, object>> missionInfoList; // 작전 정보
     public Dictionary<int, List<Dictionary<string, object>>> missionInfoDifficulty; // 작전 정보 난이도 키 추가
     public List<Dictionary<string, object>> dispatchInfoList; // 파견 정보
     public List<Dictionary<string, object>> officeInfoList;  // 사무소 레벨별 정보
     public List<Dictionary<string, object>> eventInfoList; // 이벤트 노드 정보
-    public List<Dictionary<string, object>> eventEffectInfoList;
     public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectTagInfoList;
     public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectNoTagInfoList;
     private Dictionary<string, Dictionary<string, object>> stringTable = new();
@@ -42,7 +37,9 @@ public class GameManager : Singleton<GameManager>
     public GameObject currentSelectObject; // Hero Info
     public Dictionary<string, object> currentSelectMission; // Mission Select
     public List<int?> battleGroups = new(3) { null, null, null }; // Mission Select -> Battle Scene
-    // Dispatch Select
+
+    // Origin Database - Set Prefab & Scriptable Objects
+    public List<GameObject> heroDatabase = new();
 
     public List<Effect> effects; // 사용할 이펙트들
     public Color currMapColor;
@@ -113,12 +110,12 @@ public class GameManager : Singleton<GameManager>
             string iconAddress = $"Icon_{address}";
             AsyncOperationHandle<Sprite> iconHandle = Addressables.LoadAssetAsync<Sprite>(iconAddress);
             iconHandle.Completed +=
-                (AsyncOperationHandle<Sprite> obj)=>
+                (AsyncOperationHandle<Sprite> obj) =>
                 {
                     Sprite sprite = obj.Result;
                     iconSprites.Add(iconAddress, sprite);
-                    handles.Add(iconAddress, iconHandle);
                 };
+            handles.Add(iconAddress, iconHandle);
 
             string IllurAddress = $"Illu_{address}";
             AsyncOperationHandle<Sprite> illuHandle = Addressables.LoadAssetAsync<Sprite>(IllurAddress);
@@ -127,8 +124,8 @@ public class GameManager : Singleton<GameManager>
                 {
                     Sprite sprite = obj.Result;
                     illustrationSprites.Add(IllurAddress, sprite);
-                    handles.Add(IllurAddress, illuHandle);
                 };
+            handles.Add(IllurAddress, illuHandle);
         }
 
         // 스프라이트 리소스 로드 대기
@@ -148,9 +145,6 @@ public class GameManager : Singleton<GameManager>
             }
             yield return null;
         }
-
-        missionInfoList = CSVReader.SplitTextAsset(handles["MissionInfoTable"].Result as TextAsset);
-        eventEffectInfoList = CSVReader.SplitTextAsset(handles["EventEffectTable"].Result as TextAsset);
         dispatchInfoList = CSVReader.SplitTextAsset(handles["DispatchInfoTable"].Result as TextAsset);
         officeInfoList = CSVReader.SplitTextAsset(handles["OfficeTable"].Result as TextAsset);
         eventInfoList = CSVReader.SplitTextAsset(handles["EventTable"].Result as TextAsset);
@@ -159,13 +153,13 @@ public class GameManager : Singleton<GameManager>
         itemInfoList = CSVReader.SplitTextAsset(handles["ItemInfoTable"].Result as TextAsset);
 
         LoadAllData();
-        FixMissionTable();
-        FixEventEffectTable();
+        FixMissionTable(CSVReader.SplitTextAsset(handles["MissionInfoTable"].Result as TextAsset));
+        FixEventEffectTable(CSVReader.SplitTextAsset(handles["EventEffectTable"].Result as TextAsset));
         AppendStringTable(CSVReader.SplitTextAsset(handles["StringTable_Desc"].Result as TextAsset), "StringTable_Desc");
         AppendStringTable(CSVReader.SplitTextAsset(handles["StringTable_Event"].Result as TextAsset), "StringTable_Event");
         AppendStringTable(CSVReader.SplitTextAsset(handles["StringTable_Proper"].Result as TextAsset), "StringTable_Proper");
         AppendStringTable(CSVReader.SplitTextAsset(handles["StringTable_UI"].Result as TextAsset), "StringTable_UI");
-        
+
         ReleaseAddressable(handles);
         handles.Clear();
     }
@@ -281,10 +275,14 @@ public class GameManager : Singleton<GameManager>
                 }
             }
         }
+        SetHeroesActive(false);
+    }
 
+    public void SetHeroesActive(bool value)
+    {
         foreach (var character in myHeroes)
         {
-            character.SetActive(false);
+            character.SetActive(value);
         }
     }
 
@@ -391,7 +389,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     // 이벤트 이팩트 테이블 분리
-    private void FixEventEffectTable()
+    private void FixEventEffectTable(List<Dictionary<string, object>> eventEffectInfoList)
     {
         eventEffectTagInfoList = new Dictionary<string, List<Dictionary<string, List<string>>>>();
         for (int i = 0; i < eventEffectInfoList.Count; i++)
@@ -437,7 +435,7 @@ public class GameManager : Singleton<GameManager>
     }
 
     // 작전 테이블 난이도 구분
-    private void FixMissionTable()
+    private void FixMissionTable(List<Dictionary<string, object>> missionInfoList)
     {
         missionInfoDifficulty = new Dictionary<int, List<Dictionary<string, object>>>();
         for (int i = 1; i < 6; i++)

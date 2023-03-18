@@ -5,7 +5,6 @@ using TMPro;
 using System.Collections;
 using System.Linq;
 using Cinemachine;
-using Unity.VisualScripting;
 
 public class BattleManager : MonoBehaviour
 {
@@ -288,6 +287,9 @@ public class BattleManager : MonoBehaviour
     {
         string textEffect = $"{eventInfoTable[column][$"TextEffect{index}"]}";
 
+        // eventEffectInfoList 는 eventEffectTagInfoList로 변경됨. 상운과 논의 후 연결해서 쓸 것
+
+        /*
         // 테스트로 노멀 이펙트만 가져옴
         int effectColumn = 0;
         for (int i = 0; i < eventEffectInfoTable.Count; i++)
@@ -345,6 +347,7 @@ public class BattleManager : MonoBehaviour
         contentText.text = gm.GetStringByTable(normalValueKey);
         object rewardKey = normalRewardKey;
         AddReward(rewardKey);
+        */
     }
 
     private void Init()
@@ -367,7 +370,7 @@ public class BattleManager : MonoBehaviour
         eventInfoTable = gm.eventInfoList;
         supplyInfoTable = gm.supplyInfoList;
         currentSelectMissionTable = gm.currentSelectMission;
-        eventEffectInfoTable = gm.eventEffectInfoList;
+        //eventEffectInfoTable = gm.eventEffectInfoList;
 
         var selectedHeroes = gm.GetSelectedHeroes();
         int count = selectedHeroes.Count;
@@ -532,7 +535,6 @@ public class BattleManager : MonoBehaviour
             useHeroes[i].RemoveAllBuff();
             useHeroes[i].SetMaxHp();
             useHeroes[i].SetEnabledPathFind(false);
-            useHeroes[i].gameObject.SetActive(true);
             Utils.CopyPositionAndRotation(useHeroes[i].gameObject, gm.heroSpawnTransform);
         }
 
@@ -542,10 +544,11 @@ public class BattleManager : MonoBehaviour
             unuseHeroes[i].RemoveAllBuff();
             unuseHeroes[i].SetMaxHp();
             unuseHeroes[i].SetEnabledPathFind(false);
-            unuseHeroes[i].gameObject.SetActive(true);
             Utils.CopyPositionAndRotation(unuseHeroes[i].gameObject, gm.heroSpawnTransform);
         }
+        gm.SetHeroesActive(false);
     }
+
     public void MoveNextStage(float timer)
     {
         StopCoroutine(coMovingMap);
@@ -570,7 +573,7 @@ public class BattleManager : MonoBehaviour
         while (!btMapTriggers[currTriggerIndex].isTriggerEnter)
         {
             if (viewPoint.transform.position.z <= nextMaxZPos)
-                viewPoint.transform.Translate(platform.transform.forward * platformMoveSpeed * Time.deltaTime);
+                viewPoint.transform.Translate(platformMoveSpeed * Time.deltaTime * platform.transform.forward);
 
             yield return null;
         }

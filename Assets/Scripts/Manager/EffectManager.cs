@@ -20,6 +20,7 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
         effectPoolSize = 5;
         effectList = GameManager.Instance.effects;
         CreateAllEffects();
+        GameManager.Instance.effects.Clear();
     }
 
     public Effect Get(EffectEnum index, Transform startPos, Quaternion rot = default)

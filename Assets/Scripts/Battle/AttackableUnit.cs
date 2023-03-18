@@ -202,23 +202,23 @@ public abstract class AttackableUnit : MonoBehaviour
         data.exp = newExp;
     }
 
-    public void LevelUpAdditional(int incDamage, int incDefense, int incHealthPoint)
+    public void LevelupStats()
     {
         LiveData data = GetUnitData().data;
-        data.baseDamage += incDamage;
-        data.baseDefense += incDefense;
-        data.healthPoint += incHealthPoint;
+        data.baseDamage += characterData.originData.damageLevelCoefficient;
+        data.baseDefense += characterData.originData.defenseLevelCoefficient;
+        data.healthPoint += characterData.originData.healthPointLevelCoefficient;
         data.currentHp = data.healthPoint;
     }
 
-    public void LevelUpMultiplication(float multipleDamage, float multipleDefense, float multipleHealthPoint)
-    {
-        LiveData data = GetUnitData().data;
-        LevelUpAdditional(
-            (int)(data.baseDamage * multipleDamage),
-            (int)(data.baseDefense * multipleDefense),
-            (int)(data.healthPoint * multipleHealthPoint));
-    }
+    //public void LevelUpMultiplication(float multipleDamage, float multipleDefense, float multipleHealthPoint)
+    //{
+    //    LiveData data = GetUnitData().data;
+    //    LevelUpAdditional(
+    //        (int)(data.baseDamage * multipleDamage),
+    //        (int)(data.baseDefense * multipleDefense),
+    //        (int)(data.healthPoint * multipleHealthPoint));
+    //}
 
     protected void Update()
     {
