@@ -9,6 +9,7 @@ public class AttackableHero : AttackableUnit
     public void SetReturnPos(Transform tr) => returnPos = returnPos = tr;
 
     private Coroutine coOnIndicator;
+    private Coroutine coOnAutoSkill;
 
     bool lateReturn = false;
     public override float UnitHp {
@@ -25,6 +26,12 @@ public class AttackableHero : AttackableUnit
             return unitState;
         }
         set {
+
+            if(transform.name.Contains("star"))
+            {
+                Logger.Debug("now : " + unitState);
+                Logger.Debug("value : " + value);
+            }
             if (unitState == value)
                 return;
 
@@ -58,6 +65,8 @@ public class AttackableHero : AttackableUnit
                     target = null;
                     lateReturn = false;
                     testRot = false;
+                    if(coOnAutoSkill != null)
+                        StopCoroutine(coOnAutoSkill);
                     break;
                 case UnitState.MoveNext:
                     pathFind.isStopped = false;
@@ -95,6 +104,11 @@ public class AttackableHero : AttackableUnit
             return battleState;
         }
         set {
+            if (transform.name.Contains("star"))
+            {
+                Logger.Debug("now : " + battleState);
+                Logger.Debug("value : " + value);
+            }
             if (value == battleState)
                 return;
             if (unitState == UnitState.Die && value != UnitBattleState.None)
@@ -141,6 +155,8 @@ public class AttackableHero : AttackableUnit
         set {
             isAuto = value;
             characterData.activeSkill.isAuto = isAuto;
+            if(heroUI != null)
+                heroUI.heroSkill.isAuto = isAuto;
         }
     }
 
@@ -263,7 +279,7 @@ public class AttackableHero : AttackableUnit
     
     protected override void BattleUpdate()
     {
-        if (isAuto && heroUI.heroSkill.IsCoolDown && !bufferState.silence)
+        if (isAuto && BattleState != UnitBattleState.None && heroUI.heroSkill.IsCoolDown && !bufferState.silence)
         {
             SearchActiveTarget();
             if (activeTarget != null && InRangeActiveAttack)
@@ -271,7 +287,7 @@ public class AttackableHero : AttackableUnit
                 heroUI.heroSkill.OnDownSkill();
                 characterData.activeSkill.targetPos = activeTarget.transform.position;
 
-                StartCoroutine(heroUI.heroSkill.OnAutoSkillActive(characterData.activeSkill));
+                coOnAutoSkill = StartCoroutine(heroUI.heroSkill.OnAutoSkillActive(characterData.activeSkill));
             }
         }
         //타겟이 없을때 타겟을 찾으면 타겟으로 가기
@@ -397,6 +413,8 @@ public class AttackableHero : AttackableUnit
                 }
                 break;
             case false:
+                if (pathFind.isStopped)
+                    pathFind.isStopped = false;
                 animator.SetFloat("Speed", pathFind.velocity.magnitude / characterData.data.moveSpeed);
                 if (Vector3.Distance(returnPos.position, transform.position) <= 0.5f)
                 {

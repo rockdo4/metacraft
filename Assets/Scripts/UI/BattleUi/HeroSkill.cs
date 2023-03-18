@@ -16,6 +16,7 @@ public class HeroSkill : MonoBehaviour
     //private TextMeshProUGUI skillDescriptionText;
 
     private float prevTimeScale ;
+    public bool isAuto;
 
     private bool isPointerInSkillActivePanel;
     private float CoolDownFill {
@@ -80,7 +81,7 @@ public class HeroSkill : MonoBehaviour
             SetActiveSkillGUIs(true);
             isPointerInSkillActivePanel = false;
 
-            prevTimeScale = BattleSpeed.Instance.GetSpeed;            
+            prevTimeScale = BattleSpeed.Instance.GetSpeed;          
             Time.timeScale = 0.25f;
         }
     }
@@ -113,19 +114,13 @@ public class HeroSkill : MonoBehaviour
         var startTime = Time.time;
         CoolDownFill = 1;
         coolDownTimer = coolDown;
-        
-        while (true)
-        {
-            yield return null;
-            if (skill.IsAutoStart)
-            {
-                ready();
-                action();
-                SetActiveSkillGUIs(false);
-                Time.timeScale = BattleSpeed.Instance.GetSpeed;
-                break;
-            }
-        }
+
+        yield return new WaitForSeconds(0.5f * Time.timeScale);
+
+        ready();
+        action();
+        SetActiveSkillGUIs(false);
+        Time.timeScale = BattleSpeed.Instance.GetSpeed;
     }
 
     private void SetActiveSkillGUIs(bool active)

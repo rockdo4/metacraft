@@ -92,8 +92,6 @@ public class ActiveSkillAOE : CharacterSkill
 
         while (true)
         {
-            if (isAuto)
-                yield return null;
             MoveCastRangeIndicator();
             MoveSkillAreaIndicator();
             yield return null;
