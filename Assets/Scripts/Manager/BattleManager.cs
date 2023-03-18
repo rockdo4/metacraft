@@ -5,6 +5,7 @@ using TMPro;
 using System.Collections;
 using System.Linq;
 using Cinemachine;
+using Unity.VisualScripting;
 
 public class BattleManager : MonoBehaviour
 {
@@ -384,7 +385,6 @@ public class BattleManager : MonoBehaviour
                 var coll = attackableHero.GetComponent<CapsuleCollider>();
                 coll.enabled = true;
                 useHeroes.Add(attackableHero);
-                attackableHero.GetUnitData().passiveSkill?.OnActiveSkill(attackableHero);
 
                 supplyEventHeroImages[i].SetHeroInfo(attackableHero.GetUnitData());
             }
@@ -529,18 +529,20 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < useHeroes.Count; i++)
         {
             useHeroes[i].ResetData();
+            useHeroes[i].RemoveAllBuff();
             useHeroes[i].SetMaxHp();
             useHeroes[i].SetEnabledPathFind(false);
-            useHeroes[i].gameObject.SetActive(false);
+            useHeroes[i].gameObject.SetActive(true);
             Utils.CopyPositionAndRotation(useHeroes[i].gameObject, gm.heroSpawnTransform);
         }
 
         for (int i = 0; i < unuseHeroes.Count; i++)
         {
             unuseHeroes[i].ResetData();
+            unuseHeroes[i].RemoveAllBuff();
             unuseHeroes[i].SetMaxHp();
             unuseHeroes[i].SetEnabledPathFind(false);
-            unuseHeroes[i].gameObject.SetActive(false);
+            unuseHeroes[i].gameObject.SetActive(true);
             Utils.CopyPositionAndRotation(unuseHeroes[i].gameObject, gm.heroSpawnTransform);
         }
     }

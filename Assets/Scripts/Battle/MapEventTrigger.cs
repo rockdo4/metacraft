@@ -80,6 +80,7 @@ public class MapEventTrigger : MonoBehaviour
         for (int i = 0; i < enemys.Count; i++)
         {
             enemys[i].ResetData();
+            enemys[i].RemoveAllBuff();
             enemys[i].gameObject.SetActive(true);
 
             if (enemyColls.Count > 0)

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "AOEWithDuration", menuName = "Character/ActiveSkill/AOEDuration")]
@@ -48,8 +49,10 @@ public class AOEWithDuration : ActiveSkillAOE
                 break;
         }
     }
-    public override void OnActiveSkill(AttackableUnit attackableUnit)
+    public override void OnActiveSkill(AttackableUnit attackableUnit, List<AttackableUnit> enemies, List<AttackableUnit> heros)
     {
+        base.OnActiveSkill(attackableUnit, enemies, heros);
+
         skillEffectedUnits = skillAreaIndicator.GetUnitsInArea();
 
         skillField.transform.SetPositionAndRotation(indicatorTransform.position, indicatorTransform.rotation);

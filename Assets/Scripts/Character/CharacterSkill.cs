@@ -109,7 +109,7 @@ public class CharacterSkill : ScriptableObject
     //    OnActiveSkill(unit);
     //}
 
-    public virtual void OnActiveSkill(AttackableUnit unit)
+    public virtual void OnActiveSkill(AttackableUnit unit, List<AttackableUnit> enemies, List<AttackableUnit> heros)
     {
         switch (buffTargetType)
         {
@@ -129,7 +129,7 @@ public class CharacterSkill : ScriptableObject
             case BufferTargetType.Friendly:
             case BufferTargetType.Enemy:
                 {
-                    var finalTargets = FindTargetInArea(unit);
+                    var finalTargets = FindTargetInArea(unit, buffTargetType, enemies, heros);
                     for (int i = 0; i < finalTargets.Count; i++)
                     {
                         foreach (var buff in buffInfos)
@@ -153,19 +153,18 @@ public class CharacterSkill : ScriptableObject
         }
     }
 
-    public List<AttackableUnit> FindTargetInArea(AttackableUnit unit)
+    public List<AttackableUnit> FindTargetInArea(AttackableUnit unit, BufferTargetType b_targetType, List<AttackableUnit> enemies, List<AttackableUnit> heros)
     {
         List<AttackableUnit> closeTargets = new List<AttackableUnit>();
 
-        var searchTarget = targetType == SkillTargetType.Friendly ? UnitType.Hero : UnitType.Enemy; 
-        List<AttackableUnit> targets = Physics.OverlapSphere(unit.transform.position, buffRadius).Select(t=>t.GetComponent<AttackableUnit>()).ToList();
+        var searchTarget = b_targetType == BufferTargetType.Friendly ? UnitType.Hero : UnitType.Enemy;
+        List<AttackableUnit> targets = (searchTarget == UnitType.Hero ? heros : enemies).ToList();
 
         foreach (var target in targets)
         {
             if (target == null)
                 continue;
-            if (target.unitType == searchTarget &&
-                Vector3.Distance(unit.transform.position, target.transform.position) <= buffRadius)
+            if (Vector3.Distance(unit.transform.position, target.transform.position) <= buffRadius)
             {
                 closeTargets.Add(target);
             }
