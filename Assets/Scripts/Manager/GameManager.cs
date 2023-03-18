@@ -48,6 +48,10 @@ public class GameManager : Singleton<GameManager>
     public Color currMapColor;
     public List<Color> mapLigthColors;
 
+    // 스프라이트 임시
+    public List<Sprite> tempIconSprites;
+    public List<Sprite> tempIlluSprites;
+
     public override void Awake()
     {
         base.Awake();
@@ -325,14 +329,17 @@ public class GameManager : Singleton<GameManager>
 
     public Sprite GetSpriteByAddress(string address)
     {
+        string onlyName = address[5..];
         if (iconSprites.ContainsKey(address))
         {
-            return iconSprites[address];
+            return tempIconSprites[GetHeroIndex(onlyName)];
+            //return iconSprites[address];
         }
 
         if (illustrationSprites.ContainsKey(address))
         {
-            return illustrationSprites[address];
+            return tempIlluSprites[GetHeroIndex(onlyName)];
+            //return illustrationSprites[address];
         }
 
         Logger.Debug($"Load sprite fail. address: {address}");
@@ -343,6 +350,7 @@ public class GameManager : Singleton<GameManager>
     public void NextDay()
     {
         playerData.currentDay = playerData.currentDay != DayOfWeek.일 ? playerData.currentDay + 1 : DayOfWeek.월;
+        playerData.cumulateGameDay++;
     }
 
     public void AddOfficeExperience(int exp)
