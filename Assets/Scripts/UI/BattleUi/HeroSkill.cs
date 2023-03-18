@@ -137,7 +137,7 @@ public class HeroSkill : MonoBehaviour
         if (!skillActivedHighlight.activeSelf)
             return;
 
-        if (isIn)
+        if (isIn && !isAuto)
             ready();
         else
             offAreaIndicator();
