@@ -383,7 +383,7 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     public virtual void ResetData()
     {
-        RemoveBuffers();
+        ResetBuffTimer();
         nowAttack = characterData.attacks[0];
         animator.SetFloat("Speed",0);
 
@@ -393,7 +393,7 @@ public abstract class AttackableUnit : MonoBehaviour
         battleState = UnitBattleState.None;
         nowUpdate = null;
     }
-    public void ResetBuffers()
+    public void RemoveAllBuff()
     {
         for (int i = buffList.Count - 1; i >= 0; i--)
         {
@@ -402,7 +402,7 @@ public abstract class AttackableUnit : MonoBehaviour
         }
         buffList.Clear();
     }
-    public void RemoveBuffers()
+    public void ResetBuffTimer()
     {
         foreach(var buff in buffList)
         {

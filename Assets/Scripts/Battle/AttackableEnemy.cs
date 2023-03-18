@@ -50,7 +50,7 @@ public class AttackableEnemy : AttackableUnit
                 case UnitState.Die:
                     //pathFind.enabled = false;
                     OnDead(this);
-                    ResetBuffers();
+                    RemoveAllBuff();
                     BattleState = UnitBattleState.None;
                     gameObject.GetComponent<Collider>().enabled = false;
                     animator.Rebind();

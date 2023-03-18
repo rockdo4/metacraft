@@ -384,6 +384,7 @@ public class BattleManager : MonoBehaviour
                 var coll = attackableHero.GetComponent<CapsuleCollider>();
                 coll.enabled = true;
                 useHeroes.Add(attackableHero);
+                attackableHero.GetUnitData().passiveSkill?.OnActiveSkill(attackableHero);
 
                 supplyEventHeroImages[i].SetHeroInfo(attackableHero.GetUnitData());
             }
