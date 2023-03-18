@@ -312,7 +312,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
         lastSearchTime = Time.time;
         var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
-        var minTarget = GetSearchTargetInAround(targetList, 10);
+        var minTarget = GetSearchTargetInAround(targetList, 3);
 
         if (IsAlive(minTarget))
             target = minTarget;
@@ -388,6 +388,10 @@ public abstract class AttackableUnit : MonoBehaviour
         animator.SetFloat("Speed",0);
 
         characterData.passiveSkill?.OnActiveSkill(this);
+
+        unitState = UnitState.None;
+        battleState = UnitBattleState.None;
+        nowUpdate = null;
     }
     public void ResetBuffers()
     {
@@ -675,6 +679,7 @@ public abstract class AttackableUnit : MonoBehaviour
     {
         //Utils.CopyPositionAndRotation(gameObject, gameObject.transform.parent);
         //pathFind.enabled = false;
+        Logger.Debug("DestroyUnit");
         gameObject.SetActive(false);
         isAlive = false;
     }
@@ -754,6 +759,10 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public virtual void AddStateBuff(BuffInfo info, AttackableUnit attackableUnit = null, BuffIcon icon = null)
     {
+        if (UnitState == UnitState.Die)
+        {
+            return;
+        }
         var findBuff = buffList.Find(t => t.buffInfo.id == info.id);
         if (findBuff != null)
         {

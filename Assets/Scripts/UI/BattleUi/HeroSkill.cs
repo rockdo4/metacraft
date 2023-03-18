@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
+using System.Collections;
 
 public class HeroSkill : MonoBehaviour
 {
@@ -107,14 +108,24 @@ public class HeroSkill : MonoBehaviour
         CoolDownFill = 1;
         coolDownTimer = coolDown;
     }
-    public void OnAutoSkillActive()
+    public IEnumerator OnAutoSkillActive(CharacterSkill skill)
     {
-        ready();
-        action();
-        SetActiveSkillGUIs(false);
-        Time.timeScale = BattleSpeed.Instance.GetSpeed;
+        var startTime = Time.time;
         CoolDownFill = 1;
         coolDownTimer = coolDown;
+        
+        while (true)
+        {
+            yield return null;
+            if (skill.IsAutoStart)
+            {
+                ready();
+                action();
+                SetActiveSkillGUIs(false);
+                Time.timeScale = BattleSpeed.Instance.GetSpeed;
+                break;
+            }
+        }
     }
 
     private void SetActiveSkillGUIs(bool active)

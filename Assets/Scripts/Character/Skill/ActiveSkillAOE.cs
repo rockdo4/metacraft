@@ -36,6 +36,7 @@ public class ActiveSkillAOE : CharacterSkill
     private Transform closestEnemyTransformWhenTrackTarget;
 
     public bool hasDuration = false;
+    public override bool IsAutoStart { get => skillAreaIndicator == null? false :skillAreaIndicator.isTriggerEnter; }
     public override void OnActive()
     {
         if (skillAreaIndicator != null &&
@@ -91,6 +92,8 @@ public class ActiveSkillAOE : CharacterSkill
 
         while (true)
         {
+            if (isAuto)
+                yield return null;
             MoveCastRangeIndicator();
             MoveSkillAreaIndicator();
             yield return null;
@@ -231,6 +234,7 @@ public class ActiveSkillAOE : CharacterSkill
             EffectManager.Instance.Get(activeEffect, indicatorTransform);
 
         skillEffectedUnits = skillAreaIndicator.GetUnitsInArea();
+
 
         foreach (var target in skillEffectedUnits)
         {

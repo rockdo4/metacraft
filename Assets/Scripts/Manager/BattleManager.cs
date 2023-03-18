@@ -79,7 +79,7 @@ public class BattleManager : MonoBehaviour
     public CinemachineVirtualCamera cinemachine;
     private int enemyTriggerIndex = 0;                          // 방어전에 쓰일것 (에너미 스폰하는 트리거)
     private List<Light> lights = new();
-    public bool isMiddleBossAlive = false;
+    public bool isMiddleBossAlive = true;
     private GameManager gm;
 
     public AttackableEnemy bossPrefab;
@@ -455,10 +455,6 @@ public class BattleManager : MonoBehaviour
                 NodeClearReward();
                 MissionClear();
             }
-            else if (btMapTriggers[currTriggerIndex + 1] != null && btMapTriggers[currTriggerIndex + 1].isStageEnd)
-            {
-                ChoiceNextStageByNode();
-            }
             else if (!btMapTriggers[currTriggerIndex].isStageEnd)
             {
                 readyCount = useHeroes.Count;
@@ -511,8 +507,10 @@ public class BattleManager : MonoBehaviour
         if (useHeroes.Count == 0)
         {
             MissionFail();
+            return;
         }
     }
+
     public void MissionFail()
     {
         Time.timeScale = 0;
@@ -565,17 +563,24 @@ public class BattleManager : MonoBehaviour
             useHeroes[i].SetMoveSpeed(platformMoveSpeed);
         }
 
-        //while (viewPoint.transform.position.z <= nextMaxZPos)
+        float nextMaxZPos = btMapTriggers[currTriggerIndex].heroSettingPositions.Max(transform => transform.position.z);
         while (!btMapTriggers[currTriggerIndex].isTriggerEnter)
         {
+            if (viewPoint.transform.position.z <= nextMaxZPos)
+                viewPoint.transform.Translate(platform.transform.forward * platformMoveSpeed * Time.deltaTime);
+
             yield return null;
         }
 
         if (!btMapTriggers[currTriggerIndex].isMissionEnd)
         {
-            if (btMapTriggers[currTriggerIndex].isSkip)
+            if (btMapTriggers[currTriggerIndex].isLastTrigger)
             {
                 ChoiceNextStageByNode();
+            }
+            else if (tree.CurNode.type == TreeNodeTypes.Threat)
+            {
+                SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
             }
         }
         else
@@ -667,16 +672,19 @@ public class BattleManager : MonoBehaviour
         currTriggerIndex = 0;
         currBtMgr = curMap.GetComponent<BattleMapInfo>();
 
-        if (tree.CurNode.type == TreeNodeTypes.Threat)
-            enemyCountTxt.StartTimer();
-        else
-            enemyCountTxt.Count = currBtMgr.GetAllEnemyCount();
-
         btMapTriggers = currBtMgr.GetTriggers();
         platform = currBtMgr.GetPlatform();
         viewPoint = currBtMgr.GetViewPoint();
         viewPointInitPos = viewPoint.transform.position;
         cinemachine.Follow = viewPoint.transform;
+
+        if (tree.CurNode.type == TreeNodeTypes.Threat)
+        {
+            enemyCountTxt.StartTimer();
+            isMiddleBossAlive = true;
+        }
+        else
+            enemyCountTxt.Count = currBtMgr.GetAllEnemyCount();
 
         btMapTriggers.Last().isLastTrigger = true;
 
@@ -810,6 +818,7 @@ public class BattleManager : MonoBehaviour
         if (enemy.GetUnitData().data.job == (int)CharacterJob.villain &&
             tree.CurNode.type == TreeNodeTypes.Threat)
         {
+            Logger.Debug("Middle Boss Dead");
             DeadMiddleBoss();
             SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
         }
@@ -827,7 +836,8 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 0; i < useHeroes.Count; i++)
         {
-            useHeroes[i].ChangeUnitState(UnitState.Battle);
+            if (!useHeroes[i].GetUnitState().Equals(UnitState.Battle))
+                useHeroes[i].ChangeUnitState(UnitState.Battle);
         }
     }
 
@@ -982,29 +992,13 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void LateUpdate()
-    {
-        Vector3 heroPos = useHeroes[0].gameObject.transform.position;
-        heroPos.x = viewPoint.transform.position.x;
-        heroPos.y = viewPoint.transform.position.y;
-
-        viewPoint.transform.position = heroPos;
-    }
-
     /*********************************************  임시  **********************************************/
     private void DeadMiddleBoss()
     {
-        for (int i = 0; i < btMapTriggers[enemyTriggerIndex].enemySettingPositions.Count; i++)
-        {
-            if (!btMapTriggers[enemyTriggerIndex].enemySettingPositions[i].GetMiddleBossIsAlive())
-            {
-                Logger.Debug("Next!");
-                KillAllEnemy(enemyTriggerIndex);
-                enemyCountTxt.StopTimer();
-                isMiddleBossAlive = true;
-                break;
-            }
-        }
+        Logger.Debug("Next!");
+        KillAllEnemy(enemyTriggerIndex);
+        enemyCountTxt.StopTimer();
+        isMiddleBossAlive = false;
     }
 
     private void KillAllEnemy(int index)
@@ -1018,7 +1012,10 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < useCount; i++)
         {
             if (btMapTriggers[index].useEnemys[i].isAlive)
-                OnDeadEnemy((AttackableEnemy)btMapTriggers[index].enemys[i]);
+            {
+                btMapTriggers[index].useEnemys[i].ChangeUnitState(UnitState.Die);
+                //OnDeadEnemy((AttackableEnemy)btMapTriggers[index].useEnemys[i]);
+            }
         }
 
         int unuseCount = btMapTriggers[index].enemys.Count;
@@ -1026,7 +1023,8 @@ public class BattleManager : MonoBehaviour
         {
             if (btMapTriggers[index].enemys[i].isAlive)
             {
-                btMapTriggers[index].enemys[i].gameObject.SetActive(false);
+                //btMapTriggers[index].enemys[i].gameObject.SetActive(false);
+                btMapTriggers[index].enemys[i].ChangeUnitState(UnitState.Die);
             }
         }
     }

@@ -28,6 +28,8 @@ public class AttackableHero : AttackableUnit
             if (unitState == value)
                 return;
 
+            if (unitState == UnitState.Die)
+                return;
             unitState = value;
             heroUI.heroState = unitState;
             switch (unitState)
@@ -94,6 +96,8 @@ public class AttackableHero : AttackableUnit
         }
         set {
             if (value == battleState)
+                return;
+            if (unitState == UnitState.Die)
                 return;
             battleState = value;
 
@@ -266,7 +270,8 @@ public class AttackableHero : AttackableUnit
             {
                 heroUI.heroSkill.OnDownSkill();
                 characterData.activeSkill.targetPos = activeTarget.transform.position;
-                heroUI.heroSkill.OnAutoSkillActive();
+
+                StartCoroutine(heroUI.heroSkill.OnAutoSkillActive(characterData.activeSkill));
             }
         }
         //타겟이 없을때 타겟을 찾으면 타겟으로 가기
@@ -380,7 +385,7 @@ public class AttackableHero : AttackableUnit
 
                     if (battleManager.tree.CurNode.type == TreeNodeTypes.Threat)
                     {
-                        if (battleManager.isMiddleBossAlive)
+                        if (!battleManager.isMiddleBossAlive)
                         {
                             battleManager.OnReady();
                         }
@@ -429,7 +434,7 @@ public class AttackableHero : AttackableUnit
     {
         battleManager.OnDeadHero((AttackableHero)unit);
         heroUI.SetDieImage();
-        enemyList.Clear();
+        //enemyList.Clear();
 
         SkillCancle();      
     }
@@ -530,6 +535,11 @@ public class AttackableHero : AttackableUnit
 
     public override void StunEnd()
     {
+        if (unitState == UnitState.Die)
+        {
+            animator.SetTrigger("Die");
+            return;
+        }
         base.StunEnd();
         if (lateReturn)
         {

@@ -55,7 +55,7 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
             for (int j = 0; j < effectPool[i].Count; j++)
             {
                 effectPool[i][j].SetParticlesActive(false);
-                effectPool[i][j].gameObject.SetActive(false);
+                //effectPool[i][j].gameObject.SetActive(false);
             }
         }
     }

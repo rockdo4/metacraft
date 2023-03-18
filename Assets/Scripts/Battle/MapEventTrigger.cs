@@ -72,8 +72,8 @@ public class MapEventTrigger : MonoBehaviour
             enemys[i].ResetData();
             enemys[i].gameObject.SetActive(true);
             enemyColls[i].enabled = true;
-            enemys[i].gameObject.transform.position = enemySettingPositions[i].GetRespawnPos();
             enemys[i].SetEnabledPathFind(false);
+            enemys[i].gameObject.transform.position = enemySettingPositions[i].GetRespawnPos();
         }
     }
 
