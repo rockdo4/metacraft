@@ -196,11 +196,13 @@ public class GameManager : Singleton<GameManager>
         {
             _ => "Contents",
         };
-        // Logger.Debug($"key [{key}], languageKey [{languageKey}], result : [{stringTable[key][languageKey]}]");
         if (stringTable.ContainsKey(key))
             return $"{stringTable[key][languageKey]}";
         else
-            return $"Load fail to string table. key [{key}], languageKey [{languageKey}]";
+        {
+            Logger.Debug($"Load fail to string table. key [{key}]");
+            return $"Load fail to string table. key [{key}]";
+        }
     }
 
     public void ReleaseAddressable(Dictionary<string, AsyncOperationHandle> handles)
@@ -324,11 +326,16 @@ public class GameManager : Singleton<GameManager>
     public Sprite GetSpriteByAddress(string address)
     {
         if (iconSprites.ContainsKey(address))
+        {
             return iconSprites[address];
+        }
 
         if (illustrationSprites.ContainsKey(address))
+        {
             return illustrationSprites[address];
+        }
 
+        Logger.Debug($"Load sprite fail. address: {address}");
         return null;
     }
 

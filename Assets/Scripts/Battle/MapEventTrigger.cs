@@ -63,6 +63,16 @@ public class MapEventTrigger : MonoBehaviour
         {
             enemys[i].gameObject.SetActive(false);
         }
+
+        AddEnemysCollider();
+    }
+
+    public void AddEnemysCollider()
+    {
+        for (int i = 0; i < enemys.Count; i++)
+        {
+            AddEnemyColliders(enemys[i].GetComponent<CapsuleCollider>());
+        }
     }
 
     public void ResetEnemys()
@@ -71,8 +81,27 @@ public class MapEventTrigger : MonoBehaviour
         {
             enemys[i].ResetData();
             enemys[i].gameObject.SetActive(true);
-            enemyColls[i].enabled = true;
+
+            if (enemyColls.Count > 0)
+                enemyColls[i].enabled = true;
+
             enemys[i].SetEnabledPathFind(false);
+            //enemys[i].gameObject.transform.position = enemySettingPositions[i].GetRespawnPos();
+        }
+    }
+
+    public void SetEnemysActive(bool set) // юс╫ц
+    {
+        for (int i = 0; i < enemys.Count; i++)
+        {
+            enemys[i].gameObject.SetActive(set);
+        }
+    }
+
+    public void ResetEnemyPositions()
+    {
+        for (int i = 0; i < enemys.Count; i++)
+        {
             enemys[i].gameObject.transform.position = enemySettingPositions[i].GetRespawnPos();
         }
     }

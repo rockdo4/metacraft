@@ -38,6 +38,7 @@ public class StageEnemy : MonoBehaviour
         {
             StopCoroutine(coStartTimmer);
             startTimer = false;
+            timer = 180f;
         }
     }
 
