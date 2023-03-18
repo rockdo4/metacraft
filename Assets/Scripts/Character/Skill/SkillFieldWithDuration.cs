@@ -33,15 +33,15 @@ public class SkillFieldWithDuration : MonoBehaviour
 
     private HashSet<Collider> colliders = new HashSet<Collider>();
     private string tagName;
+    private GameObject currParticle;
+
 
     protected void OnEnable()
     {        
         Invoke(offSkillFieldFuncName, duration);
         if(IsInit)
         {
-            var currEffect = EffectManager.Instance.Get(effect, transform);
-            if (isTrackTarget)
-                currEffect.transform.SetParent(transform, true);
+            currParticle = EffectManager.Instance.Get(effect, transform).transform.GetChild(0).gameObject;            
         }
             
     }
@@ -81,6 +81,8 @@ public class SkillFieldWithDuration : MonoBehaviour
 
     private void Update()
     {
+        if(isTrackTarget)
+            currParticle.transform.position = transform.position;
         TrackTarget();
         OnDamage();
     }
