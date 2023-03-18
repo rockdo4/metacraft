@@ -12,21 +12,22 @@ public class AutoButton : MonoBehaviour
     bool nowState = false;
     int Idx => !nowState ? 0 : 1;
 
-    public void ResetData()
+    public void ResetData(List<AttackableUnit> heroList)
     {
-        SetAutoState(GameManager.Instance.playerData.isAuto);
+        SetAutoState(GameManager.Instance.playerData.isAuto, heroList);
     }
-    public void SetAutoState(bool state)
+    public void SetAutoState(bool state, List<AttackableUnit> heroList = null)
     {
         nowState = state;
         butonImage.color = burronColors[Idx];
         stateTxt.color = textColors[Idx];
 
-        var characters = GameObject.FindObjectsOfType<AttackableUnit>();
-
-        foreach(var character in characters)
+        if (heroList != null)
         {
-            character.IsAuto = nowState;
+            foreach (var character in heroList)
+            {
+                character.IsAuto = nowState;
+            }
         }
     }
     public void OnClick()

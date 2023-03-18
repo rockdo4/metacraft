@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -264,45 +265,50 @@ public abstract class AttackableUnit : MonoBehaviour
         if (nowAttack.targetNumLimit == 1)
         {
             target.OnDamage(this, nowAttack);
-            //foreach (var buff in normalbuffs)
-            //{
-            //    bool isCritical = false;
-            //    var value = CalculDamage(characterData.activeSkill, ref isCritical);
-            //    target.AddValueBuff(buff, value, null);
-            //}
-            return;
         }
-
-        List<AttackableUnit> attackTargetList = new();
-
-        var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
-        foreach (var now_target in targetList)
+        else
         {
-            Vector3 interV = now_target.transform.position - transform.position;
-            if (interV.magnitude <= nowAttack.distance)
-            {
-                float angle = Vector3.Angle(transform.forward, interV);
+            List<AttackableUnit> attackTargetList = new();
 
-                if (Mathf.Abs(angle) < nowAttack.angle / 2f)
+            var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
+            foreach (var now_target in targetList)
+            {
+                Vector3 interV = now_target.transform.position - transform.position;
+                if (interV.magnitude <= nowAttack.distance)
                 {
-                    attackTargetList.Add(now_target);
+                    float angle = Vector3.Angle(transform.forward, interV);
+
+                    if (Mathf.Abs(angle) < nowAttack.angle / 2f)
+                    {
+                        attackTargetList.Add(now_target);
+                    }
                 }
+            }
+
+            attackTargetList = GetNearestUnitList(attackTargetList, nowAttack.targetNumLimit);
+
+            for (int i = 0; i < attackTargetList.Count; i++)
+            {
+                attackTargetList[i].OnDamage(this, nowAttack);
             }
         }
 
-        //attackTargetList = GetNearestUnitList(attackTargetList, nowAttack.targetNumLimit);
+        if(nowAttack.searchType == SkillSearchType.Healer)
+        {
+            var levelCorrection = 1 + Mathf.Clamp((characterData.data.level - characterData.data.level) / 100f, -0.4f, 0);
 
-        //for (int i = 0; i < attackTargetList.Count; i++)
-        //{
-        //    attackTargetList[i].OnDamage(this, nowAttack);
-        //    foreach (var buff in normalbuffs)
-        //    {
-        //        bool isCritical = false;
-        //        var value = CalculDamage(characterData.activeSkill, ref isCritical);
-        //        attackTargetList[i].AddValueBuff(buff, value, null);
-        //    }
-        //}
+            bool isCritical = false;
+            var dmg = (int)(CalculDamage(nowAttack, ref isCritical) * levelCorrection);
 
+            foreach (var buff in nowAttack.buffInfos)
+            {
+                if (buff[nowAttack.skillLevel-1].type == BuffType.Heal)
+                {
+                    target.AddValueBuff(buff[nowAttack.skillLevel-1], dmg);
+                    break;
+                }
+            }
+        }
     }
 
     protected void AssultSearch()
