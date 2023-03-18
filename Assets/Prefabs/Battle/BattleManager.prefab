@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &5353816805012943499
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5353816805012943496}
+  - component: {fileID: 5353816805012943497}
+  m_Layer: 0
+  m_Name: BattleManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5353816805012943496
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5353816805012943499}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5353816805012943497
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5353816805012943499}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 97e05894489eaa84185b96522c2a394e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  eventMaps:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  curEvent: -2
+  eventUi: {fileID: 0}
+  choiceButtons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  battleEventHeroImage: {fileID: 0}
+  contentText: {fileID: 0}
+  supplyUi: {fileID: 0}
+  supplyButtons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  supplyEventHeroImages:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  supplyContentText: {fileID: 0}
+  stageReward: {fileID: 0}
+  heroUiList:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  useHeroes: []
+  unuseHeroes: []
+  enemyCountTxt: {fileID: 0}
+  clearUi: {fileID: 0}
+  fadePanel: {fileID: 0}
+  tree: {fileID: 0}
+  roadChoiceButtons:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  roadPrefab:
+  - {fileID: 251221339641947662, guid: 6716700914f92d44caefb25cb6f1c981, type: 3}
+  - {fileID: 7480396628083327126, guid: 23fac9c5563612b43890c4d91a5255c6, type: 3}
+  - {fileID: 1070084864741755495, guid: 9157ccf2f43fb9e4cb96f00cf9324c26, type: 3}
+  currTriggerIndex: 0
+  cinemachine: {fileID: 0}
+  isMiddleBossAlive: 0
+  bossPrefab: {fileID: 5451489805747354053, guid: 9d91e5913dd8211499c6ef32e60a032a,
+    type: 3}
+  eventExitButton: {fileID: 0}

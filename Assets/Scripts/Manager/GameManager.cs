@@ -59,14 +59,6 @@ public class GameManager : Singleton<GameManager>
         EffectManager.Instance.CreateEffectManager();
     }
 
-    private void Start()
-    {
-        foreach (var character in myHeroes)
-        {
-            character.SetActive(false);
-        }
-    }
-
     public void SetHeroesOrigin()
     {
         int count = myHeroes.Count;
@@ -225,6 +217,18 @@ public class GameManager : Singleton<GameManager>
 
             Application.Quit();
         }
+
+        //if (Input.GetKeyDown(KeyCode.P)) // 캐릭터 생성 임시코드
+        //{
+        //    GameManager gm = Instance;
+        //    int count = gm.myHeroes.Count;
+        //    if (count == gm.heroDatabase.Count)
+        //        return;
+
+        //    GameObject newHero = Instantiate(gm.heroDatabase[count], gm.heroSpawnTransform);
+        //    gm.myHeroes.Add(newHero);
+        //    newHero.SetActive(false);
+        //}
     }
 
     public void OnApplicationQuit()
@@ -276,6 +280,11 @@ public class GameManager : Singleton<GameManager>
                 }
             }
         }
+
+        foreach (var character in myHeroes)
+        {
+            character.SetActive(false);
+        }
     }
 
     public GameObject CreateNewHero(string heroName)
@@ -317,7 +326,10 @@ public class GameManager : Singleton<GameManager>
         {
             string tableName = heroDatabase[i].GetComponent<CharacterDataBundle>().originData.name;
             if (tableName.Equals(heroName))
+            {
+                Logger.Debug($"index: [{i}], name: [{heroName}]");
                 return i;
+            }
         }
         return -1;
     }

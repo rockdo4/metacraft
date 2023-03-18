@@ -21,14 +21,14 @@ public class TreeNodeObject : MonoBehaviour, IComparable<TreeNodeObject>
         this.type = type;
         string str = type switch
         {
-            TreeNodeTypes.Root => "사무소",
-            TreeNodeTypes.Threat => "강적",
-            TreeNodeTypes.Supply => "보급",
-            TreeNodeTypes.Event => "이벤트",
-            TreeNodeTypes.Boss => "빌런",
-            _ => "일반",
+            TreeNodeTypes.Root => "node_root",
+            TreeNodeTypes.Threat => "node_threat",
+            TreeNodeTypes.Supply => "node_supply",
+            TreeNodeTypes.Event => "node_event",
+            TreeNodeTypes.Villain => "node_villain",
+            _ => "node_normal",
         };
-        nodeNameText.text = str;
+        nodeNameText.text = GameManager.Instance.GetStringByTable(str);
     }
 
     public void AddChildren(TreeNodeObject node)

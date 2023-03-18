@@ -6,5 +6,5 @@ public enum TreeNodeTypes
     Threat,
     Supply,
     Event,
-    Boss,
+    Villain,
 }

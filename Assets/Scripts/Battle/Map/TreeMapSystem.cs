@@ -9,7 +9,7 @@ public class TreeMapSystem : MonoBehaviour
     // 트리 가지의 수를 최소 1개, 최대 3개로 고정하고
     // 가지가 2개, 3개일 확률을 조정함
     public TreeNodeObject root;
-    public TreeNodeObject boss;
+    public TreeNodeObject villain;
     private TreeNodeObject curNode;
     public TreeNodeObject CurNode
     { 
@@ -17,7 +17,7 @@ public class TreeMapSystem : MonoBehaviour
         set
         { 
             curNode = value;
-            SetNodeHighlighter(value);
+            SetNodeHighlighter(curNode);
         }
     }
     public int height = 6;
@@ -40,6 +40,7 @@ public class TreeMapSystem : MonoBehaviour
     public GameObject uiLineRendererPrefab;
     public GameObject movableHighlighterPrefab;
 
+    public GameObject background;
     public Transform nodeTarget;
     public Transform lineRendererTarget;
     public Transform movableHighlighterTarget;
@@ -48,10 +49,11 @@ public class TreeMapSystem : MonoBehaviour
 
     private List<GameObject> bundles = new();
     private List<List<TreeNodeObject>> nodes = new();
-    private List<GameObject> lines = new();
+    private List<UILineRenderer> lines = new();
     private List<List<TreeBlueprintData>> blueprint = new();
     private List<GameObject> highlighters = new();
     private int nodeIndex = 0;
+    private bool showFirst = true;
 
     private struct TreeBlueprintData
     {
@@ -69,19 +71,19 @@ public class TreeMapSystem : MonoBehaviour
         }
     }
 
-    //private void Awake()
-    //{
-        // 이후 고정 노드 조건 확인등 검증도 여기서 함
-        //CreateTreeGraph();
-    //}
+    public void ShowTree(bool value)
+    {
+        if (showFirst)
+        {
+            StartCoroutine(CoLinkNodes());  // 라인렌더러 위치 조정
+            showFirst = false;
+        }
 
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.L))
-    //    {
-    //        CreateTreeGraph();
-    //    }
-    //}
+        background.SetActive(value);
+        nodeTarget.gameObject.SetActive(value);
+        lineRendererTarget.gameObject.SetActive(value);
+        movableHighlighterTarget.gameObject.SetActive(value);
+    }
 
     public void CreateTreeGraph()
     {
@@ -90,17 +92,20 @@ public class TreeMapSystem : MonoBehaviour
         InitSettings(height - 2);       // 트리의 깊이 설정, 필요한 오브젝트 생성
         CreateBlueprint();              // 설계도 생성
         CreateNodes();                  // 노드 생성
-        StartCoroutine(CoLinkNodes());  // 노드 연결
-        curNode = root;
+        CurNode = root;
+
+        int nodesLength = nodes.Count;
+        for (int i = 0; i < nodesLength - 1; i++)
+            LinkNodes(i, nodes[i], nodes[i + 1]); // 노드끼리 연결
+
+        CreateLineRenderer();           // 라인렌더러 생성
     }
 
-    public void SetNodeHighlighter(TreeNodeObject node)
+    private void SetNodeHighlighter(TreeNodeObject node)
     {
         currentNodeHighlighter.transform.position = node.transform.position;
-    }
-
-    public void SetMovableHighlighter(TreeNodeObject node)
-    {
+        
+        OffMovableHighlighters();
         List<TreeNodeObject> movableNodes = node.childrens;
         int count = movableNodes.Count;
         for (int i = 0; i < count; i++)
@@ -110,7 +115,7 @@ public class TreeMapSystem : MonoBehaviour
         }
     }
 
-    public void OffMovableHighlighters()
+    private void OffMovableHighlighters()
     {
         for (int i = 0; i < width; i++)
         {
@@ -134,12 +139,12 @@ public class TreeMapSystem : MonoBehaviour
                 fixBranchCount = true;
                 type = TreeNodeTypes.Root;
             }
-            else if (i == height - 1) // Boss
+            else if (i == height - 1) // Villain
             {
                 branchWidth = 1;
                 branchCount = 0;
                 fixBranchCount = true;
-                type = TreeNodeTypes.Boss;
+                type = TreeNodeTypes.Villain;
             }
             else
             {
@@ -177,7 +182,7 @@ public class TreeMapSystem : MonoBehaviour
             }
         }
         root = nodes[0][0].GetComponent<TreeNodeObject>();
-        boss = nodes[height - 1][0].GetComponent<TreeNodeObject>();
+        villain = nodes[height - 1][0].GetComponent<TreeNodeObject>();
     }
 
     private TreeNodeTypes SelectType(TreeNodeTypes type)
@@ -217,18 +222,26 @@ public class TreeMapSystem : MonoBehaviour
 
     private IEnumerator CoLinkNodes()
     {
-        int nodesLength = nodes.Count;
-        for (int i = 0; i < nodesLength - 1; i++)
-            LinkNodes(i, nodes[i], nodes[i + 1]);
-        
         // UI Layout Group에서 포지션을 배치하기 위한 시간이 필요해서 코루틴으로 실행 시간 차이를 줌
         yield return null;
-        DrawLineRenderer();
-        SetNodeHighlighter(root);
-        gameObject.SetActive(false);
+        int index = 0;
+        int depth = nodes.Count;
+        for (int i = 0; i < depth; i++)
+        {
+            int bundleWidth = nodes[i].Count;
+            for (int j = 0; j < bundleWidth; j++)
+            {
+                int childCount = nodes[i][j].childrens.Count;
+                for (int k = 0; k < childCount; k++)
+                {
+                    SetLinePosition(lines[index++], nodes[i][j].tail.position, nodes[i][j].childrens[k].head.position);
+                }
+            }
+        }
+        CurNode = root;
     }
 
-    private void DrawLineRenderer()
+    private void CreateLineRenderer()
     {
         int depth = nodes.Count;
 
@@ -240,7 +253,8 @@ public class TreeMapSystem : MonoBehaviour
                 int childCount = nodes[i][j].childrens.Count;
                 for (int k = 0; k < childCount; k++)
                 {
-                    CreateNewLine(nodes[i][j].tail.position, nodes[i][j].childrens[k].head.position);
+                    GameObject lrObj = Instantiate(uiLineRendererPrefab, lineRendererTarget);
+                    lines.Add(lrObj.GetComponent<UILineRenderer>());
                 }
             }
         }
@@ -278,11 +292,8 @@ public class TreeMapSystem : MonoBehaviour
         }
     }
 
-    private void CreateNewLine(Vector3 start, Vector3 end)
+    private void SetLinePosition(UILineRenderer lr, Vector3 start, Vector3 end)
     {
-        GameObject lrObj = Instantiate(uiLineRendererPrefab, lineRendererTarget);
-        lines.Add(lrObj);
-        UILineRenderer lr = lrObj.GetComponent<UILineRenderer>();
         lr.Points[0] = lineRendererTarget.InverseTransformPoint(start);
         lr.Points[1] = lineRendererTarget.InverseTransformPoint(end);
         lr.enabled = true;

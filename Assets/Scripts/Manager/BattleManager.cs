@@ -141,7 +141,7 @@ public class BattleManager : MonoBehaviour
             for (int i = 0; i < useHeroes.Count; i++)
                 Invoke(nameof(OnReady), 3f);
         }
-        else if (tree.CurNode.type == TreeNodeTypes.Boss)
+        else if (tree.CurNode.type == TreeNodeTypes.Villain)
         {
             // 보스맵에서 임시로 모두 OnReady 해줘서 움직이게함
             SetHeroesReady();
@@ -189,7 +189,7 @@ public class BattleManager : MonoBehaviour
                 SetActiveUi(eventUi, true);
                 SetEventInfo(ev);
                 break;
-            case TreeNodeTypes.Boss:
+            case TreeNodeTypes.Villain:
                 curMap = eventMaps[0];
                 //OnLight(0);
                 break;
@@ -481,7 +481,7 @@ public class BattleManager : MonoBehaviour
         {
             prevNode.childrens[i].nodeButton.onClick.RemoveAllListeners();
         }
-        tree.OffMovableHighlighters();
+        //tree.OffMovableHighlighters();
 
         SetHeroReturnPositioning(roads[nodeIndex].fadeTrigger.heroSettingPositions);
     }
@@ -603,7 +603,7 @@ public class BattleManager : MonoBehaviour
             yield break;
         }
 
-        if (tree.CurNode.type == TreeNodeTypes.Boss)
+        if (tree.CurNode.type == TreeNodeTypes.Villain)
         {
             btMapTriggers.Last().isMissionEnd = true;
         }
@@ -614,6 +614,7 @@ public class BattleManager : MonoBehaviour
     {
         heroList = useHeroes;
     }
+
     private void ChoiceNextStageByNode()
     {
         stageReward.gameObject.SetActive(true);
@@ -626,10 +627,10 @@ public class BattleManager : MonoBehaviour
             useHeroes[i].ChangeUnitState(UnitState.Idle);
         }
 
-        tree.gameObject.SetActive(true);
+        //tree.gameObject.SetActive(true);
+        tree.ShowTree(true);
 
         List<TreeNodeObject> childs = tree.CurNode.childrens;
-        tree.SetMovableHighlighter(tree.CurNode);
         int count = childs.Count;
         for (int i = 0; i < count; i++)
         {
@@ -637,17 +638,19 @@ public class BattleManager : MonoBehaviour
             childs[i].nodeButton.onClick.AddListener(() => SelectNextStage(num));
         }
     }
-    private void ChoiceNextStage()
-    {
-        TreeNodeObject thisNode = tree.CurNode;
-        int count = thisNode.childrens.Count;
-        for (int i = 0; i < count; i++)
-        {
-            choiceButtonTexts[i].text = $"{thisNode.childrens[i].type}";
-            choiceButtons[i].gameObject.SetActive(true);
-            //roadChoiceButtons[i].choiceIndex = i;
-        }
-    }
+
+    //private void ChoiceNextStage()
+    //{
+    //    TreeNodeObject thisNode = tree.CurNode;
+    //    int count = thisNode.childrens.Count;
+    //    for (int i = 0; i < count; i++)
+    //    {
+    //        choiceButtonTexts[i].text = $"{thisNode.childrens[i].type}";
+    //        choiceButtons[i].gameObject.SetActive(true);
+    //        //roadChoiceButtons[i].choiceIndex = i;
+    //    }
+    //}
+
     private void CreateRoad()
     {
         if (tree.CurNode.childrens.Count == 0)
@@ -690,7 +693,7 @@ public class BattleManager : MonoBehaviour
         btMapTriggers.Last().isLastTrigger = true;
 
         // 임시 빌드용 코드
-        if (tree.CurNode.type == TreeNodeTypes.Boss)
+        if (tree.CurNode.type == TreeNodeTypes.Villain)
         {
             currBtMgr.battleMapType = BattleMapEnum.Normal;
             //Logger.Debug(btMapTriggers[^2].name);
@@ -752,7 +755,8 @@ public class BattleManager : MonoBehaviour
     }
     private bool OnNextStage()
     {
-        tree.gameObject.SetActive(false);
+        //tree.gameObject.SetActive(false);
+        tree.ShowTree(false);
         stageReward.gameObject.SetActive(false);
 
         coFadeOut = StartCoroutine(CoFadeOut());
@@ -901,7 +905,7 @@ public class BattleManager : MonoBehaviour
                 itemCount = 3;
                 //Logger.Debug("EventMapReward");
                 return;
-            case TreeNodeTypes.Boss:
+            case TreeNodeTypes.Villain:
                 colomId = "HardReward";
                 collomWeight = "HWeight";
                 itemCount = 5;
@@ -955,7 +959,7 @@ public class BattleManager : MonoBehaviour
         }
         if (Input.GetKeyDown(KeyCode.B))
         {
-            tree.CurNode.type = TreeNodeTypes.Boss;
+            tree.CurNode.type = TreeNodeTypes.Villain;
             DestroyRoad();
             RemoveRoadTrigger();
             ResetRoads();
