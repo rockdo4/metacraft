@@ -10,7 +10,6 @@ public class TempHeroAnimatorTrigger : MonoBehaviour
     }
     public void NormalAttackOnDamage(AnimationEvent ev)
     {
-        
         unit.NormalAttackOnDamage();
     }
     public void DeadUnit(AnimationEvent ev)
