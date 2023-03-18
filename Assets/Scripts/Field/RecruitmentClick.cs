@@ -1,15 +1,27 @@
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class RecruitmentClick : MonoBehaviour, IPointerDownHandler
+public class RecruitmentClick : MonoBehaviour
 {
     public UIManager uiMgr;
 
-    public void OnPointerDown(PointerEventData eventData)
+    public void Update()
     {
-        if (!EventSystem.current.IsPointerOverGameObject(eventData.pointerId))
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
-            uiMgr.ShowView(7);
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit))
+                {
+                    if (hit.collider.gameObject == gameObject)
+                    {
+                        uiMgr.ShowView(7);
+                    }
+                }
+            }
         }
     }
 }
