@@ -11,20 +11,26 @@ public class AttackableHero : AttackableUnit
     private Coroutine coOnIndicator;
 
     bool lateReturn = false;
-    public override float UnitHp {
-        get {  return base.UnitHp; }
-        set {
+
+    public override float UnitHp
+    {
+        get { return base.UnitHp; }
+        set
+        {
             base.UnitHp = value;
             heroUI.SetHp(UnitHp, MaxHp);
 
         }
     }
 
-    protected override UnitState UnitState {
-        get {
+    protected override UnitState UnitState
+    {
+        get
+        {
             return unitState;
         }
-        set {
+        set
+        {
             if (unitState == value)
                 return;
 
@@ -53,7 +59,7 @@ public class AttackableHero : AttackableUnit
                     BattleState = UnitBattleState.None;
                     nowUpdate = ReturnPosUpdate;
 
-                    heroUI.heroSkill.CancleSkill();                    
+                    heroUI.heroSkill.CancleSkill();
 
                     target = null;
                     lateReturn = false;
@@ -90,11 +96,14 @@ public class AttackableHero : AttackableUnit
         }
     }
 
-    protected override UnitBattleState BattleState {
-        get {
+    protected override UnitBattleState BattleState
+    {
+        get
+        {
             return battleState;
         }
-        set {
+        set
+        {
             if (value == battleState)
                 return;
             if (unitState == UnitState.Die && value != UnitBattleState.None)
@@ -125,7 +134,7 @@ public class AttackableHero : AttackableUnit
                 case UnitBattleState.Stun:
                     pathFind.isStopped = true;
                     animator.SetTrigger("Stun");
-                    Logger.Debug("Stun Trigger");
+                    //Logger.Debug("Stun Trigger");
                     animator.ResetTrigger("Attack");
                     animator.ResetTrigger("AttackEnd");
                     break;
@@ -134,29 +143,21 @@ public class AttackableHero : AttackableUnit
     }
 
     bool testRot = false;
-    public override bool IsAuto {
-        get {
+    public override bool IsAuto
+    {
+        get
+        {
             return isAuto;
         }
-        set {
+        set
+        {
             isAuto = value;
             characterData.activeSkill.isAuto = isAuto;
         }
     }
 
-    //protected override void Awake()
-    //{
-    //    base.Awake();
-    //    pathFind = transform.GetComponent<NavMeshAgent>();
-    //    characterData.InitSetting();
-    //    SetData();
-
-    //    unitState = UnitState.Idle;
-
-    //    lastNormalAttackTime = Time.time;
-    //}
     protected void Awake()
-    {   
+    {
         // 어웨이크 에러땜에 임시로 추가함
         InitData();
         pathFind = transform.GetComponent<NavMeshAgent>();
@@ -167,6 +168,7 @@ public class AttackableHero : AttackableUnit
 
         ResetCoolDown();
     }
+
     private void Start()
     {
         foreach (var attack in characterData.attacks)
@@ -206,7 +208,7 @@ public class AttackableHero : AttackableUnit
         UnitState = UnitState.None;
         battleState = UnitBattleState.None;
         pathFind.stoppingDistance = 0f;
-        
+
         lateReturn = false;
         lastNavTime = Time.time;
         ResetCoolDown();
@@ -222,23 +224,26 @@ public class AttackableHero : AttackableUnit
     {
         coOnIndicator = StartCoroutine(characterData.activeSkill.SkillCoroutine());
     }
+
     public void OffSkillAreaIndicator()
     {
         if (coOnIndicator == null)
             return;
 
-        GetActiveSkillAOE().ActiveOffSkillAreaIndicator();                
+        GetActiveSkillAOE().ActiveOffSkillAreaIndicator();
     }
+
     public void SkillCancle()
     {
         if (coOnIndicator == null)
             return;
 
         GetActiveSkillAOE().SetActiveIndicators(false);
-        StopAOESkillCoroutine();        
+        StopAOESkillCoroutine();
     }
+
     public void PlayActiveSkillAnimation()
-    {        
+    {
         pathFind.isStopped = true;
         BattleState = UnitBattleState.ActiveSkill;
         if (coOnIndicator != null)
@@ -247,20 +252,23 @@ public class AttackableHero : AttackableUnit
             StopAOESkillCoroutine();
         }
     }
+
     private void StopAOESkillCoroutine()
     {
         StopCoroutine(coOnIndicator);
         coOnIndicator = null;
     }
+
     private ActiveSkillAOE GetActiveSkillAOE()
-    {   
+    {
         return characterData.activeSkill as ActiveSkillAOE;
-    } 
+    }
+
     protected override void IdleUpdate()
     {
 
     }
-    
+
     protected override void BattleUpdate()
     {
         if (isAuto && heroUI.heroSkill.IsCoolDown && !bufferState.silence)
@@ -410,7 +418,7 @@ public class AttackableHero : AttackableUnit
 
     public override void ChangeUnitState(UnitState state)
     {
-        Logger.Debug(state);
+        //Logger.Debug(state);
         if (BattleState == UnitBattleState.ActiveSkill || BattleState == UnitBattleState.NormalAttack || BattleState == UnitBattleState.Stun)
         {
             lateReturn = true;
@@ -418,6 +426,7 @@ public class AttackableHero : AttackableUnit
         }
         UnitState = state;
     }
+
     public override void ChangeBattleState(UnitBattleState state)
     {
         BattleState = state;
@@ -436,7 +445,7 @@ public class AttackableHero : AttackableUnit
         heroUI.SetDieImage();
         //enemyList.Clear();
 
-        SkillCancle();      
+        SkillCancle();
     }
 
     //타겟이 없으면 Idle로 가고, 쿨타임 계산해서 바로 스킬 가능하면 사용, 아니라면 대기
@@ -457,6 +466,7 @@ public class AttackableHero : AttackableUnit
             BattleState = UnitBattleState.BattleIdle;
         }
     }
+
     public override void ActiveSkillEnd()
     {
         pathFind.isStopped = false;
@@ -472,6 +482,7 @@ public class AttackableHero : AttackableUnit
             BattleState = UnitBattleState.BattleIdle;
         }
     }
+
     public override void AddValueBuff(BuffInfo info, int anotherValue = 0, BuffIcon icon = null)
     {
         int idx = 0;
@@ -503,6 +514,7 @@ public class AttackableHero : AttackableUnit
             heroUI.SetHp(UnitHp, MaxHp);
         }
     }
+
     public override void AddStateBuff(BuffInfo info, AttackableUnit attackableUnit = null, BuffIcon icon = null)
     {
         int idx = 0;
@@ -525,7 +537,7 @@ public class AttackableHero : AttackableUnit
         else
             BuffDurationUpdate(info.id, info.duration);
 
-        if(info.type == BuffType.Silence)
+        if (info.type == BuffType.Silence)
         {
             heroUI.IsSilence = true;
         }
@@ -549,8 +561,9 @@ public class AttackableHero : AttackableUnit
         {
             BattleState = UnitBattleState.BattleIdle;
         }
-        Logger.Debug("Stun End");
+        //Logger.Debug("Stun End");
     }
+
     public override void RemoveBuff(Buff buff)
     {
         base.RemoveBuff(buff);

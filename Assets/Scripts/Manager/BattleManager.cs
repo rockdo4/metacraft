@@ -693,7 +693,7 @@ public class BattleManager : MonoBehaviour
         if (tree.CurNode.type == TreeNodeTypes.Boss)
         {
             currBtMgr.battleMapType = BattleMapEnum.Normal;
-            Logger.Debug(btMapTriggers[^2].name);
+            //Logger.Debug(btMapTriggers[^2].name);
 
             btMapTriggers[^2].enemys.Clear();
             btMapTriggers[^2].enemyColls.Clear();
@@ -820,7 +820,7 @@ public class BattleManager : MonoBehaviour
         if (enemy.GetUnitData().data.job == (int)CharacterJob.villain &&
             tree.CurNode.type == TreeNodeTypes.Threat)
         {
-            Logger.Debug("Middle Boss Dead");
+            //Logger.Debug("Middle Boss Dead");
             DeadMiddleBoss();
             SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
         }
@@ -893,19 +893,19 @@ public class BattleManager : MonoBehaviour
                 colomId = "ClearReward";
                 collomWeight = "CWeight";
                 itemCount = 3;
-                Logger.Debug("SupplyMapReward");
+                //Logger.Debug("SupplyMapReward");
                 break;
             case TreeNodeTypes.Event:
                 colomId = "ClearReward";
                 collomWeight = "CWeight";
                 itemCount = 3;
-                Logger.Debug("EventMapReward");
+                //Logger.Debug("EventMapReward");
                 return;
             case TreeNodeTypes.Boss:
                 colomId = "HardReward";
                 collomWeight = "HWeight";
                 itemCount = 5;
-                Logger.Debug("BossReward");
+                //Logger.Debug("BossReward");
                 return;
             default:
                 break;
@@ -966,7 +966,7 @@ public class BattleManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.V))
         {
             currBtMgr.battleMapType = BattleMapEnum.Normal;
-            Logger.Debug(btMapTriggers[^2].name);
+            //Logger.Debug(btMapTriggers[^2].name);
 
             btMapTriggers[^2].enemys.Clear();
             btMapTriggers[^2].enemyColls.Clear();
@@ -998,7 +998,7 @@ public class BattleManager : MonoBehaviour
     /*********************************************  юс╫ц  **********************************************/
     private void DeadMiddleBoss()
     {
-        Logger.Debug("Next!");
+        //Logger.Debug("Next!");
         KillAllEnemy(enemyTriggerIndex);
         enemyCountTxt.StopTimer();
         isMiddleBossAlive = false;

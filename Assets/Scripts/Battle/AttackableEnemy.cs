@@ -6,11 +6,14 @@ public class AttackableEnemy : AttackableUnit
     [SerializeField]
     public void SetTargetList(List<AttackableUnit> list) => heroList = list;
 
-    protected override UnitState UnitState {
-        get {
+    protected override UnitState UnitState
+    {
+        get
+        {
             return unitState;
         }
-        set {
+        set
+        {
             if (unitState == value)
                 return;
             if (unitState == UnitState.Die && value != UnitState.None)
@@ -56,7 +59,7 @@ public class AttackableEnemy : AttackableUnit
                     animator.Rebind();
                     animator.SetTrigger("Die");
 
-                    Logger.Debug("Enemy Die");
+                    //Logger.Debug("Enemy Die");
                     nowUpdate = DieUpdate;
                     break;
                 default:
@@ -65,11 +68,14 @@ public class AttackableEnemy : AttackableUnit
         }
     }
 
-    protected override UnitBattleState BattleState {
-        get {
+    protected override UnitBattleState BattleState
+    {
+        get
+        {
             return battleState;
         }
-        set {
+        set
+        {
             if (value == battleState)
                 return;
             if (unitState == UnitState.Die && value != UnitBattleState.None)
@@ -79,7 +85,7 @@ public class AttackableEnemy : AttackableUnit
             switch (battleState)
             {
                 case UnitBattleState.MoveToTarget:
-                    Logger.Debug(transform.parent.parent.parent.name);
+                    //Logger.Debug(transform.parent.parent.parent.name);
                     pathFind.isStopped = false;
                     break;
                 case UnitBattleState.BattleIdle:
@@ -103,20 +109,6 @@ public class AttackableEnemy : AttackableUnit
     float attackDelay = 1f;
     float attackDelayTimer = 0f;
 
-    //protected override void Awake()
-    //{
-    //    base.Awake();
-    //    pathFind = transform.GetComponent<NavMeshAgent>();
-    //    characterData.InitSetting();
-    //    SetData();
-
-    //    unitState = UnitState.Idle;
-    //    lastNormalAttackTime = Time.time;
-
-    //    hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
-
-    //}
-
     private void Awake()
     {
         InitData();
@@ -137,7 +129,7 @@ public class AttackableEnemy : AttackableUnit
             attack.SkillHolderTransform = effectCreateTransform ?? transform;
             attack.ActorTransform = transform;
         }
-        if(characterData.activeSkill != null)
+        if (characterData.activeSkill != null)
             characterData.activeSkill.ActorTransform = transform;
 
         var manager = FindObjectOfType<BattleManager>();
@@ -203,17 +195,17 @@ public class AttackableEnemy : AttackableUnit
         switch (BattleState)
         {
             case UnitBattleState.MoveToTarget: //타겟에게 이동중 타겟 거리 계산.
-                if(attackDelayTimer >= attackDelay && FindNowAttack())
+                if (attackDelayTimer >= attackDelay && FindNowAttack())
                 {
                     BattleState = UnitBattleState.NormalAttack;
                 }
-                else if(InRangeMinNormalAttack)
+                else if (InRangeMinNormalAttack)
                 {
                     BattleState = UnitBattleState.BattleIdle;
                 }
                 else if (Time.time - lastNavTime > navDelay) //일반공격, 패시브 사용 불가 거리일시 이동
                 {
-                    lastNavTime = Time.time; 
+                    lastNavTime = Time.time;
 
                     pathFind.SetDestination(target.transform.position);
                 }
@@ -228,11 +220,11 @@ public class AttackableEnemy : AttackableUnit
                 stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime >= 1.0f)
                 {
-                    if(name.Contains("Test"))
-                    {
-                       // Logger.Debug("anime name : "  + animator.GetCurrentAnimatorClipInfo(0)[0].clip.);
-                        Logger.Debug(nowAttack.name + " End");
-                    }
+                    //if (name.Contains("Test"))
+                    //{
+                    //    // Logger.Debug("anime name : "  + animator.GetCurrentAnimatorClipInfo(0)[0].clip.);
+                    //    Logger.Debug(nowAttack.name + " End");
+                    //}
                     NormalAttackEnd();
                     attackDelayTimer = 0f;
                     //StartCoroutine(TestAttackEnd());
@@ -252,6 +244,7 @@ public class AttackableEnemy : AttackableUnit
     {
 
     }
+
     protected override void ReturnPosUpdate()
     {
 
@@ -268,8 +261,9 @@ public class AttackableEnemy : AttackableUnit
 
     public override void OnDamage(AttackableUnit attackableUnit, CharacterSkill skill)
     {
-        base.OnDamage(attackableUnit, skill);        
+        base.OnDamage(attackableUnit, skill);
     }
+
     public override void OnDead(AttackableUnit unit)
     {
         battleManager.OnDeadEnemy((AttackableEnemy)unit);
@@ -284,12 +278,12 @@ public class AttackableEnemy : AttackableUnit
         lastNormalAttackTime[nowAttack] = Time.time;
 
         BattleState = UnitBattleState.BattleIdle;
-    } 
+    }
+
     public override void OnActiveSkill()    //테스트용
     {
         if (nowAttack.targetNumLimit == 1)
         {
-            bool isCritical = false;
             target.OnDamage(this, characterData.activeSkill);
             return;
         }
@@ -315,10 +309,10 @@ public class AttackableEnemy : AttackableUnit
 
         for (int i = 0; i < attackTargetList.Count; i++)
         {
-            bool isCritical = false;
             attackTargetList[i].OnDamage(this, characterData.activeSkill);
         }
     }
+
     public override void ActiveSkillEnd()
     {
         pathFind.isStopped = false;
@@ -327,6 +321,7 @@ public class AttackableEnemy : AttackableUnit
         BattleState = UnitBattleState.BattleIdle;
         base.ActiveSkillEnd();
     }
+
     public override void StunEnd()
     {
         if (unitState == UnitState.Die)
@@ -345,5 +340,4 @@ public class AttackableEnemy : AttackableUnit
         else
             return null;
     }
-
 }
