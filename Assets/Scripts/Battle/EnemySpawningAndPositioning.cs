@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static UnityEditor.PlayerSettings;
 
 public class EnemySpawningAndPositioning : MonoBehaviour
 {
@@ -112,8 +113,31 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     {
         StartCoroutine(CoRespawn(enemyPool, timer));
     }
+
+    private void ResetPositionEnemys()
+    {
+        Vector3 trPos = tr.position;
+
+        for (int i = 0; i < enemys.Count; i++) // 4
+        {
+            for (int j = 0; j < enemys[i].Count; j++)
+            {
+                Vector3 randomArea = UnityEngine.Random.insideUnitSphere * spawnRange;
+                randomArea.y = 0f;
+                randomArea.x += trPos.x;
+                randomArea.z += trPos.z;
+
+                enemys[i][j].gameObject.transform.position = randomArea;
+            }
+        }
+    }
+
     public void InfinityRespawn()
     {
+        ResetPositionEnemys();
+
+        spawnCount = 0;
+        isInfinityRespawn = true;
         coInfinityRespawn = StartCoroutine(CoInfinityRespawn(respawnTimer));
     }
     public void SpawnAllEnemy(ref List<AttackableUnit> enemyPool)

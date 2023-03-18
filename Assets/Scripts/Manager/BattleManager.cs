@@ -712,6 +712,7 @@ public class BattleManager : MonoBehaviour
             }
 
             btMapTriggers[^2].ResetEnemys();
+            btMapTriggers[^2].ResetEnemyPositions();
         }
 
         CreateRoad();
@@ -984,6 +985,7 @@ public class BattleManager : MonoBehaviour
             }
 
             btMapTriggers[^2].ResetEnemys();
+            btMapTriggers[^2].ResetEnemyPositions();
         }
 
         if (Input.GetKeyDown(KeyCode.C))

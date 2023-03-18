@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEngine;
 
 public class DefenseMapInfo : BattleMapInfo
 {
@@ -32,6 +33,12 @@ public class DefenseMapInfo : BattleMapInfo
         {
             triggers[index].SpawnAllEnemy();
             init = true;
+        }
+        else
+        {
+            triggers[index].isTriggerEnter = false;
+            triggers[index].ResetEnemys();
+            triggers[index].SetEnemysActive(false);
         }
 
         triggers[index].InfinityRespawnEnemy();
