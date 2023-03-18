@@ -48,10 +48,6 @@ public class GameManager : Singleton<GameManager>
     public Color currMapColor;
     public List<Color> mapLigthColors;
 
-    // 스프라이트 임시
-    public List<Sprite> tempIconSprites;
-    public List<Sprite> tempIlluSprites;
-
     public override void Awake()
     {
         base.Awake();
@@ -115,10 +111,24 @@ public class GameManager : Singleton<GameManager>
         {
             string address = heroDatabase[i].GetComponent<CharacterDataBundle>().originData.name;
             string iconAddress = $"Icon_{address}";
+            AsyncOperationHandle<Sprite> iconHandle = Addressables.LoadAssetAsync<Sprite>(iconAddress);
+            iconHandle.Completed +=
+                (AsyncOperationHandle<Sprite> obj)=>
+                {
+                    Sprite sprite = obj.Result;
+                    iconSprites.Add(iconAddress, sprite);
+                    handles.Add(iconAddress, iconHandle);
+                };
+
             string IllurAddress = $"Illu_{address}";
-            handles.Add(iconAddress, Addressables.LoadAssetAsync<Sprite>(iconAddress));
-            handles.Add(IllurAddress, Addressables.LoadAssetAsync<Sprite>(IllurAddress));
-            heroNames.Add(address);
+            AsyncOperationHandle<Sprite> illuHandle = Addressables.LoadAssetAsync<Sprite>(IllurAddress);
+            illuHandle.Completed +=
+                (AsyncOperationHandle<Sprite> obj) =>
+                {
+                    Sprite sprite = obj.Result;
+                    illustrationSprites.Add(IllurAddress, sprite);
+                    handles.Add(IllurAddress, illuHandle);
+                };
         }
 
         // 스프라이트 리소스 로드 대기
@@ -147,15 +157,6 @@ public class GameManager : Singleton<GameManager>
         compensationInfoList = CSVReader.SplitTextAsset(handles["CompensationTable"].Result as TextAsset);
         supplyInfoList = CSVReader.SplitTextAsset(handles["SupplyTable"].Result as TextAsset);
         itemInfoList = CSVReader.SplitTextAsset(handles["ItemInfoTable"].Result as TextAsset);
-
-        count = heroNames.Count;
-        for (int i = 0; i < count; i++)
-        {
-            string iconKey = $"Icon_{heroNames[i]}";
-            iconSprites.Add(iconKey, handles[iconKey].Result as Sprite);
-            string illuKey = $"Illu_{heroNames[i]}";
-            illustrationSprites.Add(illuKey, handles[illuKey].Result as Sprite);
-        }
 
         LoadAllData();
         FixMissionTable();
@@ -327,7 +328,7 @@ public class GameManager : Singleton<GameManager>
             string tableName = heroDatabase[i].GetComponent<CharacterDataBundle>().originData.name;
             if (tableName.Equals(heroName))
             {
-                Logger.Debug($"index: [{i}], name: [{heroName}]");
+                //Logger.Debug($"index: [{i}], name: [{heroName}]");
                 return i;
             }
         }
@@ -341,17 +342,14 @@ public class GameManager : Singleton<GameManager>
 
     public Sprite GetSpriteByAddress(string address)
     {
-        string onlyName = address[5..];
         if (iconSprites.ContainsKey(address))
         {
-            return tempIconSprites[GetHeroIndex(onlyName)];
-            //return iconSprites[address];
+            return iconSprites[address];
         }
 
         if (illustrationSprites.ContainsKey(address))
         {
-            return tempIlluSprites[GetHeroIndex(onlyName)];
-            //return illustrationSprites[address];
+            return illustrationSprites[address];
         }
 
         Logger.Debug($"Load sprite fail. address: {address}");
