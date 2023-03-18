@@ -10,7 +10,7 @@ public class TempHeroAnimatorTrigger : MonoBehaviour
     }
     public void DeadUnit(AnimationEvent ev)
     {
-        unit.OnDead(unit);
+       // unit.OnDead(unit);
     }
     public void DestroyUnit(AnimationEvent ev)
     {

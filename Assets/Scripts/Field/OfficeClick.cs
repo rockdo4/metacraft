@@ -6,11 +6,23 @@ public class OfficeClick : MonoBehaviour
 {
     public UIManager uiMgr;
 
-    public void OnMouseDown()
+    public void Update()
     {
-        if(!EventSystem.current.IsPointerOverGameObject())
+        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
-            uiMgr.ShowView(2);
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit))
+                {
+                    if (hit.collider.gameObject == gameObject)
+                    {
+                        uiMgr.ShowView(2);
+                    }
+                }
+            }
         }
     }
 }
