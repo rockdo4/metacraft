@@ -227,15 +227,6 @@ public abstract class AttackableUnit : MonoBehaviour
         {
             buffList[i].TimerUpdate();
         }
-
-        if (Input.GetKeyDown(KeyCode.Insert))
-        {
-            if (name.Contains("Test"))
-            {
-                clipOverrides["NormalAttack"] = skillClips[0];
-                animatorOverrideController.ApplyOverrides(clipOverrides);
-            }
-        }
     }
 
     public abstract void ChangeUnitState(UnitState state);
@@ -260,59 +251,59 @@ public abstract class AttackableUnit : MonoBehaviour
         //}
     }
 
-    //public virtual void NormalAttackOnDamage()
-    //{
-    //    if (target == null)
-    //        return;
+    public virtual void NormalAttackOnDamage()
+    {
+        if (target == null)
+            return;
 
-    //    if (BattleState == UnitBattleState.ActiveSkill)
-    //        return;
+        if (BattleState == UnitBattleState.ActiveSkill)
+            return;
 
-    //    nowAttack.NormalAttackOnDamage();
+        nowAttack.NormalAttackOnDamage();
 
-    //    if (nowAttack.targetNumLimit == 1)
-    //    {
-    //        target.OnDamage(this, nowAttack);
-    //        //foreach (var buff in normalbuffs)
-    //        //{
-    //        //    bool isCritical = false;
-    //        //    var value = CalculDamage(characterData.activeSkill, ref isCritical);
-    //        //    target.AddValueBuff(buff, value, null);
-    //        //}
-    //        return;
-    //    }
+        if (nowAttack.targetNumLimit == 1)
+        {
+            target.OnDamage(this, nowAttack);
+            //foreach (var buff in normalbuffs)
+            //{
+            //    bool isCritical = false;
+            //    var value = CalculDamage(characterData.activeSkill, ref isCritical);
+            //    target.AddValueBuff(buff, value, null);
+            //}
+            return;
+        }
 
-    //    List<AttackableUnit> attackTargetList = new();
+        List<AttackableUnit> attackTargetList = new();
 
-    //    var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
-    //    foreach (var now_target in targetList)
-    //    {
-    //        Vector3 interV = now_target.transform.position - transform.position;
-    //        if (interV.magnitude <= nowAttack.distance)
-    //        {
-    //            float angle = Vector3.Angle(transform.forward, interV);
+        var targetList = (normalAttackTargetType == UnitType.Hero) ? heroList : enemyList;
+        foreach (var now_target in targetList)
+        {
+            Vector3 interV = now_target.transform.position - transform.position;
+            if (interV.magnitude <= nowAttack.distance)
+            {
+                float angle = Vector3.Angle(transform.forward, interV);
 
-    //            if (Mathf.Abs(angle) < nowAttack.angle / 2f)
-    //            {
-    //                attackTargetList.Add(now_target);
-    //            }
-    //        }
-    //    }
+                if (Mathf.Abs(angle) < nowAttack.angle / 2f)
+                {
+                    attackTargetList.Add(now_target);
+                }
+            }
+        }
 
-    //    //attackTargetList = GetNearestUnitList(attackTargetList, nowAttack.targetNumLimit);
+        //attackTargetList = GetNearestUnitList(attackTargetList, nowAttack.targetNumLimit);
 
-    //    //for (int i = 0; i < attackTargetList.Count; i++)
-    //    //{
-    //    //    attackTargetList[i].OnDamage(this, nowAttack);
-    //    //    foreach (var buff in normalbuffs)
-    //    //    {
-    //    //        bool isCritical = false;
-    //    //        var value = CalculDamage(characterData.activeSkill, ref isCritical);
-    //    //        attackTargetList[i].AddValueBuff(buff, value, null);
-    //    //    }
-    //    //}
+        //for (int i = 0; i < attackTargetList.Count; i++)
+        //{
+        //    attackTargetList[i].OnDamage(this, nowAttack);
+        //    foreach (var buff in normalbuffs)
+        //    {
+        //        bool isCritical = false;
+        //        var value = CalculDamage(characterData.activeSkill, ref isCritical);
+        //        attackTargetList[i].AddValueBuff(buff, value, null);
+        //    }
+        //}
 
-    //}
+    }
 
     protected void AssultSearch()
     {

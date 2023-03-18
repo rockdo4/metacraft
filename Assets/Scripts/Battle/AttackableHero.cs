@@ -63,7 +63,7 @@ public class AttackableHero : AttackableUnit
 
                     target = null;
                     lateReturn = false;
-                    testRot = false;
+                    isRotate = false;
                     break;
                 case UnitState.MoveNext:
                     pathFind.isStopped = false;
@@ -142,7 +142,7 @@ public class AttackableHero : AttackableUnit
         }
     }
 
-    bool testRot = false;
+    bool isRotate = false;
     public override bool IsAuto
     {
         get
@@ -204,7 +204,7 @@ public class AttackableHero : AttackableUnit
 
     public override void ResetData()
     {
-        testRot = false;
+        isRotate = false;
         UnitState = UnitState.None;
         battleState = UnitBattleState.None;
         pathFind.stoppingDistance = 0f;
@@ -375,7 +375,7 @@ public class AttackableHero : AttackableUnit
 
     protected override void ReturnPosUpdate()
     {
-        switch (testRot)
+        switch (isRotate)
         {
             case true:
                 //transform.rotation = Quaternion.Lerp(transform.rotation, returnPos.rotation, Time.deltaTime * 5);
@@ -388,7 +388,7 @@ public class AttackableHero : AttackableUnit
                 //if (angle <= 0)
                 {
                     transform.rotation = returnPos.rotation;
-                    testRot = false;
+                    isRotate = false;
                     UnitState = UnitState.Idle;
 
                     if (battleManager.tree.CurNode.type == TreeNodeTypes.Threat)
@@ -408,7 +408,7 @@ public class AttackableHero : AttackableUnit
                 animator.SetFloat("Speed", pathFind.velocity.magnitude / characterData.data.moveSpeed);
                 if (Vector3.Distance(returnPos.position, transform.position) <= 0.5f)
                 {
-                    testRot = true;
+                    isRotate = true;
                     pathFind.isStopped = true;
                     transform.position = returnPos.position;
                 }

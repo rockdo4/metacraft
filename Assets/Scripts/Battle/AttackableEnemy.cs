@@ -333,7 +333,7 @@ public class AttackableEnemy : AttackableUnit
         BattleState = UnitBattleState.BattleIdle;
     }
 
-    public AttackableEnemy TestGetIsBattle()
+    public AttackableEnemy GetIsBattle()
     {
         if (UnitState == UnitState.Battle)
             return this;
