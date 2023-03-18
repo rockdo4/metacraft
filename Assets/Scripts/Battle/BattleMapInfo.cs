@@ -90,6 +90,7 @@ public class BattleMapInfo : MonoBehaviour
         for (int i = 0; i < triggers.Count; i++)
         {
             triggers[i].ResetEnemys();
+            triggers[i].ResetEnemyPositions();
         }
     }
     protected void AllTriggerEnterReset()

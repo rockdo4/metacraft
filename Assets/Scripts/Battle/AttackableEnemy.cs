@@ -13,7 +13,7 @@ public class AttackableEnemy : AttackableUnit
         set {
             if (unitState == value)
                 return;
-            if (unitState == UnitState.Die)
+            if (unitState == UnitState.Die && value != UnitState.None)
                 return;
             unitState = value;
             switch (unitState)
@@ -49,11 +49,11 @@ public class AttackableEnemy : AttackableUnit
                     break;
                 case UnitState.Die:
                     //pathFind.enabled = false;
-                    ResetBuffers();
+                    OnDead(this);
+                    RemoveAllBuff();
                     BattleState = UnitBattleState.None;
                     gameObject.GetComponent<Collider>().enabled = false;
-                    animator.ResetTrigger("Stun");
-                    animator.ResetTrigger("StunEnd");
+                    animator.Rebind();
                     animator.SetTrigger("Die");
 
                     Logger.Debug("Enemy Die");
@@ -72,7 +72,7 @@ public class AttackableEnemy : AttackableUnit
         set {
             if (value == battleState)
                 return;
-            if (unitState == UnitState.Die)
+            if (unitState == UnitState.Die && value != UnitBattleState.None)
                 return;
 
             battleState = value;
@@ -148,7 +148,7 @@ public class AttackableEnemy : AttackableUnit
     public override void ResetData()
     {
         UnitState = UnitState.None;
-        battleState = UnitBattleState.None;
+        BattleState = UnitBattleState.None;
         UnitHp = characterData.data.healthPoint;
         hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
         lastNavTime = Time.time;
@@ -273,6 +273,7 @@ public class AttackableEnemy : AttackableUnit
     public override void OnDead(AttackableUnit unit)
     {
         battleManager.OnDeadEnemy((AttackableEnemy)unit);
+        hpBarManager.Die();
     }
 
     //타겟이 없으면 Idle로 가고, 쿨타임 계산해서 바로 스킬 가능하면 사용, 아니라면 대기

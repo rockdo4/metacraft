@@ -384,6 +384,7 @@ public class BattleManager : MonoBehaviour
                 var coll = attackableHero.GetComponent<CapsuleCollider>();
                 coll.enabled = true;
                 useHeroes.Add(attackableHero);
+                attackableHero.GetUnitData().passiveSkill?.OnActiveSkill(attackableHero);
 
                 supplyEventHeroImages[i].SetHeroInfo(attackableHero.GetUnitData());
             }
@@ -712,6 +713,7 @@ public class BattleManager : MonoBehaviour
             }
 
             btMapTriggers[^2].ResetEnemys();
+            btMapTriggers[^2].ResetEnemyPositions();
         }
 
         CreateRoad();
@@ -984,6 +986,7 @@ public class BattleManager : MonoBehaviour
             }
 
             btMapTriggers[^2].ResetEnemys();
+            btMapTriggers[^2].ResetEnemyPositions();
         }
 
         if (Input.GetKeyDown(KeyCode.C))

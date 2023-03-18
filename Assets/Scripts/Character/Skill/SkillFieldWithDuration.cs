@@ -102,8 +102,12 @@ public class SkillFieldWithDuration : MonoBehaviour
 
         foreach (Collider collider in colliders)
         {
-            if(collider.gameObject.activeSelf)
-                collider.GetComponent<AttackableUnit>().OnDamage(attackableUnit, skill);
+            if (collider != null && collider.gameObject.activeSelf)
+            {
+                var attackable = collider.GetComponent<AttackableUnit>();
+                if(attackable.GetUnitState() == UnitState.Battle)
+                    attackable.OnDamage(attackableUnit, skill);
+            }
         }
     }
     public virtual void SetScale(float x, float y, float z = 1f)
