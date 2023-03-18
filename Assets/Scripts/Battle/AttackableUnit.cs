@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
+using static UnityEngine.Rendering.DebugUI;
 
 public class AnimationClipOverrides : List<KeyValuePair<AnimationClip, AnimationClip>>
 {
@@ -112,6 +113,7 @@ public abstract class AttackableUnit : MonoBehaviour
     protected List<Buff> buffList = new();
     [SerializeField]
     protected BufferState bufferState = new();
+    public BufferState GetBuffState => bufferState;
 
     protected bool isAuto = false;
     public virtual bool IsAuto
@@ -293,24 +295,24 @@ public abstract class AttackableUnit : MonoBehaviour
             }
         }
 
-        if(nowAttack.searchType == SkillSearchType.Healer)
-        {
-            var levelCorrection = 1 + Mathf.Clamp((characterData.data.level - characterData.data.level) / 100f, -0.4f, 0);
+        //if (nowAttack.searchType == SkillSearchType.Healer)
+        //{
+        //    BuffInfo heal = null;
+        //    foreach (var buff in nowAttack.buffInfos)
+        //    {
+        //        if (buff[nowAttack.skillLevel - 1].type == BuffType.Heal)
+        //        {
+        //            heal = buff[nowAttack.skillLevel - 1];
+        //            break;
+        //        }
+        //    }
+        //    var levelCorrection = 1 + Mathf.Clamp((characterData.data.level - characterData.data.level) / 100f, -0.4f, 0);
+        //    bool isCritical = false;
+        //    var dmg = (int)(CalculDamage(nowAttack, ref isCritical) * levelCorrection);
+        //    target.AddValueBuff(heal, dmg);
 
-            bool isCritical = false;
-            var dmg = (int)(CalculDamage(nowAttack, ref isCritical) * levelCorrection);
-
-            foreach (var buff in nowAttack.buffInfos)
-            {
-                if (buff[nowAttack.skillLevel-1].type == BuffType.Heal)
-                {
-                    target.AddValueBuff(buff[nowAttack.skillLevel-1], dmg);
-                    break;
-                }
-            }
-        }
+        //}
     }
-
     protected void AssultSearch()
     {
         if (bufferState.provoke)
@@ -433,7 +435,7 @@ public abstract class AttackableUnit : MonoBehaviour
     //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)
     public virtual void OnDamage(AttackableUnit attackableUnit, CharacterSkill skill)
     {
-        if ((skill.searchType == SkillSearchType.Healer || skill.searchType == SkillSearchType.Buffer))
+        if (skill.searchType == SkillSearchType.Buffer)
         {
             return;
         }
