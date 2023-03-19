@@ -274,7 +274,7 @@ public class BattleManager : MonoBehaviour
 
         // eventEffectInfoList 는 eventEffectTagInfoList로 변경됨. 상운과 논의 후 연결해서 쓸 것
 
-        /*
+        
         // 테스트로 노멀 이펙트만 가져옴
         int effectColumn = 0;
         for (int i = 0; i < eventEffectInfoTable.Count; i++)
@@ -332,7 +332,7 @@ public class BattleManager : MonoBehaviour
         contentText.text = gm.GetStringByTable(normalValueKey);
         object rewardKey = normalRewardKey;
         AddReward(rewardKey);
-        */
+        
     }
 
     private void Init()
@@ -355,7 +355,7 @@ public class BattleManager : MonoBehaviour
         eventInfoTable = gm.eventInfoList;
         supplyInfoTable = gm.supplyInfoList;
         currentSelectMissionTable = gm.currentSelectMission;
-        //eventEffectInfoTable = gm.eventEffectInfoList;
+        eventEffectInfoTable = gm.eventEffectInfoList;
 
         var selectedHeroes = gm.GetSelectedHeroes();
         int count = selectedHeroes.Count;
@@ -391,7 +391,7 @@ public class BattleManager : MonoBehaviour
         clearUi.SetHeroes(useHeroes);
         readyCount = useHeroes.Count;
 
-        FindObjectOfType<AutoButton>().ResetData(useHeroes);
+        FindObjectOfType<AutoButton>().ResetData(ref useHeroes);
 
         gm.SetDifferentColor();
         for (int i = 0; i < eventMaps.Count; i++)

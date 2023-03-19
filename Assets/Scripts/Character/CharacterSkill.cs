@@ -134,12 +134,25 @@ public class CharacterSkill : ScriptableObject
                     {
                         foreach (var buff in buffInfos)
                         {
-                            if (buff[skillLevel - 1].type == BuffType.Provoke
-                                || buff[skillLevel - 1].type == BuffType.Stun
-                                || buff[skillLevel - 1].type == BuffType.Silence)
-                                finalTargets[i].AddStateBuff(buff[skillLevel - 1], unit);
+                            var nowBuff = buff[skillLevel - 1];
+                            if (nowBuff.type == BuffType.Provoke
+                                || nowBuff.type == BuffType.Stun
+                                || nowBuff.type == BuffType.Silence)
+                                finalTargets[i].AddStateBuff(nowBuff, unit);
                             else
-                                finalTargets[i].AddValueBuff(buff[skillLevel - 1]);
+                            {
+                                //int value = 0;
+
+                                //var levelCorrection = 1 + 
+                                //    Mathf.Clamp((unit.GetUnitData().data.level - unit.GetUnitData().data.level) / 100f, -0.4f, 0);
+
+                                //bool isCritical = nowBuff.type == BuffType.Heal ? false :
+                                //    UnityEngine.Random.Range(0f, 1f) < unit.GetUnitData().data.critical + (unit.GetBuffState.criticalProbability);
+
+                                //var dmg = (int)(unit.CalculDamage(this, ref isCritical) * levelCorrection);
+                                //finalTargets[i].AddValueBuff(nowBuff, value);
+                                finalTargets[i].AddValueBuff(nowBuff);
+                            }
                         }
                     }
                 }
