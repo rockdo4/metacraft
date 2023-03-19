@@ -1,9 +1,7 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.AI;
-using static UnityEngine.Rendering.DebugUI;
 
 public class AnimationClipOverrides : List<KeyValuePair<AnimationClip, AnimationClip>>
 {
