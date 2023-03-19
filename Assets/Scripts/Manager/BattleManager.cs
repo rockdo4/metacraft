@@ -286,10 +286,13 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        //float normalValue1 = (float)eventEffectInfoTable[effectColumn]["Normalvalue1"];
-        //float normalValue2 = (float)eventEffectInfoTable[effectColumn]["Normalvalue2"];
-        string normalValue1 = $"{eventEffectInfoTable[effectColumn]["Normalvalue1"]}";
-        string normalValue2 = $"{eventEffectInfoTable[effectColumn]["Normalvalue2"]}";
+        string normalV1 = $"{eventEffectInfoTable[effectColumn]["Normalvalue1"]}";
+        string normalV2 = $"{eventEffectInfoTable[effectColumn]["Normalvalue2"]}";
+        float normalValue1 = float.Parse(normalV1);
+        float normalValue2 = float.Parse(normalV2);
+
+        //string normalValue1 = $"{eventEffectInfoTable[effectColumn]["Normalvalue1"]}";
+        //string normalValue2 = $"{eventEffectInfoTable[effectColumn]["Normalvalue2"]}";
         string value1Text = $"{eventEffectInfoTable[effectColumn]["NormalvalueText1"]}";
         string value2Text = $"{eventEffectInfoTable[effectColumn]["NormalvalueText2"]}";
         int normalReward1 = (int)eventEffectInfoTable[effectColumn]["NormalReward1"];
@@ -299,35 +302,37 @@ public class BattleManager : MonoBehaviour
         string normalValueKey = string.Empty;
         int normalRewardKey = 0;
 
-        normalValueKey = value1Text;
-        normalRewardKey = normalReward1;
+        //normalValueKey = value1Text;
+        //normalRewardKey = normalReward1;
 
-        //if (normalValue1.Equals(1f))
-        //{
-        //    normalValueKey = value1Text;
-        //    normalRewardKey = normalReward1;
-        //}
-        //else if (normalValue2.Equals(1f))
-        //{
-        //    normalValueKey = value2Text;
-        //    normalRewardKey = normalReward2;
-        //}
-        //else if (normalValue1.Equals(normalValue2))
-        //{
-        //    float randomValue = Random.Range(0f, 1f);
-        //    normalValueKey = randomValue >= 0.5f ? value1Text : value2Text;
-        //    normalRewardKey = normalValueKey.Equals(value1Text) ? normalReward1 : normalReward2;
-        //}
-        //else
-        //{
-        //    normalValueKey = normalValue1 > normalValue2 ? value1Text : value2Text;
-        //    normalRewardKey = normalValueKey.Equals(value1Text) ? normalReward1 : normalReward2;
-        //}
+        if (normalValue1.Equals(1f))
+        {
+            normalValueKey = value1Text;
+            normalRewardKey = normalReward1;
+        }
+        else if (normalValue2.Equals(1f))
+        {
+            normalValueKey = value2Text;
+            normalRewardKey = normalReward2;
+        }
+        else if (normalValue1.Equals(normalValue2))
+        {
+            float randomValue = Random.Range(0f, 1f);
+            normalValueKey = randomValue >= 0.5f ? value1Text : value2Text;
+            normalRewardKey = normalValueKey.Equals(value1Text) ? normalReward1 : normalReward2;
+        }
+        else
+        {
+            normalValueKey = normalValue1 > normalValue2 ? value1Text : value2Text;
+            normalRewardKey = normalValueKey.Equals(value1Text) ? normalReward1 : normalReward2;
+        }
 
         if (normalRewardKey == -1)
         {
             return;
         }
+
+        Logger.Debug($"{normalValueKey}");
 
         contentText.text = gm.GetStringByTable(normalValueKey);
         object rewardKey = normalRewardKey;
