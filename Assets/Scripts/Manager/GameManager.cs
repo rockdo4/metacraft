@@ -114,7 +114,7 @@ public class GameManager : Singleton<GameManager>
                     Sprite sprite = obj.Result;
                     iconSprites.Add(iconAddress, sprite);
                 };
-            handles.Add(iconAddress, iconHandle);
+            //handles.Add(iconAddress, iconHandle);
 
             string IllurAddress = $"Illu_{address}";
             AsyncOperationHandle<Sprite> illuHandle = Addressables.LoadAssetAsync<Sprite>(IllurAddress);
@@ -124,7 +124,7 @@ public class GameManager : Singleton<GameManager>
                     Sprite sprite = obj.Result;
                     illustrationSprites.Add(IllurAddress, sprite);
                 };
-            handles.Add(IllurAddress, illuHandle);
+            //handles.Add(IllurAddress, illuHandle);
         }
 
         // 스프라이트 리소스 로드 대기
