@@ -887,11 +887,11 @@ public class BattleManager : MonoBehaviour
                 collomWeight = "HWeight";
                 itemCount = 5;
                 break;
-            //case TreeNodeTypes.Supply:
-            //    colomId = "ClearReward";
-            //    collomWeight = "CWeight";
-            //    itemCount = 3;
-            //    break;
+            case TreeNodeTypes.Supply:
+                colomId = "ClearReward";
+                collomWeight = "CWeight";
+                itemCount = 3;
+                break;
             //case TreeNodeTypes.Event:
             //    colomId = "ClearReward";
             //    collomWeight = "CWeight";
