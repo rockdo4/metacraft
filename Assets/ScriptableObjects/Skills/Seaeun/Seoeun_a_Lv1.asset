@@ -18,7 +18,7 @@ MonoBehaviour:
   preCooldown: 0
   cooldown: 3
   distance: 5
-  targetNumLimit: 1
+  targetNumLimit: 3
   angle: 360
   coefficientType: 2
   coefficient: 0.075
@@ -31,8 +31,10 @@ MonoBehaviour:
   isAuto: 0
   targetPos: {x: 0, y: 0, z: 0}
   skillDescription: skillinfo_southsilver_a
-  buffInfos: []
-  buffRadius: 0
-  buffTargetType: -1
-  buffTargetCnt: 0
+  buffInfos:
+  - list:
+    - {fileID: 11400000, guid: 47841f8d0e5ebf44ea9cff5fe16407e0, type: 2}
+  buffRadius: 5
+  buffTargetType: 1
+  buffTargetCnt: 3
   priority: 0
