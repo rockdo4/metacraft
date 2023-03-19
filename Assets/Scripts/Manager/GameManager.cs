@@ -42,7 +42,6 @@ public class GameManager : Singleton<GameManager>
     // Origin Database - Set Prefab & Scriptable Objects
     public List<GameObject> heroDatabase = new();
 
-    public List<Effect> effects; // 사용할 이펙트들
     public Color currMapColor;
     public List<Color> mapLigthColors;
 
@@ -50,7 +49,6 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
         StartCoroutine(LoadAllResources());
-        EffectManager.Instance.CreateEffectManager();
     }
 
     public void SetHeroesOrigin()
