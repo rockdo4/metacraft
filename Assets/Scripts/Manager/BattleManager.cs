@@ -406,7 +406,7 @@ public class BattleManager : MonoBehaviour
         clearUi.SetHeroes(useHeroes);
         readyCount = useHeroes.Count;
 
-        FindObjectOfType<AutoButton>().ResetData(useHeroes);
+        FindObjectOfType<AutoButton>().ResetData(ref useHeroes);
 
         gm.SetDifferentColor();
         for (int i = 0; i < eventMaps.Count; i++)
