@@ -285,7 +285,6 @@ public class AttackableHero : AttackableUnit
             SearchActiveTarget();
             if (activeTarget != null && InRangeActiveAttack)
             {
-                heroUI.heroSkill.OnDownSkill();
                 characterData.activeSkill.targetPos = activeTarget.transform.position;
                     
                 coOnAutoSkill = StartCoroutine(heroUI.heroSkill.OnAutoSkillActive(characterData.activeSkill));

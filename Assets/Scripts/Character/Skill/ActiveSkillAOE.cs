@@ -112,6 +112,13 @@ public class ActiveSkillAOE : CharacterSkill
             else
                 WhenTrackTarget(hit);
         }
+        else if(isAuto)
+        {
+            var nowHit = new RaycastHit();
+            nowHit.point = targetPos;
+            WhenManualTarget(nowHit);
+            WhenTrackTarget(nowHit);
+        }
     }
     private void WhenManualTarget(RaycastHit hit)
     {
