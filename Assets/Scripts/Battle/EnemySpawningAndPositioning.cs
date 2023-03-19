@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class EnemySpawningAndPositioning : MonoBehaviour
@@ -164,12 +163,11 @@ public class EnemySpawningAndPositioning : MonoBehaviour
 
         if (isMiddleBoss)
         {
-            float maxHp = enemys.SelectMany(x => x).Max(enemy => enemy.GetUnitData().data.healthPoint);
             for (int i = 0; i < enemys.Count; i++)
             {
                 for (int j = 0; j < enemys[i].Count; j++)
                 {
-                    if (enemys[i][j].GetUnitData().data.healthPoint == maxHp)
+                    if (enemys[i][j].GetUnitData().data.job == (int)CharacterJob.villain)
                     {
                         middleBoss = enemys[i][j];
                         break;
