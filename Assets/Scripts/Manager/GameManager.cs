@@ -77,23 +77,6 @@ public class GameManager : Singleton<GameManager>
     {
         Dictionary<string, AsyncOperationHandle> handles = new();
 
-        // Resources 테이블로 뺄 예정
-        //List<string> tableNames = new()
-        //{
-        //    "MissionInfoTable",
-        //    "EventEffectTable",
-        //    "DispatchInfoTable",
-        //    "OfficeTable",
-        //    "EventTable",
-        //    "CompensationTable",
-        //    "SupplyTable",
-        //    "StringTable_Desc",
-        //    "StringTable_Event",
-        //    "StringTable_Proper",
-        //    "StringTable_UI",
-        //    "ItemInfoTable",
-        //};
-
         // Load TextAssets
         TextAsset ta = Resources.Load<TextAsset>("TextAssetList");
         var tableNames = ta.text.Split("\r\n");
