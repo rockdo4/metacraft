@@ -5,6 +5,7 @@ using TMPro;
 using System.Collections;
 using System.Linq;
 using Cinemachine;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 
 public class BattleManager : MonoBehaviour
 {
@@ -402,9 +403,15 @@ public class BattleManager : MonoBehaviour
             object stringTableRewardKey = rewardKey;
             AddReward(stringTableRewardKey);
         }
-        else
+        else if (priorityRewardType == 1)
         {
             ExecutionBuff(rewardKey);
+        }
+        else if (priorityRewardType == 2)
+        {
+            // 아이템 인포 테이블에서 찾고 add
+            stageReward.AddItem($"{rewardKey}", "1");
+            Logger.Debug("Good");
         }
     }
 
