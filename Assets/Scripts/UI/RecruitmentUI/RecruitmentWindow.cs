@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +7,7 @@ public class RecruitmentWindow : MonoBehaviour
     public List<GameObject> heroDatabase;
     private float[] probs;
     private Dictionary<int, int> gradeCounts = new Dictionary<int, int>();
+    private List<GameObject> getGacha;
 
     private void Start()
     {
@@ -51,11 +50,41 @@ public class RecruitmentWindow : MonoBehaviour
             }
         }
     }
-    private void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Z))
-        {
 
+    public void OneTimeGacha()
+    {
+        getGacha.Add(heroDatabase[Gacha(probs)]);
+    }
+    public void TenTimesGacha()
+    {
+        for (int i = 0; i < 10; i++)
+        {
+            getGacha.Add(heroDatabase[Gacha(probs)]);
         }
+    }
+
+    private int Gacha(float[] probs)
+    {
+        float total = 0;
+
+        foreach (float elem in probs)
+        {
+            total += elem;
+        }
+
+        float randomPoint = Random.value * total;
+
+        for (int i = 0; i < probs.Length; i++)
+        {
+            if (randomPoint < probs[i])
+            {
+                return i;
+            }
+            else
+            {
+                randomPoint -= probs[i];
+            }
+        }
+        return probs.Length - 1;
     }
 }
