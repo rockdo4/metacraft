@@ -355,11 +355,11 @@ public class GameManager : Singleton<GameManager>
     }
 
     //요일 변경
-    public void NextDay()
-    {
-        playerData.currentDay = playerData.currentDay != DayOfWeek.일 ? playerData.currentDay + 1 : DayOfWeek.월;
-        playerData.cumulateGameDay++;
-    }
+    //public void NextDay()
+    //{
+    //    playerData.currentDay = playerData.currentDay != DayOfWeek.일 ? playerData.currentDay + 1 : DayOfWeek.월;
+    //    playerData.cumulateGameDay++;
+    //}
 
     public void AddOfficeExperience(int exp)
     {
