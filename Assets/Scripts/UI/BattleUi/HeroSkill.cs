@@ -86,10 +86,10 @@ public class HeroSkill : MonoBehaviour
     }
     public void CancleSkill()
     {
-        Time.timeScale = BattleSpeed.Instance.GetSpeed;
         cancle();
         SetActiveSkillGUIs(false);
         Time.timeScale = BattleSpeed.Instance.GetSpeed;
+        Logger.Debug("ResetTimeScale");
     }
     public void OnUpSkillActive()
     {
@@ -105,6 +105,7 @@ public class HeroSkill : MonoBehaviour
         action();
         SetActiveSkillGUIs(false);
         Time.timeScale = BattleSpeed.Instance.GetSpeed;
+        Logger.Debug("ResetTimeScale");
         CoolDownFill = 1;
         coolDownTimer = coolDown;
     }
@@ -112,14 +113,25 @@ public class HeroSkill : MonoBehaviour
     {
         OnDownSkill();
 
-        yield return new WaitForSeconds(0.5f * Time.timeScale);
+        yield return new WaitForSeconds(1f * Time.timeScale);
 
-        CoolDownFill = 1;
-        coolDownTimer = coolDown;
-        ready();
-        action();
-        SetActiveSkillGUIs(false);
-        Time.timeScale = BattleSpeed.Instance.GetSpeed;
+        if (isAuto)
+        {
+            CoolDownFill = 1;
+            coolDownTimer = coolDown;
+            ready();
+            action();
+            SetActiveSkillGUIs(false);
+            Time.timeScale = BattleSpeed.Instance.GetSpeed;
+            Logger.Debug("ResetTimeScale");
+        }
+        else
+        {
+            cancle();
+            SetActiveSkillGUIs(false);
+            Time.timeScale = BattleSpeed.Instance.GetSpeed;
+            Logger.Debug("ResetTimeScale");
+        }
     }
 
     private void SetActiveSkillGUIs(bool active)

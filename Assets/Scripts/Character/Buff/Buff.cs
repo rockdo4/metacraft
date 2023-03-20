@@ -41,7 +41,6 @@ public class Buff
             }
         }
 
-
         if (timer <= 0)
         {
             removeBuff?.Invoke(this);

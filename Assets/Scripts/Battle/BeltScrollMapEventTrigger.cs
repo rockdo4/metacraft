@@ -7,7 +7,10 @@ public class BeltScrollMapEventTrigger : MapEventTrigger
     private void OnTriggerEnter(Collider other)
     {
         if (!isLastTrigger && other.TryGetComponent<AttackableHero>(out var hero))
+        {
+            Logger.Debug("this");
             hero.ChangeUnitState(UnitState.Battle);
+        }
 
         if (!isTriggerEnter)
         {

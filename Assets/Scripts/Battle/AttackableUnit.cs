@@ -223,6 +223,8 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected void Update()
     {
+        if (Time.timeScale == 0)
+            return;
         nowUpdate?.Invoke();
         for (int i = buffList.Count - 1; i >= 0; i--)
         {
@@ -433,6 +435,9 @@ public abstract class AttackableUnit : MonoBehaviour
     //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)
     public virtual void OnDamage(AttackableUnit attackableUnit, CharacterSkill skill)
     {
+        if (UnitState != UnitState.Battle)
+            return;
+
         if (skill.searchType == SkillSearchType.Buffer)
         {
             return;
@@ -453,6 +458,11 @@ public abstract class AttackableUnit : MonoBehaviour
         //힐링관련 함수
         if (skill.targetType.Equals(SkillTargetType.Friendly))
             dmg = -(int)attackableUnit.CalculDamage(skill, ref isCritical);
+
+
+        //if ((unitType == UnitType.Hero && skill.targetType.Equals(SkillTargetType.Friendly))
+        //    || (unitType == UnitType.Enemy && skill.targetType.Equals(SkillTargetType.Enemy)))
+        //    dmg = -(int)attackableUnit.CalculDamage(skill, ref isCritical);
 
         UnitHp = Mathf.Max(UnitHp - dmg, 0);
         if (UnitHp <= 0)
@@ -710,11 +720,9 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public virtual void AddValueBuff(BuffInfo info, int anotherValue = 0, BuffIcon icon = null)
     {
-        var findBuff = buffList.Find(t => t.buffInfo.id == info.id);
-        if (findBuff != null)
-        {
-            findBuff.timer = info.duration;
-        }
+        if (UnitState != UnitState.Battle)
+            return;
+
         else
         {
             if (info.fraction == 0)
@@ -778,11 +786,7 @@ public abstract class AttackableUnit : MonoBehaviour
         {
             return;
         }
-        var findBuff = buffList.Find(t => t.buffInfo.id == info.id);
-        if (findBuff != null)
-        {
-            findBuff.timer = info.duration;
-        }
+
         else
         {
             Action endEvent = null;

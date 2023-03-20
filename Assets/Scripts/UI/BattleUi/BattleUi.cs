@@ -16,6 +16,7 @@ public class BattleUi : View
     }
     public void OnPause()
     {
+        Logger.Debug("Pause");
         Time.timeScale = 0f;
     }
     public void OffPause()

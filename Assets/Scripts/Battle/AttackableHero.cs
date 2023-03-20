@@ -1,3 +1,4 @@
+using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -27,11 +28,6 @@ public class AttackableHero : AttackableUnit
         }
         set {
 
-            if (transform.name.Contains("star"))
-            {
-                Logger.Debug("now : " + unitState);
-                Logger.Debug("value : " + value);
-            }
             if (unitState == value)
                 return;
 
@@ -60,20 +56,25 @@ public class AttackableHero : AttackableUnit
                     BattleState = UnitBattleState.None;
                     nowUpdate = ReturnPosUpdate;
 
-                    heroUI.heroSkill.CancleSkill();
 
                     target = null;
-                    lateReturn = false;
-                    testRot = false;
+                    isRotate = false;
+                    heroUI.heroSkill.CancleSkill();
                     if (coOnAutoSkill != null)
+                    {
                         StopCoroutine(coOnAutoSkill);
+                        coOnAutoSkill = null;
+                        Logger.Debug($"{transform.name} + : + StopCoroutine");
+                    }
                     break;
                 case UnitState.MoveNext:
                     pathFind.isStopped = false;
+                    lateReturn = false;
                     pathFind.SetDestination(transform.position);
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
+                    coOnAutoSkill = null;
                     pathFind.isStopped = false;
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.stoppingDistance = minAttackDis;
@@ -82,7 +83,6 @@ public class AttackableHero : AttackableUnit
                     battleManager.GetCurrBtMgr().GetEnemyList(ref enemyList);
 
                     animator.SetFloat("Speed", 1);
-
                     BattleState = UnitBattleState.MoveToTarget;
                     nowUpdate = BattleUpdate;
                     OnPassiveSkill(enemyList, heroList);
@@ -94,6 +94,13 @@ public class AttackableHero : AttackableUnit
                     gameObject.GetComponent<Collider>().enabled = false;
                     animator.SetTrigger("Die");
 
+                    if (coOnAutoSkill != null)
+                    {
+                        StopCoroutine(coOnAutoSkill);
+                        coOnAutoSkill = null;
+                        heroUI.heroSkill.CancleSkill();
+                        Logger.Debug($"{transform.name} + : + StopCoroutine");
+                    }
                     nowUpdate = DieUpdate;
                     break;
             }
@@ -105,11 +112,7 @@ public class AttackableHero : AttackableUnit
             return battleState;
         }
         set {
-            if (transform.name.Contains("star"))
-            {
-                Logger.Debug("now : " + battleState);
-                Logger.Debug("value : " + value);
-            }
+
             if (value == battleState)
                 return;
             if (unitState == UnitState.Die && value != UnitBattleState.None)
@@ -148,7 +151,7 @@ public class AttackableHero : AttackableUnit
         }
     }
 
-    bool testRot = false;
+    bool isRotate = false;
     public override bool IsAuto {
         get {
             return isAuto;
@@ -158,6 +161,18 @@ public class AttackableHero : AttackableUnit
             characterData.activeSkill.isAuto = isAuto;
             if (heroUI != null)
                 heroUI.heroSkill.isAuto = isAuto;
+
+            if (!isAuto)
+            {
+                SkillCancle();
+                if (coOnAutoSkill != null)
+                {
+                    StopCoroutine(coOnAutoSkill);
+                    heroUI.heroSkill.CancleSkill();
+                    coOnAutoSkill = null;
+                    Logger.Debug($"{transform.name} + : + StopCoroutine");
+                }
+            }
         }
     }
 
@@ -219,7 +234,7 @@ public class AttackableHero : AttackableUnit
 
     public override void ResetData()
     {
-        testRot = false;
+        isRotate = false;
         UnitState = UnitState.None;
         battleState = UnitBattleState.None;
         pathFind.stoppingDistance = 0f;
@@ -256,12 +271,19 @@ public class AttackableHero : AttackableUnit
     }
     public void PlayActiveSkillAnimation()
     {
+        Logger.Debug($"PlaySkill : {Time.timeScale}");
         pathFind.isStopped = true;
         BattleState = UnitBattleState.ActiveSkill;
         if (coOnIndicator != null)
         {
             GetActiveSkillAOE().ReadyEffectUntillOnActiveSkill();
             StopAOESkillCoroutine();
+        }
+
+        if (coOnAutoSkill != null)
+        {
+            StopCoroutine(coOnAutoSkill);
+            coOnAutoSkill = null;
         }
     }
     private void StopAOESkillCoroutine()
@@ -280,14 +302,18 @@ public class AttackableHero : AttackableUnit
 
     protected override void BattleUpdate()
     {
-        if (isAuto && BattleState != UnitBattleState.None && heroUI.heroSkill.IsCoolDown && !bufferState.silence)
+        Logger.Debug(Time.timeScale);
+        if (IsAuto && BattleState != UnitBattleState.None && heroUI.heroSkill.IsCoolDown && !bufferState.silence)
         {
             SearchActiveTarget();
             if (activeTarget != null && InRangeActiveAttack)
             {
                 characterData.activeSkill.targetPos = activeTarget.transform.position;
-                    
-                coOnAutoSkill = StartCoroutine(heroUI.heroSkill.OnAutoSkillActive(characterData.activeSkill));
+                if (coOnAutoSkill == null)
+                {
+                    Logger.Debug("Auto Start");
+                    coOnAutoSkill = StartCoroutine(heroUI.heroSkill.OnAutoSkillActive(characterData.activeSkill));
+                }
             }
         }
         //타겟이 없을때 타겟을 찾으면 타겟으로 가기
@@ -361,6 +387,7 @@ public class AttackableHero : AttackableUnit
                 stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("ActiveSkill") && stateInfo.normalizedTime >= 1.0f)
                 {
+                    Logger.Debug(Time.timeScale);
                     ActiveSkillEnd();
                 }
                 break;
@@ -383,7 +410,7 @@ public class AttackableHero : AttackableUnit
 
     protected override void ReturnPosUpdate()
     {
-        switch (testRot)
+        switch (isRotate)
         {
             case true:
                 //transform.rotation = Quaternion.Lerp(transform.rotation, returnPos.rotation, Time.deltaTime * 5);
@@ -396,7 +423,7 @@ public class AttackableHero : AttackableUnit
                 //if (angle <= 0)
                 {
                     transform.rotation = returnPos.rotation;
-                    testRot = false;
+                    isRotate = false;
                     UnitState = UnitState.Idle;
 
                     if (battleManager.tree.CurNode.type == TreeNodeTypes.Threat)
@@ -418,7 +445,7 @@ public class AttackableHero : AttackableUnit
                 animator.SetFloat("Speed", pathFind.velocity.magnitude / characterData.data.moveSpeed);
                 if (Vector3.Distance(returnPos.position, transform.position) <= 0.5f)
                 {
-                    testRot = true;
+                    isRotate = true;
                     pathFind.isStopped = true;
                     transform.position = returnPos.position;
                 }
@@ -428,7 +455,7 @@ public class AttackableHero : AttackableUnit
 
     public override void ChangeUnitState(UnitState state)
     {
-        Logger.Debug(state);
+        Logger.Debug($"{transform.name} : {state}");
         if (BattleState == UnitBattleState.ActiveSkill || BattleState == UnitBattleState.NormalAttack || BattleState == UnitBattleState.Stun)
         {
             lateReturn = true;
@@ -479,6 +506,8 @@ public class AttackableHero : AttackableUnit
     {
         pathFind.isStopped = false;
         animator.SetTrigger("ActiveEnd");
+        //if (coOnAutoSkill != null)
+        //    StopCoroutine(coOnAutoSkill);
         base.ActiveSkillEnd();
 
         if (lateReturn)
@@ -502,11 +531,23 @@ public class AttackableHero : AttackableUnit
             }
         }
 
-        if (buffList.Find(t => t.buffInfo.id == info.id) == null)
+        bool isOverlap = false;
+        foreach (var buff in buffList)
+        {
+            if (buff.buffInfo.id == info.id)
+            {
+                isOverlap = true;
+                break;
+            }
+        }
+
+        if (!isOverlap)
         {
             if (info.fraction != 0)
             {
                 icon = heroUI.AddIcon(info.type, info.duration, idx);
+                base.AddValueBuff(info, anotherValue, icon);
+                Logger.Debug($"{transform.name} : {info}");
             }
         }
         else
@@ -514,8 +555,6 @@ public class AttackableHero : AttackableUnit
             BuffDurationUpdate(info.id, info.duration);
         }
 
-
-        base.AddValueBuff(info, anotherValue, icon);
         if (info.type == BuffType.MaxHealthIncrease)
         {
             heroUI.SetHp(UnitHp, MaxHp);
@@ -533,11 +572,22 @@ public class AttackableHero : AttackableUnit
             }
         }
 
-        if (buffList.Find(t => t.buffInfo.id == info.id) == null)
+        bool isOverlap = false;
+        foreach (var buff in buffList)
+        {
+            if (buff.buffInfo.id == info.id)
+            {
+                isOverlap = true;
+                break;
+            }
+        }
+
+        if (!isOverlap)
         {
             if (info.fraction != 0)
             {
                 icon = heroUI.AddIcon(info.type, info.duration, idx);
+                base.AddStateBuff(info, attackableUnit, icon);
             }
         }
         else
@@ -548,7 +598,6 @@ public class AttackableHero : AttackableUnit
             heroUI.IsSilence = true;
         }
 
-        base.AddStateBuff(info, attackableUnit, icon);
     }
 
     public override void StunEnd()
