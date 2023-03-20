@@ -1,24 +1,24 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EffectManager : EffectManagerSingleton<EffectManager>
+//public class EffectManager : EffectManagerSingleton<EffectManager>
+public class EffectManager : Singleton<EffectManager>
 {
     public int effectPoolSize;
     public List<Effect> effectList;      // 생성할 이펙트 리스트들
 
     public List<List<Effect>> effectPool = new();    // 이펙트 풀
     private List<int> effectPoolIndex = new();     // 활성화할 이펙트 프리펩의 번호
-    private GameObject parent;
 
     private EffectEnum currEffect;
 
-    public void CreateEffectManager()
+    public override void Awake()
     {
-        GameObject gm = new("Effects");
-        parent = Instantiate(gm);
-        DontDestroyOnLoad(parent);
-        effectPoolSize = 5;
-        effectList = GameManager.Instance.effects;
+        base.Awake();
+
+        if (effectPoolSize == 0)
+            effectPoolSize = 5;
+
         CreateAllEffects();
     }
 
@@ -103,7 +103,7 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
         // "이펙트 프리펩 이름 + Pool" 이름의 빈 게임 오브젝트를 Effects 게임 오브젝트의 자식으로 생성
         // (종류별로 구분해서 담아두기 위함)
         GameObject parents = new ($"{effectList[effectListIndex].name} Pool");
-        parents.transform.parent = parent.transform;
+        parents.transform.parent = gameObject.transform;
 
         effectPool.Add(new List<Effect>());
         effectPoolIndex.Add(0);
@@ -116,8 +116,6 @@ public class EffectManager : EffectManagerSingleton<EffectManager>
             // 만든 이펙트 풀에 저장
             effectPool[effectListIndex].Add(effect);
         }
-
-        //parent.transform.parent = GameObject.FindGameObjectWithTag("ParentFloor").transform;
     }
 
     // 현재 사용하고 있는 풀

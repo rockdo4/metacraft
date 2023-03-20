@@ -1,16 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Reflection;
 
 namespace GAP_ParticleSystemController
 {
 
-	public static class SaveParticleSystemScript{		
-
-		public static void SaveVFX (GameObject prefabVFX, List<ParticleSystemOriginalSettings> psOriginalSettingsList) {
+	public static class SaveParticleSystemScript{
+        [System.Obsolete]
+        public static void SaveVFX (GameObject prefabVFX, List<ParticleSystemOriginalSettings> psOriginalSettingsList) {
 #if UNITY_2018_3_OR_NEWER
              var prefabFolderPath = GetPrefabFolder2018_3 (prefabVFX);
 #else
@@ -36,7 +34,7 @@ namespace GAP_ParticleSystemController
             Debug.Log ("Original Settings of '" + prefabVFX.name + "' saved to: " + prefabFolderPath + "/OriginalSettings");
 		}
 
-		public static List<ParticleSystemOriginalSettings> LoadVFX (GameObject prefabVFX) {
+        public static List<ParticleSystemOriginalSettings> LoadVFX (GameObject prefabVFX) {
 #if UNITY_2018_3_OR_NEWER
             var prefabFolderPath = GetPrefabFolder2018_3 (prefabVFX);
 #else
@@ -59,7 +57,7 @@ namespace GAP_ParticleSystemController
 			}
 		}
 
-		public static bool CheckExistingFile (GameObject prefabVFX){
+        public static bool CheckExistingFile (GameObject prefabVFX){
 #if UNITY_2018_3_OR_NEWER
             var prefabFolderPath = GetPrefabFolder2018_3 (prefabVFX);
 #else
@@ -88,7 +86,7 @@ namespace GAP_ParticleSystemController
         static string GetPrefabFolder2018_3 (GameObject prefabVFX)
         {
 #if UNITY_EDITOR
-			string prefabPath = UnityEditor.SceneManagement.PrefabStageUtility.GetPrefabStage(prefabVFX).prefabAssetPath;
+			string prefabPath = UnityEditor.SceneManagement.PrefabStageUtility.GetPrefabStage(prefabVFX).assetPath;
 			string prefabFolderPath = Path.GetDirectoryName (prefabPath);
 			return prefabFolderPath;
 #else
@@ -102,7 +100,7 @@ namespace GAP_ParticleSystemController
         {
 #if UNITY_EDITOR
             var prefabStage = UnityEditor.SceneManagement.PrefabStageUtility.GetPrefabStage(prefab);
-            UnityEditor.PrefabUtility.SaveAsPrefabAsset(prefabStage.prefabContentsRoot, prefabStage.prefabAssetPath);
+            UnityEditor.PrefabUtility.SaveAsPrefabAsset(prefabStage.prefabContentsRoot, prefabStage.assetPath);
 #endif
         }
 #endif

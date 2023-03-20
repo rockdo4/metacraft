@@ -1,6 +1,4 @@
-using System.Net;
 using UnityEngine;
-using UnityEngine.UI.Extensions;
 
 public class DrawLineBetweenObjects : MonoBehaviour
 {
@@ -14,7 +12,7 @@ public class DrawLineBetweenObjects : MonoBehaviour
 
     private Vector2 GetBentPoint(Vector3 start, Vector3 end)
     {
-        Vector2 middlePoint = new Vector2(start.x,end.y);
+        Vector2 middlePoint = new (start.x,end.y);
         return middlePoint;
     }
 }

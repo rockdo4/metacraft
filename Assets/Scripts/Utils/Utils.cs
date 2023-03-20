@@ -22,12 +22,6 @@ public class Utils
         return spwanIndexes;
     }
 
-    public static void CopyTransform(GameObject gameObject, Transform dest)
-    {
-        CopyPositionAndRotation(gameObject, dest);
-        gameObject.transform.localScale = dest.localScale;
-    }
-
     public static void CopyPositionAndRotation(GameObject gameObject, Transform dest)
     {
         gameObject.transform.SetPositionAndRotation(dest.position, dest.rotation);

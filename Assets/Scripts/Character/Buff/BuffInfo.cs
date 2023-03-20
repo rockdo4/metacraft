@@ -5,7 +5,7 @@ public class BuffInfo : ScriptableObject
 {
     [Header("중복 절대 불가")]
     public int id;              //상태의 ID
-    public string name;         //상태이상의 이름(스트링테이블 연결)
+    public new string name;         //상태이상의 이름(스트링테이블 연결)
     public string info;         //상태이상의 설명(스트링테이블 연결)
 
     [Space, Space]

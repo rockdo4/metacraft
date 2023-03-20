@@ -10,8 +10,8 @@ public class OfficeClick : MonoBehaviour
     {
         if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
         {
-            if (!EventSystem.current.IsPointerOverGameObject())
-            {
+        //    if (!EventSystem.current.IsPointerOverGameObject())
+        //    {
                 Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
                 RaycastHit hit;
 
@@ -22,7 +22,7 @@ public class OfficeClick : MonoBehaviour
                         uiMgr.ShowView(2);
                     }
                 }
-            }
+            //}
         }
     }
 }

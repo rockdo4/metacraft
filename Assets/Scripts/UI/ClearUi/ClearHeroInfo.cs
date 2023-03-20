@@ -63,9 +63,7 @@ public class ClearHeroInfo : MonoBehaviour
                 nextLevel++;
                 tempExp = 0; //레벨업 했으니, 현재 레벨의 잔여 경험치는 0
                 
-                // 레벨업시 합연산으로 올릴것과 곱연산으로 올릴 함수. 수정해서 사용
-                //thisHero.LevelUpAdditional(10, 1, 50);
-                thisHero.LevelUpMultiplication(0.1f, 0.1f, 0.1f);
+                thisHero.LevelupStats();
             }
             else //레벨업 못하는 상태면 연산 끝
             {
