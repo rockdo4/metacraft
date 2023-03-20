@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 using UnityEngine.UIElements;
 
 public class SkillAreaIndicator : MonoBehaviour
@@ -17,8 +18,19 @@ public class SkillAreaIndicator : MonoBehaviour
     private Transform trackTransform;
     public bool IsTransActor { set { isTransActor = value; } }
     private bool isTransActor = false;
-    public Transform ActorTransform { get { return actorTransform; } set { actorTransform = value; } }
+
+    public Transform ActorTransform
+    {
+        get { return actorTransform; }
+        set
+        {
+            actorTransform = value;
+            agent = actorTransform.GetComponent<NavMeshAgent>();
+            Logger.Debug("agent setted");
+        }
+    }
     private Transform actorTransform;
+    private NavMeshAgent agent;
 
     private bool onTrans = false;
     public float transTime = 0.8f;
@@ -46,12 +58,12 @@ public class SkillAreaIndicator : MonoBehaviour
             transform.position = trackTransform.position + Vector3.up * 0.1f;
     }
     private void TryTransActor()
-    {
+    {        
         if(!isTransActor) 
-            return;
+            return;        
 
         if (!onTrans)
-            return;
+            return;        
 
         TransActor();
 
@@ -61,20 +73,26 @@ public class SkillAreaIndicator : MonoBehaviour
         onTrans = true;
         startPos = actorTransform.position;
         transTimer = 0f;
+        agent.isStopped = true;        
     }
     private void TransActor()
-    {
-        transTimer += Time.deltaTime;
-        actorTransform.position = Vector3.Lerp(startPos, transform.position, transTime * divTransTime);
+    {        
+        transTimer += Time.deltaTime;        
+        actorTransform.position = Vector3.Lerp(startPos, transform.position, transTimer * divTransTime);        
         if (transTimer > transTime)
             EndTransActor();
     }
     private void EndTransActor()
     {
-        onTrans = false;
+        onTrans = false;         
+        agent.isStopped = false;        
     }
-
-
+    //private void SetTransActorValueStartOrEnd(bool trueIsStart)
+    //{
+    //    onTrans = trueIsStart;
+    //    agent.isStopped = trueIsStart;
+    //    transTimer = 0f;
+    //}
     public virtual void SetScale(float x, float y, float z = 1f)
     {
         transform.localScale = new Vector3(x, y, z);        
@@ -139,7 +157,7 @@ public class SkillAreaIndicator : MonoBehaviour
             if(unit != null)
                 unit.GetComponent<Outline>().enabled = false;
         }
-        unitsInArea.Clear();
+        unitsInArea.Clear();        
     } 
     public List<AttackableUnit> GetUnitsInArea()
     {
