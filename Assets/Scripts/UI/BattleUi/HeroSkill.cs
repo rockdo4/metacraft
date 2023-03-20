@@ -1,7 +1,6 @@
 using System;
 using UnityEngine;
 using UnityEngine.UI;
-using TMPro;
 using System.Collections;
 
 public class HeroSkill : MonoBehaviour
@@ -111,12 +110,12 @@ public class HeroSkill : MonoBehaviour
     }
     public IEnumerator OnAutoSkillActive(CharacterSkill skill)
     {
-        var startTime = Time.time;
-        CoolDownFill = 1;
-        coolDownTimer = coolDown;
+        OnDownSkill();
 
         yield return new WaitForSeconds(0.5f * Time.timeScale);
 
+        CoolDownFill = 1;
+        coolDownTimer = coolDown;
         ready();
         action();
         SetActiveSkillGUIs(false);

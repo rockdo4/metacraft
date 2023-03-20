@@ -148,16 +148,6 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    private void OnLight(int index)
-    {
-        for (int i = 0; i < lights.Count; i++)
-        {
-            lights[i].gameObject.SetActive(false);
-        }
-
-        lights[index].gameObject.SetActive(true);
-    }
-
     private void SetStageEvent(MapEventEnum ev)
     {
         switch (tree.CurNode.type)
@@ -165,15 +155,12 @@ public class BattleManager : MonoBehaviour
             case TreeNodeTypes.Normal:
             case TreeNodeTypes.Root:
                 curMap = eventMaps[0];
-                //OnLight(0);
                 break;
             case TreeNodeTypes.Threat:
                 curMap = eventMaps[1];
-                //OnLight(1);
                 break;
             case TreeNodeTypes.Supply:
                 curMap = eventMaps[2];
-                //OnLight(2);
                 for (int i = 0; i < supplyEventHeroImages.Count; i++)
                 {
                     if (supplyEventHeroImages[i].heroData != null)
@@ -185,13 +172,11 @@ public class BattleManager : MonoBehaviour
                 break;
             case TreeNodeTypes.Event:
                 curMap = eventMaps[2];
-                //OnLight(2);
                 SetActiveUi(eventUi, true);
                 SetEventInfo(ev);
                 break;
             case TreeNodeTypes.Villain:
                 curMap = eventMaps[0];
-                //OnLight(0);
                 break;
         }
 
@@ -289,7 +274,7 @@ public class BattleManager : MonoBehaviour
 
         // eventEffectInfoList 는 eventEffectTagInfoList로 변경됨. 상운과 논의 후 연결해서 쓸 것
 
-        /*
+        
         // 테스트로 노멀 이펙트만 가져옴
         int effectColumn = 0;
         for (int i = 0; i < eventEffectInfoTable.Count; i++)
@@ -301,10 +286,13 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        //float normalValue1 = (float)eventEffectInfoTable[effectColumn]["Normalvalue1"];
-        //float normalValue2 = (float)eventEffectInfoTable[effectColumn]["Normalvalue2"];
-        string normalValue1 = $"{eventEffectInfoTable[effectColumn]["Normalvalue1"]}";
-        string normalValue2 = $"{eventEffectInfoTable[effectColumn]["Normalvalue2"]}";
+        string normalV1 = $"{eventEffectInfoTable[effectColumn]["Normalvalue1"]}";
+        string normalV2 = $"{eventEffectInfoTable[effectColumn]["Normalvalue2"]}";
+        float normalValue1 = float.Parse(normalV1);
+        float normalValue2 = float.Parse(normalV2);
+
+        //string normalValue1 = $"{eventEffectInfoTable[effectColumn]["Normalvalue1"]}";
+        //string normalValue2 = $"{eventEffectInfoTable[effectColumn]["Normalvalue2"]}";
         string value1Text = $"{eventEffectInfoTable[effectColumn]["NormalvalueText1"]}";
         string value2Text = $"{eventEffectInfoTable[effectColumn]["NormalvalueText2"]}";
         int normalReward1 = (int)eventEffectInfoTable[effectColumn]["NormalReward1"];
@@ -314,40 +302,42 @@ public class BattleManager : MonoBehaviour
         string normalValueKey = string.Empty;
         int normalRewardKey = 0;
 
-        normalValueKey = value1Text;
-        normalRewardKey = normalReward1;
+        //normalValueKey = value1Text;
+        //normalRewardKey = normalReward1;
 
-        //if (normalValue1.Equals(1f))
-        //{
-        //    normalValueKey = value1Text;
-        //    normalRewardKey = normalReward1;
-        //}
-        //else if (normalValue2.Equals(1f))
-        //{
-        //    normalValueKey = value2Text;
-        //    normalRewardKey = normalReward2;
-        //}
-        //else if (normalValue1.Equals(normalValue2))
-        //{
-        //    float randomValue = Random.Range(0f, 1f);
-        //    normalValueKey = randomValue >= 0.5f ? value1Text : value2Text;
-        //    normalRewardKey = normalValueKey.Equals(value1Text) ? normalReward1 : normalReward2;
-        //}
-        //else
-        //{
-        //    normalValueKey = normalValue1 > normalValue2 ? value1Text : value2Text;
-        //    normalRewardKey = normalValueKey.Equals(value1Text) ? normalReward1 : normalReward2;
-        //}
+        if (normalValue1.Equals(1f))
+        {
+            normalValueKey = value1Text;
+            normalRewardKey = normalReward1;
+        }
+        else if (normalValue2.Equals(1f))
+        {
+            normalValueKey = value2Text;
+            normalRewardKey = normalReward2;
+        }
+        else if (normalValue1.Equals(normalValue2))
+        {
+            float randomValue = Random.Range(0f, 1f);
+            normalValueKey = randomValue >= 0.5f ? value1Text : value2Text;
+            normalRewardKey = normalValueKey.Equals(value1Text) ? normalReward1 : normalReward2;
+        }
+        else
+        {
+            normalValueKey = normalValue1 > normalValue2 ? value1Text : value2Text;
+            normalRewardKey = normalValueKey.Equals(value1Text) ? normalReward1 : normalReward2;
+        }
 
         if (normalRewardKey == -1)
         {
             return;
         }
 
+        Logger.Debug($"{normalValueKey}");
+
         contentText.text = gm.GetStringByTable(normalValueKey);
         object rewardKey = normalRewardKey;
         AddReward(rewardKey);
-        */
+        
     }
 
     private void Init()
@@ -370,7 +360,7 @@ public class BattleManager : MonoBehaviour
         eventInfoTable = gm.eventInfoList;
         supplyInfoTable = gm.supplyInfoList;
         currentSelectMissionTable = gm.currentSelectMission;
-        //eventEffectInfoTable = gm.eventEffectInfoList;
+        eventEffectInfoTable = gm.eventEffectInfoList;
 
         var selectedHeroes = gm.GetSelectedHeroes();
         int count = selectedHeroes.Count;
@@ -829,7 +819,6 @@ public class BattleManager : MonoBehaviour
         if (enemy.GetUnitData().data.job == (int)CharacterJob.villain &&
             tree.CurNode.type == TreeNodeTypes.Threat)
         {
-            //Logger.Debug("Middle Boss Dead");
             DeadMiddleBoss();
             SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
         }
@@ -902,19 +891,16 @@ public class BattleManager : MonoBehaviour
                 colomId = "ClearReward";
                 collomWeight = "CWeight";
                 itemCount = 3;
-                //Logger.Debug("SupplyMapReward");
                 break;
-            case TreeNodeTypes.Event:
-                colomId = "ClearReward";
-                collomWeight = "CWeight";
-                itemCount = 3;
-                //Logger.Debug("EventMapReward");
-                return;
+            //case TreeNodeTypes.Event:
+            //    colomId = "ClearReward";
+            //    collomWeight = "CWeight";
+            //    itemCount = 3;
+            //    return;
             case TreeNodeTypes.Villain:
                 colomId = "HardReward";
                 collomWeight = "HWeight";
                 itemCount = 5;
-                //Logger.Debug("BossReward");
                 return;
             default:
                 break;
@@ -956,53 +942,53 @@ public class BattleManager : MonoBehaviour
             stageReward.AddGold(rewardData["Gold"].ToString());
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Keypad5))
-        {
-            NodeClearReward();
-        }
-        if (Input.GetKeyDown(KeyCode.B))
-        {
-            tree.CurNode.type = TreeNodeTypes.Villain;
-            DestroyRoad();
-            RemoveRoadTrigger();
-            ResetRoads();
-            btMapTriggers.Last().isMissionEnd = true;
-        }
+    //private void Update()
+    //{
+    //    if (Input.GetKeyDown(KeyCode.Keypad5))
+    //    {
+    //        NodeClearReward();
+    //    }
+    //    if (Input.GetKeyDown(KeyCode.B))
+    //    {
+    //        tree.CurNode.type = TreeNodeTypes.Villain;
+    //        DestroyRoad();
+    //        RemoveRoadTrigger();
+    //        ResetRoads();
+    //        btMapTriggers.Last().isMissionEnd = true;
+    //    }
 
-        // 임시 보스 교체용 코드
-        if (Input.GetKeyDown(KeyCode.V))
-        {
-            currBtMgr.battleMapType = BattleMapEnum.Normal;
-            //Logger.Debug(btMapTriggers[^2].name);
+    //    // 임시 보스 교체용 코드
+    //    if (Input.GetKeyDown(KeyCode.V))
+    //    {
+    //        currBtMgr.battleMapType = BattleMapEnum.Normal;
+    //        //Logger.Debug(btMapTriggers[^2].name);
 
-            btMapTriggers[^2].enemys.Clear();
-            btMapTriggers[^2].enemyColls.Clear();
-            btMapTriggers[^2].enemySettingPositions[1].enemyPrefabs[0] = bossPrefab;
-            for (int i = 0; i < btMapTriggers[^2].enemySettingPositions.Count; i++)
-            {
-                btMapTriggers[^2].enemySettingPositions[i].ClearTempEnemyList();
-                var enemy = btMapTriggers[^2].enemySettingPositions[i].SpawnEnemy();
+    //        btMapTriggers[^2].enemys.Clear();
+    //        btMapTriggers[^2].enemyColls.Clear();
+    //        btMapTriggers[^2].enemySettingPositions[1].enemyPrefabs[0] = bossPrefab;
+    //        for (int i = 0; i < btMapTriggers[^2].enemySettingPositions.Count; i++)
+    //        {
+    //            btMapTriggers[^2].enemySettingPositions[i].ClearTempEnemyList();
+    //            var enemy = btMapTriggers[^2].enemySettingPositions[i].SpawnEnemy();
 
-                for (int j = 0; j < enemy.Count; j++)
-                {
-                    btMapTriggers[^2].enemys.Add(enemy[j]);
-                    btMapTriggers[^2].enemys[j].SetPathFind();
-                    btMapTriggers[^2].AddEnemyColliders(enemy[j].GetComponent<CapsuleCollider>());
-                    btMapTriggers[^2].enemys[j].SetEnabledPathFind(false);
-                }
-            }
+    //            for (int j = 0; j < enemy.Count; j++)
+    //            {
+    //                btMapTriggers[^2].enemys.Add(enemy[j]);
+    //                btMapTriggers[^2].enemys[j].SetPathFind();
+    //                btMapTriggers[^2].AddEnemyColliders(enemy[j].GetComponent<CapsuleCollider>());
+    //                btMapTriggers[^2].enemys[j].SetEnabledPathFind(false);
+    //            }
+    //        }
 
-            btMapTriggers[^2].ResetEnemys();
-            btMapTriggers[^2].ResetEnemyPositions();
-        }
+    //        btMapTriggers[^2].ResetEnemys();
+    //        btMapTriggers[^2].ResetEnemyPositions();
+    //    }
 
-        if (Input.GetKeyDown(KeyCode.C))
-        {
-            SetEventEffectReward((int)MapEventEnum.CivilianRescue, 1, contentText);
-        }
-    }
+    //    if (Input.GetKeyDown(KeyCode.C))
+    //    {
+    //        SetEventEffectReward((int)MapEventEnum.CivilianRescue, 1, contentText);
+    //    }
+    //}
 
     /*********************************************  임시  **********************************************/
     private void DeadMiddleBoss()
@@ -1023,11 +1009,7 @@ public class BattleManager : MonoBehaviour
         int useCount = btMapTriggers[index].useEnemys.Count;
         for (int i = 0; i < useCount; i++)
         {
-            //if (btMapTriggers[index].useEnemys[i].isAlive)
-            //{
-                btMapTriggers[index].useEnemys[i].ChangeUnitState(UnitState.Die);
-                //OnDeadEnemy((AttackableEnemy)btMapTriggers[index].useEnemys[i]);
-            //}
+            btMapTriggers[index].useEnemys[i].ChangeUnitState(UnitState.Die);
         }
 
         int unuseCount = btMapTriggers[index].enemys.Count;
@@ -1035,7 +1017,6 @@ public class BattleManager : MonoBehaviour
         {
             if (btMapTriggers[index].enemys[i].isAlive)
             {
-                //btMapTriggers[index].enemys[i].gameObject.SetActive(false);
                 btMapTriggers[index].enemys[i].ChangeUnitState(UnitState.Die);
             }
         }

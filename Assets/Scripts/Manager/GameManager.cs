@@ -23,6 +23,7 @@ public class GameManager : Singleton<GameManager>
     public List<Dictionary<string, object>> dispatchInfoList; // 파견 정보
     public List<Dictionary<string, object>> officeInfoList;  // 사무소 레벨별 정보
     public List<Dictionary<string, object>> eventInfoList; // 이벤트 노드 정보
+    public List<Dictionary<string, object>> eventEffectInfoList;  // 이벤트 노드 일반보상만 연결해놓기 위해 임시로 살림, 태그 검사 추가 시 추후 삭제 예정
     public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectTagInfoList;
     public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectNoTagInfoList;
     private Dictionary<string, Dictionary<string, object>> stringTable = new();
@@ -41,7 +42,6 @@ public class GameManager : Singleton<GameManager>
     // Origin Database - Set Prefab & Scriptable Objects
     public List<GameObject> heroDatabase = new();
 
-    public List<Effect> effects; // 사용할 이펙트들
     public Color currMapColor;
     public List<Color> mapLigthColors;
 
@@ -49,7 +49,6 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
         StartCoroutine(LoadAllResources());
-        EffectManager.Instance.CreateEffectManager();
     }
 
     public void SetHeroesOrigin()
@@ -115,7 +114,7 @@ public class GameManager : Singleton<GameManager>
                     Sprite sprite = obj.Result;
                     iconSprites.Add(iconAddress, sprite);
                 };
-            handles.Add(iconAddress, iconHandle);
+            //handles.Add(iconAddress, iconHandle);
 
             string IllurAddress = $"Illu_{address}";
             AsyncOperationHandle<Sprite> illuHandle = Addressables.LoadAssetAsync<Sprite>(IllurAddress);
@@ -125,7 +124,7 @@ public class GameManager : Singleton<GameManager>
                     Sprite sprite = obj.Result;
                     illustrationSprites.Add(IllurAddress, sprite);
                 };
-            handles.Add(IllurAddress, illuHandle);
+            //handles.Add(IllurAddress, illuHandle);
         }
 
         // 스프라이트 리소스 로드 대기
@@ -151,10 +150,11 @@ public class GameManager : Singleton<GameManager>
         compensationInfoList = CSVReader.SplitTextAsset(handles["CompensationTable"].Result as TextAsset);
         supplyInfoList = CSVReader.SplitTextAsset(handles["SupplyTable"].Result as TextAsset);
         itemInfoList = CSVReader.SplitTextAsset(handles["ItemInfoTable"].Result as TextAsset);
+        eventEffectInfoList = CSVReader.SplitTextAsset(handles["EventEffectTable"].Result as TextAsset);  // 이벤트 노드 일반보상만 연결해놓기 위해 임시로 살림, 태그 검사 추가 시 추후 삭제 예정
 
         LoadAllData();
         FixMissionTable(CSVReader.SplitTextAsset(handles["MissionInfoTable"].Result as TextAsset));
-        FixEventEffectTable(CSVReader.SplitTextAsset(handles["EventEffectTable"].Result as TextAsset));
+        //FixEventEffectTable(CSVReader.SplitTextAsset(handles["EventEffectTable"].Result as TextAsset));
         AppendStringTable(CSVReader.SplitTextAsset(handles["StringTable_Desc"].Result as TextAsset), "StringTable_Desc");
         AppendStringTable(CSVReader.SplitTextAsset(handles["StringTable_Event"].Result as TextAsset), "StringTable_Event");
         AppendStringTable(CSVReader.SplitTextAsset(handles["StringTable_Proper"].Result as TextAsset), "StringTable_Proper");

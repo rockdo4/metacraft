@@ -5,23 +5,22 @@ public class DispatchClick : MonoBehaviour
 {
     public UIManager uiMgr;
 
-    public void Update()
+    void Start()
     {
-        if (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began)
-        {
-            if (!EventSystem.current.IsPointerOverGameObject())
-            {
-                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
-                RaycastHit hit;
+        addPhysicsRaycaster();
+    }
 
-                if (Physics.Raycast(ray, out hit))
-                {
-                    if (hit.collider.gameObject == gameObject)
-                    {
-                        uiMgr.ShowView(6);
-                    }
-                }
-            }
+    void addPhysicsRaycaster()
+    {
+        PhysicsRaycaster physicsRaycaster = GameObject.FindObjectOfType<PhysicsRaycaster>();
+        if (physicsRaycaster == null)
+        {
+            Camera.main.gameObject.AddComponent<PhysicsRaycaster>();
         }
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        uiMgr.ShowView(6);
     }
 }
