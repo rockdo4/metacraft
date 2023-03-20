@@ -428,7 +428,7 @@ public class AttackableHero : AttackableUnit
 
     public override void ChangeUnitState(UnitState state)
     {
-        Logger.Debug(state);
+        //Logger.Debug(state);
         if (BattleState == UnitBattleState.ActiveSkill || BattleState == UnitBattleState.NormalAttack || BattleState == UnitBattleState.Stun)
         {
             lateReturn = true;
