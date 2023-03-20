@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
+using UnityEngine.AI;
 
 public class SkillAreaIndicator : MonoBehaviour
 {
@@ -17,8 +17,18 @@ public class SkillAreaIndicator : MonoBehaviour
     private Transform trackTransform;
     public bool IsTransActor { set { isTransActor = value; } }
     private bool isTransActor = false;
-    public Transform ActorTransform { get { return actorTransform; } set { actorTransform = value; } }
+
+    public Transform ActorTransform
+    {
+        get { return actorTransform; }
+        set
+        {
+            actorTransform = value;
+            agent = actorTransform.GetComponent<NavMeshAgent>();            
+        }
+    }
     private Transform actorTransform;
+    private NavMeshAgent agent;
 
     private bool onTrans = false;
     public float transTime = 0.8f;
@@ -35,7 +45,7 @@ public class SkillAreaIndicator : MonoBehaviour
     private void Update()
     {
         TryTrackTarget();
-        TryTransActor();
+        //TryTransActor();
     }
     private void TryTrackTarget()
     {
@@ -45,36 +55,50 @@ public class SkillAreaIndicator : MonoBehaviour
         if (trackTransform != null)
             transform.position = trackTransform.position + Vector3.up * 0.1f;
     }
-    private void TryTransActor()
-    {
-        if(!isTransActor) 
-            return;
+    //private void TryTransActor()
+    //{        
+    //    if(!isTransActor) 
+    //        return;        
 
-        if (!onTrans)
-            return;
+    //    if (!onTrans)
+    //        return;        
 
-        TransActor();
+    //    TransActor();
 
-    }
+    //}
     public void StartTransActor()
     {
         onTrans = true;
-        startPos = actorTransform.position;
-        transTimer = 0f;
+        //startPos = actorTransform.position;
+        actorTransform.LookAt(transform.position);
+        agent.SetDestination(transform.position);
+        agent.isStopped = false;                
     }
-    private void TransActor()
-    {
-        transTimer += Time.deltaTime;
-        actorTransform.position = Vector3.Lerp(startPos, transform.position, transTime * divTransTime);
-        if (transTimer > transTime)
-            EndTransActor();
-    }
+
+    //private void TransActor()
+    //{        
+    //    transTimer += Time.deltaTime;        
+    //    //actorTransform.position = Vector3.Lerp(startPos, transform.position, transTimer * divTransTime);        
+    //    if (transTimer > transTime)
+    //        EndTransActor();
+    //}
     private void EndTransActor()
     {
         onTrans = false;
+        if (!NavMesh.SamplePosition(agent.transform.position, out _, 0.1f, NavMesh.AllAreas))
+        {            
+            if (NavMesh.FindClosestEdge(agent.transform.position, out NavMeshHit hit, NavMesh.AllAreas))
+            {                
+                agent.transform.position = hit.position;
+            }
+        }        
     }
-
-
+    //private void SetTransActorValueStartOrEnd(bool trueIsStart)
+    //{
+    //    onTrans = trueIsStart;
+    //    agent.isStopped = trueIsStart;
+    //    transTimer = 0f;
+    //}
     public virtual void SetScale(float x, float y, float z = 1f)
     {
         transform.localScale = new Vector3(x, y, z);        
@@ -139,7 +163,7 @@ public class SkillAreaIndicator : MonoBehaviour
             if(unit != null)
                 unit.GetComponent<Outline>().enabled = false;
         }
-        unitsInArea.Clear();
+        unitsInArea.Clear();        
     } 
     public List<AttackableUnit> GetUnitsInArea()
     {

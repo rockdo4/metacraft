@@ -240,11 +240,7 @@ public class ActiveSkillAOE : CharacterSkill
         base.OnActiveSkill(attackableUnit,enemies, heros);
 
         if (hasDuration)
-            return;
-
-        if (isTransActor)
-            skillAreaIndicator.StartTransActor();
-                    
+            return;                    
 
         if (skillStartFromCharacter)
             EffectManager.Instance.Get(activeEffect, indicatorTransform, indicatorTransform.rotation);
@@ -277,5 +273,8 @@ public class ActiveSkillAOE : CharacterSkill
         EffectManager.Instance.Get(readyEffect, indicatorTransform);
         skillAreaIndicator.Renderer.enabled = false;
         castRangeIndicator.SetActive(false);
+
+        if (isTransActor)
+            skillAreaIndicator.StartTransActor();
     }
 }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Linq;
+using UnityEngine.AI;
 
 [Serializable]
 public class BuffLevel
@@ -19,7 +20,7 @@ public class BuffLevel
 public class CharacterSkill : ScriptableObject
 {
     public Transform ActorTransform { set { actorTransform = value; } }
-    protected Transform actorTransform;
+    protected Transform actorTransform;    
 
     public Transform SkillHolderTransform { set { skillHolderTransform = value; } }
     protected Transform skillHolderTransform;

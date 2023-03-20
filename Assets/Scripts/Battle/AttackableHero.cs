@@ -508,6 +508,8 @@ public class AttackableHero : AttackableUnit
         //if (coOnAutoSkill != null)
         //    StopCoroutine(coOnAutoSkill);
         base.ActiveSkillEnd();
+        Logger.Debug("skillend");
+        Logger.Debug(IsAlive(target));
 
         if (lateReturn)
         {
