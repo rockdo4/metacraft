@@ -21,6 +21,8 @@ public class ActiveSkillAOE : CharacterSkill
     public bool isTrackTarget;
     private LayerMask targetMaskWhenManualSkill;
 
+    public bool isTransActor;
+
     public float sectorRadius;
     public float sectorAngle;
 
@@ -68,6 +70,12 @@ public class ActiveSkillAOE : CharacterSkill
             InitTrackTargetLayerMaskSet();
             colliders = new Collider[maxColliders];
             skillAreaIndicator.IsTrackTarget = true;
+        }
+
+        if(isTransActor)
+        {
+            skillAreaIndicator.IsTransActor = true;
+            skillAreaIndicator.ActorTransform = actorTransform;
         }
     }
     protected virtual void SetIndicatorScale()
@@ -233,6 +241,10 @@ public class ActiveSkillAOE : CharacterSkill
 
         if (hasDuration)
             return;
+
+        if (isTransActor)
+            skillAreaIndicator.StartTransActor();
+                    
 
         if (skillStartFromCharacter)
             EffectManager.Instance.Get(activeEffect, indicatorTransform, indicatorTransform.rotation);

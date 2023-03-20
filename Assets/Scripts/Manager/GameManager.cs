@@ -77,25 +77,11 @@ public class GameManager : Singleton<GameManager>
     {
         Dictionary<string, AsyncOperationHandle> handles = new();
 
-        // Resources 테이블로 뺄 예정
-        List<string> tableNames = new()
-        {
-            "MissionInfoTable",
-            "EventEffectTable",
-            "DispatchInfoTable",
-            "OfficeTable",
-            "EventTable",
-            "CompensationTable",
-            "SupplyTable",
-            "StringTable_Desc",
-            "StringTable_Event",
-            "StringTable_Proper",
-            "StringTable_UI",
-            "ItemInfoTable",
-        };
-
         // Load TextAssets
-        int count = tableNames.Count;
+        TextAsset ta = Resources.Load<TextAsset>("TextAssetList");
+        var tableNames = ta.text.Split("\r\n");
+
+        int count = tableNames.Length;
         for (int i = 0; i < count; i++)
             handles.Add(tableNames[i], Addressables.LoadAssetAsync<TextAsset>(tableNames[i]));
 
@@ -355,11 +341,11 @@ public class GameManager : Singleton<GameManager>
     }
 
     //요일 변경
-    public void NextDay()
-    {
-        playerData.currentDay = playerData.currentDay != DayOfWeek.일 ? playerData.currentDay + 1 : DayOfWeek.월;
-        playerData.cumulateGameDay++;
-    }
+    //public void NextDay()
+    //{
+    //    playerData.currentDay = playerData.currentDay != DayOfWeek.일 ? playerData.currentDay + 1 : DayOfWeek.월;
+    //    playerData.cumulateGameDay++;
+    //}
 
     public void AddOfficeExperience(int exp)
     {
@@ -389,50 +375,50 @@ public class GameManager : Singleton<GameManager>
     }
 
     // 이벤트 이팩트 테이블 분리
-    private void FixEventEffectTable(List<Dictionary<string, object>> eventEffectInfoList)
-    {
-        eventEffectTagInfoList = new Dictionary<string, List<Dictionary<string, List<string>>>>();
-        for (int i = 0; i < eventEffectInfoList.Count; i++)
-        {
-            var midList = new List<Dictionary<string, List<string>>>();
-            for (int j = 0; j < 10; j++)
-            {
-                var smallDic = new Dictionary<string, List<string>>();
-                var list = new List<string>();
-                string priorityTag = $"PriorityTag{j + 1}";
-                string priorityText = $"PriorityText{j + 1}";
-                string priorityRewardType = $"PriorityRewardType{j + 1}";
-                string priorityReward = $"PriorityReward{j + 1}";
-                list.Add(priorityText);
-                list.Add(priorityRewardType);
-                list.Add(priorityReward);
-                smallDic.Add((string)eventEffectInfoList[i][priorityTag], list);
-                midList.Add(smallDic);
-            }
-            eventEffectTagInfoList.Add((string)eventEffectInfoList[i]["ID"], midList);
-        }
+    //private void FixEventEffectTable(List<Dictionary<string, object>> eventEffectInfoList)
+    //{
+    //    eventEffectTagInfoList = new Dictionary<string, List<Dictionary<string, List<string>>>>();
+    //    for (int i = 0; i < eventEffectInfoList.Count; i++)
+    //    {
+    //        var midList = new List<Dictionary<string, List<string>>>();
+    //        for (int j = 0; j < 10; j++)
+    //        {
+    //            var smallDic = new Dictionary<string, List<string>>();
+    //            var list = new List<string>();
+    //            string priorityTag = $"PriorityTag{j + 1}";
+    //            string priorityText = $"PriorityText{j + 1}";
+    //            string priorityRewardType = $"PriorityRewardType{j + 1}";
+    //            string priorityReward = $"PriorityReward{j + 1}";
+    //            list.Add(priorityText);
+    //            list.Add(priorityRewardType);
+    //            list.Add(priorityReward);
+    //            smallDic.Add((string)eventEffectInfoList[i][priorityTag], list);
+    //            midList.Add(smallDic);
+    //        }
+    //        eventEffectTagInfoList.Add((string)eventEffectInfoList[i]["ID"], midList);
+    //    }
 
-        eventEffectNoTagInfoList = new Dictionary<string, List<Dictionary<string, List<string>>>>();
-        for (int i = 0; i < eventEffectInfoList.Count; i++)
-        {
-            var midList = new List<Dictionary<string, List<string>>>();
-            for (int j = 0; j < 3; j++)
-            {
-                var smallDic = new Dictionary<string, List<string>>();
-                var list = new List<string>();
-                string text = $"NormalvalueText{j + 1}";
-                string rate = $"Normalvalue{j + 1}";
-                string rewardType = $"NormalRewardType{j + 1}";
-                string reward = $"NormalReward{j + 1}";
-                list.Add(rate);
-                list.Add(rewardType);
-                list.Add(reward);
-                smallDic.Add(eventEffectInfoList[i][text].ToString(), list);
-                midList.Add(smallDic);
-            }
-            eventEffectNoTagInfoList.Add((string)eventEffectInfoList[i]["ID"], midList);
-        }
-    }
+    //    eventEffectNoTagInfoList = new Dictionary<string, List<Dictionary<string, List<string>>>>();
+    //    for (int i = 0; i < eventEffectInfoList.Count; i++)
+    //    {
+    //        var midList = new List<Dictionary<string, List<string>>>();
+    //        for (int j = 0; j < 3; j++)
+    //        {
+    //            var smallDic = new Dictionary<string, List<string>>();
+    //            var list = new List<string>();
+    //            string text = $"NormalvalueText{j + 1}";
+    //            string rate = $"Normalvalue{j + 1}";
+    //            string rewardType = $"NormalRewardType{j + 1}";
+    //            string reward = $"NormalReward{j + 1}";
+    //            list.Add(rate);
+    //            list.Add(rewardType);
+    //            list.Add(reward);
+    //            smallDic.Add(eventEffectInfoList[i][text].ToString(), list);
+    //            midList.Add(smallDic);
+    //        }
+    //        eventEffectNoTagInfoList.Add((string)eventEffectInfoList[i]["ID"], midList);
+    //    }
+    //}
 
     // 작전 테이블 난이도 구분
     private void FixMissionTable(List<Dictionary<string, object>> missionInfoList)

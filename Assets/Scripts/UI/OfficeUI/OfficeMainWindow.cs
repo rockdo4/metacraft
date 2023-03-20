@@ -6,7 +6,7 @@ public class OfficeMainWindow : View
     public TextMeshProUGUI officeLevel;
     public TextMeshProUGUI officeExp;
     public TextMeshProUGUI playerGold;
-    public TextMeshProUGUI currentDay;
+    //public TextMeshProUGUI currentDay;
 
     private void OnEnable()
     {
@@ -21,6 +21,6 @@ public class OfficeMainWindow : View
         officeLevel.text = pd.officeLevel.ToString();
         officeExp.text = pd.officeExperience.ToString();
         playerGold.text = pd.gold.ToString();
-        currentDay.text = $"{pd.currentDay}요일";
+        //currentDay.text = $"{pd.currentDay}요일";
     }
 }

@@ -53,6 +53,8 @@ public class LiveData : IComparable<LiveData>
         criticalDmg = originData.criticalDmg;
         evasion = originData.evasion;
         accuracy = originData.accuracy;
+
+        tags = originData.tags;
     }
 
     public void SetLoad(string json)

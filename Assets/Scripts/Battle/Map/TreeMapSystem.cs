@@ -3,6 +3,28 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI.Extensions;
 
+[System.Serializable]
+public struct TreeInitSetting
+{
+    public int height;
+    public int width;
+    public int normalCount;
+    public int threatCount;
+    public int supplyCount;
+    public int eventCount;
+
+    public TreeInitSetting(int height = 4, int width = 5,
+        int normalNodeCount = 0, int threatNodeCount = 0, int supplyNodeCount = 0, int eventNodeCount = 0)
+    {
+        this.height = height;
+        this.width = width;
+        normalCount = normalNodeCount;
+        threatCount = threatNodeCount;
+        supplyCount = supplyNodeCount;
+        eventCount = eventNodeCount;
+    }
+}
+
 public class TreeMapSystem : MonoBehaviour
 {
     // Root, Boss 타입은 트리에 단 하나만 존재
@@ -20,13 +42,11 @@ public class TreeMapSystem : MonoBehaviour
             SetNodeHighlighter(curNode);
         }
     }
-    public int height = 6;
-    public int width = 5;
 
-    public int normalCount = 1;
-    public int threatCount = 1;
-    public int supplyCount = 1;
-    public int eventCount = 1;
+    // 인스펙터에서 노드 수를 조정할 때
+    public TreeInitSetting treeSettings;
+
+    // 내부에서 타입을 정해줄때 사용
     private int localNormalCount = 1;
     private int localThreatCount = 1;
     private int localSupplyCount = 1;
@@ -54,6 +74,7 @@ public class TreeMapSystem : MonoBehaviour
     private List<GameObject> highlighters = new();
     private int nodeIndex = 0;
     private bool showFirst = true;
+
 
     private struct TreeBlueprintData
     {
@@ -85,11 +106,11 @@ public class TreeMapSystem : MonoBehaviour
         movableHighlighterTarget.gameObject.SetActive(value);
     }
 
-    public void CreateTreeGraph()
+    public void CreateTreeGraph(int normalNodeCount = 0, int threatNodeCount = 0, int supplyNodeCount = 0, int eventNodeCount = 0)
     {
         nodeIndex = 0;
         DestroyAllObjs();
-        InitSettings(height - 2);       // 트리의 깊이 설정, 필요한 오브젝트 생성
+        InitSettings(normalNodeCount, threatNodeCount, supplyNodeCount, eventNodeCount);       // 트리의 깊이 설정, 필요한 오브젝트 생성
         CreateBlueprint();              // 설계도 생성
         CreateNodes();                  // 노드 생성
         CurNode = root;
@@ -117,7 +138,7 @@ public class TreeMapSystem : MonoBehaviour
 
     private void OffMovableHighlighters()
     {
-        for (int i = 0; i < width; i++)
+        for (int i = 0; i < treeSettings.width; i++)
         {
             highlighters[i].SetActive(false);
         }
@@ -125,8 +146,8 @@ public class TreeMapSystem : MonoBehaviour
 
     private void CreateBlueprint()
     {
-        blueprint = new(height);
-        for (int i = 0; i < height; i++)
+        blueprint = new(treeSettings.height);
+        for (int i = 0; i < treeSettings.height; i++)
         {
             int branchWidth = 0;
             TreeNodeTypes type;
@@ -139,7 +160,7 @@ public class TreeMapSystem : MonoBehaviour
                 fixBranchCount = true;
                 type = TreeNodeTypes.Root;
             }
-            else if (i == height - 1) // Villain
+            else if (i == treeSettings.height - 1) // Villain
             {
                 branchWidth = 1;
                 branchCount = 0;
@@ -153,8 +174,8 @@ public class TreeMapSystem : MonoBehaviour
                 {
                     branchWidth += elem.branchCount;
                 }
-                if (branchWidth > width)
-                    branchWidth = width;
+                if (branchWidth > treeSettings.width)
+                    branchWidth = treeSettings.width;
             }
             blueprint.Add(new(branchWidth));
             for (int j = 0; j < branchWidth; j++)
@@ -174,7 +195,7 @@ public class TreeMapSystem : MonoBehaviour
 
     private void CreateNodes()
     {
-        for (int i = 0; i < height; i++)
+        for (int i = 0; i < treeSettings.height; i++)
         {
             foreach (TreeBlueprintData data in blueprint[i])
             {
@@ -182,7 +203,7 @@ public class TreeMapSystem : MonoBehaviour
             }
         }
         root = nodes[0][0].GetComponent<TreeNodeObject>();
-        villain = nodes[height - 1][0].GetComponent<TreeNodeObject>();
+        villain = nodes[treeSettings.height - 1][0].GetComponent<TreeNodeObject>();
     }
 
     private TreeNodeTypes SelectType(TreeNodeTypes type)
@@ -202,7 +223,7 @@ public class TreeMapSystem : MonoBehaviour
 
         TreeNodeTypes returnType;
         if (pool.Count == 0)
-            returnType = (TreeNodeTypes)Random.Range(2, 5);
+            returnType = (TreeNodeTypes)Random.Range(2, 6);
         else
         {
             returnType = pool[Random.Range(0, pool.Count)];
@@ -308,14 +329,14 @@ public class TreeMapSystem : MonoBehaviour
         return instanceNode;
     }
 
-    public void InitSettings(int depth)
+    public void InitSettings(int normalNodeCount = 0, int threatNodeCount = 0, int supplyNodeCount = 0, int eventNodeCount = 0)
     {
-        localNormalCount = normalCount;
-        localThreatCount = threatCount;
-        localSupplyCount = supplyCount;
-        localEventCount = eventCount;
+        localNormalCount = normalNodeCount == 0 ? treeSettings.normalCount : normalNodeCount;
+        localThreatCount = threatNodeCount == 0 ? treeSettings.threatCount : threatNodeCount;
+        localSupplyCount = supplyNodeCount == 0 ? treeSettings.supplyCount : supplyNodeCount;
+        localEventCount = eventNodeCount == 0 ? treeSettings.eventCount : eventNodeCount;
 
-        for (int i = 0; i < depth + 2; i++)
+        for (int i = 0; i < treeSettings.height; i++)
         {
             GameObject bundle = Instantiate(nodeBundlePrefab, nodeTarget);
             bundle.name = $"bundle_{i}";
@@ -323,7 +344,7 @@ public class TreeMapSystem : MonoBehaviour
             bundles.Add(bundle);
         }
 
-        for (int i = 0; i < width; i++)
+        for (int i = 0; i < treeSettings.width; i++)
         {
             GameObject highlighterObj = Instantiate(movableHighlighterPrefab, movableHighlighterTarget);
             highlighters.Add(highlighterObj);

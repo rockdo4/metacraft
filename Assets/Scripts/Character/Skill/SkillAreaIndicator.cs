@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class SkillAreaIndicator : MonoBehaviour
 {
@@ -14,19 +15,65 @@ public class SkillAreaIndicator : MonoBehaviour
     private bool isTrackTarget = false;
     public Transform TrackTransform { get { return trackTransform; } set { trackTransform = value; } }
     private Transform trackTransform;
+    public bool IsTransActor { set { isTransActor = value; } }
+    private bool isTransActor = false;
+    public Transform ActorTransform { get { return actorTransform; } set { actorTransform = value; } }
+    private Transform actorTransform;
+
+    private bool onTrans = false;
+    public float transTime = 0.8f;
+    private float divTransTime;
+    private float transTimer = 0f;
+
+    private Vector3 startPos;
  
     protected virtual void Awake()
     {
         Renderer = GetComponent<MeshRenderer>();
+        divTransTime = 1 / transTime;
     }
     private void Update()
+    {
+        TryTrackTarget();
+        TryTransActor();
+    }
+    private void TryTrackTarget()
     {
         if (!isTrackTarget)
             return;
 
-        if(trackTransform != null) //임시코드 영우형이 확인 예정
+        if (trackTransform != null)
             transform.position = trackTransform.position + Vector3.up * 0.1f;
     }
+    private void TryTransActor()
+    {
+        if(!isTransActor) 
+            return;
+
+        if (!onTrans)
+            return;
+
+        TransActor();
+
+    }
+    public void StartTransActor()
+    {
+        onTrans = true;
+        startPos = actorTransform.position;
+        transTimer = 0f;
+    }
+    private void TransActor()
+    {
+        transTimer += Time.deltaTime;
+        actorTransform.position = Vector3.Lerp(startPos, transform.position, transTime * divTransTime);
+        if (transTimer > transTime)
+            EndTransActor();
+    }
+    private void EndTransActor()
+    {
+        onTrans = false;
+    }
+
 
     public virtual void SetScale(float x, float y, float z = 1f)
     {
