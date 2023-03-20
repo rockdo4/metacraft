@@ -329,14 +329,14 @@ public class BattleManager : MonoBehaviour
             normalRewardKey = normalValueKey.Equals(value1Text) ? normalReward1 : normalReward2;
         }
 
+        Logger.Debug($"{normalValueKey}");
+        contentText.text = gm.GetStringByTable(normalValueKey);
+
         if (normalRewardKey == -1)
         {
             return;
         }
 
-        Logger.Debug($"{normalValueKey}");
-
-        contentText.text = gm.GetStringByTable(normalValueKey);
         object rewardKey = normalRewardKey;
         AddReward(rewardKey);
         
