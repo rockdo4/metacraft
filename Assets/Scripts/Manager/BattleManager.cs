@@ -204,7 +204,12 @@ public class BattleManager : MonoBehaviour
 
     private void ExecutionBuff(int id)
     {
-        BuffManager.instance.GetBuff(id);
+        var buff = BuffManager.instance.GetBuff(id);
+
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            useHeroes[i].AddValueBuff(buff);
+        }
     }
 
     private void SetEventInfo(MapEventEnum ev)
@@ -270,14 +275,80 @@ public class BattleManager : MonoBehaviour
         eventExitButton.gameObject.SetActive(true);
     }
 
+    // 이벤트 노드 노멀 선택지 보상
+    private void GetNormalEventEffect(ref string valueKey, ref int rewardKey, int effectColumn)
+    {
+        string normalV1Text = $"{eventEffectInfoTable[effectColumn]["Normalvalue1"]}";
+        string normalV2Text = $"{eventEffectInfoTable[effectColumn]["Normalvalue2"]}";
+        float normalValue1 = float.Parse(normalV1Text);
+        float normalValue2 = float.Parse(normalV2Text);
+
+        string value1Text = $"{eventEffectInfoTable[effectColumn]["NormalvalueText1"]}";
+        string value2Text = $"{eventEffectInfoTable[effectColumn]["NormalvalueText2"]}";
+        int normalReward1 = (int)eventEffectInfoTable[effectColumn]["NormalReward1"];
+        int normalReward2 = (int)eventEffectInfoTable[effectColumn]["NormalReward2"];
+
+        if (normalValue1.Equals(1f))
+        {
+            valueKey = value1Text;
+            rewardKey = normalReward1;
+        }
+        else if (normalValue2.Equals(1f))
+        {
+            valueKey = value2Text;
+            rewardKey = normalReward2;
+        }
+        else if (normalValue1.Equals(normalValue2))
+        {
+            float randomValue = Random.Range(0f, 1f);
+            valueKey = randomValue >= 0.5f ? value1Text : value2Text;
+            rewardKey = valueKey.Equals(value1Text) ? normalReward1 : normalReward2;
+        }
+        else
+        {
+            valueKey = normalValue1 > normalValue2 ? value1Text : value2Text;
+            rewardKey = valueKey.Equals(value1Text) ? normalReward1 : normalReward2;
+        }
+
+        Logger.Debug($"normal value : {valueKey}, noraml reward : {rewardKey}");
+    }
+
+    private void GetPriorityTagEventEffect
+        (ref string valueKey, ref int rewardKey, int effectColumn, List<string> tags, ref int rewardType)
+    {
+        // 태그를 찾았으면 해당 태그의 이벤트 불러오고 리턴
+        for (int i = 0; i < useHeroes.Count; i++)
+        {
+            var heroTag = useHeroes[i].GetUnitData().data.tags;
+
+            Logger.Debug($"{heroTag.Count}");
+            for (int j = 0; j < heroTag.Count; j++)
+            {
+                Logger.Debug($"hero tag : {heroTag[j]}");
+                for (int k = 0; k < tags.Count; k++)
+                {
+                    if (heroTag[j].Equals(tags[k]))
+                    {
+                        // PriorityRewardType
+                        valueKey = $"{eventEffectInfoTable[effectColumn][$"PriorityText{k + 1}"]}";
+                        rewardKey = (int)eventEffectInfoTable[effectColumn][$"PriorityReward{k + 1}"];
+                        rewardType = (int)eventEffectInfoTable[effectColumn][$"PriorityRewardType{k + 1}"];
+                        Logger.Debug($"Get! [value : {valueKey}, reward : {rewardKey}]");
+                        return;
+                    }
+                }
+            }
+        }
+
+        // 못 찾았으면 노멀 이펙트로 이동해서 찾기
+        GetNormalEventEffect(ref valueKey, ref rewardKey, effectColumn);
+    }
+
     private void SetEventEffectReward(int column, int index, TextMeshProUGUI contentText)
     {
         string textEffect = $"{eventInfoTable[column][$"TextEffect{index}"]}";
 
         // eventEffectInfoList 는 eventEffectTagInfoList로 변경됨. 상운과 논의 후 연결해서 쓸 것
-
-        
-        // 테스트로 노멀 이펙트만 가져옴
         int effectColumn = 0;
         for (int i = 0; i < eventEffectInfoTable.Count; i++)
         {
@@ -288,58 +359,53 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        string normalV1 = $"{eventEffectInfoTable[effectColumn]["Normalvalue1"]}";
-        string normalV2 = $"{eventEffectInfoTable[effectColumn]["Normalvalue2"]}";
-        float normalValue1 = float.Parse(normalV1);
-        float normalValue2 = float.Parse(normalV2);
+        string valueKey = string.Empty;
+        int rewardKey = 0;
+        int priorityRewardType = 0;
 
-        //string normalValue1 = $"{eventEffectInfoTable[effectColumn]["Normalvalue1"]}";
-        //string normalValue2 = $"{eventEffectInfoTable[effectColumn]["Normalvalue2"]}";
-        string value1Text = $"{eventEffectInfoTable[effectColumn]["NormalvalueText1"]}";
-        string value2Text = $"{eventEffectInfoTable[effectColumn]["NormalvalueText2"]}";
-        int normalReward1 = (int)eventEffectInfoTable[effectColumn]["NormalReward1"];
-        int normalReward2 = (int)eventEffectInfoTable[effectColumn]["NormalReward2"];
+        List<string> tags = new();
 
-
-        string normalValueKey = string.Empty;
-        int normalRewardKey = 0;
-
-        //normalValueKey = value1Text;
-        //normalRewardKey = normalReward1;
-
-        if (normalValue1.Equals(1f))
+        int tagCount = (int)eventEffectInfoTable[effectColumn]["PriorityTagCount"];
+        for (int i = 0; i < tagCount; i++)
         {
-            normalValueKey = value1Text;
-            normalRewardKey = normalReward1;
+            string tag = $"{eventEffectInfoTable[effectColumn][$"PriorityTag{i + 1}"]}";
+
+            if (tag == string.Empty)
+            {
+                break;
+            }
+            Logger.Debug(tag);
+            tags.Add(tag);
         }
-        else if (normalValue2.Equals(1f))
+
+        // 테이블에 태그와 연관된 이벤트가 없을 때는 연산하지 않고 바로 노멀 이펙트로 이동
+        if (tags.Count == 0)
         {
-            normalValueKey = value2Text;
-            normalRewardKey = normalReward2;
-        }
-        else if (normalValue1.Equals(normalValue2))
-        {
-            float randomValue = Random.Range(0f, 1f);
-            normalValueKey = randomValue >= 0.5f ? value1Text : value2Text;
-            normalRewardKey = normalValueKey.Equals(value1Text) ? normalReward1 : normalReward2;
+            GetNormalEventEffect(ref valueKey, ref rewardKey, effectColumn);
         }
         else
         {
-            normalValueKey = normalValue1 > normalValue2 ? value1Text : value2Text;
-            normalRewardKey = normalValueKey.Equals(value1Text) ? normalReward1 : normalReward2;
+            Logger.Debug("TagEvent");
+            GetPriorityTagEventEffect(ref valueKey, ref rewardKey, effectColumn, tags, ref priorityRewardType);
         }
 
-        Logger.Debug($"{normalValueKey}");
-        contentText.text = gm.GetStringByTable(normalValueKey);
+        Logger.Debug($"{valueKey}");
+        contentText.text = gm.GetStringByTable(valueKey);
 
-        if (normalRewardKey == -1)
+        if (rewardKey == -1)
         {
             return;
         }
 
-        object rewardKey = normalRewardKey;
-        AddReward(rewardKey);
-        
+        if (priorityRewardType == 0)
+        {
+            object stringTableRewardKey = rewardKey;
+            AddReward(stringTableRewardKey);
+        }
+        else
+        {
+            ExecutionBuff(rewardKey);
+        }
     }
 
     private void Init()
@@ -764,7 +830,8 @@ public class BattleManager : MonoBehaviour
         if (tree.CurNode.type == TreeNodeTypes.Event)
         {
             var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
-            StartNextStage((MapEventEnum)randomEvent);
+            //StartNextStage((MapEventEnum)randomEvent);
+            StartNextStage(MapEventEnum.NewbieHeroRescue);
             return true;
         }
         else if (tree.CurNode.type == TreeNodeTypes.Supply)
