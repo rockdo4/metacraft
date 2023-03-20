@@ -13,6 +13,11 @@ public class StageReward : MonoBehaviour
 
     public string goldId;
 
+    /************************* Minu *************************/
+    public GameObject eventRewardPage;
+    public Transform eventRewardTr;
+    private List<RewardItem> currRewards = new();
+
     private void Start()
     {
         itemInfoList = GameManager.Instance.itemInfoList;
@@ -37,10 +42,16 @@ public class StageReward : MonoBehaviour
     }
     public void AddGold(string value)
     {
-        AddItem(goldId, value);
+        AddItem(goldId, value, false);
     }
-    public void AddItem(string id, string count)
+    public void AddItem(string id, string count, bool isEventReward)
     {
+        if (isEventReward)
+        {
+            var currReward = Instantiate(item, eventRewardTr);
+            currReward.SetData(id, "", count);
+            currRewards.Add(currReward);
+        }
 
         for (int i = 0; i < rewards.Count; i++)
         {
@@ -53,6 +64,7 @@ public class StageReward : MonoBehaviour
 
         var newItem = Instantiate(item, rewardTr);
         newItem.SetData(id, "", count);
+
         rewards.Add(newItem);
     }
 
@@ -88,5 +100,25 @@ public class StageReward : MonoBehaviour
         {
             rewards[i].transform.SetSiblingIndex(i);
         }
+    }
+
+    /***************** Minu *****************/
+    public void OnEventRewardPage()
+    {
+        eventRewardPage.SetActive(true);
+    }
+    public void OffEventRewardPage()
+    {
+        DestroyCurrRewards();
+        eventRewardPage.SetActive(false);
+    }
+
+    public void DestroyCurrRewards()
+    {
+        for (int i = 0; i < currRewards.Count; i++)
+        {
+            Destroy(currRewards[i].gameObject);
+        }
+        currRewards.Clear();
     }
 }

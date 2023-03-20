@@ -272,8 +272,9 @@ public class BattleManager : MonoBehaviour
         {
             choiceButtons[i].gameObject.SetActive(false);
         }
-        SetEventEffectReward((int)curEvent, index + 1, contentText);
+
         eventExitButton.gameObject.SetActive(true);
+        SetEventEffectReward((int)curEvent, index + 1, contentText);
     }
 
     // 이벤트 노드 노멀 선택지 보상
@@ -410,8 +411,10 @@ public class BattleManager : MonoBehaviour
         else if (priorityRewardType == 2)
         {
             // 아이템 인포 테이블에서 찾고 add
-            stageReward.AddItem($"{rewardKey}", "1");
-            Logger.Debug("Good");
+            stageReward.AddItem($"{rewardKey}", "1", true);
+
+            stageReward.gameObject.SetActive(true);
+            stageReward.OnEventRewardPage();
         }
     }
 
@@ -1015,7 +1018,7 @@ public class BattleManager : MonoBehaviour
             //if ((int)rewardData[$"{keyValue}{i}"] == -1)
             if ((int)rewardData[$"{keyValue}{i}"] == -1)
                 continue;
-            stageReward.AddItem(rewardData[$"{keyItem}{i}"].ToString(), rewardData[$"{keyValue}{i}"].ToString());
+            stageReward.AddItem(rewardData[$"{keyItem}{i}"].ToString(), rewardData[$"{keyValue}{i}"].ToString(), false);
         }
         if ((int)rewardData["Gold"] != -1)
             stageReward.AddGold(rewardData["Gold"].ToString());
