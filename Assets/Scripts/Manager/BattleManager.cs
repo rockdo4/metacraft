@@ -687,11 +687,15 @@ public class BattleManager : MonoBehaviour
 
         btMapTriggers.Last().isLastTrigger = true;
 
+        for (int i = 0; i < btMapTriggers.Count; i++)
+        {
+            btMapTriggers[i].isTriggerEnter = false;
+        }
+
         // 임시 빌드용 코드
         if (tree.CurNode.type == TreeNodeTypes.Villain)
         {
             currBtMgr.battleMapType = BattleMapEnum.Normal;
-            //Logger.Debug(btMapTriggers[^2].name);
 
             btMapTriggers[^2].enemys.Clear();
             btMapTriggers[^2].enemyColls.Clear();
