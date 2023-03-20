@@ -480,6 +480,8 @@ public class AttackableHero : AttackableUnit
         pathFind.isStopped = false;
         animator.SetTrigger("ActiveEnd");
         base.ActiveSkillEnd();
+        Logger.Debug("skillend");
+        Logger.Debug(IsAlive(target));
 
         if (lateReturn)
         {

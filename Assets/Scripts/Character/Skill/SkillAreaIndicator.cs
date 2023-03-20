@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UIElements;
 
 public class SkillAreaIndicator : MonoBehaviour
 {
@@ -25,8 +24,7 @@ public class SkillAreaIndicator : MonoBehaviour
         set
         {
             actorTransform = value;
-            agent = actorTransform.GetComponent<NavMeshAgent>();
-            Logger.Debug("agent setted");
+            agent = actorTransform.GetComponent<NavMeshAgent>();            
         }
     }
     private Transform actorTransform;
@@ -47,7 +45,7 @@ public class SkillAreaIndicator : MonoBehaviour
     private void Update()
     {
         TryTrackTarget();
-        TryTransActor();
+        //TryTransActor();
     }
     private void TryTrackTarget()
     {
@@ -57,35 +55,43 @@ public class SkillAreaIndicator : MonoBehaviour
         if (trackTransform != null)
             transform.position = trackTransform.position + Vector3.up * 0.1f;
     }
-    private void TryTransActor()
-    {        
-        if(!isTransActor) 
-            return;        
+    //private void TryTransActor()
+    //{        
+    //    if(!isTransActor) 
+    //        return;        
 
-        if (!onTrans)
-            return;        
+    //    if (!onTrans)
+    //        return;        
 
-        TransActor();
+    //    TransActor();
 
-    }
+    //}
     public void StartTransActor()
     {
         onTrans = true;
-        startPos = actorTransform.position;
-        transTimer = 0f;
-        agent.isStopped = true;        
+        //startPos = actorTransform.position;
+        actorTransform.LookAt(transform.position);
+        agent.SetDestination(transform.position);
+        agent.isStopped = false;                
     }
-    private void TransActor()
-    {        
-        transTimer += Time.deltaTime;        
-        actorTransform.position = Vector3.Lerp(startPos, transform.position, transTimer * divTransTime);        
-        if (transTimer > transTime)
-            EndTransActor();
-    }
+
+    //private void TransActor()
+    //{        
+    //    transTimer += Time.deltaTime;        
+    //    //actorTransform.position = Vector3.Lerp(startPos, transform.position, transTimer * divTransTime);        
+    //    if (transTimer > transTime)
+    //        EndTransActor();
+    //}
     private void EndTransActor()
     {
-        onTrans = false;         
-        agent.isStopped = false;        
+        onTrans = false;
+        if (!NavMesh.SamplePosition(agent.transform.position, out _, 0.1f, NavMesh.AllAreas))
+        {            
+            if (NavMesh.FindClosestEdge(agent.transform.position, out NavMeshHit hit, NavMesh.AllAreas))
+            {                
+                agent.transform.position = hit.position;
+            }
+        }        
     }
     //private void SetTransActorValueStartOrEnd(bool trueIsStart)
     //{

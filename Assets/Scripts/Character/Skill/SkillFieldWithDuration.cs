@@ -83,10 +83,10 @@ public class SkillFieldWithDuration : MonoBehaviour
     {
         if(isTrackTarget)
             currParticle.transform.position = transform.position;
-        TrackTarget();
+        TryTrackTarget();
         OnDamage();
     }
-    private void TrackTarget()
+    private void TryTrackTarget()
     {
         if(!isTrackTarget) 
             return;
