@@ -165,6 +165,8 @@ public class BattleManager : MonoBehaviour
                 {
                     if (supplyEventHeroImages[i].heroData != null)
                         supplyEventHeroImages[i].SetCurrHp();
+                    else
+                        supplyEventHeroImages[i].gameObject.SetActive(false);
                 }
                 SetActiveUi(supplyUi, supplyButtons, true, supplyButtons.Count);
                 SetActiveHeroUiList(false);
@@ -404,7 +406,6 @@ public class BattleManager : MonoBehaviour
             BattleMapInfo battleMap = eventMaps[i].GetComponent<BattleMapInfo>();
             Light battleMapLigth = battleMap.GetLight();
             battleMapLigth.color = gm.GetMapLightColor();
-            //battleMapLigth.gameObject.SetActive(false);
             lights.Add(battleMapLigth);
         }
 
