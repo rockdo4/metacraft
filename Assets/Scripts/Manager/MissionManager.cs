@@ -43,10 +43,10 @@ public class MissionManager : View
         marks = GetComponentInChildren<MissionSpawner>().prefebs;
     }
 
-    private void OnEnable()
-    {
-        UpdateMissionDay();
-    }
+    //private void OnEnable()
+    //{
+    //    UpdateMissionDay();
+    //}
 
     private void Start()
     {
@@ -82,10 +82,10 @@ public class MissionManager : View
         }
     }
 
-    public void UpdateMissionDay()
-    {
-        dayOfweek.text = $"{gm.playerData.currentDay}요일";
-    }
+    //public void UpdateMissionDay()
+    //{
+    //    dayOfweek.text = $"{gm.playerData.currentDay}요일";
+    //}
 
     public void UpdateMissionInfo(int difficulty, int num)
     {

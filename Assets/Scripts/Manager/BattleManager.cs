@@ -563,7 +563,7 @@ public class BattleManager : MonoBehaviour
     private void MissionClear()
     {
         UIManager.Instance.ShowView(1);
-        gm.NextDay();
+        // gm.NextDay();
         clearUi.SetData();
     }
 
@@ -582,7 +582,7 @@ public class BattleManager : MonoBehaviour
     public void MissionFail()
     {
         Time.timeScale = 0;
-        gm.NextDay();
+        // gm.NextDay();
         UIManager.Instance.ShowView(2);
     }
     private void OnDestroy()
