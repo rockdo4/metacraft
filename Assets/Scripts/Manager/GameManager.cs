@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Text;
 using UnityEngine;
@@ -40,7 +41,7 @@ public class GameManager : Singleton<GameManager>
     public List<int?> battleGroups = new(3) { null, null, null }; // Mission Select -> Battle Scene
 
     // Origin Database - Set Prefab & Scriptable Objects
-    public List<GameObject> heroDatabase = new();
+    private List<GameObject> heroDatabase = new();
 
     public Color currMapColor;
     public List<Color> mapLigthColors;
@@ -49,6 +50,11 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
         StartCoroutine(LoadAllResources());
+    }
+
+    public int heroDataCounts()
+    {
+        return heroDatabase.Count;
     }
 
     public void SetHeroesOrigin()
@@ -85,9 +91,11 @@ public class GameManager : Singleton<GameManager>
         for (int i = 0; i < count; i++)
             handles.Add(tableNames[i], Addressables.LoadAssetAsync<TextAsset>(tableNames[i]));
 
-        // Load Sprites
-        List<string> heroNames = new();
+        // Load Character Prefabs
 
+
+
+        // Load Sprites
         count = heroDatabase.Count;
         for (int i = 0; i < count; i++)
         {

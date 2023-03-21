@@ -16,7 +16,7 @@ public class ShopWindow : View
         if (count == gm.heroDatabase.Count)
             return;
 
-        GameObject newHero = Instantiate(gm.heroDatabase[count], gm.heroSpawnTransform);
+        GameObject newHero = gm.CreateNewHero(count);// Instantiate(gm.heroDatabase[count], gm.heroSpawnTransform);
         gm.myHeroes.Add(newHero);
         newHero.SetActive(false);
 

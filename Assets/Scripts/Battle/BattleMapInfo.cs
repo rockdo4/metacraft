@@ -4,7 +4,6 @@ using UnityEngine;
 public class BattleMapInfo : MonoBehaviour
 {
     public List<Transform> startPositions;
-    public List<Transform> endPositions;
 
     public List<MapEventTrigger> triggers = new();
 
@@ -32,10 +31,6 @@ public class BattleMapInfo : MonoBehaviour
     public List<Transform> GetStartPosition()
     {
         return startPositions;
-    }
-    public List<Transform> GetEndPosition()
-    {
-        return endPositions;
     }
 
     public GameObject GetViewPoint()
