@@ -6,7 +6,6 @@ public class NormalMapEventTrigger : MapEventTrigger
     {
         if (!isLastTrigger && other.TryGetComponent<AttackableHero>(out var hero))
         {
-            Logger.Debug("this");
             hero.ChangeUnitState(UnitState.Battle);
         }
 

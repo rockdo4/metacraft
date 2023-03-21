@@ -64,7 +64,6 @@ public class AttackableHero : AttackableUnit
                     {
                         StopCoroutine(coOnAutoSkill);
                         coOnAutoSkill = null;
-                        Logger.Debug($"{transform.name} + : + StopCoroutine");
                     }
                     break;
                 case UnitState.MoveNext:
@@ -99,7 +98,6 @@ public class AttackableHero : AttackableUnit
                         StopCoroutine(coOnAutoSkill);
                         coOnAutoSkill = null;
                         heroUI.heroSkill.CancleSkill();
-                        Logger.Debug($"{transform.name} + : + StopCoroutine");
                     }
                     nowUpdate = DieUpdate;
                     break;
@@ -143,7 +141,6 @@ public class AttackableHero : AttackableUnit
                 case UnitBattleState.Stun:
                     pathFind.isStopped = true;
                     animator.SetTrigger("Stun");
-                    Logger.Debug("Stun Trigger");
                     animator.ResetTrigger("Attack");
                     animator.ResetTrigger("AttackEnd");
                     break;
@@ -170,7 +167,6 @@ public class AttackableHero : AttackableUnit
                     StopCoroutine(coOnAutoSkill);
                     heroUI.heroSkill.CancleSkill();
                     coOnAutoSkill = null;
-                    Logger.Debug($"{transform.name} + : + StopCoroutine");
                 }
             }
         }
@@ -271,7 +267,6 @@ public class AttackableHero : AttackableUnit
     }
     public void PlayActiveSkillAnimation()
     {
-        Logger.Debug($"PlaySkill : {Time.timeScale}");
         pathFind.isStopped = true;
         BattleState = UnitBattleState.ActiveSkill;
         if (coOnIndicator != null)
@@ -310,7 +305,6 @@ public class AttackableHero : AttackableUnit
                 characterData.activeSkill.targetPos = activeTarget.transform.position;
                 if (coOnAutoSkill == null)
                 {
-                    Logger.Debug("Auto Start");
                     coOnAutoSkill = StartCoroutine(heroUI.heroSkill.OnAutoSkillActive(characterData.activeSkill));
                 }
             }
@@ -545,7 +539,6 @@ public class AttackableHero : AttackableUnit
             {
                 icon = heroUI.AddIcon(info.type, info.duration, idx);
                 base.AddValueBuff(info, anotherValue, icon);
-                Logger.Debug($"{transform.name} : {info}");
             }
         }
         else
@@ -569,7 +562,6 @@ public class AttackableHero : AttackableUnit
                 break;
             }
         }
-
         bool isOverlap = false;
         foreach (var buff in buffList)
         {
@@ -614,7 +606,6 @@ public class AttackableHero : AttackableUnit
         {
             BattleState = UnitBattleState.BattleIdle;
         }
-        Logger.Debug("Stun End");
     }
     public override void RemoveBuff(Buff buff)
     {

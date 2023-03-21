@@ -333,7 +333,6 @@ public class BattleManager : MonoBehaviour
         {
             var heroTag = useHeroes[i].GetUnitData().data.tags;
 
-            Logger.Debug($"{heroTag.Count}");
             for (int j = 0; j < heroTag.Count; j++)
             {
                 Logger.Debug($"hero tag : {heroTag[j]}");
@@ -397,7 +396,6 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            Logger.Debug("TagEvent");
             GetPriorityTagEventEffect(ref valueKey, ref rewardKey, effectColumn, tags, ref priorityRewardType);
         }
 
