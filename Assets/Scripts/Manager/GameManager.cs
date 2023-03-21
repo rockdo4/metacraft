@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Net;
 using System.Text;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -21,6 +22,7 @@ public class GameManager : Singleton<GameManager>
     // Resources - Sprites, TextAsset + (Scriptable Objects, Sound etc)
     private Dictionary<string, Sprite> iconSprites = new();
     private Dictionary<string, Sprite> illustrationSprites = new();
+    private Dictionary<string, Sprite> stateIconSprites = new();
     public Dictionary<int, List<Dictionary<string, object>>> missionInfoDifficulty; // 작전 정보 난이도 키 추가
     public List<Dictionary<string, object>> dispatchInfoList; // 파견 정보
     public List<Dictionary<string, object>> officeInfoList;  // 사무소 레벨별 정보
@@ -121,6 +123,20 @@ public class GameManager : Singleton<GameManager>
                 {
                     Sprite sprite = obj.Result;
                     illustrationSprites.Add(IllurAddress, sprite);
+                };
+        }
+
+
+        count = 28;
+        for (int i = 1; i <= count; i++)
+        {
+            string address = string.Format("state{0}",i);
+            AsyncOperationHandle<Sprite> stateIconHandle = Addressables.LoadAssetAsync<Sprite>(address);
+            stateIconHandle.Completed +=
+                (AsyncOperationHandle<Sprite> obj) =>
+                {
+                    Sprite sprite = obj.Result;
+                    stateIconSprites.Add(address, sprite);
                 };
         }
 
@@ -339,6 +355,11 @@ public class GameManager : Singleton<GameManager>
         if (illustrationSprites.ContainsKey(address))
         {
             return illustrationSprites[address];
+        }
+
+        if (stateIconSprites.ContainsKey(address))
+        {
+            return stateIconSprites[address];
         }
 
         Logger.Debug($"Load sprite fail. address: {address}");

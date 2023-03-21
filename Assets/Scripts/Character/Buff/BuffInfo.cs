@@ -5,6 +5,7 @@ public class BuffInfo : ScriptableObject
 {
     [Header("중복 절대 불가")]
     public int id;              //상태의 ID
+    public int sort;            //아이콘 번호, 테이블에 있는 sort번호
     public new string name;         //상태이상의 이름(스트링테이블 연결)
     public string info;         //상태이상의 설명(스트링테이블 연결)
 
