@@ -15,9 +15,6 @@ public class SkillAreaIndicator : MonoBehaviour
     private bool isTrackTarget = false;
     public Transform TrackTransform { get { return trackTransform; } set { trackTransform = value; } }
     private Transform trackTransform;
-    public bool IsTransActor { set { isTransActor = value; } }
-    private bool isTransActor = false;
-
     public Transform ActorTransform
     {
         get { return actorTransform; }
@@ -29,13 +26,9 @@ public class SkillAreaIndicator : MonoBehaviour
     }
     private Transform actorTransform;
     private NavMeshAgent agent;
-
-    private bool onTrans = false;
+    
     public float transTime = 0.8f;
     private float divTransTime;
-    private float transTimer = 0f;
-
-    private Vector3 startPos;
  
     protected virtual void Awake()
     {
@@ -44,8 +37,7 @@ public class SkillAreaIndicator : MonoBehaviour
     }
     private void Update()
     {
-        TryTrackTarget();
-        //TryTransActor();
+        TryTrackTarget();        
     }
     private void TryTrackTarget()
     {
@@ -55,51 +47,23 @@ public class SkillAreaIndicator : MonoBehaviour
         if (trackTransform != null)
             transform.position = trackTransform.position + Vector3.up * 0.1f;
     }
-    //private void TryTransActor()
-    //{        
-    //    if(!isTransActor) 
-    //        return;        
-
-    //    if (!onTrans)
-    //        return;        
-
-    //    TransActor();
-
-    //}
     public void StartTransActor()
     {
-        onTrans = true;
-        //startPos = actorTransform.position;
         actorTransform.LookAt(transform.position);
         agent.SetDestination(transform.position);
         agent.isStopped = false;                
         var distanceSqr = Utils.GetDistanceSqr(actorTransform.position, transform.position);
         agent.speed = distanceSqr * divTransTime;
     }
-
-    //private void TransActor()
-    //{        
-    //    transTimer += Time.deltaTime;        
-    //    //actorTransform.position = Vector3.Lerp(startPos, transform.position, transTimer * divTransTime);        
-    //    if (transTimer > transTime)
-    //        EndTransActor();
-    //}
-    private void EndTransActor()
-    {
-        onTrans = false;
-        if (!NavMesh.SamplePosition(agent.transform.position, out _, 0.1f, NavMesh.AllAreas))
-        {            
-            if (NavMesh.FindClosestEdge(agent.transform.position, out NavMeshHit hit, NavMesh.AllAreas))
-            {                
-                agent.transform.position = hit.position;
-            }
-        }        
-    }
-    //private void SetTransActorValueStartOrEnd(bool trueIsStart)
-    //{
-    //    onTrans = trueIsStart;
-    //    agent.isStopped = trueIsStart;
-    //    transTimer = 0f;
+    //private void EndTransActor()
+    //{    
+    //    if (!NavMesh.SamplePosition(agent.transform.position, out _, 0.1f, NavMesh.AllAreas))
+    //    {            
+    //        if (NavMesh.FindClosestEdge(agent.transform.position, out NavMeshHit hit, NavMesh.AllAreas))
+    //        {                
+    //            agent.transform.position = hit.position;
+    //        }
+    //    }        
     //}
     public virtual void SetScale(float x, float y, float z = 1f)
     {

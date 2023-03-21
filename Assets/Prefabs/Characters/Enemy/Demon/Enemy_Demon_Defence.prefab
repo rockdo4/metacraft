@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 16434657934555993}
   - component: {fileID: 622755115076962049}
   - component: {fileID: 5347105160204720125}
+  - component: {fileID: 8543923727519128365}
   m_Layer: 7
   m_Name: Enemy_Demon_Defence
   m_TagString: Enemy
@@ -72,7 +73,7 @@ MonoBehaviour:
     evasion: 0
     accuracy: 0.5
   attacks:
-  - {fileID: 11400000, guid: b5b498abaadafaa4b811e665173ecacd, type: 2}
+  - {fileID: 11400000, guid: 2d593e6b6f293ea45a7a4b99156f6db2, type: 2}
   activeSkill: {fileID: 0}
   passiveSkill: {fileID: 0}
 --- !u!136 &8378594368993012405
@@ -207,9 +208,54 @@ MonoBehaviour:
   isThereDamageUI: 1
   usingFloatingHpBar: 1
   isAlive: 0
-  effectCreateTransform: {fileID: 0}
-  hitEffectTransform: {fileID: 0}
+  effectCreateTransform: {fileID: 8571695584032985657}
+  hitEffectTransform: {fileID: 3888670240173935110}
   isMapTriggerEnter: 0
+--- !u!114 &8543923727519128365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16434657934555995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb9a7c2cf5813934b88e3573fb1ab658, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skill: {fileID: 11400000, guid: b4ea757c3986ed345893d91447b5163a, type: 2}
+  interval: 5
+--- !u!1 &2910808103058431661
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8571695584032985657}
+  m_Layer: 0
+  m_Name: EffectHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8571695584032985657
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2910808103058431661}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.897, z: 1.497}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3884434113695818178}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3889846742633449346
 GameObject:
   m_ObjectHideFlags: 0
@@ -1254,6 +1300,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3884536058770284912}
+  - {fileID: 8571695584032985657}
   m_Father: {fileID: 3884378319500271688}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -73,8 +73,7 @@ public class ActiveSkillAOE : CharacterSkill
         }
 
         if(isTransActor)
-        {
-            skillAreaIndicator.IsTransActor = true;
+        {          
             skillAreaIndicator.ActorTransform = actorTransform;
         }
     }

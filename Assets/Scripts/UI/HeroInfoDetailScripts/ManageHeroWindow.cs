@@ -28,7 +28,7 @@ public class ManageHeroWindow : View
         var list = GameManager.Instance.myHeroes;
         foreach (var character in list)
         {
-            copyCharacterTable.Add(character.GetComponent<CharacterDataBundle>());
+            copyCharacterTable.Add(character.Value.GetComponent<CharacterDataBundle>());
         }
     }
 

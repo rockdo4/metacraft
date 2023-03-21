@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 using System.Linq;
-using UnityEngine.AI;
 
 [Serializable]
 public class BuffLevel
@@ -76,27 +75,20 @@ public class CharacterSkill : ScriptableObject
     }
     //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)									
     public virtual int CreateDamageResult(LiveData data, BufferState status)
-    {        
-        var result = 0;
+    {   
         switch (coefficientType)
         {
             case SkillCoefficientType.Attack:
-                result = (int)((data.baseDamage * status.Damage) * coefficient);
-                break;
+                return (int)((data.baseDamage * status.Damage) * coefficient);                
             case SkillCoefficientType.Defense:
-                result = (int)((data.baseDefense * status.defense) * coefficient);
-                break;
+                return (int)((data.baseDefense * status.defense) * coefficient);                
             case SkillCoefficientType.MaxHealth:
-                result = (int)((data.healthPoint * status.maxHealthIncrease) * coefficient);
-                break;
+                return (int)((data.healthPoint * status.maxHealthIncrease) * coefficient);
             case SkillCoefficientType.Health:
-                result = (int)(data.currentHp * coefficient);
-                break;
-        }
-        //if (targetType == SkillTargetType.Friendly)
-        //    result *= -1;
+                return (int)(data.currentHp * coefficient);                
+        }        
 
-        return result;
+        return 0;
     }
     public virtual void NormalAttackOnDamage()
     {
@@ -119,6 +111,7 @@ public class CharacterSkill : ScriptableObject
             case BufferTargetType.Self:
                 foreach (var buff in buffInfos)
                 {
+                    Logger.Debug($"{buff[skillLevel - 1]} 를 {unit} 에 적용");
                     if (buff[skillLevel - 1].type == BuffType.Provoke
                         || buff[skillLevel - 1].type == BuffType.Stun
                         || buff[skillLevel - 1].type == BuffType.Silence)
@@ -136,22 +129,13 @@ public class CharacterSkill : ScriptableObject
                         foreach (var buff in buffInfos)
                         {
                             var nowBuff = buff[skillLevel - 1];
+                            Logger.Debug($"{nowBuff} 를 {finalTargets[i]} 에 적용");
                             if (nowBuff.type == BuffType.Provoke
                                 || nowBuff.type == BuffType.Stun
                                 || nowBuff.type == BuffType.Silence)
                                 finalTargets[i].AddStateBuff(nowBuff, unit);
                             else
                             {
-                                //int value = 0;
-
-                                //var levelCorrection = 1 + 
-                                //    Mathf.Clamp((unit.GetUnitData().data.level - unit.GetUnitData().data.level) / 100f, -0.4f, 0);
-
-                                //bool isCritical = nowBuff.type == BuffType.Heal ? false :
-                                //    UnityEngine.Random.Range(0f, 1f) < unit.GetUnitData().data.critical + (unit.GetBuffState.criticalProbability);
-
-                                //var dmg = (int)(unit.CalculDamage(this, ref isCritical) * levelCorrection);
-                                //finalTargets[i].AddValueBuff(nowBuff, value);
                                 finalTargets[i].AddValueBuff(nowBuff);
                             }
                         }
