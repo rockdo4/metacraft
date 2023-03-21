@@ -1083,28 +1083,8 @@ public class BattleManager : MonoBehaviour
 
         for (int i = useCount - 1; i >= 0; i--)
         {
-            try
-            {
-                btMapTriggers[index].useEnemys[i].ChangeUnitState(UnitState.Die);
-            }
-            catch (System.Exception)
-            {
-
-                throw;
-            }
+            btMapTriggers[index].useEnemys[i].ChangeUnitState(UnitState.Die);
         }
-        //for (int i = 0; i < useCount; i++)
-        //{
-        //    try
-        //    {
-        //        btMapTriggers[index].useEnemys[i].ChangeUnitState(UnitState.Die);
-        //    }
-        //    catch (System.Exception)
-        //    {
-
-        //        throw;
-        //    }
-        //}
 
         int unuseCount = btMapTriggers[index].enemys.Count;
         for (int i = 0; i < unuseCount; i++)
