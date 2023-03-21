@@ -1,5 +1,4 @@
 using System.Collections;
-using UnityEditor.Purchasing;
 using UnityEngine;
 
 public class RockBottomActive : MonoBehaviour
@@ -22,6 +21,7 @@ public class RockBottomActive : MonoBehaviour
     {
         float timer = 0f;
         float radian = 0f;
+        float zeroToDoublePieByTimer = 2 * Mathf.PI / jumpTime;
         Vector3 posSave;
         while (true)
         {
@@ -33,8 +33,8 @@ public class RockBottomActive : MonoBehaviour
                 transForm.localPosition = posSave;
                 yield break;
             }
-            radian = timer * divJumpTime * 2 * Mathf.PI;            
-            var currHeight = (Mathf.Cos(radian) * -1 + 1f) * 0.5f;            
+            radian = timer * zeroToDoublePieByTimer;            
+            var currHeight = Mathf.Cos(radian) * -0.5f + 0.5f;
             posSave.y = Mathf.Lerp(0f, jumpHeigh, currHeight);
             transForm.localPosition = posSave;
             yield return null;
