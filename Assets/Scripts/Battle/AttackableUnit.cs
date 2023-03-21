@@ -26,6 +26,7 @@ public abstract class AttackableUnit : MonoBehaviour
     [SerializeField, Header("캐릭터 데이터")]
     protected CharacterDataBundle characterData;
     public CharacterDataBundle GetUnitData() => characterData;
+    public void SetUnitOriginData(CharacterData data) => characterData.originData = data;
     [SerializeField, Header("현재 스킬")]
     protected CharacterSkill nowAttack;
     protected CharacterSkill GetNowAttack() => nowAttack;
