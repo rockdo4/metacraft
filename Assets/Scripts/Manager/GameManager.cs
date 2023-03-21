@@ -15,6 +15,7 @@ public class GameManager : Singleton<GameManager>
     // MyData - Craft, Load & Save to this data
     public List<GameObject> myHeroes = new();
     public Transform heroSpawnTransform;
+    public Dictionary<string, GameObject> myHeroes2 = new();
 
     // Resources - Sprites, TextAsset + (Scriptable Objects, Sound etc)
     private Dictionary<string, Sprite> iconSprites = new();
