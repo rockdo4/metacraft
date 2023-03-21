@@ -7,10 +7,10 @@ public class RecruitmentWindow : MonoBehaviour
     private List<GameObject> heroDatabase;
     private float[] probs;
     private Dictionary<int, int> gradeCounts = new Dictionary<int, int>();
-    private List<GameObject> getGacha;
+    private List<GameObject> getGacha = new ();
     public GameObject gachaPrefeb;
     public Transform showGacha;
-    private List<RecruitmentInfo> resultRecruitmentList;
+    private List<RecruitmentInfo> resultRecruitmentList = new ();
 
     private void Start()
     {
@@ -56,8 +56,7 @@ public class RecruitmentWindow : MonoBehaviour
 
     public void OneTimeGacha()
     {
-        var add = GameManager.Instance.CreateNewHero(Gacha(probs));
-        getGacha.Add(add);
+        getGacha.Add(heroDatabase[Gacha(probs)]);
 
         GameObject obj = Instantiate(gachaPrefeb, showGacha);
         RecruitmentInfo info = obj.GetComponent<RecruitmentInfo>();
@@ -74,7 +73,7 @@ public class RecruitmentWindow : MonoBehaviour
         {
             GameObject obj = Instantiate(gachaPrefeb, showGacha);
             RecruitmentInfo info = obj.GetComponent<RecruitmentInfo>();
-            //info.SetData();
+            info.SetData(getGacha[i].GetComponent<CharacterDataBundle>());
             resultRecruitmentList.Add(info);
         }
     }
