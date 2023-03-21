@@ -18,7 +18,7 @@ public class HeroUi : MonoBehaviour
     public void SetAuto(ref bool state) => isAuto = state;
     public bool isSilence;
     public bool IsSilence {
-        get { return isSilence;   }
+        get { return isSilence; }
         set {
             isSilence = value;
             silenceImage.gameObject.SetActive(value);
@@ -28,15 +28,16 @@ public class HeroUi : MonoBehaviour
     public void SetHeroInfo(CharacterDataBundle data)
     {
         heroData = data;
-        heroImage.sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{heroData.data.name}");
-        SetHp(heroData.data.currentHp, heroData.data.healthPoint);
+        string key = $"Icon_{heroData.data.name}";
+        heroImage.sprite = GameManager.Instance.GetSpriteByAddress(key);
+        SetHp();
     }
-
 
     public BuffIcon AddIcon(BuffType type, float duration, int idx)
     {
         return viewBuffList.AddIcon(type, duration, idx);
     }
+
     public void RemoveBuff(BuffIcon icon)
     {
         viewBuffList.RemoveBuff(icon);
@@ -54,16 +55,19 @@ public class HeroUi : MonoBehaviour
     {
         viewBuffList.OnClickPopUp();
     }
-    public void SetHp(float nowHp, float maxHp)
+
+    public void SetHp(float? nowHp = null, float? maxHp = null)
     {
-        hpBar.value = nowHp / maxHp; // Mathf.Max((float)nowHp / maxHp); max 왜 쓴거임? - 진석 
-                                            // 그러게요..? 여기다 쓸 이유가 없는데.. 최대체력 넘지 못하게 하는 코드
-                                            //  작업하면서 무지성으로 복붙한거 같아요- 정연
+        if (nowHp == null || maxHp == null)
+            hpBar.value = heroData.data.currentHp / heroData.data.healthPoint;
+        else
+            hpBar.value = (float)(nowHp / maxHp);
     }
-    public void SetCurrHp()
-    {
-        SetHp(heroData.data.currentHp, heroData.data.healthPoint);
-    }
+
+    //public void SetCurrHp()
+    //{
+    //    SetHp(heroData.data.currentHp, heroData.data.healthPoint);
+    //}
 
     public void SetDieImage()
     {
