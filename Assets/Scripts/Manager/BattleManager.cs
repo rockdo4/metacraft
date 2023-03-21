@@ -167,7 +167,7 @@ public class BattleManager : MonoBehaviour
                 for (int i = 0; i < supplyEventHeroImages.Count; i++)
                 {
                     if (supplyEventHeroImages[i].heroData != null)
-                        supplyEventHeroImages[i].SetCurrHp();
+                        supplyEventHeroImages[i].SetHp();
                     else
                         supplyEventHeroImages[i].gameObject.SetActive(false);
                 }
