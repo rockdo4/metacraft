@@ -25,10 +25,10 @@ public class ManageHeroWindow : View
     private void SetList()
     {
         copyCharacterTable.Clear();
-        var list = GameManager.Instance.myHeroes;
+        var list = GameManager.Instance.myHeroes2;
         foreach (var character in list)
         {
-            copyCharacterTable.Add(character.GetComponent<CharacterDataBundle>());
+            copyCharacterTable.Add(character.Value.GetComponent<CharacterDataBundle>());
         }
     }
 

@@ -28,8 +28,9 @@ public class HeroUi : MonoBehaviour
     public void SetHeroInfo(CharacterDataBundle data)
     {
         heroData = data;
-        heroImage.sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{heroData.data.name}");
-        SetHp(heroData.data.currentHp, heroData.data.healthPoint);
+        string key = $"Icon_{heroData.data.name}";
+        heroImage.sprite = GameManager.Instance.GetSpriteByAddress(key);
+        SetHp();
     }
 
     public BuffIcon AddIcon(BuffType type, float duration, int idx)

@@ -102,7 +102,8 @@ public class MissionManager : View
         }
         for (int i = 0; i < fitProperties.Length; i++)
         {
-            fitProperties[i].text = gm.GetStringByTable($"{selectMission[$"BonusType{i + 1}"]}");
+            string key = $"{selectMission[$"BonusType{i + 1}"]}";
+            fitProperties[i].text = gm.GetStringByTable(key);
             fitProperties[i].fontStyle = FontStyles.Normal;
             fitProperties[i].color = Color.white;
         }
