@@ -302,7 +302,6 @@ public class AttackableHero : AttackableUnit
 
     protected override void BattleUpdate()
     {
-        Logger.Debug(Time.timeScale);
         if (IsAuto && BattleState != UnitBattleState.None && heroUI.heroSkill.IsCoolDown && !bufferState.silence)
         {
             SearchActiveTarget();
