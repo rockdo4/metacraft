@@ -25,6 +25,8 @@ public class GameManager : Singleton<GameManager>
     public List<Dictionary<string, object>> officeInfoList;  // 사무소 레벨별 정보
     public List<Dictionary<string, object>> eventInfoList; // 이벤트 노드 정보
     public List<Dictionary<string, object>> eventEffectInfoList;  // 이벤트 노드 일반보상만 연결해놓기 위해 임시로 살림, 태그 검사 추가 시 추후 삭제 예정
+    public List<Dictionary<string, object>> enemyInfoList;
+    public List<Dictionary<string, object>> enemySpawnList;
     public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectTagInfoList;
     public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectNoTagInfoList;
     private Dictionary<string, Dictionary<string, object>> stringTable = new();
@@ -52,6 +54,20 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine(LoadAllResources());
     }
 
+    public int heroDataCounts()
+    {
+        return heroDatabase.Count;
+    }
+
+    public void SetHeroesOrigin()
+    {
+        int count = myHeroes.Count;
+        for (int i = 0; i < count; i++)
+        {
+            Utils.CopyPositionAndRotation(myHeroes[i], heroSpawnTransform);
+        }
+    }
+
     public List<GameObject> GetSelectedHeroes()
     {
         List<GameObject> selectedHeroes = new();
@@ -67,8 +83,7 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator LoadAllResources()
     {
-        Dictionary<string, AsyncOperationHandle> releaseHandles = new();
-        List<AsyncOperationHandle> unreleaseHandles = new();
+        Dictionary<string, AsyncOperationHandle> handles = new();
 
         // Load TextAssets
         TextAsset ta = Resources.Load<TextAsset>("TextAssetList");
@@ -76,7 +91,11 @@ public class GameManager : Singleton<GameManager>
 
         int count = tableNames.Length;
         for (int i = 0; i < count; i++)
-            releaseHandles.Add(tableNames[i], Addressables.LoadAssetAsync<TextAsset>(tableNames[i]));
+            handles.Add(tableNames[i], Addressables.LoadAssetAsync<TextAsset>(tableNames[i]));
+
+        // Load Character Prefabs
+
+
 
         // Load Sprites
         count = heroDatabase.Count;
@@ -91,7 +110,7 @@ public class GameManager : Singleton<GameManager>
                     Sprite sprite = obj.Result;
                     iconSprites.Add(iconAddress, sprite);
                 };
-            unreleaseHandles.Add(iconHandle);
+            //handles.Add(iconAddress, iconHandle);
 
             string IllurAddress = $"Illu_{address}";
             AsyncOperationHandle<Sprite> illuHandle = Addressables.LoadAssetAsync<Sprite>(IllurAddress);
@@ -101,16 +120,16 @@ public class GameManager : Singleton<GameManager>
                     Sprite sprite = obj.Result;
                     illustrationSprites.Add(IllurAddress, sprite);
                 };
-            unreleaseHandles.Add(illuHandle);
+            //handles.Add(IllurAddress, illuHandle);
         }
 
-        // 리소스 로드 대기
+        // 스프라이트 리소스 로드 대기
         bool loadAll = false;
         while (!loadAll)
         {
             count = 0;
             loadAll = true;
-            foreach (var handle in releaseHandles)
+            foreach (var handle in handles)
             {
                 if (!handle.Value.IsDone)
                 {
@@ -119,37 +138,29 @@ public class GameManager : Singleton<GameManager>
                 }
                 count++;
             }
-
-            foreach (var handle in unreleaseHandles)
-            {
-                if (!handle.IsDone)
-                {
-                    loadAll = false;
-                    break;
-                }
-                count++;
-            }
-            
             yield return null;
         }
-        dispatchInfoList = CSVReader.SplitTextAsset(releaseHandles["DispatchInfoTable"].Result as TextAsset);
-        officeInfoList = CSVReader.SplitTextAsset(releaseHandles["OfficeTable"].Result as TextAsset);
-        eventInfoList = CSVReader.SplitTextAsset(releaseHandles["EventTable"].Result as TextAsset);
-        compensationInfoList = CSVReader.SplitTextAsset(releaseHandles["CompensationTable"].Result as TextAsset);
-        supplyInfoList = CSVReader.SplitTextAsset(releaseHandles["SupplyTable"].Result as TextAsset);
-        itemInfoList = CSVReader.SplitTextAsset(releaseHandles["ItemInfoTable"].Result as TextAsset);
-        eventEffectInfoList = CSVReader.SplitTextAsset(releaseHandles["EventEffectTable"].Result as TextAsset);  // 이벤트 노드 일반보상만 연결해놓기 위해 임시로 살림, 태그 검사 추가 시 추후 삭제 예정
+        dispatchInfoList = CSVReader.SplitTextAsset(handles["DispatchInfoTable"].Result as TextAsset);
+        officeInfoList = CSVReader.SplitTextAsset(handles["OfficeTable"].Result as TextAsset);
+        eventInfoList = CSVReader.SplitTextAsset(handles["EventTable"].Result as TextAsset);
+        compensationInfoList = CSVReader.SplitTextAsset(handles["CompensationTable"].Result as TextAsset);
+        supplyInfoList = CSVReader.SplitTextAsset(handles["SupplyTable"].Result as TextAsset);
+        itemInfoList = CSVReader.SplitTextAsset(handles["ItemInfoTable"].Result as TextAsset);
+        eventEffectInfoList = CSVReader.SplitTextAsset(handles["EventEffectTable"].Result as TextAsset);  // 이벤트 노드 일반보상만 연결해놓기 위해 임시로 살림, 태그 검사 추가 시 추후 삭제 예정
+        enemyInfoList = CSVReader.SplitTextAsset(handles["EnemyInfoTable"].Result as TextAsset);
+        enemySpawnList = CSVReader.SplitTextAsset(handles["EnemySpawnTable"].Result as TextAsset);
+
 
         LoadAllData();
-        FixMissionTable(CSVReader.SplitTextAsset(releaseHandles["MissionInfoTable"].Result as TextAsset));
+        FixMissionTable(CSVReader.SplitTextAsset(handles["MissionInfoTable"].Result as TextAsset));
         //FixEventEffectTable(CSVReader.SplitTextAsset(handles["EventEffectTable"].Result as TextAsset));
-        AppendStringTable(CSVReader.SplitTextAsset(releaseHandles["StringTable_Desc"].Result as TextAsset), "StringTable_Desc");
-        AppendStringTable(CSVReader.SplitTextAsset(releaseHandles["StringTable_Event"].Result as TextAsset), "StringTable_Event");
-        AppendStringTable(CSVReader.SplitTextAsset(releaseHandles["StringTable_Proper"].Result as TextAsset), "StringTable_Proper");
-        AppendStringTable(CSVReader.SplitTextAsset(releaseHandles["StringTable_UI"].Result as TextAsset), "StringTable_UI");
+        AppendStringTable(CSVReader.SplitTextAsset(handles["StringTable_Desc"].Result as TextAsset), "StringTable_Desc");
+        AppendStringTable(CSVReader.SplitTextAsset(handles["StringTable_Event"].Result as TextAsset), "StringTable_Event");
+        AppendStringTable(CSVReader.SplitTextAsset(handles["StringTable_Proper"].Result as TextAsset), "StringTable_Proper");
+        AppendStringTable(CSVReader.SplitTextAsset(handles["StringTable_UI"].Result as TextAsset), "StringTable_UI");
 
-        ReleaseAddressable(releaseHandles);
-        releaseHandles.Clear();
+        ReleaseAddressable(handles);
+        handles.Clear();
     }
 
     private void AppendStringTable(List<Dictionary<string, object>> rawData, string tableName)
@@ -453,16 +464,6 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    public void SetHeroesOrigin()
-    {
-        int count = myHeroes.Count;
-        for (int i = 0; i < count; i++)
-        {
-            Utils.CopyPositionAndRotation(myHeroes[i], heroSpawnTransform);
-        }
-    }
-
-
     /************************************* Minu *******************************************/
     public void SetDifferentColor()
     {
@@ -475,7 +476,7 @@ public class GameManager : Singleton<GameManager>
         Color prevColor;
         do
         {
-            int randomRange = Random.Range(0, 101);
+            int randomRange = UnityEngine.Random.Range(0, 101);
             prevColor = currMapColor;
 
             if (randomRange >= 60)

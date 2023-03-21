@@ -301,7 +301,7 @@ public class AttackableHero : AttackableUnit
     }
 
     protected override void BattleUpdate()
-    {
+    {        
         if (IsAuto && BattleState != UnitBattleState.None && heroUI.heroSkill.IsCoolDown && !bufferState.silence)
         {
             SearchActiveTarget();
@@ -385,8 +385,7 @@ public class AttackableHero : AttackableUnit
             case UnitBattleState.ActiveSkill:
                 stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("ActiveSkill") && stateInfo.normalizedTime >= 1.0f)
-                {
-                    Logger.Debug(Time.timeScale);
+                {                    
                     ActiveSkillEnd();
                 }
                 break;
@@ -503,12 +502,11 @@ public class AttackableHero : AttackableUnit
     public override void ActiveSkillEnd()
     {
         pathFind.isStopped = false;
+        pathFind.speed = characterData.data.moveSpeed;
         animator.SetTrigger("ActiveEnd");
         //if (coOnAutoSkill != null)
         //    StopCoroutine(coOnAutoSkill);
         base.ActiveSkillEnd();
-        Logger.Debug("skillend");
-        Logger.Debug(IsAlive(target));
 
         if (lateReturn)
         {
