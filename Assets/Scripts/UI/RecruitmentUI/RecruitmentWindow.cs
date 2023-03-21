@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class RecruitmentWindow : MonoBehaviour
 {
+    //public Image pageImage;
     public RecruitmentData type; //영입 타입
     private List<GameObject> heroDatabase; // 히어로 전체 데이터
     private float[] probs; // 히어로별 확률 저장
@@ -16,6 +18,7 @@ public class RecruitmentWindow : MonoBehaviour
 
     private void Start()
     {
+        //pageImage.sprite = GameManager.Instance.GetSpriteByAddress($"{type.image}");
         heroDatabase = GameManager.Instance.heroDatabase;
         probs = new float[heroDatabase.Count];
         gradeCounts.Add(1, 0);
