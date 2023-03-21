@@ -26,6 +26,7 @@ public class CharacterDataBundle : MonoBehaviour, IComparable<CharacterDataBundl
     public void InitSetting()
     {
         data.SetInit(originData);
+        gameObject.name = originData.name;
     }
 
     public int CompareTo(CharacterDataBundle other)

@@ -13,7 +13,8 @@ public class GameManager : Singleton<GameManager>
     public PlayerData playerData;
 
     // MyData - Craft, Load & Save to this data
-    public List<GameObject> myHeroes = new();
+    //public List<GameObject> myHeroes = new();
+    public Dictionary<string, GameObject> myHeroes2 = new();
     public Transform heroSpawnTransform;
     public Dictionary<string, GameObject> myHeroes2 = new();
 
@@ -58,10 +59,15 @@ public class GameManager : Singleton<GameManager>
 
     public void SetHeroesOrigin()
     {
-        int count = myHeroes.Count;
-        for (int i = 0; i < count; i++)
+        //int count = myHeroes2.Count;
+        //for (int i = 0; i < count; i++)
+        //{
+        //    Utils.CopyPositionAndRotation(myHeroes[i], heroSpawnTransform);
+        //}
+
+        foreach (var elem in myHeroes2)
         {
-            Utils.CopyPositionAndRotation(myHeroes[i], heroSpawnTransform);
+            Utils.CopyPositionAndRotation(elem.Value, heroSpawnTransform);
         }
     }
 
@@ -72,7 +78,8 @@ public class GameManager : Singleton<GameManager>
 
         for (int i = 0; i < count; i++)
         {
-            selectedHeroes.Add(battleGroups[i] == null ? null : myHeroes[(int)battleGroups[i]]);
+            int key = battleGroups[i] == null ? -1 : (int)battleGroups[i];
+            selectedHeroes.Add(battleGroups[i] == null ? null : myHeroes2[heroDatabase[key].name.ToLower()]);
         }
 
         return selectedHeroes;
@@ -217,9 +224,9 @@ public class GameManager : Singleton<GameManager>
         sb.AppendLine("ID;Contents");
         sb.AppendLine($"PlayerData;{JsonUtility.ToJson(playerData)}");
 
-        foreach (var hero in myHeroes)
+        foreach (var hero in myHeroes2)
         {
-            LiveData data = hero.GetComponent<CharacterDataBundle>().data;
+            LiveData data = hero.Value.GetComponent<CharacterDataBundle>().data;
             sb.AppendLine($"Hero_{data.name};{JsonUtility.ToJson(data)}");
         }
         File.WriteAllText(GetSaveFilePath(), sb.ToString());
@@ -259,9 +266,9 @@ public class GameManager : Singleton<GameManager>
 
     public void SetHeroesActive(bool value)
     {
-        foreach (var character in myHeroes)
+        foreach (var character in myHeroes2)
         {
-            character.SetActive(value);
+            character.Value.SetActive(value);
         }
     }
 
@@ -276,7 +283,8 @@ public class GameManager : Singleton<GameManager>
             return null;
 
         GameObject newHero = Instantiate(heroDatabase[index], heroSpawnTransform);
-        myHeroes.Add(newHero);
+        string key = newHero.name;
+        myHeroes2.Add(key, newHero);
         newHero.SetActive(false);
         return newHero;
     }
