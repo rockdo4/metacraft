@@ -89,11 +89,11 @@ public class MissionManager : View
 
     public void UpdateMissionInfo(int difficulty, int num)
     {
-        var dic = missionInfoTable[difficulty][num];
-        gm.currentSelectMission = dic;
+        var selectMission = missionInfoTable[difficulty][num];
+        gm.currentSelectMission = selectMission;
 
         //portrait.sprite = gm.iconSprites[$"Icon_{dic["BossID"]}"];  보스아이디 적 테이블에서 불러와야함
-        explanation.text = gm.GetStringByTable($"{dic["TooltipID"]}");
+        explanation.text = gm.GetStringByTable($"{selectMission["TooltipID"]}");
         //ExpectedCost.text = $"{dic["ExpectedCostID"]}";  삭제예정
         gm.ClearBattleGroups();
         for (int i = 0; i < heroSlots.Length; i++)
@@ -102,8 +102,7 @@ public class MissionManager : View
         }
         for (int i = 0; i < fitProperties.Length; i++)
         {
-            var count = $"BonusType{i + 1}";
-            fitProperties[i].text = gm.GetStringByTable($"{dic[count]}");
+            fitProperties[i].text = gm.GetStringByTable($"{selectMission[$"BonusType{i + 1}"]}");
             fitProperties[i].fontStyle = FontStyles.Normal;
             fitProperties[i].color = Color.white;
         }
@@ -170,7 +169,8 @@ public class MissionManager : View
             {
                 if (hero != null)
                 {
-                    if (hero.GetComponent<CharacterDataBundle>().data.job.Equals(fitProperties[i].text))
+                    string job = gm.GetStringByTable($"herotype_{(CharacterJob)hero.GetComponent<CharacterDataBundle>().data.job}");
+                    if (job.Equals(fitProperties[i].text))
                     {
                         fitProperties[i].fontStyle = FontStyles.Bold;
                         fitProperties[i].color = Color.red;

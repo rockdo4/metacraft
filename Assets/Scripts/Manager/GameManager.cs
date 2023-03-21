@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Text;
 using UnityEngine;
@@ -25,6 +24,8 @@ public class GameManager : Singleton<GameManager>
     public List<Dictionary<string, object>> officeInfoList;  // 사무소 레벨별 정보
     public List<Dictionary<string, object>> eventInfoList; // 이벤트 노드 정보
     public List<Dictionary<string, object>> eventEffectInfoList;  // 이벤트 노드 일반보상만 연결해놓기 위해 임시로 살림, 태그 검사 추가 시 추후 삭제 예정
+    public List<Dictionary<string, object>> enemyInfoList;
+    public List<Dictionary<string, object>> enemySpawnList;
     public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectTagInfoList;
     public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectNoTagInfoList;
     private Dictionary<string, Dictionary<string, object>> stringTable = new();
@@ -52,11 +53,6 @@ public class GameManager : Singleton<GameManager>
     {
         base.Awake();
         StartCoroutine(LoadAllResources());
-    }
-
-    public int heroDataCounts()
-    {
-        return heroDatabase.Count;
     }
 
     public void SetHeroesOrigin()
@@ -91,11 +87,10 @@ public class GameManager : Singleton<GameManager>
 
         int count = tableNames.Length;
         for (int i = 0; i < count; i++)
-            handles.Add(tableNames[i], Addressables.LoadAssetAsync<TextAsset>(tableNames[i]));
-
-        // Load Character Prefabs
-
-
+        {
+            if (tableNames[i].Length != 0)
+                handles.Add(tableNames[i], Addressables.LoadAssetAsync<TextAsset>(tableNames[i]));
+        }
 
         // Load Sprites
         count = heroDatabase.Count;
@@ -110,7 +105,6 @@ public class GameManager : Singleton<GameManager>
                     Sprite sprite = obj.Result;
                     iconSprites.Add(iconAddress, sprite);
                 };
-            //handles.Add(iconAddress, iconHandle);
 
             string IllurAddress = $"Illu_{address}";
             AsyncOperationHandle<Sprite> illuHandle = Addressables.LoadAssetAsync<Sprite>(IllurAddress);
@@ -120,7 +114,6 @@ public class GameManager : Singleton<GameManager>
                     Sprite sprite = obj.Result;
                     illustrationSprites.Add(IllurAddress, sprite);
                 };
-            //handles.Add(IllurAddress, illuHandle);
         }
 
         // 스프라이트 리소스 로드 대기
@@ -146,6 +139,8 @@ public class GameManager : Singleton<GameManager>
         compensationInfoList = CSVReader.SplitTextAsset(handles["CompensationTable"].Result as TextAsset);
         supplyInfoList = CSVReader.SplitTextAsset(handles["SupplyTable"].Result as TextAsset);
         itemInfoList = CSVReader.SplitTextAsset(handles["ItemInfoTable"].Result as TextAsset);
+        enemyInfoList = CSVReader.SplitTextAsset(handles["EnemyInfoTable"].Result as TextAsset);
+        enemySpawnList = CSVReader.SplitTextAsset(handles["EnemySpawnTable"].Result as TextAsset);
         recruitmentReplacementTable = CSVReader.SplitTextAsset(handles["RecruitmentReplacementTable"].Result as TextAsset);
         eventEffectInfoList = CSVReader.SplitTextAsset(handles["EventEffectTable"].Result as TextAsset);
 
@@ -208,18 +203,6 @@ public class GameManager : Singleton<GameManager>
 
             Application.Quit();
         }
-
-        //if (Input.GetKeyDown(KeyCode.P)) // 캐릭터 생성 임시코드
-        //{
-        //    GameManager gm = Instance;
-        //    int count = gm.myHeroes.Count;
-        //    if (count == gm.heroDatabase.Count)
-        //        return;
-
-        //    GameObject newHero = Instantiate(gm.heroDatabase[count], gm.heroSpawnTransform);
-        //    gm.myHeroes.Add(newHero);
-        //    newHero.SetActive(false);
-        //}
     }
 
     public void OnApplicationQuit()
@@ -263,7 +246,6 @@ public class GameManager : Singleton<GameManager>
                 {
                     newHero.GetComponent<CharacterDataBundle>().data.SetLoad(contents);
                     newHero.name = heroName;
-                    myHeroes.Add(newHero);
                 }
                 else
                 {
@@ -291,7 +273,11 @@ public class GameManager : Singleton<GameManager>
     {
         if (index == -1)
             return null;
-        return Instantiate(heroDatabase[index], heroSpawnTransform);
+
+        GameObject newHero = Instantiate(heroDatabase[index], heroSpawnTransform);
+        myHeroes.Add(newHero);
+        newHero.SetActive(false);
+        return newHero;
     }
 
     private string GetSaveFilePath()

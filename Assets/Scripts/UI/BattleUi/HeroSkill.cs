@@ -113,7 +113,7 @@ public class HeroSkill : MonoBehaviour
     {
         OnDownSkill();
 
-        yield return new WaitForSeconds(1f * Time.timeScale);
+        yield return new WaitForSeconds(0.5f * Time.timeScale);
 
         if (isAuto)
         {
