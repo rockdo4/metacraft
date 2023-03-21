@@ -20,6 +20,8 @@ public class NormalMapInfo : BattleMapInfo
             {
                 for (int j = 0; j < triggers[i].enemySettingPositions.Count; j++)
                 {
+                    // 각 위치마다 데이터 설정 (적 프리펩, 데이터들)
+
                     var enemy = triggers[i].enemySettingPositions[j]?.SpawnEnemy();
                     if (enemy == null)
                         break;
