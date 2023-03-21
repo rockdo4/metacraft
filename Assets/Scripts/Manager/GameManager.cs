@@ -87,7 +87,9 @@ public class GameManager : Singleton<GameManager>
 
         int count = tableNames.Length;
         for (int i = 0; i < count; i++)
+        {
             handles.Add(tableNames[i], Addressables.LoadAssetAsync<TextAsset>(tableNames[i]));
+        }
 
         // Load Sprites
         count = heroDatabase.Count;
