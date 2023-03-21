@@ -41,7 +41,7 @@ public class GameManager : Singleton<GameManager>
     public List<int?> battleGroups = new(3) { null, null, null }; // Mission Select -> Battle Scene
 
     // Origin Database - Set Prefab & Scriptable Objects
-    private List<GameObject> heroDatabase = new();
+    public List<GameObject> heroDatabase = new();
 
     public Color currMapColor;
     public List<Color> mapLigthColors;

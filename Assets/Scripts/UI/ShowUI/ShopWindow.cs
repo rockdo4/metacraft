@@ -13,7 +13,7 @@ public class ShopWindow : View
         // 임시 코드
         GameManager gm = GameManager.Instance;
         int count = gm.myHeroes.Count;
-        if (count == gm.heroDatabase.Count)
+        if (count == gm.heroDataCounts())
             return;
 
         GameObject newHero = gm.CreateNewHero(count);// Instantiate(gm.heroDatabase[count], gm.heroSpawnTransform);

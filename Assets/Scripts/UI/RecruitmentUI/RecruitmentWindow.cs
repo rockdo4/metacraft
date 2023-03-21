@@ -56,7 +56,8 @@ public class RecruitmentWindow : MonoBehaviour
 
     public void OneTimeGacha()
     {
-        getGacha.Add(GameManager.Instance.CreateNewHero(Gacha(probs)));
+        var add = GameManager.Instance.CreateNewHero(Gacha(probs));
+        getGacha.Add(add);
 
         GameObject obj = Instantiate(gachaPrefeb, showGacha);
         RecruitmentInfo info = obj.GetComponent<RecruitmentInfo>();
