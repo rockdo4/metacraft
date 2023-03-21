@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1880833858625902182
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2789207460557966812}
+  m_Layer: 7
+  m_Name: EffectHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2789207460557966812
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1880833858625902182}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.378, z: 0.393}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2136368913396659216}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2136963265409975972
 GameObject:
   m_ObjectHideFlags: 0
@@ -879,6 +910,7 @@ Transform:
   - {fileID: 2142030314330417794}
   - {fileID: 2136046188759921816}
   - {fileID: 2135836018084386774}
+  - {fileID: 2789207460557966812}
   m_Father: {fileID: 7961928728425208734}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2210,7 +2242,8 @@ MonoBehaviour:
     evasion: 0
     accuracy: 0.5
   attacks:
-  - {fileID: 11400000, guid: b5b498abaadafaa4b811e665173ecacd, type: 2}
+  - {fileID: 11400000, guid: a7087f4a70c7c694fa673a65a9217ccc, type: 2}
+  - {fileID: 11400000, guid: 0b1bf28d892557c4cba4526e813bc3ed, type: 2}
   activeSkill: {fileID: 0}
   passiveSkill: {fileID: 0}
 --- !u!136 &1874253817518230129
@@ -2327,7 +2360,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterData: {fileID: 7961928728425208723}
   nowAttack: {fileID: 0}
-  skillClips: []
+  skillClips:
+  - {fileID: 7400000, guid: 8c70b623c19b5b04799bec627e3ee3f1, type: 2}
+  - {fileID: 7400000, guid: be2300f6ef8c4134ca26b0b8a968458e, type: 2}
   unitType: 1
   normalAttackTargetType: 0
   PassiveTargetType: 0
@@ -2345,6 +2380,6 @@ MonoBehaviour:
   isThereDamageUI: 1
   usingFloatingHpBar: 1
   isAlive: 0
-  effectCreateTransform: {fileID: 0}
-  hitEffectTransform: {fileID: 0}
+  effectCreateTransform: {fileID: 2789207460557966812}
+  hitEffectTransform: {fileID: 2136068168982727654}
   isMapTriggerEnter: 0
