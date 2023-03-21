@@ -14,8 +14,6 @@ public class MapEventTrigger : MonoBehaviour
     public bool isStageEnd = false;
     [Header("미션 종료 트리거")]
     public bool isMissionEnd = false;
-    [Header("스킵할 트리거")]
-    public bool isSkip = false;
     [Header("길목 트리거")]
     public bool isForkedRoad = false;
     [Header("마지막 트리거")] 
@@ -23,12 +21,6 @@ public class MapEventTrigger : MonoBehaviour
     public bool isTriggerEnter = false;
 
     public List<CapsuleCollider> enemyColls = new();
-
-    private void Start()
-    {
-        if (enemySettingPositions.Count == 0)
-            isSkip = true;
-    }
 
     public void OnDead(AttackableEnemy enemy)
     {
