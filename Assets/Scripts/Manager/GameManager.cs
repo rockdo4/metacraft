@@ -35,6 +35,8 @@ public class GameManager : Singleton<GameManager>
 
     public List<Dictionary<string, object>> supplyInfoList; // 보급 노드 정보
 
+    public List<Dictionary<string, object>> recruitmentReplacementTable;
+
     // Office Select
     public GameObject currentSelectObject; // Hero Info
     public Dictionary<string, object> currentSelectMission; // Mission Select
@@ -144,11 +146,11 @@ public class GameManager : Singleton<GameManager>
         compensationInfoList = CSVReader.SplitTextAsset(handles["CompensationTable"].Result as TextAsset);
         supplyInfoList = CSVReader.SplitTextAsset(handles["SupplyTable"].Result as TextAsset);
         itemInfoList = CSVReader.SplitTextAsset(handles["ItemInfoTable"].Result as TextAsset);
-        eventEffectInfoList = CSVReader.SplitTextAsset(handles["EventEffectTable"].Result as TextAsset);  // 이벤트 노드 일반보상만 연결해놓기 위해 임시로 살림, 태그 검사 추가 시 추후 삭제 예정
+        recruitmentReplacementTable = CSVReader.SplitTextAsset(handles["RecruitmentReplacementTable"].Result as TextAsset);
+        eventEffectInfoList = CSVReader.SplitTextAsset(handles["EventEffectTable"].Result as TextAsset);
 
         LoadAllData();
         FixMissionTable(CSVReader.SplitTextAsset(handles["MissionInfoTable"].Result as TextAsset));
-        //FixEventEffectTable(CSVReader.SplitTextAsset(handles["EventEffectTable"].Result as TextAsset));
         AppendStringTable(CSVReader.SplitTextAsset(handles["StringTable_Desc"].Result as TextAsset), "StringTable_Desc");
         AppendStringTable(CSVReader.SplitTextAsset(handles["StringTable_Event"].Result as TextAsset), "StringTable_Event");
         AppendStringTable(CSVReader.SplitTextAsset(handles["StringTable_Proper"].Result as TextAsset), "StringTable_Proper");
@@ -381,52 +383,6 @@ public class GameManager : Singleton<GameManager>
         playerData.officeImage = (string)officeInfoList[level]["OfficeImage"];
         //Logger.Debug($"현재 레벨 : {playerData.officeLevel}");
     }
-
-    // 이벤트 이팩트 테이블 분리
-    //private void FixEventEffectTable(List<Dictionary<string, object>> eventEffectInfoList)
-    //{
-    //    eventEffectTagInfoList = new Dictionary<string, List<Dictionary<string, List<string>>>>();
-    //    for (int i = 0; i < eventEffectInfoList.Count; i++)
-    //    {
-    //        var midList = new List<Dictionary<string, List<string>>>();
-    //        for (int j = 0; j < 10; j++)
-    //        {
-    //            var smallDic = new Dictionary<string, List<string>>();
-    //            var list = new List<string>();
-    //            string priorityTag = $"PriorityTag{j + 1}";
-    //            string priorityText = $"PriorityText{j + 1}";
-    //            string priorityRewardType = $"PriorityRewardType{j + 1}";
-    //            string priorityReward = $"PriorityReward{j + 1}";
-    //            list.Add(priorityText);
-    //            list.Add(priorityRewardType);
-    //            list.Add(priorityReward);
-    //            smallDic.Add((string)eventEffectInfoList[i][priorityTag], list);
-    //            midList.Add(smallDic);
-    //        }
-    //        eventEffectTagInfoList.Add((string)eventEffectInfoList[i]["ID"], midList);
-    //    }
-
-    //    eventEffectNoTagInfoList = new Dictionary<string, List<Dictionary<string, List<string>>>>();
-    //    for (int i = 0; i < eventEffectInfoList.Count; i++)
-    //    {
-    //        var midList = new List<Dictionary<string, List<string>>>();
-    //        for (int j = 0; j < 3; j++)
-    //        {
-    //            var smallDic = new Dictionary<string, List<string>>();
-    //            var list = new List<string>();
-    //            string text = $"NormalvalueText{j + 1}";
-    //            string rate = $"Normalvalue{j + 1}";
-    //            string rewardType = $"NormalRewardType{j + 1}";
-    //            string reward = $"NormalReward{j + 1}";
-    //            list.Add(rate);
-    //            list.Add(rewardType);
-    //            list.Add(reward);
-    //            smallDic.Add(eventEffectInfoList[i][text].ToString(), list);
-    //            midList.Add(smallDic);
-    //        }
-    //        eventEffectNoTagInfoList.Add((string)eventEffectInfoList[i]["ID"], midList);
-    //    }
-    //}
 
     // 작전 테이블 난이도 구분
     private void FixMissionTable(List<Dictionary<string, object>> missionInfoList)
