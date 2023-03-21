@@ -16,7 +16,6 @@ public class GameManager : Singleton<GameManager>
     //public List<GameObject> myHeroes = new();
     public Dictionary<string, GameObject> myHeroes2 = new();
     public Transform heroSpawnTransform;
-    public Dictionary<string, GameObject> myHeroes2 = new();
 
     // Resources - Sprites, TextAsset + (Scriptable Objects, Sound etc)
     private Dictionary<string, Sprite> iconSprites = new();

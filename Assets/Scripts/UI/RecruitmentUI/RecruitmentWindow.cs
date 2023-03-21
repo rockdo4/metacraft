@@ -65,28 +65,36 @@ public class RecruitmentWindow : MonoBehaviour
     {
         ClearResult();
 
+        bool isDuplicate = false;
         var hero = heroDatabase[Gacha(probs)];
-        foreach (var myhero in GameManager.Instance.myHeroes2)
+        string heroName = hero.GetComponent<CharacterDataBundle>().originData.name;
+        var myHeroes = GameManager.Instance.myHeroes2;
+        foreach (var myhero in myHeroes)
         {
-            string heroName = hero.GetComponent<CharacterDataBundle>().originData.name;
             if (heroName.Equals(myhero.Value.GetComponent<CharacterDataBundle>().originData.name))
             {
                 Logger.Debug("ม฿บน");
+                isDuplicate = true;
                 break;
-            }
-            else
-            {
-                GameManager.Instance.CreateNewHero(heroName);
-                GameManager.Instance.myHeroes2.Add(heroName, hero);
-                getGacha.Add(hero);
             }
         }
 
         GameObject obj = Instantiate(gachaPrefeb, showGacha);
         RecruitmentInfo info = obj.GetComponent<RecruitmentInfo>();
+        if (!isDuplicate)
+        {
+            GameManager.Instance.CreateNewHero(heroName);
+            getGacha.Add(hero);
 
-        info.SetData(getGacha[0].GetComponent<CharacterDataBundle>());
-        resultRecruitmentList.Add(info);
+            info.SetData(getGacha[0].GetComponent<CharacterDataBundle>());
+            resultRecruitmentList.Add(info);
+        }
+        else
+        {
+
+            resultRecruitmentList.Add(info);
+        }
+
     }
     public void TenTimesGacha()
     {
