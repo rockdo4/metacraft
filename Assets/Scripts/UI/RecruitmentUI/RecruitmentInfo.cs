@@ -7,15 +7,15 @@ public class RecruitmentInfo : MonoBehaviour
     public Image icon;
     public TextMeshProUGUI gradeText;
     public TextMeshProUGUI heroNameText;
-    public LiveData data;
+    public CharacterData originData;
     protected CharacterDataBundle bundle;
 
     public virtual void SetData(CharacterDataBundle dataBundle)
     {
         bundle = dataBundle;
-        data = dataBundle.data;
-        heroNameText.text = GameManager.Instance.GetStringByTable(data.name);
-        gradeText.text = $"{(CharacterGrade)data.grade}";
-        icon.sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{data.name}");
+        originData = dataBundle.originData;
+        heroNameText.text = GameManager.Instance.GetStringByTable(originData.name);
+        gradeText.text = $"{(CharacterGrade)originData.grade}";
+        icon.sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{originData.name}");
     }
 }
