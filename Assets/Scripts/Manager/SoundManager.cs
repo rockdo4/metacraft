@@ -14,7 +14,10 @@ public class SoundManager : Singleton<SoundManager>
 
     [Range(-80, 0)]
     public float se = 0;
-        
+
+    [Range(-80, 0)]
+    public float ambience = 0;
+
     private static List<(Queue<SePlayer> use, Queue<SePlayer> unUse)> sePlayerPools;
   
     public List<SePlayer> prefabs;
@@ -37,6 +40,7 @@ public class SoundManager : Singleton<SoundManager>
         mixer.SetFloat(nameof(master), master);
         mixer.SetFloat(nameof(bgm), bgm);
         mixer.SetFloat(nameof(se), se);
+        mixer.SetFloat(nameof(ambience), ambience);
     }
     private void CheckAllSEplayerSetted()
     {
@@ -94,8 +98,4 @@ public class SoundManager : Singleton<SoundManager>
         sePlayerPools[index].use.Enqueue(sePlayer);
         sePlayer.PlaySE();
     }
-    public static void PlaySE(SeList clipName, Transform transform)
-    {
-
-    } 
 }
