@@ -82,6 +82,8 @@ public class BattleManager : MonoBehaviour
 
     public AttackableEnemy bossPrefab;
     public Button eventExitButton;
+
+    //이벤트, 보급 등에서 사용하는 버프리스트
     public List<BuffInfo> buffList;
 
     private void Start()
@@ -210,7 +212,6 @@ public class BattleManager : MonoBehaviour
             useHeroes[i].AddValueBuff(buff);
         }
     }
-
     private BuffInfo FindBuff(int id)
     {
         foreach (var buff in buffList)
@@ -1094,6 +1095,14 @@ public class BattleManager : MonoBehaviour
 
         for (int i = useCount - 1; i >= 0; i--)
         {
+            try
+            {
+                btMapTriggers[index].useEnemys[i].ChangeUnitState(UnitState.Die);
+            }
+            catch (System.Exception)
+            {
+                throw;
+            }
             btMapTriggers[index].useEnemys[i].ChangeUnitState(UnitState.Die);
         }
 
