@@ -16,9 +16,9 @@ public class ShopWindow : View
         if (count == gm.heroDatabase.Count)
             return;
 
-        GameObject newHero = gm.CreateNewHero(count);// Instantiate(gm.heroDatabase[count], gm.heroSpawnTransform);
-        gm.myHeroes.Add(newHero);
-        newHero.SetActive(false);
+        GameObject newHero = gm.CreateNewHero(count);
+        //gm.myHeroes.Add(newHero);
+        //newHero.SetActive(false);
 
         LiveData data = newHero.GetComponent<AttackableUnit>().GetUnitData().data;
         portrait.sprite = gm.GetSpriteByAddress($"Illu_{data.name}");

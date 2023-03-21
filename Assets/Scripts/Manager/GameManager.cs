@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.IO;
 using System.Text;
 using UnityEngine;
@@ -54,11 +53,6 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine(LoadAllResources());
     }
 
-    public int heroDataCounts()
-    {
-        return heroDatabase.Count;
-    }
-
     public void SetHeroesOrigin()
     {
         int count = myHeroes.Count;
@@ -93,10 +87,6 @@ public class GameManager : Singleton<GameManager>
         for (int i = 0; i < count; i++)
             handles.Add(tableNames[i], Addressables.LoadAssetAsync<TextAsset>(tableNames[i]));
 
-        // Load Character Prefabs
-
-
-
         // Load Sprites
         count = heroDatabase.Count;
         for (int i = 0; i < count; i++)
@@ -110,7 +100,6 @@ public class GameManager : Singleton<GameManager>
                     Sprite sprite = obj.Result;
                     iconSprites.Add(iconAddress, sprite);
                 };
-            //handles.Add(iconAddress, iconHandle);
 
             string IllurAddress = $"Illu_{address}";
             AsyncOperationHandle<Sprite> illuHandle = Addressables.LoadAssetAsync<Sprite>(IllurAddress);
@@ -120,7 +109,6 @@ public class GameManager : Singleton<GameManager>
                     Sprite sprite = obj.Result;
                     illustrationSprites.Add(IllurAddress, sprite);
                 };
-            //handles.Add(IllurAddress, illuHandle);
         }
 
         // 스프라이트 리소스 로드 대기
@@ -149,7 +137,6 @@ public class GameManager : Singleton<GameManager>
         eventEffectInfoList = CSVReader.SplitTextAsset(handles["EventEffectTable"].Result as TextAsset);  // 이벤트 노드 일반보상만 연결해놓기 위해 임시로 살림, 태그 검사 추가 시 추후 삭제 예정
         enemyInfoList = CSVReader.SplitTextAsset(handles["EnemyInfoTable"].Result as TextAsset);
         enemySpawnList = CSVReader.SplitTextAsset(handles["EnemySpawnTable"].Result as TextAsset);
-
 
         LoadAllData();
         FixMissionTable(CSVReader.SplitTextAsset(handles["MissionInfoTable"].Result as TextAsset));
@@ -211,18 +198,6 @@ public class GameManager : Singleton<GameManager>
 
             Application.Quit();
         }
-
-        //if (Input.GetKeyDown(KeyCode.P)) // 캐릭터 생성 임시코드
-        //{
-        //    GameManager gm = Instance;
-        //    int count = gm.myHeroes.Count;
-        //    if (count == gm.heroDatabase.Count)
-        //        return;
-
-        //    GameObject newHero = Instantiate(gm.heroDatabase[count], gm.heroSpawnTransform);
-        //    gm.myHeroes.Add(newHero);
-        //    newHero.SetActive(false);
-        //}
     }
 
     public void OnApplicationQuit()
@@ -266,7 +241,6 @@ public class GameManager : Singleton<GameManager>
                 {
                     newHero.GetComponent<CharacterDataBundle>().data.SetLoad(contents);
                     newHero.name = heroName;
-                    myHeroes.Add(newHero);
                 }
                 else
                 {
@@ -294,7 +268,11 @@ public class GameManager : Singleton<GameManager>
     {
         if (index == -1)
             return null;
-        return Instantiate(heroDatabase[index], heroSpawnTransform);
+
+        GameObject newHero = Instantiate(heroDatabase[index], heroSpawnTransform);
+        myHeroes.Add(newHero);
+        newHero.SetActive(false);
+        return newHero;
     }
 
     private string GetSaveFilePath()
