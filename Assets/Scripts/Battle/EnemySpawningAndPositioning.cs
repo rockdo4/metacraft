@@ -7,7 +7,7 @@ public class EnemySpawningAndPositioning : MonoBehaviour
 {
     private Transform tr;
     [Header("생성할 적 프리펩들을 넣어주세요")]
-    public List<AttackableEnemy> enemyPrefabs;
+    public List<AttackableEnemy> enemyPrefabs = new();
     [SerializeField, Header("리스폰할 몬스터 웨이브 수를 넣어주세요.")]
     public int waveCount;
     [SerializeField, Header("해당 구역의 크기를 정해주세요.")]

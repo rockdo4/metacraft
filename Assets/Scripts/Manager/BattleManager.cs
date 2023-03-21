@@ -1041,14 +1041,6 @@ public class BattleManager : MonoBehaviour
 
         for (int i = useCount - 1; i >= 0; i--)
         {
-            try
-            {
-                btMapTriggers[index].useEnemys[i].ChangeUnitState(UnitState.Die);
-            }
-            catch (System.Exception)
-            {
-                throw;
-            }
             btMapTriggers[index].useEnemys[i].ChangeUnitState(UnitState.Die);
         }
 
@@ -1062,13 +1054,66 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void InitEnemySetting()
+    public void InitEnemysSetting()
     {
+        // 보스 ID 찾기
+        string bossID = $"{currentSelectMissionTable["BossID"]}";
 
+        // 미션 테이블에서 노멀 몬스터들 담겨있는 키 랜덤 뽑기
+        int nMonCount = (int)currentSelectMissionTable["NMonCount"];
+        int randomEnemyCount = Random.Range(1, nMonCount + 1);
+        string normalEnemysKey = $"{currentSelectMissionTable[$"NMon{randomEnemyCount}"]}";
 
-    //    enemyInfoTable
+        // 뽑은 키로 스폰 테이블에서 
+        Dictionary<string, object> spawnTableNormalEnemys = new();
+        for (int i = 0; i < enemySpawnTable.Count; i++)
+        {
+            if (enemySpawnTable[i]["ID"].Equals(normalEnemysKey))
+            {
+                spawnTableNormalEnemys = enemySpawnTable[i];
+                break;
+            }
+        }
 
+        List<string> monIds = new();
+        List<int> monValues = new();
+        List<int> monLevels = new();
 
-    ////enemySpawnTable
+        int monCount = (int)spawnTableNormalEnemys["MonCount"];
+        for (int i = 1; i <= monCount; i++)
+        {
+            string monId = $"{spawnTableNormalEnemys[$"MonID{i}"]}";
+            monIds.Add(monId);
+
+            int monValue = (int)spawnTableNormalEnemys[$"Monval{i}"];
+            monValues.Add(monValue);
+
+            int monLevel = (int)spawnTableNormalEnemys[$"Mon{i}Lv"];
+            monLevels.Add(monLevel);
+        }
+
+        List<Dictionary<string, object>> enemyData = new();
+        for (int i = 0; i < enemyInfoTable.Count; i++)
+        {
+            for (int j = 0; j < monIds.Count; j++)
+            {
+                if (enemyInfoTable[i]["ID"].Equals(monIds[j]))
+                {
+                    enemyData.Add(enemyInfoTable[j]);
+                }
+            }
+        }
+
+        //for (int i = 0; i < btMapTriggers.Count; i++)
+        //{
+        //    for (int j = 0; j < btMapTriggers[i].enemySettingPositions.Count; j++)
+        //    {
+        //        int currPosEnemyCount = monValues[j];
+        //        for (int k = 0; k < currPosEnemyCount; k++)
+        //        {
+        //            btMapTriggers[j].enemySettingPositions[k].enemyPrefabs.Add();
+        //        }
+        //    }
+        //}
     }
 }
