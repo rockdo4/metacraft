@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 16434657934555993}
   - component: {fileID: 622755115076962049}
   - component: {fileID: 5347105160204720125}
+  - component: {fileID: 8543923727519128365}
   m_Layer: 7
   m_Name: Enemy_Demon_Defence
   m_TagString: Enemy
@@ -72,7 +73,7 @@ MonoBehaviour:
     evasion: 0
     accuracy: 0.5
   attacks:
-  - {fileID: 11400000, guid: 7274dd22605fade4dbe2bafd38475693, type: 2}
+  - {fileID: 11400000, guid: 2d593e6b6f293ea45a7a4b99156f6db2, type: 2}
   activeSkill: {fileID: 0}
   passiveSkill: {fileID: 0}
 --- !u!136 &8378594368993012405
@@ -210,6 +211,20 @@ MonoBehaviour:
   effectCreateTransform: {fileID: 8571695584032985657}
   hitEffectTransform: {fileID: 3888670240173935110}
   isMapTriggerEnter: 0
+--- !u!114 &8543923727519128365
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 16434657934555995}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb9a7c2cf5813934b88e3573fb1ab658, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skill: {fileID: 11400000, guid: b4ea757c3986ed345893d91447b5163a, type: 2}
+  interval: 5
 --- !u!1 &2910808103058431661
 GameObject:
   m_ObjectHideFlags: 0

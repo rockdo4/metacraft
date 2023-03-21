@@ -456,7 +456,9 @@ public abstract class AttackableUnit : MonoBehaviour
         }
 
         //힐링관련 함수
-        if (skill.targetType.Equals(SkillTargetType.Friendly))
+        var isFridendly = skill.targetType.Equals(SkillTargetType.Friendly);
+
+        if (isFridendly)
             dmg = -(int)attackableUnit.CalculDamage(skill, ref isCritical);
 
 
@@ -471,7 +473,14 @@ public abstract class AttackableUnit : MonoBehaviour
         }
 
         if (!skill.hitEffect.Equals(EffectEnum.None))
-            EffectManager.Instance.Get(skill.hitEffect, hitEffectTransform != null ? hitEffectTransform : transform);
+        {
+            if (isFridendly)
+            {
+                EffectManager.Instance.Get(skill.hitEffect, transform);
+            }
+            else
+                EffectManager.Instance.Get(skill.hitEffect, hitEffectTransform != null ? hitEffectTransform : transform);
+        }
         ShowHpBarAndDamageText(dmg, isCritical);
     }
 
@@ -768,7 +777,7 @@ public abstract class AttackableUnit : MonoBehaviour
                     default:
                         break;
                 }
-                Buff buff = new (info, this, RemoveBuff, icon, endEvent);
+                Buff buff = new(info, this, RemoveBuff, icon, endEvent);
                 buffList.Add(buff);
                 bufferState.Buffer(info.type, info.buffValue);
 
