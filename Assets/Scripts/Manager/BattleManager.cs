@@ -416,7 +416,7 @@ public class BattleManager : MonoBehaviour
                 AddReward(stringTableRewardKey);
                 break;
             case 1:
-                ExecutionBuff(rewardKey);
+                //ExecutionBuff(rewardKey);
                 break;
             case 2:
                 stageReward.AddItem($"{rewardKey}", "1", true);
