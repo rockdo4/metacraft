@@ -4,10 +4,13 @@ using UnityEngine;
 public class RecruitmentWindow : MonoBehaviour
 {
     public RecruitmentData type;
-    public List<GameObject> heroDatabase;
+    private List<GameObject> heroDatabase;
     private float[] probs;
     private Dictionary<int, int> gradeCounts = new Dictionary<int, int>();
     private List<GameObject> getGacha;
+    public GameObject gachaPrefeb;
+    public Transform showGacha;
+    private List<RecruitmentInfo> resultRecruitmentList;
 
     private void Start()
     {
@@ -53,13 +56,26 @@ public class RecruitmentWindow : MonoBehaviour
 
     public void OneTimeGacha()
     {
-        getGacha.Add(heroDatabase[Gacha(probs)]);
+        var add = GameManager.Instance.CreateNewHero(Gacha(probs));
+        getGacha.Add(add);
+
+        GameObject obj = Instantiate(gachaPrefeb, showGacha);
+        RecruitmentInfo info = obj.GetComponent<RecruitmentInfo>();
+        info.SetData(getGacha[0].GetComponent<CharacterDataBundle>());
+        resultRecruitmentList.Add(info);
     }
     public void TenTimesGacha()
     {
         for (int i = 0; i < 10; i++)
         {
             getGacha.Add(heroDatabase[Gacha(probs)]);
+        }
+        for (int i = 0; i < 10; i++)
+        {
+            GameObject obj = Instantiate(gachaPrefeb, showGacha);
+            RecruitmentInfo info = obj.GetComponent<RecruitmentInfo>();
+            //info.SetData();
+            resultRecruitmentList.Add(info);
         }
     }
 

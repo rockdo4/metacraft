@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Text;
 using UnityEngine;
@@ -53,6 +54,11 @@ public class GameManager : Singleton<GameManager>
         StartCoroutine(LoadAllResources());
     }
 
+    public int heroDataCounts()
+    {
+        return heroDatabase.Count;
+    }
+
     public void SetHeroesOrigin()
     {
         int count = myHeroes.Count;
@@ -87,9 +93,11 @@ public class GameManager : Singleton<GameManager>
         for (int i = 0; i < count; i++)
             handles.Add(tableNames[i], Addressables.LoadAssetAsync<TextAsset>(tableNames[i]));
 
-        // Load Sprites
-        List<string> heroNames = new();
+        // Load Character Prefabs
 
+
+
+        // Load Sprites
         count = heroDatabase.Count;
         for (int i = 0; i < count; i++)
         {
