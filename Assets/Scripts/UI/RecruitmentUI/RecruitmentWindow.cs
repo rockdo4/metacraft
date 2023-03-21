@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class RecruitmentWindow : MonoBehaviour
@@ -11,6 +12,7 @@ public class RecruitmentWindow : MonoBehaviour
     public GameObject gachaPrefeb; //영입 결과 프리팹
     public Transform showGacha; // 영입 결과 프리팹 생성위치
     private List<RecruitmentInfo> resultRecruitmentList = new (); // 영입 결과 프리팹 생성 및 정보 불러온 리스트
+    public TextMeshProUGUI rateInfo;
 
     private void Start()
     {
@@ -52,6 +54,8 @@ public class RecruitmentWindow : MonoBehaviour
                     }
             }
         }
+
+        OnRateInfo();
     }
 
     public void OneTimeGacha()
@@ -119,5 +123,15 @@ public class RecruitmentWindow : MonoBehaviour
     private void DuplicateInspection()
     {
 
+    }
+
+    private void OnRateInfo()
+    {
+        for (int i = 0; i < heroDatabase.Count; i++)
+        {
+            string name = heroDatabase[i].GetComponent<CharacterDataBundle>().originData.name;
+            float rate = probs[i];
+            rateInfo.text += $"{GameManager.Instance.GetStringByTable(name)} : {rate.ToString("F2")}%\n";
+        }
     }
 }
