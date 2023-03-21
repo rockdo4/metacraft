@@ -24,6 +24,8 @@ public class GameManager : Singleton<GameManager>
     public List<Dictionary<string, object>> officeInfoList;  // 사무소 레벨별 정보
     public List<Dictionary<string, object>> eventInfoList; // 이벤트 노드 정보
     public List<Dictionary<string, object>> eventEffectInfoList;  // 이벤트 노드 일반보상만 연결해놓기 위해 임시로 살림, 태그 검사 추가 시 추후 삭제 예정
+    public List<Dictionary<string, object>> enemyInfoList;
+    public List<Dictionary<string, object>> enemySpawnList;
     public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectTagInfoList;
     public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectNoTagInfoList;
     private Dictionary<string, Dictionary<string, object>> stringTable = new();
@@ -137,6 +139,9 @@ public class GameManager : Singleton<GameManager>
         supplyInfoList = CSVReader.SplitTextAsset(handles["SupplyTable"].Result as TextAsset);
         itemInfoList = CSVReader.SplitTextAsset(handles["ItemInfoTable"].Result as TextAsset);
         eventEffectInfoList = CSVReader.SplitTextAsset(handles["EventEffectTable"].Result as TextAsset);  // 이벤트 노드 일반보상만 연결해놓기 위해 임시로 살림, 태그 검사 추가 시 추후 삭제 예정
+        enemyInfoList = CSVReader.SplitTextAsset(handles["EnemyInfoTable"].Result as TextAsset);
+        enemySpawnList = CSVReader.SplitTextAsset(handles["EnemySpawnTable"].Result as TextAsset);
+
 
         LoadAllData();
         FixMissionTable(CSVReader.SplitTextAsset(handles["MissionInfoTable"].Result as TextAsset));
