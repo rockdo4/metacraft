@@ -73,6 +73,8 @@ public class SkillAreaIndicator : MonoBehaviour
         actorTransform.LookAt(transform.position);
         agent.SetDestination(transform.position);
         agent.isStopped = false;                
+        var distanceSqr = Utils.GetDistanceSqr(actorTransform.position, transform.position);
+        agent.speed = distanceSqr * divTransTime;
     }
 
     //private void TransActor()

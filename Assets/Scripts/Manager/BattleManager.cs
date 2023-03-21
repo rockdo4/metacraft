@@ -42,8 +42,6 @@ public class BattleManager : MonoBehaviour
     private List<TextMeshProUGUI> buttonTexts = new();
     private List<TextMeshProUGUI> supplyButtonTexts = new();
 
-    private List<string> heroNames = new();
-
     // TestBattleManager
     public List<HeroUi> heroUiList;
     public List<AttackableUnit> useHeroes = new();
@@ -259,8 +257,9 @@ public class BattleManager : MonoBehaviour
         }
         else
         {
-            int heroNameIndex = Random.Range(0, heroNames.Count);
-            battleEventHeroImage.sprite = gm.GetSpriteByAddress($"Icon_{heroNames[heroNameIndex]}");
+            int heroNameIndex = Random.Range(0, useHeroes.Count);
+            string heroName = useHeroes[heroNameIndex].GetUnitData().data.name;
+            battleEventHeroImage.sprite = gm.GetSpriteByAddress($"Icon_{heroName}");
             string contentTextKey = $"{eventInfoTable[(int)ev]["Eventtext"]}";
             contentText.text = gm.GetStringByTable(contentTextKey);
 
@@ -470,10 +469,6 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < useHeroes.Count; i++)
-        {
-            heroNames.Add(useHeroes[i].GetUnitData().name);
-        }
         for (int i = 0; i < choiceButtons.Count; i++)
         {
             var text = choiceButtons[i].GetComponentInChildren<TextMeshProUGUI>();
@@ -788,7 +783,6 @@ public class BattleManager : MonoBehaviour
             btMapTriggers[^2].enemySettingPositions[1].enemyPrefabs[0] = bossPrefab;
             for (int i = 0; i < btMapTriggers[^2].enemySettingPositions.Count; i++)
             {
-                btMapTriggers[^2].enemySettingPositions[i].ClearTempEnemyList();
                 var enemy = btMapTriggers[^2].enemySettingPositions[i].SpawnEnemy();
 
                 for (int j = 0; j < enemy.Count; j++)
@@ -1081,7 +1075,6 @@ public class BattleManager : MonoBehaviour
     //    }
     //}
 
-    /*********************************************  юс╫ц  **********************************************/
     private void DeadMiddleBoss()
     {
         //Logger.Debug("Next!");
@@ -1110,19 +1103,8 @@ public class BattleManager : MonoBehaviour
             {
                 throw;
             }
+            btMapTriggers[index].useEnemys[i].ChangeUnitState(UnitState.Die);
         }
-        //for (int i = 0; i < useCount; i++)
-        //{
-        //    try
-        //    {
-        //        btMapTriggers[index].useEnemys[i].ChangeUnitState(UnitState.Die);
-        //    }
-        //    catch (System.Exception)
-        //    {
-
-        //        throw;
-        //    }
-        //}
 
         int unuseCount = btMapTriggers[index].enemys.Count;
         for (int i = 0; i < unuseCount; i++)

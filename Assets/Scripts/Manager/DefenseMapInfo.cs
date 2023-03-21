@@ -40,7 +40,6 @@ public class DefenseMapInfo : BattleMapInfo
         }
 
         triggers[index].InfinityRespawnEnemy();
-        triggers[index].isSkip = true;
     }
 
     public override void GetEnemyList(ref List<AttackableUnit> enemyList)
