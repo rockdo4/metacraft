@@ -68,7 +68,7 @@ public class RecruitmentWindow : MonoBehaviour
         bool isDuplicate = false;
         var hero = heroDatabase[Gacha(probs)];
         string heroName = hero.GetComponent<CharacterDataBundle>().originData.name;
-        var myHeroes = GameManager.Instance.myHeroes2;
+        var myHeroes = GameManager.Instance.myHeroes;
         foreach (var myhero in myHeroes)
         {
             if (heroName.Equals(myhero.Value.GetComponent<CharacterDataBundle>().originData.name))

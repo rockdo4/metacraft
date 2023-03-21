@@ -13,7 +13,7 @@ public class GameManager : Singleton<GameManager>
     public PlayerData playerData;
 
     // MyData - Craft, Load & Save to this data
-    public Dictionary<string, GameObject> myHeroes2 = new();
+    public Dictionary<string, GameObject> myHeroes = new();
     public Transform heroSpawnTransform;
 
     // Resources - Sprites, TextAsset + (Scriptable Objects, Sound etc)
@@ -58,7 +58,7 @@ public class GameManager : Singleton<GameManager>
 
     public void SetHeroesOrigin()
     {
-        foreach (var elem in myHeroes2)
+        foreach (var elem in myHeroes)
         {
             Utils.CopyPositionAndRotation(elem.Value, heroSpawnTransform);
         }
@@ -72,7 +72,7 @@ public class GameManager : Singleton<GameManager>
         for (int i = 0; i < count; i++)
         {
             int key = battleGroups[i] == null ? -1 : (int)battleGroups[i];
-            selectedHeroes.Add(battleGroups[i] == null ? null : myHeroes2[heroDatabase[key].name.ToLower()]);
+            selectedHeroes.Add(battleGroups[i] == null ? null : myHeroes[heroDatabase[key].name.ToLower()]);
         }
 
         return selectedHeroes;
@@ -245,7 +245,7 @@ public class GameManager : Singleton<GameManager>
         sb.AppendLine("ID;Contents");
         sb.AppendLine($"PlayerData;{JsonUtility.ToJson(playerData)}");
 
-        foreach (var hero in myHeroes2)
+        foreach (var hero in myHeroes)
         {
             LiveData data = hero.Value.GetComponent<CharacterDataBundle>().data;
             sb.AppendLine($"Hero_{data.name};{JsonUtility.ToJson(data)}");
@@ -287,7 +287,7 @@ public class GameManager : Singleton<GameManager>
 
     public void SetHeroesActive(bool value)
     {
-        foreach (var character in myHeroes2)
+        foreach (var character in myHeroes)
         {
             character.Value.SetActive(value);
         }
@@ -305,7 +305,7 @@ public class GameManager : Singleton<GameManager>
 
         GameObject newHero = Instantiate(heroDatabase[index], heroSpawnTransform);
         string key = newHero.name;
-        myHeroes2.Add(key, newHero);
+        myHeroes.Add(key, newHero);
         newHero.SetActive(false);
         return newHero;
     }
