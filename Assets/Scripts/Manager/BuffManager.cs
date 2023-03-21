@@ -23,6 +23,4 @@ public class BuffManager : MonoBehaviour
     }
 
     public BuffInfo GetBuff(int id) => allBuff[id];
-
 }
-
