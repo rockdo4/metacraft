@@ -13,6 +13,8 @@ public class BattleManager : MonoBehaviour
     private List<Dictionary<string, object>> eventInfoTable;            // 이벤트 테이블
     private List<Dictionary<string, object>> eventEffectInfoTable;      // 이벤트 이펙트 테이블
     private List<Dictionary<string, object>> supplyInfoTable;           // 보급 테이블
+    private List<Dictionary<string, object>> enemyInfoTable;            // 적 스탯 테이블
+    private List<Dictionary<string, object>> enemySpawnTable;           // 적 생성 테이블
     private Dictionary<string, object> currentSelectMissionTable;       // 작전 테이블
 
     public MapEventEnum curEvent = MapEventEnum.None;
@@ -276,8 +278,6 @@ public class BattleManager : MonoBehaviour
 
     public void OnClickEventChoiceButton(int index)
     {
-        //SetActiveUi(eventUi, choiceButtons, false, choiceButtons.Count);
-
         for (int i = 0; i < choiceButtons.Count; i++)
         {
             choiceButtons[i].gameObject.SetActive(false);
@@ -447,6 +447,8 @@ public class BattleManager : MonoBehaviour
         supplyInfoTable = gm.supplyInfoList;
         currentSelectMissionTable = gm.currentSelectMission;
         eventEffectInfoTable = gm.eventEffectInfoList;
+        enemyInfoTable = gm.enemyInfoList;
+        enemySpawnTable = gm.enemySpawnList;
 
         var selectedHeroes = gm.GetSelectedHeroes();
         int count = selectedHeroes.Count;
@@ -555,7 +557,6 @@ public class BattleManager : MonoBehaviour
         {
             prevNode.childrens[i].nodeButton.onClick.RemoveAllListeners();
         }
-        //tree.OffMovableHighlighters();
 
         SetHeroReturnPositioning(roads[nodeIndex].fadeTrigger.heroSettingPositions);
     }
@@ -570,7 +571,6 @@ public class BattleManager : MonoBehaviour
     private void MissionClear()
     {
         UIManager.Instance.ShowView(1);
-        // gm.NextDay();
         clearUi.SetData();
     }
 
@@ -589,7 +589,6 @@ public class BattleManager : MonoBehaviour
     public void MissionFail()
     {
         Time.timeScale = 0;
-        // gm.NextDay();
         UIManager.Instance.ShowView(2);
     }
     private void OnDestroy()
@@ -703,7 +702,6 @@ public class BattleManager : MonoBehaviour
             useHeroes[i].ChangeUnitState(UnitState.Idle);
         }
 
-        //tree.gameObject.SetActive(true);
         tree.ShowTree(true);
 
         List<TreeNodeObject> childs = tree.CurNode.childrens;
@@ -834,7 +832,6 @@ public class BattleManager : MonoBehaviour
     }
     private bool OnNextStage()
     {
-        //tree.gameObject.SetActive(false);
         tree.ShowTree(false);
         stageReward.gameObject.SetActive(false);
 
@@ -844,7 +841,6 @@ public class BattleManager : MonoBehaviour
         {
             var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
             StartNextStage((MapEventEnum)randomEvent);
-            //StartNextStage(MapEventEnum.NewbieHeroRescue);
             return true;
         }
         else if (tree.CurNode.type == TreeNodeTypes.Supply)
@@ -1018,7 +1014,6 @@ public class BattleManager : MonoBehaviour
         string keyValue = "Value";
         for (int i = 1; i < maxItemCount + 1; i++)
         {
-            //if ((int)rewardData[$"{keyValue}{i}"] == -1)
             if ((int)rewardData[$"{keyValue}{i}"] == -1)
                 continue;
             stageReward.AddItem(rewardData[$"{keyItem}{i}"].ToString(), rewardData[$"{keyValue}{i}"].ToString(), false);
@@ -1027,57 +1022,8 @@ public class BattleManager : MonoBehaviour
             stageReward.AddGold(rewardData["Gold"].ToString());
     }
 
-    //private void Update()
-    //{
-    //    if (Input.GetKeyDown(KeyCode.Keypad5))
-    //    {
-    //        NodeClearReward();
-    //    }
-    //    if (Input.GetKeyDown(KeyCode.B))
-    //    {
-    //        tree.CurNode.type = TreeNodeTypes.Villain;
-    //        DestroyRoad();
-    //        RemoveRoadTrigger();
-    //        ResetRoads();
-    //        btMapTriggers.Last().isMissionEnd = true;
-    //    }
-
-    //    // 임시 보스 교체용 코드
-    //    if (Input.GetKeyDown(KeyCode.V))
-    //    {
-    //        currBtMgr.battleMapType = BattleMapEnum.Normal;
-    //        //Logger.Debug(btMapTriggers[^2].name);
-
-    //        btMapTriggers[^2].enemys.Clear();
-    //        btMapTriggers[^2].enemyColls.Clear();
-    //        btMapTriggers[^2].enemySettingPositions[1].enemyPrefabs[0] = bossPrefab;
-    //        for (int i = 0; i < btMapTriggers[^2].enemySettingPositions.Count; i++)
-    //        {
-    //            btMapTriggers[^2].enemySettingPositions[i].ClearTempEnemyList();
-    //            var enemy = btMapTriggers[^2].enemySettingPositions[i].SpawnEnemy();
-
-    //            for (int j = 0; j < enemy.Count; j++)
-    //            {
-    //                btMapTriggers[^2].enemys.Add(enemy[j]);
-    //                btMapTriggers[^2].enemys[j].SetPathFind();
-    //                btMapTriggers[^2].AddEnemyColliders(enemy[j].GetComponent<CapsuleCollider>());
-    //                btMapTriggers[^2].enemys[j].SetEnabledPathFind(false);
-    //            }
-    //        }
-
-    //        btMapTriggers[^2].ResetEnemys();
-    //        btMapTriggers[^2].ResetEnemyPositions();
-    //    }
-
-    //    if (Input.GetKeyDown(KeyCode.C))
-    //    {
-    //        SetEventEffectReward((int)MapEventEnum.CivilianRescue, 1, contentText);
-    //    }
-    //}
-
     private void DeadMiddleBoss()
     {
-        //Logger.Debug("Next!");
         KillAllEnemy(enemyTriggerIndex);
         enemyCountTxt.StopTimer();
         isMiddleBossAlive = false;
@@ -1114,5 +1060,15 @@ public class BattleManager : MonoBehaviour
                 btMapTriggers[index].enemys[i].ChangeUnitState(UnitState.Die);
             }
         }
+    }
+
+    public void InitEnemySetting()
+    {
+
+
+    //    enemyInfoTable
+
+
+    ////enemySpawnTable
     }
 }

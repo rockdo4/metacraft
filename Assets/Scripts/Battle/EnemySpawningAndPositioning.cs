@@ -36,27 +36,6 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     public List<AttackableEnemy> GetEnemy() => enemyPrefabs;
 
     private Coroutine coInfinityRespawn;
-
-    private IEnumerator CoRespawn(List<AttackableUnit> enemyPool, float timer)
-    {
-        while (timer >= 0f)
-        {
-            timer -= Time.deltaTime;
-            yield return new WaitForSeconds(Time.deltaTime);
-        }
-
-        // 리스폰
-        var spawn = SpawnEnemy();
-
-        for (int i = 0; i < spawn.Count; i++)
-        {
-            enemyPool.Add(spawn[i]);
-            for (int j = 0; j < enemys.Count; j++)
-            {
-                enemys[j].Add(spawn[i]);
-            }
-        }
-    }
     private IEnumerator CoInfinityRespawn(float timer)
     {
         // 리스폰 후 다시 코루틴 시작
@@ -103,10 +82,6 @@ public class EnemySpawningAndPositioning : MonoBehaviour
 
         return enemys;
     }
-    public void RespawnEnemy(ref List<AttackableUnit> enemyPool, float timer)
-    {
-        StartCoroutine(CoRespawn(enemyPool, timer));
-    }
 
     private void ResetPositionEnemys()
     {
@@ -138,10 +113,10 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     {
         Vector3 trPos = tr.position;
 
-        for (int i = 0; i < waveCount; i++) // 4
+        for (int i = 0; i < waveCount; i++)
         {
             enemys.Add(new List<AttackableEnemy>());
-            for (int j = 0; j < enemyPrefabs.Count; j++) // 3
+            for (int j = 0; j < enemyPrefabs.Count; j++)
             {
                 Vector3 randomArea = UnityEngine.Random.insideUnitSphere * spawnRange;
                 randomArea.y = 0f;
