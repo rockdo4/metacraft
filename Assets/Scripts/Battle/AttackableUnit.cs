@@ -460,7 +460,6 @@ public abstract class AttackableUnit : MonoBehaviour
         if (skill.targetType.Equals(SkillTargetType.Friendly))
             dmg = -(int)attackableUnit.CalculDamage(skill, ref isCritical);
 
-
         //if ((unitType == UnitType.Hero && skill.targetType.Equals(SkillTargetType.Friendly))
         //    || (unitType == UnitType.Enemy && skill.targetType.Equals(SkillTargetType.Enemy)))
         //    dmg = -(int)attackableUnit.CalculDamage(skill, ref isCritical);

@@ -539,6 +539,7 @@ public class AttackableHero : AttackableUnit
             {
                 icon = heroUI.AddIcon(info.type, info.duration, idx);
                 base.AddValueBuff(info, anotherValue, icon);
+                icon.iconImage.sprite = GameManager.Instance.GetSpriteByAddress($"state{info.sort}");
             }
         }
         else
@@ -578,6 +579,7 @@ public class AttackableHero : AttackableUnit
             {
                 icon = heroUI.AddIcon(info.type, info.duration, idx);
                 base.AddStateBuff(info, attackableUnit, icon);
+                icon.iconImage.sprite = GameManager.Instance.GetSpriteByAddress($"state{info.sort}");
             }
         }
         else
