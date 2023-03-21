@@ -5,7 +5,6 @@ using TMPro;
 using System.Collections;
 using System.Linq;
 using Cinemachine;
-using UnityEditorInternal.Profiling.Memory.Experimental;
 
 public class BattleManager : MonoBehaviour
 {
@@ -399,22 +398,20 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
-        if (priorityRewardType == 0)
+        switch (priorityRewardType)
         {
-            object stringTableRewardKey = rewardKey;
-            AddReward(stringTableRewardKey);
-        }
-        else if (priorityRewardType == 1)
-        {
-            ExecutionBuff(rewardKey);
-        }
-        else if (priorityRewardType == 2)
-        {
-            // 아이템 인포 테이블에서 찾고 add
-            stageReward.AddItem($"{rewardKey}", "1", true);
-
-            stageReward.gameObject.SetActive(true);
-            stageReward.OnEventRewardPage();
+            case 0:
+                object stringTableRewardKey = rewardKey;
+                AddReward(stringTableRewardKey);
+                break;
+            case 1:
+                ExecutionBuff(rewardKey);
+                break;
+            case 2:
+                stageReward.AddItem($"{rewardKey}", "1", true);
+                stageReward.gameObject.SetActive(true);
+                stageReward.OnEventRewardPage();
+                break;
         }
     }
 
@@ -840,8 +837,8 @@ public class BattleManager : MonoBehaviour
         if (tree.CurNode.type == TreeNodeTypes.Event)
         {
             var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
-            //StartNextStage((MapEventEnum)randomEvent);
-            StartNextStage(MapEventEnum.NewbieHeroRescue);
+            StartNextStage((MapEventEnum)randomEvent);
+            //StartNextStage(MapEventEnum.NewbieHeroRescue);
             return true;
         }
         else if (tree.CurNode.type == TreeNodeTypes.Supply)
