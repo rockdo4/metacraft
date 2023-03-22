@@ -90,6 +90,9 @@ public class BattleManager : MonoBehaviour
 
     [Header("생성할 적 프리펩들을 넣어주세요")]
     public List<AttackableEnemy> enemyPrefabs = new();
+    [Header("생성할 빌런들을 넣어주세요")]
+    public List<AttackableEnemy> villainPrefabs = new();
+    public AttackableEnemy villain;
 
     private void Start()
     {
@@ -493,6 +496,18 @@ public class BattleManager : MonoBehaviour
         }
 
         DisabledAllMap();
+
+        // 보스 ID 찾기
+        string bossID = $"{currentSelectMissionTable["BossID"]}";
+        //villain
+        for (int i = 0; i < villainPrefabs.Count; i++)
+        {
+            if (villainPrefabs[i].name.Equals(bossID))
+            {
+                villain = villainPrefabs[i];
+                break;
+            }
+        }
     }
 
     private IEnumerator CoFadeIn()
@@ -656,6 +671,12 @@ public class BattleManager : MonoBehaviour
                 ChoiceNextStageByNode();
             }
             else if (tree.CurNode.type == TreeNodeTypes.Threat)
+            {
+                SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
+                // 삭제해도 될듯
+            }
+            else if (btMapTriggers[currTriggerIndex].enemys.Count == 0 &&
+                btMapTriggers[currTriggerIndex].useEnemys.Count == 0)
             {
                 SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
             }
@@ -1068,9 +1089,6 @@ public class BattleManager : MonoBehaviour
 
     public void SpawnCurrMapAllEnemys()
     {
-        // 보스 ID 찾기
-        string bossID = $"{currentSelectMissionTable["BossID"]}";
-
         // 미션 테이블에서 노멀 몬스터들 담겨있는 키 랜덤 뽑기
         int nMonCount = (int)currentSelectMissionTable["NMonCount"];
         int randomEnemyCount = Random.Range(1, nMonCount + 1);
@@ -1119,29 +1137,29 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        Logger.Debug(enemyData.Count);
-
         for (int i = 0; i < btMapTriggers.Count; i++)
         {
             int posCount = btMapTriggers[i].enemySettingPositions.Count;
             for (int j = 0; j < posCount; j++)
             {
-                int currPosEnemyCount = monValues[j];
-                CharacterData data = new();
-                data.name = $"{enemyData[j]["NAME"]}";
-                data.job = (int)enemyData[j]["JOB"];
-                data.moveSpeed = (int)enemyData[j]["MOVESPEED"];
+                int currPosEnemyCount = monValues[i];
+                Logger.Debug($"monValue : {currPosEnemyCount} / mon id : {monIds[i]}");
 
-                string atk = $"{enemyData[j]["ATK"]}";
-                string def = $"{enemyData[j]["DEF"]}";
-                string levelAtk = $"{enemyData[j]["Levelup_Atk"]}";
-                string levelDef = $"{enemyData[j]["Levelup_Def"]}";
-                string levelHp = $"{enemyData[j]["Levelup_HP"]}";
-                string healthPoint = $"{enemyData[j]["HP"]}";
-                string critical = $"{enemyData[j]["CRITICAL"]}";
-                string criticalDmg = $"{enemyData[j]["CRITICALDAMAGE"]}";
-                string evasion = $"{enemyData[j]["EVADE"]}";
-                string accuracy = $"{enemyData[j]["ACCURACY"]}";
+                CharacterData data = new();
+                data.name = $"{enemyData[i]["NAME"]}";
+                data.job = (int)enemyData[i]["JOB"];
+                data.moveSpeed = (int)enemyData[i]["MOVESPEED"];
+
+                string atk = $"{enemyData[i]["ATK"]}";
+                string def = $"{enemyData[i]["DEF"]}";
+                string levelAtk = $"{enemyData[i]["Levelup_Atk"]}";
+                string levelDef = $"{enemyData[i]["Levelup_Def"]}";
+                string levelHp = $"{enemyData[i]["Levelup_HP"]}";
+                string healthPoint = $"{enemyData[i]["HP"]}";
+                string critical = $"{enemyData[i]["CRITICAL"]}";
+                string criticalDmg = $"{enemyData[i]["CRITICALDAMAGE"]}";
+                string evasion = $"{enemyData[i]["EVADE"]}";
+                string accuracy = $"{enemyData[i]["ACCURACY"]}";
 
                 data.baseDamage = float.Parse(atk);
                 data.baseDamage = float.Parse(def);
@@ -1157,22 +1175,38 @@ public class BattleManager : MonoBehaviour
                 data.grade = 1;
                 data.maxGrade = 5;
 
-                int enemyPrefabIndex = 0;
-                for (int k = 0; k < enemyPrefabs.Count; k++)
-                {
-                    if (enemyPrefabs[k].gameObject.name.Equals(data.name))
-                    {
-                        enemyPrefabIndex = k;
-                        break;
-                    }
-                }
 
                 for (int l = 0; l < currPosEnemyCount; l++)
                 {
                     AttackableEnemy enemy = new();
+                    int enemyPrefabIndex = 0;
+                    for (int k = 0; k < enemyPrefabs.Count; k++)
+                    {
+                        if (enemyPrefabs[k].gameObject.name.Equals(data.name))
+                        {
+                            enemyPrefabIndex = k;
+                            break;
+                        }
+                    }
+
                     enemy = Instantiate(enemyPrefabs[enemyPrefabIndex]);
                     enemy.SetUnitOriginData(data);
                     btMapTriggers[i].enemySettingPositions[j].SpawnAllEnemy(ref btMapTriggers[i].enemys, enemy);
+                }
+            }
+        }
+
+        if (tree.CurNode.type == TreeNodeTypes.Villain)
+        {
+            AttackableEnemy enemy = new();
+            enemy = Instantiate(villain);
+
+            for (int i = btMapTriggers.Count - 1; i >= 0; i--)
+            {
+                if (btMapTriggers[i].enemySettingPositions.Count > 0)
+                {
+                    btMapTriggers[i].enemySettingPositions[0].SpawnAllEnemy(ref btMapTriggers[i].enemys, enemy);
+                    break;
                 }
             }
         }

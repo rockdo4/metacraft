@@ -137,8 +137,11 @@ public class SkillAreaIndicator : MonoBehaviour
 
         foreach (Collider collider in unitsInArea)
         {
-            AttackableUnit attackableUnit = collider.GetComponent<AttackableUnit>();
-            container.Add(attackableUnit);
+            if(collider != null)
+            {
+                AttackableUnit attackableUnit = collider.GetComponent<AttackableUnit>();
+                container.Add(attackableUnit);
+            }
         }
         return container;
     }
