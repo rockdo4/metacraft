@@ -795,31 +795,6 @@ public class BattleManager : MonoBehaviour
             btMapTriggers[i].isTriggerEnter = false;
         }
 
-        // 임시 빌드용 코드
-        //if (tree.CurNode.type == TreeNodeTypes.Villain)
-        //{
-        //    currBtMgr.battleMapType = BattleMapEnum.Normal;
-
-        //    btMapTriggers[^2].enemys.Clear();
-        //    btMapTriggers[^2].enemyColls.Clear();
-        //    btMapTriggers[^2].enemySettingPositions[1].enemyPrefabs[0] = bossPrefab;
-        //    for (int i = 0; i < btMapTriggers[^2].enemySettingPositions.Count; i++)
-        //    {
-        //        var enemy = btMapTriggers[^2].enemySettingPositions[i].SpawnEnemy();
-
-        //        for (int j = 0; j < enemy.Count; j++)
-        //        {
-        //            btMapTriggers[^2].enemys.Add(enemy[j]);
-        //            btMapTriggers[^2].enemys[j].SetPathFind();
-        //            btMapTriggers[^2].AddEnemyColliders(enemy[j].GetComponent<CapsuleCollider>());
-        //            btMapTriggers[^2].enemys[j].SetEnabledPathFind(false);
-        //        }
-        //    }
-
-        //    btMapTriggers[^2].ResetEnemys();
-        //    btMapTriggers[^2].ResetEnemyPositions();
-        //}
-
         CreateRoad();
         AddRoadTrigger();
 
@@ -1070,21 +1045,25 @@ public class BattleManager : MonoBehaviour
         }
 
         int useCount = btMapTriggers[index].useEnemys.Count;
-
-
         for (int i = useCount - 1; i >= 0; i--)
         {
             btMapTriggers[index].useEnemys[i].ChangeUnitState(UnitState.Die);
         }
 
-        int unuseCount = btMapTriggers[index].enemys.Count;
-        for (int i = 0; i < unuseCount; i++)
+        int unuseCount = btMapTriggers[index].enemys.Count - 1;
+        for (int i = unuseCount; i >= 0; i--)
         {
             if (btMapTriggers[index].enemys[i].isAlive)
             {
                 btMapTriggers[index].enemys[i].ChangeUnitState(UnitState.Die);
             }
+            else
+            {
+                Destroy(btMapTriggers[index].enemys[i].gameObject);
+            }
         }
+
+        btMapTriggers[index].enemys.Clear();
     }
 
     public void SpawnCurrMapAllEnemys()
@@ -1123,7 +1102,6 @@ public class BattleManager : MonoBehaviour
             monLevels.Add(monLevel);
         }
 
-
         // 적들 데이터 담아두기
         List<Dictionary<string, object>> enemyData = new();
         for (int i = 0; i < enemyInfoTable.Count; i++)
@@ -1139,9 +1117,13 @@ public class BattleManager : MonoBehaviour
 
         for (int i = 0; i < btMapTriggers.Count; i++)
         {
+            btMapTriggers[i].ResetSpawnCount();
+            btMapTriggers[i].enemys.Clear();
             int posCount = btMapTriggers[i].enemySettingPositions.Count;
             for (int j = 0; j < posCount; j++)
             {
+                btMapTriggers[i].enemySettingPositions[j].ClearEnemysList();
+
                 int currPosEnemyCount = monValues[i];
                 Logger.Debug($"monValue : {currPosEnemyCount} / mon id : {monIds[i]}");
 
@@ -1191,6 +1173,7 @@ public class BattleManager : MonoBehaviour
 
                     enemy = Instantiate(enemyPrefabs[enemyPrefabIndex]);
                     enemy.SetUnitOriginData(data);
+                    enemy.gameObject.SetActive(false);
                     btMapTriggers[i].enemySettingPositions[j].SpawnAllEnemy(ref btMapTriggers[i].enemys, enemy);
                 }
             }

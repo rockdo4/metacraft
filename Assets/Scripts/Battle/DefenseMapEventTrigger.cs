@@ -8,7 +8,7 @@ public class DefenseMapEventTrigger : MapEventTrigger
     {
         if (!isTriggerEnter)
         {
-            if (other.CompareTag("Enemy"))
+            if (other.CompareTag("Enemy") && isEnemyTrigger)
             {
                 AttackableEnemy enemy = other.GetComponent<AttackableEnemy>();
                 AddUseEnemyList(enemy);
