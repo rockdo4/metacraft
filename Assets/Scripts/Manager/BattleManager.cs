@@ -799,31 +799,6 @@ public class BattleManager : MonoBehaviour
             btMapTriggers[i].isTriggerEnter = false;
         }
 
-        // 임시 빌드용 코드
-        //if (tree.CurNode.type == TreeNodeTypes.Villain)
-        //{
-        //    currBtMgr.battleMapType = BattleMapEnum.Normal;
-
-        //    btMapTriggers[^2].enemys.Clear();
-        //    btMapTriggers[^2].enemyColls.Clear();
-        //    btMapTriggers[^2].enemySettingPositions[1].enemyPrefabs[0] = bossPrefab;
-        //    for (int i = 0; i < btMapTriggers[^2].enemySettingPositions.Count; i++)
-        //    {
-        //        var enemy = btMapTriggers[^2].enemySettingPositions[i].SpawnEnemy();
-
-        //        for (int j = 0; j < enemy.Count; j++)
-        //        {
-        //            btMapTriggers[^2].enemys.Add(enemy[j]);
-        //            btMapTriggers[^2].enemys[j].SetPathFind();
-        //            btMapTriggers[^2].AddEnemyColliders(enemy[j].GetComponent<CapsuleCollider>());
-        //            btMapTriggers[^2].enemys[j].SetEnabledPathFind(false);
-        //        }
-        //    }
-
-        //    btMapTriggers[^2].ResetEnemys();
-        //    btMapTriggers[^2].ResetEnemyPositions();
-        //}
-
         CreateRoad();
         AddRoadTrigger();
 
@@ -1074,21 +1049,25 @@ public class BattleManager : MonoBehaviour
         }
 
         int useCount = btMapTriggers[index].useEnemys.Count;
-
-
         for (int i = useCount - 1; i >= 0; i--)
         {
             btMapTriggers[index].useEnemys[i].ChangeUnitState(UnitState.Die);
         }
 
-        int unuseCount = btMapTriggers[index].enemys.Count;
-        for (int i = 0; i < unuseCount; i++)
+        int unuseCount = btMapTriggers[index].enemys.Count - 1;
+        for (int i = unuseCount; i >= 0; i--)
         {
             if (btMapTriggers[index].enemys[i].isAlive)
             {
                 btMapTriggers[index].enemys[i].ChangeUnitState(UnitState.Die);
             }
+            else
+            {
+                Destroy(btMapTriggers[index].enemys[i].gameObject);
+            }
         }
+
+        btMapTriggers[index].enemys.Clear();
     }
 
     public void SpawnCurrMapAllEnemys()
@@ -1127,7 +1106,6 @@ public class BattleManager : MonoBehaviour
             monLevels.Add(monLevel);
         }
 
-
         // 적들 데이터 담아두기
         List<Dictionary<string, object>> enemyData = new();
         for (int i = 0; i < enemyInfoTable.Count; i++)
@@ -1143,42 +1121,48 @@ public class BattleManager : MonoBehaviour
 
         for (int i = 0; i < btMapTriggers.Count; i++)
         {
+            btMapTriggers[i].ResetSpawnCount();
+            btMapTriggers[i].enemys.Clear();
             int posCount = btMapTriggers[i].enemySettingPositions.Count;
             for (int j = 0; j < posCount; j++)
             {
+                btMapTriggers[i].enemySettingPositions[j].ClearEnemysList();
+
                 int currPosEnemyCount = monValues[i];
                 Logger.Debug($"monValue : {currPosEnemyCount} / mon id : {monIds[i]}");
 
-                CharacterData data = new();
-                data.name = $"{enemyData[i]["NAME"]}";
-                data.job = (int)enemyData[i]["JOB"];
-                data.moveSpeed = (int)enemyData[i]["MOVESPEED"];
+                //CharacterData data;
+                //data.name = $"{enemyData[i]["NAME"]}";
+                //data.job = (int)enemyData[i]["JOB"];
+                //data.moveSpeed = (int)enemyData[i]["MOVESPEED"];
 
-                string atk = $"{enemyData[i]["ATK"]}";
-                string def = $"{enemyData[i]["DEF"]}";
-                string levelAtk = $"{enemyData[i]["Levelup_Atk"]}";
-                string levelDef = $"{enemyData[i]["Levelup_Def"]}";
-                string levelHp = $"{enemyData[i]["Levelup_HP"]}";
-                string healthPoint = $"{enemyData[i]["HP"]}";
-                string critical = $"{enemyData[i]["CRITICAL"]}";
-                string criticalDmg = $"{enemyData[i]["CRITICALDAMAGE"]}";
-                string evasion = $"{enemyData[i]["EVADE"]}";
-                string accuracy = $"{enemyData[i]["ACCURACY"]}";
+                //string atk = $"{enemyData[i]["ATK"]}";
+                //string def = $"{enemyData[i]["DEF"]}";
+                //string levelAtk = $"{enemyData[i]["Levelup_Atk"]}";
+                //string levelDef = $"{enemyData[i]["Levelup_Def"]}";
+                //string levelHp = $"{enemyData[i]["Levelup_HP"]}";
+                //string healthPoint = $"{enemyData[i]["HP"]}";
+                //string critical = $"{enemyData[i]["CRITICAL"]}";
+                //string criticalDmg = $"{enemyData[i]["CRITICALDAMAGE"]}";
+                //string evasion = $"{enemyData[i]["EVADE"]}";
+                //string accuracy = $"{enemyData[i]["ACCURACY"]}";
 
-                data.baseDamage = float.Parse(atk);
-                data.baseDamage = float.Parse(def);
-                data.damageLevelCoefficient = float.Parse(levelAtk);
-                data.defenseLevelCoefficient = float.Parse(levelDef);
-                data.healthPointLevelCoefficient = float.Parse(levelHp);
-                data.healthPoint = float.Parse(healthPoint);
-                data.critical = float.Parse(critical);
-                data.criticalDmg = float.Parse(criticalDmg);
-                data.evasion = float.Parse(evasion);
-                data.accuracy = float.Parse(accuracy);
+                //data.baseDamage = float.Parse(atk);
+                //data.baseDamage = float.Parse(def);
+                //data.damageLevelCoefficient = float.Parse(levelAtk);
+                //data.defenseLevelCoefficient = float.Parse(levelDef);
+                //data.healthPointLevelCoefficient = float.Parse(levelHp);
+                //data.healthPoint = float.Parse(healthPoint);
+                //data.critical = float.Parse(critical);
+                //data.criticalDmg = float.Parse(criticalDmg);
+                //data.evasion = float.Parse(evasion);
+                //data.accuracy = float.Parse(accuracy);
 
-                data.grade = 1;
-                data.maxGrade = 5;
+                //data.grade = 1;
+                //data.maxGrade = 5;
 
+
+                string name = $"{enemyData[i]["NAME"]}";
 
                 for (int l = 0; l < currPosEnemyCount; l++)
                 {
@@ -1186,7 +1170,7 @@ public class BattleManager : MonoBehaviour
                     int enemyPrefabIndex = 0;
                     for (int k = 0; k < enemyPrefabs.Count; k++)
                     {
-                        if (enemyPrefabs[k].gameObject.name.Equals(data.name))
+                        if (enemyPrefabs[k].gameObject.name.Equals(name))  
                         {
                             enemyPrefabIndex = k;
                             break;
@@ -1194,7 +1178,8 @@ public class BattleManager : MonoBehaviour
                     }
 
                     enemy = Instantiate(enemyPrefabs[enemyPrefabIndex]);
-                    enemy.SetUnitOriginData(data);
+                    //enemy.SetUnitOriginData(data);
+                    enemy.gameObject.SetActive(false);
                     btMapTriggers[i].enemySettingPositions[j].SpawnAllEnemy(ref btMapTriggers[i].enemys, enemy);
                 }
             }
