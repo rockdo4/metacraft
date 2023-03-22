@@ -70,7 +70,8 @@ public class RecruitmentWindow : MonoBehaviour
     private void GachaProcess(GameObject hero, int i)
     {
         bool isDuplicate = false;
-        string heroName = hero.GetComponent<CharacterDataBundle>().originData.name;
+        CharacterDataBundle herobundle = hero.GetComponent<CharacterDataBundle>();
+        string heroName = herobundle.originData.name;
         var myHeroes = GameManager.Instance.myHeroes;
 
         // 중복 검사
@@ -80,6 +81,18 @@ public class RecruitmentWindow : MonoBehaviour
             {
                 isDuplicate = true;
                 break;
+            }
+        }
+
+        if (!isDuplicate)
+        {
+            for (int j = 0; j < i; j++)
+            {
+                if (hero.Equals(getGacha[j]))
+                {
+                    isDuplicate = true;
+                    break;
+                }
             }
         }
 
@@ -96,10 +109,12 @@ public class RecruitmentWindow : MonoBehaviour
 
             info.SetData(getGacha[i].GetComponent<CharacterDataBundle>());
         }
-        //else
-        //{
-        //    // 중복시. 미구현
-        //}
+        else
+        {
+            // 중복. 임시코드. 아이템으로 대체하도록 함
+            info.SetData(herobundle);
+            info.icon.color = Color.gray;
+        }
 
         resultRecruitmentList.Add(info);
     }
@@ -158,7 +173,7 @@ public class RecruitmentWindow : MonoBehaviour
         {
             string name = heroDatabase[i].GetComponent<CharacterDataBundle>().originData.name;
             float rate = probs[i];
-            rateInfo.text += $"{GameManager.Instance.GetStringByTable(name)} : {rate.ToString("F2")}%\n";
+            rateInfo.text += $"{GameManager.Instance.GetStringByTable(name)} : {rate:F2}%\n";
         }
     }
 }

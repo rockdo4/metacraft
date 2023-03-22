@@ -44,6 +44,7 @@ public class CharacterSkill : ScriptableObject
     // 일반 스킬(평타)을 해당 클래스 통해서 작성
     public SkillCoefficientType coefficientType = SkillCoefficientType.Attack; // 스킬 계수 타입. 공격력, 방어력, 체력 등등   
     public float coefficient = 1; //계수
+    public float addCoefficient;
 
     public SkillTargetType targetType;
     public SkillSearchType searchType;
@@ -75,17 +76,19 @@ public class CharacterSkill : ScriptableObject
     }
     //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)									
     public virtual int CreateDamageResult(LiveData data, BufferState status)
-    {   
+    {
+        var currCoefficient = coefficient + skillLevel * addCoefficient;
+
         switch (coefficientType)
         {
             case SkillCoefficientType.Attack:
-                return (int)((data.baseDamage * status.Damage) * coefficient);                
+                return (int)((data.baseDamage * status.Damage) * currCoefficient);                
             case SkillCoefficientType.Defense:
-                return (int)((data.baseDefense * status.defense) * coefficient);                
+                return (int)((data.baseDefense * status.defense) * currCoefficient);                
             case SkillCoefficientType.MaxHealth:
-                return (int)((data.healthPoint * status.maxHealthIncrease) * coefficient);
+                return (int)((data.healthPoint * status.maxHealthIncrease) * currCoefficient);
             case SkillCoefficientType.Health:
-                return (int)(data.currentHp * coefficient);                
+                return (int)(data.currentHp * currCoefficient);                
         }        
 
         return 0;

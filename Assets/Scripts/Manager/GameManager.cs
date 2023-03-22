@@ -50,6 +50,7 @@ public class GameManager : Singleton<GameManager>
 
     // Origin Database - Set Prefab & Scriptable Objects
     public List<GameObject> heroDatabase = new();
+    public AssetLoadProgress progress;
 
     public Color currMapColor;
     public List<Color> mapLigthColors;
@@ -180,14 +181,13 @@ public class GameManager : Singleton<GameManager>
                 if (!handle.Value.IsDone)
                 {
                     loadAll = false;
-                    Logger.Debug($"{handle.Key} waiting load");
                     break;
                 }
                 count++;
             }
             if (!loadAll)
             {
-                Logger.Debug($"progress {count}/{total}");
+                progress.SetProgress(count, total);
                 yield return null;
             }
 
@@ -200,9 +200,10 @@ public class GameManager : Singleton<GameManager>
                 }
                 count++;
             }
-            Logger.Debug($"progress {count}/{total}");
+            progress.SetProgress(count, total);
             yield return null;
         }
+
         dispatchInfoList = CSVReader.SplitTextAsset(releasehandles["DispatchInfoTable"].Result as TextAsset);
         officeInfoList = CSVReader.SplitTextAsset(releasehandles["OfficeTable"].Result as TextAsset);
         eventInfoList = CSVReader.SplitTextAsset(releasehandles["EventTable"].Result as TextAsset);
@@ -224,6 +225,7 @@ public class GameManager : Singleton<GameManager>
 
         ReleaseAddressable(releasehandles);
         releasehandles.Clear();
+        progress.CompleteProgress();
     }
 
     private void AppendStringTable(List<Dictionary<string, object>> rawData, string tableName)
