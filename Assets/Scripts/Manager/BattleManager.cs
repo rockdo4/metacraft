@@ -90,6 +90,9 @@ public class BattleManager : MonoBehaviour
 
     [Header("생성할 적 프리펩들을 넣어주세요")]
     public List<AttackableEnemy> enemyPrefabs = new();
+    [Header("생성할 빌런들을 넣어주세요")]
+    public List<AttackableEnemy> villainPrefabs = new();
+    public AttackableEnemy villain;
 
     private void Start()
     {
@@ -420,7 +423,11 @@ public class BattleManager : MonoBehaviour
                 ExecutionBuff(rewardKey);
                 break;
             case 2:
-                stageReward.AddItem($"{rewardKey}","", "1","", true);
+                var itemInfo = gm.itemInfoList.Find(t => t["ID"].ToString().Equals(rewardKey.ToString()));
+                stageReward.AddItem($"{rewardKey}", itemInfo["Item_Name"].ToString()
+                    , itemInfo["Icon_Name"].ToString()
+                    , itemInfo["Info"].ToString()
+                    , "1", true);
                 stageReward.gameObject.SetActive(true);
                 stageReward.OnEventRewardPage();
                 break;
@@ -493,6 +500,18 @@ public class BattleManager : MonoBehaviour
         }
 
         DisabledAllMap();
+
+        // 보스 ID 찾기
+        string bossID = $"{currentSelectMissionTable["BossID"]}";
+        //villain
+        for (int i = 0; i < villainPrefabs.Count; i++)
+        {
+            if (villainPrefabs[i].name.Equals(bossID))
+            {
+                villain = villainPrefabs[i];
+                break;
+            }
+        }
     }
 
     private IEnumerator CoFadeIn()
@@ -656,6 +675,12 @@ public class BattleManager : MonoBehaviour
                 ChoiceNextStageByNode();
             }
             else if (tree.CurNode.type == TreeNodeTypes.Threat)
+            {
+                SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
+                // 삭제해도 될듯
+            }
+            else if (btMapTriggers[currTriggerIndex].enemys.Count == 0 &&
+                btMapTriggers[currTriggerIndex].useEnemys.Count == 0)
             {
                 SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
             }
@@ -940,6 +965,7 @@ public class BattleManager : MonoBehaviour
         enemyTriggerIndex = index;
     }
 
+    [ContextMenu("TEST")]
     public void NodeClearReward()
     {
         var influence = gm.currentSelectMission["Influence"];//세력
@@ -1023,8 +1049,9 @@ public class BattleManager : MonoBehaviour
             var item = gm.itemInfoList.Find(t => t["ID"].Equals(rewardData[$"{keyItem}{i}"]));
             stageReward.AddItem(rewardData[$"{keyItem}{i}"].ToString(),
                 item["Item_Name"].ToString(),
-                rewardData[$"{keyValue}{i}"].ToString(),
+                item["Icon_Name"].ToString(),
                 item["Info"].ToString(),
+                rewardData[$"{keyValue}{i}"].ToString(),
                 false);
         }
         var gold = gm.itemInfoList.Find(t => t["ID"].Equals(keyItem));
@@ -1066,9 +1093,6 @@ public class BattleManager : MonoBehaviour
 
     public void SpawnCurrMapAllEnemys()
     {
-        // 보스 ID 찾기
-        string bossID = $"{currentSelectMissionTable["BossID"]}";
-
         // 미션 테이블에서 노멀 몬스터들 담겨있는 키 랜덤 뽑기
         int nMonCount = (int)currentSelectMissionTable["NMonCount"];
         int randomEnemyCount = Random.Range(1, nMonCount + 1);
@@ -1117,45 +1141,77 @@ public class BattleManager : MonoBehaviour
             }
         }
 
-        Logger.Debug(enemyData.Count);
-
         for (int i = 0; i < btMapTriggers.Count; i++)
         {
-            for (int j = 0; j < btMapTriggers[i].enemySettingPositions.Count; j++)
+            int posCount = btMapTriggers[i].enemySettingPositions.Count;
+            for (int j = 0; j < posCount; j++)
             {
-                int currPosEnemyCount = monValues[j];
+                int currPosEnemyCount = monValues[i];
+                Logger.Debug($"monValue : {currPosEnemyCount} / mon id : {monIds[i]}");
+
                 CharacterData data = new();
-                data.name = $"{enemyData[j]["NAME"]}";
-                data.job = (int)enemyData[j]["JOB"];
+                data.name = $"{enemyData[i]["NAME"]}";
+                data.job = (int)enemyData[i]["JOB"];
+                data.moveSpeed = (int)enemyData[i]["MOVESPEED"];
 
-                data.baseDamage = (float)enemyData[j]["ATK"];
-                data.baseDefense = (float)enemyData[j]["DEF"];
-                data.damageLevelCoefficient = (float)enemyData[j]["Levelup_Atk"];
-                data.defenseLevelCoefficient = (float)enemyData[j]["Levelup_Def"];
-                data.healthPointLevelCoefficient = (float)enemyData[j]["Levelup_HP"];
+                string atk = $"{enemyData[i]["ATK"]}";
+                string def = $"{enemyData[i]["DEF"]}";
+                string levelAtk = $"{enemyData[i]["Levelup_Atk"]}";
+                string levelDef = $"{enemyData[i]["Levelup_Def"]}";
+                string levelHp = $"{enemyData[i]["Levelup_HP"]}";
+                string healthPoint = $"{enemyData[i]["HP"]}";
+                string critical = $"{enemyData[i]["CRITICAL"]}";
+                string criticalDmg = $"{enemyData[i]["CRITICALDAMAGE"]}";
+                string evasion = $"{enemyData[i]["EVADE"]}";
+                string accuracy = $"{enemyData[i]["ACCURACY"]}";
 
-                data.healthPoint = (float)enemyData[j]["HP"];
-                data.moveSpeed = (int)enemyData[j]["MOVESPEED"];
-                data.critical = (float)enemyData[j]["CRITICAL"];
-                data.criticalDmg = (float)enemyData[j]["CRITICALDAMAGE"];
-                data.evasion = (float)enemyData[j]["EVADE"];
-                data.accuracy = (float)enemyData[j]["ACCURACY"];
+                data.baseDamage = float.Parse(atk);
+                data.baseDamage = float.Parse(def);
+                data.damageLevelCoefficient = float.Parse(levelAtk);
+                data.defenseLevelCoefficient = float.Parse(levelDef);
+                data.healthPointLevelCoefficient = float.Parse(levelHp);
+                data.healthPoint = float.Parse(healthPoint);
+                data.critical = float.Parse(critical);
+                data.criticalDmg = float.Parse(criticalDmg);
+                data.evasion = float.Parse(evasion);
+                data.accuracy = float.Parse(accuracy);
 
                 data.grade = 1;
                 data.maxGrade = 5;
 
-                AttackableEnemy enemy = new();
-                for (int k = 0; k < enemyPrefabs.Count; k++)
-                {
-                    if (enemyPrefabs[k].gameObject.name.Equals(data.name))
-                    {
-                        enemy = enemyPrefabs[k];
-                        break;
-                    }
-                }
 
-                btMapTriggers[j].enemySettingPositions[j].SpawnAllEnemy
-                    (currPosEnemyCount, ref btMapTriggers[j].useEnemys, enemy, data);
+                for (int l = 0; l < currPosEnemyCount; l++)
+                {
+                    AttackableEnemy enemy = new();
+                    int enemyPrefabIndex = 0;
+                    for (int k = 0; k < enemyPrefabs.Count; k++)
+                    {
+                        if (enemyPrefabs[k].gameObject.name.Equals(data.name))
+                        {
+                            enemyPrefabIndex = k;
+                            break;
+                        }
+                    }
+
+                    enemy = Instantiate(enemyPrefabs[enemyPrefabIndex]);
+                    enemy.SetUnitOriginData(data);
+                    btMapTriggers[i].enemySettingPositions[j].SpawnAllEnemy(ref btMapTriggers[i].enemys, enemy);
+                }
+            }
+        }
+
+        if (tree.CurNode.type == TreeNodeTypes.Villain)
+        {
+            AttackableEnemy enemy = new();
+            enemy = Instantiate(villain);
+
+            for (int i = btMapTriggers.Count - 1; i >= 0; i--)
+            {
+                if (btMapTriggers[i].enemySettingPositions.Count > 0)
+                {
+                    btMapTriggers[i].enemySettingPositions[0].SpawnAllEnemy(ref btMapTriggers[i].enemys, enemy);
+                    break;
+                }
             }
         }
     }

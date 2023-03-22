@@ -17,7 +17,7 @@ public class MissionManager : View
     public TextMeshProUGUI[] fitProperties;
 
     //public TextMeshProUGUI deductionAP;
-    public TextMeshProUGUI ProperCombatPower;
+    //public TextMeshProUGUI ProperCombatPower;
 
     public Slider difficultyAdjustment;
 
@@ -109,7 +109,7 @@ public class MissionManager : View
         }
         //deductionAP.text = $"AP -{dic["ConsumptionBehavior"]}";
         //ProperCombatPower.text = $"0/{dic["ProperCombatPower"]}";
-        ProperCombatPower.color = Color.white;
+        //ProperCombatPower.color = Color.white;
 
         ////보상 테이블 연결 필요
         //int erCount = expectedRewards.Count;
@@ -175,11 +175,13 @@ public class MissionManager : View
                     {
                         fitProperties[i].fontStyle = FontStyles.Bold;
                         fitProperties[i].color = Color.red;
+                        gm.fitPropertyFlags[i] = true;
                         break;
                     }
                     fitProperties[i].fontStyle = FontStyles.Normal;
                     fitProperties[i].color = Color.white;
                 }
+                gm.fitPropertyFlags[i] = false;
             }
         }
     }

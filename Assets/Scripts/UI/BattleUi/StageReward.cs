@@ -9,7 +9,6 @@ public class StageReward : MonoBehaviour
     public Transform rewardTr;
     public List<RewardItem> rewards;
     public int golds = 0;
-    public List<Dictionary<string, object>> itemInfoList; // 아이템 정보
 
     public string goldId;
 
@@ -17,11 +16,6 @@ public class StageReward : MonoBehaviour
     public GameObject eventRewardPage;
     public Transform eventRewardTr;
     private List<RewardItem> currRewards = new();
-
-    private void Start()
-    {
-        itemInfoList = GameManager.Instance.itemInfoList;
-    }
 
     private void OnDisable()
     {
@@ -45,14 +39,15 @@ public class StageReward : MonoBehaviour
         var gold = GameManager.Instance.itemInfoList.Find(t => t["ID"].ToString().Equals(goldId));
         string name = gold["Item_Name"].ToString();
         string info = gold["Info"].ToString();
-        AddItem(goldId, name,count, info, false);
+        string iconName = gold["Icon_Name"].ToString();
+        AddItem(goldId, name, iconName, info, count, false);
     }
-    public void AddItem(string id, string name, string count,string info, bool isEventReward)
+    public void AddItem(string id, string name, string iconName, string info, string count, bool isEventReward)
     {
         if (isEventReward)
         {
             var currReward = Instantiate(item, eventRewardTr);
-            currReward.SetData(id, name, count, info);
+            currReward.SetData(id, name, iconName, info, count);
             currRewards.Add(currReward);
         }
 
@@ -66,8 +61,7 @@ public class StageReward : MonoBehaviour
         }
 
         var newItem = Instantiate(item, rewardTr);
-        newItem.SetData(id, name, count, info);
-        newItem.itemImage.sprite = GameManager.Instance.GetSpriteByAddress(item.data.id);
+        newItem.SetData(id, name,iconName, info, count);
 
         rewards.Add(newItem);
     }

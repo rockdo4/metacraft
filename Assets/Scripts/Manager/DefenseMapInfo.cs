@@ -35,7 +35,7 @@ public class DefenseMapInfo : BattleMapInfo
         }
         else
         {
-            triggers[index].ResetEnemys();
+            //triggers[index].ResetEnemys();
             triggers[index].SetEnemysActive(false);
         }
 

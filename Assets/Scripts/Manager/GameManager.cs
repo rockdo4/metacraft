@@ -14,8 +14,8 @@ public class GameManager : Singleton<GameManager>
 
     // MyData - Craft, Load & Save to this data
     public Dictionary<string, GameObject> myHeroes = new();
-    public Transform heroSpawnTransform;
-    public Dictionary<int, Item> inventoryData = new();
+    public Transform heroSpawnTransform;    
+    public Dictionary<string, Item> inventoryData = new();
 
     // Resources - Sprites, TextAsset + (Scriptable Objects, Sound etc)
     private Dictionary<string, Sprite> iconSprites = new();
@@ -46,6 +46,7 @@ public class GameManager : Singleton<GameManager>
     public GameObject currentSelectObject; // Hero Info
     public Dictionary<string, object> currentSelectMission; // Mission Select
     public List<int?> battleGroups = new(3) { null, null, null }; // Mission Select -> Battle Scene
+    public List<bool> fitPropertyFlags = new(3) { false, false, false };
 
     // Origin Database - Set Prefab & Scriptable Objects
     public List<GameObject> heroDatabase = new();
@@ -350,9 +351,11 @@ public class GameManager : Singleton<GameManager>
     public void ClearBattleGroups()
     {
         battleGroups.Clear();
+        fitPropertyFlags.Clear();
         for (int i = 0; i < 3; i++)
         {
             battleGroups.Add(null);
+            fitPropertyFlags.Add(false);
         }
     }
 

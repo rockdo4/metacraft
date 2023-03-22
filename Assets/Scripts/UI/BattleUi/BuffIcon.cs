@@ -9,7 +9,7 @@ public class BuffIcon : MonoBehaviour
     //public float duration; //ÃÑ Áö¼Ó½Ã°£
 
     public Action OnEnd;
-    public GameObject popUpBuff;
+    public PopUpBuffIcon popUpBuff;
     public TextMeshProUGUI count;
     public Image iconImage;
 
@@ -18,7 +18,7 @@ public class BuffIcon : MonoBehaviour
         if (OnEnd != null)
             OnEnd();
 
-        Destroy(popUpBuff);
+        Destroy(popUpBuff.gameObject);
         Destroy(gameObject);
     }
 

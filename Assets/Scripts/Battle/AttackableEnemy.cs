@@ -341,4 +341,9 @@ public class AttackableEnemy : AttackableUnit
         else
             return null;
     }
+
+    public override void DestroyUnit()
+    {
+        Destroy(gameObject);
+    }
 }

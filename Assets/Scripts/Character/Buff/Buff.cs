@@ -39,6 +39,7 @@ public class Buff
             {
                 sec = 1f;
                 icon.count.text = ((int)timer).ToString();
+                icon.popUpBuff.count.text = icon.count.text;
             }
         }
 

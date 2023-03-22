@@ -399,7 +399,6 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     public void OnPassiveSkill(List<AttackableUnit> enemies, List<AttackableUnit> heros)
     {
-        Logger.Debug($"{transform.name} 버프 시작");
         characterData.passiveSkill?.OnActiveSkill(this, enemies, heros);
     }
     public virtual void ResetData()
@@ -710,7 +709,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     // Test
     public abstract void OnDead(AttackableUnit unit);
-    public void DestroyUnit()
+    public virtual void DestroyUnit()
     {
         //Utils.CopyPositionAndRotation(gameObject, gameObject.transform.parent);
         //pathFind.enabled = false;
@@ -724,6 +723,7 @@ public abstract class AttackableUnit : MonoBehaviour
     public void SetPathFind()
     {
         pathFind = transform.GetComponent<NavMeshAgent>();
+        pathFind.enabled = true;
     }
 
     // 여기에 State 초기화랑 트리거 모두 해제하는 코드 작성

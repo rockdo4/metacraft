@@ -73,7 +73,6 @@ public class RecruitmentWindow : MonoBehaviour
         {
             if (heroName.Equals(myhero.Value.GetComponent<CharacterDataBundle>().originData.name))
             {
-                Logger.Debug("ม฿บน");
                 isDuplicate = true;
                 break;
             }
