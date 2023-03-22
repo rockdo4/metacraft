@@ -12,7 +12,7 @@ public class ShopWindow : View
     {
         // 임시 코드
         GameManager gm = GameManager.Instance;
-        int count = gm.myHeroes2.Count;
+        int count = gm.myHeroes.Count;
         if (count == gm.heroDatabase.Count)
             return;
 

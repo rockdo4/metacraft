@@ -398,6 +398,7 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     public void OnPassiveSkill(List<AttackableUnit> enemies, List<AttackableUnit> heros)
     {
+        Logger.Debug($"{transform.name} 버프 시작");
         characterData.passiveSkill?.OnActiveSkill(this, enemies, heros);
     }
     public virtual void ResetData()
@@ -460,7 +461,6 @@ public abstract class AttackableUnit : MonoBehaviour
 
         if (isFridendly)
             dmg = -(int)attackableUnit.CalculDamage(skill, ref isCritical);
-
 
         //if ((unitType == UnitType.Hero && skill.targetType.Equals(SkillTargetType.Friendly))
         //    || (unitType == UnitType.Enemy && skill.targetType.Equals(SkillTargetType.Enemy)))
@@ -729,9 +729,10 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public virtual void AddValueBuff(BuffInfo info, int anotherValue = 0, BuffIcon icon = null)
     {
-        if (UnitState != UnitState.Battle)
+        if (UnitState == UnitState.Die)
+        {
             return;
-
+        }
         else
         {
             if (info.fraction == 0)

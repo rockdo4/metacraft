@@ -18,4 +18,6 @@ public class RecruitmentInfo : MonoBehaviour
         gradeText.text = $"{(CharacterGrade)originData.grade}";
         icon.sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{originData.name}");
     }
+
+    //아이템 연결
 }
