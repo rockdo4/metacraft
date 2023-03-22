@@ -229,7 +229,7 @@ Transform:
   m_GameObject: {fileID: 119712573433271651}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 2607673373923349580}
@@ -268,7 +268,9 @@ MonoBehaviour:
     evasion: 0
     accuracy: 0.5
   attacks:
-  - {fileID: 11400000, guid: 20dcfd9577ad65c48822cac5550a28f6, type: 2}
+  - {fileID: 11400000, guid: 4717f03947c84a24b83022c653c5f0fe, type: 2}
+  - {fileID: 11400000, guid: cb934ecf098a3b241aa8762aad8c5d0a, type: 2}
+  - {fileID: 11400000, guid: ad0a18b968739e148afe98c852cb28c9, type: 2}
   activeSkill: {fileID: 0}
   passiveSkill: {fileID: 0}
 --- !u!136 &8490853096526201997
@@ -385,7 +387,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterData: {fileID: 119712573433271663}
   nowAttack: {fileID: 0}
-  skillClips: []
+  skillClips:
+  - {fileID: 7400000, guid: 06a74e53897d4d2438958fb38c661f51, type: 2}
+  - {fileID: 7400000, guid: e0d9a53a147e8d84ab5a780d1521cc05, type: 2}
+  - {fileID: 7400000, guid: f2f986a0bad4fb44b8f7aac71124a18a, type: 2}
   unitType: 1
   normalAttackTargetType: 0
   PassiveTargetType: 0
@@ -403,8 +408,8 @@ MonoBehaviour:
   isThereDamageUI: 1
   usingFloatingHpBar: 1
   isAlive: 0
-  effectCreateTransform: {fileID: 0}
-  hitEffectTransform: {fileID: 0}
+  effectCreateTransform: {fileID: 2574625650023205062}
+  hitEffectTransform: {fileID: 8778769538901242250}
   isMapTriggerEnter: 0
 --- !u!1 &126373116876751508
 GameObject:
