@@ -11,6 +11,8 @@ public struct Item
     public int count;
     public string info;
     public string iconName;
+
+    public void AddCount(int cnt) => count += cnt;
 }
 
 public class RewardItem : MonoBehaviour

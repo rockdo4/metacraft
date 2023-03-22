@@ -7,7 +7,7 @@ public class BuffList : MonoBehaviour
     // private readonly int maxViewBuffCount = 3;
 
     public BuffIcon buffPref;
-    public GameObject buffPopUpPref;
+    public PopUpBuffIcon buffPopUpPref;
     [SerializeField]
     public List<BuffIcon> uiBuffList = new(); //현재 적용된 버프 리스트
 
@@ -26,14 +26,15 @@ public class BuffList : MonoBehaviour
             plusImage.gameObject.SetActive(false);
         }
     }
-    public BuffIcon AddIcon(BuffType type, float duration, int idx)
+    public BuffIcon AddIcon(BuffType type, float duration, int idx, Sprite sprite)
     {
-
         var viewBuff = Instantiate(buffPref, viewBuffTr);   //캐릭터 좌측의 리스트에 버프 추가하고, 팝업에도 추가
         var popUpBuff = Instantiate(buffPopUpPref, popUpBuffTr);
 
         viewBuff.transform.SetSiblingIndex(idx);
         popUpBuff.transform.SetSiblingIndex(idx);
+        viewBuff.iconImage.sprite = sprite;
+        popUpBuff.iconImage.sprite = sprite;
 
         viewBuff.buffType = type;
         //viewBuff.duration = duration;
