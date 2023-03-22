@@ -1162,7 +1162,6 @@ public class BattleManager : MonoBehaviour
 
                 for (int l = 0; l < currPosEnemyCount; l++)
                 {
-                    AttackableEnemy enemy = new();
                     int enemyPrefabIndex = 0;
                     for (int k = 0; k < enemyPrefabs.Count; k++)
                     {
@@ -1173,8 +1172,7 @@ public class BattleManager : MonoBehaviour
                         }
                     }
 
-                    enemy = Instantiate(enemyPrefabs[enemyPrefabIndex]);
-                    //enemy.SetUnitOriginData(data);
+                    var enemy = Instantiate(enemyPrefabs[enemyPrefabIndex]);
                     enemy.gameObject.SetActive(false);
                     btMapTriggers[i].enemySettingPositions[j].SpawnAllEnemy(ref btMapTriggers[i].enemys, enemy);
                 }
@@ -1183,8 +1181,7 @@ public class BattleManager : MonoBehaviour
 
         if (tree.CurNode.type == TreeNodeTypes.Villain)
         {
-            AttackableEnemy enemy = new();
-            enemy = Instantiate(villain);
+            var enemy = Instantiate(villain);
 
             for (int i = btMapTriggers.Count - 1; i >= 0; i--)
             {
