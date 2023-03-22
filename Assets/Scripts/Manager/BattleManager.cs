@@ -1114,41 +1114,57 @@ public class BattleManager : MonoBehaviour
 
         for (int i = 0; i < btMapTriggers.Count; i++)
         {
-            for (int j = 0; j < btMapTriggers[i].enemySettingPositions.Count; j++)
+            int posCount = btMapTriggers[i].enemySettingPositions.Count;
+            for (int j = 0; j < posCount; j++)
             {
                 int currPosEnemyCount = monValues[j];
                 CharacterData data = new();
                 data.name = $"{enemyData[j]["NAME"]}";
                 data.job = (int)enemyData[j]["JOB"];
-
-                data.baseDamage = (float)enemyData[j]["ATK"];
-                data.baseDefense = (float)enemyData[j]["DEF"];
-                data.damageLevelCoefficient = (float)enemyData[j]["Levelup_Atk"];
-                data.defenseLevelCoefficient = (float)enemyData[j]["Levelup_Def"];
-                data.healthPointLevelCoefficient = (float)enemyData[j]["Levelup_HP"];
-
-                data.healthPoint = (float)enemyData[j]["HP"];
                 data.moveSpeed = (int)enemyData[j]["MOVESPEED"];
-                data.critical = (float)enemyData[j]["CRITICAL"];
-                data.criticalDmg = (float)enemyData[j]["CRITICALDAMAGE"];
-                data.evasion = (float)enemyData[j]["EVADE"];
-                data.accuracy = (float)enemyData[j]["ACCURACY"];
+
+                string atk = $"{enemyData[j]["ATK"]}";
+                string def = $"{enemyData[j]["DEF"]}";
+                string levelAtk = $"{enemyData[j]["Levelup_Atk"]}";
+                string levelDef = $"{enemyData[j]["Levelup_Def"]}";
+                string levelHp = $"{enemyData[j]["Levelup_HP"]}";
+                string healthPoint = $"{enemyData[j]["HP"]}";
+                string critical = $"{enemyData[j]["CRITICAL"]}";
+                string criticalDmg = $"{enemyData[j]["CRITICALDAMAGE"]}";
+                string evasion = $"{enemyData[j]["EVADE"]}";
+                string accuracy = $"{enemyData[j]["ACCURACY"]}";
+
+                data.baseDamage = float.Parse(atk);
+                data.baseDamage = float.Parse(def);
+                data.damageLevelCoefficient = float.Parse(levelAtk);
+                data.defenseLevelCoefficient = float.Parse(levelDef);
+                data.healthPointLevelCoefficient = float.Parse(levelHp);
+                data.healthPoint = float.Parse(healthPoint);
+                data.critical = float.Parse(critical);
+                data.criticalDmg = float.Parse(criticalDmg);
+                data.evasion = float.Parse(evasion);
+                data.accuracy = float.Parse(accuracy);
 
                 data.grade = 1;
                 data.maxGrade = 5;
 
-                AttackableEnemy enemy = new();
+                int enemyPrefabIndex = 0;
                 for (int k = 0; k < enemyPrefabs.Count; k++)
                 {
                     if (enemyPrefabs[k].gameObject.name.Equals(data.name))
                     {
-                        enemy = enemyPrefabs[k];
+                        enemyPrefabIndex = k;
                         break;
                     }
                 }
 
-                btMapTriggers[j].enemySettingPositions[j].SpawnAllEnemy
-                    (currPosEnemyCount, ref btMapTriggers[j].useEnemys, enemy, data);
+                for (int l = 0; l < currPosEnemyCount; l++)
+                {
+                    AttackableEnemy enemy = new();
+                    enemy = Instantiate(enemyPrefabs[enemyPrefabIndex]);
+                    enemy.SetUnitOriginData(data);
+                    btMapTriggers[i].enemySettingPositions[j].SpawnAllEnemy(ref btMapTriggers[i].enemys, enemy);
+                }
             }
         }
     }

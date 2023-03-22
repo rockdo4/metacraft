@@ -24,8 +24,9 @@ public class MapEventTrigger : MonoBehaviour
 
     public void OnDead(AttackableEnemy enemy)
     {
-        enemys.Add(enemy);
+        //enemys.Add(enemy);
         useEnemys.Remove(enemy);
+        //Destroy(enemy.gameObject);
     }
 
     public void InfinityRespawnEnemy()
@@ -46,10 +47,10 @@ public class MapEventTrigger : MonoBehaviour
     }
     public void SpawnAllEnemy()
     {
-        for (int i = 0; i < enemySettingPositions.Count; i++)
-        {
-            //enemySettingPositions[i].SpawnAllEnemy(ref enemys);
-        }
+        //for (int i = 0; i < enemySettingPositions.Count; i++)
+        //{
+        //    enemySettingPositions[i].SpawnAllEnemy(ref enemys);
+        //}
 
         for (int i = 0; i < enemys.Count; i++)
         {
@@ -67,21 +68,21 @@ public class MapEventTrigger : MonoBehaviour
         }
     }
 
-    public void ResetEnemys()
-    {
-        for (int i = 0; i < enemys.Count; i++)
-        {
-            enemys[i].ResetData();
-            enemys[i].RemoveAllBuff();
-            enemys[i].gameObject.SetActive(true);
+    //public void ResetEnemys()
+    //{
+    //    for (int i = 0; i < enemys.Count; i++)
+    //    {
+    //        enemys[i].ResetData();
+    //        enemys[i].RemoveAllBuff();
+    //        enemys[i].gameObject.SetActive(true);
 
-            if (enemyColls.Count > 0)
-                enemyColls[i].enabled = true;
+    //        if (enemyColls.Count > 0)
+    //            enemyColls[i].enabled = true;
 
-            enemys[i].SetEnabledPathFind(false);
-            //enemys[i].gameObject.transform.position = enemySettingPositions[i].GetRespawnPos();
-        }
-    }
+    //        enemys[i].SetEnabledPathFind(false);
+    //        //enemys[i].gameObject.transform.position = enemySettingPositions[i].GetRespawnPos();
+    //    }
+    //}
 
     public void SetEnemysActive(bool set) // юс╫ц
     {
@@ -91,13 +92,13 @@ public class MapEventTrigger : MonoBehaviour
         }
     }
 
-    public void ResetEnemyPositions()
-    {
-        for (int i = 0; i < enemys.Count; i++)
-        {
-            enemys[i].gameObject.transform.position = enemySettingPositions[i].GetRespawnPos();
-        }
-    }
+    //public void ResetEnemyPositions()
+    //{
+    //    for (int i = 0; i < enemys.Count; i++)
+    //    {
+    //        enemys[i].gameObject.transform.position = enemySettingPositions[i].GetRespawnPos();
+    //    }
+    //}
 
     public void AddEnemyColliders(CapsuleCollider coll)
     {

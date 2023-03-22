@@ -7,8 +7,6 @@ using static UnityEditor.PlayerSettings;
 public class EnemySpawningAndPositioning : MonoBehaviour
 {
     private Transform tr;
-    //[Header("생성할 적 프리펩들을 넣어주세요")]
-    //public List<AttackableEnemy> enemyPrefabs = new();
     [SerializeField, Header("리스폰할 몬스터 웨이브 수를 넣어주세요.")]
     public int waveCount;
     [SerializeField, Header("해당 구역의 크기를 정해주세요.")]
@@ -28,6 +26,8 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     private void Awake()
     {
         tr = gameObject.transform;
+        waveCount = 1;
+        spawnRange = 5;
     }
 
     public void SetRespawnPos(Transform tr) => this.tr = tr;
@@ -39,6 +39,9 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     private Coroutine coInfinityRespawn;
     private IEnumerator CoInfinityRespawn(float timer)
     {
+        if (enemys.Count == 0)
+            yield break;
+
         // 리스폰 후 다시 코루틴 시작
         for (int i = 0; i < enemys[spawnCount].Count; i++)
         {
@@ -91,27 +94,27 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     //    return enemys;
     //}
 
-    private void ResetPositionEnemys()
-    {
-        Vector3 trPos = tr.position;
+    //private void ResetPositionEnemys()
+    //{
+    //    Vector3 trPos = tr.position;
 
-        for (int i = 0; i < enemys.Count; i++) // 4
-        {
-            for (int j = 0; j < enemys[i].Count; j++)
-            {
-                Vector3 randomArea = UnityEngine.Random.insideUnitSphere * spawnRange;
-                randomArea.y = 0f;
-                randomArea.x += trPos.x;
-                randomArea.z += trPos.z;
+    //    for (int i = 0; i < enemys.Count; i++) // 4
+    //    {
+    //        for (int j = 0; j < enemys[i].Count; j++)
+    //        {
+    //            Vector3 randomArea = UnityEngine.Random.insideUnitSphere * spawnRange;
+    //            randomArea.y = 0f;
+    //            randomArea.x += trPos.x;
+    //            randomArea.z += trPos.z;
 
-                enemys[i][j].gameObject.transform.position = randomArea;
-            }
-        }
-    }
+    //            enemys[i][j].gameObject.transform.position = randomArea;
+    //        }
+    //    }
+    //}
 
     public void InfinityRespawn()
     {
-        ResetPositionEnemys();
+        //ResetPositionEnemys();
 
         spawnCount = 0;
         isInfinityRespawn = true;
@@ -119,32 +122,30 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     }
 
     public void SpawnRandomAreaEnemys
-        (int index, int enemySpawnCount, ref List<AttackableUnit> enemyPool, AttackableEnemy enemyPrefab, CharacterData data)
+        (int index, ref List<AttackableUnit> enemyPool, AttackableEnemy enemy)
     {
         Vector3 trPos = tr.position;
 
         enemys.Add(new List<AttackableEnemy>());
-        for (int j = 0; j < enemySpawnCount; j++)
-        {
-            Vector3 randomArea = UnityEngine.Random.insideUnitSphere * spawnRange;
-            randomArea.y = 0f;
-            randomArea.x += trPos.x;
-            randomArea.z += trPos.z;
 
-            var e = Instantiate(enemyPrefab, randomArea, enemyPrefab.gameObject.transform.rotation, tr);
-            e.SetUnitOriginData(data);
+        Vector3 randomArea = UnityEngine.Random.insideUnitSphere * spawnRange;
+        randomArea.y = 0f;
+        randomArea.x += trPos.x;
+        randomArea.z += trPos.z;
 
-            enemyPool.Add(e);
-            enemys[index].Add(e);
-        }
+        enemy.gameObject.transform.position = randomArea;
+        enemy.gameObject.transform.parent = tr;
+
+        enemyPool.Add(enemy);
+        enemys[index].Add(enemy);
     }
 
     public void SpawnAllEnemy
-        (int enemySpawnCount, ref List<AttackableUnit> enemyPool, AttackableEnemy enemyPrefab, CharacterData data)
+        (ref List<AttackableUnit> enemyPool, AttackableEnemy enemy)
     {
         for (int i = 0; i < waveCount; i++)
         {
-            SpawnRandomAreaEnemys(i, enemySpawnCount, ref enemyPool, enemyPrefab, data);
+            SpawnRandomAreaEnemys(i, ref enemyPool, enemy);
             if (isMiddleBoss)
                 break;
         }
