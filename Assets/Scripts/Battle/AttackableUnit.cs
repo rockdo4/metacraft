@@ -398,7 +398,6 @@ public abstract class AttackableUnit : MonoBehaviour
     }
     public void OnPassiveSkill(List<AttackableUnit> enemies, List<AttackableUnit> heros)
     {
-        Logger.Debug($"{transform.name} 버프 시작");
         characterData.passiveSkill?.OnActiveSkill(this, enemies, heros);
     }
     public virtual void ResetData()
