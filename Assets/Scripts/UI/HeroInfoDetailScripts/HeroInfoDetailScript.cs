@@ -1,6 +1,7 @@
 using TMPro;
 using System.Text;
 using UnityEngine.UI;
+
 public class HeroInfoDetailScript : View
 {
     public Image portrait;
@@ -8,12 +9,18 @@ public class HeroInfoDetailScript : View
     public TextMeshProUGUI levelInfoInLeftPanel;
     public TextMeshProUGUI typeInfoInLeftPanel;
     public TextMeshProUGUI statDetail;
+    public Toggle[] firstToggleTabs;
 
     public Button[] trainingPlusButtons;
 
     private void OnEnable()
     {
         SetHeroStatInfoText();
+        int count = firstToggleTabs.Length;
+        for (int i = 0; i < count; i++)
+        {
+            firstToggleTabs[i].isOn = (i == 0);
+        }
     }
 
     private void SetHeroStatInfoText()
