@@ -13,6 +13,8 @@ public class HeroInfoDetailScript : View
 
     public Button[] trainingPlusButtons;
 
+    public Slider expBar;
+
     private void OnEnable()
     {
         SetHeroStatInfoText();
@@ -38,17 +40,20 @@ public class HeroInfoDetailScript : View
         stringBuilder.Append($"방어력 : {data.baseDefense}\n");
         stringBuilder.Append($"체력 : {data.healthPoint}\n");
         stringBuilder.Append($"타입 : {gm.GetStringByTable($"herotype_{(CharacterJob)data.job}")}\n");
-        stringBuilder.Append($"치명타 확률 : {data.critical * 100:0.0}%\n");
-        stringBuilder.Append($"치명타 배율 : {data.criticalDmg * 100:0.0}%\n");
+        stringBuilder.Append($"치명타 확률 : {data.critical * 100:0}%\n");
+        stringBuilder.Append($"치명타 배율 : {data.criticalDmg * 100:0}%\n");
         stringBuilder.Append($"이동 속도 : {data.moveSpeed}\n");
         statDetail.text = stringBuilder.ToString();
+        expBar.value = data.exp;
+        expBar.maxValue = (int)gm.expRequirementTable[data.level - 1]["NEEDEXP"];
+        expBar.GetComponentInChildren<TextMeshProUGUI>().text = $"EXP {expBar.value:0} / {expBar.maxValue:0}";
     }
 
     //private void SetTrainingPlusButtons()
     //{
-        //int testStat = 10;
-        //trainingPlusButtons[0].onClick.AddListener(()=>data.baseDamage += testStat);
-        //trainingPlusButtons[1].onClick.AddListener(()=>data.baseDefense += testStat);
-        //trainingPlusButtons[2].onClick.AddListener(()=>data.healthPoint += testStat);
+    //int testStat = 10;
+    //trainingPlusButtons[0].onClick.AddListener(()=>data.baseDamage += testStat);
+    //trainingPlusButtons[1].onClick.AddListener(()=>data.baseDefense += testStat);
+    //trainingPlusButtons[2].onClick.AddListener(()=>data.healthPoint += testStat);
     //}
 }

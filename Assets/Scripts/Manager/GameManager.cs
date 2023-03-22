@@ -39,7 +39,8 @@ public class GameManager : Singleton<GameManager>
 
     public List<Dictionary<string, object>> supplyInfoList; // 보급 노드 정보
 
-    public List<Dictionary<string, object>> recruitmentReplacementTable;
+    public List<Dictionary<string, object>> recruitmentReplacementTable; // 영입 중복 대체 테이블
+    public List<Dictionary<string, object>> expRequirementTable; // 경험치 요구량 테이블
 
     // Office Select
     public GameObject currentSelectObject; // Hero Info
@@ -191,6 +192,7 @@ public class GameManager : Singleton<GameManager>
         enemySpawnList = CSVReader.SplitTextAsset(releasehandles["EnemySpawnTable"].Result as TextAsset);
         recruitmentReplacementTable = CSVReader.SplitTextAsset(releasehandles["RecruitmentReplacementTable"].Result as TextAsset);
         eventEffectInfoList = CSVReader.SplitTextAsset(releasehandles["EventEffectTable"].Result as TextAsset);
+        expRequirementTable = CSVReader.SplitTextAsset(releasehandles["ExpRequirementTable"].Result as TextAsset);
 
         LoadAllData();
         FixMissionTable(CSVReader.SplitTextAsset(releasehandles["MissionInfoTable"].Result as TextAsset));
