@@ -13,6 +13,7 @@ public class RewardManager : MonoBehaviour
 
     public void SetReward()
     {
+
         StartCoroutine(CoSetReward());
     }
 
@@ -28,7 +29,7 @@ public class RewardManager : MonoBehaviour
             GameObject itemPref = Instantiate(rewardPref, rewardTr);
             RewardItem item = itemPref.GetComponent<RewardItem>();
 
-            item.SetData(reward.Id, reward.itemNameText.text, reward.itemCountText.text);
+            item.SetData(reward.data.id, reward.itemNameText.text, reward.itemCountText.text);
 
             count--;
             yield return wfs;

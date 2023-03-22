@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Net;
 using System.Text;
 using UnityEngine;
 using UnityEngine.AddressableAssets;
@@ -17,11 +16,13 @@ public class GameManager : Singleton<GameManager>
     //public List<GameObject> myHeroes = new();
     public Dictionary<string, GameObject> myHeroes2 = new();
     public Transform heroSpawnTransform;
+    public Dictionary<int, Item> inventoryData = new();
 
     // Resources - Sprites, TextAsset + (Scriptable Objects, Sound etc)
     private Dictionary<string, Sprite> iconSprites = new();
     private Dictionary<string, Sprite> illustrationSprites = new();
     private Dictionary<string, Sprite> stateIconSprites = new();
+    private Dictionary<string, Sprite> itemSprites = new();
     public Dictionary<int, List<Dictionary<string, object>>> missionInfoDifficulty; // 작전 정보 난이도 키 추가
     public List<Dictionary<string, object>> dispatchInfoList; // 파견 정보
     public List<Dictionary<string, object>> officeInfoList;  // 사무소 레벨별 정보
@@ -126,7 +127,7 @@ public class GameManager : Singleton<GameManager>
         }
 
 
-        count = 28;
+        count = 28; //임시. 나중에 버프 테이블 불러오게 수정할 예정
         for (int i = 1; i <= count; i++)
         {
             string address = string.Format("state{0}",i);
@@ -176,6 +177,24 @@ public class GameManager : Singleton<GameManager>
 
         ReleaseAddressable(handles);
         handles.Clear();
+
+        int itemCount = itemInfoList.Count;
+        for (int i = 0; i < itemCount; i++)
+        {
+            string address = $"{itemInfoList[i]["Icon_Name"]}";
+            AsyncOperationHandle<Sprite> stateIconHandle = Addressables.LoadAssetAsync<Sprite>(address);
+
+            stateIconHandle.Completed +=
+                (AsyncOperationHandle<Sprite> obj) =>
+                {
+                    if (!itemSprites.ContainsKey(address))
+                    {
+                        Sprite sprite = obj.Result;
+                        itemSprites.Add(address, sprite);
+                    }
+                };
+        }
+
     }
 
     private void AppendStringTable(List<Dictionary<string, object>> rawData, string tableName)
@@ -238,6 +257,7 @@ public class GameManager : Singleton<GameManager>
         StringBuilder sb = new();
         sb.AppendLine("ID;Contents");
         sb.AppendLine($"PlayerData;{JsonUtility.ToJson(playerData)}");
+        sb.AppendLine($"Inventory;{JsonUtility.ToJson(inventoryData)}");
 
         foreach (var hero in myHeroes2)
         {
@@ -274,6 +294,10 @@ public class GameManager : Singleton<GameManager>
                 {
                     Logger.Debug($"Load failed {heroName}");
                 }
+            }
+            else if(id.Contains("Inventory"))
+            {
+                //여기다가 불러오는거
             }
         }
         SetHeroesActive(false);
@@ -359,6 +383,11 @@ public class GameManager : Singleton<GameManager>
         if (stateIconSprites.ContainsKey(address))
         {
             return stateIconSprites[address];
+        }
+
+        if (itemSprites.ContainsKey(address))
+        {
+            return itemSprites[address];
         }
 
         Logger.Debug($"Load sprite fail. address: {address}");
