@@ -537,9 +537,8 @@ public class AttackableHero : AttackableUnit
         {
             if (info.fraction != 0)
             {
-                icon = heroUI.AddIcon(info.type, info.duration, idx);
+                icon = heroUI.AddIcon(info.type, info.duration, idx, GameManager.Instance.GetSpriteByAddress($"state{info.sort}"));
                 base.AddValueBuff(info, anotherValue, icon);
-                icon.iconImage.sprite = GameManager.Instance.GetSpriteByAddress($"state{info.sort}");
             }
         }
         else
@@ -577,9 +576,8 @@ public class AttackableHero : AttackableUnit
         {
             if (info.fraction != 0)
             {
-                icon = heroUI.AddIcon(info.type, info.duration, idx);
+                icon = heroUI.AddIcon(info.type, info.duration, idx, GameManager.Instance.GetSpriteByAddress($"state{info.sort}"));
                 base.AddStateBuff(info, attackableUnit, icon);
-                icon.iconImage.sprite = GameManager.Instance.GetSpriteByAddress($"state{info.sort}");
             }
         }
         else
