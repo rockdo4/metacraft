@@ -417,7 +417,7 @@ public class BattleManager : MonoBehaviour
                 ExecutionBuff(rewardKey);
                 break;
             case 2:
-                stageReward.AddItem($"{rewardKey}","", "1","","", true);
+                stageReward.AddItem($"{rewardKey}","", "","","1", true);
                 stageReward.gameObject.SetActive(true);
                 stageReward.OnEventRewardPage();
                 break;
