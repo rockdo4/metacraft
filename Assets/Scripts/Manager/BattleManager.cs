@@ -420,7 +420,11 @@ public class BattleManager : MonoBehaviour
                 ExecutionBuff(rewardKey);
                 break;
             case 2:
-                stageReward.AddItem($"{rewardKey}","", "1","","", true);
+                var itemInfo = gm.itemInfoList.Find(t => t["ID"].ToString().Equals(rewardKey.ToString()));
+                stageReward.AddItem($"{rewardKey}", itemInfo["Item_Name"].ToString()
+                    , itemInfo["Icon_Name"].ToString()
+                    , itemInfo["Info"].ToString()
+                    , "1", true);
                 stageReward.gameObject.SetActive(true);
                 stageReward.OnEventRewardPage();
                 break;
