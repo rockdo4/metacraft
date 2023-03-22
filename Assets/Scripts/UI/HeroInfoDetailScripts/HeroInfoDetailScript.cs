@@ -15,6 +15,9 @@ public class HeroInfoDetailScript : View
 
     public Slider expBar;
 
+    public Image[] skillIcons;
+    public TextMeshProUGUI[] skillInfo;
+
     private void OnEnable()
     {
         SetHeroStatInfoText();
@@ -28,7 +31,8 @@ public class HeroInfoDetailScript : View
     private void SetHeroStatInfoText()
     {
         GameManager gm = GameManager.Instance;
-        LiveData data = gm.currentSelectObject.GetComponent<AttackableUnit>().GetUnitData().data;
+        CharacterDataBundle cdb = gm.currentSelectObject.GetComponent<AttackableUnit>().GetUnitData();
+        LiveData data = cdb.data;
         portrait.sprite = gm.GetSpriteByAddress($"Illu_{data.name}");
 
         gradeInfoInLeftPanel.text = $"{(CharacterGrade)data.grade}";
@@ -39,14 +43,22 @@ public class HeroInfoDetailScript : View
         stringBuilder.Append($"공격력 : {data.baseDamage}\n");
         stringBuilder.Append($"방어력 : {data.baseDefense}\n");
         stringBuilder.Append($"체력 : {data.healthPoint}\n");
-        stringBuilder.Append($"타입 : {gm.GetStringByTable($"herotype_{(CharacterJob)data.job}")}\n");
-        stringBuilder.Append($"치명타 확률 : {data.critical * 100:0}%\n");
-        stringBuilder.Append($"치명타 배율 : {data.criticalDmg * 100:0}%\n");
         stringBuilder.Append($"이동 속도 : {data.moveSpeed}\n");
+        stringBuilder.Append($"크리티컬 확률 : {data.critical * 100:0}%\n");
+        stringBuilder.Append($"크리티컬 배율 : {data.criticalDmg * 100:0}%\n");
+        stringBuilder.Append($"명중률 : {data.accuracy * 100:0}%\n");
+        stringBuilder.Append($"회피율 : {data.evasion * 100:0}%\n");
         statDetail.text = stringBuilder.ToString();
         expBar.value = data.exp;
         expBar.maxValue = (int)gm.expRequirementTable[data.level - 1]["NEEDEXP"];
         expBar.GetComponentInChildren<TextMeshProUGUI>().text = $"EXP {expBar.value:0} / {expBar.maxValue:0}";
+
+        //skillIcons[0].sprite = 
+        skillInfo[0].text = $"{gm.GetStringByTable(cdb.attacks[0].skillName)}\n{gm.GetStringByTable(cdb.attacks[0].skillDescription)}";
+        //skillIcons[1].sprite = 
+        skillInfo[1].text = $"{gm.GetStringByTable(cdb.passiveSkill.skillName)}\n{gm.GetStringByTable(cdb.passiveSkill.skillDescription)}";
+        //skillIcons[2].sprite = 
+        skillInfo[2].text = $"{gm.GetStringByTable(cdb.activeSkill.skillName)}\n{gm.GetStringByTable(cdb.activeSkill.skillDescription)}";
     }
 
     //private void SetTrainingPlusButtons()
