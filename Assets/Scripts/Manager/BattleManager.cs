@@ -1127,36 +1127,38 @@ public class BattleManager : MonoBehaviour
                 int currPosEnemyCount = monValues[i];
                 Logger.Debug($"monValue : {currPosEnemyCount} / mon id : {monIds[i]}");
 
-                CharacterData data = new();
-                data.name = $"{enemyData[i]["NAME"]}";
-                data.job = (int)enemyData[i]["JOB"];
-                data.moveSpeed = (int)enemyData[i]["MOVESPEED"];
+                //CharacterData data;
+                //data.name = $"{enemyData[i]["NAME"]}";
+                //data.job = (int)enemyData[i]["JOB"];
+                //data.moveSpeed = (int)enemyData[i]["MOVESPEED"];
 
-                string atk = $"{enemyData[i]["ATK"]}";
-                string def = $"{enemyData[i]["DEF"]}";
-                string levelAtk = $"{enemyData[i]["Levelup_Atk"]}";
-                string levelDef = $"{enemyData[i]["Levelup_Def"]}";
-                string levelHp = $"{enemyData[i]["Levelup_HP"]}";
-                string healthPoint = $"{enemyData[i]["HP"]}";
-                string critical = $"{enemyData[i]["CRITICAL"]}";
-                string criticalDmg = $"{enemyData[i]["CRITICALDAMAGE"]}";
-                string evasion = $"{enemyData[i]["EVADE"]}";
-                string accuracy = $"{enemyData[i]["ACCURACY"]}";
+                //string atk = $"{enemyData[i]["ATK"]}";
+                //string def = $"{enemyData[i]["DEF"]}";
+                //string levelAtk = $"{enemyData[i]["Levelup_Atk"]}";
+                //string levelDef = $"{enemyData[i]["Levelup_Def"]}";
+                //string levelHp = $"{enemyData[i]["Levelup_HP"]}";
+                //string healthPoint = $"{enemyData[i]["HP"]}";
+                //string critical = $"{enemyData[i]["CRITICAL"]}";
+                //string criticalDmg = $"{enemyData[i]["CRITICALDAMAGE"]}";
+                //string evasion = $"{enemyData[i]["EVADE"]}";
+                //string accuracy = $"{enemyData[i]["ACCURACY"]}";
 
-                data.baseDamage = float.Parse(atk);
-                data.baseDamage = float.Parse(def);
-                data.damageLevelCoefficient = float.Parse(levelAtk);
-                data.defenseLevelCoefficient = float.Parse(levelDef);
-                data.healthPointLevelCoefficient = float.Parse(levelHp);
-                data.healthPoint = float.Parse(healthPoint);
-                data.critical = float.Parse(critical);
-                data.criticalDmg = float.Parse(criticalDmg);
-                data.evasion = float.Parse(evasion);
-                data.accuracy = float.Parse(accuracy);
+                //data.baseDamage = float.Parse(atk);
+                //data.baseDamage = float.Parse(def);
+                //data.damageLevelCoefficient = float.Parse(levelAtk);
+                //data.defenseLevelCoefficient = float.Parse(levelDef);
+                //data.healthPointLevelCoefficient = float.Parse(levelHp);
+                //data.healthPoint = float.Parse(healthPoint);
+                //data.critical = float.Parse(critical);
+                //data.criticalDmg = float.Parse(criticalDmg);
+                //data.evasion = float.Parse(evasion);
+                //data.accuracy = float.Parse(accuracy);
 
-                data.grade = 1;
-                data.maxGrade = 5;
+                //data.grade = 1;
+                //data.maxGrade = 5;
 
+
+                string name = $"{enemyData[i]["NAME"]}";
 
                 for (int l = 0; l < currPosEnemyCount; l++)
                 {
@@ -1164,7 +1166,7 @@ public class BattleManager : MonoBehaviour
                     int enemyPrefabIndex = 0;
                     for (int k = 0; k < enemyPrefabs.Count; k++)
                     {
-                        if (enemyPrefabs[k].gameObject.name.Equals(data.name))
+                        if (enemyPrefabs[k].gameObject.name.Equals(name))  
                         {
                             enemyPrefabIndex = k;
                             break;
@@ -1172,7 +1174,7 @@ public class BattleManager : MonoBehaviour
                     }
 
                     enemy = Instantiate(enemyPrefabs[enemyPrefabIndex]);
-                    enemy.SetUnitOriginData(data);
+                    //enemy.SetUnitOriginData(data);
                     enemy.gameObject.SetActive(false);
                     btMapTriggers[i].enemySettingPositions[j].SpawnAllEnemy(ref btMapTriggers[i].enemys, enemy);
                 }
