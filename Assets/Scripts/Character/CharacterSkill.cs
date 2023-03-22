@@ -111,7 +111,6 @@ public class CharacterSkill : ScriptableObject
             case BufferTargetType.Self:
                 foreach (var buff in buffInfos)
                 {
-                    Logger.Debug($"{buff[skillLevel - 1]} 를 {unit} 에 적용");
                     if (buff[skillLevel - 1].type == BuffType.Provoke
                         || buff[skillLevel - 1].type == BuffType.Stun
                         || buff[skillLevel - 1].type == BuffType.Silence)
@@ -129,7 +128,6 @@ public class CharacterSkill : ScriptableObject
                         foreach (var buff in buffInfos)
                         {
                             var nowBuff = buff[skillLevel - 1];
-                            Logger.Debug($"{nowBuff} 를 {finalTargets[i]} 에 적용");
                             if (nowBuff.type == BuffType.Provoke
                                 || nowBuff.type == BuffType.Stun
                                 || nowBuff.type == BuffType.Silence)

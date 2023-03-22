@@ -9,7 +9,6 @@ public class StageReward : MonoBehaviour
     public Transform rewardTr;
     public List<RewardItem> rewards;
     public int golds = 0;
-    public List<Dictionary<string, object>> itemInfoList; // 아이템 정보
 
     public string goldId;
 
@@ -17,11 +16,6 @@ public class StageReward : MonoBehaviour
     public GameObject eventRewardPage;
     public Transform eventRewardTr;
     private List<RewardItem> currRewards = new();
-
-    private void Start()
-    {
-        itemInfoList = GameManager.Instance.itemInfoList;
-    }
 
     private void OnDisable()
     {
