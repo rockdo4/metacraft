@@ -37,7 +37,7 @@ public class TreeMapSystem : MonoBehaviour
     { 
         get { return curNode; }
         set
-        { 
+        {
             curNode = value;
             SetNodeHighlighter(curNode);
         }
@@ -75,7 +75,6 @@ public class TreeMapSystem : MonoBehaviour
     private int nodeIndex = 0;
     private bool showFirst = true;
 
-
     private struct TreeBlueprintData
     {
         public TreeNodeTypes nodeType;
@@ -104,6 +103,11 @@ public class TreeMapSystem : MonoBehaviour
         nodeTarget.gameObject.SetActive(value);
         lineRendererTarget.gameObject.SetActive(value);
         movableHighlighterTarget.gameObject.SetActive(value);
+    }
+
+    public void TestLinkNodes()
+    {
+        StartCoroutine(CoLinkNodes());  // 라인렌더러 위치 조정
     }
 
     public void CreateTreeGraph(int normalNodeCount = 0, int threatNodeCount = 0, int supplyNodeCount = 0, int eventNodeCount = 0)
@@ -354,6 +358,14 @@ public class TreeMapSystem : MonoBehaviour
 
     public void DestroyAllObjs()
     {
+        int lcount = lines.Count;
+        for (int i = 0; i < lcount; i++)
+        {
+            if (lines[i] != null)
+                Destroy(lines[i].gameObject);
+        }
+        lines.Clear();
+
         int ncount = nodes.Count;
         for (int i = 0; i < ncount; i++)
         {
@@ -381,14 +393,6 @@ public class TreeMapSystem : MonoBehaviour
                 Destroy(bundles[i]);
         }
         bundles.Clear();
-
-        int lcount = lines.Count;
-        for (int i = 0; i < lcount; i++)
-        {
-            if (lines[i] != null)
-                Destroy(lines[i]);
-        }
-        lines.Clear();
 
         int hcount = highlighters.Count;
         for (int i = 0; i < hcount; i++)
