@@ -546,8 +546,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 3673541048557384804}
+  m_Children: []
   m_Father: {fileID: 2553096147153036623}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -576,7 +575,7 @@ MonoBehaviour:
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
-  m_CellSize: {x: 300, y: 350}
+  m_CellSize: {x: 150, y: 150}
   m_Spacing: {x: 45, y: 50}
   m_Constraint: 1
   m_ConstraintCount: 5
@@ -867,6 +866,7 @@ GameObject:
   - component: {fileID: 2553096147792292503}
   - component: {fileID: 2553096147792292501}
   - component: {fileID: 2553096147792292500}
+  - component: {fileID: 1769469397582790886}
   m_Layer: 5
   m_Name: InventoryWindow
   m_TagString: Untagged
@@ -937,6 +937,21 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &1769469397582790886
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2553096147792292502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d8ed1ce02d7e13449a644aee0a1b237, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  itemPrev: {fileID: 1797279225682892999, guid: 90e931212f71add4bb73ba37e161b4c0,
+    type: 3}
+  itemTr: {fileID: 2553096146316931278}
 --- !u!1 &2553096148079257805
 GameObject:
   m_ObjectHideFlags: 0
@@ -1858,7 +1873,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 7188272899010697912}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1769469397582790886}
+        m_TargetAssemblyTypeName: InventoryWindow, Assembly-CSharp
+        m_MethodName: OnClickSortButton
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 2
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5640332200986109710
 GameObject:
   m_ObjectHideFlags: 0
@@ -2526,7 +2553,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6429953906297768687}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1769469397582790886}
+        m_TargetAssemblyTypeName: InventoryWindow, Assembly-CSharp
+        m_MethodName: OnClickSortButton
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 1
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &9100561226631545370
 GameObject:
   m_ObjectHideFlags: 0
@@ -2648,129 +2687,16 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6242794914998979839}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
---- !u!1001 &4889449707007865086
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    m_TransformParent: {fileID: 2553096146316931278}
-    m_Modifications:
-    - target: {fileID: 1350839805849479902, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_Name
-      value: Item
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_Pivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_Pivot.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_RootOrder
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_AnchorMin.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_SizeDelta.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_SizeDelta.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_AnchoredPosition.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_AnchoredPosition.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 53014d8491bec834eba56a9346098348, type: 3}
---- !u!224 &3673541048557384804 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 8152037064045708442, guid: 53014d8491bec834eba56a9346098348,
-    type: 3}
-  m_PrefabInstance: {fileID: 4889449707007865086}
-  m_PrefabAsset: {fileID: 0}
+      m_Calls:
+      - m_Target: {fileID: 1769469397582790886}
+        m_TargetAssemblyTypeName: InventoryWindow, Assembly-CSharp
+        m_MethodName: OnClickSortButton
+        m_Mode: 5
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 0
+          m_BoolArgument: 0
+        m_CallState: 2

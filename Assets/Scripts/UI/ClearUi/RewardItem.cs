@@ -1,19 +1,8 @@
 using System;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
-
-[Serializable]
-public struct Item
-{
-    public string id;
-    public string name;
-    public int count;
-    public string info;
-    public string iconName;
-
-    public void AddCount(int cnt) => count += cnt;
-}
 
 public class RewardItem : MonoBehaviour
 {
@@ -22,13 +11,15 @@ public class RewardItem : MonoBehaviour
     public TextMeshProUGUI itemCountText;
     public Image itemImage;
 
-    public void SetData(string id, string itemName, string iconName, string info, string itemCount = null)
+    public void SetData(string id, string itemName, string iconName, string info,string sort, string dataID, string itemCount = null)
     {
         data.id = id;
         data.name = itemName;
         data.count =  itemCount == null ? 0 :int.Parse(itemCount);
         data.iconName = iconName;
         data.info = info;
+        data.sort = sort;
+        data.dataID = dataID;
         itemNameText.text = itemName;
         if (itemCountText != null)
             itemCountText.text = itemCount;

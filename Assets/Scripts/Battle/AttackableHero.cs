@@ -33,6 +33,8 @@ public class AttackableHero : AttackableUnit
 
             if (unitState == UnitState.Die && value != UnitState.None)
                 return;
+            if (name.Contains("shadow"))
+                Logger.Debug($"{name} : {value}");
             unitState = value;
             heroUI.heroState = unitState;
             switch (unitState)
@@ -42,12 +44,6 @@ public class AttackableHero : AttackableUnit
                     nowUpdate = null;
                     break;
                 case UnitState.Idle:
-                    //if (lateReturn)
-                    //{
-                    //    UnitState = UnitState.ReturnPosition;
-                    //    return;
-                    //}
-                    Logger.Debug("this fcking");
                     pathFind.isStopped = true;
 
                     animator.SetFloat("Speed", 0);
@@ -122,6 +118,8 @@ public class AttackableHero : AttackableUnit
             if (unitState == UnitState.Die && value != UnitBattleState.None)
                 return;
             battleState = value;
+            if (name.Contains("shadow"))
+                Logger.Debug($"{name} : {value}");
 
             //상태가 바뀔때마다 애니메이션 호출
             switch (battleState)
@@ -377,14 +375,14 @@ public class AttackableHero : AttackableUnit
                 break;
             case UnitBattleState.NormalAttack:
                 stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-                if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime >= 1.0f)
+                if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime >= .75f)
                 {
                     NormalAttackEnd();
                 }
                 break;
             case UnitBattleState.ActiveSkill:
                 stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-                if (stateInfo.IsName("ActiveSkill") && stateInfo.normalizedTime >= 1.0f)
+                if (stateInfo.IsName("ActiveSkill") && stateInfo.normalizedTime >= 0.75f)
                 {                    
                     ActiveSkillEnd();
                 }
@@ -408,34 +406,42 @@ public class AttackableHero : AttackableUnit
 
     protected override void ReturnPosUpdate()
     {
-        if (pathFind.isStopped)
-            pathFind.isStopped = false;
-        animator.SetFloat("Speed", pathFind.velocity.magnitude / characterData.data.moveSpeed);
-        if (Vector3.Distance(returnPos.position, transform.position) <= 0.5f)
+        switch (isRotate)
         {
-            pathFind.isStopped = true;
-            transform.position = returnPos.position;
+            case true:
 
-            transform.rotation = returnPos.rotation;
-            if (battleManager.tree.CurNode.type == TreeNodeTypes.Threat)
-            {
-                if (!battleManager.isMiddleBossAlive)
+                transform.rotation = returnPos.rotation;
+                isRotate = false;
+                UnitState = UnitState.Idle;
+
+                if (battleManager.tree.CurNode.type == TreeNodeTypes.Threat)
+                {
+                    if (!battleManager.isMiddleBossAlive)
+                    {
+                        battleManager.OnReady();
+                    }
+                }
+                else
                 {
                     battleManager.OnReady();
-                    Logger.Debug("wtf ready");
                 }
-            }
-            else
-            {
-                battleManager.OnReady();
-                Logger.Debug("wtf ready");
-            }
+                break;
+            case false:
+                if (pathFind.isStopped)
+                    pathFind.isStopped = false;
+                animator.SetFloat("Speed", pathFind.velocity.magnitude / characterData.data.moveSpeed);
+                if (Vector3.Distance(returnPos.position, transform.position) <= 0.5f)
+                {
+                    isRotate = true;
+                    pathFind.isStopped = true;
+                    transform.position = returnPos.position;
+                }
+                break;
         }
     }
 
     public override void ChangeUnitState(UnitState state)
     {
-        Logger.Debug(state);
         if (state == UnitState.ReturnPosition)
         {
             if (BattleState == UnitBattleState.ActiveSkill || BattleState == UnitBattleState.NormalAttack || BattleState == UnitBattleState.Stun)
@@ -475,6 +481,7 @@ public class AttackableHero : AttackableUnit
         base.NormalAttackEnd();
 
         lastNormalAttackTime[nowAttack] = Time.time;
+        Logger.Debug($"{name} : NormalAttackEnd");
 
         if (lateReturn)
         {
