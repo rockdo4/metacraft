@@ -420,7 +420,7 @@ public class BattleManager : MonoBehaviour
                 ExecutionBuff(rewardKey);
                 break;
             case 2:
-                stageReward.AddItem($"{rewardKey}", "1", true);
+                stageReward.AddItem($"{rewardKey}","", "1","","", true);
                 stageReward.gameObject.SetActive(true);
                 stageReward.OnEventRewardPage();
                 break;
@@ -940,6 +940,7 @@ public class BattleManager : MonoBehaviour
         enemyTriggerIndex = index;
     }
 
+    [ContextMenu("TEST")]
     public void NodeClearReward()
     {
         var influence = gm.currentSelectMission["Influence"];//¼¼·Â
@@ -1019,8 +1020,16 @@ public class BattleManager : MonoBehaviour
         {
             if ((int)rewardData[$"{keyValue}{i}"] == -1)
                 continue;
-            stageReward.AddItem(rewardData[$"{keyItem}{i}"].ToString(), rewardData[$"{keyValue}{i}"].ToString(), false);
+
+            var item = gm.itemInfoList.Find(t => t["ID"].Equals(rewardData[$"{keyItem}{i}"]));
+            stageReward.AddItem(rewardData[$"{keyItem}{i}"].ToString(),
+                item["Item_Name"].ToString(),
+                item["Icon_Name"].ToString(),
+                item["Info"].ToString(),
+                rewardData[$"{keyValue}{i}"].ToString(),
+                false);
         }
+        var gold = gm.itemInfoList.Find(t => t["ID"].Equals(keyItem));
         if ((int)rewardData["Gold"] != -1)
             stageReward.AddGold(rewardData["Gold"].ToString());
     }

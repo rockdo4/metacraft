@@ -40,22 +40,26 @@ public class StageReward : MonoBehaviour
     {
         rewardPage.SetActive(false);
     }
-    public void AddGold(string value)
+    public void AddGold(string count)
     {
-        AddItem(goldId, value, false);
+        var gold = GameManager.Instance.itemInfoList.Find(t => t["ID"].ToString().Equals(goldId));
+        string name = gold["Item_Name"].ToString();
+        string info = gold["Info"].ToString();
+        string iconName = gold["Icon_Name"].ToString();
+        AddItem(goldId, name, iconName, info, count, false);
     }
-    public void AddItem(string id, string count, bool isEventReward)
+    public void AddItem(string id, string name, string iconName, string info, string count, bool isEventReward)
     {
         if (isEventReward)
         {
             var currReward = Instantiate(item, eventRewardTr);
-            currReward.SetData(id, "", count);
+            currReward.SetData(id, name, iconName, info, count);
             currRewards.Add(currReward);
         }
 
         for (int i = 0; i < rewards.Count; i++)
         {
-            if (rewards[i].Id.CompareTo(id) == 0)
+            if (rewards[i].data.id.CompareTo(id) == 0)
             {
                 rewards[i].AddCount(count);
                 return;
@@ -63,7 +67,7 @@ public class StageReward : MonoBehaviour
         }
 
         var newItem = Instantiate(item, rewardTr);
-        newItem.SetData(id, "", count);
+        newItem.SetData(id, name,iconName, info, count);
 
         rewards.Add(newItem);
     }
@@ -72,7 +76,7 @@ public class StageReward : MonoBehaviour
     {
         for (int i = 0; i < rewards.Count; i++)
         {
-            if (item.Id.CompareTo(rewards[i].Id) < 0)
+            if (item.data.id.CompareTo(rewards[i].data.id) < 0)
             {
                 item.transform.SetSiblingIndex(i);
                 return;
@@ -86,7 +90,7 @@ public class StageReward : MonoBehaviour
         {
             for (int j = i + 1; j < rewards.Count; j++)
             {
-                if (rewards[i].Id.CompareTo(rewards[j].Id) < 0)
+                if (rewards[i].data.id.CompareTo(rewards[j].data.id) < 0)
                 {
                     var temp = rewards[i];
                     rewards[i] = rewards[j];
