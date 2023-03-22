@@ -80,19 +80,19 @@ public class BattleMapInfo : MonoBehaviour
     {
         return battleMapType;
     }
-    //protected void ResetAllTriggerEnemys()
-    //{
-    //    for (int i = 0; i < triggers.Count; i++)
-    //    {
-    //        triggers[i].ResetEnemys();
-    //        triggers[i].ResetEnemyPositions();
-    //    }
-    //}
+
     protected void AllTriggerEnterReset()
     {
         for (int i = 0; i < triggers.Count; i++)
         {
             triggers[i].isTriggerEnter = false;
+        }
+    }
+    protected void AllEnemyActive(bool set)
+    {
+        for (int i = 0; i < triggers.Count; i++)
+        {
+            triggers[i].SetEnemysActive(true);
         }
     }
 }

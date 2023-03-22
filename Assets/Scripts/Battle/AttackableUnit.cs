@@ -204,12 +204,12 @@ public abstract class AttackableUnit : MonoBehaviour
         data.exp = newExp;
     }
 
-    public void LevelupStats()
+    public void LevelupStats(int level = 1)
     {
         LiveData data = GetUnitData().data;
-        data.baseDamage += characterData.originData.damageLevelCoefficient;
-        data.baseDefense += characterData.originData.defenseLevelCoefficient;
-        data.healthPoint += characterData.originData.healthPointLevelCoefficient;
+        data.baseDamage += characterData.originData.damageLevelCoefficient * level;
+        data.baseDefense += characterData.originData.defenseLevelCoefficient * level;
+        data.healthPoint += characterData.originData.healthPointLevelCoefficient * level;
         data.currentHp = data.healthPoint;
     }
 

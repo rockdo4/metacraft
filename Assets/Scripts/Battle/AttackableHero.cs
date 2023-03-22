@@ -42,6 +42,12 @@ public class AttackableHero : AttackableUnit
                     nowUpdate = null;
                     break;
                 case UnitState.Idle:
+                    //if (lateReturn)
+                    //{
+                    //    UnitState = UnitState.ReturnPosition;
+                    //    return;
+                    //}
+                    Logger.Debug("this fcking");
                     pathFind.isStopped = true;
 
                     animator.SetFloat("Speed", 0);
@@ -402,46 +408,28 @@ public class AttackableHero : AttackableUnit
 
     protected override void ReturnPosUpdate()
     {
-        switch (isRotate)
+        if (pathFind.isStopped)
+            pathFind.isStopped = false;
+        animator.SetFloat("Speed", pathFind.velocity.magnitude / characterData.data.moveSpeed);
+        if (Vector3.Distance(returnPos.position, transform.position) <= 0.5f)
         {
-            case true:
-                //transform.rotation = Quaternion.Lerp(transform.rotation, returnPos.rotation, Time.deltaTime * 5);
-                //float angle = Quaternion.Angle(transform.rotation, returnPos.rotation);
+            pathFind.isStopped = true;
+            transform.position = returnPos.position;
 
-                //var nowSpeed = animator.GetFloat("Speed");
-                //var downSpeed = Mathf.Lerp(0, 1, Time.deltaTime * 10f);
-                //animator.SetFloat("Speed", nowSpeed - downSpeed);
-
-                //if (angle <= 0)
+            transform.rotation = returnPos.rotation;
+            if (battleManager.tree.CurNode.type == TreeNodeTypes.Threat)
+            {
+                if (!battleManager.isMiddleBossAlive)
                 {
-                    transform.rotation = returnPos.rotation;
-                    isRotate = false;
-                    UnitState = UnitState.Idle;
-
-                    if (battleManager.tree.CurNode.type == TreeNodeTypes.Threat)
-                    {
-                        if (!battleManager.isMiddleBossAlive)
-                        {
-                            battleManager.OnReady();
-                        }
-                    }
-                    else
-                    {
-                        battleManager.OnReady();
-                    }
+                    battleManager.OnReady();
+                    Logger.Debug("wtf ready");
                 }
-                break;
-            case false:
-                if (pathFind.isStopped)
-                    pathFind.isStopped = false;
-                animator.SetFloat("Speed", pathFind.velocity.magnitude / characterData.data.moveSpeed);
-                if (Vector3.Distance(returnPos.position, transform.position) <= 0.5f)
-                {
-                    isRotate = true;
-                    pathFind.isStopped = true;
-                    transform.position = returnPos.position;
-                }
-                break;
+            }
+            else
+            {
+                battleManager.OnReady();
+                Logger.Debug("wtf ready");
+            }
         }
     }
 
