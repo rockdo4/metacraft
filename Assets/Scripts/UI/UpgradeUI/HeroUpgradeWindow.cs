@@ -78,4 +78,34 @@ public class HeroUpgradeWindow : View
             heroInfos[index].gameObject.SetActive(false);
         }
     }
+
+    // Mission Hero Info Button 에서 호출
+    public void OnClickHeroSelect(CharacterDataBundle bundle)
+    {
+        //int index = gm.GetHeroIndex(bundle.gameObject);
+        //var selectIndexGroup = gm.battleGroups;
+
+        //int? duplication = null;
+        //for (int i = 0; i < 3; i++)
+        //{
+        //    if (selectIndexGroup[i] == index)
+        //    {
+        //        duplication = i;
+        //        break;
+        //    }
+        //}
+
+        //LiveData liveData = bundle.data;
+        //heroSlots[heroSlotsIndex].GetComponent<Image>().sprite = gm.GetSpriteByAddress($"Icon_{liveData.name}");
+        //selectIndexGroup[heroSlotsIndex] = index;
+
+        //if (duplication != null)
+        //{
+        //    heroSlots[(int)duplication].GetComponent<Image>().sprite = null;
+        //    selectIndexGroup[(int)duplication] = null;
+        //}
+
+        //PropertyMatchingCheck();
+        ////TotalPowerCheck(); 삭제 예정
+    }
 }
