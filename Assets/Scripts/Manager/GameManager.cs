@@ -366,6 +366,8 @@ public class GameManager : Singleton<GameManager>
 
     public void LoadScene(int sceneIdx)
     {
+        AudioManager.Instance.StopAllBGM();
+
         SceneManager.LoadScene(sceneIdx);
         currentScene = (SceneIndex)sceneIdx;
     }

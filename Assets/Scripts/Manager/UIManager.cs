@@ -13,13 +13,18 @@ public class UIManager : MonoBehaviour
     public Color interactablePanelColor;
     public Color noneInteractablePanelColor;
 
-    public AudioSource viewSound;
-    public AudioSource popupSound;
+    public AudioClip viewAudio;
+    public AudioClip popupAudio;
+    public AudioClip clearAudio;
+
+    private AudioSource audioSource;
+    private bool hasAudioSource;
 
     private void Awake()
     {
         Instance = this;
         viewManager = gameObject.AddComponent<ViewManager>();
+        hasAudioSource = TryGetComponent(out audioSource);
         SetPopupManager();
         SetPopUpHolders();
         SetViewManager();
@@ -50,15 +55,15 @@ public class UIManager : MonoBehaviour
         viewManager.Show(index);
         popUpManager.CurrentViewIndex = index;
 
-        if(viewSound != null)
-            viewSound.Play();
+        if (hasAudioSource)
+            audioSource.PlayOneShot(viewAudio);       
     }
     public void ShowPopup(int index)
     {
         popUpManager.ShowPopupInHierarchy(index);
 
-        if(popupSound != null)
-            popupSound.Play();
+        if (hasAudioSource)
+            audioSource.PlayOneShot(popupAudio);
     }
     public void ShowPanelInteractable(bool interactable)
     {
@@ -67,5 +72,8 @@ public class UIManager : MonoBehaviour
     public void ClearPopups()
     {
         popUpManager.ClearPopups();
+
+        if (hasAudioSource)
+            audioSource.PlayOneShot(clearAudio);
     }
 }
