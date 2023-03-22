@@ -86,6 +86,7 @@ public class GameManager : Singleton<GameManager>
     {
         Dictionary<string, AsyncOperationHandle> releasehandles = new();
         List<AsyncOperationHandle> unreleasehandles = new();
+        int total = 0;
 
         // Load TextAssets
         TextAsset ta = Resources.Load<TextAsset>("TextAssetList");
@@ -96,8 +97,18 @@ public class GameManager : Singleton<GameManager>
         int count = tableNames.Length;
         for (int i = 0; i < count; i++)
         {
-            if (tableNames[i].Length != 0)
-                releasehandles.Add(tableNames[i], Addressables.LoadAssetAsync<TextAsset>(tableNames[i]));
+            string key = tableNames[i];
+            if (key.Length != 0)
+            {
+                AsyncOperationHandle<TextAsset> tas = Addressables.LoadAssetAsync<TextAsset>(key);
+                releasehandles.Add(key, tas);
+                tas.Completed +=
+                    (AsyncOperationHandle<TextAsset> obj) =>
+                {
+                    Logger.Debug($"{key} load success");
+                };
+                total++;
+            }
         }
 
         // Load Sprites
@@ -124,6 +135,7 @@ public class GameManager : Singleton<GameManager>
                     illustrationSprites.Add(IllurAddress, sprite);
                 };
             unreleasehandles.Add(illuHandle);
+            total += 2;
         }
 
         count = 28; //임시. 나중에 버프 테이블 불러오게 수정할 예정
@@ -138,6 +150,7 @@ public class GameManager : Singleton<GameManager>
                     stateIconSprites.Add(address, sprite);
                 };
             unreleasehandles.Add(stateIconHandle);
+            total++;
         }
 
         int itemCount = itemNames.Length;
@@ -153,6 +166,7 @@ public class GameManager : Singleton<GameManager>
                     itemSprites.Add(address, sprite);
                 };
             unreleasehandles.Add(itemIconHandle);
+            total++;
         }
 
         // 스프라이트 리소스 로드 대기
@@ -166,9 +180,15 @@ public class GameManager : Singleton<GameManager>
                 if (!handle.Value.IsDone)
                 {
                     loadAll = false;
+                    Logger.Debug($"{handle.Key} waiting load");
                     break;
                 }
                 count++;
+            }
+            if (!loadAll)
+            {
+                Logger.Debug($"progress {count}/{total}");
+                yield return null;
             }
 
             foreach (var handle in unreleasehandles)
@@ -180,7 +200,7 @@ public class GameManager : Singleton<GameManager>
                 }
                 count++;
             }
-
+            Logger.Debug($"progress {count}/{total}");
             yield return null;
         }
         dispatchInfoList = CSVReader.SplitTextAsset(releasehandles["DispatchInfoTable"].Result as TextAsset);

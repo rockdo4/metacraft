@@ -28,6 +28,8 @@ public class HeroInfoDetailScript : View
     private void SetHeroStatInfoText()
     {
         GameManager gm = GameManager.Instance;
+        if (gm.currentSelectObject == null)
+            return;
         LiveData data = gm.currentSelectObject.GetComponent<AttackableUnit>().GetUnitData().data;
         portrait.sprite = gm.GetSpriteByAddress($"Illu_{data.name}");
 
