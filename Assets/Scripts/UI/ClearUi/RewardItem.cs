@@ -10,6 +10,7 @@ public struct Item
     public string name;
     public int count;
     public string info;
+    public string iconName;
 }
 
 public class RewardItem : MonoBehaviour
@@ -18,12 +19,15 @@ public class RewardItem : MonoBehaviour
     public TextMeshProUGUI itemNameText;
     public TextMeshProUGUI itemCountText;
     public Image itemImage;
+    public string iconName;
 
-    public void SetData(string id, string itemName, string itemCount = null, string info = null)
+    public void SetData(string id, string itemName, string iconName, string info, string itemCount = null)
     {
         data.id = id;
         data.name = itemName;
         data.count =  itemCount == null ? 0 :int.Parse(itemCount);
+        data.iconName = iconName;
+        data.info = info;
         itemNameText.text = itemName;
         if (itemCountText != null)
             itemCountText.text = itemCount;
