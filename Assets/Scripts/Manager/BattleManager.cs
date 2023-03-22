@@ -496,7 +496,20 @@ public class BattleManager : MonoBehaviour
             lights.Add(battleMapLigth);
         }
 
-        DisabledAllMap();
+        DisabledAllMap(); 
+
+        var fitPropertyFlags = gm.fitPropertyFlags;
+        for (int i = 0; i < 3; i++)
+        {
+            if (fitPropertyFlags[i])
+            {
+                var buff = FindBuff((int)(currentSelectMissionTable[$"BonusID{i + 1}"]));
+                foreach (var hero in useHeroes)
+                {
+                    hero.AddValueBuff(buff);
+                }
+            }
+        }
     }
 
     private IEnumerator CoFadeIn()

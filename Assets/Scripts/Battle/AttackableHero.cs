@@ -447,10 +447,14 @@ public class AttackableHero : AttackableUnit
 
     public override void ChangeUnitState(UnitState state)
     {
-        if (BattleState == UnitBattleState.ActiveSkill || BattleState == UnitBattleState.NormalAttack || BattleState == UnitBattleState.Stun)
+        Logger.Debug(state);
+        if (state == UnitState.ReturnPosition)
         {
-            lateReturn = true;
-            return;
+            if (BattleState == UnitBattleState.ActiveSkill || BattleState == UnitBattleState.NormalAttack || BattleState == UnitBattleState.Stun)
+            {
+                lateReturn = true;
+                return;
+            }
         }
         UnitState = state;
     }
