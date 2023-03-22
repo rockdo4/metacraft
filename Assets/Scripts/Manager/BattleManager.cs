@@ -1024,9 +1024,9 @@ public class BattleManager : MonoBehaviour
             var item = gm.itemInfoList.Find(t => t["ID"].Equals(rewardData[$"{keyItem}{i}"]));
             stageReward.AddItem(rewardData[$"{keyItem}{i}"].ToString(),
                 item["Item_Name"].ToString(),
-                rewardData[$"{keyValue}{i}"].ToString(),
-                item["Info"].ToString(),
                 item["Icon_Name"].ToString(),
+                item["Info"].ToString(),
+                rewardData[$"{keyValue}{i}"].ToString(),
                 false);
         }
         var gold = gm.itemInfoList.Find(t => t["ID"].Equals(keyItem));

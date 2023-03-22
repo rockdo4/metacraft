@@ -19,7 +19,6 @@ public class RewardItem : MonoBehaviour
     public TextMeshProUGUI itemNameText;
     public TextMeshProUGUI itemCountText;
     public Image itemImage;
-    public string iconName;
 
     public void SetData(string id, string itemName, string iconName, string info, string itemCount = null)
     {
@@ -31,6 +30,7 @@ public class RewardItem : MonoBehaviour
         itemNameText.text = itemName;
         if (itemCountText != null)
             itemCountText.text = itemCount;
+        itemImage.sprite = GameManager.Instance.GetSpriteByAddress(data.iconName);
     }
     public void AddCount(string count)
     {

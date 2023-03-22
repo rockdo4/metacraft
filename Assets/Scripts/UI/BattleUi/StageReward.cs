@@ -46,9 +46,9 @@ public class StageReward : MonoBehaviour
         string name = gold["Item_Name"].ToString();
         string info = gold["Info"].ToString();
         string iconName = gold["Icon_Name"].ToString();
-        AddItem(goldId, name,count, info, iconName, false);
+        AddItem(goldId, name, iconName, info, count, false);
     }
-    public void AddItem(string id, string name, string count,string info,string iconName, bool isEventReward)
+    public void AddItem(string id, string name, string iconName, string info, string count, bool isEventReward)
     {
         if (isEventReward)
         {
@@ -68,7 +68,6 @@ public class StageReward : MonoBehaviour
 
         var newItem = Instantiate(item, rewardTr);
         newItem.SetData(id, name,iconName, info, count);
-        newItem.itemImage.sprite = GameManager.Instance.GetSpriteByAddress(newItem.data.iconName);
 
         rewards.Add(newItem);
     }
