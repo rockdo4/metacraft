@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class RecruitmentWindow : MonoBehaviour
 {
@@ -64,11 +63,17 @@ public class RecruitmentWindow : MonoBehaviour
     public void OneTimeGacha()
     {
         ClearResult();
+        GameObject hero = heroDatabase[Gacha(probs)];
+        GachaProcess(hero, 0);
+    }
 
+    private void GachaProcess(GameObject hero, int i)
+    {
         bool isDuplicate = false;
-        var hero = heroDatabase[Gacha(probs)];
         string heroName = hero.GetComponent<CharacterDataBundle>().originData.name;
         var myHeroes = GameManager.Instance.myHeroes;
+
+        // 중복 검사
         foreach (var myhero in myHeroes)
         {
             if (heroName.Equals(myhero.Value.GetComponent<CharacterDataBundle>().originData.name))
@@ -78,23 +83,27 @@ public class RecruitmentWindow : MonoBehaviour
             }
         }
 
+        // 가챠 정보창 생성
         GameObject obj = Instantiate(gachaPrefeb, showGacha);
         RecruitmentInfo info = obj.GetComponent<RecruitmentInfo>();
+
+        // 중복 여부에 따른 분기
         if (!isDuplicate)
         {
-            GameManager.Instance.CreateNewHero(heroName);
-            getGacha.Add(hero);
+            // 새 Hero 생성
+            GameObject newHero = GameManager.Instance.CreateNewHero(heroName);
+            getGacha.Add(newHero);
 
-            info.SetData(getGacha[0].GetComponent<CharacterDataBundle>());
-            resultRecruitmentList.Add(info);
+            info.SetData(getGacha[i].GetComponent<CharacterDataBundle>());
         }
-        else
-        {
+        //else
+        //{
+        //    // 중복시. 미구현
+        //}
 
-            resultRecruitmentList.Add(info);
-        }
-
+        resultRecruitmentList.Add(info);
     }
+
     public void TenTimesGacha()
     {
         ClearResult();
@@ -104,10 +113,7 @@ public class RecruitmentWindow : MonoBehaviour
         }
         for (int i = 0; i < 10; i++)
         {
-            GameObject obj = Instantiate(gachaPrefeb, showGacha);
-            RecruitmentInfo info = obj.GetComponent<RecruitmentInfo>();
-            info.SetData(getGacha[i].GetComponent<CharacterDataBundle>());
-            resultRecruitmentList.Add(info);
+            GachaProcess(getGacha[i], i);
         }
     }
 
@@ -144,11 +150,6 @@ public class RecruitmentWindow : MonoBehaviour
             Destroy(result.gameObject);
         }
         resultRecruitmentList.Clear();
-    }
-
-    private void DuplicateInspection()
-    {
-
     }
 
     private void OnRateInfo()

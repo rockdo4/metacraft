@@ -20,13 +20,13 @@ public class MapEventTrigger : MonoBehaviour
     public bool isLastTrigger = false;
     public bool isTriggerEnter = false;
 
-    public List<CapsuleCollider> enemyColls = new();
+    // 적이 포함된 트리거
+    public bool isEnemyTrigger;
 
     public void OnDead(AttackableEnemy enemy)
     {
-        //enemys.Add(enemy);
         useEnemys.Remove(enemy);
-        //Destroy(enemy.gameObject);
+        enemys.Remove(enemy);
     }
 
     public void InfinityRespawnEnemy()
@@ -45,44 +45,6 @@ public class MapEventTrigger : MonoBehaviour
     {
         useEnemys.Remove(enemy);
     }
-    public void SpawnAllEnemy()
-    {
-        //for (int i = 0; i < enemySettingPositions.Count; i++)
-        //{
-        //    enemySettingPositions[i].SpawnAllEnemy(ref enemys);
-        //}
-
-        for (int i = 0; i < enemys.Count; i++)
-        {
-            enemys[i].gameObject.SetActive(false);
-        }
-
-        AddEnemysCollider();
-    }
-
-    public void AddEnemysCollider()
-    {
-        for (int i = 0; i < enemys.Count; i++)
-        {
-            AddEnemyColliders(enemys[i].GetComponent<CapsuleCollider>());
-        }
-    }
-
-    //public void ResetEnemys()
-    //{
-    //    for (int i = 0; i < enemys.Count; i++)
-    //    {
-    //        enemys[i].ResetData();
-    //        enemys[i].RemoveAllBuff();
-    //        enemys[i].gameObject.SetActive(true);
-
-    //        if (enemyColls.Count > 0)
-    //            enemyColls[i].enabled = true;
-
-    //        enemys[i].SetEnabledPathFind(false);
-    //        //enemys[i].gameObject.transform.position = enemySettingPositions[i].GetRespawnPos();
-    //    }
-    //}
 
     public void SetEnemysActive(bool set) // 임시
     {
@@ -92,16 +54,11 @@ public class MapEventTrigger : MonoBehaviour
         }
     }
 
-    //public void ResetEnemyPositions()
-    //{
-    //    for (int i = 0; i < enemys.Count; i++)
-    //    {
-    //        enemys[i].gameObject.transform.position = enemySettingPositions[i].GetRespawnPos();
-    //    }
-    //}
-
-    public void AddEnemyColliders(CapsuleCollider coll)
+    public void ResetSpawnCount()
     {
-        enemyColls.Add(coll);
+        for (int i = 0; i < enemySettingPositions.Count; i++)
+        {
+            enemySettingPositions[i].firstSpawnCount = 0;
+        }
     }
 }

@@ -31,8 +31,12 @@ public class HeroInfoDetailScript : View
     private void SetHeroStatInfoText()
     {
         GameManager gm = GameManager.Instance;
+
+        if (gm.currentSelectObject == null)
+            return;
         CharacterDataBundle cdb = gm.currentSelectObject.GetComponent<AttackableUnit>().GetUnitData();
         LiveData data = cdb.data;
+
         portrait.sprite = gm.GetSpriteByAddress($"Illu_{data.name}");
 
         gradeInfoInLeftPanel.text = $"{(CharacterGrade)data.grade}";

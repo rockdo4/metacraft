@@ -1,8 +1,10 @@
+using UnityEngine;
 using System.Collections.Generic;
+
 
 public class DefenseMapInfo : BattleMapInfo
 {
-    private int enemyTriggetIndex;
+    private int enemyTriggerIndex;
 
     public override void GameStart()
     {
@@ -19,31 +21,37 @@ public class DefenseMapInfo : BattleMapInfo
             }
         }
 
-        enemyTriggetIndex = index;
-        SettingMap(enemyTriggetIndex);
-        battleMgr.SetEnemyTriggerIndex(enemyTriggetIndex);
+        enemyTriggerIndex = index;
+        SettingMap(enemyTriggerIndex);
+        battleMgr.SetEnemyTriggerIndex(enemyTriggerIndex);
         int count = GetAllEnemyCount();
         battleMgr.SetEnemyCountTxt(count);
     }
 
     private void SettingMap(int index)
     {
-        if (!init)
-        {
-            triggers[index].SpawnAllEnemy();
-            init = true;
-        }
-        else
-        {
-            //triggers[index].ResetEnemys();
-            triggers[index].SetEnemysActive(false);
-        }
-
+        triggers[index].isEnemyTrigger = true;
         triggers[index].InfinityRespawnEnemy();
+
+        // 임시 강적 소환
+        AttackableEnemy enemy = new();
+        enemy = Instantiate(battleMgr.villain);
+        enemy.SetEnabledPathFind(false);
+
+        int posCount = triggers[enemyTriggerIndex].enemySettingPositions.Count - 1;
+        int randomIndex = Random.Range(0, posCount);
+        triggers[enemyTriggerIndex].
+            enemySettingPositions[randomIndex].
+            SpawnAllEnemy(ref triggers[enemyTriggerIndex].enemys, enemy);
+
+        enemy.SetEnabledPathFind(true);
+        enemy.ChangeUnitState(UnitState.Battle);
+        triggers[enemyTriggerIndex].enemySettingPositions[randomIndex].isMiddleBoss = true;
+        triggers[enemyTriggerIndex].enemySettingPositions[randomIndex].middleBoss = enemy;
     }
 
     public override void GetEnemyList(ref List<AttackableUnit> enemyList)
     {
-        enemyList = triggers[enemyTriggetIndex].useEnemys;
+        enemyList = triggers[enemyTriggerIndex].useEnemys;
     }
 }
