@@ -664,6 +664,16 @@ public class BattleManager : MonoBehaviour
             yield return null;
         }
 
+        //while (viewPoint.transform.position.z <= nextMaxZPos)
+        //{
+        //    viewPoint.transform.Translate(platformMoveSpeed * Time.deltaTime * platform.transform.forward);
+
+        //    if (btMapTriggers[currTriggerIndex].isTriggerEnter)
+        //        break;
+
+        //    yield return null;
+        //}
+
         if (!btMapTriggers[currTriggerIndex].isMissionEnd)
         {
             if (btMapTriggers[currTriggerIndex].isLastTrigger)
@@ -679,6 +689,13 @@ public class BattleManager : MonoBehaviour
                 btMapTriggers[currTriggerIndex].useEnemys.Count == 0)
             {
                 SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
+            }
+            else if (!btMapTriggers[currTriggerIndex].isLastTrigger)
+            {
+                for (int i = 0; i < useHeroes.Count; i++)
+                {
+                    useHeroes[i].ChangeUnitState(UnitState.Battle);
+                }
             }
         }
         else
