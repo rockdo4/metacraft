@@ -181,14 +181,12 @@ public class GameManager : Singleton<GameManager>
                 if (!handle.Value.IsDone)
                 {
                     loadAll = false;
-                    Logger.Debug($"{handle.Key} waiting load");
                     break;
                 }
                 count++;
             }
             if (!loadAll)
             {
-                Logger.Debug($"progress {count}/{total}");
                 progress.SetProgress(count, total);
                 yield return null;
             }
@@ -202,7 +200,6 @@ public class GameManager : Singleton<GameManager>
                 }
                 count++;
             }
-            Logger.Debug($"progress {count}/{total}");
             progress.SetProgress(count, total);
             yield return null;
         }

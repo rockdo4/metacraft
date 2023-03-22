@@ -9,11 +9,6 @@ public class AssetLoadProgress : MonoBehaviour
     public TextMeshProUGUI text;
     public GameObject loadSceneButton;
 
-    private void Awake()
-    {
-        fill.fillAmount = 0;
-    }
-
     public void SetProgress(int count, int total)
     {
         text.text = $"{count} / {total}";
