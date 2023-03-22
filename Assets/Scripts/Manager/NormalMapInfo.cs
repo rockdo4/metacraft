@@ -20,19 +20,17 @@ public class NormalMapInfo : BattleMapInfo
             {
                 for (int j = 0; j < triggers[i].enemySettingPositions.Count; j++)
                 {
-                    // 각 위치마다 데이터 설정 (적 프리펩, 데이터들)
+                    //var enemy = triggers[i].enemySettingPositions[j]?.SpawnEnemy();
+                    //if (enemy == null)
+                    //    break;
 
-                    var enemy = triggers[i].enemySettingPositions[j]?.SpawnEnemy();
-                    if (enemy == null)
-                        break;
-
-                    for (int k = 0; k < enemy.Count; k++)
-                    {
-                        triggers[i].enemys.Add(enemy[k]);
-                        triggers[i].enemys[j].SetPathFind();
-                        triggers[i].AddEnemyColliders(enemy[k].GetComponent<CapsuleCollider>());
-                        triggers[i].enemys[j].SetEnabledPathFind(false);
-                    }
+                    //for (int k = 0; k < enemy.Count; k++)
+                    //{
+                    //    triggers[i].enemys.Add(enemy[k]);
+                    //    triggers[i].enemys[j].SetPathFind();
+                    //    triggers[i].AddEnemyColliders(enemy[k].GetComponent<CapsuleCollider>());
+                    //    triggers[i].enemys[j].SetEnabledPathFind(false);
+                    //}
                 }
             }
 

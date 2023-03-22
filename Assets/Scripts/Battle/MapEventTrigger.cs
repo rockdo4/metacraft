@@ -48,7 +48,7 @@ public class MapEventTrigger : MonoBehaviour
     {
         for (int i = 0; i < enemySettingPositions.Count; i++)
         {
-            enemySettingPositions[i].SpawnAllEnemy(ref enemys);
+            //enemySettingPositions[i].SpawnAllEnemy(ref enemys);
         }
 
         for (int i = 0; i < enemys.Count; i++)
