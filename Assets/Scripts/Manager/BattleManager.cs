@@ -512,6 +512,19 @@ public class BattleManager : MonoBehaviour
                 break;
             }
         }
+
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (gm.fitPropertyFlags[i])
+            {
+                var buff = FindBuff((int)(currentSelectMissionTable[$"BonusID{i + 1}"]));
+                foreach (var hero in useHeroes)
+                {
+                    hero.AddValueBuff(buff);
+                }
+            }
+        }
     }
 
     private IEnumerator CoFadeIn()
@@ -544,6 +557,7 @@ public class BattleManager : MonoBehaviour
     public void OnReady()
     {
         readyCount--;
+        Logger.Debug("wtf ready");
 
         if (readyCount == 0)
         {
@@ -668,6 +682,16 @@ public class BattleManager : MonoBehaviour
             yield return null;
         }
 
+        //while (viewPoint.transform.position.z <= nextMaxZPos)
+        //{
+        //    viewPoint.transform.Translate(platformMoveSpeed * Time.deltaTime * platform.transform.forward);
+
+        //    if (btMapTriggers[currTriggerIndex].isTriggerEnter)
+        //        break;
+
+        //    yield return null;
+        //}
+
         if (!btMapTriggers[currTriggerIndex].isMissionEnd)
         {
             if (btMapTriggers[currTriggerIndex].isLastTrigger)
@@ -683,6 +707,13 @@ public class BattleManager : MonoBehaviour
                 btMapTriggers[currTriggerIndex].useEnemys.Count == 0)
             {
                 SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
+            }
+            else if (!btMapTriggers[currTriggerIndex].isLastTrigger)
+            {
+                for (int i = 0; i < useHeroes.Count; i++)
+                {
+                    useHeroes[i].ChangeUnitState(UnitState.Battle);
+                }
             }
         }
         else
@@ -1166,7 +1197,6 @@ public class BattleManager : MonoBehaviour
 
                 for (int l = 0; l < currPosEnemyCount; l++)
                 {
-                    AttackableEnemy enemy = new();
                     int enemyPrefabIndex = 0;
                     for (int k = 0; k < enemyPrefabs.Count; k++)
                     {
@@ -1177,8 +1207,7 @@ public class BattleManager : MonoBehaviour
                         }
                     }
 
-                    enemy = Instantiate(enemyPrefabs[enemyPrefabIndex]);
-                    //enemy.SetUnitOriginData(data);
+                    var enemy = Instantiate(enemyPrefabs[enemyPrefabIndex]);
                     enemy.gameObject.SetActive(false);
                     btMapTriggers[i].enemySettingPositions[j].SpawnAllEnemy(ref btMapTriggers[i].enemys, enemy);
                 }
@@ -1187,8 +1216,7 @@ public class BattleManager : MonoBehaviour
 
         if (tree.CurNode.type == TreeNodeTypes.Villain)
         {
-            AttackableEnemy enemy = new();
-            enemy = Instantiate(villain);
+            var enemy = Instantiate(villain);
 
             for (int i = btMapTriggers.Count - 1; i >= 0; i--)
             {
