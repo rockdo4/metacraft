@@ -34,5 +34,11 @@ public class ClearUiController : View
         }
 
         rewards.SetReward();
+        var newItems =  rewards.stageReward.itemInfoList;
+
+        foreach (var item in newItems)
+        {
+
+        }
     }
 }

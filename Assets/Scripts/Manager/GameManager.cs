@@ -15,11 +15,13 @@ public class GameManager : Singleton<GameManager>
     // MyData - Craft, Load & Save to this data
     public Dictionary<string, GameObject> myHeroes = new();
     public Transform heroSpawnTransform;
+    public Dictionary<int, Item> inventoryData = new();
 
     // Resources - Sprites, TextAsset + (Scriptable Objects, Sound etc)
     private Dictionary<string, Sprite> iconSprites = new();
     private Dictionary<string, Sprite> illustrationSprites = new();
     private Dictionary<string, Sprite> stateIconSprites = new();
+    private Dictionary<string, Sprite> itemSprites = new();
     public Dictionary<int, List<Dictionary<string, object>>> missionInfoDifficulty; // 작전 정보 난이도 키 추가
     public List<Dictionary<string, object>> dispatchInfoList; // 파견 정보
     public List<Dictionary<string, object>> officeInfoList;  // 사무소 레벨별 정보
@@ -85,7 +87,9 @@ public class GameManager : Singleton<GameManager>
 
         // Load TextAssets
         TextAsset ta = Resources.Load<TextAsset>("TextAssetList");
+        TextAsset ia = Resources.Load<TextAsset>("ItemAssetList");
         var tableNames = ta.text.Split("\r\n");
+        var itemNames = ia.text.Split("\r\n");
 
         int count = tableNames.Length;
         for (int i = 0; i < count; i++)
@@ -120,7 +124,7 @@ public class GameManager : Singleton<GameManager>
             unreleasehandles.Add(illuHandle);
         }
 
-        count = 28;
+        count = 28; //임시. 나중에 버프 테이블 불러오게 수정할 예정
         for (int i = 1; i <= count; i++)
         {
             string address = string.Format("state{0}",i);
@@ -132,6 +136,21 @@ public class GameManager : Singleton<GameManager>
                     stateIconSprites.Add(address, sprite);
                 };
             unreleasehandles.Add(stateIconHandle);
+        }
+
+        int itemCount = itemNames.Length;
+        for (int i = 0; i < itemCount; i++)
+        {
+            string address = $"{itemNames[i]}";
+            AsyncOperationHandle<Sprite> itemIconHandle = Addressables.LoadAssetAsync<Sprite>(address);
+
+            itemIconHandle.Completed +=
+                (AsyncOperationHandle<Sprite> obj) =>
+                {
+                    Sprite sprite = obj.Result;
+                    itemSprites.Add(address, sprite);
+                };
+            unreleasehandles.Add(itemIconHandle);
         }
 
         // 스프라이트 리소스 로드 대기
@@ -244,6 +263,7 @@ public class GameManager : Singleton<GameManager>
         StringBuilder sb = new();
         sb.AppendLine("ID;Contents");
         sb.AppendLine($"PlayerData;{JsonUtility.ToJson(playerData)}");
+        sb.AppendLine($"Inventory;{JsonUtility.ToJson(inventoryData)}");
 
         foreach (var hero in myHeroes)
         {
@@ -280,6 +300,10 @@ public class GameManager : Singleton<GameManager>
                 {
                     Logger.Debug($"Load failed {heroName}");
                 }
+            }
+            else if(id.Contains("Inventory"))
+            {
+                //여기다가 불러오는거
             }
         }
         SetHeroesActive(false);
@@ -365,6 +389,11 @@ public class GameManager : Singleton<GameManager>
         if (stateIconSprites.ContainsKey(address))
         {
             return stateIconSprites[address];
+        }
+
+        if (itemSprites.ContainsKey(address))
+        {
+            return itemSprites[address];
         }
 
         Logger.Debug($"Load sprite fail. address: {address}");
