@@ -88,6 +88,9 @@ public class BattleManager : MonoBehaviour
     //이벤트, 보급 등에서 사용하는 버프리스트
     public List<BuffInfo> buffList;
 
+    [Header("생성할 적 프리펩들을 넣어주세요")]
+    public List<AttackableEnemy> enemyPrefabs = new();
+
     private void Start()
     {
         Init();
@@ -754,6 +757,8 @@ public class BattleManager : MonoBehaviour
         viewPointInitPos = viewPoint.transform.position;
         cinemachine.Follow = viewPoint.transform;
 
+        SpawnCurrMapAllEnemys();
+
         if (tree.CurNode.type == TreeNodeTypes.Threat)
         {
             enemyCountTxt.StartTimer();
@@ -770,29 +775,29 @@ public class BattleManager : MonoBehaviour
         }
 
         // 임시 빌드용 코드
-        if (tree.CurNode.type == TreeNodeTypes.Villain)
-        {
-            currBtMgr.battleMapType = BattleMapEnum.Normal;
+        //if (tree.CurNode.type == TreeNodeTypes.Villain)
+        //{
+        //    currBtMgr.battleMapType = BattleMapEnum.Normal;
 
-            btMapTriggers[^2].enemys.Clear();
-            btMapTriggers[^2].enemyColls.Clear();
-            btMapTriggers[^2].enemySettingPositions[1].enemyPrefabs[0] = bossPrefab;
-            for (int i = 0; i < btMapTriggers[^2].enemySettingPositions.Count; i++)
-            {
-                var enemy = btMapTriggers[^2].enemySettingPositions[i].SpawnEnemy();
+        //    btMapTriggers[^2].enemys.Clear();
+        //    btMapTriggers[^2].enemyColls.Clear();
+        //    btMapTriggers[^2].enemySettingPositions[1].enemyPrefabs[0] = bossPrefab;
+        //    for (int i = 0; i < btMapTriggers[^2].enemySettingPositions.Count; i++)
+        //    {
+        //        var enemy = btMapTriggers[^2].enemySettingPositions[i].SpawnEnemy();
 
-                for (int j = 0; j < enemy.Count; j++)
-                {
-                    btMapTriggers[^2].enemys.Add(enemy[j]);
-                    btMapTriggers[^2].enemys[j].SetPathFind();
-                    btMapTriggers[^2].AddEnemyColliders(enemy[j].GetComponent<CapsuleCollider>());
-                    btMapTriggers[^2].enemys[j].SetEnabledPathFind(false);
-                }
-            }
+        //        for (int j = 0; j < enemy.Count; j++)
+        //        {
+        //            btMapTriggers[^2].enemys.Add(enemy[j]);
+        //            btMapTriggers[^2].enemys[j].SetPathFind();
+        //            btMapTriggers[^2].AddEnemyColliders(enemy[j].GetComponent<CapsuleCollider>());
+        //            btMapTriggers[^2].enemys[j].SetEnabledPathFind(false);
+        //        }
+        //    }
 
-            btMapTriggers[^2].ResetEnemys();
-            btMapTriggers[^2].ResetEnemyPositions();
-        }
+        //    btMapTriggers[^2].ResetEnemys();
+        //    btMapTriggers[^2].ResetEnemyPositions();
+        //}
 
         CreateRoad();
         AddRoadTrigger();
@@ -1046,14 +1051,6 @@ public class BattleManager : MonoBehaviour
 
         for (int i = useCount - 1; i >= 0; i--)
         {
-            try
-            {
-                btMapTriggers[index].useEnemys[i].ChangeUnitState(UnitState.Die);
-            }
-            catch (System.Exception)
-            {
-                throw;
-            }
             btMapTriggers[index].useEnemys[i].ChangeUnitState(UnitState.Die);
         }
 
@@ -1067,13 +1064,99 @@ public class BattleManager : MonoBehaviour
         }
     }
 
-    public void InitEnemySetting()
+    public void SpawnCurrMapAllEnemys()
     {
+        // 보스 ID 찾기
+        string bossID = $"{currentSelectMissionTable["BossID"]}";
+
+        // 미션 테이블에서 노멀 몬스터들 담겨있는 키 랜덤 뽑기
+        int nMonCount = (int)currentSelectMissionTable["NMonCount"];
+        int randomEnemyCount = Random.Range(1, nMonCount + 1);
+        string normalEnemysKey = $"{currentSelectMissionTable[$"NMon{randomEnemyCount}"]}";
+
+        // 뽑은 키로 스폰 테이블에서 소환할 적들 찾기
+        Dictionary<string, object> spawnTableNormalEnemys = new();
+        for (int i = 0; i < enemySpawnTable.Count; i++)
+        {
+            if ($"{enemySpawnTable[i]["ID"]}".Equals(normalEnemysKey))
+            {
+                spawnTableNormalEnemys = enemySpawnTable[i];
+                break;
+            }
+        }
+
+        // 적들 id, 마리수, 레벨 담아두기
+        List<string> monIds = new();
+        List<int> monValues = new();
+        List<int> monLevels = new();
+
+        int monCount = (int)spawnTableNormalEnemys["MonCount"];
+        for (int i = 1; i <= monCount; i++)
+        {
+            string monId = $"{spawnTableNormalEnemys[$"MonID{i}"]}";
+            monIds.Add(monId);
+
+            int monValue = (int)spawnTableNormalEnemys[$"Monval{i}"];
+            monValues.Add(monValue);
+
+            int monLevel = (int)spawnTableNormalEnemys[$"Mon{i}LV"];
+            monLevels.Add(monLevel);
+        }
 
 
-    //    enemyInfoTable
+        // 적들 데이터 담아두기
+        List<Dictionary<string, object>> enemyData = new();
+        for (int i = 0; i < enemyInfoTable.Count; i++)
+        {
+            for (int j = 0; j < monIds.Count; j++)
+            {
+                if ($"{enemyInfoTable[i]["ID"]}".Equals(monIds[j]))
+                {
+                    enemyData.Add(enemyInfoTable[j]);
+                }
+            }
+        }
 
+        Logger.Debug(enemyData.Count);
 
-    ////enemySpawnTable
+        for (int i = 0; i < btMapTriggers.Count; i++)
+        {
+            for (int j = 0; j < btMapTriggers[i].enemySettingPositions.Count; j++)
+            {
+                int currPosEnemyCount = monValues[j];
+                CharacterData data = new();
+                data.name = $"{enemyData[j]["NAME"]}";
+                data.job = (int)enemyData[j]["JOB"];
+
+                data.baseDamage = (float)enemyData[j]["ATK"];
+                data.baseDefense = (float)enemyData[j]["DEF"];
+                data.damageLevelCoefficient = (float)enemyData[j]["Levelup_Atk"];
+                data.defenseLevelCoefficient = (float)enemyData[j]["Levelup_Def"];
+                data.healthPointLevelCoefficient = (float)enemyData[j]["Levelup_HP"];
+
+                data.healthPoint = (float)enemyData[j]["HP"];
+                data.moveSpeed = (int)enemyData[j]["MOVESPEED"];
+                data.critical = (float)enemyData[j]["CRITICAL"];
+                data.criticalDmg = (float)enemyData[j]["CRITICALDAMAGE"];
+                data.evasion = (float)enemyData[j]["EVADE"];
+                data.accuracy = (float)enemyData[j]["ACCURACY"];
+
+                data.grade = 1;
+                data.maxGrade = 5;
+
+                AttackableEnemy enemy = new();
+                for (int k = 0; k < enemyPrefabs.Count; k++)
+                {
+                    if (enemyPrefabs[k].gameObject.name.Equals(data.name))
+                    {
+                        enemy = enemyPrefabs[k];
+                        break;
+                    }
+                }
+
+                btMapTriggers[j].enemySettingPositions[j].SpawnAllEnemy
+                    (currPosEnemyCount, ref btMapTriggers[j].useEnemys, enemy, data);
+            }
+        }
     }
 }

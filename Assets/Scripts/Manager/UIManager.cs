@@ -13,6 +13,9 @@ public class UIManager : MonoBehaviour
     public Color interactablePanelColor;
     public Color noneInteractablePanelColor;
 
+    public AudioSource viewSound;
+    public AudioSource popupSound;
+
     private void Awake()
     {
         Instance = this;
@@ -46,10 +49,16 @@ public class UIManager : MonoBehaviour
     {
         viewManager.Show(index);
         popUpManager.CurrentViewIndex = index;
+
+        if(viewSound != null)
+            viewSound.Play();
     }
     public void ShowPopup(int index)
     {
         popUpManager.ShowPopupInHierarchy(index);
+
+        if(popupSound != null)
+            popupSound.Play();
     }
     public void ShowPanelInteractable(bool interactable)
     {
