@@ -97,6 +97,10 @@ public class BattleManager : MonoBehaviour
     private void Start()
     {
         Init();
+        // 밸런스 테스트용 임시 코드
+        gm = GameManager.Instance;
+        gm.enemySpawnList = CSVReader.Read("EnemySpawnTest");
+        gm.enemyInfoList = CSVReader.Read("EnemyInfoTest");
         StartNextStage(curEvent);
     }
 
@@ -144,7 +148,7 @@ public class BattleManager : MonoBehaviour
         SetStageEvent(ev);
         StartStage();
 
-        if (currBtMgr.GetBattleMapType() == BattleMapEnum.Normal && 
+        if (currBtMgr.GetBattleMapType() == BattleMapEnum.Normal &&
             (tree.CurNode.type == TreeNodeTypes.Normal || tree.CurNode.type == TreeNodeTypes.Root))
         {
             for (int i = 0; i < useHeroes.Count; i++)
@@ -742,7 +746,7 @@ public class BattleManager : MonoBehaviour
     private void ChoiceNextStageByNode()
     {
         stageReward.gameObject.SetActive(true);
-        
+
         if (tree.CurNode.type != TreeNodeTypes.Event && tree.CurNode.type != TreeNodeTypes.Supply)
             NodeClearReward();
 
@@ -928,12 +932,12 @@ public class BattleManager : MonoBehaviour
                 EnemyCountCheck(enemy, currTriggerIndex);
                 break;
             case BattleMapEnum.Defense:
-                EnemyCountCheck(enemy , enemyTriggerIndex);
+                EnemyCountCheck(enemy, enemyTriggerIndex);
                 break;
         }
     }
 
-    private void EnemyCountCheck(AttackableEnemy enemy ,int triggerIndex)
+    private void EnemyCountCheck(AttackableEnemy enemy, int triggerIndex)
     {
         btMapTriggers[triggerIndex].OnDead(enemy);
         if (enemy.GetUnitData().data.job == (int)CharacterJob.villain &&
@@ -1029,7 +1033,7 @@ public class BattleManager : MonoBehaviour
         int weight = 0;
 
         List<string> allItems = new();
-        for (int i = 1; i < itemCount+1; i++)
+        for (int i = 1; i < itemCount + 1; i++)
         {
             string itemWeight = collomWeight + i.ToString();
             string itemKey = colomId + i.ToString();
@@ -1206,6 +1210,42 @@ public class BattleManager : MonoBehaviour
                             {
                                 var enemy = Instantiate(enemyPrefabs[k]);
                                 enemy.gameObject.SetActive(false);
+
+
+                                // 밸런스 테스트용 코드
+                                string key = enemy.GetUnitData().originData.name;
+                                List<Dictionary<string, object>> enemyInfos = gm.enemyInfoList;
+                                int eiCount = enemyInfos.Count;
+                                for (int idx = 0; idx < eiCount; idx++)
+                                {
+                                    string compareKey = gm.GetStringByTable(enemyInfos[idx]["NAME"].ToString());
+                                    if (!key.Equals(compareKey))
+                                    {
+                                        //Logger.Debug($"{key} / {compareKey}");
+                                        continue;
+                                    }
+
+                                    LiveData ld = enemy.GetUnitData().data;
+
+                                    ld.level = (int)gm.currentSelectMission["Level"];
+
+                                    ld.baseDamage = float.Parse(enemyInfos[idx]["ATK"].ToString());     // 일반 공격 데미지
+                                    ld.baseDefense = float.Parse(enemyInfos[idx]["DEF"].ToString());     // 방어력
+                                    ld.healthPoint = float.Parse(enemyInfos[idx]["HP"].ToString());   // 최대 체력
+                                    ld.moveSpeed = float.Parse(enemyInfos[idx]["MOVESPEED"].ToString());       // 이동 속도. 범위, 초기값 설정 필요
+                                    ld.critical = float.Parse(enemyInfos[idx]["CRITICAL"].ToString());     // 크리티컬 확률
+                                    ld.criticalDmg = float.Parse(enemyInfos[idx]["CRITICALDAMAGE"].ToString());  // 크리티컬 데미지 배율
+                                    ld.accuracy = float.Parse(enemyInfos[idx]["ACCURACY"].ToString());     // 명중률
+                                    ld.evasion = float.Parse(enemyInfos[idx]["EVADE"].ToString());      // 회피율
+
+                                    enemy.LevelupStats(ld.level - 1,
+                                        (float?)enemyInfos[idx]["Levelup_Atk"],
+                                        (float?)enemyInfos[idx]["Levelup_Def"],
+                                        (float?)enemyInfos[idx]["Levelup_HP"]);
+                                    Logger.Debug($"{key} 적용 완료");
+                                }
+                                // 밸런스 테스트용 코드
+
 
                                 btMapTriggers[i].enemySettingPositions[j].SpawnAllEnemy(ref btMapTriggers[i].enemys, enemy);
                             }

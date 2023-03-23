@@ -22,7 +22,7 @@ public class LiveData : IComparable<LiveData>
     public float baseDefense = 0;     // 방어력
     public float healthPoint = 500;   // 최대 체력
     public float currentHp = 500;     // 현재 체력
-    public int moveSpeed = 3;       // 이동 속도. 범위, 초기값 설정 필요
+    public float moveSpeed = 3;       // 이동 속도. 범위, 초기값 설정 필요
     public float critical = 0f;     // 크리티컬 확률
     public float criticalDmg = 2f;  // 크리티컬 데미지 배율
     public float evasion = 0f;      // 회피율
