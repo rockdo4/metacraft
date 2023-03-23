@@ -23,6 +23,7 @@ public class InventoryWindow : View
     {
         info.text = string.Empty;
         useButton.interactable = false;
+        nowItem = null;
 
         for (int i = items.Count - 1; i >= 0; i--)
         {
@@ -43,11 +44,17 @@ public class InventoryWindow : View
 
     public void OnClickAllButton()
     {
+        info.text = string.Empty;
+        useButton.interactable = false;
+        nowItem = null;
         foreach (var item in items)
             item.gameObject.SetActive(true);
     }
     public void OnClickSortButton(string sort)
     {
+        info.text = string.Empty;
+        useButton.interactable = false;
+        nowItem = null;
         foreach (var item in items)
         {
             if (item.data.sort.Equals(sort))

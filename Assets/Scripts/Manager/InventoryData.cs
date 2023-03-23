@@ -17,6 +17,13 @@ public class InventoryData
     }
     public void AddItem(Item item)
     {
+        if (item.id.CompareTo("60300001") == 0)
+        {
+            GameManager.Instance.playerData.gold += item.count;
+            {
+                return;
+            }
+        }
         var idx = FindItem(item);
         if (idx == -1)
             inventory.Add(item);

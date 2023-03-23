@@ -39,6 +39,7 @@ public class UsePopup : MonoBehaviour
     public void Set(Item item)
     {
         useButton.interactable = false;
+        info.text = string.Empty;
         useItem = item;
         nowItem = null;
         var data = GameManager.Instance.itemBoxList.Find(t => t["ID"].ToString().Equals(item.dataID));
