@@ -1258,7 +1258,7 @@ public class BattleManager : MonoBehaviour
                                 int eiCount = enemyData.Count;
                                 for (int idx = 0; idx < eiCount; idx++)
                                 {
-                                    string compareKey = gm.GetStringByTable(enemyData[idx]["NAME"].ToString());
+                                    string compareKey = enemyData[idx]["NAME"].ToString().ToLower();
                                     if (!key.Equals(compareKey))
                                     {
                                         Logger.Debug($"{key} / {compareKey}");
