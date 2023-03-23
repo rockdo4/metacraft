@@ -641,7 +641,7 @@ public class BattleManager : MonoBehaviour
                 index = 13;
                 break;
         }
-        AudioManager.Instance.ChangeBGMwithFade(index);
+        AudioManager.Instance.ChageBGMOnlyFadeOut(index);
     }
     private void SetHeroReturnPositioning(List<Transform> pos)
     {
