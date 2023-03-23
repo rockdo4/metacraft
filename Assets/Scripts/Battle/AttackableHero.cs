@@ -33,8 +33,8 @@ public class AttackableHero : AttackableUnit
 
             if (unitState == UnitState.Die && value != UnitState.None)
                 return;
-            if (name.Contains("shadow"))
-                Logger.Debug($"{name} : {value}");
+            //if (name.Contains("shadow"))
+                //Logger.Debug($"{name} : {value}");
             unitState = value;
             heroUI.heroState = unitState;
             switch (unitState)
@@ -118,8 +118,8 @@ public class AttackableHero : AttackableUnit
             if (unitState == UnitState.Die && value != UnitBattleState.None)
                 return;
             battleState = value;
-            if (name.Contains("shadow"))
-                Logger.Debug($"{name} : {value}");
+            //if (name.Contains("shadow"))
+                //Logger.Debug($"{name} : {value}");
 
             //상태가 바뀔때마다 애니메이션 호출
             switch (battleState)
@@ -481,7 +481,7 @@ public class AttackableHero : AttackableUnit
         base.NormalAttackEnd();
 
         lastNormalAttackTime[nowAttack] = Time.time;
-        Logger.Debug($"{name} : NormalAttackEnd");
+        //Logger.Debug($"{name} : NormalAttackEnd");
 
         if (lateReturn)
         {
