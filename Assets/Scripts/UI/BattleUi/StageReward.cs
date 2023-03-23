@@ -40,14 +40,16 @@ public class StageReward : MonoBehaviour
         string name = gold["Item_Name"].ToString();
         string info = gold["Info"].ToString();
         string iconName = gold["Icon_Name"].ToString();
-        AddItem(goldId, name, iconName, info, count, false);
+        string sort = gold["Sort"].ToString();
+        string dataId = gold["DataID"].ToString();
+        AddItem(goldId, name, iconName, info, dataId,sort, count, false);
     }
-    public void AddItem(string id, string name, string iconName, string info, string count, bool isEventReward)
+    public void AddItem(string id, string name, string iconName, string info,string sort, string dataId, string count, bool isEventReward)
     {
         if (isEventReward)
         {
             var currReward = Instantiate(item, eventRewardTr);
-            currReward.SetData(id, name, iconName, info, count);
+            currReward.SetData(id, name, iconName, info, sort, dataId, count);
             currRewards.Add(currReward);
         }
 
@@ -61,7 +63,7 @@ public class StageReward : MonoBehaviour
         }
 
         var newItem = Instantiate(item, rewardTr);
-        newItem.SetData(id, name,iconName, info, count);
+        newItem.SetData(id, name, iconName, info, sort, dataId, count);
 
         rewards.Add(newItem);
     }
