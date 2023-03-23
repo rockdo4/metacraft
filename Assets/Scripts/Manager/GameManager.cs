@@ -92,9 +92,11 @@ public class GameManager : Singleton<GameManager>
 
         // Load TextAssets
         TextAsset ta = Resources.Load<TextAsset>("TextAssetList");
-        TextAsset ia = Resources.Load<TextAsset>("ItemAssetList");
+        TextAsset ia = Resources.Load<TextAsset>("ItemNameList");
+        TextAsset sa = Resources.Load<TextAsset>("SkillNameList");
         var tableNames = ta.text.Split("\r\n");
         var itemNames = ia.text.Split("\r\n");
+        var skillNames = sa.text.Split("\r\n");
 
         int count = tableNames.Length;
         for (int i = 0; i < count; i++)
