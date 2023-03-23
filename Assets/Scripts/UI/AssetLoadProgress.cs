@@ -11,8 +11,9 @@ public class AssetLoadProgress : MonoBehaviour
 
     public void SetProgress(int count, int total)
     {
-        text.text = $"{count} / {total}";
-        fill.fillAmount = (float)count / total;
+        float value = (float)count / total;
+        fill.fillAmount = value;
+        text.text = $"{value * 100f:0.00}%";
     }
 
     public void CompleteProgress()
