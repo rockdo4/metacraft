@@ -9,8 +9,8 @@ public class ClearUiController : View
     
     private List<ClearHeroInfo> heroes = new();
     private void OnEnable()
-    {
-        AudioManager.Instance.ChageBGMwithOneWayFade(9);
+    {        
+        AudioManager.Instance.ChageBGMOnlyFadeOut(9);
     }
     public void SetHeroes(List<AttackableUnit> _heroes)
     {
