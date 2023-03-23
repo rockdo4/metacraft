@@ -155,7 +155,8 @@ MonoBehaviour:
     evasion: 0
     accuracy: 0.5
   attacks:
-  - {fileID: 11400000, guid: 20dcfd9577ad65c48822cac5550a28f6, type: 2}
+  - {fileID: 11400000, guid: 64db0e73d0cbd3c41834932f0103b77c, type: 2}
+  - {fileID: 11400000, guid: b31d5b500d0cd5f41a04f88a84243ef3, type: 2}
   activeSkill: {fileID: 0}
   passiveSkill: {fileID: 0}
 --- !u!136 &4377651214388297004
@@ -272,7 +273,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterData: {fileID: 5241159181975743694}
   nowAttack: {fileID: 0}
-  skillClips: []
+  skillClips:
+  - {fileID: 7400000, guid: f14cb277d3074384b8b01dbbb3fb55a9, type: 2}
+  - {fileID: 7400000, guid: 637f7e94c45a1254fa1c3996a0cfb972, type: 2}
   unitType: 1
   normalAttackTargetType: 0
   PassiveTargetType: 0
@@ -287,6 +290,7 @@ MonoBehaviour:
   citizenList: []
   unitState: 0
   battleState: 0
+  buffList: []
   isThereDamageUI: 1
   usingFloatingHpBar: 1
   isAlive: 0

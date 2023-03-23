@@ -480,7 +480,7 @@ public abstract class AttackableUnit : MonoBehaviour
             else
                 EffectManager.Instance.Get(skill.hitEffect, hitEffectTransform != null ? hitEffectTransform : transform);
         }
-        ShowHpBarAndDamageText(dmg, isCritical);
+        ShowHpBarAndDamageText(dmg, isCritical);        
     }
 
     public void ShowHpBarAndDamageText(int dmg, bool isCritical = false)
