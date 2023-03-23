@@ -26,7 +26,6 @@ public abstract class AttackableUnit : MonoBehaviour
     [SerializeField, Header("캐릭터 데이터")]
     protected CharacterDataBundle characterData;
     public CharacterDataBundle GetUnitData() => characterData;
-    public void SetUnitOriginData(CharacterData data) => characterData.originData = data;
     [SerializeField, Header("현재 스킬")]
     protected CharacterSkill nowAttack;
     protected CharacterSkill GetNowAttack() => nowAttack;
@@ -204,12 +203,12 @@ public abstract class AttackableUnit : MonoBehaviour
         data.exp = newExp;
     }
 
-    public void LevelupStats(int level = 1)
+    public void LevelupStats(int level = 1, float? atkCoeff = null, float? defCoeff = null, float? hpCoeff = null)
     {
         LiveData data = GetUnitData().data;
-        data.baseDamage += characterData.originData.damageLevelCoefficient * level;
-        data.baseDefense += characterData.originData.defenseLevelCoefficient * level;
-        data.healthPoint += characterData.originData.healthPointLevelCoefficient * level;
+        data.baseDamage += (atkCoeff == null ? characterData.originData.damageLevelCoefficient * level : (float)atkCoeff * level);
+        data.baseDefense += (defCoeff == null ? characterData.originData.defenseLevelCoefficient * level : (float)defCoeff * level);
+        data.healthPoint += (hpCoeff == null ? characterData.originData.healthPointLevelCoefficient * level : (float)hpCoeff * level);
         data.currentHp = data.healthPoint;
     }
 

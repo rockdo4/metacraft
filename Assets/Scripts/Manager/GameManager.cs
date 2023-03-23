@@ -251,12 +251,13 @@ public class GameManager : Singleton<GameManager>
         {
             _ => "Contents",
         };
-        if (stringTable.ContainsKey(key))
-            return $"{stringTable[key][languageKey]}";
+        string modifyKey = key.ToLower();
+        if (stringTable.ContainsKey(modifyKey))
+            return $"{stringTable[modifyKey][languageKey]}";
         else
         {
-            Logger.Debug($"Load fail to string table. key [{key}]");
-            return $"Load fail to string table. key [{key}]";
+            Logger.Debug($"Load fail to string table. key [{modifyKey}]");
+            return $"Load fail to string table. key [{modifyKey}]";
         }
     }
 

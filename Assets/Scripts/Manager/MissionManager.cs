@@ -73,7 +73,11 @@ public class MissionManager : View
                 int index = k++;
                 var missionName = missionInfoTable[difficulty][nums[difficulty - 1][index]]["NameString"];
                 marks[j].GetComponentInChildren<TextMeshProUGUI>().text = gm.GetStringByTable($"{missionName}");
-                marks[j].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(difficulty, nums[difficulty - 1][index]));
+                var buttons = marks[j].GetComponentsInChildren<Button>();
+                foreach (var button in buttons)
+                {
+                    button.onClick.AddListener(() => UpdateMissionInfo(difficulty, nums[difficulty - 1][index]));
+                }
             }
             else
             {

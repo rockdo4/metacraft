@@ -24,7 +24,7 @@ public class CharacterData : ScriptableObject, IComparable<CharacterData>
     public float        critical = 0f;      // 크리티컬 확률
     [Range(1f, 10f)]
     public float        criticalDmg = 2f;   // 크리티컬 데미지 배율
-    public int          moveSpeed = 3;      // 이동 속도. 범위, 초기값 설정 필요
+    public float          moveSpeed = 3;      // 이동 속도. 범위, 초기값 설정 필요
     [Range(0f, 1f)]
     public float        accuracy = 1f;      // 명중률
     [Range(0f, 1f)]
