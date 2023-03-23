@@ -32,7 +32,6 @@ public abstract class AttackableUnit : MonoBehaviour
     protected float minAttackDis = float.MaxValue;
     public AnimationClip[] skillClips;
 
-
     [Header("캐릭터 타입")]
     public UnitType unitType;
     //[Header("Ai 타입")]
@@ -63,11 +62,9 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public float MaxHp => ((bufferState.maxHealthIncrease * characterData.data.healthPoint));
     public float UnitHpScale => characterData.data.currentHp / MaxHp;
-    public virtual float UnitHp
-    {
+    public virtual float UnitHp {
         get { return characterData.data.currentHp; }
-        set
-        {
+        set {
             characterData.data.currentHp = Mathf.Clamp(value, 0, MaxHp);
         }
     }
@@ -100,7 +97,20 @@ public abstract class AttackableUnit : MonoBehaviour
     protected virtual UnitBattleState BattleState { get; set; }
 
     public bool IsAlive(AttackableUnit unit) => (unit != null) && (unit.gameObject.activeSelf) && (unit.UnitHp > 0);
-    protected bool CanNormalAttackTime(CharacterSkill skill) => (Time.time - lastNormalAttackTime[skill]) * bufferState.attackSpeed > skill.cooldown;
+    protected bool CanNormalAttackTime(CharacterSkill skill)
+    {
+        if (name.Contains("shadow"))
+        {
+            Debug.Log("===");
+            Debug.Log(skill.cooldown);
+            Debug.Log(Time.time);
+            Debug.Log(lastNormalAttackTime[skill]);
+            Debug.Log(bufferState.attackSpeed);
+            Debug.Log("===");
+        }
+        return (Time.time - lastNormalAttackTime[skill]) * bufferState.attackSpeed > skill.cooldown;
+    }
+
     protected bool InRangeNormalAttack(CharacterSkill skill) => Vector3.Distance(target.transform.position, transform.position) < skill.distance;
     protected bool InRangeMinNormalAttack => Vector3.Distance(target.transform.position, transform.position) < minAttackDis;
     protected bool InRangeActiveAttack => Vector3.Distance(activeTarget.transform.position, transform.position) < characterData.activeSkill.distance;
@@ -114,8 +124,7 @@ public abstract class AttackableUnit : MonoBehaviour
     public BufferState GetBuffState => bufferState;
 
     protected bool isAuto = false;
-    public virtual bool IsAuto
-    {
+    public virtual bool IsAuto {
         get { return isAuto; }
         set { isAuto = value; }
     }
@@ -378,11 +387,17 @@ public abstract class AttackableUnit : MonoBehaviour
         }
     }
 
-    public virtual void NormalAttackEnd() => target = (!IsAlive(target)) ? null : target;
+    public virtual void NormalAttackEnd()
+    {
+        target = (!IsAlive(target)) ? null : target;
+    }
 
     public virtual void PassiveSkillEnd() { }
 
-    public virtual void ActiveSkillEnd() => target = (!IsAlive(target)) ? null : target;
+    public virtual void ActiveSkillEnd()
+    {
+        target = (!IsAlive(target)) ? null : target;
+    }
 
     public virtual void StunEnd()
     {
@@ -867,6 +882,10 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public bool FindNowAttack()
     {
+        if(name.Contains("shadow"))
+        {
+            Logger.Debug("FindNowAttack");
+        }
         int idx = 0;
         foreach (var attack in characterData.attacks)
         {
