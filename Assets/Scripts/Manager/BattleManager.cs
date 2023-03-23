@@ -504,17 +504,18 @@ public class BattleManager : MonoBehaviour
         DisabledAllMap();
 
         // 보스 ID 찾기
-        string bossID = $"{currentSelectMissionTable["BossID"]}";
+        string bossID = $"{currentSelectMissionTable["BossID"]}";        
         //villain
         for (int i = 0; i < villainPrefabs.Count; i++)
         {
             if (villainPrefabs[i].name.Equals(bossID))
             {
                 villain = villainPrefabs[i];
+                PlayBGM(i);
                 break;
             }
+            PlayBGM(0);
         }
-
 
         for (int i = 0; i < 3; i++)
         {
@@ -527,6 +528,24 @@ public class BattleManager : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void PlayBGM(int index)
+    {
+        int bgmIndex = 0;
+        switch(index)
+        {
+            case 0:
+                bgmIndex = 6;
+                break;
+            case 1:
+                bgmIndex = 4;
+                break;
+            case 2:
+                bgmIndex = 5;
+                break;
+        }
+        AudioManager.Instance.PlayBGM(bgmIndex);
     }
 
     private IEnumerator CoFadeIn()
@@ -586,6 +605,10 @@ public class BattleManager : MonoBehaviour
         nodeIndex = index;
         TreeNodeObject prevNode = tree.CurNode;
         tree.CurNode = prevNode.childrens[index];
+        if(tree.CurNode.type.Equals(TreeNodeTypes.Villain))
+        {
+            Invoke(nameof(PlayBossBGM), 3f);
+        }
         readyCount = useHeroes.Count;
         int childCount = prevNode.childrens.Count;
 
@@ -595,6 +618,23 @@ public class BattleManager : MonoBehaviour
         }
 
         SetHeroReturnPositioning(roads[nodeIndex].fadeTrigger.heroSettingPositions);
+    }
+    private void PlayBossBGM()
+    {
+        int index = 0;
+        switch (AudioManager.Instance.GetCurrBGMIndex())
+        {
+            case 6:
+                index = 7;
+                break;
+            case 4:
+                index = 8;
+                break;
+            case 5:
+                index = 13;
+                break;
+        }
+        AudioManager.Instance.ChangeBGMwithFade(index);
     }
     private void SetHeroReturnPositioning(List<Transform> pos)
     {
@@ -769,6 +809,7 @@ public class BattleManager : MonoBehaviour
         {
             int num = i;
             childs[i].nodeButton.onClick.AddListener(() => SelectNextStage(num));
+            childs[i].nodeButton.onClick.AddListener(() => AudioManager.Instance.PlayUIAudio(0));
         }
     }
 
