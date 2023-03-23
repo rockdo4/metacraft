@@ -1125,6 +1125,23 @@ public class BattleManager : MonoBehaviour
                 }
             }
 
+            Dictionary<string, object> spawnTableHardEnemys = new();
+            if (tree.CurNode.type == TreeNodeTypes.Threat)
+            {
+                int hMonCount = (int)currentSelectMissionTable["HMonCount"];
+                int randomHEnemyCount = Random.Range(1, hMonCount + 1);
+                string threatEnemysKey = $"{currentSelectMissionTable[$"HMon{randomHEnemyCount}"]}";
+
+                for (int j = 0; j < enemySpawnTable.Count; j++)
+                {
+                    if ($"{enemySpawnTable[j]["ID"]}".Equals(threatEnemysKey))
+                    {
+                        spawnTableHardEnemys = enemySpawnTable[j];
+                        break;
+                    }
+                }
+            }
+
             // 적들 id, 마리수, 레벨 담아두기
             List<string> monIds = new();
             List<int> monValues = new();
@@ -1141,6 +1158,18 @@ public class BattleManager : MonoBehaviour
 
                 int monLevel = (int)spawnTableNormalEnemys[$"Mon{j}LV"];
                 monLevels.Add(monLevel);
+
+                if (tree.CurNode.type == TreeNodeTypes.Threat)
+                {
+                    string hMonId = $"{spawnTableHardEnemys[$"MonID{i}"]}";
+                    monIds.Add(hMonId);
+
+                    int hMonValue = (int)spawnTableHardEnemys[$"Monval{i}"];
+                    monValues.Add(hMonValue);
+
+                    int hMonLevel = (int)spawnTableHardEnemys[$"Mon{i}LV"];
+                    monLevels.Add(hMonLevel);
+                }
             }
 
             // 적들 ID 찾아서 InfoTable 한 줄씩 담아두기
@@ -1167,6 +1196,11 @@ public class BattleManager : MonoBehaviour
                         string name = $"{enemyData[l]["NAME"]}";
                         if (enemyPrefabs[k].gameObject.name.Equals(name))
                         {
+                            if (tree.CurNode.type == TreeNodeTypes.Threat)
+                            {
+
+                            }
+
                             int currPosEnemyCount = monValues[l];
                             for (int s = 0; s < currPosEnemyCount; s++)
                             {
