@@ -54,21 +54,21 @@ public class UIManager : MonoBehaviour
     {
         ShowViewWithNoSound(index);
 
-        if (hasAudioSource)
+        if (hasAudioSource && !viewAudio.Equals(null))
             audioSource.PlayOneShot(viewAudio);       
     }
     public void ShowPopup(int index)
     {
         ShowPopupWithNoSound(index);
 
-        if (hasAudioSource)
+        if (hasAudioSource && !popupAudio.Equals(null))
             audioSource.PlayOneShot(popupAudio);
     }
     public void ClearPopups()
     {
         ClearPopupsWithNoSound();
 
-        if (hasAudioSource)
+        if (hasAudioSource && !clearAudio.Equals(null))
             audioSource.PlayOneShot(clearAudio);
     }
 
