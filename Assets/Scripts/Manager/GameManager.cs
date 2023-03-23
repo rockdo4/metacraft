@@ -36,6 +36,7 @@ public class GameManager : Singleton<GameManager>
 
     public List<Dictionary<string, object>> compensationInfoList; // 보상 정보
     public List<Dictionary<string, object>> itemInfoList; // 아이템 정보
+    public List<Dictionary<string, object>> itemBoxList; // 아이템 정보
 
     public List<Dictionary<string, object>> supplyInfoList; // 보급 노드 정보
 
@@ -210,6 +211,7 @@ public class GameManager : Singleton<GameManager>
         compensationInfoList = CSVReader.SplitTextAsset(releasehandles["CompensationTable"].Result as TextAsset);
         supplyInfoList = CSVReader.SplitTextAsset(releasehandles["SupplyTable"].Result as TextAsset);
         itemInfoList = CSVReader.SplitTextAsset(releasehandles["ItemInfoTable"].Result as TextAsset);
+        itemBoxList = CSVReader.SplitTextAsset(releasehandles["ItemBoxTable"].Result as TextAsset);
         enemyInfoList = CSVReader.SplitTextAsset(releasehandles["EnemyInfoTable"].Result as TextAsset);
         enemySpawnList = CSVReader.SplitTextAsset(releasehandles["EnemySpawnTable"].Result as TextAsset);
         recruitmentReplacementTable = CSVReader.SplitTextAsset(releasehandles["RecruitmentReplacementTable"].Result as TextAsset);
