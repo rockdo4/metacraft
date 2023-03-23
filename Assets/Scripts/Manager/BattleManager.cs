@@ -1195,7 +1195,7 @@ public class BattleManager : MonoBehaviour
                         string compareKey = gm.GetStringByTable(enemyInfos[idx]["NAME"].ToString());
                         if (!key.Equals(compareKey))
                         {
-                            Logger.Debug($"{key} / {compareKey}");
+                            //Logger.Debug($"{key} / {compareKey}");
                             continue;
                         }
 
@@ -1216,6 +1216,7 @@ public class BattleManager : MonoBehaviour
                             (float?)enemyInfos[idx]["Levelup_Atk"],
                             (float?)enemyInfos[idx]["Levelup_Def"],
                             (float?)enemyInfos[idx]["Levelup_HP"]);
+                        Logger.Debug($"{key} 적용 완료");
                     }
                     // 밸런스 테스트용 코드
 
