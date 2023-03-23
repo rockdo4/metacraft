@@ -106,7 +106,7 @@ public class GameManager : Singleton<GameManager>
                 tas.Completed +=
                     (AsyncOperationHandle<TextAsset> obj) =>
                 {
-                    Logger.Debug($"{key} load success");
+                    //Logger.Debug($"{key} load success");
                 };
                 total++;
             }
@@ -117,7 +117,7 @@ public class GameManager : Singleton<GameManager>
         for (int i = 0; i < count; i++)
         {
             string address = heroDatabase[i].GetComponent<CharacterDataBundle>().originData.name;
-            string iconAddress = $"Icon_{address}";
+            string iconAddress = $"icon_{address}";
             AsyncOperationHandle<Sprite> iconHandle = Addressables.LoadAssetAsync<Sprite>(iconAddress);
             iconHandle.Completed +=
                 (AsyncOperationHandle<Sprite> obj) =>
@@ -127,7 +127,7 @@ public class GameManager : Singleton<GameManager>
                 };
             unreleasehandles.Add(iconHandle);
 
-            string IllurAddress = $"Illu_{address}";
+            string IllurAddress = $"illu_{address}";
             AsyncOperationHandle<Sprite> illuHandle = Addressables.LoadAssetAsync<Sprite>(IllurAddress);
             illuHandle.Completed +=
                 (AsyncOperationHandle<Sprite> obj) =>
@@ -234,7 +234,7 @@ public class GameManager : Singleton<GameManager>
         for (int i = 0; i < count; i++)
         {
             var copy = rawData[i];
-            string id = $"{rawData[i]["ID"]}";
+            string id = $"{rawData[i]["ID"]}".ToLower();
             copy.Remove("ID");
             if (stringTable.ContainsKey(id))
             {

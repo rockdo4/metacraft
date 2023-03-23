@@ -67,13 +67,13 @@ public class AudioManager : Singleton<AudioManager>
         for (int i = 0; i < bgms.Length; i++)
         {
             bgms[i] = Instantiate(bgms[i], bgmHolder.transform);
-            DontDestroyOnLoad(bgms[i]);
+            //DontDestroyOnLoad(bgms[i]);
         }
 
         for (int i = 0; i < uiAudios.Length; i++)
         {
             uiAudios[i] = Instantiate(uiAudios[i], uiHolder.transform);
-            DontDestroyOnLoad(uiAudios[i]);
+            //DontDestroyOnLoad(uiAudios[i]);
         }
     }
     private void SaveBGMOriginVolumes()
