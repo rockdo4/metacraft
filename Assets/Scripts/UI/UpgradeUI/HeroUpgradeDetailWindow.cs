@@ -54,8 +54,22 @@ public class HeroUpgradeDetailWindow : View
         nextSkillInfo[1].text = gm.GetStringByTable($"{cdb.attacks[0].skillDescription}");
         nextSkillInfo[2].text = gm.GetStringByTable($"{cdb.activeSkill.skillDescription}");
 
-        //meterialIcons;
-        //meterialInfo;
-        //gold;
+        FindUpgradeMaterial(data.name, data.grade);
+        
+    }
+
+    private void FindUpgradeMaterial(string name, int grade)
+    {
+        GameManager gm = GameManager.Instance;
+
+        for (int i = 0; i < gm.upgradeTable.Count; i++)
+        {
+            if (gm.upgradeTable[i]["Name"].ToString() == name&&(int)gm.upgradeTable[i]["Grade"] == grade)
+            {
+                //meterialIcons[0] = gm.inventoryData.FindItem(gm.upgradeTable[i]["Material1"])
+                meterialInfo[0].text = $"{0}/{gm.upgradeTable[i]["Mmaterial1Amount"]}";
+                gold.text = $"{gm.playerData.gold}/{gm.upgradeTable[i]["NeedGold"]}";
+            }
+        }
     }
 }
