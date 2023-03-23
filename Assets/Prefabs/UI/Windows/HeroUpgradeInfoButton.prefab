@@ -1018,6 +1018,7 @@ GameObject:
   - component: {fileID: 6488599665337194434}
   - component: {fileID: 2752790747294089861}
   - component: {fileID: 7331439822239647853}
+  - component: {fileID: 6949913849303841001}
   m_Layer: 5
   m_Name: HeroUpgradeInfoButton
   m_TagString: Untagged
@@ -1137,12 +1138,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2752790747294089861}
         m_TargetAssemblyTypeName: ControlUIManagerFlow, Assembly-CSharp
-        m_MethodName: ShowPopup
+        m_MethodName: ShowView
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
+          m_IntArgument: 8
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -1151,6 +1152,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: HeroUpgradeInfoButton, Assembly-CSharp
         m_MethodName: OnClick
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6949913849303841001}
+        m_TargetAssemblyTypeName: GetAudioManagerFunc, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1206,6 +1219,18 @@ MonoBehaviour:
     criticalDmg: 2
     evasion: 0
     accuracy: 1
+--- !u!114 &6949913849303841001
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6488599665337194439}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0266323f7b0a8964c934f46339e937f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6913550902242587876
 GameObject:
   m_ObjectHideFlags: 0

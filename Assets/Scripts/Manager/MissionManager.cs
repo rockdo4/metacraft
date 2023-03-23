@@ -73,7 +73,11 @@ public class MissionManager : View
                 int index = k++;
                 var missionName = missionInfoTable[difficulty][nums[difficulty - 1][index]]["NameString"];
                 marks[j].GetComponentInChildren<TextMeshProUGUI>().text = gm.GetStringByTable($"{missionName}");
-                marks[j].GetComponentInChildren<Button>().onClick.AddListener(() => UpdateMissionInfo(difficulty, nums[difficulty - 1][index]));
+                var buttons = marks[j].GetComponentsInChildren<Button>();
+                foreach (var button in buttons)
+                {
+                    button.onClick.AddListener(() => UpdateMissionInfo(difficulty, nums[difficulty - 1][index]));
+                }
             }
             else
             {
@@ -140,7 +144,7 @@ public class MissionManager : View
         }
 
         LiveData liveData = bundle.data;
-        heroSlots[heroSlotsIndex].GetComponent<Image>().sprite = gm.GetSpriteByAddress($"Icon_{liveData.name}");
+        heroSlots[heroSlotsIndex].GetComponent<Image>().sprite = gm.GetSpriteByAddress($"icon_{liveData.name}");
         selectIndexGroup[heroSlotsIndex] = index;
 
         if (duplication != null)

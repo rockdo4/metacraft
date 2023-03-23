@@ -57,6 +57,7 @@ public class CharacterSkill : ScriptableObject
     public virtual bool IsAutoStart { get; }
     public Vector3 targetPos;
     public string skillDescription;
+    public string skillIcon;
 
     public List<BuffLevel> buffInfos;
     public int buffRadius;

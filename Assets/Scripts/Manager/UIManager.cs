@@ -13,13 +13,18 @@ public class UIManager : MonoBehaviour
     public Color interactablePanelColor;
     public Color noneInteractablePanelColor;
 
-    public AudioSource viewSound;
-    public AudioSource popupSound;
+    public AudioClip viewAudio;
+    public AudioClip popupAudio;
+    public AudioClip clearAudio;
+
+    private AudioSource audioSource;
+    private bool hasAudioSource;
 
     private void Awake()
     {
         Instance = this;
         viewManager = gameObject.AddComponent<ViewManager>();
+        hasAudioSource = TryGetComponent(out audioSource);
         SetPopupManager();
         SetPopUpHolders();
         SetViewManager();
@@ -47,25 +52,42 @@ public class UIManager : MonoBehaviour
     }
     public void ShowView(int index)
     {
-        viewManager.Show(index);
-        popUpManager.CurrentViewIndex = index;
+        ShowViewWithNoSound(index);
 
-        if(viewSound != null)
-            viewSound.Play();
+        if (hasAudioSource && !viewAudio.Equals(null))
+            audioSource.PlayOneShot(viewAudio);       
     }
     public void ShowPopup(int index)
     {
-        popUpManager.ShowPopupInHierarchy(index);
+        ShowPopupWithNoSound(index);
 
-        if(popupSound != null)
-            popupSound.Play();
+        if (hasAudioSource && !popupAudio.Equals(null))
+            audioSource.PlayOneShot(popupAudio);
+    }
+    public void ClearPopups()
+    {
+        ClearPopupsWithNoSound();
+
+        if (hasAudioSource && !clearAudio.Equals(null))
+            audioSource.PlayOneShot(clearAudio);
+    }
+
+    public void ShowViewWithNoSound(int index)
+    {
+        viewManager.Show(index);
+        popUpManager.CurrentViewIndex = index;
+    }
+    public void ShowPopupWithNoSound(int index)
+    {
+        popUpManager.ShowPopupInHierarchy(index);
+    }
+    public void ClearPopupsWithNoSound()
+    {
+        popUpManager.ClearPopups();
     }
     public void ShowPanelInteractable(bool interactable)
     {
         popUpManager.ShowPanelInteractable(interactable);
     }
-    public void ClearPopups()
-    {
-        popUpManager.ClearPopups();
-    }
+
 }

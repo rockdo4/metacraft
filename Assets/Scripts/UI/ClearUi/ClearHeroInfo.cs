@@ -30,7 +30,7 @@ public class ClearHeroInfo : MonoBehaviour
 
         nowExp = data.exp;
         expImage.fillAmount = (float)nowExp / ExpTable[nowLevel];
-        heroImage.sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{data.name}");
+        heroImage.sprite = GameManager.Instance.GetSpriteByAddress($"icon_{data.name}");
     }
 
     public void SetTestTable()
