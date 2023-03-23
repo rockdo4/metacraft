@@ -124,6 +124,8 @@ public class AudioManager : Singleton<AudioManager>
         if(coBgmFadeCoroutine != null)
             StopCoroutine(coBgmFadeCoroutine);
 
+        Logger.Debug(2);
+        Logger.Debug(index);
         coBgmFadeCoroutine = StartCoroutine(CoBGMFadeCoroutine(index));
     }    
     private IEnumerator CoBGMFadeCoroutine(int index)

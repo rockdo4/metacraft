@@ -5,6 +5,8 @@ public class ChangeAudioWhenEnabled : MonoBehaviour
     public int index;
     private void OnEnable()
     {
-        AudioManager.Instance.ChageBGMwithOneWayFade(index);
+        Logger.Debug(1);
+        Logger.Debug(transform.name);
+        AudioManager.Instance.ChangeBGMwithFade(index);
     }
 }
