@@ -523,6 +523,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2131926675777548777}
+        m_TargetAssemblyTypeName: GetAudioManagerFunc, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &2553096147792292502
 GameObject:
   m_ObjectHideFlags: 0
@@ -535,6 +547,7 @@ GameObject:
   - component: {fileID: 2553096147792292501}
   - component: {fileID: 2553096147792292500}
   - component: {fileID: 1422008090}
+  - component: {fileID: 2131926675777548777}
   m_Layer: 5
   m_Name: Manage Hero Window
   m_TagString: Untagged
@@ -620,6 +633,18 @@ MonoBehaviour:
     type: 3}
   contents: {fileID: 2553096146316931278}
   heroInfos: []
+--- !u!114 &2131926675777548777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2553096147792292502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0266323f7b0a8964c934f46339e937f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2553096148079257805
 GameObject:
   m_ObjectHideFlags: 0
@@ -1934,6 +1959,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: ManageHeroWindow, Assembly-CSharp
         m_MethodName: SelectSortType
         m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 2131926675777548777}
+        m_TargetAssemblyTypeName: GetAudioManagerFunc, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
