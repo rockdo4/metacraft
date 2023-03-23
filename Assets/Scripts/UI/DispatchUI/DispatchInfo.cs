@@ -31,7 +31,7 @@ public class DispatchInfo : MonoBehaviour
     {
         dispatchInfo = info;
         completeTime = (int)dispatchInfo["Time"];
-        addRewardCharacterPortrait.sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{dispatchInfo["AddRewardCharaID"]}");
+        addRewardCharacterPortrait.sprite = GameManager.Instance.GetSpriteByAddress($"icon_{dispatchInfo["AddRewardCharaID"]}");
         dispatchDescription.text = $"{completeTime}\n{dispatchInfo["Name"]}\n{dispatchInfo["Text"]}";
         beforeButton.text = $"ÆÄ°ß";
     }

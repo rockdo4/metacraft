@@ -34,7 +34,7 @@ public class HeroUpgradeDetailWindow : View
         heroName.text = data.name;
         heroGrade.text = $"{(CharacterGrade)data.grade}등급 > {(CharacterGrade)(data.grade + 1)}등급";
         heroMaxLevel.text = $"{gm.maxLevelTable[data.grade]} > {gm.maxLevelTable[data.grade + 1]}";
-        heroPortrait.sprite = gm.GetSpriteByAddress($"Icon_{data.name}");
+        heroPortrait.sprite = gm.GetSpriteByAddress($"icon_{data.name}");
         prevSkillIcons[0].sprite = gm.GetSpriteByAddress($"{cdb.passiveSkill.skillIcon}");
         prevSkillIcons[1].sprite = gm.GetSpriteByAddress($"{cdb.attacks[0].skillIcon}");
         prevSkillIcons[2].sprite = gm.GetSpriteByAddress($"{cdb.activeSkill.skillIcon}");

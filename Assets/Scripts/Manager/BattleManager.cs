@@ -271,7 +271,7 @@ public class BattleManager : MonoBehaviour
         {
             int heroNameIndex = Random.Range(0, useHeroes.Count);
             string heroName = useHeroes[heroNameIndex].GetUnitData().data.name;
-            battleEventHeroImage.sprite = gm.GetSpriteByAddress($"Icon_{heroName}");
+            battleEventHeroImage.sprite = gm.GetSpriteByAddress($"icon_{heroName}");
             string contentTextKey = $"{eventInfoTable[(int)ev]["Eventtext"]}";
             contentText.text = gm.GetStringByTable(contentTextKey);
 
