@@ -11,11 +11,11 @@ public class GameManager : Singleton<GameManager>
 {
     public SceneIndex currentScene = SceneIndex.Title;
     public PlayerData playerData;
+    public InventoryData inventoryData;
 
     // MyData - Craft, Load & Save to this data
     public Dictionary<string, GameObject> myHeroes = new();
     public Transform heroSpawnTransform;    
-    public Dictionary<string, Item> inventoryData = new();
 
     // Resources - Sprites, TextAsset + (Scriptable Objects, Sound etc)
     private Dictionary<string, Sprite> iconSprites = new();
@@ -50,6 +50,7 @@ public class GameManager : Singleton<GameManager>
 
     // Origin Database - Set Prefab & Scriptable Objects
     public List<GameObject> heroDatabase = new();
+    public AssetLoadProgress progress;
 
     public Color currMapColor;
     public List<Color> mapLigthColors;
@@ -138,7 +139,7 @@ public class GameManager : Singleton<GameManager>
             total += 2;
         }
 
-        count = 28; //임시. 나중에 버프 테이블 불러오게 수정할 예정
+        count = 29; //임시. 나중에 버프 테이블 불러오게 수정할 예정
         for (int i = 1; i <= count; i++)
         {
             string address = string.Format("state{0}",i);
@@ -180,14 +181,13 @@ public class GameManager : Singleton<GameManager>
                 if (!handle.Value.IsDone)
                 {
                     loadAll = false;
-                    Logger.Debug($"{handle.Key} waiting load");
                     break;
                 }
                 count++;
             }
             if (!loadAll)
             {
-                Logger.Debug($"progress {count}/{total}");
+                progress.SetProgress(count, total);
                 yield return null;
             }
 
@@ -200,9 +200,10 @@ public class GameManager : Singleton<GameManager>
                 }
                 count++;
             }
-            Logger.Debug($"progress {count}/{total}");
+            progress.SetProgress(count, total);
             yield return null;
         }
+
         dispatchInfoList = CSVReader.SplitTextAsset(releasehandles["DispatchInfoTable"].Result as TextAsset);
         officeInfoList = CSVReader.SplitTextAsset(releasehandles["OfficeTable"].Result as TextAsset);
         eventInfoList = CSVReader.SplitTextAsset(releasehandles["EventTable"].Result as TextAsset);
@@ -224,6 +225,7 @@ public class GameManager : Singleton<GameManager>
 
         ReleaseAddressable(releasehandles);
         releasehandles.Clear();
+        progress.CompleteProgress();
     }
 
     private void AppendStringTable(List<Dictionary<string, object>> rawData, string tableName)
@@ -326,7 +328,7 @@ public class GameManager : Singleton<GameManager>
             }
             else if(id.Contains("Inventory"))
             {
-                //여기다가 불러오는거
+                inventoryData = JsonUtility.FromJson<InventoryData>(contents);
             }
         }
         SetHeroesActive(false);

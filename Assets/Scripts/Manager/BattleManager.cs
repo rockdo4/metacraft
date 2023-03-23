@@ -427,7 +427,9 @@ public class BattleManager : MonoBehaviour
                 stageReward.AddItem($"{rewardKey}", itemInfo["Item_Name"].ToString()
                     , itemInfo["Icon_Name"].ToString()
                     , itemInfo["Info"].ToString()
-                    , "1", true);
+                    , itemInfo["Sort"].ToString()
+                    , itemInfo["DataID"].ToString()
+                    , "1", true); ;
                 stageReward.gameObject.SetActive(true);
                 stageReward.OnEventRewardPage();
                 break;
@@ -512,6 +514,19 @@ public class BattleManager : MonoBehaviour
                 break;
             }
         }
+
+
+        for (int i = 0; i < 3; i++)
+        {
+            if (gm.fitPropertyFlags[i])
+            {
+                var buff = FindBuff((int)(currentSelectMissionTable[$"BonusID{i + 1}"]));
+                foreach (var hero in useHeroes)
+                {
+                    hero.AddValueBuff(buff);
+                }
+            }
+        }
     }
 
     private IEnumerator CoFadeIn()
@@ -544,6 +559,7 @@ public class BattleManager : MonoBehaviour
     public void OnReady()
     {
         readyCount--;
+        Logger.Debug("wtf ready");
 
         if (readyCount == 0)
         {
@@ -947,7 +963,6 @@ public class BattleManager : MonoBehaviour
         enemyTriggerIndex = index;
     }
 
-    [ContextMenu("TEST")]
     public void NodeClearReward()
     {
         var influence = gm.currentSelectMission["Influence"];//¼¼·Â
@@ -1033,6 +1048,8 @@ public class BattleManager : MonoBehaviour
                 item["Item_Name"].ToString(),
                 item["Icon_Name"].ToString(),
                 item["Info"].ToString(),
+                item["Sort"].ToString(),
+                item["DataID"].ToString(),
                 rewardData[$"{keyValue}{i}"].ToString(),
                 false);
         }

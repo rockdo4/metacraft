@@ -33,6 +33,8 @@ public class AttackableHero : AttackableUnit
 
             if (unitState == UnitState.Die && value != UnitState.None)
                 return;
+            if (name.Contains("shadow"))
+                Logger.Debug($"{name} : {value}");
             unitState = value;
             heroUI.heroState = unitState;
             switch (unitState)
@@ -116,6 +118,8 @@ public class AttackableHero : AttackableUnit
             if (unitState == UnitState.Die && value != UnitBattleState.None)
                 return;
             battleState = value;
+            if (name.Contains("shadow"))
+                Logger.Debug($"{name} : {value}");
 
             //상태가 바뀔때마다 애니메이션 호출
             switch (battleState)
@@ -371,14 +375,14 @@ public class AttackableHero : AttackableUnit
                 break;
             case UnitBattleState.NormalAttack:
                 stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-                if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime >= 1.0f)
+                if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime >= .75f)
                 {
                     NormalAttackEnd();
                 }
                 break;
             case UnitBattleState.ActiveSkill:
                 stateInfo = animator.GetCurrentAnimatorStateInfo(0);
-                if (stateInfo.IsName("ActiveSkill") && stateInfo.normalizedTime >= 1.0f)
+                if (stateInfo.IsName("ActiveSkill") && stateInfo.normalizedTime >= 0.75f)
                 {                    
                     ActiveSkillEnd();
                 }
@@ -405,30 +409,21 @@ public class AttackableHero : AttackableUnit
         switch (isRotate)
         {
             case true:
-                //transform.rotation = Quaternion.Lerp(transform.rotation, returnPos.rotation, Time.deltaTime * 5);
-                //float angle = Quaternion.Angle(transform.rotation, returnPos.rotation);
 
-                //var nowSpeed = animator.GetFloat("Speed");
-                //var downSpeed = Mathf.Lerp(0, 1, Time.deltaTime * 10f);
-                //animator.SetFloat("Speed", nowSpeed - downSpeed);
+                transform.rotation = returnPos.rotation;
+                isRotate = false;
+                UnitState = UnitState.Idle;
 
-                //if (angle <= 0)
+                if (battleManager.tree.CurNode.type == TreeNodeTypes.Threat)
                 {
-                    transform.rotation = returnPos.rotation;
-                    isRotate = false;
-                    UnitState = UnitState.Idle;
-
-                    if (battleManager.tree.CurNode.type == TreeNodeTypes.Threat)
-                    {
-                        if (!battleManager.isMiddleBossAlive)
-                        {
-                            battleManager.OnReady();
-                        }
-                    }
-                    else
+                    if (!battleManager.isMiddleBossAlive)
                     {
                         battleManager.OnReady();
                     }
+                }
+                else
+                {
+                    battleManager.OnReady();
                 }
                 break;
             case false:
@@ -447,10 +442,13 @@ public class AttackableHero : AttackableUnit
 
     public override void ChangeUnitState(UnitState state)
     {
-        if (BattleState == UnitBattleState.ActiveSkill || BattleState == UnitBattleState.NormalAttack || BattleState == UnitBattleState.Stun)
+        if (state == UnitState.ReturnPosition)
         {
-            lateReturn = true;
-            return;
+            if (BattleState == UnitBattleState.ActiveSkill || BattleState == UnitBattleState.NormalAttack || BattleState == UnitBattleState.Stun)
+            {
+                lateReturn = true;
+                return;
+            }
         }
         UnitState = state;
     }
@@ -483,6 +481,7 @@ public class AttackableHero : AttackableUnit
         base.NormalAttackEnd();
 
         lastNormalAttackTime[nowAttack] = Time.time;
+        Logger.Debug($"{name} : NormalAttackEnd");
 
         if (lateReturn)
         {
