@@ -96,11 +96,11 @@ public class BattleManager : MonoBehaviour
 
     private void Start()
     {
-        Init();
         // 밸런스 테스트용 임시 코드
-        gm = GameManager.Instance;
+        GameManager gm = GameManager.Instance;
         gm.enemySpawnList = CSVReader.Read("EnemySpawnTest");
         gm.enemyInfoList = CSVReader.Read("EnemyInfoTest");
+        Init();
         StartNextStage(curEvent);
     }
 
@@ -1214,14 +1214,13 @@ public class BattleManager : MonoBehaviour
 
                                 // 밸런스 테스트용 코드
                                 string key = enemy.GetUnitData().originData.name;
-                                List<Dictionary<string, object>> enemyInfos = gm.enemyInfoList;
-                                int eiCount = enemyInfos.Count;
+                                int eiCount = enemyData.Count;
                                 for (int idx = 0; idx < eiCount; idx++)
                                 {
-                                    string compareKey = gm.GetStringByTable(enemyInfos[idx]["NAME"].ToString());
+                                    string compareKey = gm.GetStringByTable(enemyData[idx]["NAME"].ToString());
                                     if (!key.Equals(compareKey))
                                     {
-                                        //Logger.Debug($"{key} / {compareKey}");
+                                        Logger.Debug($"{key} / {compareKey}");
                                         continue;
                                     }
 
@@ -1229,19 +1228,19 @@ public class BattleManager : MonoBehaviour
 
                                     ld.level = (int)gm.currentSelectMission["Level"];
 
-                                    ld.baseDamage = float.Parse(enemyInfos[idx]["ATK"].ToString());     // 일반 공격 데미지
-                                    ld.baseDefense = float.Parse(enemyInfos[idx]["DEF"].ToString());     // 방어력
-                                    ld.healthPoint = float.Parse(enemyInfos[idx]["HP"].ToString());   // 최대 체력
-                                    ld.moveSpeed = float.Parse(enemyInfos[idx]["MOVESPEED"].ToString());       // 이동 속도. 범위, 초기값 설정 필요
-                                    ld.critical = float.Parse(enemyInfos[idx]["CRITICAL"].ToString());     // 크리티컬 확률
-                                    ld.criticalDmg = float.Parse(enemyInfos[idx]["CRITICALDAMAGE"].ToString());  // 크리티컬 데미지 배율
-                                    ld.accuracy = float.Parse(enemyInfos[idx]["ACCURACY"].ToString());     // 명중률
-                                    ld.evasion = float.Parse(enemyInfos[idx]["EVADE"].ToString());      // 회피율
+                                    ld.baseDamage = float.Parse(enemyData[idx]["ATK"].ToString());     // 일반 공격 데미지
+                                    ld.baseDefense = float.Parse(enemyData[idx]["DEF"].ToString());     // 방어력
+                                    ld.healthPoint = float.Parse(enemyData[idx]["HP"].ToString());   // 최대 체력
+                                    ld.moveSpeed = float.Parse(enemyData[idx]["MOVESPEED"].ToString());       // 이동 속도. 범위, 초기값 설정 필요
+                                    ld.critical = float.Parse(enemyData[idx]["CRITICAL"].ToString());     // 크리티컬 확률
+                                    ld.criticalDmg = float.Parse(enemyData[idx]["CRITICALDAMAGE"].ToString());  // 크리티컬 데미지 배율
+                                    ld.accuracy = float.Parse(enemyData[idx]["ACCURACY"].ToString());     // 명중률
+                                    ld.evasion = float.Parse(enemyData[idx]["EVADE"].ToString());      // 회피율
 
                                     enemy.LevelupStats(ld.level - 1,
-                                        (float?)enemyInfos[idx]["Levelup_Atk"],
-                                        (float?)enemyInfos[idx]["Levelup_Def"],
-                                        (float?)enemyInfos[idx]["Levelup_HP"]);
+                                        (float?)enemyData[idx]["Levelup_Atk"],
+                                        (float?)enemyData[idx]["Levelup_Def"],
+                                        (float?)enemyData[idx]["Levelup_HP"]);
                                     Logger.Debug($"{key} 적용 완료");
                                 }
                                 // 밸런스 테스트용 코드
