@@ -33,8 +33,6 @@ public class AttackableHero : AttackableUnit
 
             if (unitState == UnitState.Die && value != UnitState.None)
                 return;
-            if (name.Contains("shadow"))
-                Logger.Debug($"{name} : {value}");
             unitState = value;
             heroUI.heroState = unitState;
             switch (unitState)
@@ -118,9 +116,6 @@ public class AttackableHero : AttackableUnit
             if (unitState == UnitState.Die && value != UnitBattleState.None)
                 return;
             battleState = value;
-            if (name.Contains("shadow"))
-                Logger.Debug($"{name} : {value}");
-
             //상태가 바뀔때마다 애니메이션 호출
             switch (battleState)
             {
@@ -131,6 +126,10 @@ public class AttackableHero : AttackableUnit
                     pathFind.isStopped = true;
                     break;
                 case UnitBattleState.NormalAttack:
+                    if (name.Contains("shadow"))
+                    {
+                        Logger.Debug($"{name}    NormalAttack Start");
+                    }
                     pathFind.isStopped = true;
                     animator.SetTrigger("Attack");
                     break;
@@ -340,7 +339,13 @@ public class AttackableHero : AttackableUnit
                     if (IsAlive(target))
                     {
                         if (FindNowAttack())
+                        {
+                            if(name.Contains("shadow"))
+                            {
+                                Logger.Debug($"{lastNormalAttackTime[nowAttack]}  {nowAttack}");
+                            }
                             BattleState = UnitBattleState.NormalAttack;
+                        }
                         else
                             BattleState = UnitBattleState.MoveToTarget;
                     }
@@ -355,6 +360,10 @@ public class AttackableHero : AttackableUnit
             case UnitBattleState.MoveToTarget: //타겟에게 이동중 타겟 거리 계산.
                 if (FindNowAttack())
                 {
+                    if (name.Contains("shadow"))
+                    {
+                        Logger.Debug($"{lastNormalAttackTime[nowAttack]}  {nowAttack}");
+                    }
                     BattleState = UnitBattleState.NormalAttack;
                 }
                 else if (InRangeMinNormalAttack)
@@ -369,7 +378,13 @@ public class AttackableHero : AttackableUnit
                 break;
             case UnitBattleState.BattleIdle:
                 if (FindNowAttack())
+                {
+                    if (name.Contains("shadow"))
+                    {
+                        Logger.Debug($"{lastNormalAttackTime[nowAttack]}  {nowAttack}");
+                    }
                     BattleState = UnitBattleState.NormalAttack;
+                }
                 else if (!InRangeMinNormalAttack)
                     BattleState = UnitBattleState.MoveToTarget;
                 break;
@@ -377,13 +392,17 @@ public class AttackableHero : AttackableUnit
                 stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime >= .75f)
                 {
+                    if(name.Contains("shadow"))
+                        Logger.Debug($"{name}   NormalAttackEnd");
                     NormalAttackEnd();
                 }
                 break;
             case UnitBattleState.ActiveSkill:
                 stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("ActiveSkill") && stateInfo.normalizedTime >= 0.75f)
-                {                    
+                {
+                    if (name.Contains("shadow"))
+                        Logger.Debug($"{name}   ActiveSkillEnd");
                     ActiveSkillEnd();
                 }
                 break;
@@ -481,7 +500,6 @@ public class AttackableHero : AttackableUnit
         base.NormalAttackEnd();
 
         lastNormalAttackTime[nowAttack] = Time.time;
-        Logger.Debug($"{name} : NormalAttackEnd");
 
         if (lateReturn)
         {

@@ -11,6 +11,28 @@ public class RewardItem : MonoBehaviour
     public TextMeshProUGUI itemCountText;
     public Image itemImage;
 
+    public void SetData(Item item)
+    {
+        data = item;
+        itemNameText.text = GameManager.Instance.GetStringByTable(data.name);
+        if (itemCountText != null)
+            itemCountText.text = data.count.ToString();
+        itemImage.sprite = GameManager.Instance.GetSpriteByAddress(data.iconName);
+    }
+    public void SetData(Dictionary<string, object> newData, int count)
+    {
+        data.id = newData["ID"].ToString();
+        data.name = newData["Item_Name"].ToString();
+        data.count = count;
+        data.iconName = newData["Icon_Name"].ToString();
+        data.info = newData["Info"].ToString();
+        data.sort = newData["Sort"].ToString();
+        data.dataID = newData["DataID"].ToString();
+        itemNameText.text = GameManager.Instance.GetStringByTable(data.name);
+        if (itemCountText != null)
+            itemCountText.text = count.ToString();
+        itemImage.sprite = GameManager.Instance.GetSpriteByAddress(data.iconName);
+    }
     public void SetData(string id, string itemName, string iconName, string info,string sort, string dataID, string itemCount = null)
     {
         data.id = id;
@@ -20,7 +42,7 @@ public class RewardItem : MonoBehaviour
         data.info = info;
         data.sort = sort;
         data.dataID = dataID;
-        itemNameText.text = itemName;
+        itemNameText.text = GameManager.Instance.GetStringByTable(itemName);
         if (itemCountText != null)
             itemCountText.text = itemCount;
         itemImage.sprite = GameManager.Instance.GetSpriteByAddress(data.iconName);
