@@ -28,7 +28,7 @@ public class HeroUi : MonoBehaviour
     public void SetHeroInfo(CharacterDataBundle data)
     {
         heroData = data;
-        string key = $"Icon_{heroData.data.name}";
+        string key = $"icon_{heroData.data.name}";
         heroImage.sprite = GameManager.Instance.GetSpriteByAddress(key);
         SetHp();
     }
