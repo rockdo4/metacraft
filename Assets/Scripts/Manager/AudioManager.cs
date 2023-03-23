@@ -27,7 +27,7 @@ public class AudioManager : Singleton<AudioManager>
     public float bgmFadeInterval = 1f;
 
     Coroutine coBgmFadeCoroutine;
-    private int currBgmIndex;
+    private int currBgmIndex;    
 
     private string currBgmName;
 
@@ -112,14 +112,21 @@ public class AudioManager : Singleton<AudioManager>
         bgms[index].volume = bgmOriginVolumes[index];
         bgms[index].Play(); 
     }
-    public void ChangeBGMwithFade(int index)
+    public void ChageBGMOnlyFadeOut(int index)
+    {
+        if (coBgmFadeCoroutine != null)
+            StopCoroutine(coBgmFadeCoroutine);
+
+        coBgmFadeCoroutine = StartCoroutine(CoBGMOnlyFadeOut(index));
+    }
+    public void ChangeBGMFadeCross(int index)
     {
         if(coBgmFadeCoroutine != null)
             StopCoroutine(coBgmFadeCoroutine);
 
-        coBgmFadeCoroutine = StartCoroutine(CoBGMFadeCoroutine(index));
+        coBgmFadeCoroutine = StartCoroutine(CoBGMCrossFade(index));
     }    
-    private IEnumerator CoBGMFadeCoroutine(int index)
+    private IEnumerator CoBGMCrossFade(int index)
     {
         float timer = 0f;
           
@@ -131,7 +138,7 @@ public class AudioManager : Singleton<AudioManager>
 
         while (true)
         {
-            timer += Time.deltaTime;
+            timer += Time.fixedDeltaTime;            
          
             bgms[currBgmIndex].volume = Mathf.Lerp(sourBgmVolume, 0, divFadeTime * timer);
 
@@ -160,11 +167,52 @@ public class AudioManager : Singleton<AudioManager>
         }
     }
 
+    private IEnumerator CoBGMOnlyFadeOut(int index)
+    {
+        float timer = 0f;
+
+        float sourBgmVolume = bgms[currBgmIndex].volume;
+
+        float divFadeTime = 1 / bgmFadeTime;
+        bool destBgmStartPlay = false;
+
+        while (true)
+        {
+            timer += Time.fixedDeltaTime;
+
+            bgms[currBgmIndex].volume = Mathf.Lerp(sourBgmVolume, 0, divFadeTime * timer);
+
+            if (timer > bgmFadeInterval && !destBgmStartPlay)
+            {
+                bgms[index].Play();
+                bgms[index].volume = bgms[index].volume;
+                destBgmStartPlay = true;
+            }
+
+            if (timer > bgmFadeTime)
+            {
+                if (currBgmIndex.Equals(index))
+                    yield break;
+
+                bgms[currBgmIndex].Stop();
+                currBgmIndex = index;
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
     public void StopAllBGM()
     {
         foreach(var bgm in bgms)
         {
             bgm.Stop();            
         }
+    }
+
+    public int GetCurrBGMIndex()
+    {
+        return currBgmIndex;
     }
 }

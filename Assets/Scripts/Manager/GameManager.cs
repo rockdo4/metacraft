@@ -18,10 +18,7 @@ public class GameManager : Singleton<GameManager>
     public Transform heroSpawnTransform;    
 
     // Resources - Sprites, TextAsset + (Scriptable Objects, Sound etc)
-    private Dictionary<string, Sprite> iconSprites = new();
-    private Dictionary<string, Sprite> illustrationSprites = new();
-    private Dictionary<string, Sprite> stateIconSprites = new();
-    private Dictionary<string, Sprite> itemSprites = new();
+    private Dictionary<string, Sprite> sprites = new();
     public Dictionary<int, List<Dictionary<string, object>>> missionInfoDifficulty; // 작전 정보 난이도 키 추가
     public List<Dictionary<string, object>> dispatchInfoList; // 파견 정보
     public List<Dictionary<string, object>> officeInfoList;  // 사무소 레벨별 정보
@@ -94,11 +91,9 @@ public class GameManager : Singleton<GameManager>
 
         // Load TextAssets
         TextAsset ta = Resources.Load<TextAsset>("TextAssetList");
-        TextAsset ia = Resources.Load<TextAsset>("ItemNameList");
-        TextAsset sa = Resources.Load<TextAsset>("SkillNameList");
+        TextAsset sn = Resources.Load<TextAsset>("SpriteNameList");
         var tableNames = ta.text.Split("\r\n");
-        var itemNames = ia.text.Split("\r\n");
-        var skillNames = sa.text.Split("\r\n");
+        var spriteNames = sn.text.Split("\r\n");
 
         int count = tableNames.Length;
         for (int i = 0; i < count; i++)
@@ -122,56 +117,22 @@ public class GameManager : Singleton<GameManager>
         for (int i = 0; i < count; i++)
         {
             string address = heroDatabase[i].GetComponent<CharacterDataBundle>().originData.name;
-            string iconAddress = $"icon_{address}";
-            AsyncOperationHandle<Sprite> iconHandle = Addressables.LoadAssetAsync<Sprite>(iconAddress);
-            iconHandle.Completed +=
-                (AsyncOperationHandle<Sprite> obj) =>
-                {
-                    Sprite sprite = obj.Result;
-                    iconSprites.Add(iconAddress, sprite);
-                };
-            unreleasehandles.Add(iconHandle);
-
-            string IllurAddress = $"illu_{address}";
-            AsyncOperationHandle<Sprite> illuHandle = Addressables.LoadAssetAsync<Sprite>(IllurAddress);
-            illuHandle.Completed +=
-                (AsyncOperationHandle<Sprite> obj) =>
-                {
-                    Sprite sprite = obj.Result;
-                    illustrationSprites.Add(IllurAddress, sprite);
-                };
-            unreleasehandles.Add(illuHandle);
+            unreleasehandles.Add(LoadSprite($"icon_{address}"));
+            unreleasehandles.Add(LoadSprite($"illu_{address}"));
             total += 2;
         }
 
         count = 29; //임시. 나중에 버프 테이블 불러오게 수정할 예정
         for (int i = 1; i <= count; i++)
         {
-            string address = string.Format("state{0}",i);
-            AsyncOperationHandle<Sprite> stateIconHandle = Addressables.LoadAssetAsync<Sprite>(address);
-            stateIconHandle.Completed +=
-                (AsyncOperationHandle<Sprite> obj) =>
-                {
-                    Sprite sprite = obj.Result;
-                    stateIconSprites.Add(address, sprite);
-                };
-            unreleasehandles.Add(stateIconHandle);
+            unreleasehandles.Add(LoadSprite($"state{i}"));
             total++;
         }
 
-        int itemCount = itemNames.Length;
-        for (int i = 0; i < itemCount; i++)
+        int spriteCount = spriteNames.Length;
+        for (int i = 0; i < spriteCount; i++)
         {
-            string address = $"{itemNames[i]}";
-            AsyncOperationHandle<Sprite> itemIconHandle = Addressables.LoadAssetAsync<Sprite>(address);
-
-            itemIconHandle.Completed +=
-                (AsyncOperationHandle<Sprite> obj) =>
-                {
-                    Sprite sprite = obj.Result;
-                    itemSprites.Add(address, sprite);
-                };
-            unreleasehandles.Add(itemIconHandle);
+            unreleasehandles.Add(LoadSprite($"{spriteNames[i]}"));
             total++;
         }
 
@@ -234,6 +195,19 @@ public class GameManager : Singleton<GameManager>
         ReleaseAddressable(releasehandles);
         releasehandles.Clear();
         progress.CompleteProgress();
+    }
+
+    private AsyncOperationHandle<Sprite> LoadSprite(string address)
+    {
+        AsyncOperationHandle<Sprite> itemIconHandle = Addressables.LoadAssetAsync<Sprite>(address);
+
+        itemIconHandle.Completed +=
+            (AsyncOperationHandle<Sprite> obj) =>
+            {
+                Sprite sprite = obj.Result;
+                sprites.Add(address, sprite);
+            };
+        return itemIconHandle;
     }
 
     private void AppendStringTable(List<Dictionary<string, object>> rawData, string tableName)
@@ -412,26 +386,11 @@ public class GameManager : Singleton<GameManager>
 
     public Sprite GetSpriteByAddress(string address)
     {
-        if (iconSprites.ContainsKey(address))
+        if (sprites.ContainsKey(address))
         {
-            return iconSprites[address];
+            return sprites[address];
         }
-
-        if (illustrationSprites.ContainsKey(address))
-        {
-            return illustrationSprites[address];
-        }
-
-        if (stateIconSprites.ContainsKey(address))
-        {
-            return stateIconSprites[address];
-        }
-
-        if (itemSprites.ContainsKey(address))
-        {
-            return itemSprites[address];
-        }
-
+        
         Logger.Debug($"Load sprite fail. address: {address}");
         return null;
     }

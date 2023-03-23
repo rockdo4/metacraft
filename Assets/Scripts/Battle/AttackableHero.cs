@@ -33,6 +33,7 @@ public class AttackableHero : AttackableUnit
 
             if (unitState == UnitState.Die && value != UnitState.None)
                 return;
+
             unitState = value;
             heroUI.heroState = unitState;
             switch (unitState)
@@ -116,6 +117,7 @@ public class AttackableHero : AttackableUnit
             if (unitState == UnitState.Die && value != UnitBattleState.None)
                 return;
             battleState = value;
+
             //상태가 바뀔때마다 애니메이션 호출
             switch (battleState)
             {
