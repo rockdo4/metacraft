@@ -86,8 +86,6 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     {
         Vector3 trPos = tr.position;
 
-        enemys.Add(new List<AttackableEnemy>());
-
         Vector3 randomArea = UnityEngine.Random.insideUnitSphere * spawnRange;
         randomArea.y = 0f;
         randomArea.x += trPos.x;
@@ -103,6 +101,7 @@ public class EnemySpawningAndPositioning : MonoBehaviour
     public void SpawnAllEnemy
         (ref List<AttackableUnit> enemyPool, AttackableEnemy enemy)
     {
+        enemys.Add(new List<AttackableEnemy>());
         for (int i = 0; i < waveCount; i++)
         {
             SpawnRandomAreaEnemys(firstSpawnCount, ref enemyPool, enemy);
