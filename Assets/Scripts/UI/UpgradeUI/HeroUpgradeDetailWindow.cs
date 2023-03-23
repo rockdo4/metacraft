@@ -21,6 +21,17 @@ public class HeroUpgradeDetailWindow : View
     public TextMeshProUGUI gold;
     public Button upgradeButton;
 
+    //Popup
+    public Image resultHeroIcon;
+    public TextMeshProUGUI resultHeroText;
+
+    private GameManager gm;
+
+    private void Start()
+    {
+        gm = GameManager.Instance;
+    }
+
     private void OnEnable()
     {
         SetHeroInfo();
@@ -28,13 +39,10 @@ public class HeroUpgradeDetailWindow : View
 
     private void SetHeroInfo()
     {
-        GameManager gm = GameManager.Instance;
-
         if (gm.currentSelectObject == null)
             return;
         CharacterDataBundle cdb = gm.currentSelectObject.GetComponent<AttackableUnit>().GetUnitData();
         LiveData data = cdb.data;
-        var maxLevelTable = gm.maxLevelTable;
 
         heroName.text = gm.GetStringByTable(data.name);
         heroGrade.text = $"{(CharacterGrade)data.grade}등급 > {(CharacterGrade)(data.grade + 1)}등급";
@@ -55,13 +63,14 @@ public class HeroUpgradeDetailWindow : View
         nextSkillInfo[2].text = gm.GetStringByTable($"{cdb.activeSkill.skillDescription}");
 
         FindUpgradeMaterial(data.name, data.grade);
-        
+
+        resultHeroIcon.sprite = gm.GetSpriteByAddress($"icon_{data.name}");
+        resultHeroText.text = $"승급 심사 통과를 축하합니다!\n{(CharacterGrade)(data.grade + 1)}등급 히어로로 승급하였습니다!";
+
     }
 
     private void FindUpgradeMaterial(string name, int grade)
     {
-        GameManager gm = GameManager.Instance;
-
         for (int i = 0; i < gm.upgradeTable.Count; i++)
         {
             if (gm.upgradeTable[i]["Name"].ToString() == name&&(int)gm.upgradeTable[i]["Grade"] == grade)
@@ -71,5 +80,19 @@ public class HeroUpgradeDetailWindow : View
                 gold.text = $"{gm.playerData.gold}/{gm.upgradeTable[i]["NeedGold"]}";
             }
         }
+    }
+
+    public void OnClickUpgradeButton()
+    {
+        CharacterDataBundle cdb = gm.currentSelectObject.GetComponent<AttackableUnit>().GetUnitData();
+        LiveData data = cdb.data;
+
+        data.grade += 1;
+        data.maxLevel = (int)gm.maxLevelTable[data.grade + 1]["MaxLevel"];
+        cdb.attacks[0].skillLevel += 1;
+        cdb.passiveSkill.skillLevel += 1;
+        cdb.activeSkill.skillLevel += 1;
+
+        //아이템 소모, 골드 소모
     }
 }

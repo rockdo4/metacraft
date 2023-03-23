@@ -14,6 +14,7 @@ public class LiveData : IComparable<LiveData>
     public List<string> tags;      // 태그(특성)
 
     public int level = 1;          // 레벨
+    public int maxLevel;           // 최대 레벨
     public int exp = 0;            // 경험치
     public int likeability = 0;    // 호감도
 
