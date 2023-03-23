@@ -20,4 +20,24 @@ public class HeroUpgradeDetailWindow : View
     public TextMeshProUGUI[] meterialInfo;
     public TextMeshProUGUI gold;
     public Button upgradeButton;
+
+    private void SetHeroInfo()
+    {
+        GameManager gm = GameManager.Instance;
+
+        if (gm.currentSelectObject == null)
+            return;
+        CharacterDataBundle cdb = gm.currentSelectObject.GetComponent<AttackableUnit>().GetUnitData();
+        LiveData data = cdb.data;
+        var maxLevelTable = gm.maxLevelTable;
+
+        heroName.text = data.name;
+        heroGrade.text = $"{(CharacterGrade)data.grade}등급 > {(CharacterGrade)(data.grade + 1)}등급";
+        heroMaxLevel.text = $"{gm.maxLevelTable[data.grade]} > {gm.maxLevelTable[data.grade + 1]}";
+        heroPortrait.sprite = gm.GetSpriteByAddress($"Icon_{data.name}");
+        foreach(var preskillIcon in preSkillIcons)
+        {
+            preskillIcon.sprite = gm.GetSpriteByAddress($"Icon_{data.name}");
+        }
+    }
 }
