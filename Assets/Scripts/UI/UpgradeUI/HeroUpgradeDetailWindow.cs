@@ -21,6 +21,11 @@ public class HeroUpgradeDetailWindow : View
     public TextMeshProUGUI gold;
     public Button upgradeButton;
 
+    private void OnEnable()
+    {
+        SetHeroInfo();
+    }
+
     private void SetHeroInfo()
     {
         GameManager gm = GameManager.Instance;
@@ -31,9 +36,9 @@ public class HeroUpgradeDetailWindow : View
         LiveData data = cdb.data;
         var maxLevelTable = gm.maxLevelTable;
 
-        heroName.text = data.name;
+        heroName.text = gm.GetStringByTable(data.name);
         heroGrade.text = $"{(CharacterGrade)data.grade}등급 > {(CharacterGrade)(data.grade + 1)}등급";
-        heroMaxLevel.text = $"{gm.maxLevelTable[data.grade]} > {gm.maxLevelTable[data.grade + 1]}";
+        heroMaxLevel.text = $"{gm.maxLevelTable[data.grade]["MaxLevel"]} > {gm.maxLevelTable[data.grade + 1]["MaxLevel"]}";
         heroPortrait.sprite = gm.GetSpriteByAddress($"icon_{data.name}");
         prevSkillIcons[0].sprite = gm.GetSpriteByAddress($"{cdb.passiveSkill.skillIcon}");
         prevSkillIcons[1].sprite = gm.GetSpriteByAddress($"{cdb.attacks[0].skillIcon}");
@@ -49,5 +54,8 @@ public class HeroUpgradeDetailWindow : View
         nextSkillInfo[1].text = gm.GetStringByTable($"{cdb.attacks[0].skillDescription}");
         nextSkillInfo[2].text = gm.GetStringByTable($"{cdb.activeSkill.skillDescription}");
 
+        //meterialIcons;
+        //meterialInfo;
+        //gold;
     }
 }
