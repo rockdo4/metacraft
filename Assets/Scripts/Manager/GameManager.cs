@@ -220,10 +220,10 @@ public class GameManager : Singleton<GameManager>
         
         LoadAllData();
         FixMissionTable(CSVReader.SplitTextAsset(releasehandles["MissionInfoTable"].Result as TextAsset));
-        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_Desc"].Result as TextAsset), "StringTable_Desc");
-        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_Event"].Result as TextAsset), "StringTable_Event");
-        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_Proper"].Result as TextAsset), "StringTable_Proper");
-        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_UI"].Result as TextAsset), "StringTable_UI");
+        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_Desc"].Result as TextAsset, false), "StringTable_Desc");
+        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_Event"].Result as TextAsset, false), "StringTable_Event");
+        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_Proper"].Result as TextAsset, false), "StringTable_Proper");
+        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_UI"].Result as TextAsset, false), "StringTable_UI");
 
         ReleaseAddressable(releasehandles);
         releasehandles.Clear();
