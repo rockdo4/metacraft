@@ -27,7 +27,7 @@ public class AudioManager : Singleton<AudioManager>
     public float bgmFadeInterval = 1f;
 
     Coroutine coBgmFadeCoroutine;
-    private int currBgmIndex;
+    private int currBgmIndex;    
 
     private string currBgmName;
 
@@ -112,6 +112,13 @@ public class AudioManager : Singleton<AudioManager>
         bgms[index].volume = bgmOriginVolumes[index];
         bgms[index].Play(); 
     }
+    public void ChageBGMwithOneWayFade(int index)
+    {
+        if (coBgmFadeCoroutine != null)
+            StopCoroutine(coBgmFadeCoroutine);
+
+        coBgmFadeCoroutine = StartCoroutine(CoBGMFadeOneWayCoroutine(index));
+    }
     public void ChangeBGMwithFade(int index)
     {
         if(coBgmFadeCoroutine != null)
@@ -160,11 +167,53 @@ public class AudioManager : Singleton<AudioManager>
         }
     }
 
+    private IEnumerator CoBGMFadeOneWayCoroutine(int index)
+    {
+        float timer = 0f;
+
+        float sourBgmVolume = bgms[currBgmIndex].volume;
+        float destBgmVolume = bgms[index].volume;
+
+        float divFadeTime = 1 / bgmFadeTime;
+        bool destBgmStartPlay = false;
+
+        while (true)
+        {
+            timer += Time.deltaTime;
+
+            bgms[currBgmIndex].volume = Mathf.Lerp(sourBgmVolume, 0, divFadeTime * timer);
+
+            if (timer > bgmFadeInterval && !destBgmStartPlay)
+            {
+                bgms[index].Play();
+                bgms[index].volume = destBgmVolume;
+                destBgmStartPlay = true;
+            }
+
+            if (timer > bgmFadeInterval + bgmFadeTime)
+            {
+                if (currBgmIndex.Equals(index))
+                    yield break;
+
+                bgms[currBgmIndex].Stop();
+                currBgmIndex = index;
+                yield break;
+            }
+
+            yield return null;
+        }
+    }
+
     public void StopAllBGM()
     {
         foreach(var bgm in bgms)
         {
             bgm.Stop();            
         }
+    }
+
+    public int GetCurrBGMIndex()
+    {
+        return currBgmIndex;
     }
 }
