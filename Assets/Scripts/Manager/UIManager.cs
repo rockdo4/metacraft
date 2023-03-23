@@ -52,28 +52,42 @@ public class UIManager : MonoBehaviour
     }
     public void ShowView(int index)
     {
-        viewManager.Show(index);
-        popUpManager.CurrentViewIndex = index;
+        ShowViewWithNoSound(index);
 
         if (hasAudioSource)
             audioSource.PlayOneShot(viewAudio);       
     }
     public void ShowPopup(int index)
     {
-        popUpManager.ShowPopupInHierarchy(index);
+        ShowPopupWithNoSound(index);
 
         if (hasAudioSource)
             audioSource.PlayOneShot(popupAudio);
+    }
+    public void ClearPopups()
+    {
+        ClearPopupsWithNoSound();
+
+        if (hasAudioSource)
+            audioSource.PlayOneShot(clearAudio);
+    }
+
+    public void ShowViewWithNoSound(int index)
+    {
+        viewManager.Show(index);
+        popUpManager.CurrentViewIndex = index;
+    }
+    public void ShowPopupWithNoSound(int index)
+    {
+        popUpManager.ShowPopupInHierarchy(index);
+    }
+    public void ClearPopupsWithNoSound()
+    {
+        popUpManager.ClearPopups();
     }
     public void ShowPanelInteractable(bool interactable)
     {
         popUpManager.ShowPanelInteractable(interactable);
     }
-    public void ClearPopups()
-    {
-        popUpManager.ClearPopups();
 
-        if (hasAudioSource)
-            audioSource.PlayOneShot(clearAudio);
-    }
 }
