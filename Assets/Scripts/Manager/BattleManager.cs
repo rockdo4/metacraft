@@ -668,16 +668,6 @@ public class BattleManager : MonoBehaviour
             yield return null;
         }
 
-        //while (viewPoint.transform.position.z <= nextMaxZPos)
-        //{
-        //    viewPoint.transform.Translate(platformMoveSpeed * Time.deltaTime * platform.transform.forward);
-
-        //    if (btMapTriggers[currTriggerIndex].isTriggerEnter)
-        //        break;
-
-        //    yield return null;
-        //}
-
         if (!btMapTriggers[currTriggerIndex].isMissionEnd)
         {
             if (btMapTriggers[currTriggerIndex].isLastTrigger)
@@ -1089,6 +1079,96 @@ public class BattleManager : MonoBehaviour
 
     public void SpawnCurrMapAllEnemys()
     {
+        //int triggerCount = 0;
+        //for (int i = 0; i < btMapTriggers.Count; i++)
+        //{
+        //    btMapTriggers[i].ResetSpawnCount();
+        //    btMapTriggers[i].enemys.Clear();
+
+        //    int posCount = btMapTriggers[i].enemySettingPositions.Count;
+        //    if (posCount > 0)
+        //    {
+        //        triggerCount++;
+        //    }
+        //}
+
+        //for (int t = 0; t < triggerCount; t++)
+        //{
+        //    // 미션 테이블에서 노멀 몬스터들 담겨있는 키 랜덤 뽑기
+        //    int nMonCount = (int)currentSelectMissionTable["NMonCount"];
+        //    int randomEnemyCount = Random.Range(1, nMonCount + 1);
+        //    string normalEnemysKey = $"{currentSelectMissionTable[$"NMon{randomEnemyCount}"]}";
+
+        //    // 뽑은 키로 스폰 테이블에서 소환할 적들 찾기
+        //    Dictionary<string, object> spawnTableNormalEnemys = new();
+        //    for (int i = 0; i < enemySpawnTable.Count; i++)
+        //    {
+        //        if ($"{enemySpawnTable[i]["ID"]}".Equals(normalEnemysKey))
+        //        {
+        //            spawnTableNormalEnemys = enemySpawnTable[i];
+        //            break;
+        //        }
+        //    }
+
+        //    // 적들 id, 마리수, 레벨 담아두기
+        //    List<string> monIds = new();
+        //    List<int> monValues = new();
+        //    List<int> monLevels = new();
+
+        //    int monCount = (int)spawnTableNormalEnemys["MonCount"];
+        //    for (int i = 1; i <= monCount; i++)
+        //    {
+        //        string monId = $"{spawnTableNormalEnemys[$"MonID{i}"]}";
+        //        monIds.Add(monId);
+
+        //        int monValue = (int)spawnTableNormalEnemys[$"Monval{i}"];
+        //        monValues.Add(monValue);
+
+        //        int monLevel = (int)spawnTableNormalEnemys[$"Mon{i}LV"];
+        //        monLevels.Add(monLevel);
+        //    }
+
+        //    // 적들 데이터 담아두기
+        //    List<Dictionary<string, object>> enemyData = new();
+        //    for (int i = 0; i < enemyInfoTable.Count; i++)
+        //    {
+        //        for (int j = 0; j < monIds.Count; j++)
+        //        {
+        //            if ($"{enemyInfoTable[i]["ID"]}".Equals(monIds[j]))
+        //            {
+        //                enemyData.Add(enemyInfoTable[j]);
+        //            }
+        //        }
+        //    }
+
+        //    for (int i = 0; i < btMapTriggers.Count; i++)
+        //    {
+        //        int posCount = btMapTriggers[i].enemySettingPositions.Count;
+        //        for (int j = 0; j < posCount; j++)
+        //        {
+        //            int currPosEnemyCount = monValues[i];
+        //            string name = $"{enemyData[i]["NAME"]}";
+
+        //            for (int l = 0; l < currPosEnemyCount; l++)
+        //            {
+        //                int enemyPrefabIndex = 0;
+        //                for (int k = 0; k < enemyPrefabs.Count; k++)
+        //                {
+        //                    if (enemyPrefabs[k].gameObject.name.Equals(name))
+        //                    {
+        //                        enemyPrefabIndex = k;
+        //                        break;
+        //                    }
+        //                }
+
+        //                var enemy = Instantiate(enemyPrefabs[enemyPrefabIndex]);
+        //                enemy.gameObject.SetActive(false);
+        //                btMapTriggers[i].enemySettingPositions[j].SpawnAllEnemy(ref btMapTriggers[i].enemys, enemy);
+        //            }
+        //        }
+        //    }
+        //}
+
         // 미션 테이블에서 노멀 몬스터들 담겨있는 키 랜덤 뽑기
         int nMonCount = (int)currentSelectMissionTable["NMonCount"];
         int randomEnemyCount = Random.Range(1, nMonCount + 1);
@@ -1104,6 +1184,23 @@ public class BattleManager : MonoBehaviour
                 break;
             }
         }
+
+        //Dictionary<string, object> spawnTableHardEnemys = new();
+        //if (tree.CurNode.type == TreeNodeTypes.Threat)
+        //{
+        //    int hMonCount = (int)currentSelectMissionTable["HMonCount"];
+        //    int randomHEnemyCount = Random.Range(1, hMonCount + 1);
+        //    string threatEnemysKey = $"{currentSelectMissionTable[$"HMon{randomHEnemyCount}"]}";
+
+        //    for (int i = 0; i < enemySpawnTable.Count; i++)
+        //    {
+        //        if ($"{enemySpawnTable[i]["ID"]}".Equals(threatEnemysKey))
+        //        {
+        //            spawnTableHardEnemys = enemySpawnTable[i];
+        //            break;
+        //        }
+        //    }
+        //}
 
         // 적들 id, 마리수, 레벨 담아두기
         List<string> monIds = new();
@@ -1121,6 +1218,18 @@ public class BattleManager : MonoBehaviour
 
             int monLevel = (int)spawnTableNormalEnemys[$"Mon{i}LV"];
             monLevels.Add(monLevel);
+
+            //if (tree.CurNode.type == TreeNodeTypes.Threat)
+            //{
+            //    string hMonId = $"{spawnTableHardEnemys[$"MonID{i}"]}";
+            //    monIds.Add(hMonId);
+
+            //    int hMonValue = (int)spawnTableHardEnemys[$"Monval{i}"];
+            //    monValues.Add(hMonValue);
+
+            //    int hMonLevel = (int)spawnTableHardEnemys[$"Mon{i}LV"];
+            //    monLevels.Add(hMonLevel);
+            //}
         }
 
         // 적들 데이터 담아두기
@@ -1186,7 +1295,7 @@ public class BattleManager : MonoBehaviour
                     int enemyPrefabIndex = 0;
                     for (int k = 0; k < enemyPrefabs.Count; k++)
                     {
-                        if (enemyPrefabs[k].gameObject.name.Equals(name))  
+                        if (enemyPrefabs[k].gameObject.name.Equals(name))
                         {
                             enemyPrefabIndex = k;
                             break;
