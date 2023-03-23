@@ -45,25 +45,11 @@ public class RewardManager : MonoBehaviour
     void SaveItems()
     {
         var rewards = stageReward.rewards;
-        var inventoryData = GameManager.Instance.inventoryData;
+        ref InventoryData inventoryData = ref GameManager.Instance.inventoryData;
 
         foreach (var item in rewards)
         {
-            var idx = FindItem(item);
-            if (idx == -1)
-                inventoryData.inventory.Add(item.data);
-            else
-                inventoryData.inventory[idx].AddCount(item.data.count);
+            inventoryData.AddItem(item.data);
         }
-    }
-    int FindItem(RewardItem item)
-    {
-        var inventoryData = GameManager.Instance.inventoryData;
-        for(int i = 0; i < inventoryData.inventory.Count; i++)
-        {
-            if (inventoryData.inventory[i].id == item.data.id)
-                return i;
-        }
-        return -1;
     }
 }
