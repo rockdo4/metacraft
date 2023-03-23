@@ -1,11 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
-using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
-using static UnityEngine.UI.Extensions.TextPic;
 
 public class RewardItem : MonoBehaviour
 {
@@ -17,7 +14,7 @@ public class RewardItem : MonoBehaviour
     public void SetData(Item item)
     {
         data = item;
-        itemNameText.text = data.name;
+        itemNameText.text = GameManager.Instance.GetStringByTable(data.name);
         if (itemCountText != null)
             itemCountText.text = data.count.ToString();
         itemImage.sprite = GameManager.Instance.GetSpriteByAddress(data.iconName);
@@ -31,7 +28,7 @@ public class RewardItem : MonoBehaviour
         data.info = newData["Info"].ToString();
         data.sort = newData["Sort"].ToString();
         data.dataID = newData["DataID"].ToString();
-        itemNameText.text = data.name;
+        itemNameText.text = GameManager.Instance.GetStringByTable(data.name);
         if (itemCountText != null)
             itemCountText.text = count.ToString();
         itemImage.sprite = GameManager.Instance.GetSpriteByAddress(data.iconName);
@@ -45,7 +42,7 @@ public class RewardItem : MonoBehaviour
         data.info = info;
         data.sort = sort;
         data.dataID = dataID;
-        itemNameText.text = itemName;
+        itemNameText.text = GameManager.Instance.GetStringByTable(itemName);
         if (itemCountText != null)
             itemCountText.text = itemCount;
         itemImage.sprite = GameManager.Instance.GetSpriteByAddress(data.iconName);

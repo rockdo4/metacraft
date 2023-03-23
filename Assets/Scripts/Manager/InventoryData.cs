@@ -26,7 +26,7 @@ public class InventoryData
 
     int FindItem(Item item)
     {
-        var inventoryData = GameManager.Instance.inventoryData;
+        InventoryData inventoryData = GameManager.Instance.inventoryData;
         for (int i = 0; i < inventoryData.inventory.Count; i++)
         {
             if (inventoryData.inventory[i].id == item.id)
@@ -37,7 +37,7 @@ public class InventoryData
 }
 
 [Serializable]
-public struct Item
+public class Item
 {
     public string id;
     public string name;
@@ -47,6 +47,12 @@ public struct Item
     public string sort;
     public string dataID;
 
-    public void AddCount(int cnt) => count += cnt;  
-    public void DelCount(int cnt) => count -= cnt;  
+    public void AddCount(int cnt)
+    {
+        count += cnt;
+    }
+    public void DelCount(int cnt)
+    {
+        count -= cnt;
+    }
 }

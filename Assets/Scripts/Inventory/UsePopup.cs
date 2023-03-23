@@ -1,6 +1,8 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class UsePopup : MonoBehaviour
 {
@@ -10,10 +12,17 @@ public class UsePopup : MonoBehaviour
     public TextMeshProUGUI info;
     public GetPopUp getPopUp;
     public Item useItem;
+    public List<RewardItem> items = new();
+    public Button useButton;
     
 
     public void OnClickCancle()
     {
+        for (int i = items.Count - 1; i >= 0; i--)
+        {
+            Destroy(items[i].gameObject);
+        }
+        items.Clear();
         gameObject.SetActive(false);
     }
 
@@ -29,7 +38,9 @@ public class UsePopup : MonoBehaviour
 
     public void Set(Item item)
     {
+        useButton.interactable = false;
         useItem = item;
+        nowItem = null;
         var data = GameManager.Instance.itemBoxList.Find(t => t["ID"].ToString().Equals(item.dataID));
         var itemData = GameManager.Instance.itemInfoList;
 
@@ -50,13 +61,14 @@ public class UsePopup : MonoBehaviour
 
             addItem.GetComponent<Button>().onClick.AddListener(() => SetInfo(addItem.data));
             addItem.SetData(addItemData, int.Parse(nowItemValue.ToString()));
+            items.Add(addItem);
         }
     }
 
     public void SetInfo(Item item)
     {
-        info.text = item.info;
+        useButton.interactable = true;
+        info.text = GameManager.Instance.GetStringByTable(item.info);
         nowItem = item;
     }
-
 }

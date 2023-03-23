@@ -5,7 +5,7 @@ using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class InventoryWindow : MonoBehaviour
+public class InventoryWindow : View
 {
     public RewardItem itemPrev;
     public Transform itemTr;
@@ -14,11 +14,23 @@ public class InventoryWindow : MonoBehaviour
     public Item nowItem;
     public Button useButton;
     public UsePopup usePopup;
-    
 
-    private void OnEnable() // Init으로 대체 예정
+    private void OnEnable()
     {
-        var inventoryData = GameManager.Instance.inventoryData.inventory;
+        Init();
+    }
+    private void Init() // Init으로 대체 예정
+    {
+        info.text = string.Empty;
+        useButton.interactable = false;
+
+        for (int i = items.Count - 1; i >= 0; i--)
+        {
+            Destroy(items[i].gameObject);
+        }
+        items.Clear();
+
+        var inventoryData =  GameManager.Instance.inventoryData.inventory;
 
         foreach (var item in inventoryData)
         {
@@ -46,10 +58,20 @@ public class InventoryWindow : MonoBehaviour
                 item.gameObject.SetActive(false);
         }
     }
+    public void OnDisable()
+    {
+        for (int i = items.Count - 1; i >= 0; i--)
+        {
+            Destroy(items[i].gameObject);
+        }
+        items.Clear();
+        usePopup.getPopUp.OnClickCancle();
+        usePopup.OnClickCancle();
+    }
 
     public void SetInfo(Item item)
     {
-        info.text = item.info;
+        info.text = GameManager.Instance.GetStringByTable(item.info);
         useButton.interactable = !item.dataID.Equals(string.Empty);
         nowItem = item;
     }
@@ -62,9 +84,8 @@ public class InventoryWindow : MonoBehaviour
 
     public void OnClickGetButton()
     {
-        for (int i = 0; i < items.Count; i++)
-        {
-
-        }
+        usePopup.getPopUp.OnClickCancle();
+        usePopup.OnClickCancle();
+        Init();
     }
 }

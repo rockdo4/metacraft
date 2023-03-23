@@ -45,7 +45,7 @@ public class RewardManager : MonoBehaviour
     void SaveItems()
     {
         var rewards = stageReward.rewards;
-        var inventoryData = GameManager.Instance.inventoryData;
+        ref InventoryData inventoryData = ref GameManager.Instance.inventoryData;
 
         foreach (var item in rewards)
         {
