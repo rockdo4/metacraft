@@ -107,7 +107,7 @@ public class GameManager : Singleton<GameManager>
                 tas.Completed +=
                     (AsyncOperationHandle<TextAsset> obj) =>
                 {
-                    Logger.Debug($"{key} load success");
+                    //Logger.Debug($"{key} load success");
                 };
                 total++;
             }
@@ -118,7 +118,7 @@ public class GameManager : Singleton<GameManager>
         for (int i = 0; i < count; i++)
         {
             string address = heroDatabase[i].GetComponent<CharacterDataBundle>().originData.name;
-            string iconAddress = $"Icon_{address}";
+            string iconAddress = $"icon_{address}";
             AsyncOperationHandle<Sprite> iconHandle = Addressables.LoadAssetAsync<Sprite>(iconAddress);
             iconHandle.Completed +=
                 (AsyncOperationHandle<Sprite> obj) =>
@@ -128,7 +128,7 @@ public class GameManager : Singleton<GameManager>
                 };
             unreleasehandles.Add(iconHandle);
 
-            string IllurAddress = $"Illu_{address}";
+            string IllurAddress = $"illu_{address}";
             AsyncOperationHandle<Sprite> illuHandle = Addressables.LoadAssetAsync<Sprite>(IllurAddress);
             illuHandle.Completed +=
                 (AsyncOperationHandle<Sprite> obj) =>
@@ -220,10 +220,10 @@ public class GameManager : Singleton<GameManager>
         
         LoadAllData();
         FixMissionTable(CSVReader.SplitTextAsset(releasehandles["MissionInfoTable"].Result as TextAsset));
-        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_Desc"].Result as TextAsset), "StringTable_Desc");
-        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_Event"].Result as TextAsset), "StringTable_Event");
-        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_Proper"].Result as TextAsset), "StringTable_Proper");
-        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_UI"].Result as TextAsset), "StringTable_UI");
+        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_Desc"].Result as TextAsset, false), "StringTable_Desc");
+        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_Event"].Result as TextAsset, false), "StringTable_Event");
+        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_Proper"].Result as TextAsset, false), "StringTable_Proper");
+        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_UI"].Result as TextAsset, false), "StringTable_UI");
 
         ReleaseAddressable(releasehandles);
         releasehandles.Clear();
@@ -236,7 +236,7 @@ public class GameManager : Singleton<GameManager>
         for (int i = 0; i < count; i++)
         {
             var copy = rawData[i];
-            string id = $"{rawData[i]["ID"]}";
+            string id = $"{rawData[i]["ID"]}".ToLower();
             copy.Remove("ID");
             if (stringTable.ContainsKey(id))
             {
