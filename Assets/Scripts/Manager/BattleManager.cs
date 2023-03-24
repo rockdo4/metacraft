@@ -1173,6 +1173,8 @@ public class BattleManager : MonoBehaviour
                 string normalEnemysKey = $"{currentSelectMissionTable[$"NMon{randomEnemyCount}"]}";
                 SetEnemySpawnTable(ref spawnTableNormalEnemys, normalEnemysKey);
 
+                Logger.Debug($"Key : {normalEnemysKey}");
+
                 if (tree.CurNode.type == TreeNodeTypes.Villain)
                 {
                     string villainEnemysKey = $"{currentSelectMissionTable["Villain"]}";
@@ -1196,16 +1198,14 @@ public class BattleManager : MonoBehaviour
 
             // 적들 ID 찾아서 InfoTable 한 줄씩 담아두기
             List<Dictionary<string, object>> enemyData = new();
-            for (int j = 0; j < enemyInfoTable.Count; j++)
+            for (int j = 0; j < monIds.Count; j++)
             {
-                string name = $"{enemyInfoTable[j]["NAME"]}";
-                string id = $"{enemyInfoTable[j]["ID"]}";
-
-                for (int k = 0; k < monIds.Count; k++)
+                for (int k = 0; k < enemyInfoTable.Count; k++)
                 {
-                    if (id.Equals(monIds[k]))
+                    string id = $"{enemyInfoTable[k]["ID"]}";
+                    if (id.Equals(monIds[j]))
                     {
-                        enemyData.Add(enemyInfoTable[j]);
+                        enemyData.Add(enemyInfoTable[k]);
                     }
                 }
             }
@@ -1218,14 +1218,14 @@ public class BattleManager : MonoBehaviour
                 for (int l = 0; l < enemyData.Count; l++)
                 {
                     // 내부에서 이름 찾기
-                    string name = $"{enemyData[l]["NAME"]}";
+                    string enemyName = $"{enemyData[l]["NAME"]}";
                     int job = (int)enemyData[l]["JOB"];
 
                     // 찾은 이름을 프리펩 순회하면서 대조하기
                     for (int k = 0; k < enemyPrefabs.Count; k++)
                     {
                         // 찾음
-                        if (enemyPrefabs[k].gameObject.name.Equals(name))
+                        if (enemyPrefabs[k].gameObject.name.Equals(enemyName))
                         {
                             // 생성해야하는 wave(리스폰할 횟수)당 해당 위치에 테이블의 마릿수만큼 소환
                             int currPosEnemyCount = monValues[l];
