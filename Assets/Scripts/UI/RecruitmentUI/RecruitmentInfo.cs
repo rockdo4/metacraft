@@ -16,7 +16,7 @@ public class RecruitmentInfo : MonoBehaviour
         originData = dataBundle.originData;
         heroNameText.text = GameManager.Instance.GetStringByTable(originData.name);
         gradeText.text = $"{(CharacterGrade)originData.grade}";
-        icon.sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{originData.name}");
+        icon.sprite = GameManager.Instance.GetSpriteByAddress($"icon_{originData.name}");
     }
 
     //아이템 연결

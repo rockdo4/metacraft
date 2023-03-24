@@ -144,7 +144,7 @@ public class MissionManager : View
         }
 
         LiveData liveData = bundle.data;
-        heroSlots[heroSlotsIndex].GetComponent<Image>().sprite = gm.GetSpriteByAddress($"Icon_{liveData.name}");
+        heroSlots[heroSlotsIndex].GetComponent<Image>().sprite = gm.GetSpriteByAddress($"icon_{liveData.name}");
         selectIndexGroup[heroSlotsIndex] = index;
 
         if (duplication != null)

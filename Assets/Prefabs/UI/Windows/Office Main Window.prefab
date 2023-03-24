@@ -171,10 +171,10 @@ RectTransform:
   m_Father: {fileID: 8798705030396205857}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 2644, y: -150}
+  m_SizeDelta: {x: 532, y: 220}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &63554506
 CanvasRenderer:
@@ -391,6 +391,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 8269663971358400008}
+        m_TargetAssemblyTypeName: GetAudioManagerFunc, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: ShowView
@@ -523,7 +535,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6318226093509819651}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 8269663971358400008}
+        m_TargetAssemblyTypeName: GetAudioManagerFunc, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &1701406473009249196
 GameObject:
   m_ObjectHideFlags: 0
@@ -899,14 +923,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: ShowView
+      - m_Target: {fileID: 8269663971358400008}
+        m_TargetAssemblyTypeName: GetAudioManagerFunc, Assembly-CSharp
+        m_MethodName: PlayUI
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 2
+          m_IntArgument: 1
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -987,10 +1011,10 @@ RectTransform:
   m_Father: {fileID: 8798705030396205857}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1480, y: -150}
+  m_SizeDelta: {x: 532, y: 220}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8798705030630522498
 CanvasRenderer:
@@ -1121,10 +1145,10 @@ RectTransform:
   m_Father: {fileID: 8798705030396205857}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 2062, y: -150}
+  m_SizeDelta: {x: 532, y: 220}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8798705030322725961
 CanvasRenderer:
@@ -2295,10 +2319,10 @@ RectTransform:
   m_Father: {fileID: 8798705030396205857}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 316, y: -150}
+  m_SizeDelta: {x: 532, y: 220}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8798705030528218515
 CanvasRenderer:
@@ -3246,6 +3270,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 1
         m_CallState: 2
+      - m_Target: {fileID: 8269663971358400008}
+        m_TargetAssemblyTypeName: GetAudioManagerFunc, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 4
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
 --- !u!1 &8798705031019007232
 GameObject:
   m_ObjectHideFlags: 0
@@ -3834,6 +3870,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 8269663971358400008}
+        m_TargetAssemblyTypeName: GetAudioManagerFunc, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 4
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &8798705031260383855
 GameObject:
   m_ObjectHideFlags: 0
@@ -4321,6 +4369,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: ShowPanelInteractable
         m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 8269663971358400008}
+        m_TargetAssemblyTypeName: GetAudioManagerFunc, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -6111,6 +6171,7 @@ GameObject:
   - component: {fileID: 8798705031912283506}
   - component: {fileID: 8798705031912283507}
   - component: {fileID: 5352931363774674922}
+  - component: {fileID: 8269663971358400008}
   m_Layer: 5
   m_Name: Office Main Window
   m_TagString: Untagged
@@ -6205,6 +6266,18 @@ MonoBehaviour:
   officeLevel: {fileID: 8798705031812399051}
   officeExp: {fileID: 8798705031622880707}
   playerGold: {fileID: 2997829276056094551}
+--- !u!114 &8269663971358400008
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8798705031912283510}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0266323f7b0a8964c934f46339e937f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8798705031949490558
 GameObject:
   m_ObjectHideFlags: 0
@@ -6355,10 +6428,10 @@ RectTransform:
   m_Father: {fileID: 8798705030396205857}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 898, y: -150}
+  m_SizeDelta: {x: 532, y: 220}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8798705032144882006
 CanvasRenderer:
@@ -6847,6 +6920,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 8269663971358400008}
+        m_TargetAssemblyTypeName: GetAudioManagerFunc, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: ShowView
@@ -6980,6 +7065,18 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
+      - m_Target: {fileID: 8269663971358400008}
+        m_TargetAssemblyTypeName: GetAudioManagerFunc, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
         m_MethodName: ShowView

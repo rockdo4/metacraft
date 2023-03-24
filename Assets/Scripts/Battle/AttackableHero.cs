@@ -33,8 +33,6 @@ public class AttackableHero : AttackableUnit
 
             if (unitState == UnitState.Die && value != UnitState.None)
                 return;
-            if (name.Contains("shadow"))
-                Logger.Debug($"{name} : {value}");
             unitState = value;
             heroUI.heroState = unitState;
             switch (unitState)
@@ -118,10 +116,6 @@ public class AttackableHero : AttackableUnit
             if (unitState == UnitState.Die && value != UnitBattleState.None)
                 return;
             battleState = value;
-            if (name.Contains("shadow"))
-                Logger.Debug($"{name} : {value}");
-
-            //상태가 바뀔때마다 애니메이션 호출
             switch (battleState)
             {
                 case UnitBattleState.MoveToTarget:
@@ -201,9 +195,12 @@ public class AttackableHero : AttackableUnit
     }
     private void Start()
     {
+        if (effectCreateTransform.Equals(null))
+            effectCreateTransform = transform;
+
         foreach (var attack in characterData.attacks)
         {
-            attack.SkillHolderTransform = effectCreateTransform ?? transform;
+            attack.SkillHolderTransform = effectCreateTransform;
             attack.ActorTransform = transform;
         }
         characterData.activeSkill.ActorTransform = transform;
@@ -340,7 +337,9 @@ public class AttackableHero : AttackableUnit
                     if (IsAlive(target))
                     {
                         if (FindNowAttack())
+                        {
                             BattleState = UnitBattleState.NormalAttack;
+                        }
                         else
                             BattleState = UnitBattleState.MoveToTarget;
                     }
@@ -369,7 +368,9 @@ public class AttackableHero : AttackableUnit
                 break;
             case UnitBattleState.BattleIdle:
                 if (FindNowAttack())
+                {
                     BattleState = UnitBattleState.NormalAttack;
+                }
                 else if (!InRangeMinNormalAttack)
                     BattleState = UnitBattleState.MoveToTarget;
                 break;
@@ -383,7 +384,7 @@ public class AttackableHero : AttackableUnit
             case UnitBattleState.ActiveSkill:
                 stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("ActiveSkill") && stateInfo.normalizedTime >= 0.75f)
-                {                    
+                {
                     ActiveSkillEnd();
                 }
                 break;
@@ -481,7 +482,6 @@ public class AttackableHero : AttackableUnit
         base.NormalAttackEnd();
 
         lastNormalAttackTime[nowAttack] = Time.time;
-        Logger.Debug($"{name} : NormalAttackEnd");
 
         if (lateReturn)
         {

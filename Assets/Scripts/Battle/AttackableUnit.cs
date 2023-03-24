@@ -32,7 +32,6 @@ public abstract class AttackableUnit : MonoBehaviour
     protected float minAttackDis = float.MaxValue;
     public AnimationClip[] skillClips;
 
-
     [Header("캐릭터 타입")]
     public UnitType unitType;
     //[Header("Ai 타입")]
@@ -63,11 +62,9 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public float MaxHp => ((bufferState.maxHealthIncrease * characterData.data.healthPoint));
     public float UnitHpScale => characterData.data.currentHp / MaxHp;
-    public virtual float UnitHp
-    {
+    public virtual float UnitHp {
         get { return characterData.data.currentHp; }
-        set
-        {
+        set {
             characterData.data.currentHp = Mathf.Clamp(value, 0, MaxHp);
         }
     }
@@ -100,7 +97,11 @@ public abstract class AttackableUnit : MonoBehaviour
     protected virtual UnitBattleState BattleState { get; set; }
 
     public bool IsAlive(AttackableUnit unit) => (unit != null) && (unit.gameObject.activeSelf) && (unit.UnitHp > 0);
-    protected bool CanNormalAttackTime(CharacterSkill skill) => (Time.time - lastNormalAttackTime[skill]) * bufferState.attackSpeed > skill.cooldown;
+    protected bool CanNormalAttackTime(CharacterSkill skill)
+    {
+        return (Time.time - lastNormalAttackTime[skill]) * bufferState.attackSpeed > skill.cooldown;
+    }
+
     protected bool InRangeNormalAttack(CharacterSkill skill) => Vector3.Distance(target.transform.position, transform.position) < skill.distance;
     protected bool InRangeMinNormalAttack => Vector3.Distance(target.transform.position, transform.position) < minAttackDis;
     protected bool InRangeActiveAttack => Vector3.Distance(activeTarget.transform.position, transform.position) < characterData.activeSkill.distance;
@@ -114,8 +115,7 @@ public abstract class AttackableUnit : MonoBehaviour
     public BufferState GetBuffState => bufferState;
 
     protected bool isAuto = false;
-    public virtual bool IsAuto
-    {
+    public virtual bool IsAuto {
         get { return isAuto; }
         set { isAuto = value; }
     }
@@ -138,6 +138,9 @@ public abstract class AttackableUnit : MonoBehaviour
         var manager = FindObjectOfType<BattleManager>();
         if (manager != null)
             battleManager = manager;
+
+        if (effectCreateTransform.Equals(null))
+            effectCreateTransform = transform;
     }
 
     protected void InitData()
@@ -157,7 +160,8 @@ public abstract class AttackableUnit : MonoBehaviour
             if (usingFloatingHpBar)
             {
                 hpBarManager = GetComponent<HpBarManager>();
-                hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+                hpBarManager.SetLiveData(characterData.data);
+                //hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
             }
         }
 
@@ -378,11 +382,17 @@ public abstract class AttackableUnit : MonoBehaviour
         }
     }
 
-    public virtual void NormalAttackEnd() => target = (!IsAlive(target)) ? null : target;
+    public virtual void NormalAttackEnd()
+    {
+        target = (!IsAlive(target)) ? null : target;
+    }
 
     public virtual void PassiveSkillEnd() { }
 
-    public virtual void ActiveSkillEnd() => target = (!IsAlive(target)) ? null : target;
+    public virtual void ActiveSkillEnd()
+    {
+        target = (!IsAlive(target)) ? null : target;
+    }
 
     public virtual void StunEnd()
     {
@@ -394,7 +404,6 @@ public abstract class AttackableUnit : MonoBehaviour
     public virtual void ProvokeEnd()
     {
         target = null;
-        //Logger.Debug("Provoke End");
     }
     public void OnPassiveSkill(List<AttackableUnit> enemies, List<AttackableUnit> heros)
     {
@@ -480,7 +489,7 @@ public abstract class AttackableUnit : MonoBehaviour
             else
                 EffectManager.Instance.Get(skill.hitEffect, hitEffectTransform != null ? hitEffectTransform : transform);
         }
-        ShowHpBarAndDamageText(dmg, isCritical);
+        ShowHpBarAndDamageText(dmg, isCritical);        
     }
 
     public void ShowHpBarAndDamageText(int dmg, bool isCritical = false)
@@ -501,7 +510,7 @@ public abstract class AttackableUnit : MonoBehaviour
         if (!usingFloatingHpBar)
             return;
 
-        hpBarManager.OnDamage(dmg);
+        hpBarManager.ActiveHpBar();
         if (UnitHp <= 0)
         {
             hpBarManager.Die();
@@ -710,9 +719,6 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void OnDead(AttackableUnit unit);
     public virtual void DestroyUnit()
     {
-        //Utils.CopyPositionAndRotation(gameObject, gameObject.transform.parent);
-        //pathFind.enabled = false;
-        //Logger.Debug("DestroyUnit");
         gameObject.SetActive(false);
         isAlive = false;
     }
@@ -771,7 +777,6 @@ public abstract class AttackableUnit : MonoBehaviour
                     case BuffType.LifeSteal:
                         break;
                     case BuffType.energyCharging:
-                        //Logger.Debug("energyCharging");
                         break;
                     case BuffType.Count:
                         break;
@@ -804,17 +809,14 @@ public abstract class AttackableUnit : MonoBehaviour
             switch (info.type)
             {
                 case BuffType.Provoke:
-                    //Logger.Debug("Provoke");
                     target = attackableUnit;
                     endEvent = ProvokeEnd;
                     break;
                 case BuffType.Stun:
-                    //Logger.Debug("Stun");
                     endEvent = StunEnd;
                     BattleState = UnitBattleState.Stun;
                     break;
                 case BuffType.Silence:
-                    //Logger.Debug("Stun");
                     break;
 
             }
@@ -874,8 +876,6 @@ public abstract class AttackableUnit : MonoBehaviour
             {
                 if (skillClips.Length != 0)
                 {
-                    //Logger.Debug(name + " " + skillClips[idx].name);
-
                     clipOverrides["NormalAttack"] = skillClips[idx];
                     animatorOverrideController.ApplyOverrides(clipOverrides);
 

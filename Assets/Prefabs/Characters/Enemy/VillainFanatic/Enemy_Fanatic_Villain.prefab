@@ -9405,7 +9405,7 @@ Transform:
   m_GameObject: {fileID: 4442708247915172301}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 407840354942654728}
@@ -9444,7 +9444,7 @@ MonoBehaviour:
     evasion: 0
     accuracy: 0
   attacks:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: b5b498abaadafaa4b811e665173ecacd, type: 2}
   activeSkill: {fileID: 0}
   passiveSkill: {fileID: 0}
 --- !u!136 &5321978814047551523
@@ -9576,6 +9576,7 @@ MonoBehaviour:
   citizenList: []
   unitState: 0
   battleState: 0
+  buffList: []
   isThereDamageUI: 1
   usingFloatingHpBar: 1
   isAlive: 0
