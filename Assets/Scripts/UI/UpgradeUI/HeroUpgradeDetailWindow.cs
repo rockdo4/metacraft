@@ -89,6 +89,18 @@ public class HeroUpgradeDetailWindow : View
         for (int i = 0; i < gm.upgradeTable.Count; i++)
         {
             var itemName = gm.upgradeTable[i]["Name"].ToString();
+            int itemCount = 0;
+            if (gm.inventoryData.IsItem(itemName))
+            {
+                itemCount = 0;
+            }
+            else
+            {
+                itemCount = gm.inventoryData.GetItem(itemName).count;
+            }
+            meterialInfo[0].text = $"{itemCount}/{gm.upgradeTable[i]["Mmaterial1Amount"]}";
+            gold.text = $"{gm.playerData.gold}/{gm.upgradeTable[i]["NeedGold"]}";
+
             if (itemName == name && (int)gm.upgradeTable[i]["Grade"] == grade)
             {
                 foreach (var item in gm.itemInfoList)
@@ -96,14 +108,10 @@ public class HeroUpgradeDetailWindow : View
                     if (item["ID"].Equals(gm.upgradeTable[i]["Material1"].ToString()))
                     {
                         meterialIcons[0].sprite = gm.GetSpriteByAddress(item["Icon_Name"].ToString());
+
                     }
                 }
-            }
-            Item thisItem = gm.inventoryData.FindItem(itemName);
-            var itemCount = thisItem == null ? 0 : gm.inventoryData.FindItem(itemName).count;
-            meterialInfo[0].text = $"{itemCount}/{gm.upgradeTable[i]["Mmaterial1Amount"]}";
-            
-            gold.text = $"{gm.playerData.gold}/{gm.upgradeTable[i]["NeedGold"]}";
+            }         
         }
     }
 
