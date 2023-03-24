@@ -95,6 +95,10 @@ public class InventoryData
     //특정 개수만큼 아이템이 있는지 확인
     public bool IsItem(string id, int count)
     {
+        var idx = FindItemIndex(id);
+        if (idx == -1)
+            return false;
+
         var item = inventory[FindItemIndex(id)];
         return (item != null) && (item.count >= count);
     }
