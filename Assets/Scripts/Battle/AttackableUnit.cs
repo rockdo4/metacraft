@@ -99,15 +99,6 @@ public abstract class AttackableUnit : MonoBehaviour
     public bool IsAlive(AttackableUnit unit) => (unit != null) && (unit.gameObject.activeSelf) && (unit.UnitHp > 0);
     protected bool CanNormalAttackTime(CharacterSkill skill)
     {
-        if (name.Contains("shadow"))
-        {
-            Debug.Log("===");
-            Debug.Log(skill.cooldown);
-            Debug.Log(Time.time);
-            Debug.Log(lastNormalAttackTime[skill]);
-            Debug.Log(bufferState.attackSpeed);
-            Debug.Log("===");
-        }
         return (Time.time - lastNormalAttackTime[skill]) * bufferState.attackSpeed > skill.cooldown;
     }
 
@@ -147,6 +138,9 @@ public abstract class AttackableUnit : MonoBehaviour
         var manager = FindObjectOfType<BattleManager>();
         if (manager != null)
             battleManager = manager;
+
+        if (effectCreateTransform.Equals(null))
+            effectCreateTransform = transform;
     }
 
     protected void InitData()
@@ -166,7 +160,8 @@ public abstract class AttackableUnit : MonoBehaviour
             if (usingFloatingHpBar)
             {
                 hpBarManager = GetComponent<HpBarManager>();
-                hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+                hpBarManager.SetLiveData(characterData.data);
+                //hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
             }
         }
 
@@ -212,12 +207,12 @@ public abstract class AttackableUnit : MonoBehaviour
         data.exp = newExp;
     }
 
-    public void LevelupStats(int level = 1, float? atkCoeff = null, float? defCoeff = null, float? hpCoeff = null)
+    public void LevelupStats(int level = 1, float atkCoeff = -1, float defCoeff = -1, float hpCoeff = -1)
     {
         LiveData data = GetUnitData().data;
-        data.baseDamage += (atkCoeff == null ? characterData.originData.damageLevelCoefficient * level : (float)atkCoeff * level);
-        data.baseDefense += (defCoeff == null ? characterData.originData.defenseLevelCoefficient * level : (float)defCoeff * level);
-        data.healthPoint += (hpCoeff == null ? characterData.originData.healthPointLevelCoefficient * level : (float)hpCoeff * level);
+        data.baseDamage += (atkCoeff < 0 ? characterData.originData.damageLevelCoefficient * level : (float)atkCoeff * level);
+        data.baseDefense += (defCoeff < 0 ? characterData.originData.defenseLevelCoefficient * level : (float)defCoeff * level);
+        data.healthPoint += (hpCoeff < 0 ? characterData.originData.healthPointLevelCoefficient * level : (float)hpCoeff * level);
         data.currentHp = data.healthPoint;
     }
 
@@ -409,7 +404,6 @@ public abstract class AttackableUnit : MonoBehaviour
     public virtual void ProvokeEnd()
     {
         target = null;
-        //Logger.Debug("Provoke End");
     }
     public void OnPassiveSkill(List<AttackableUnit> enemies, List<AttackableUnit> heros)
     {
@@ -495,7 +489,7 @@ public abstract class AttackableUnit : MonoBehaviour
             else
                 EffectManager.Instance.Get(skill.hitEffect, hitEffectTransform != null ? hitEffectTransform : transform);
         }
-        ShowHpBarAndDamageText(dmg, isCritical);
+        ShowHpBarAndDamageText(dmg, isCritical);        
     }
 
     public void ShowHpBarAndDamageText(int dmg, bool isCritical = false)
@@ -516,7 +510,7 @@ public abstract class AttackableUnit : MonoBehaviour
         if (!usingFloatingHpBar)
             return;
 
-        hpBarManager.OnDamage(dmg);
+        hpBarManager.ActiveHpBar();
         if (UnitHp <= 0)
         {
             hpBarManager.Die();
@@ -725,9 +719,6 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void OnDead(AttackableUnit unit);
     public virtual void DestroyUnit()
     {
-        //Utils.CopyPositionAndRotation(gameObject, gameObject.transform.parent);
-        //pathFind.enabled = false;
-        //Logger.Debug("DestroyUnit");
         gameObject.SetActive(false);
         isAlive = false;
     }
@@ -786,7 +777,6 @@ public abstract class AttackableUnit : MonoBehaviour
                     case BuffType.LifeSteal:
                         break;
                     case BuffType.energyCharging:
-                        //Logger.Debug("energyCharging");
                         break;
                     case BuffType.Count:
                         break;
@@ -819,17 +809,14 @@ public abstract class AttackableUnit : MonoBehaviour
             switch (info.type)
             {
                 case BuffType.Provoke:
-                    //Logger.Debug("Provoke");
                     target = attackableUnit;
                     endEvent = ProvokeEnd;
                     break;
                 case BuffType.Stun:
-                    //Logger.Debug("Stun");
                     endEvent = StunEnd;
                     BattleState = UnitBattleState.Stun;
                     break;
                 case BuffType.Silence:
-                    //Logger.Debug("Stun");
                     break;
 
             }
@@ -882,10 +869,6 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public bool FindNowAttack()
     {
-        if(name.Contains("shadow"))
-        {
-            Logger.Debug("FindNowAttack");
-        }
         int idx = 0;
         foreach (var attack in characterData.attacks)
         {
@@ -893,8 +876,6 @@ public abstract class AttackableUnit : MonoBehaviour
             {
                 if (skillClips.Length != 0)
                 {
-                    //Logger.Debug(name + " " + skillClips[idx].name);
-
                     clipOverrides["NormalAttack"] = skillClips[idx];
                     animatorOverrideController.ApplyOverrides(clipOverrides);
 

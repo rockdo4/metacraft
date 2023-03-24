@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 4722134037762802028}
   - component: {fileID: 5266529455105113396}
   - component: {fileID: 830556827287203272}
+  - component: {fileID: 1257426708909823139}
   m_Layer: 7
   m_Name: Enemy_Demon_Elite
   m_TagString: Enemy
@@ -72,7 +73,8 @@ MonoBehaviour:
     evasion: 0
     accuracy: 0.5
   attacks:
-  - {fileID: 11400000, guid: 20dcfd9577ad65c48822cac5550a28f6, type: 2}
+  - {fileID: 11400000, guid: 4271c2362c4fdf641903751216906fd7, type: 2}
+  - {fileID: 11400000, guid: b9cf5f0b412b3b840913f4ddafe848f3, type: 2}
   activeSkill: {fileID: 0}
   passiveSkill: {fileID: 0}
 --- !u!136 &3887943447154856064
@@ -189,7 +191,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterData: {fileID: 4722134037762802018}
   nowAttack: {fileID: 0}
-  skillClips: []
+  skillClips:
+  - {fileID: 7400000, guid: d81d0730c8bc11c4cb0790ec50130b00, type: 2}
+  - {fileID: 7400000, guid: 6a238c2dc7d7cdd408c0a697cd680ee0, type: 2}
   unitType: 1
   normalAttackTargetType: 0
   PassiveTargetType: 0
@@ -204,12 +208,27 @@ MonoBehaviour:
   citizenList: []
   unitState: 0
   battleState: 0
+  buffList: []
   isThereDamageUI: 1
   usingFloatingHpBar: 1
   isAlive: 0
   effectCreateTransform: {fileID: 2009087416374130161}
   hitEffectTransform: {fileID: 7114510063201028433}
   isMapTriggerEnter: 0
+--- !u!114 &1257426708909823139
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4722134037762802030}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb9a7c2cf5813934b88e3573fb1ab658, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  skill: {fileID: 11400000, guid: b4ea757c3986ed345893d91447b5163a, type: 2}
+  interval: 5
 --- !u!1 &7111184836645193851
 GameObject:
   m_ObjectHideFlags: 0
