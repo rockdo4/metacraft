@@ -82,7 +82,6 @@ public class BattleManager : MonoBehaviour
     public bool isMiddleBossAlive = true;
     private GameManager gm;
 
-    public AttackableEnemy bossPrefab;
     public Button eventExitButton;
 
     //이벤트, 보급 등에서 사용하는 버프리스트
@@ -92,7 +91,10 @@ public class BattleManager : MonoBehaviour
     public List<AttackableEnemy> enemyPrefabs = new();
     [Header("생성할 빌런들을 넣어주세요")]
     public List<AttackableEnemy> villainPrefabs = new();
-    public AttackableEnemy villain;
+    private AttackableEnemy villain;
+    [Header("검사할 강적들을 넣어주세요")]
+    public List<AttackableEnemy> threatPrefabs = new();
+    private AttackableEnemy middleBoss;
 
     private void Start()
     {
@@ -508,11 +510,11 @@ public class BattleManager : MonoBehaviour
         DisabledAllMap();
 
         // 보스 ID 찾기
-        string bossID = $"{currentSelectMissionTable["BossID"]}";        
+        string villainID = $"{currentSelectMissionTable["VillainID"]}";        
         //villain
         for (int i = 0; i < villainPrefabs.Count; i++)
         {
-            if (villainPrefabs[i].name.Equals(bossID))
+            if (villainPrefabs[i].name.Equals(villainID))
             {
                 villain = villainPrefabs[i];
                 PlayBGM(i);
@@ -582,7 +584,6 @@ public class BattleManager : MonoBehaviour
     public void OnReady()
     {
         readyCount--;
-        Logger.Debug("wtf ready");
 
         if (readyCount == 0)
         {
@@ -984,6 +985,7 @@ public class BattleManager : MonoBehaviour
         if (enemy.GetUnitData().data.job == (int)CharacterJob.elite &&
             tree.CurNode.type == TreeNodeTypes.Threat)
         {
+            middleBoss = null;
             DeadMiddleBoss();
             SetHeroReturnPositioning(btMapTriggers[currTriggerIndex].heroSettingPositions);
         }
@@ -1152,39 +1154,29 @@ public class BattleManager : MonoBehaviour
 
     public void SpawnCurrMapAllEnemys()
     {
+        string middleBossName = string.Empty;
+        int threatMonPrefabCount = 0;
+
         for (int i = 0; i < btMapTriggers.Count; i++)
         {
-            // 미션 테이블에서 노멀 몬스터들 담겨있는 키 랜덤 뽑기
-            int nMonCount = (int)currentSelectMissionTable["NMonCount"];
-            int randomEnemyCount = Random.Range(1, nMonCount + 1);
-            string normalEnemysKey = $"{currentSelectMissionTable[$"NMon{randomEnemyCount}"]}";
-
             // 뽑은 키로 스폰 테이블에서 소환할 적들 찾기
             Dictionary<string, object> spawnTableNormalEnemys = new();
-            for (int j = 0; j < enemySpawnTable.Count; j++)
-            {
-                if ($"{enemySpawnTable[j]["ID"]}".Equals(normalEnemysKey))
-                {
-                    spawnTableNormalEnemys = enemySpawnTable[j];
-                    break;
-                }
-            }
-
             Dictionary<string, object> spawnTableHardEnemys = new();
+
             if (tree.CurNode.type == TreeNodeTypes.Threat)
             {
                 int hMonCount = (int)currentSelectMissionTable["HMonCount"];
                 int randomHEnemyCount = Random.Range(1, hMonCount + 1);
                 string threatEnemysKey = $"{currentSelectMissionTable[$"HMon{randomHEnemyCount}"]}";
-
-                for (int j = 0; j < enemySpawnTable.Count; j++)
-                {
-                    if ($"{enemySpawnTable[j]["ID"]}".Equals(threatEnemysKey))
-                    {
-                        spawnTableHardEnemys = enemySpawnTable[j];
-                        break;
-                    }
-                }
+                SetEnemySpawnTable(ref spawnTableHardEnemys, threatEnemysKey);
+            }
+            else
+            {
+                // 미션 테이블에서 노멀 몬스터들 담겨있는 키 랜덤 뽑기
+                int nMonCount = (int)currentSelectMissionTable["NMonCount"];
+                int randomEnemyCount = Random.Range(1, nMonCount + 1);
+                string normalEnemysKey = $"{currentSelectMissionTable[$"NMon{randomEnemyCount}"]}";
+                SetEnemySpawnTable(ref spawnTableNormalEnemys, normalEnemysKey);
             }
 
             // 적들 id, 마리수, 레벨 담아두기
@@ -1192,33 +1184,25 @@ public class BattleManager : MonoBehaviour
             List<int> monValues = new();
             List<int> monLevels = new();
 
-            int monCount = (int)spawnTableNormalEnemys["MonCount"];
-            for (int j = 1; j <= monCount; j++)
-            {
-                string monId = $"{spawnTableNormalEnemys[$"MonID{j}"]}";
-                monIds.Add(monId);
-
-                int monValue = (int)spawnTableNormalEnemys[$"Monval{j}"];
-                monValues.Add(monValue);
-
-                int monLevel = (int)spawnTableNormalEnemys[$"Mon{j}LV"];
-                monLevels.Add(monLevel);
-            }
-
             if (tree.CurNode.type == TreeNodeTypes.Threat)
             {
-                int hMonCount = (int)spawnTableHardEnemys["MonCount"];
-                for (int j = 1; j <= hMonCount; j++)
+                AddEnemySpawnTable(spawnTableHardEnemys, monIds, monValues, monLevels);
+
+                for (int j = 0; j < threatPrefabs.Count; j++)
                 {
-                    string hMonId = $"{spawnTableHardEnemys[$"MonID{j}"]}";
-                    monIds.Add(hMonId);
-
-                    int hMonValue = (int)spawnTableHardEnemys[$"Monval{j}"];
-                    monValues.Add(hMonValue);
-
-                    int hMonLevel = (int)spawnTableHardEnemys[$"Mon{j}LV"];
-                    monLevels.Add(hMonLevel);
+                    for (int k = 0; k < monIds.Count; k++)
+                    {
+                        if (threatPrefabs[j].name.Equals(monIds[k]))
+                        {
+                            threatMonPrefabCount = j;
+                            break;
+                        }
+                    }
                 }
+            }
+            else
+            {
+                AddEnemySpawnTable(spawnTableNormalEnemys, monIds, monValues, monLevels);
             }
 
             // 적들 ID 찾아서 InfoTable 한 줄씩 담아두기
@@ -1229,9 +1213,7 @@ public class BattleManager : MonoBehaviour
                 {
                     if ($"{enemyInfoTable[j]["ID"]}".Equals(monIds[k]))
                     {
-                        Logger.Debug($"{enemyInfoTable[j]["ID"]} / {monIds[k]}");
                         enemyData.Add(enemyInfoTable[k]);
-                        break;
                     }
                 }
             }
@@ -1258,22 +1240,27 @@ public class BattleManager : MonoBehaviour
                             int waveCount = btMapTriggers[i].enemySettingPositions[j].waveCount;
                             for (int wave = 0; wave < waveCount; wave++)
                             {
+                                if (tree.CurNode.type == TreeNodeTypes.Threat)
+                                {
+                                    bool isMiddleBossSpawn = false;
+                                    for (int threat = 0; threat < threatPrefabs.Count; threat++)
+                                    {
+                                        if (threatPrefabs[threat].name == name)
+                                        {
+                                            isMiddleBossSpawn = true;
+                                            break;
+                                        }
+                                    }
+                                    if (isMiddleBossSpawn)
+                                        break;
+                                }
+
                                 btMapTriggers[i].enemySettingPositions[j].enemys.Add(new List<AttackableEnemy>());
                                 for (int s = 0; s < currPosEnemyCount; s++)
                                 {
                                     var enemy = Instantiate(enemyPrefabs[k]);
                                     enemy.gameObject.SetActive(false);
-
-                                    // 밸런스 테스트용 코드
                                     SetEnemyLiveData(enemyData, enemy);
-                                    if (tree.CurNode.type == TreeNodeTypes.Threat &&
-                                        enemy.GetUnitData().data.job == (int)CharacterJob.elite)
-                                    {
-                                        Logger.Debug("Elite!!!");
-                                        btMapTriggers[i].enemySettingPositions[j].isMiddleBoss = true;
-                                        btMapTriggers[i].enemySettingPositions[j].middleBoss = enemy;
-                                    }
-
                                     btMapTriggers[i].enemySettingPositions[j].SpawnAllEnemy(ref btMapTriggers[i].enemys, enemy, wave);
                                 }
                             }
@@ -1296,6 +1283,11 @@ public class BattleManager : MonoBehaviour
                 }
             }
         }
+        else  if (tree.CurNode.type == TreeNodeTypes.Threat)
+        {
+            int maxPosCount = btMapTriggers[enemyTriggerIndex].enemySettingPositions.Count - 1;
+            middleBoss = threatPrefabs[threatMonPrefabCount];
+        }
     }
 
     private void SetEnemyLiveData(List<Dictionary<string, object>> enemyData, AttackableEnemy enemy)
@@ -1305,8 +1297,6 @@ public class BattleManager : MonoBehaviour
         int eiCount = enemyData.Count;
         for (int idx = 0; idx < eiCount; idx++)
         {
-
-            //string compareKey = gm.GetStringByTable(enemyData[idx]["NAME"].ToString());
             string compareKey = enemyData[idx]["NAME"].ToString().ToLower();
             if (!key.Equals(compareKey))
             {
@@ -1333,5 +1323,38 @@ public class BattleManager : MonoBehaviour
                 (float?)enemyData[idx]["Levelup_HP"]);
             //Logger.Debug($"{key} 적용 완료");
         }
+    }
+
+    private void AddEnemySpawnTable(Dictionary<string, object> table, List<string> ids, List<int> values, List<int> levels)
+    {
+        int monCount = (int)table["MonCount"];
+        for (int j = 1; j <= monCount; j++)
+        {
+            string monId = $"{table[$"MonID{j}"]}";
+            ids.Add(monId);
+
+            int monValue = (int)table[$"Monval{j}"];
+            values.Add(monValue);
+
+            int monLevel = (int)table[$"Mon{j}LV"];
+            levels.Add(monLevel);
+        }
+    }
+
+    private void SetEnemySpawnTable(ref Dictionary<string, object> spawnTable, string nameKey)
+    {
+        for (int j = 0; j < enemySpawnTable.Count; j++)
+        {
+            if ($"{enemySpawnTable[j]["ID"]}".Equals(nameKey))
+            {
+                spawnTable = enemySpawnTable[j];
+                break;
+            }
+        }
+    }
+
+    public AttackableEnemy GetMiddleBoss()
+    {
+        return middleBoss;
     }
 }

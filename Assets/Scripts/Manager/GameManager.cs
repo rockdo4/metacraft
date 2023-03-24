@@ -239,7 +239,7 @@ public class GameManager : Singleton<GameManager>
         else
         {
             Logger.Debug($"Load fail to string table. key [{modifyKey}]");
-            return $"Load fail to string table. key [{modifyKey}]";
+            return modifyKey;
         }
     }
 

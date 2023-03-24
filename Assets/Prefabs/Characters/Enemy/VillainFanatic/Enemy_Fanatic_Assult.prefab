@@ -12810,7 +12810,7 @@ Transform:
   m_GameObject: {fileID: 4994027243135980546}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7444765455678534848}
@@ -12849,7 +12849,7 @@ MonoBehaviour:
     evasion: 0
     accuracy: 0
   attacks:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: a2c6620a4fd3aa0429db9970668a2285, type: 2}
   activeSkill: {fileID: 0}
   passiveSkill: {fileID: 0}
 --- !u!136 &3545042389525939692
@@ -12966,7 +12966,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterData: {fileID: 4994027243135980558}
   nowAttack: {fileID: 0}
-  skillClips: []
+  skillClips:
+  - {fileID: 7400000, guid: 587ada5ffa1906d438dcd770a1fe7d52, type: 2}
   unitType: 1
   normalAttackTargetType: 0
   PassiveTargetType: 0
@@ -12981,6 +12982,7 @@ MonoBehaviour:
   citizenList: []
   unitState: 0
   battleState: 0
+  buffList: []
   isThereDamageUI: 1
   usingFloatingHpBar: 1
   isAlive: 0

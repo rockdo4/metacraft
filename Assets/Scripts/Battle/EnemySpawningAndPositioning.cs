@@ -94,14 +94,10 @@ public class EnemySpawningAndPositioning : MonoBehaviour
         enemy.gameObject.transform.parent = tr;
     }
 
-    public void SpawnAllEnemy
-        (ref List<AttackableUnit> enemyPool, AttackableEnemy enemy, int wave)
+    public void SpawnAllEnemy (ref List<AttackableUnit> enemyPool, AttackableEnemy enemy, int wave)
     {
-        //enemys.Add(new List<AttackableEnemy>());
         SpawnRandomAreaEnemys(enemy);
         enemyPool.Add(enemy);
         enemys[wave].Add(enemy);
-
-        //firstSpawnCount++;
     }
 }
