@@ -6,9 +6,13 @@ public class GetAudioManagerFunc : MonoBehaviour
     {
         AudioManager.Instance.PlayBGM(index);
     }
-    public void PlayBGMUsingFade(int index) 
+    public void PlayBGMUsingFadeCross(int index) 
     {
-        AudioManager.Instance.ChangeBGMwithFade(index);
+        AudioManager.Instance.ChangeBGMFadeCross(index);
+    }
+    public void PlayBGMUsingOnlyFadeOut(int index)
+    {
+        AudioManager.Instance.ChageBGMOnlyFadeOut(index);
     }
     public void PlayUI(int index)
     {        

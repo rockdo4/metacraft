@@ -99,15 +99,6 @@ public abstract class AttackableUnit : MonoBehaviour
     public bool IsAlive(AttackableUnit unit) => (unit != null) && (unit.gameObject.activeSelf) && (unit.UnitHp > 0);
     protected bool CanNormalAttackTime(CharacterSkill skill)
     {
-        if (name.Contains("shadow"))
-        {
-            Debug.Log("===");
-            Debug.Log(skill.cooldown);
-            Debug.Log(Time.time);
-            Debug.Log(lastNormalAttackTime[skill]);
-            Debug.Log(bufferState.attackSpeed);
-            Debug.Log("===");
-        }
         return (Time.time - lastNormalAttackTime[skill]) * bufferState.attackSpeed > skill.cooldown;
     }
 
@@ -409,7 +400,6 @@ public abstract class AttackableUnit : MonoBehaviour
     public virtual void ProvokeEnd()
     {
         target = null;
-        //Logger.Debug("Provoke End");
     }
     public void OnPassiveSkill(List<AttackableUnit> enemies, List<AttackableUnit> heros)
     {
@@ -725,9 +715,6 @@ public abstract class AttackableUnit : MonoBehaviour
     public abstract void OnDead(AttackableUnit unit);
     public virtual void DestroyUnit()
     {
-        //Utils.CopyPositionAndRotation(gameObject, gameObject.transform.parent);
-        //pathFind.enabled = false;
-        //Logger.Debug("DestroyUnit");
         gameObject.SetActive(false);
         isAlive = false;
     }
@@ -786,7 +773,6 @@ public abstract class AttackableUnit : MonoBehaviour
                     case BuffType.LifeSteal:
                         break;
                     case BuffType.energyCharging:
-                        //Logger.Debug("energyCharging");
                         break;
                     case BuffType.Count:
                         break;
@@ -819,17 +805,14 @@ public abstract class AttackableUnit : MonoBehaviour
             switch (info.type)
             {
                 case BuffType.Provoke:
-                    //Logger.Debug("Provoke");
                     target = attackableUnit;
                     endEvent = ProvokeEnd;
                     break;
                 case BuffType.Stun:
-                    //Logger.Debug("Stun");
                     endEvent = StunEnd;
                     BattleState = UnitBattleState.Stun;
                     break;
                 case BuffType.Silence:
-                    //Logger.Debug("Stun");
                     break;
 
             }
@@ -882,10 +865,6 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public bool FindNowAttack()
     {
-        if(name.Contains("shadow"))
-        {
-            Logger.Debug("FindNowAttack");
-        }
         int idx = 0;
         foreach (var attack in characterData.attacks)
         {
@@ -893,8 +872,6 @@ public abstract class AttackableUnit : MonoBehaviour
             {
                 if (skillClips.Length != 0)
                 {
-                    //Logger.Debug(name + " " + skillClips[idx].name);
-
                     clipOverrides["NormalAttack"] = skillClips[idx];
                     animatorOverrideController.ApplyOverrides(clipOverrides);
 

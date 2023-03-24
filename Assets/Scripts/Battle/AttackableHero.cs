@@ -116,7 +116,6 @@ public class AttackableHero : AttackableUnit
             if (unitState == UnitState.Die && value != UnitBattleState.None)
                 return;
             battleState = value;
-            //상태가 바뀔때마다 애니메이션 호출
             switch (battleState)
             {
                 case UnitBattleState.MoveToTarget:
@@ -126,10 +125,6 @@ public class AttackableHero : AttackableUnit
                     pathFind.isStopped = true;
                     break;
                 case UnitBattleState.NormalAttack:
-                    if (name.Contains("shadow"))
-                    {
-                        Logger.Debug($"{name}    NormalAttack Start");
-                    }
                     pathFind.isStopped = true;
                     animator.SetTrigger("Attack");
                     break;
@@ -340,10 +335,6 @@ public class AttackableHero : AttackableUnit
                     {
                         if (FindNowAttack())
                         {
-                            if(name.Contains("shadow"))
-                            {
-                                Logger.Debug($"{lastNormalAttackTime[nowAttack]}  {nowAttack}");
-                            }
                             BattleState = UnitBattleState.NormalAttack;
                         }
                         else
@@ -360,10 +351,6 @@ public class AttackableHero : AttackableUnit
             case UnitBattleState.MoveToTarget: //타겟에게 이동중 타겟 거리 계산.
                 if (FindNowAttack())
                 {
-                    if (name.Contains("shadow"))
-                    {
-                        Logger.Debug($"{lastNormalAttackTime[nowAttack]}  {nowAttack}");
-                    }
                     BattleState = UnitBattleState.NormalAttack;
                 }
                 else if (InRangeMinNormalAttack)
@@ -379,10 +366,6 @@ public class AttackableHero : AttackableUnit
             case UnitBattleState.BattleIdle:
                 if (FindNowAttack())
                 {
-                    if (name.Contains("shadow"))
-                    {
-                        Logger.Debug($"{lastNormalAttackTime[nowAttack]}  {nowAttack}");
-                    }
                     BattleState = UnitBattleState.NormalAttack;
                 }
                 else if (!InRangeMinNormalAttack)
@@ -392,8 +375,6 @@ public class AttackableHero : AttackableUnit
                 stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime >= .75f)
                 {
-                    if(name.Contains("shadow"))
-                        Logger.Debug($"{name}   NormalAttackEnd");
                     NormalAttackEnd();
                 }
                 break;
@@ -401,8 +382,6 @@ public class AttackableHero : AttackableUnit
                 stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("ActiveSkill") && stateInfo.normalizedTime >= 0.75f)
                 {
-                    if (name.Contains("shadow"))
-                        Logger.Debug($"{name}   ActiveSkillEnd");
                     ActiveSkillEnd();
                 }
                 break;

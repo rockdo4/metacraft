@@ -7,7 +7,7 @@ public class EnemySpawningAndPositioning : MonoBehaviour
 {
     private Transform tr;
     [SerializeField, Range(1, 20), Header("해당 구역 최대 리스폰 횟수 (방어전 제외 1)")]
-    private int waveCount = 0;
+    public int waveCount = 0;
     [SerializeField, Header("해당 구역의 크기를 정해주세요.")]
     private int spawnRange;
     [Range(1, 20), Header("리스폰 시간을 설정해주세요.")]
@@ -81,8 +81,7 @@ public class EnemySpawningAndPositioning : MonoBehaviour
         coInfinityRespawn = StartCoroutine(CoInfinityRespawn(respawnTimer));
     }
 
-    public void SpawnRandomAreaEnemys
-        (int index, ref List<AttackableUnit> enemyPool, AttackableEnemy enemy)
+    public void SpawnRandomAreaEnemys (AttackableEnemy enemy)
     {
         Vector3 trPos = tr.position;
 
@@ -93,20 +92,12 @@ public class EnemySpawningAndPositioning : MonoBehaviour
 
         enemy.gameObject.transform.position = randomArea;
         enemy.gameObject.transform.parent = tr;
-
-        enemyPool.Add(enemy);
-        enemys[index].Add(enemy);
     }
 
-    public void SpawnAllEnemy
-        (ref List<AttackableUnit> enemyPool, AttackableEnemy enemy)
+    public void SpawnAllEnemy (ref List<AttackableUnit> enemyPool, AttackableEnemy enemy, int wave)
     {
-        enemys.Add(new List<AttackableEnemy>());
-        for (int i = 0; i < waveCount; i++)
-        {
-            SpawnRandomAreaEnemys(firstSpawnCount, ref enemyPool, enemy);
-        }
-
-        firstSpawnCount++;
+        SpawnRandomAreaEnemys(enemy);
+        enemyPool.Add(enemy);
+        enemys[wave].Add(enemy);
     }
 }

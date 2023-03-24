@@ -33,20 +33,20 @@ public class DefenseMapInfo : BattleMapInfo
         triggers[index].isEnemyTrigger = true;
         triggers[index].InfinityRespawnEnemy();
 
-        // 임시 강적 소환
-        //var enemy = Instantiate(battleMgr.villain);
-        //enemy.SetEnabledPathFind(false);
+        // 강적 소환
+        var enemy = Instantiate(battleMgr.middleBoss);
+        enemy.SetEnabledPathFind(false);
 
-        //int posCount = triggers[enemyTriggerIndex].enemySettingPositions.Count - 1;
-        //int randomIndex = Random.Range(0, posCount);
-        //triggers[enemyTriggerIndex].
-        //    enemySettingPositions[randomIndex].
-        //    SpawnAllEnemy(ref triggers[enemyTriggerIndex].enemys, enemy);
+        int posCount = triggers[enemyTriggerIndex].enemySettingPositions.Count - 1;
+        int randomIndex = Random.Range(0, posCount);
+        triggers[enemyTriggerIndex].
+            enemySettingPositions[randomIndex].
+            SpawnAllEnemy(ref triggers[enemyTriggerIndex].enemys, enemy, 0);
 
-        //enemy.SetEnabledPathFind(true);
-        //enemy.ChangeUnitState(UnitState.Battle);
-        //triggers[enemyTriggerIndex].enemySettingPositions[randomIndex].isMiddleBoss = true;
-        //triggers[enemyTriggerIndex].enemySettingPositions[randomIndex].middleBoss = enemy;
+        enemy.SetEnabledPathFind(true);
+        enemy.ChangeUnitState(UnitState.Battle);
+        triggers[enemyTriggerIndex].enemySettingPositions[randomIndex].isMiddleBoss = true;
+        triggers[enemyTriggerIndex].enemySettingPositions[randomIndex].middleBoss = enemy;
     }
 
     public override void GetEnemyList(ref List<AttackableUnit> enemyList)
