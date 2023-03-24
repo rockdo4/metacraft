@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System;
+using static UnityEditor.Progress;
+using Unity.VisualScripting;
 
 [Serializable]
 public class InventoryData
@@ -90,7 +92,10 @@ public class InventoryData
     // 아이템이 있는지 확인
     public bool IsItem(string id)
     {
-        return inventory[FindItemIndex(id)] != null;
+        var idx = FindItemIndex(id);
+        if (idx == -1)
+            return false;
+        return inventory[idx] != null;
     }
     //특정 개수만큼 아이템이 있는지 확인
     public bool IsItem(string id, int count)
@@ -99,14 +104,31 @@ public class InventoryData
         if (idx == -1)
             return false;
 
-        var item = inventory[FindItemIndex(id)];
+        var item = inventory[idx];
         return (item != null) && (item.count >= count);
     }
     //아이디로만 아이템 가져오기. 없으면 null
     public Item GetItem(string id)
     {
-        return inventory[FindItemIndex(id)];
+        var idx = FindItemIndex(id);
+        if (idx == -1)
+            return null;
+        return inventory[idx];
     }
+
+    public Item FindItem(string id)
+    {
+        InventoryData inventoryData = GameManager.Instance.inventoryData;
+        for (int i = 0; i < inventoryData.inventory.Count; i++)
+        {
+            if (inventoryData.inventory[i].id == id)
+            {
+                return inventoryData.inventory[i];
+            }
+        }
+        return null;
+    }
+
 }
 
 [Serializable]

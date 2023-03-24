@@ -16,6 +16,7 @@ public class RecruitmentWindow : MonoBehaviour
     public TextMeshProUGUI rateInfo;
 
 
+    public List<Dictionary<string, object>> itemInfoList; // 아이템 정보
 
     private void Start()
     {
@@ -60,6 +61,8 @@ public class RecruitmentWindow : MonoBehaviour
         }
 
         OnRateInfo();
+
+        itemInfoList = GameManager.Instance.itemInfoList;
     }
 
     public void OneTimeGacha()
@@ -116,6 +119,7 @@ public class RecruitmentWindow : MonoBehaviour
             // 중복. 임시코드. 아이템으로 대체하도록 함
             info.SetData(herobundle);
             info.icon.color = Color.gray;
+
         }
 
         resultRecruitmentList.Add(info);
