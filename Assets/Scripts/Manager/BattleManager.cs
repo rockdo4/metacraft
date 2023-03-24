@@ -369,6 +369,7 @@ public class BattleManager : MonoBehaviour
     private void SetEventEffectReward(int column, int index, TextMeshProUGUI contentText)
     {
         stageReward.nowRewards.Clear();
+        Logger.Debug("stageReward.nowRewards.Clear");
         string textEffect = $"{eventInfoTable[column][$"TextEffect{index}"]}";
 
         // eventEffectInfoList 는 eventEffectTagInfoList로 변경됨. 상운과 논의 후 연결해서 쓸 것
@@ -650,8 +651,9 @@ public class BattleManager : MonoBehaviour
     }
     private void MissionClear()
     {
-        clearUi.SetData();
+        stageReward.gameObject.SetActive(true);
         UIManager.Instance.ShowView(1);
+        clearUi.SetData(btMapTriggers[currTriggerIndex].isMissionEnd);
     }
 
     public void OnDeadHero(AttackableHero hero)
@@ -796,7 +798,7 @@ public class BattleManager : MonoBehaviour
         }
 
         UIManager.Instance.ShowView(1);
-        clearUi.SetData();
+        clearUi.SetData(btMapTriggers[currTriggerIndex].isMissionEnd);
     }
     public void OnClickClearUiButton()
     {
@@ -1031,8 +1033,8 @@ public class BattleManager : MonoBehaviour
 
     public void NodeClearReward()
     {
-        bool isLastNode = false;
         stageReward.nowRewards.Clear();
+        Logger.Debug("stageReward.nowRewards.Clear");
         var influence = gm.currentSelectMission["Influence"];//세력
         int difficulty = (int)gm.currentSelectMission["Difficulty"]; //난이도
         var nodeType = tree.CurNode.type; //노드타입
@@ -1076,7 +1078,6 @@ public class BattleManager : MonoBehaviour
                 colomId = "HardReward";
                 collomWeight = "HWeight";
                 itemCount = 5;
-                isLastNode = true;
                 break;
             default:
                 break;
@@ -1098,10 +1099,9 @@ public class BattleManager : MonoBehaviour
 
         var rewardsCode = data[allItems[Random.Range(0, weight)]];
         AddReward(rewardsCode);
-        if(isLastNode)
+        if(btMapTriggers[currTriggerIndex].isMissionEnd)
         {
             UIManager.Instance.ShowView(1);
-            clearUi.SetData();
             clearUi.nodeButton.gameObject.SetActive(false);
             clearUi.lastNodeButton.gameObject.SetActive(true);
         }

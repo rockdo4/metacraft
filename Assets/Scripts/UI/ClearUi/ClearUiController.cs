@@ -33,7 +33,7 @@ public class ClearUiController : View
         }
     }
 
-    public void SetData()
+    public void SetData(bool isLast = false)
     {
         //플레이어 경험치 상승
         int difficulty = (int)GameManager.Instance.currentSelectMission["Difficulty"];
@@ -47,7 +47,7 @@ public class ClearUiController : View
             hero.Clear(exp);
         }
 
-        rewards.SetReward();
+        rewards.SetReward(isLast);
     }
 
 }
