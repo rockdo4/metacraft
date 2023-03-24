@@ -119,7 +119,7 @@ public class AudioManager : Singleton<AudioManager>
             StopCoroutine(coBgmFadeCoroutine);
         
         coBgmFadeCoroutine = StartCoroutine(CoBGMOnlyFadeOut(index));
-        Logger.Debug($"{index}번 트랙 재생");
+        Logger.Debug($"{index}번 트랙 단방향 페이드 재생");
     }
     public void ChangeBGMFadeCross(int index)
     {
@@ -127,7 +127,7 @@ public class AudioManager : Singleton<AudioManager>
             StopCoroutine(coBgmFadeCoroutine);
 
         coBgmFadeCoroutine = StartCoroutine(CoBGMCrossFade(index));
-        Logger.Debug($"{index}번 트랙 재생");
+        Logger.Debug($"{index}번 트랙 크로스 페이드 재생");
     }    
     private IEnumerator CoBGMCrossFade(int index)
     {
