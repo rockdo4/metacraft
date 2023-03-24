@@ -149,6 +149,7 @@ GameObject:
   - component: {fileID: 7925124359894300629}
   - component: {fileID: 4048777531916590695}
   - component: {fileID: 303855066418570938}
+  - component: {fileID: 2316558363269842387}
   m_Layer: 5
   m_Name: LoadSceneButton
   m_TagString: Untagged
@@ -271,6 +272,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 2316558363269842387}
+        m_TargetAssemblyTypeName: GetAudioManagerFunc, Assembly-CSharp
+        m_MethodName: PlayBGMUsingFadeCross
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &303855066418570938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -281,5 +294,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 01107fdb797d3964588e7507f02d774f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2316558363269842387
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7759071371137861972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0266323f7b0a8964c934f46339e937f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

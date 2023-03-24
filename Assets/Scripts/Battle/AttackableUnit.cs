@@ -157,7 +157,8 @@ public abstract class AttackableUnit : MonoBehaviour
             if (usingFloatingHpBar)
             {
                 hpBarManager = GetComponent<HpBarManager>();
-                hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+                hpBarManager.SetLiveData(characterData.data);
+                //hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
             }
         }
 
@@ -501,7 +502,7 @@ public abstract class AttackableUnit : MonoBehaviour
         if (!usingFloatingHpBar)
             return;
 
-        hpBarManager.OnDamage(dmg);
+        hpBarManager.ActiveHpBar();
         if (UnitHp <= 0)
         {
             hpBarManager.Die();

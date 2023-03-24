@@ -1,24 +1,14 @@
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
-public struct HpInfo
-{
-    public HpInfo(float maxHp, float hp)
-    {
-        this.maxHp = maxHp;
-        this.hp = hp;
-    }
-    public float maxHp;
-    public float hp;
-}
+
 public class HpBarManager : MonoBehaviour
 {
     public Slider hpBar;
     private CanvasGroup canvasGroup;
     private CanvasHpBarHolder canvasBarHolder;
     private Camera cam;
-
-    private HpInfo hpInfo;
+    
     private Vector3 barLocation;
     private float maxHpDiv;
 
@@ -33,6 +23,8 @@ public class HpBarManager : MonoBehaviour
 
     private float lastPosUpdateTime;
     private float posUpdateRatio;
+
+    private LiveData data;
     private void OnEnable()
     {
         if (!isInstantiated)
@@ -57,10 +49,9 @@ public class HpBarManager : MonoBehaviour
         UpdateBar();
         CheckDurationTimer();
     }
-    public void SetHp(float maxHp, float hp)
+    public void SetLiveData(LiveData data)
     {
-        hpInfo = new HpInfo(maxHp, hp); 
-        maxHpDiv = 1 / hpInfo.maxHp;
+        this.data = data;
     }
     private void InstantiateHpBar()
     {
@@ -75,9 +66,10 @@ public class HpBarManager : MonoBehaviour
     {
         UpdateBarPos();
 
-        canvasGroup.alpha = isOn ? 1f : 0f;        
+        canvasGroup.alpha = isOn ? 1f : 0f;
 
-        hpBar.value = hpInfo.hp * maxHpDiv;
+        hpBar.value = data.currentHp / data.healthPoint;
+        
         //카메라 위치 체인지가 극심한 게임에선 필요함
         //if (hpBar.transform.position.z < 0f)
         //    canvasGroup.alpha = 0f;
@@ -112,10 +104,5 @@ public class HpBarManager : MonoBehaviour
     {
         isOn = true;
         timer = 0f;
-    }
-    public void OnDamage(float damage)
-    {
-        hpInfo.hp -= damage;
-        ActiveHpBar();
     }
 }

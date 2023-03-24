@@ -203,7 +203,7 @@ public class AttackableHero : AttackableUnit
     {
         foreach (var attack in characterData.attacks)
         {
-            attack.SkillHolderTransform = effectCreateTransform ?? transform;
+            attack.SkillHolderTransform = effectCreateTransform.Equals(null) ? transform : effectCreateTransform;
             attack.ActorTransform = transform;
         }
         characterData.activeSkill.ActorTransform = transform;
