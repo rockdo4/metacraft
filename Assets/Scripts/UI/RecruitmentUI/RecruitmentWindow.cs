@@ -15,7 +15,7 @@ public class RecruitmentWindow : MonoBehaviour
     public Transform showGacha; // 영입 결과 프리팹 생성위치
     private List<RecruitmentInfo> resultRecruitmentList = new(); // 영입 결과 프리팹 생성 및 정보 불러온 리스트
     public TextMeshProUGUI rateInfo;
-
+    private bool ratePopup = false;
 
     public List<Dictionary<string, object>> itemInfoList; // 아이템 정보
 
@@ -64,6 +64,7 @@ public class RecruitmentWindow : MonoBehaviour
         OnRateInfo();
 
         itemInfoList = GameManager.Instance.itemInfoList;
+        ratePopup = false;
     }
 
     public void OneTimeGacha()
@@ -194,5 +195,12 @@ public class RecruitmentWindow : MonoBehaviour
             float rate = probs[i];
             rateInfo.text += $"{GameManager.Instance.GetStringByTable(name)} : {rate:F2}%\n";
         }
+    }
+
+    public void SetRatePopup()
+    {
+        ratePopup = !ratePopup;
+        if (!ratePopup)
+            UIManager.Instance.ClearPopups();
     }
 }
