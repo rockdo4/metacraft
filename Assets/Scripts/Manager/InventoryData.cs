@@ -31,7 +31,7 @@ public class InventoryData
             inventory[idx].AddCount(item.count);
     }
 
-    int FindItem(Item item)
+    public int FindItem(Item item)
     {
         InventoryData inventoryData = GameManager.Instance.inventoryData;
         for (int i = 0; i < inventoryData.inventory.Count; i++)
