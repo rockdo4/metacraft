@@ -119,28 +119,18 @@ public class RecruitmentWindow : MonoBehaviour
         {
             // 중복. 임시코드. 아이템으로 대체하도록 함
 
-            string stoneId = string.Empty;
-
-            switch ((CharacterJob)herobundle.originData.job)
+            try
             {
-                case CharacterJob.assult:
-                    stoneId = "60300014";
-                    break;
-                case CharacterJob.defence:
-                    stoneId = "60300008";
-                    break;
-                case CharacterJob.shooter:
-                    stoneId = "60300004";
-                    break;
-                case CharacterJob.assassin:
-                    stoneId = "60300017";
-                    break;
-                case CharacterJob.assist:
-                    stoneId = "60300011";
-                    break;
+                string stoneId = GameManager.Instance.recruitmentReplacementTable.
+                Find(t => t["Name"].ToString().CompareTo(herobundle.originData.name) == 0)["Replacement"].ToString();
+
+                info.SetStoneData(herobundle, itemInfoList.Find(t => t["ID"].ToString().CompareTo(stoneId) == 0));
+                GameManager.Instance.inventoryData.AddItem(stoneId);
             }
-            info.SetStoneData(herobundle, itemInfoList.Find(t => t["ID"].ToString().CompareTo(stoneId) == 0));
-            GameManager.Instance.inventoryData.AddItem(stoneId);
+            catch
+            {
+                Logger.Debug("this");
+            }
             //info.icon.color = Color.gray;
         }
 

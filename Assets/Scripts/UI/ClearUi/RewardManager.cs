@@ -12,10 +12,21 @@ public class RewardManager : MonoBehaviour
     public GameObject rewardPref;
     public StageReward stageReward;
 
+    List<GameObject> rewardList = new();
+
     public void SetReward()
     {
         StartCoroutine(CoSetReward());
         SaveItems();
+    }
+
+    public void ResetReward()
+    {
+        for (int i = rewardList.Count-1; i >= 0; i--)
+        {
+            Destroy(rewardList[i]);
+        }
+        rewardList.Clear();
     }
 
     public IEnumerator CoSetReward()
@@ -28,6 +39,7 @@ public class RewardManager : MonoBehaviour
         foreach (var reward in rewards)
         {
             GameObject itemPref = Instantiate(rewardPref, rewardTr);
+            rewardList.Add(itemPref);
             RewardItem item = itemPref.GetComponent<RewardItem>();
 
             item.SetData(reward.data.id,

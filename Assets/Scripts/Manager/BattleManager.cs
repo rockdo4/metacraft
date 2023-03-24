@@ -649,8 +649,6 @@ public class BattleManager : MonoBehaviour
     }
     private void MissionClear()
     {
-        UIManager.Instance.ShowView(1);
-        clearUi.SetData();
     }
 
     public void OnDeadHero(AttackableHero hero)
@@ -794,6 +792,13 @@ public class BattleManager : MonoBehaviour
             useHeroes[i].ChangeUnitState(UnitState.Idle);
         }
 
+        UIManager.Instance.ShowView(1);
+        clearUi.SetData();
+    }
+    public void OnClickClearUiButton()
+    {
+        clearUi.ResetUi();
+        UIManager.Instance.ShowView(0);
         tree.ShowTree(true);
 
         List<TreeNodeObject> childs = tree.CurNode.childrens;
