@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System;
+using static UnityEditor.Progress;
+using Unity.VisualScripting;
 
 [Serializable]
 public class InventoryData
@@ -41,6 +43,20 @@ public class InventoryData
         }
         return -1;
     }
+
+    public Item FindItem(string id)
+    {
+        InventoryData inventoryData = GameManager.Instance.inventoryData;
+        for (int i = 0; i < inventoryData.inventory.Count; i++)
+        {
+            if (inventoryData.inventory[i].id == id)
+            {
+                return inventoryData.inventory[i];
+            }
+        }
+        return null;
+    }
+
 }
 
 [Serializable]

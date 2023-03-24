@@ -15,7 +15,5 @@ public class HeroUpgradeInfoButton : HeroInfoButton
     public override void OnClick()
     {
         base.OnClick();
-        HeroUpgradeWindow mm = FindObjectOfType<HeroUpgradeWindow>();
-        mm.OnClickHeroSelect(bundle);
     }
 }
