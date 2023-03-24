@@ -254,7 +254,7 @@ public class BattleManager : MonoBehaviour
                 }
             }
 
-            string supplyTextId = $"{supplyInfoTable[index]["supply_text"]}";
+            string supplyTextId = $"{supplyInfoTable[index]["Supply_text"]}";
             string findStringTable = gm.GetStringByTable(supplyTextId);
             supplyContentText.text = findStringTable;
 
@@ -263,7 +263,7 @@ public class BattleManager : MonoBehaviour
             {
                 supplyButtons[i].SetActive(true);
 
-                string textId = $"{supplyInfoTable[index][$"choice{i + 1}_text"]}";
+                string textId = $"{supplyInfoTable[index][$"Choice{i + 1}_text"]}";
 
                 string stringTableChoiceText = gm.GetStringByTable(textId);
                 supplyButtonTexts[i].text = stringTableChoiceText;
