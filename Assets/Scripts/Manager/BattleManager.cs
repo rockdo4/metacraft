@@ -86,6 +86,7 @@ public class BattleManager : MonoBehaviour
 
     //이벤트, 보급 등에서 사용하는 버프리스트
     public List<BuffInfo> buffList;
+    private List<int> supplyEffectKey = new();
 
     [Header("생성할 적 프리펩들을 넣어주세요")]
     public List<AttackableEnemy> enemyPrefabs = new();
@@ -134,6 +135,8 @@ public class BattleManager : MonoBehaviour
     }
     public void EndSupply()
     {
+        Logger.Debug("여기다가 보급 넣으면 됨");
+
         SetActiveUi(supplyUi, supplyButtons, false, supplyButtons.Count);
         for (int i = 0; i < heroUiList.Count; i++)
         {
@@ -264,6 +267,12 @@ public class BattleManager : MonoBehaviour
 
                 string stringTableChoiceText = gm.GetStringByTable(textId);
                 supplyButtonTexts[i].text = stringTableChoiceText;
+
+                Logger.Debug("이정연 / 보급 버튼마다 이펙트 설정하는 부분");
+                int effectCount = (int)supplyInfoTable[index]["EffectCount"];
+                int randomEffectKey = Random.Range(1, effectCount);
+                int effectKey = (int)supplyInfoTable[index][$"Effect{randomEffectKey}"];
+                supplyEffectKey.Add(effectKey);
             }
         }
         else
