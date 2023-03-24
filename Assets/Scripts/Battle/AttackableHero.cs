@@ -33,6 +33,7 @@ public class AttackableHero : AttackableUnit
 
             if (unitState == UnitState.Die && value != UnitState.None)
                 return;
+
             unitState = value;
             heroUI.heroState = unitState;
             switch (unitState)
@@ -116,6 +117,7 @@ public class AttackableHero : AttackableUnit
             if (unitState == UnitState.Die && value != UnitBattleState.None)
                 return;
             battleState = value;
+
             switch (battleState)
             {
                 case UnitBattleState.MoveToTarget:
@@ -195,9 +197,12 @@ public class AttackableHero : AttackableUnit
     }
     private void Start()
     {
+        if (effectCreateTransform.Equals(null))
+            effectCreateTransform = transform;
+
         foreach (var attack in characterData.attacks)
         {
-            attack.SkillHolderTransform = effectCreateTransform ?? transform;
+            attack.SkillHolderTransform = effectCreateTransform;
             attack.ActorTransform = transform;
         }
         characterData.activeSkill.ActorTransform = transform;
