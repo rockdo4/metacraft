@@ -96,7 +96,7 @@ public class HeroUpgradeDetailWindow : View
             }
             else
             {
-                itemCount = gm.inventoryData.GetItem(itemName).count;
+                itemCount = 0; // gm.inventoryData.GetItem(itemName).count; 없는데 가져오려고 하면 어떻게함
             }
             meterialInfo[0].text = $"{itemCount}/{gm.upgradeTable[i]["Mmaterial1Amount"]}";
             gold.text = $"{gm.playerData.gold}/{gm.upgradeTable[i]["NeedGold"]}";
