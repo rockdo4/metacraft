@@ -115,12 +115,12 @@ public class CharacterSkill : ScriptableObject
             case BufferTargetType.Self:
                 foreach (var buff in buffInfos)
                 {
-                    if (buff[skillLevel - 1].type == BuffType.Provoke
-                        || buff[skillLevel - 1].type == BuffType.Stun
-                        || buff[skillLevel - 1].type == BuffType.Silence)
-                        unit.AddStateBuff(buff[skillLevel - 1]);
+                    if (buff[0].type == BuffType.Provoke
+                        || buff[0].type == BuffType.Stun
+                        || buff[0].type == BuffType.Silence)
+                        unit.AddStateBuff(buff[0]);
                     else
-                        unit.AddValueBuff(buff[skillLevel - 1]);
+                        unit.AddValueBuff(buff[0]);
                 }
                 break;
             case BufferTargetType.Friendly:
@@ -131,7 +131,7 @@ public class CharacterSkill : ScriptableObject
                     {
                         foreach (var buff in buffInfos)
                         {
-                            var nowBuff = buff[skillLevel - 1];
+                            var nowBuff = buff[0];
                             if (nowBuff.type == BuffType.Provoke
                                 || nowBuff.type == BuffType.Stun
                                 || nowBuff.type == BuffType.Silence)
