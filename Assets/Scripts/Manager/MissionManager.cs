@@ -96,9 +96,8 @@ public class MissionManager : View
         var selectMission = missionInfoTable[difficulty][num];
         gm.currentSelectMission = selectMission;
 
-        //portrait.sprite = gm.iconSprites[$"Icon_{dic["BossID"]}"];  보스아이디 적 테이블에서 불러와야함
+        portrait.sprite = gm.GetSpriteByAddress($"icon_{selectMission["VillainID"]}");
         explanation.text = gm.GetStringByTable($"{selectMission["TooltipID"]}");
-        //ExpectedCost.text = $"{dic["ExpectedCostID"]}";  삭제예정
         gm.ClearBattleGroups();
         for (int i = 0; i < heroSlots.Length; i++)
         {

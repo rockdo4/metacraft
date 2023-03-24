@@ -208,7 +208,10 @@ public class AudioManager : Singleton<AudioManager>
 
     public void StopAllBGM()
     {
-        foreach(var bgm in bgms)
+        if (coBgmFadeCoroutine != null)
+            StopCoroutine(coBgmFadeCoroutine);
+
+        foreach (var bgm in bgms)
         {
             bgm.Stop();            
         }
