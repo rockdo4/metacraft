@@ -34,7 +34,7 @@ public class DefenseMapInfo : BattleMapInfo
         triggers[index].InfinityRespawnEnemy();
 
         // 강적 소환
-        var enemy = Instantiate(battleMgr.middleBoss);
+        var enemy = Instantiate(battleMgr.GetMiddleBoss());
         enemy.SetEnabledPathFind(false);
 
         int posCount = triggers[enemyTriggerIndex].enemySettingPositions.Count - 1;
