@@ -336,7 +336,10 @@ public abstract class AttackableUnit : MonoBehaviour
         if (IsAlive(minTarget))
             target = minTarget;
         else
-            SearchMaxHealthTarget(targetList); //체력이 가장 많은 타겟 추적
+        {
+            if(target == null)
+                SearchMaxHealthTarget(targetList); //체력이 가장 많은 타겟 추적
+        }
     }
 
     protected void AssassinSearch()
