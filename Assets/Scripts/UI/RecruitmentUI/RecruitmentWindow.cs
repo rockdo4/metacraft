@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.Jobs.LowLevel.Unsafe;
 using UnityEngine;
 
 public class RecruitmentWindow : MonoBehaviour
@@ -117,10 +118,32 @@ public class RecruitmentWindow : MonoBehaviour
         else
         {
             // 중복. 임시코드. 아이템으로 대체하도록 함
-            info.SetData(herobundle);
-            info.icon.color = Color.gray;
 
+            string stoneId = string.Empty;
+
+            switch ((CharacterJob)herobundle.originData.job)
+            {
+                case CharacterJob.assult:
+                    stoneId = "60300014";
+                    break;
+                case CharacterJob.defence:
+                    stoneId = "60300008";
+                    break;
+                case CharacterJob.shooter:
+                    stoneId = "60300004";
+                    break;
+                case CharacterJob.assassin:
+                    stoneId = "60300017";
+                    break;
+                case CharacterJob.assist:
+                    stoneId = "60300011";
+                    break;
+            }
+            info.SetStoneData(herobundle, itemInfoList.Find(t => t["ID"].ToString().CompareTo(stoneId) == 0));
+            GameManager.Instance.inventoryData.AddItem(stoneId);
+            //info.icon.color = Color.gray;
         }
+
 
         resultRecruitmentList.Add(info);
     }
