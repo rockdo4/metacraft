@@ -149,16 +149,14 @@ public class BattleManager : MonoBehaviour
         SetStageEvent(ev);
         StartStage();
 
-        if (currBtMgr.GetBattleMapType() == BattleMapEnum.Normal &&
-            (tree.CurNode.type == TreeNodeTypes.Normal || tree.CurNode.type == TreeNodeTypes.Root))
+        switch (tree.CurNode.type)
         {
-            for (int i = 0; i < useHeroes.Count; i++)
-                Invoke(nameof(OnReady), 3f);
-        }
-        else if (tree.CurNode.type == TreeNodeTypes.Villain)
-        {
-            // 보스맵에서 임시로 모두 OnReady 해줘서 움직이게함
-            SetHeroesReady();
+            case TreeNodeTypes.Root:
+            case TreeNodeTypes.Normal:
+            case TreeNodeTypes.Villain:
+                for (int i = 0; i < useHeroes.Count; i++)
+                    Invoke(nameof(OnReady), 3f);
+                break;
         }
     }
 
@@ -332,8 +330,6 @@ public class BattleManager : MonoBehaviour
             valueKey = normalValue1 > normalValue2 ? value1Text : value2Text;
             rewardKey = valueKey.Equals(value1Text) ? normalReward1 : normalReward2;
         }
-
-        Logger.Debug($"normal value : {valueKey}, noraml reward : {rewardKey}");
     }
 
     private void GetPriorityTagEventEffect
@@ -1173,8 +1169,6 @@ public class BattleManager : MonoBehaviour
                 string normalEnemysKey = $"{currentSelectMissionTable[$"NMon{randomEnemyCount}"]}";
                 SetEnemySpawnTable(ref spawnTableNormalEnemys, normalEnemysKey);
 
-                Logger.Debug($"Key : {normalEnemysKey}");
-
                 if (tree.CurNode.type == TreeNodeTypes.Villain)
                 {
                     string villainEnemysKey = $"{currentSelectMissionTable["Villain"]}";
@@ -1358,10 +1352,5 @@ public class BattleManager : MonoBehaviour
                 break;
             }
         }
-    }
-
-    public AttackableEnemy GetMiddleBoss()
-    {
-        return middleBoss;
     }
 }
