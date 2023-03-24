@@ -92,9 +92,8 @@ public class BattleManager : MonoBehaviour
     [Header("생성할 빌런들을 넣어주세요")]
     public List<AttackableEnemy> villainPrefabs = new();
     private AttackableEnemy villain;
-    [Header("검사할 강적들을 넣어주세요")]
-    public List<AttackableEnemy> threatPrefabs = new();
     private AttackableEnemy middleBoss;
+    public Dictionary<string, object> bossData = new();
 
     private void Start()
     {
@@ -516,7 +515,6 @@ public class BattleManager : MonoBehaviour
         {
             if (villainPrefabs[i].name.Equals(villainID))
             {
-                villain = villainPrefabs[i];
                 PlayBGM(i);
                 break;
             }
@@ -1155,9 +1153,6 @@ public class BattleManager : MonoBehaviour
 
     public void SpawnCurrMapAllEnemys()
     {
-        string middleBossName = string.Empty;
-        int threatMonPrefabCount = 0;
-
         for (int i = 0; i < btMapTriggers.Count; i++)
         {
             // 뽑은 키로 스폰 테이블에서 소환할 적들 찾기
@@ -1178,6 +1173,12 @@ public class BattleManager : MonoBehaviour
                 int randomEnemyCount = Random.Range(1, nMonCount + 1);
                 string normalEnemysKey = $"{currentSelectMissionTable[$"NMon{randomEnemyCount}"]}";
                 SetEnemySpawnTable(ref spawnTableNormalEnemys, normalEnemysKey);
+
+                if (tree.CurNode.type == TreeNodeTypes.Villain)
+                {
+                    string villainEnemysKey = $"{currentSelectMissionTable["Villain"]}";
+                    SetEnemySpawnTable(ref spawnTableNormalEnemys, villainEnemysKey);
+                }
             }
 
             // 적들 id, 마리수, 레벨 담아두기
@@ -1188,18 +1189,6 @@ public class BattleManager : MonoBehaviour
             if (tree.CurNode.type == TreeNodeTypes.Threat)
             {
                 AddEnemySpawnTable(spawnTableHardEnemys, monIds, monValues, monLevels);
-
-                for (int j = 0; j < threatPrefabs.Count; j++)
-                {
-                    for (int k = 0; k < monIds.Count; k++)
-                    {
-                        if (threatPrefabs[j].name.Equals(monIds[k]))
-                        {
-                            threatMonPrefabCount = j;
-                            break;
-                        }
-                    }
-                }
             }
             else
             {
@@ -1210,15 +1199,17 @@ public class BattleManager : MonoBehaviour
             List<Dictionary<string, object>> enemyData = new();
             for (int j = 0; j < enemyInfoTable.Count; j++)
             {
+                string name = $"{enemyInfoTable[j]["NAME"]}";
+                string id = $"{enemyInfoTable[j]["ID"]}";
+
                 for (int k = 0; k < monIds.Count; k++)
                 {
-                    if ($"{enemyInfoTable[j]["ID"]}".Equals(monIds[k]))
+                    if (id.Equals(monIds[k]))
                     {
-                        enemyData.Add(enemyInfoTable[k]);
+                        enemyData.Add(enemyInfoTable[j]);
                     }
                 }
             }
-
 
             // 설치된 포지션의 카운트만큼 순회
             int posCount = btMapTriggers[i].enemySettingPositions.Count;
@@ -1229,6 +1220,7 @@ public class BattleManager : MonoBehaviour
                 {
                     // 내부에서 이름 찾기
                     string name = $"{enemyData[l]["NAME"]}";
+                    int job = (int)enemyData[l]["JOB"];
 
                     // 찾은 이름을 프리펩 순회하면서 대조하기
                     for (int k = 0; k < enemyPrefabs.Count; k++)
@@ -1243,18 +1235,19 @@ public class BattleManager : MonoBehaviour
                             {
                                 if (tree.CurNode.type == TreeNodeTypes.Threat)
                                 {
-                                    bool isMiddleBossSpawn = false;
-                                    for (int threat = 0; threat < threatPrefabs.Count; threat++)
-                                    {
-                                        if (threatPrefabs[threat].name == name)
-                                        {
-                                            isMiddleBossSpawn = true;
-                                            break;
-                                        }
-                                    }
-                                    if (isMiddleBossSpawn)
+                                    if (job == (int)CharacterJob.elite && middleBoss != null)
                                         break;
                                 }
+                                else if (tree.CurNode.type == TreeNodeTypes.Villain)
+                                {
+                                    if (job == (int)CharacterJob.villain && villain != null)
+                                        break;
+                                }
+                                else
+                                {
+                                    if (job == (int)CharacterJob.villain)
+                                        break;
+                                }    
 
                                 btMapTriggers[i].enemySettingPositions[j].enemys.Add(new List<AttackableEnemy>());
                                 for (int s = 0; s < currPosEnemyCount; s++)
@@ -1262,32 +1255,46 @@ public class BattleManager : MonoBehaviour
                                     var enemy = Instantiate(enemyPrefabs[k]);
                                     enemy.gameObject.SetActive(false);
                                     SetEnemyLiveData(enemyData, enemy);
-                                    btMapTriggers[i].enemySettingPositions[j].SpawnAllEnemy(ref btMapTriggers[i].enemys, enemy, wave);
+
+                                    int saveWave = wave;
+                                    int saveI = i;
+                                    int saveJ = j;
+                                    if (tree.CurNode.type == TreeNodeTypes.Threat && job == (int)CharacterJob.elite)
+                                    {
+                                        middleBoss = enemy;
+                                        saveWave = 0;
+                                        enemy.SetEnabledPathFind(true);
+                                        enemy.ChangeUnitState(UnitState.Battle);
+                                        btMapTriggers[i].enemySettingPositions[j].isMiddleBoss = true;
+                                        btMapTriggers[i].enemySettingPositions[j].middleBoss = enemy;
+
+                                        currPosEnemyCount = 0;
+                                    }
+                                    else if (tree.CurNode.type == TreeNodeTypes.Villain && job == (int)CharacterJob.villain)
+                                    {
+                                        villain = enemy;
+                                        for (int btMapTriggerCount = btMapTriggers.Count - 1; btMapTriggerCount >= 0; btMapTriggerCount--)
+                                        {
+                                            if (btMapTriggers[btMapTriggerCount].enemySettingPositions.Count > 0)
+                                            {
+                                                saveI = btMapTriggerCount;
+                                                break;
+                                            }
+                                        }
+
+                                        saveJ = 0;
+                                        saveWave = 0;
+                                        currPosEnemyCount = 0;
+                                        btMapTriggers[saveI].enemySettingPositions[saveJ].enemys.Add(new List<AttackableEnemy>());
+                                    }
+
+                                    btMapTriggers[saveI].enemySettingPositions[saveJ].SpawnAllEnemy(ref btMapTriggers[saveI].enemys, enemy, saveWave);
                                 }
                             }
                         }
                     }
                 }
             }
-        }
-
-        if (tree.CurNode.type == TreeNodeTypes.Villain)
-        {
-            var enemy = Instantiate(villain);
-
-            for (int i = btMapTriggers.Count - 1; i >= 0; i--)
-            {
-                if (btMapTriggers[i].enemySettingPositions.Count > 0)
-                {
-                    btMapTriggers[i].enemySettingPositions[0].SpawnAllEnemy(ref btMapTriggers[i].enemys, enemy, 0);
-                    break;
-                }
-            }
-        }
-        else  if (tree.CurNode.type == TreeNodeTypes.Threat)
-        {
-            int maxPosCount = btMapTriggers[enemyTriggerIndex].enemySettingPositions.Count - 1;
-            middleBoss = threatPrefabs[threatMonPrefabCount];
         }
     }
 
