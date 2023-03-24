@@ -1,7 +1,5 @@
 using System.Collections.Generic;
 using System;
-using static UnityEditor.Progress;
-using Unity.VisualScripting;
 
 [Serializable]
 public class InventoryData
