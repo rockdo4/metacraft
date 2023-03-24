@@ -31,12 +31,12 @@ public class RewardManager : MonoBehaviour
             RewardItem item = itemPref.GetComponent<RewardItem>();
 
             item.SetData(reward.data.id,
-                reward.itemNameText.text,
+                reward.data.name,
                 reward.data.iconName,
                 reward.data.info,
                 reward.data.sort,
                 reward.data.dataID,
-                reward.itemCountText.text);;
+                reward.data.count.ToString());;
 
             count--;
             yield return wfs;

@@ -510,11 +510,11 @@ public class BattleManager : MonoBehaviour
         DisabledAllMap();
 
         // 보스 ID 찾기
-        string bossID = $"{currentSelectMissionTable["BossID"]}";        
+        string villainID = $"{currentSelectMissionTable["VillainID"]}";        
         //villain
         for (int i = 0; i < villainPrefabs.Count; i++)
         {
-            if (villainPrefabs[i].name.Equals(bossID))
+            if (villainPrefabs[i].name.Equals(villainID))
             {
                 villain = villainPrefabs[i];
                 PlayBGM(i);
