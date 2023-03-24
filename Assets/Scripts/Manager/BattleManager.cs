@@ -1318,9 +1318,9 @@ public class BattleManager : MonoBehaviour
             ld.evasion = float.Parse(enemyData[idx]["EVADE"].ToString());      // 회피율
 
             enemy.LevelupStats(ld.level - 1,
-                (float?)enemyData[idx]["Levelup_Atk"],
-                (float?)enemyData[idx]["Levelup_Def"],
-                (float?)enemyData[idx]["Levelup_HP"]);
+                float.Parse(enemyData[idx]["Levelup_Atk"].ToString()),
+                float.Parse(enemyData[idx]["Levelup_Def"].ToString()),
+                float.Parse(enemyData[idx]["Levelup_HP"].ToString()));
             //Logger.Debug($"{key} 적용 완료");
         }
     }
