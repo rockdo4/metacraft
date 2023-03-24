@@ -134,6 +134,8 @@ public class BattleManager : MonoBehaviour
     }
     public void EndSupply()
     {
+        Logger.Debug("여기다가 보급 넣으면 됨");
+
         SetActiveUi(supplyUi, supplyButtons, false, supplyButtons.Count);
         for (int i = 0; i < heroUiList.Count; i++)
         {
