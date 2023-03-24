@@ -1152,7 +1152,7 @@ Transform:
   m_GameObject: {fileID: 2493515369199031910}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 6712389073379342967}
@@ -1179,6 +1179,7 @@ MonoBehaviour:
     job: 0
     tags: []
     level: 0
+    maxLevel: 0
     exp: 0
     likeability: 0
     baseDamage: 50
@@ -1204,10 +1205,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.6265865
-  m_Height: 3.5703094
+  m_Radius: 0.38219893
+  m_Height: 1.5703174
   m_Direction: 1
-  m_Center: {x: -0.015165806, y: 1.6637055, z: 0.20045418}
+  m_Center: {x: -0.015165806, y: 0.66370946, z: -0.04393339}
 --- !u!54 &4789578942535973165
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1242,7 +1243,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 3
+  m_Height: 1.6
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
@@ -1323,6 +1324,7 @@ MonoBehaviour:
   citizenList: []
   unitState: 0
   battleState: 0
+  buffList: []
   isThereDamageUI: 1
   usingFloatingHpBar: 1
   isAlive: 0
@@ -3140,7 +3142,15 @@ Animator:
   m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
-  m_WarningMessage: 
+  m_WarningMessage: "\nBinding warning: Some generic clip(s) animate transforms that
+    are already bound by a Humanoid avatar. These transforms can only be changed
+    by Humanoid clips.\n\tTransform 'index_03_l'\n\tTransform 'lowerarm_l'\n\tTransform
+    'neck_01'\n\tTransform 'clavicle_l'\n\tTransform 'ball_l'\n\tTransform 'hand_l'\n\tTransform
+    'index_03_r'\n\tTransform 'upperarm_r'\n\tTransform 'index_01_l'\n\tTransform
+    'upperarm_l'\n\tand more ...\n\tFrom animation clip 'idle'\n\tFrom animation
+    clip 'walk'\n\tFrom animation clip 'run'\n\tFrom animation clip 'swipe attack'\n\tFrom
+    animation clip 'die'\n\tFrom animation clip 'swipe attack'\n\tFrom animation
+    clip 'idle'"
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
