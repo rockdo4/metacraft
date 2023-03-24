@@ -674,24 +674,21 @@ public class BattleManager : MonoBehaviour
     {
         EffectManager.Instance.DisabledAllEffect();
 
-        for (int i = 0; i < useHeroes.Count; i++)
-        {
-            useHeroes[i].ResetData();
-            useHeroes[i].RemoveAllBuff();
-            useHeroes[i].SetMaxHp();
-            useHeroes[i].SetEnabledPathFind(false);
-            Utils.CopyPositionAndRotation(useHeroes[i].gameObject, gm.heroSpawnTransform);
-        }
-
-        for (int i = 0; i < unuseHeroes.Count; i++)
-        {
-            unuseHeroes[i].ResetData();
-            unuseHeroes[i].RemoveAllBuff();
-            unuseHeroes[i].SetMaxHp();
-            unuseHeroes[i].SetEnabledPathFind(false);
-            Utils.CopyPositionAndRotation(unuseHeroes[i].gameObject, gm.heroSpawnTransform);
-        }
+        ResetThisHeroes(useHeroes);
+        ResetThisHeroes(unuseHeroes);
         gm.SetHeroesActive(false);
+    }
+
+    private void ResetThisHeroes(List<AttackableUnit> heroes)
+    {
+        for (int i = 0; i < heroes.Count; i++)
+        {
+            heroes[i].ResetData();
+            heroes[i].RemoveAllBuff();
+            heroes[i].SetMaxHp();
+            heroes[i].SetEnabledPathFind(false);
+            Utils.CopyPositionAndRotation(heroes[i].gameObject, gm.heroSpawnTransform);
+        }
     }
 
     public void MoveNextStage(float timer)
