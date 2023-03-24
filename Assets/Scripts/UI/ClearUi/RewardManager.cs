@@ -22,7 +22,7 @@ public class RewardManager : MonoBehaviour
     {
         var rewards = stageReward.rewards;
 
-        WaitForSeconds wfs = new(0.3f);
+        WaitForSecondsRealtime wfs = new(0.3f);
         count = rewards.Count;
 
         foreach (var reward in rewards)
