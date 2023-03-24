@@ -15,6 +15,9 @@ public class RecruitmentWindow : MonoBehaviour
     private List<RecruitmentInfo> resultRecruitmentList = new(); // 영입 결과 프리팹 생성 및 정보 불러온 리스트
     public TextMeshProUGUI rateInfo;
 
+
+    public List<Dictionary<string, object>> itemInfoList; // 아이템 정보
+
     private void Start()
     {
         //pageImage.sprite = GameManager.Instance.GetSpriteByAddress($"{type.image}");
@@ -58,6 +61,8 @@ public class RecruitmentWindow : MonoBehaviour
         }
 
         OnRateInfo();
+
+        itemInfoList = GameManager.Instance.itemInfoList;
     }
 
     public void OneTimeGacha()
@@ -114,6 +119,7 @@ public class RecruitmentWindow : MonoBehaviour
             // 중복. 임시코드. 아이템으로 대체하도록 함
             info.SetData(herobundle);
             info.icon.color = Color.gray;
+
         }
 
         resultRecruitmentList.Add(info);
