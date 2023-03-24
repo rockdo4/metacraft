@@ -93,6 +93,9 @@ public class BattleManager : MonoBehaviour
     [Header("생성할 빌런들을 넣어주세요")]
     public List<AttackableEnemy> villainPrefabs = new();
     public AttackableEnemy villain;
+    [Header("검사할 강적들을 넣어주세요")]
+    public List<AttackableEnemy> threatPrefabs = new();
+    public AttackableEnemy middleBoss;
 
     private void Start()
     {
@@ -1152,6 +1155,9 @@ public class BattleManager : MonoBehaviour
 
     public void SpawnCurrMapAllEnemys()
     {
+        string middleBossName = string.Empty;
+        int threatMonPrefabCount = 0;
+
         for (int i = 0; i < btMapTriggers.Count; i++)
         {
             // 미션 테이블에서 노멀 몬스터들 담겨있는 키 랜덤 뽑기
@@ -1219,6 +1225,19 @@ public class BattleManager : MonoBehaviour
                     int hMonLevel = (int)spawnTableHardEnemys[$"Mon{j}LV"];
                     monLevels.Add(hMonLevel);
                 }
+
+                for (int j = 0; j < threatPrefabs.Count; j++)
+                {
+                    for (int k = 0; k < monIds.Count; k++)
+                    {
+                        if (threatPrefabs[j].name.Equals(monIds[k]))
+                        {
+                            middleBossName = monIds[k];
+                            threatMonPrefabCount = j;
+                            break;
+                        }
+                    }
+                }
             }
 
             // 적들 ID 찾아서 InfoTable 한 줄씩 담아두기
@@ -1229,9 +1248,7 @@ public class BattleManager : MonoBehaviour
                 {
                     if ($"{enemyInfoTable[j]["ID"]}".Equals(monIds[k]))
                     {
-                        Logger.Debug($"{enemyInfoTable[j]["ID"]} / {monIds[k]}");
                         enemyData.Add(enemyInfoTable[k]);
-                        break;
                     }
                 }
             }
@@ -1258,22 +1275,28 @@ public class BattleManager : MonoBehaviour
                             int waveCount = btMapTriggers[i].enemySettingPositions[j].waveCount;
                             for (int wave = 0; wave < waveCount; wave++)
                             {
+                                if (tree.CurNode.type == TreeNodeTypes.Threat)
+                                {
+                                    bool isMiddleBossSpawn = false;
+
+                                    for (int threat = 0; threat < threatPrefabs.Count; threat++)
+                                    {
+                                        if (threatPrefabs[threat].name == name)
+                                        {
+                                            isMiddleBossSpawn = true;
+                                            break;
+                                        }
+                                    }
+                                    if (isMiddleBossSpawn)
+                                        break;
+                                }
+
                                 btMapTriggers[i].enemySettingPositions[j].enemys.Add(new List<AttackableEnemy>());
                                 for (int s = 0; s < currPosEnemyCount; s++)
                                 {
                                     var enemy = Instantiate(enemyPrefabs[k]);
                                     enemy.gameObject.SetActive(false);
-
-                                    // 밸런스 테스트용 코드
                                     SetEnemyLiveData(enemyData, enemy);
-                                    if (tree.CurNode.type == TreeNodeTypes.Threat &&
-                                        enemy.GetUnitData().data.job == (int)CharacterJob.elite)
-                                    {
-                                        Logger.Debug("Elite!!!");
-                                        btMapTriggers[i].enemySettingPositions[j].isMiddleBoss = true;
-                                        btMapTriggers[i].enemySettingPositions[j].middleBoss = enemy;
-                                    }
-
                                     btMapTriggers[i].enemySettingPositions[j].SpawnAllEnemy(ref btMapTriggers[i].enemys, enemy, wave);
                                 }
                             }
@@ -1295,6 +1318,13 @@ public class BattleManager : MonoBehaviour
                     break;
                 }
             }
+        }
+        else  if (tree.CurNode.type == TreeNodeTypes.Threat)
+        {
+            int maxPosCount = btMapTriggers[enemyTriggerIndex].enemySettingPositions.Count - 1;
+            int randomPos = Random.Range(0, maxPosCount);
+
+            middleBoss = threatPrefabs[threatMonPrefabCount];
         }
     }
 
