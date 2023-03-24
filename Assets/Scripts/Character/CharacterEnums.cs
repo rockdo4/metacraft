@@ -25,6 +25,7 @@ public enum CharacterJob
     assassin,
     assist,
     villain,
+    elite,
     Count
 }
 // 돌격, 방어, 사격, 은밀, 지원, 빌런

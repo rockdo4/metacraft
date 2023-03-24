@@ -18,10 +18,7 @@ public class GameManager : Singleton<GameManager>
     public Transform heroSpawnTransform;    
 
     // Resources - Sprites, TextAsset + (Scriptable Objects, Sound etc)
-    private Dictionary<string, Sprite> iconSprites = new();
-    private Dictionary<string, Sprite> illustrationSprites = new();
-    private Dictionary<string, Sprite> stateIconSprites = new();
-    private Dictionary<string, Sprite> itemSprites = new();
+    private Dictionary<string, Sprite> sprites = new();
     public Dictionary<int, List<Dictionary<string, object>>> missionInfoDifficulty; // 작전 정보 난이도 키 추가
     public List<Dictionary<string, object>> dispatchInfoList; // 파견 정보
     public List<Dictionary<string, object>> officeInfoList;  // 사무소 레벨별 정보
@@ -36,11 +33,14 @@ public class GameManager : Singleton<GameManager>
 
     public List<Dictionary<string, object>> compensationInfoList; // 보상 정보
     public List<Dictionary<string, object>> itemInfoList; // 아이템 정보
+    public List<Dictionary<string, object>> itemBoxList; // 아이템 정보
 
     public List<Dictionary<string, object>> supplyInfoList; // 보급 노드 정보
 
     public List<Dictionary<string, object>> recruitmentReplacementTable; // 영입 중복 대체 테이블
     public List<Dictionary<string, object>> expRequirementTable; // 경험치 요구량 테이블
+    public List<Dictionary<string, object>> maxLevelTable; // 최대 레벨 테이블
+    public List<Dictionary<string, object>> upgradeTable; // 승급 테이블
 
     // Office Select
     public GameObject currentSelectObject; // Hero Info
@@ -91,9 +91,9 @@ public class GameManager : Singleton<GameManager>
 
         // Load TextAssets
         TextAsset ta = Resources.Load<TextAsset>("TextAssetList");
-        TextAsset ia = Resources.Load<TextAsset>("ItemAssetList");
+        TextAsset sn = Resources.Load<TextAsset>("SpriteNameList");
         var tableNames = ta.text.Split("\r\n");
-        var itemNames = ia.text.Split("\r\n");
+        var spriteNames = sn.text.Split("\r\n");
 
         int count = tableNames.Length;
         for (int i = 0; i < count; i++)
@@ -106,7 +106,7 @@ public class GameManager : Singleton<GameManager>
                 tas.Completed +=
                     (AsyncOperationHandle<TextAsset> obj) =>
                 {
-                    Logger.Debug($"{key} load success");
+                    //Logger.Debug($"{key} load success");
                 };
                 total++;
             }
@@ -117,56 +117,38 @@ public class GameManager : Singleton<GameManager>
         for (int i = 0; i < count; i++)
         {
             string address = heroDatabase[i].GetComponent<CharacterDataBundle>().originData.name;
-            string iconAddress = $"Icon_{address}";
-            AsyncOperationHandle<Sprite> iconHandle = Addressables.LoadAssetAsync<Sprite>(iconAddress);
-            iconHandle.Completed +=
-                (AsyncOperationHandle<Sprite> obj) =>
-                {
-                    Sprite sprite = obj.Result;
-                    iconSprites.Add(iconAddress, sprite);
-                };
-            unreleasehandles.Add(iconHandle);
-
-            string IllurAddress = $"Illu_{address}";
-            AsyncOperationHandle<Sprite> illuHandle = Addressables.LoadAssetAsync<Sprite>(IllurAddress);
-            illuHandle.Completed +=
-                (AsyncOperationHandle<Sprite> obj) =>
-                {
-                    Sprite sprite = obj.Result;
-                    illustrationSprites.Add(IllurAddress, sprite);
-                };
-            unreleasehandles.Add(illuHandle);
+            unreleasehandles.Add(LoadSprite($"icon_{address}"));
+            unreleasehandles.Add(LoadSprite($"illu_{address}"));
             total += 2;
         }
 
         count = 29; //임시. 나중에 버프 테이블 불러오게 수정할 예정
         for (int i = 1; i <= count; i++)
         {
-            string address = string.Format("state{0}",i);
-            AsyncOperationHandle<Sprite> stateIconHandle = Addressables.LoadAssetAsync<Sprite>(address);
-            stateIconHandle.Completed +=
-                (AsyncOperationHandle<Sprite> obj) =>
-                {
-                    Sprite sprite = obj.Result;
-                    stateIconSprites.Add(address, sprite);
-                };
-            unreleasehandles.Add(stateIconHandle);
+            unreleasehandles.Add(LoadSprite($"state{i}"));
             total++;
         }
 
-        int itemCount = itemNames.Length;
-        for (int i = 0; i < itemCount; i++)
+        // 임시코드
+        string[] villains =
         {
-            string address = $"{itemNames[i]}";
-            AsyncOperationHandle<Sprite> itemIconHandle = Addressables.LoadAssetAsync<Sprite>(address);
+            "icon_enemy_demon_villain",
+            "icon_enemy_fanatic_villain",
+            "icon_enemy_jmc_villain",
+            //"icon_enemy_moonlight_boss",
+            //"icon_enemy_shintia_boss",
+        };
 
-            itemIconHandle.Completed +=
-                (AsyncOperationHandle<Sprite> obj) =>
-                {
-                    Sprite sprite = obj.Result;
-                    itemSprites.Add(address, sprite);
-                };
-            unreleasehandles.Add(itemIconHandle);
+        for (int i = 0; i < 3; i++)
+        {
+            unreleasehandles.Add(LoadSprite(villains[i]));
+            total++;
+        }
+
+        int spriteCount = spriteNames.Length;
+        for (int i = 0; i < spriteCount; i++)
+        {
+            unreleasehandles.Add(LoadSprite($"{spriteNames[i]}"));
             total++;
         }
 
@@ -210,22 +192,38 @@ public class GameManager : Singleton<GameManager>
         compensationInfoList = CSVReader.SplitTextAsset(releasehandles["CompensationTable"].Result as TextAsset);
         supplyInfoList = CSVReader.SplitTextAsset(releasehandles["SupplyTable"].Result as TextAsset);
         itemInfoList = CSVReader.SplitTextAsset(releasehandles["ItemInfoTable"].Result as TextAsset);
+        itemBoxList = CSVReader.SplitTextAsset(releasehandles["ItemBoxTable"].Result as TextAsset);
         enemyInfoList = CSVReader.SplitTextAsset(releasehandles["EnemyInfoTable"].Result as TextAsset);
         enemySpawnList = CSVReader.SplitTextAsset(releasehandles["EnemySpawnTable"].Result as TextAsset);
         recruitmentReplacementTable = CSVReader.SplitTextAsset(releasehandles["RecruitmentReplacementTable"].Result as TextAsset);
         eventEffectInfoList = CSVReader.SplitTextAsset(releasehandles["EventEffectTable"].Result as TextAsset);
         expRequirementTable = CSVReader.SplitTextAsset(releasehandles["ExpRequirementTable"].Result as TextAsset);
+        maxLevelTable = CSVReader.SplitTextAsset(releasehandles["MaxLevelTable"].Result as TextAsset);
+        upgradeTable = CSVReader.SplitTextAsset(releasehandles["UpgradeTable"].Result as TextAsset);
 
         LoadAllData();
         FixMissionTable(CSVReader.SplitTextAsset(releasehandles["MissionInfoTable"].Result as TextAsset));
-        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_Desc"].Result as TextAsset), "StringTable_Desc");
-        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_Event"].Result as TextAsset), "StringTable_Event");
-        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_Proper"].Result as TextAsset), "StringTable_Proper");
-        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_UI"].Result as TextAsset), "StringTable_UI");
+        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_Desc"].Result as TextAsset, false), "StringTable_Desc");
+        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_Event"].Result as TextAsset, false), "StringTable_Event");
+        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_Proper"].Result as TextAsset, false), "StringTable_Proper");
+        AppendStringTable(CSVReader.SplitTextAsset(releasehandles["StringTable_UI"].Result as TextAsset, false), "StringTable_UI");
 
         ReleaseAddressable(releasehandles);
         releasehandles.Clear();
         progress.CompleteProgress();
+    }
+
+    private AsyncOperationHandle<Sprite> LoadSprite(string address)
+    {
+        AsyncOperationHandle<Sprite> itemIconHandle = Addressables.LoadAssetAsync<Sprite>(address);
+
+        itemIconHandle.Completed +=
+            (AsyncOperationHandle<Sprite> obj) =>
+            {
+                Sprite sprite = obj.Result;
+                sprites.Add(address, sprite);
+            };
+        return itemIconHandle;
     }
 
     private void AppendStringTable(List<Dictionary<string, object>> rawData, string tableName)
@@ -234,7 +232,7 @@ public class GameManager : Singleton<GameManager>
         for (int i = 0; i < count; i++)
         {
             var copy = rawData[i];
-            string id = $"{rawData[i]["ID"]}";
+            string id = $"{rawData[i]["ID"]}".ToLower();
             copy.Remove("ID");
             if (stringTable.ContainsKey(id))
             {
@@ -257,7 +255,7 @@ public class GameManager : Singleton<GameManager>
         else
         {
             Logger.Debug($"Load fail to string table. key [{modifyKey}]");
-            return $"Load fail to string table. key [{modifyKey}]";
+            return modifyKey;
         }
     }
 
@@ -404,26 +402,12 @@ public class GameManager : Singleton<GameManager>
 
     public Sprite GetSpriteByAddress(string address)
     {
-        if (iconSprites.ContainsKey(address))
+        string lower = address.ToLower();
+        if (sprites.ContainsKey(lower))
         {
-            return iconSprites[address];
+            return sprites[lower];
         }
-
-        if (illustrationSprites.ContainsKey(address))
-        {
-            return illustrationSprites[address];
-        }
-
-        if (stateIconSprites.ContainsKey(address))
-        {
-            return stateIconSprites[address];
-        }
-
-        if (itemSprites.ContainsKey(address))
-        {
-            return itemSprites[address];
-        }
-
+        
         Logger.Debug($"Load sprite fail. address: {address}");
         return null;
     }

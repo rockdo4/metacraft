@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.Jobs.LowLevel.Unsafe;
 using UnityEngine;
 
 public class RecruitmentWindow : MonoBehaviour
@@ -14,6 +15,9 @@ public class RecruitmentWindow : MonoBehaviour
     public Transform showGacha; // 영입 결과 프리팹 생성위치
     private List<RecruitmentInfo> resultRecruitmentList = new(); // 영입 결과 프리팹 생성 및 정보 불러온 리스트
     public TextMeshProUGUI rateInfo;
+
+
+    public List<Dictionary<string, object>> itemInfoList; // 아이템 정보
 
     private void Start()
     {
@@ -58,6 +62,8 @@ public class RecruitmentWindow : MonoBehaviour
         }
 
         OnRateInfo();
+
+        itemInfoList = GameManager.Instance.itemInfoList;
     }
 
     public void OneTimeGacha()
@@ -112,9 +118,22 @@ public class RecruitmentWindow : MonoBehaviour
         else
         {
             // 중복. 임시코드. 아이템으로 대체하도록 함
-            info.SetData(herobundle);
-            info.icon.color = Color.gray;
+
+            try
+            {
+                string stoneId = GameManager.Instance.recruitmentReplacementTable.
+                Find(t => t["Name"].ToString().CompareTo(herobundle.originData.name) == 0)["Replacement"].ToString();
+
+                info.SetStoneData(herobundle, itemInfoList.Find(t => t["ID"].ToString().CompareTo(stoneId) == 0));
+                GameManager.Instance.inventoryData.AddItem(stoneId);
+            }
+            catch
+            {
+                Logger.Debug("this");
+            }
+            //info.icon.color = Color.gray;
         }
+
 
         resultRecruitmentList.Add(info);
     }

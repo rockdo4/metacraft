@@ -7,7 +7,16 @@ public class ClearUiController : View
     public Transform heroTr;
     public RewardManager rewards;
     
+
     private List<ClearHeroInfo> heroes = new();
+    private void OnEnable()
+    {        
+        AudioManager.Instance.ChageBGMOnlyFadeOut(9);
+    }
+    public void ResetUi()
+    {
+        rewards.ResetReward();
+    }
 
     public void SetHeroes(List<AttackableUnit> _heroes)
     {

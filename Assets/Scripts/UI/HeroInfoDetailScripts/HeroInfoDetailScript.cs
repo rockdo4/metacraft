@@ -37,7 +37,7 @@ public class HeroInfoDetailScript : View
         CharacterDataBundle cdb = gm.currentSelectObject.GetComponent<AttackableUnit>().GetUnitData();
         LiveData data = cdb.data;
 
-        portrait.sprite = gm.GetSpriteByAddress($"Illu_{data.name}");
+        portrait.sprite = gm.GetSpriteByAddress($"illu_{data.name}");
 
         gradeInfoInLeftPanel.text = $"{(CharacterGrade)data.grade}";
         levelInfoInLeftPanel.text = data.level.ToString();

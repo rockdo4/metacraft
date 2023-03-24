@@ -286,6 +286,7 @@ GameObject:
   - component: {fileID: 1793180600720830789}
   - component: {fileID: 5477084208622532131}
   - component: {fileID: 4147503993993436486}
+  - component: {fileID: 8267716603789380213}
   m_Layer: 5
   m_Name: Dispatch
   m_TagString: Untagged
@@ -362,6 +363,18 @@ MonoBehaviour:
   m_FlexibleWidth: -1
   m_FlexibleHeight: -1
   m_LayoutPriority: 1
+--- !u!114 &8267716603789380213
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1793180600720830786}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0266323f7b0a8964c934f46339e937f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2081298125634911603
 GameObject:
   m_ObjectHideFlags: 0
@@ -1054,8 +1067,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uD30C\uACAC \uC774\uB984"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a2d89b6ecc1ab754d87cc9fd0ad23e9a, type: 2}
-  m_sharedMaterial: {fileID: -1702348751694658730, guid: a2d89b6ecc1ab754d87cc9fd0ad23e9a,
+  m_fontAsset: {fileID: 11400000, guid: bdc64b4452911cf4faf0e62328b0082f, type: 2}
+  m_sharedMaterial: {fileID: 4565134964853867374, guid: bdc64b4452911cf4faf0e62328b0082f,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1326,8 +1339,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: "\uC124\uBA85"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: a2d89b6ecc1ab754d87cc9fd0ad23e9a, type: 2}
-  m_sharedMaterial: {fileID: -1702348751694658730, guid: a2d89b6ecc1ab754d87cc9fd0ad23e9a,
+  m_fontAsset: {fileID: 11400000, guid: bdc64b4452911cf4faf0e62328b0082f, type: 2}
+  m_sharedMaterial: {fileID: 4565134964853867374, guid: bdc64b4452911cf4faf0e62328b0082f,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -1744,6 +1757,18 @@ MonoBehaviour:
       - m_Target: {fileID: 5998462923974672252}
         m_TargetAssemblyTypeName: ControlUIManagerFlow, Assembly-CSharp
         m_MethodName: ShowPopup
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8267716603789380213}
+        m_TargetAssemblyTypeName: GetAudioManagerFunc, Assembly-CSharp
+        m_MethodName: PlayUI
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

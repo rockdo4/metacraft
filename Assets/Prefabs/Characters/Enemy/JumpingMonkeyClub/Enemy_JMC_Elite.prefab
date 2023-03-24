@@ -116,7 +116,7 @@ Transform:
   m_GameObject: {fileID: 5241159181975743682}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5814027058019972405}
@@ -143,6 +143,7 @@ MonoBehaviour:
     job: 0
     tags: []
     level: 0
+    maxLevel: 0
     exp: 0
     likeability: 0
     baseDamage: 50
@@ -155,7 +156,8 @@ MonoBehaviour:
     evasion: 0
     accuracy: 0.5
   attacks:
-  - {fileID: 11400000, guid: 20dcfd9577ad65c48822cac5550a28f6, type: 2}
+  - {fileID: 11400000, guid: 64db0e73d0cbd3c41834932f0103b77c, type: 2}
+  - {fileID: 11400000, guid: b31d5b500d0cd5f41a04f88a84243ef3, type: 2}
   activeSkill: {fileID: 0}
   passiveSkill: {fileID: 0}
 --- !u!136 &4377651214388297004
@@ -168,10 +170,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.6265865
-  m_Height: 3.5703094
+  m_Radius: 0.48045585
+  m_Height: 2.0888
   m_Direction: 1
-  m_Center: {x: -0.015165806, y: 1.6637055, z: 0.20045418}
+  m_Center: {x: -0.015165806, y: 0.92295074, z: 0.054323524}
 --- !u!54 &4437855964918732042
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -206,7 +208,7 @@ NavMeshAgent:
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
-  m_Height: 3
+  m_Height: 2
   m_BaseOffset: 0
   m_WalkableMask: 4294967295
   m_ObstacleAvoidanceType: 4
@@ -272,7 +274,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   characterData: {fileID: 5241159181975743694}
   nowAttack: {fileID: 0}
-  skillClips: []
+  skillClips:
+  - {fileID: 7400000, guid: f14cb277d3074384b8b01dbbb3fb55a9, type: 2}
+  - {fileID: 7400000, guid: 637f7e94c45a1254fa1c3996a0cfb972, type: 2}
   unitType: 1
   normalAttackTargetType: 0
   PassiveTargetType: 0
@@ -287,6 +291,7 @@ MonoBehaviour:
   citizenList: []
   unitState: 0
   battleState: 0
+  buffList: []
   isThereDamageUI: 1
   usingFloatingHpBar: 1
   isAlive: 0

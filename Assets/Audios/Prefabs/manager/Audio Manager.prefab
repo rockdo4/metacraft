@@ -1,0 +1,75 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6663348588577165638
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5973284753847445496}
+  - component: {fileID: 7851982205423702223}
+  m_Layer: 0
+  m_Name: Audio Manager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5973284753847445496
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6663348588577165638}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 501.5, y: 282, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7851982205423702223
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6663348588577165638}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c685ff392f666044999dd816d9307516, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mixer: {fileID: 24100000, guid: d83e9c7f002cd1241a0c42996257bb7b, type: 2}
+  master: 0
+  bgm: 0
+  se: 0
+  ambience: 0
+  uiAudios:
+  - {fileID: 1197957171126857864, guid: c6d32164a9f323447bbaa75af00cd93b, type: 3}
+  - {fileID: 212721805172433803, guid: ff5610f7c2dddf2438cddabaf284f304, type: 3}
+  - {fileID: 8856003173787534390, guid: a0de2a6c70be5e74aaa8ecb763576f08, type: 3}
+  - {fileID: 4095186715473073044, guid: 1985c0d930e61824fbc96dc0c91d4ea4, type: 3}
+  - {fileID: 539481866825971498, guid: fa14e180f1e99404080f0e76713766fa, type: 3}
+  bgms:
+  - {fileID: 6867966491027641212, guid: 3a2a1fb279cfce64a8793a305d9eb6a5, type: 3}
+  - {fileID: 2331198282431641648, guid: 3cd002edd9dec774f8b591128c34c37d, type: 3}
+  - {fileID: 7748844642396684194, guid: efe3f0f9d7f7a56469f959fcfd2de71a, type: 3}
+  - {fileID: 6506987931072403332, guid: 32973895a9bb2774cbd166b10c4edeb8, type: 3}
+  - {fileID: 4765688457465963422, guid: 7e0542d6f16e4664f93d34474c8550ac, type: 3}
+  - {fileID: 1640871650393743182, guid: 59cf25e40e30afd4dabad8ff2486e935, type: 3}
+  - {fileID: 5964158663425278965, guid: b756c38d917082b4a8c5b4f918c9a73b, type: 3}
+  - {fileID: 2606223800548361540, guid: 26b85e0d0a1dff74da629fd5e2d38054, type: 3}
+  - {fileID: 8956111757571257989, guid: d1e05b02d9899d1469b695b8d5871d66, type: 3}
+  - {fileID: 4387782496039697216, guid: 4ec85470b888ae44183d81e90ea6e714, type: 3}
+  - {fileID: 1875805143397230113, guid: ff13effcca6244b46bf7f54b35397226, type: 3}
+  - {fileID: 2092927619223564727, guid: 3df1c7765a2b1da44907bc5bef899f77, type: 3}
+  - {fileID: 3087859836183312141, guid: 76b29bf5f934b0c42987d7ebd600a4a0, type: 3}
+  - {fileID: 3324725915745481002, guid: 3b12ac1240936a94a912f758b92624e6, type: 3}
+  bgmFadeTime: 2
+  bgmFadeInterval: 1
+  awakeMusicIndex: 0

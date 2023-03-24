@@ -120,14 +120,18 @@ public class AttackableEnemy : AttackableUnit
         unitState = UnitState.Idle;
         ResetCoolDown();
 
-        hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+        //hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+        hpBarManager.SetLiveData(characterData.data);
     }
 
     private void Start()
     {
+        if (effectCreateTransform.Equals(null))
+            effectCreateTransform = transform;
+
         foreach (var attack in characterData.attacks)
         {
-            attack.SkillHolderTransform = effectCreateTransform ?? transform;
+            attack.SkillHolderTransform = effectCreateTransform;
             attack.ActorTransform = transform;
         }
         if (characterData.activeSkill != null)
@@ -143,7 +147,8 @@ public class AttackableEnemy : AttackableUnit
         UnitState = UnitState.None;
         BattleState = UnitBattleState.None;
         UnitHp = characterData.data.healthPoint;
-        hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+        //hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
+        hpBarManager.SetLiveData(characterData.data);
         lastNavTime = Time.time;
         ResetCoolDown();
         target = null;

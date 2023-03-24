@@ -30,7 +30,7 @@ public class ClearHeroInfo : MonoBehaviour
 
         nowExp = data.exp;
         expImage.fillAmount = (float)nowExp / ExpTable[nowLevel];
-        heroImage.sprite = GameManager.Instance.GetSpriteByAddress($"Icon_{data.name}");
+        heroImage.sprite = GameManager.Instance.GetSpriteByAddress($"icon_{data.name}");
     }
 
     public void SetTestTable()
@@ -62,7 +62,9 @@ public class ClearHeroInfo : MonoBehaviour
 
                 nextLevel++;
                 tempExp = 0; //레벨업 했으니, 현재 레벨의 잔여 경험치는 0
-                
+
+                AudioManager.Instance.PlayUIAudio(3);
+
                 thisHero.LevelupStats();
             }
             else //레벨업 못하는 상태면 연산 끝
