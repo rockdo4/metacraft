@@ -585,7 +585,6 @@ public class BattleManager : MonoBehaviour
     public void OnReady()
     {
         readyCount--;
-        Logger.Debug("wtf ready");
 
         if (readyCount == 0)
         {
