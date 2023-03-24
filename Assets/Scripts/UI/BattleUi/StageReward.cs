@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 using UnityEngine;
 
 public class StageReward : MonoBehaviour
@@ -8,6 +9,7 @@ public class StageReward : MonoBehaviour
     public RewardItem item;
     public Transform rewardTr;
     public List<RewardItem> rewards;
+    public List<RewardItem> nowRewards;
     public int golds = 0;
 
     public string goldId;
@@ -66,6 +68,7 @@ public class StageReward : MonoBehaviour
         newItem.SetData(id, name, iconName, info, sort, dataId, count);
 
         rewards.Add(newItem);
+        nowRewards.Add(newItem);
     }
 
     public void Sort(RewardItem item)

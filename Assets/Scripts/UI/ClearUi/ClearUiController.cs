@@ -1,12 +1,17 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ClearUiController : View
 {
     public ClearHeroInfo clearHeroPref;
     public Transform heroTr;
     public RewardManager rewards;
-    
+
+    public Button nodeButton;
+    public Button lastNodeButton;
+
+
 
     private List<ClearHeroInfo> heroes = new();
     private void OnEnable()

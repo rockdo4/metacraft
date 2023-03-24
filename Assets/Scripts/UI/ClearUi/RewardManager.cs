@@ -12,12 +12,15 @@ public class RewardManager : MonoBehaviour
     public GameObject rewardPref;
     public StageReward stageReward;
 
-    List<GameObject> rewardList = new();
+    public List<GameObject> rewardList = new();
 
-    public void SetReward()
+    public void SetReward(bool isLast = false)
     {
         StartCoroutine(CoSetReward());
-        SaveItems();
+        if (isLast)
+        {
+            SaveItems();
+        }
     }
 
     public void ResetReward()
@@ -31,7 +34,7 @@ public class RewardManager : MonoBehaviour
 
     public IEnumerator CoSetReward()
     {
-        var rewards = stageReward.rewards;
+        var rewards = stageReward.nowRewards;
 
         WaitForSecondsRealtime wfs = new(0.3f);
         count = rewards.Count;
