@@ -23,7 +23,7 @@ public class GetPopUp : MonoBehaviour
         nowItem.count = int.Parse(count.text) * addCount;
 
         GameManager.Instance.inventoryData.AddItem(nowItem);
-        GameManager.Instance.inventoryData.UseItem(useItem, int.Parse(count.text));
+        GameManager.Instance.inventoryData.UseItem(useItem.id, int.Parse(count.text));
         OnClickCancle();
     }
 

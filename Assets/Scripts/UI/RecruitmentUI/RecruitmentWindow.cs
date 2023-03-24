@@ -15,6 +15,8 @@ public class RecruitmentWindow : MonoBehaviour
     private List<RecruitmentInfo> resultRecruitmentList = new(); // 영입 결과 프리팹 생성 및 정보 불러온 리스트
     public TextMeshProUGUI rateInfo;
 
+
+
     private void Start()
     {
         //pageImage.sprite = GameManager.Instance.GetSpriteByAddress($"{type.image}");
