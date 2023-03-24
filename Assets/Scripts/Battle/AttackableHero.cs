@@ -200,9 +200,12 @@ public class AttackableHero : AttackableUnit
     }
     private void Start()
     {
+        if (effectCreateTransform.Equals(null))
+            effectCreateTransform = transform;
+
         foreach (var attack in characterData.attacks)
         {
-            attack.SkillHolderTransform = effectCreateTransform.Equals(null) ? transform : effectCreateTransform;
+            attack.SkillHolderTransform = effectCreateTransform;
             attack.ActorTransform = transform;
         }
         characterData.activeSkill.ActorTransform = transform;

@@ -108,16 +108,18 @@ public class AudioManager : Singleton<AudioManager>
     public void PlayBGM(int index) 
     {
         StopAllBGM();
-        currBgmIndex = index;
+        currBgmIndex = index;        
         bgms[index].volume = bgmOriginVolumes[index];
-        bgms[index].Play(); 
+        bgms[index].Play();
+        Logger.Debug($"{index}번 트랙 재생");
     }
     public void ChageBGMOnlyFadeOut(int index)
     {
         if (coBgmFadeCoroutine != null)
             StopCoroutine(coBgmFadeCoroutine);
-
+        
         coBgmFadeCoroutine = StartCoroutine(CoBGMOnlyFadeOut(index));
+        Logger.Debug($"{index}번 트랙 재생");
     }
     public void ChangeBGMFadeCross(int index)
     {
@@ -125,6 +127,7 @@ public class AudioManager : Singleton<AudioManager>
             StopCoroutine(coBgmFadeCoroutine);
 
         coBgmFadeCoroutine = StartCoroutine(CoBGMCrossFade(index));
+        Logger.Debug($"{index}번 트랙 재생");
     }    
     private IEnumerator CoBGMCrossFade(int index)
     {
