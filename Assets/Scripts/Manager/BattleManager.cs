@@ -149,10 +149,26 @@ public class BattleManager : MonoBehaviour
                 ExecutionBuff(80260002);
                 break;
             case 1:
+                List<object> supplyList = new();
+                string supplyId = $"{currentSelectMissionTable["SupplyID"]}";
+                var data = GameManager.Instance.supplyInfoList.Find(t => t["ID"].ToString().CompareTo(supplyId) == 0);
 
+                for (int i = 0; i < 20; i++)
+                {
+                    var key = data[$"Effect{i + 1}"];
+                    if ((int)key != -1)
+                        supplyList.Add(key);
+                    else
+                        break;
+                }
+
+                var choiceSupply = supplyList[Random.Range(0, supplyList.Count)];
+                ExecutionBuff((int)choiceSupply);
                 break;
             case 2:
-
+                clearUi.rewards.SaveItems();
+                clearUi.ResetUi();
+                stageReward.ResetData();
                 break;
             default:
                 break;

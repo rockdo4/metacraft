@@ -53,7 +53,7 @@ public class RewardManager : MonoBehaviour
             yield return wfs;
         }
     }
-    void SaveItems()
+    public void SaveItems()
     {
         var rewards = stageReward.rewards;
         ref InventoryData inventoryData = ref GameManager.Instance.inventoryData;
