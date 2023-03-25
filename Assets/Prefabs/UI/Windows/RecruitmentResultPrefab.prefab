@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -421,24 +421,7 @@ MonoBehaviour:
   icon: {fileID: 3575600933992415568}
   gradeText: {fileID: 3575600934006938434}
   heroNameText: {fileID: 3575600934344875977}
-  data:
-    name: 
-    grade: 1
-    maxGrade: 5
-    job: 0
-    tags: []
-    level: 1
-    exp: 0
-    likeability: 0
-    baseDamage: 50
-    baseDefense: 0
-    healthPoint: 500
-    currentHp: 500
-    moveSpeed: 3
-    critical: 0
-    criticalDmg: 2
-    evasion: 0
-    accuracy: 1
+  originData: {fileID: 0}
 --- !u!1 &3575600934344875979
 GameObject:
   m_ObjectHideFlags: 0
@@ -474,8 +457,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 50}
+  m_AnchoredPosition: {x: 0.9778, y: 0}
+  m_SizeDelta: {x: 280.1732, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &3575600934344875982
 CanvasRenderer:
@@ -533,8 +516,8 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36
-  m_fontSizeBase: 36
+  m_fontSize: 30
+  m_fontSizeBase: 30
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
