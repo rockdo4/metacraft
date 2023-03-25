@@ -10,7 +10,7 @@ public class ClearUiController : View
 
     public Button nodeButton;
     public Button lastNodeButton;
-
+    public int baseExp = 0;
 
 
     private List<ClearHeroInfo> heroes = new();
@@ -20,6 +20,7 @@ public class ClearUiController : View
     }
     public void ResetUi()
     {
+        baseExp = 0;
         rewards.ResetReward();
     }
 
@@ -33,11 +34,10 @@ public class ClearUiController : View
         }
     }
 
-    public void SetData(bool isLast = false)
+    public void SetData(bool isLast)
     {
         //플레이어 경험치 상승
         int difficulty = (int)GameManager.Instance.currentSelectMission["Difficulty"];
-        int baseExp = 100;
         GameManager.Instance.AddOfficeExperience(baseExp * difficulty);
 
         foreach (var hero in heroes)
@@ -49,5 +49,4 @@ public class ClearUiController : View
 
         rewards.SetReward(isLast);
     }
-
 }

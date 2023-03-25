@@ -1,13 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class RewardManager : MonoBehaviour
 {
-    [SerializeField]
-    private int count;
-
     public Transform rewardTr;
     public GameObject rewardPref;
     public StageReward stageReward;
@@ -37,7 +33,7 @@ public class RewardManager : MonoBehaviour
         var rewards = stageReward.nowRewards;
         Logger.Debug(rewards.Count);
         WaitForSecondsRealtime wfs = new(0.3f);
-        count = rewards.Count;
+        int count = rewards.Count;
 
         foreach (var reward in rewards)
         {

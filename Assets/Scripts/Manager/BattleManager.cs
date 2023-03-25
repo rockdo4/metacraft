@@ -1132,6 +1132,9 @@ public class BattleManager : MonoBehaviour
         var gold = gm.itemInfoList.Find(t => t["ID"].Equals(keyItem));
         if ((int)rewardData["Gold"] != -1)
             stageReward.AddGold(rewardData["Gold"].ToString());
+
+        var baseExp = (int)rewardData["HeroExp"];
+        clearUi.baseExp = baseExp == -1 ? 0 : baseExp;
     }
 
     private void DeadMiddleBoss()
