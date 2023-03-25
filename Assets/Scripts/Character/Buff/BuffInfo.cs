@@ -27,4 +27,12 @@ public class BuffInfo : ScriptableObject
     public float buffValue;       //상태이상의 효과값
     [Header("상태이상의 지속시간")]
     public float duration;      //상태이상의 지속시간
+
+
+
+    [Space, Space]
+    [Header("버프 레벨")]
+    public int buffLevel; 
+    [Header("증가 수차")]
+    public float addBuffState;
 }

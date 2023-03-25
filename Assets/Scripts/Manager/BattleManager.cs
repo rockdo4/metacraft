@@ -1118,7 +1118,7 @@ public class BattleManager : MonoBehaviour
             case TreeNodeTypes.Villain:
                 colomId = "ClearReward";
                 collomWeight = "CWeight";
-                itemCount = 5;
+                itemCount = 3;
                 break;
             default:
                 break;
