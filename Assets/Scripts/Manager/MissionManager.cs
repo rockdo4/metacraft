@@ -12,7 +12,7 @@ public class MissionManager : View
     public TextMeshProUGUI explanation;  // Mission explanation
 
     public TextMeshProUGUI ExpectedCost;
-    public GameObject[] heroSlots;
+    public Image[] heroSlots;
     private int heroSlotsIndex;
     public TextMeshProUGUI[] fitProperties;
 
@@ -101,7 +101,8 @@ public class MissionManager : View
         gm.ClearBattleGroups();
         for (int i = 0; i < heroSlots.Length; i++)
         {
-            heroSlots[i].GetComponent<Image>().sprite = null;
+            heroSlots[i].sprite = null;
+            heroSlots[i].color = new Color(0, 0, 0, 0);
         }
         for (int i = 0; i < fitProperties.Length; i++)
         {
@@ -143,12 +144,13 @@ public class MissionManager : View
         }
 
         LiveData liveData = bundle.data;
-        heroSlots[heroSlotsIndex].GetComponent<Image>().sprite = gm.GetSpriteByAddress($"icon_{liveData.name}");
+        heroSlots[heroSlotsIndex].sprite = gm.GetSpriteByAddress($"icon_{liveData.name}");
+        heroSlots[heroSlotsIndex].color = Color.white;
         selectIndexGroup[heroSlotsIndex] = index;
 
         if (duplication != null)
         {
-            heroSlots[(int)duplication].GetComponent<Image>().sprite = null;
+            heroSlots[(int)duplication].sprite = null;
             selectIndexGroup[(int)duplication] = null;
         }
 
