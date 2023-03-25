@@ -1214,6 +1214,19 @@ public class BattleManager : MonoBehaviour
 
     public void SpawnCurrMapAllEnemys()
     {
+        int bossTriggerIndex = 0;
+        if (tree.CurNode.type == TreeNodeTypes.Villain)
+        {
+            for (int btMapTriggerCount = btMapTriggers.Count - 1; btMapTriggerCount >= 0; btMapTriggerCount--)
+            {
+                if (btMapTriggers[btMapTriggerCount].enemySettingPositions.Count > 0)
+                {
+                    bossTriggerIndex = btMapTriggerCount;
+                    break;
+                }
+            }
+        }
+
         for (int i = 0; i < btMapTriggers.Count; i++)
         {
             // 뽑은 키로 스폰 테이블에서 소환할 적들 찾기
@@ -1235,10 +1248,12 @@ public class BattleManager : MonoBehaviour
                 string normalEnemysKey = $"{currentSelectMissionTable[$"NMon{randomEnemyCount}"]}";
                 SetEnemySpawnTable(ref spawnTableNormalEnemys, normalEnemysKey);
 
-                if (tree.CurNode.type == TreeNodeTypes.Villain)
+                if (tree.CurNode.type == TreeNodeTypes.Villain && i == bossTriggerIndex)
                 {
                     string villainEnemysKey = $"{currentSelectMissionTable["Villain"]}";
                     SetEnemySpawnTable(ref spawnTableNormalEnemys, villainEnemysKey);
+
+                    //Logger.Debug($"Normal Key : {normalEnemysKey} / Boss Key : {villainEnemysKey}");
                 }
             }
 
@@ -1274,22 +1289,24 @@ public class BattleManager : MonoBehaviour
             int posCount = btMapTriggers[i].enemySettingPositions.Count;
             for (int j = 0; j < posCount; j++)
             {
-                // 데이터 내부 순회
-                for (int l = 0; l < enemyData.Count; l++)
+                // 프리펩 내부 순회
+                for (int l = 0; l < enemyPrefabs.Count; l++)
                 {
-                    // 내부에서 이름 찾기
-                    string enemyName = $"{enemyData[l]["NAME"]}";
-                    int job = (int)enemyData[l]["JOB"];
-
-                    // 찾은 이름을 프리펩 순회하면서 대조하기
-                    for (int k = 0; k < enemyPrefabs.Count; k++)
+                    // 데이터 내부 순회
+                    for (int k = 0; k < enemyData.Count; k++)
                     {
+                        // 내부에서 이름 찾기
+                        string enemyName = $"{enemyData[k]["NAME"]}";
+                        int job = (int)enemyData[k]["JOB"];
                         // 찾음
-                        if (enemyPrefabs[k].gameObject.name.Equals(enemyName))
+                        if (enemyPrefabs[l].gameObject.name.Equals(enemyName))
                         {
                             // 생성해야하는 wave(리스폰할 횟수)당 해당 위치에 테이블의 마릿수만큼 소환
-                            int currPosEnemyCount = monValues[l];
+                            int currPosEnemyCount = monValues[k];
                             int waveCount = btMapTriggers[i].enemySettingPositions[j].waveCount;
+
+                            //Logger.Debug($"Name : {enemyName} / MonCount : {currPosEnemyCount} / Trigger : {i}");
+
                             for (int wave = 0; wave < waveCount; wave++)
                             {
                                 if (tree.CurNode.type == TreeNodeTypes.Threat)
@@ -1311,7 +1328,7 @@ public class BattleManager : MonoBehaviour
                                 btMapTriggers[i].enemySettingPositions[j].enemys.Add(new List<AttackableEnemy>());
                                 for (int s = 0; s < currPosEnemyCount; s++)
                                 {
-                                    var enemy = Instantiate(enemyPrefabs[k]);
+                                    var enemy = Instantiate(enemyPrefabs[l]);
                                     enemy.gameObject.SetActive(false);
                                     SetEnemyLiveData(enemyData, enemy);
 
@@ -1332,15 +1349,7 @@ public class BattleManager : MonoBehaviour
                                     else if (tree.CurNode.type == TreeNodeTypes.Villain && job == (int)CharacterJob.villain)
                                     {
                                         villain = enemy;
-                                        for (int btMapTriggerCount = btMapTriggers.Count - 1; btMapTriggerCount >= 0; btMapTriggerCount--)
-                                        {
-                                            if (btMapTriggers[btMapTriggerCount].enemySettingPositions.Count > 0)
-                                            {
-                                                saveI = btMapTriggerCount;
-                                                break;
-                                            }
-                                        }
-
+                                        saveI = bossTriggerIndex;
                                         saveJ = 0;
                                         saveWave = 0;
                                         currPosEnemyCount = 0;
