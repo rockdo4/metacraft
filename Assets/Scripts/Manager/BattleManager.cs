@@ -1118,7 +1118,7 @@ public class BattleManager : MonoBehaviour
             case TreeNodeTypes.Villain:
                 colomId = "ClearReward";
                 collomWeight = "CWeight";
-                itemCount = 5;
+                itemCount = 3;
                 break;
             default:
                 break;
@@ -1129,8 +1129,8 @@ public class BattleManager : MonoBehaviour
         List<string> allItems = new();
         for (int i = 1; i < itemCount + 1; i++)
         {
-            string itemWeight = collomWeight + i.ToString();
-            string itemKey = colomId + i.ToString();
+            string itemWeight = $"{collomWeight}{i}";
+            string itemKey = $"{colomId}{i}";
             var value = (int)data[itemWeight];
             if (value == -1)
                 continue;
