@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
 using TMPro;
-using Unity.Jobs.LowLevel.Unsafe;
 using UnityEngine;
 
 public class RecruitmentWindow : MonoBehaviour
@@ -245,8 +244,18 @@ public class RecruitmentWindow : MonoBehaviour
 
     public void SetRatePopup()
     {
-        ratePopup = !ratePopup;
+        SetRatePopupMode(!ratePopup);
+    }
+
+    private void SetRatePopupMode(bool value)
+    {
+        ratePopup = value;
         if (!ratePopup)
             UIManager.Instance.ClearPopups();
+    }
+
+    private void OnDisable()
+    {
+        SetRatePopupMode(false);
     }
 }
