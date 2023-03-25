@@ -539,8 +539,8 @@ public class AttackableHero : AttackableUnit
             if (info.fraction != 0)
             {
                 icon = heroUI.AddIcon(info.type, info.duration, idx, GameManager.Instance.GetSpriteByAddress($"state{info.sort}"));
-                base.AddValueBuff(info, anotherValue, icon);
             }
+            base.AddValueBuff(info, anotherValue, icon);
         }
         else
         {

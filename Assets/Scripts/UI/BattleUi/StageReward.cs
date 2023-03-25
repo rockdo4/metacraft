@@ -47,7 +47,6 @@ public class StageReward : MonoBehaviour
     }
     public void AddItem(string id, string name, string iconName, string info,string sort, string dataId, string count, bool isEventReward)
     {
-        Logger.Debug("GetItem");
         if (isEventReward)
         {
             var currReward = Instantiate(item, eventRewardTr);
