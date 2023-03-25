@@ -35,7 +35,7 @@ public class HeroUpgradeDetailWindow : View
     private void OnEnable()
     {
         SetHeroInfo();
-    }   
+    }
 
     private void SetHeroInfo()
     {
@@ -48,7 +48,7 @@ public class HeroUpgradeDetailWindow : View
         CharacterGrade curGrade = (CharacterGrade)data.grade;
         if (curGrade != CharacterGrade.SS)
         {
-            heroGrade.text = $"{curGrade}등급 > {curGrade + 1}등급"; 
+            heroGrade.text = $"{curGrade}등급 > {curGrade + 1}등급";
             heroMaxLevel.text =
                 $"{gm.maxLevelTable[data.grade - 1]["MaxLevel"]} >" +
                 $"{gm.maxLevelTable[data.grade]["MaxLevel"]}";
@@ -86,35 +86,35 @@ public class HeroUpgradeDetailWindow : View
 
     private void FindUpgradeMaterial(string name, int grade)
     {
-        for (int i = 0; i < gm.upgradeTable.Count; i++)
+        var ut = gm.upgradeTable;
+        var inven = gm.inventoryData;
+        var items = gm.itemInfoList;
+
+        for (int i = 0; i < ut.Count; i++)
         {
-            var itemName = gm.upgradeTable[i]["Name"].ToString();
-            int itemCount = 0;
-            if (gm.inventoryData.IsItem(itemName))
+            if (ut[i]["Name"].ToString().Equals(name) && ((int)ut[i]["Grade"]).Equals(grade))
             {
-                itemCount = 0;
-            }
-            else
-            {
-                itemCount = 0; // gm.inventoryData.GetItem(itemName).count; 없는데 가져오려고 하면 어떻게함
-            }
-            meterialInfo[0].text = $"{itemCount}/{gm.upgradeTable[i]["Mmaterial1Amount"]}";
-            gold.text = $"{gm.playerData.gold}/{gm.upgradeTable[i]["NeedGold"]}";
-
-            if (itemName == name && (int)gm.upgradeTable[i]["Grade"] == grade)
-            {
-                foreach (var item in gm.itemInfoList)
+                var itemID = ut[i]["Material1"].ToString();
+                for (int j = 0; j < items.Count; j++)
                 {
-                    if (item["ID"].Equals(gm.upgradeTable[i]["Material1"].ToString()))
+                    if (items[j]["ID"].ToString().Equals(itemID))
                     {
-                        meterialIcons[0].sprite = gm.GetSpriteByAddress(item["Icon_Name"].ToString());
-
+                        meterialIcons[0].sprite = gm.GetSpriteByAddress(items[j]["Icon_Name"].ToString());
+                        break;
                     }
                 }
-            }         
+                if (inven.IsItem(itemID))
+                {
+                    meterialInfo[0].text = $"{inven.FindItem(itemID).count}/{(int)ut[i]["Mmaterial1Amount"]}";
+                }
+                else
+                {
+                    meterialInfo[0].text = $"{0}/{(int)ut[i]["Mmaterial1Amount"]}";
+                }
+                gold.text = $"{gm.playerData.gold}/{(int)ut[i]["NeedGold"]}";
+            }            
         }
     }
-
 
     public void OnClickUpgradeButton()
     {

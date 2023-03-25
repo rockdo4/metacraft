@@ -141,6 +141,9 @@ public abstract class AttackableUnit : MonoBehaviour
 
         if (effectCreateTransform.Equals(null))
             effectCreateTransform = transform;
+
+        if (hitEffectTransform.Equals(null))
+            hitEffectTransform = transform;
     }
 
     protected void InitData()
@@ -457,7 +460,7 @@ public abstract class AttackableUnit : MonoBehaviour
         var defense = 100f / (100 + characterData.data.baseDefense * bufferState.defense);
         var levelCorrection = 1 + Mathf.Clamp((attackableUnit.characterData.data.level - characterData.data.level) / 100f, -0.4f, 0);
 
-        bool isCritical = false;
+        bool isCritical = false;        
         var dmg = (int)(attackableUnit.CalculDamage(skill, ref isCritical) * defense * levelCorrection);
 
         if (bufferState.isShield)
@@ -490,7 +493,7 @@ public abstract class AttackableUnit : MonoBehaviour
                 EffectManager.Instance.Get(skill.hitEffect, transform);
             }
             else
-                EffectManager.Instance.Get(skill.hitEffect, hitEffectTransform != null ? hitEffectTransform : transform);
+                EffectManager.Instance.Get(skill.hitEffect, hitEffectTransform);
         }
         ShowHpBarAndDamageText(dmg, isCritical);        
     }
