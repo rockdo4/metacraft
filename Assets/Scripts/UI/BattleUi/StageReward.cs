@@ -9,7 +9,6 @@ public class StageReward : MonoBehaviour
     public Transform rewardTr;
     public List<RewardItem> rewards;
     public List<Item> nowRewards;
-    public int golds = 0;
 
     public string goldId;
 
@@ -47,7 +46,6 @@ public class StageReward : MonoBehaviour
     }
     public void AddItem(string id, string name, string iconName, string info,string sort, string dataId, string count, bool isEventReward)
     {
-        Logger.Debug("GetItem");
         if (isEventReward)
         {
             var currReward = Instantiate(item, eventRewardTr);
@@ -125,5 +123,16 @@ public class StageReward : MonoBehaviour
             Destroy(currRewards[i].gameObject);
         }
         currRewards.Clear();
+    }
+
+    public void ResetData()
+    {
+        for (int i = 0; i < rewards.Count; i++)
+        {
+            Destroy(rewards[i].gameObject);
+        }
+
+        rewards.Clear();
+        nowRewards.Clear();
     }
 }

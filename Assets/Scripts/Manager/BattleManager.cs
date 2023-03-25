@@ -133,7 +133,7 @@ public class BattleManager : MonoBehaviour
         SetActiveUi(eventUi, choiceButtons, false, choiceButtons.Count);
         SetHeroesReady();
     }
-    public void EndSupply()
+    public void EndSupply(int idx)
     {
         Logger.Debug("여기다가 보급 넣으면 됨");
 
@@ -142,7 +142,37 @@ public class BattleManager : MonoBehaviour
         {
             heroUiList[i].gameObject.SetActive(true);
         }
-        NodeClearReward();
+
+        switch (idx)
+        {
+            case 0:
+                ExecutionBuff(80260002);
+                break;
+            case 1:
+                List<object> supplyList = new();
+                string supplyId = $"{currentSelectMissionTable["SupplyID"]}";
+                var data = GameManager.Instance.supplyInfoList.Find(t => t["ID"].ToString().CompareTo(supplyId) == 0);
+
+                for (int i = 0; i < 20; i++)
+                {
+                    var key = data[$"Effect{i + 1}"];
+                    if ((int)key != -1)
+                        supplyList.Add(key);
+                    else
+                        break;
+                }
+
+                var choiceSupply = supplyList[Random.Range(0, supplyList.Count)];
+                ExecutionBuff((int)choiceSupply);
+                break;
+            case 2:
+                clearUi.rewards.SaveItems();
+                clearUi.ResetUi();
+                stageReward.ResetData();
+                break;
+            default:
+                break;
+        }
     }
 
     private void StartNextStage(MapEventEnum ev)
@@ -268,11 +298,13 @@ public class BattleManager : MonoBehaviour
                 string stringTableChoiceText = gm.GetStringByTable(textId);
                 supplyButtonTexts[i].text = stringTableChoiceText;
 
-                Logger.Debug("이정연 / 보급 버튼마다 이펙트 설정하는 부분");
                 int effectCount = (int)supplyInfoTable[index]["EffectCount"];
                 int randomEffectKey = Random.Range(1, effectCount);
                 int effectKey = (int)supplyInfoTable[index][$"Effect{randomEffectKey}"];
                 supplyEffectKey.Add(effectKey);
+
+
+
             }
         }
         else
@@ -789,7 +821,17 @@ public class BattleManager : MonoBehaviour
 
     private void ChoiceNextStageByNode()
     {
-        stageReward.gameObject.SetActive(true);
+        if (tree.CurNode.type != TreeNodeTypes.Supply)
+            stageReward.gameObject.SetActive(true);
+        else
+        {
+            for (int i = 0; i < useHeroes.Count; i++)
+            {
+                useHeroes[i].ChangeUnitState(UnitState.Idle);
+            }
+            OnClickClearUiButton();
+            return;
+        }
 
         if (tree.CurNode.type != TreeNodeTypes.Event && tree.CurNode.type != TreeNodeTypes.Supply)
             NodeClearReward();
@@ -1036,7 +1078,6 @@ public class BattleManager : MonoBehaviour
     public void NodeClearReward()
     {
         stageReward.nowRewards.Clear();
-        Logger.Debug("stageReward.nowRewards.Clear");
         var influence = gm.currentSelectMission["Influence"];//세력
         int difficulty = (int)gm.currentSelectMission["Difficulty"]; //난이도
         var nodeType = tree.CurNode.type; //노드타입
@@ -1067,18 +1108,16 @@ public class BattleManager : MonoBehaviour
                 itemCount = 5;
                 break;
             case TreeNodeTypes.Supply:
-                colomId = "ClearReward";
-                collomWeight = "CWeight";
-                itemCount = 3;
-                break;
+                clearUi.baseExp = 0;
+                return;
             //case TreeNodeTypes.Event:
             //    colomId = "ClearReward";
             //    collomWeight = "CWeight";
             //    itemCount = 3;
             //    return;
             case TreeNodeTypes.Villain:
-                colomId = "HardReward";
-                collomWeight = "HWeight";
+                colomId = "ClearReward";
+                collomWeight = "CWeight";
                 itemCount = 5;
                 break;
             default:
@@ -1134,6 +1173,9 @@ public class BattleManager : MonoBehaviour
         var gold = gm.itemInfoList.Find(t => t["ID"].Equals(keyItem));
         if ((int)rewardData["Gold"] != -1)
             stageReward.AddGold(rewardData["Gold"].ToString());
+
+        var baseExp = (int)rewardData["HeroExp"];
+        clearUi.baseExp = baseExp == -1 ? 0 : baseExp;
     }
 
     private void DeadMiddleBoss()

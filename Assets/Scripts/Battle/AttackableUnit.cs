@@ -753,7 +753,7 @@ public abstract class AttackableUnit : MonoBehaviour
                 {
                     case BuffType.Heal:
                         {
-                            UnitHp += anotherValue;
+                            UnitHp += (int)(characterData.data.healthPoint * info.buffValue);
                             if (isThereDamageUI)
                             {
                                 floatingDamageText.OnAttack(anotherValue, false, transform.position, DamageType.Heal);
@@ -766,29 +766,6 @@ public abstract class AttackableUnit : MonoBehaviour
             {
                 Action endEvent = null;
 
-                switch (info.type)
-                {
-                    case BuffType.Resistance:
-                        break;
-                    case BuffType.Blind:
-                        break;
-                    case BuffType.Burns:
-                        break;
-                    case BuffType.Freeze:
-                        break;
-                    case BuffType.Shield:
-                        break;
-                    case BuffType.Bleed:
-                        break;
-                    case BuffType.LifeSteal:
-                        break;
-                    case BuffType.energyCharging:
-                        break;
-                    case BuffType.Count:
-                        break;
-                    default:
-                        break;
-                }
                 Buff buff = new(info, this, RemoveBuff, icon, endEvent);
                 buffList.Add(buff);
                 bufferState.Buffer(info.type, info.buffValue);
