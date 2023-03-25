@@ -20,12 +20,12 @@ public class RecruitmentInfo : MonoBehaviour
         icon.sprite = GameManager.Instance.GetSpriteByAddress($"icon_{originData.name}");
     }
 
-    public void SetStoneData(CharacterDataBundle dataBundle, Dictionary<string, object> stoneData)
+    public void SetStoneData(CharacterGrade grade, Dictionary<string, object> stoneData)
     {
         //bundle = dataBundle;
         //originData = dataBundle.originData;
         heroNameText.text = GameManager.Instance.GetStringByTable(stoneData["Item_Name"].ToString());
-        //gradeText.text = $"{(CharacterGrade)originData.grade}";
+        gradeText.text = $"{grade}";
         icon.sprite = GameManager.Instance.GetSpriteByAddress(stoneData["Icon_Name"].ToString());
     }
 

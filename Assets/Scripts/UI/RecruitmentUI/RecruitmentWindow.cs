@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Text;
 using TMPro;
 using Unity.Jobs.LowLevel.Unsafe;
 using UnityEngine;
@@ -125,7 +126,8 @@ public class RecruitmentWindow : MonoBehaviour
                 string stoneId = GameManager.Instance.recruitmentReplacementTable.
                 Find(t => t["Name"].ToString().CompareTo(herobundle.originData.name) == 0)["Replacement"].ToString();
 
-                info.SetStoneData(herobundle, itemInfoList.Find(t => t["ID"].ToString().CompareTo(stoneId) == 0));
+                info.SetStoneData((CharacterGrade)herobundle.originData.grade,
+                    itemInfoList.Find(t => t["ID"].ToString().CompareTo(stoneId) == 0));
                 GameManager.Instance.inventoryData.AddItem(stoneId);
             }
             catch
@@ -189,12 +191,56 @@ public class RecruitmentWindow : MonoBehaviour
 
     private void OnRateInfo()
     {
+        List<string> gradeCList = new ();
+        List<string> gradeBList = new ();
+        List<string> gradeAList = new ();
+
         for (int i = 0; i < heroDatabase.Count; i++)
         {
-            string name = heroDatabase[i].GetComponent<CharacterDataBundle>().originData.name;
+            CharacterDataBundle cdb = heroDatabase[i].GetComponent<CharacterDataBundle>();
+            string name = cdb.originData.name;
+            CharacterGrade grade = (CharacterGrade)cdb.originData.grade;
             float rate = probs[i];
-            rateInfo.text += $"{GameManager.Instance.GetStringByTable(name)} : {rate:F2}%\n";
+            string result = $"{GameManager.Instance.GetStringByTable(name)} : {rate:F2}%";
+            switch (grade)
+            {
+                case CharacterGrade.C:
+                    gradeCList.Add(result);
+                    break;
+                case CharacterGrade.B:
+                    gradeBList.Add(result);
+                    break;
+                default:
+                    gradeAList.Add(result);
+                    break;
+            }
+            //rateInfo.text += $"{GameManager.Instance.GetStringByTable(name)} : {rate:F2}%\n";
         }
+
+        StringBuilder sb = new ();
+
+        sb.AppendLine("A 등급");
+        int count = gradeAList.Count;
+        for (int i = 0; i < count; i++)
+        {
+            sb.AppendLine(gradeAList[i]);
+        }
+
+        sb.AppendLine("\nB 등급");
+        count = gradeBList.Count;
+        for (int i = 0; i < count; i++)
+        {
+            sb.AppendLine(gradeBList[i]);
+        }
+
+        sb.AppendLine("\nC 등급");
+        count = gradeCList.Count;
+        for (int i = 0; i < count; i++)
+        {
+            sb.AppendLine(gradeCList[i]);
+        }
+
+        rateInfo.text = sb.ToString();
     }
 
     public void SetRatePopup()
