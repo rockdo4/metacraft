@@ -1,17 +1,28 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ClearUiController : View
 {
     public ClearHeroInfo clearHeroPref;
     public Transform heroTr;
     public RewardManager rewards;
-    
+
+    public Button nodeButton;
+    public Button lastNodeButton;
+
+
+
     private List<ClearHeroInfo> heroes = new();
     private void OnEnable()
     {        
         AudioManager.Instance.ChageBGMOnlyFadeOut(9);
     }
+    public void ResetUi()
+    {
+        rewards.ResetReward();
+    }
+
     public void SetHeroes(List<AttackableUnit> _heroes)
     {
         foreach(var hero in _heroes)
@@ -22,7 +33,7 @@ public class ClearUiController : View
         }
     }
 
-    public void SetData()
+    public void SetData(bool isLast = false)
     {
         //플레이어 경험치 상승
         int difficulty = (int)GameManager.Instance.currentSelectMission["Difficulty"];
@@ -36,7 +47,7 @@ public class ClearUiController : View
             hero.Clear(exp);
         }
 
-        rewards.SetReward();
+        rewards.SetReward(isLast);
     }
 
 }

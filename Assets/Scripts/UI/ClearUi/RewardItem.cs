@@ -42,10 +42,12 @@ public class RewardItem : MonoBehaviour
         data.info = info;
         data.sort = sort;
         data.dataID = dataID;
-        itemNameText.text = GameManager.Instance.GetStringByTable(itemName);
+        if(itemNameText != null)
+            itemNameText.text = GameManager.Instance.GetStringByTable(itemName);
         if (itemCountText != null)
             itemCountText.text = itemCount;
-        itemImage.sprite = GameManager.Instance.GetSpriteByAddress(data.iconName);
+        if (itemImage != null)
+            itemImage.sprite = GameManager.Instance.GetSpriteByAddress(data.iconName);
     }
     public void AddCount(string count)
     {

@@ -15,7 +15,7 @@ public class RecruitmentWindow : MonoBehaviour
     public Transform showGacha; // 영입 결과 프리팹 생성위치
     private List<RecruitmentInfo> resultRecruitmentList = new(); // 영입 결과 프리팹 생성 및 정보 불러온 리스트
     public TextMeshProUGUI rateInfo;
-
+    private bool ratePopup = false;
 
     public List<Dictionary<string, object>> itemInfoList; // 아이템 정보
 
@@ -64,6 +64,7 @@ public class RecruitmentWindow : MonoBehaviour
         OnRateInfo();
 
         itemInfoList = GameManager.Instance.itemInfoList;
+        ratePopup = false;
     }
 
     public void OneTimeGacha()
@@ -119,28 +120,18 @@ public class RecruitmentWindow : MonoBehaviour
         {
             // 중복. 임시코드. 아이템으로 대체하도록 함
 
-            string stoneId = string.Empty;
-
-            switch ((CharacterJob)herobundle.originData.job)
+            try
             {
-                case CharacterJob.assult:
-                    stoneId = "60300014";
-                    break;
-                case CharacterJob.defence:
-                    stoneId = "60300008";
-                    break;
-                case CharacterJob.shooter:
-                    stoneId = "60300004";
-                    break;
-                case CharacterJob.assassin:
-                    stoneId = "60300017";
-                    break;
-                case CharacterJob.assist:
-                    stoneId = "60300011";
-                    break;
+                string stoneId = GameManager.Instance.recruitmentReplacementTable.
+                Find(t => t["Name"].ToString().CompareTo(herobundle.originData.name) == 0)["Replacement"].ToString();
+
+                info.SetStoneData(herobundle, itemInfoList.Find(t => t["ID"].ToString().CompareTo(stoneId) == 0));
+                GameManager.Instance.inventoryData.AddItem(stoneId);
             }
-            info.SetStoneData(herobundle, itemInfoList.Find(t => t["ID"].ToString().CompareTo(stoneId) == 0));
-            GameManager.Instance.inventoryData.AddItem(stoneId);
+            catch
+            {
+                Logger.Debug("this");
+            }
             //info.icon.color = Color.gray;
         }
 
@@ -204,5 +195,12 @@ public class RecruitmentWindow : MonoBehaviour
             float rate = probs[i];
             rateInfo.text += $"{GameManager.Instance.GetStringByTable(name)} : {rate:F2}%\n";
         }
+    }
+
+    public void SetRatePopup()
+    {
+        ratePopup = !ratePopup;
+        if (!ratePopup)
+            UIManager.Instance.ClearPopups();
     }
 }

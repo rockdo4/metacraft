@@ -8,6 +8,7 @@ public class StageReward : MonoBehaviour
     public RewardItem item;
     public Transform rewardTr;
     public List<RewardItem> rewards;
+    public List<Item> nowRewards;
     public int golds = 0;
 
     public string goldId;
@@ -46,6 +47,7 @@ public class StageReward : MonoBehaviour
     }
     public void AddItem(string id, string name, string iconName, string info,string sort, string dataId, string count, bool isEventReward)
     {
+        Logger.Debug("GetItem");
         if (isEventReward)
         {
             var currReward = Instantiate(item, eventRewardTr);
@@ -58,6 +60,8 @@ public class StageReward : MonoBehaviour
             if (rewards[i].data.id.CompareTo(id) == 0)
             {
                 rewards[i].AddCount(count);
+                var overlapItem = new Item(id, name, int.Parse(count), info, iconName, sort, dataId);
+                nowRewards.Add(overlapItem);
                 return;
             }
         }
@@ -66,6 +70,7 @@ public class StageReward : MonoBehaviour
         newItem.SetData(id, name, iconName, info, sort, dataId, count);
 
         rewards.Add(newItem);
+        nowRewards.Add(newItem.data);
     }
 
     public void Sort(RewardItem item)
