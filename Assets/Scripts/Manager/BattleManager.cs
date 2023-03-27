@@ -5,6 +5,7 @@ using TMPro;
 using System.Collections;
 using System.Linq;
 using Cinemachine;
+using UnityEditorInternal.Profiling.Memory.Experimental;
 
 public class BattleManager : MonoBehaviour
 {
@@ -50,6 +51,7 @@ public class BattleManager : MonoBehaviour
     public List<AttackableUnit> unuseHeroes = new();
     public StageEnemy enemyCountTxt;
     public ClearUiController clearUi;
+    public SendOfficePopUp sendOfficePopUp;
     public Image fadePanel;
     public TreeMapSystem tree;
     private int nodeIndex;
@@ -105,6 +107,8 @@ public class BattleManager : MonoBehaviour
         gm.enemyInfoList = CSVReader.Read("EnemyInfoTest");
         Init();
         StartNextStage(curEvent);
+
+        sendOfficePopUp.checkButton.onClick.AddListener(() => { SetHeroesReady(); });
     }
 
     private void SetActiveUi(GameObject ui, bool set) => ui.SetActive(set);
@@ -136,8 +140,6 @@ public class BattleManager : MonoBehaviour
     }
     public void EndSupply(int idx)
     {
-        Logger.Debug("여기다가 보급 넣으면 됨");
-
         SetActiveUi(supplyUi, supplyButtons, false, supplyButtons.Count);
         for (int i = 0; i < heroUiList.Count; i++)
         {
@@ -167,7 +169,10 @@ public class BattleManager : MonoBehaviour
                 ExecutionBuff((int)choiceSupply);
                 break;
             case 2:
+                stageReward.gameObject.SetActive(true);
                 clearUi.rewards.SaveItems();
+                sendOfficePopUp.gameObject.SetActive(true);
+                sendOfficePopUp.SetItems(stageReward.rewards);
                 clearUi.ResetUi();
                 stageReward.ResetData();
                 break;
