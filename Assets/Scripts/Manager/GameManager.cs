@@ -29,7 +29,8 @@ public class GameManager : Singleton<GameManager>
     public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectTagInfoList;
     public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectNoTagInfoList;
     private Dictionary<string, Dictionary<string, object>> stringTable = new();
-    private int languageIndex = 0; // kor
+    private int languageIndex = 0; // kor    
+    public int LanguageIndex { get { return languageIndex; } }
 
     public List<Dictionary<string, object>> compensationInfoList; // 보상 정보
     public List<Dictionary<string, object>> itemInfoList; // 아이템 정보
