@@ -13,6 +13,8 @@ public class OptionController : MonoBehaviour
     public Sprite[] countryIcons;
     public string[] countryTexts;
 
+    static int testLanguageChangeIndex = 0;
+
     private void Awake()
     {
         bgmSlider.value = AudioManager.Instance.bgm;
@@ -31,6 +33,11 @@ public class OptionController : MonoBehaviour
     public void SetSEVolume(float volume)
     {
         AudioManager.Instance.SetSEVolume(volume);
+    }
+    public void ChangeLanguage()
+    {
+        //여기에 언어 변경 함수 추가        
+        SetLanguage(testLanguageChangeIndex++ % 2);
     }
 
 }
