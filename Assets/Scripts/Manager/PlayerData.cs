@@ -24,4 +24,5 @@ public class PlayerData
     [Range(1, 4)]
     public int battleSpeed = 1;
     public bool isAuto = false;
+    public bool isTutorial = true;
 }

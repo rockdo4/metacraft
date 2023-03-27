@@ -7,6 +7,14 @@ public class TutorialManager : MonoBehaviour
     private int currChatWindowIndex = 0;
     private int chatLine = 0;
 
+    private void Start()
+    {
+        if (!GameManager.Instance.playerData.isTutorial)
+        {
+            
+        }
+    }
+
     public void OnChatWindow(int index)
     {
         currChatWindowIndex = index;
@@ -22,6 +30,7 @@ public class TutorialManager : MonoBehaviour
     {
         // 여기서 채팅 줄 관리
         //tutorialButtonList[currChatWindowIndex].SetText(string);
+        chatLine++;
     }
 
     public void OnSkip()
