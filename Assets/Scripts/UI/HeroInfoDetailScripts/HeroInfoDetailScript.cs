@@ -53,8 +53,8 @@ public class HeroInfoDetailScript : View
         stringBuilder.Append($"명중률 : {data.accuracy * 100:0}%\n");
         stringBuilder.Append($"회피율 : {data.evasion * 100:0}%\n");
         statDetail.text = stringBuilder.ToString();
+        expBar.maxValue = (int)gm.expRequirementTable[data.level]["NEEDEXP"];
         expBar.value = data.exp;
-        expBar.maxValue = (int)gm.expRequirementTable[data.level - 1]["NEEDEXP"];
         expBar.GetComponentInChildren<TextMeshProUGUI>().text = $"EXP {expBar.value:0} / {expBar.maxValue:0}";
 
         //skillIcons[0].sprite = 
@@ -64,12 +64,4 @@ public class HeroInfoDetailScript : View
         //skillIcons[2].sprite = 
         skillInfo[2].text = $"{gm.GetStringByTable(cdb.activeSkill.skillName)}\n{gm.GetStringByTable(cdb.activeSkill.skillDescription)}";
     }
-
-    //private void SetTrainingPlusButtons()
-    //{
-    //int testStat = 10;
-    //trainingPlusButtons[0].onClick.AddListener(()=>data.baseDamage += testStat);
-    //trainingPlusButtons[1].onClick.AddListener(()=>data.baseDefense += testStat);
-    //trainingPlusButtons[2].onClick.AddListener(()=>data.healthPoint += testStat);
-    //}
 }
