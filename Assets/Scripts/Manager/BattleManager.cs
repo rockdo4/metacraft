@@ -59,7 +59,8 @@ public class BattleManager : MonoBehaviour
     private Coroutine coFadeOut;
     private int readyCount;
     public List<GameObject> roadPrefab;
-    private List<ForkedRoad> roads = new();
+    //private List<ForkedRoad> roads = new();
+    private List<MapEventTrigger> roads = new();
     private GameObject road;
 
     // BeltScrollManager
@@ -659,7 +660,8 @@ public class BattleManager : MonoBehaviour
             prevNode.childrens[i].nodeButton.onClick.RemoveAllListeners();
         }
 
-        SetHeroReturnPositioning(roads[nodeIndex].fadeTrigger.heroSettingPositions);
+        //SetHeroReturnPositioning(roads[nodeIndex].fadeTrigger.heroSettingPositions);
+        SetHeroReturnPositioning(roads[nodeIndex].heroSettingPositions);
     }
     private void PlayBossBGM()
     {
@@ -881,7 +883,9 @@ public class BattleManager : MonoBehaviour
 
         road = Instantiate(roadPrefab[tree.CurNode.childrens.Count - 1], platform.transform);
         road.transform.position = currBtMgr.GetRoadTr().transform.position;
-        roads = road.GetComponentsInChildren<ForkedRoad>().ToList();
+        road.transform.rotation = currBtMgr.roadTr.transform.rotation;
+        //roads = road.GetComponentsInChildren<ForkedRoad>().ToList();
+        roads = road.GetComponentsInChildren<MapEventTrigger>().ToList();
     }
     private void DestroyRoad()
     {
@@ -962,9 +966,20 @@ public class BattleManager : MonoBehaviour
     }
     private void RemoveRoadTrigger()
     {
-        for (int i = 0; i < roads.Count; i++)
+        //for (int i = 0; i < roads.Count; i++)
+        //{
+        //    //btMapTriggers.Remove(roads[i].fadeTrigger);
+        //    var removeRoad = roads[i].isForkedRoad == true ? roads[i] : null;
+        //    btMapTriggers.Remove(removeRoad);
+        //}
+        for (int i = 0; i < btMapTriggers.Count; i++)
         {
-            btMapTriggers.Remove(roads[i].fadeTrigger);
+            //btMapTriggers.Remove(roads[i].fadeTrigger);
+
+            if (!btMapTriggers[i].isForkedRoad)
+                continue;
+
+            btMapTriggers.Remove(btMapTriggers[i]);
         }
     }
     private bool OnNextStage()
@@ -1001,7 +1016,8 @@ public class BattleManager : MonoBehaviour
 
         for (int i = 0; i < roads.Count; i++)
         {
-            btMapTriggers.Add(roads[i].fadeTrigger);
+            //btMapTriggers.Add(roads[i].fadeTrigger);
+            btMapTriggers.Add(roads[i]);
         }
     }
     public int GetCurrTriggerIndex()
