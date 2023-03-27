@@ -59,7 +59,8 @@ public class BattleManager : MonoBehaviour
     private Coroutine coFadeOut;
     private int readyCount;
     public List<GameObject> roadPrefab;
-    private List<ForkedRoad> roads = new();
+    //private List<ForkedRoad> roads = new();
+    private List<MapEventTrigger> roads = new();
     private GameObject road;
 
     // BeltScrollManager
@@ -659,7 +660,8 @@ public class BattleManager : MonoBehaviour
             prevNode.childrens[i].nodeButton.onClick.RemoveAllListeners();
         }
 
-        SetHeroReturnPositioning(roads[nodeIndex].fadeTrigger.heroSettingPositions);
+        //SetHeroReturnPositioning(roads[nodeIndex].fadeTrigger.heroSettingPositions);
+        SetHeroReturnPositioning(roads[nodeIndex].heroSettingPositions);
     }
     private void PlayBossBGM()
     {
@@ -881,7 +883,9 @@ public class BattleManager : MonoBehaviour
 
         road = Instantiate(roadPrefab[tree.CurNode.childrens.Count - 1], platform.transform);
         road.transform.position = currBtMgr.GetRoadTr().transform.position;
-        roads = road.GetComponentsInChildren<ForkedRoad>().ToList();
+        road.transform.rotation = currBtMgr.roadTr.transform.rotation;
+        //roads = road.GetComponentsInChildren<ForkedRoad>().ToList();
+        roads = road.GetComponentsInChildren<MapEventTrigger>().ToList();
     }
     private void DestroyRoad()
     {
@@ -962,9 +966,20 @@ public class BattleManager : MonoBehaviour
     }
     private void RemoveRoadTrigger()
     {
-        for (int i = 0; i < roads.Count; i++)
+        //for (int i = 0; i < roads.Count; i++)
+        //{
+        //    //btMapTriggers.Remove(roads[i].fadeTrigger);
+        //    var removeRoad = roads[i].isForkedRoad == true ? roads[i] : null;
+        //    btMapTriggers.Remove(removeRoad);
+        //}
+        for (int i = 0; i < btMapTriggers.Count; i++)
         {
-            btMapTriggers.Remove(roads[i].fadeTrigger);
+            //btMapTriggers.Remove(roads[i].fadeTrigger);
+
+            if (!btMapTriggers[i].isForkedRoad)
+                continue;
+
+            btMapTriggers.Remove(btMapTriggers[i]);
         }
     }
     private bool OnNextStage()
@@ -1001,7 +1016,8 @@ public class BattleManager : MonoBehaviour
 
         for (int i = 0; i < roads.Count; i++)
         {
-            btMapTriggers.Add(roads[i].fadeTrigger);
+            //btMapTriggers.Add(roads[i].fadeTrigger);
+            btMapTriggers.Add(roads[i]);
         }
     }
     public int GetCurrTriggerIndex()
@@ -1129,8 +1145,8 @@ public class BattleManager : MonoBehaviour
         List<string> allItems = new();
         for (int i = 1; i < itemCount + 1; i++)
         {
-            string itemWeight = collomWeight + i.ToString();
-            string itemKey = colomId + i.ToString();
+            string itemWeight = $"{collomWeight}{i}";
+            string itemKey = $"{colomId}{i}";
             var value = (int)data[itemWeight];
             if (value == -1)
                 continue;
@@ -1214,6 +1230,19 @@ public class BattleManager : MonoBehaviour
 
     public void SpawnCurrMapAllEnemys()
     {
+        int bossTriggerIndex = 0;
+        if (tree.CurNode.type == TreeNodeTypes.Villain)
+        {
+            for (int btMapTriggerCount = btMapTriggers.Count - 1; btMapTriggerCount >= 0; btMapTriggerCount--)
+            {
+                if (btMapTriggers[btMapTriggerCount].enemySettingPositions.Count > 0)
+                {
+                    bossTriggerIndex = btMapTriggerCount;
+                    break;
+                }
+            }
+        }
+
         for (int i = 0; i < btMapTriggers.Count; i++)
         {
             // 뽑은 키로 스폰 테이블에서 소환할 적들 찾기
@@ -1235,10 +1264,12 @@ public class BattleManager : MonoBehaviour
                 string normalEnemysKey = $"{currentSelectMissionTable[$"NMon{randomEnemyCount}"]}";
                 SetEnemySpawnTable(ref spawnTableNormalEnemys, normalEnemysKey);
 
-                if (tree.CurNode.type == TreeNodeTypes.Villain)
+                if (tree.CurNode.type == TreeNodeTypes.Villain && i == bossTriggerIndex)
                 {
                     string villainEnemysKey = $"{currentSelectMissionTable["Villain"]}";
                     SetEnemySpawnTable(ref spawnTableNormalEnemys, villainEnemysKey);
+
+                    //Logger.Debug($"Normal Key : {normalEnemysKey} / Boss Key : {villainEnemysKey}");
                 }
             }
 
@@ -1274,22 +1305,24 @@ public class BattleManager : MonoBehaviour
             int posCount = btMapTriggers[i].enemySettingPositions.Count;
             for (int j = 0; j < posCount; j++)
             {
-                // 데이터 내부 순회
-                for (int l = 0; l < enemyData.Count; l++)
+                // 프리펩 내부 순회
+                for (int l = 0; l < enemyPrefabs.Count; l++)
                 {
-                    // 내부에서 이름 찾기
-                    string enemyName = $"{enemyData[l]["NAME"]}";
-                    int job = (int)enemyData[l]["JOB"];
-
-                    // 찾은 이름을 프리펩 순회하면서 대조하기
-                    for (int k = 0; k < enemyPrefabs.Count; k++)
+                    // 데이터 내부 순회
+                    for (int k = 0; k < enemyData.Count; k++)
                     {
+                        // 내부에서 이름 찾기
+                        string enemyName = $"{enemyData[k]["NAME"]}";
+                        int job = (int)enemyData[k]["JOB"];
                         // 찾음
-                        if (enemyPrefabs[k].gameObject.name.Equals(enemyName))
+                        if (enemyPrefabs[l].gameObject.name.Equals(enemyName))
                         {
                             // 생성해야하는 wave(리스폰할 횟수)당 해당 위치에 테이블의 마릿수만큼 소환
-                            int currPosEnemyCount = monValues[l];
+                            int currPosEnemyCount = monValues[k];
                             int waveCount = btMapTriggers[i].enemySettingPositions[j].waveCount;
+
+                            //Logger.Debug($"Name : {enemyName} / MonCount : {currPosEnemyCount} / Trigger : {i}");
+
                             for (int wave = 0; wave < waveCount; wave++)
                             {
                                 if (tree.CurNode.type == TreeNodeTypes.Threat)
@@ -1311,7 +1344,7 @@ public class BattleManager : MonoBehaviour
                                 btMapTriggers[i].enemySettingPositions[j].enemys.Add(new List<AttackableEnemy>());
                                 for (int s = 0; s < currPosEnemyCount; s++)
                                 {
-                                    var enemy = Instantiate(enemyPrefabs[k]);
+                                    var enemy = Instantiate(enemyPrefabs[l]);
                                     enemy.gameObject.SetActive(false);
                                     SetEnemyLiveData(enemyData, enemy);
 
@@ -1332,15 +1365,7 @@ public class BattleManager : MonoBehaviour
                                     else if (tree.CurNode.type == TreeNodeTypes.Villain && job == (int)CharacterJob.villain)
                                     {
                                         villain = enemy;
-                                        for (int btMapTriggerCount = btMapTriggers.Count - 1; btMapTriggerCount >= 0; btMapTriggerCount--)
-                                        {
-                                            if (btMapTriggers[btMapTriggerCount].enemySettingPositions.Count > 0)
-                                            {
-                                                saveI = btMapTriggerCount;
-                                                break;
-                                            }
-                                        }
-
+                                        saveI = bossTriggerIndex;
                                         saveJ = 0;
                                         saveWave = 0;
                                         currPosEnemyCount = 0;

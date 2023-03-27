@@ -36,14 +36,14 @@ public class ManageDispatchWindow : View
                         advancementMaterialDispatches.Add(info);
                         break;
                     }
-                case 2: //스킬재료
-                    {
-                        GameObject obj = Instantiate(dispatchPrefab, contents[2]);
-                        DispatchInfo info = obj.GetComponent<DispatchInfo>();
-                        info.SetData(dispatchInfoTable[i]);
-                        skillMaterialDispatches.Add(info);
-                        break;
-                    }
+                //case 2: //스킬재료
+                //    {
+                //        GameObject obj = Instantiate(dispatchPrefab, contents[2]);
+                //        DispatchInfo info = obj.GetComponent<DispatchInfo>();
+                //        info.SetData(dispatchInfoTable[i]);
+                //        skillMaterialDispatches.Add(info);
+                //        break;
+                //    }
             }
         }
     }

@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class HeroInfoButton : MonoBehaviour
 {
-    public TextMeshProUGUI heroNameText;
     public TextMeshProUGUI gradeText;
     public TextMeshProUGUI jobText;
     public TextMeshProUGUI levelText;
@@ -16,7 +15,6 @@ public class HeroInfoButton : MonoBehaviour
     {
         bundle = dataBundle;
         data = dataBundle.data;
-        heroNameText.text = GameManager.Instance.GetStringByTable(data.name);
         gradeText.text = $"{(CharacterGrade)data.grade}";
         jobText.text = GameManager.Instance.GetStringByTable($"herotype_{(CharacterJob)data.job}");
         levelText.text = $"{data.level}";

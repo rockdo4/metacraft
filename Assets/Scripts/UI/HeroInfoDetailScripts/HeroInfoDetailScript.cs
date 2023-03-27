@@ -44,9 +44,9 @@ public class HeroInfoDetailScript : View
         typeInfoInLeftPanel.text = $"{gm.GetStringByTable($"herotype_{(CharacterJob)data.job}")}\n";
         StringBuilder stringBuilder = new();
         stringBuilder.Append($"히어로 명 : {gm.GetStringByTable(data.name)}\n");
-        stringBuilder.Append($"공격력 : {data.baseDamage}\n");
-        stringBuilder.Append($"방어력 : {data.baseDefense}\n");
-        stringBuilder.Append($"체력 : {data.healthPoint}\n");
+        stringBuilder.Append($"공격력 : {data.baseDamage:0.00}\n");
+        stringBuilder.Append($"방어력 : {data.baseDefense:0.00}\n");
+        stringBuilder.Append($"체력 : {data.healthPoint:0}\n");
         stringBuilder.Append($"이동 속도 : {data.moveSpeed}\n");
         stringBuilder.Append($"크리티컬 확률 : {data.critical * 100:0}%\n");
         stringBuilder.Append($"크리티컬 배율 : {data.criticalDmg * 100:0}%\n");

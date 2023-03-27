@@ -29,7 +29,8 @@ public class GameManager : Singleton<GameManager>
     public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectTagInfoList;
     public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectNoTagInfoList;
     private Dictionary<string, Dictionary<string, object>> stringTable = new();
-    private int languageIndex = 0; // kor
+    private int languageIndex = 0; // kor    
+    public int LanguageIndex { get { return languageIndex; } }
 
     public List<Dictionary<string, object>> compensationInfoList; // 보상 정보
     public List<Dictionary<string, object>> itemInfoList; // 아이템 정보
@@ -41,6 +42,7 @@ public class GameManager : Singleton<GameManager>
     public List<Dictionary<string, object>> expRequirementTable; // 경험치 요구량 테이블
     public List<Dictionary<string, object>> maxLevelTable; // 최대 레벨 테이블
     public List<Dictionary<string, object>> upgradeTable; // 승급 테이블
+    //public List<Dictionary<string, object>> tutorialTextTable; // 튜토리얼 대사 테이블
 
     // Office Select
     public GameObject currentSelectObject; // Hero Info
@@ -200,6 +202,7 @@ public class GameManager : Singleton<GameManager>
         expRequirementTable = CSVReader.SplitTextAsset(releasehandles["ExpRequirementTable"].Result as TextAsset);
         maxLevelTable = CSVReader.SplitTextAsset(releasehandles["MaxLevelTable"].Result as TextAsset);
         upgradeTable = CSVReader.SplitTextAsset(releasehandles["UpgradeTable"].Result as TextAsset);
+        //tutorialTextTable = CSVReader.SplitTextAsset(releasehandles["TutorialTextTable"].Result as TextAsset);
 
         LoadAllData();
         FixMissionTable(CSVReader.SplitTextAsset(releasehandles["MissionInfoTable"].Result as TextAsset));
