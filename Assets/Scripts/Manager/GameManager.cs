@@ -1,8 +1,10 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class GameManager : Singleton<GameManager>
 {
@@ -48,8 +50,8 @@ public class GameManager : Singleton<GameManager>
     public List<bool> fitPropertyFlags = new(3) { false, false, false };
 
     // Origin Database - Set Prefab & Scriptable Objects
-    //public AssetLoadProgress progress;
     public List<GameObject> heroDatabase = new();
+    public Image fadeEffect;
 
     public Color currMapColor;
     public List<Color> mapLigthColors;
@@ -202,8 +204,33 @@ public class GameManager : Singleton<GameManager>
 
     public void LoadScene(int sceneIdx)
     {
+        StartCoroutine(ChangeSceneFadeEffect(sceneIdx, 3f));
+    }
+
+    private IEnumerator ChangeSceneFadeEffect(int sceneIdx, float duration)
+    {
+        fadeEffect.gameObject.SetActive(true);
+        float timer = 0f;
+        float halfDuration = duration * 0.5f;
+        Color fadeIn = new (0, 0, 0, 0);
+        Color fadeOut = new (0, 0, 0, 1);
+        while (timer < halfDuration)
+        {
+            fadeEffect.color = Color.Lerp(fadeIn, fadeOut, timer / halfDuration);
+            yield return null;
+            timer += Time.deltaTime;
+        }
+
         SceneManager.LoadScene(sceneIdx);
         currentScene = (SceneIndex)sceneIdx;
+
+        while (timer < duration)
+        {
+            fadeEffect.color = Color.Lerp(fadeOut, fadeIn, (timer - halfDuration) / halfDuration);
+            yield return null;
+            timer += Time.deltaTime;
+        }
+        fadeEffect.gameObject.SetActive(false);
     }
 
     public void ClearBattleGroups()
