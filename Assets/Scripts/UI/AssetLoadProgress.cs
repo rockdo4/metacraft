@@ -156,7 +156,7 @@ public class AssetLoadProgress : MonoBehaviour
         gm.enemySpawnList = CSVReader.SplitTextAsset(releaseHandles["EnemySpawnTable"].Result as TextAsset);
         gm.recruitmentReplacementTable = CSVReader.SplitTextAsset(releaseHandles["RecruitmentReplacementTable"].Result as TextAsset);
         gm.eventEffectInfoList = CSVReader.SplitTextAsset(releaseHandles["EventEffectTable"].Result as TextAsset);
-        gm.expRequirementTable = CSVReader.SplitTextAsset(releaseHandles["ExpRequirementTable"].Result as TextAsset);
+        gm.expRequirementTable = FixExpTable(CSVReader.SplitTextAsset(releaseHandles["ExpRequirementTable"].Result as TextAsset));
         gm.maxLevelTable = CSVReader.SplitTextAsset(releaseHandles["MaxLevelTable"].Result as TextAsset);
         gm.upgradeTable = CSVReader.SplitTextAsset(releaseHandles["UpgradeTable"].Result as TextAsset);
         //tutorialTextTable = CSVReader.SplitTextAsset(releasehandles["TutorialTextTable"].Result as TextAsset);
@@ -255,5 +255,18 @@ public class AssetLoadProgress : MonoBehaviour
                     break;
             }
         }
+    }
+
+    private Dictionary<int, int> FixExpTable(List<Dictionary<string, object>> expTable)
+    {
+        Dictionary<int, int> result = new ();
+
+        int count = expTable.Count;
+        for (int i = 0; i < count; i++)
+        {
+            result.Add((int)expTable[i]["LEVEL"], (int)expTable[i]["NEEDEXP"]);
+        }
+        
+        return result;
     }
 }

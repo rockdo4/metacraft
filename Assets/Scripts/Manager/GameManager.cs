@@ -38,7 +38,7 @@ public class GameManager : Singleton<GameManager>
     public List<Dictionary<string, object>> supplyInfoList; // 보급 노드 정보
 
     public List<Dictionary<string, object>> recruitmentReplacementTable; // 영입 중복 대체 테이블
-    public List<Dictionary<string, object>> expRequirementTable; // 경험치 요구량 테이블
+    public Dictionary<int, int> expRequirementTable; // 경험치 요구량 테이블
     public List<Dictionary<string, object>> maxLevelTable; // 최대 레벨 테이블
     public List<Dictionary<string, object>> upgradeTable; // 승급 테이블
     //public List<Dictionary<string, object>> tutorialTextTable; // 튜토리얼 대사 테이블
