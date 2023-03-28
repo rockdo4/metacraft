@@ -490,8 +490,12 @@ public class BattleManager : MonoBehaviour
 
     private void Init()
     {
+        gm = GameManager.Instance;
         if (tree.CurNode == null)
-            tree.CreateTreeGraph();
+        {
+            int difficulty = (int) gm.currentSelectMission["Difficulty"];
+            tree.CreateTreeGraph(difficulty);
+        }
 
         for (int i = 0; i < choiceButtons.Count; i++)
         {
@@ -504,7 +508,6 @@ public class BattleManager : MonoBehaviour
             supplyButtonTexts.Add(text);
         }
 
-        gm = GameManager.Instance;
         eventInfoTable = gm.eventInfoList;
         supplyInfoTable = gm.supplyInfoList;
         currentSelectMissionTable = gm.currentSelectMission;

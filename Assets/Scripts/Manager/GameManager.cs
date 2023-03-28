@@ -171,7 +171,8 @@ public class GameManager : Singleton<GameManager>
             }
             if (!loadAll)
             {
-                progress.SetProgress(count, total);
+                if (progress != null)
+                    progress.SetProgress(count, total);
                 yield return null;
             }
 
@@ -184,7 +185,8 @@ public class GameManager : Singleton<GameManager>
                 }
                 count++;
             }
-            progress.SetProgress(count, total);
+            if (progress != null)
+                progress.SetProgress(count, total);
             yield return null;
         }
 
@@ -213,7 +215,8 @@ public class GameManager : Singleton<GameManager>
 
         ReleaseAddressable(releasehandles);
         releasehandles.Clear();
-        progress.CompleteProgress();
+        if (progress != null)
+            progress.CompleteProgress();
     }
 
     private AsyncOperationHandle<Sprite> LoadSprite(string address)
