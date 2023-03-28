@@ -38,8 +38,9 @@ public class BufferState
     public bool blind = false; // ½Ç¸í
     public int energyCnt = 0;
 
-    public void Buffer(BuffType type, float scale, bool isSet = true)
+    public void Buffer(BuffType type, BuffInfo info, bool isRemove = false, bool isSet = true)
     {
+        var scale = (info.buffValue + ((info.buffLevel - 1) * info.addBuffState)) * (isRemove ? -1f : 1f);
         switch (type)
         {
             case BuffType.PowerUp:
@@ -142,8 +143,8 @@ public class BufferState
                 break;
         }
     }
-    public void RemoveBuffer(BuffType type, float scale)
+    public void RemoveBuffer(BuffType type, BuffInfo info)
     {
-        Buffer(type, -scale, false);
+        Buffer(type, info, true, false);
     }
 }

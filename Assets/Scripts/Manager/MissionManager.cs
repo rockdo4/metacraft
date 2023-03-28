@@ -86,11 +86,6 @@ public class MissionManager : View
         }
     }
 
-    //public void UpdateMissionDay()
-    //{
-    //    dayOfweek.text = $"{gm.playerData.currentDay}요일";
-    //}
-
     public void UpdateMissionInfo(int difficulty, int num)
     {
         var selectMission = missionInfoTable[difficulty][num];
@@ -151,6 +146,7 @@ public class MissionManager : View
         if (duplication != null)
         {
             heroSlots[(int)duplication].sprite = null;
+            heroSlots[(int)duplication].color = new Color(0, 0, 0, 0);
             selectIndexGroup[(int)duplication] = null;
         }
 
@@ -190,22 +186,6 @@ public class MissionManager : View
             }
         }
     }
-
-    //// 전투력 합계 체크  삭제 예정
-    //private void TotalPowerCheck()
-    //{
-    //    var selectedHeroes = gm.GetSelectedHeroes();
-
-    //    int totalPower = 0;
-    //    foreach (var hero in selectedHeroes)
-    //    {
-    //        if (hero != null)
-    //            totalPower += hero.GetComponent<CharacterDataBundle>().data.Power;
-    //    }
-    //    var properCombatPower = gm.currentSelectMission["ProperCombatPower"];
-    //    ProperCombatPower.text = $"{totalPower}/{properCombatPower}";
-    //    ProperCombatPower.color = totalPower < (int)properCombatPower ? Color.red : Color.white;
-    //}
 
     public void StartMission()
     {

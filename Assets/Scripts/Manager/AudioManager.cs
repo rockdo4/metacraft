@@ -29,8 +29,6 @@ public class AudioManager : Singleton<AudioManager>
     Coroutine coBgmFadeCoroutine;
     private int currBgmIndex;    
 
-    private string currBgmName;
-
     public int awakeMusicIndex;
     private GameObject bgmHolder;
     private GameObject uiHolder;
@@ -44,18 +42,11 @@ public class AudioManager : Singleton<AudioManager>
         SaveBGMOriginVolumes();
         PlayBGM(awakeMusicIndex);
     }
-    //private void BGMListToDictionary()
-    //{
-    //    foreach(var bgm in bgms)
-    //    {
-    //        bgmSources.Add(bgm.clip.name, bgm);
-    //    }
-    //}
 
-    private void Update()
-    {
-        MixerControl();
-    }
+    //private void Update()
+    //{
+    //    MixerControl();
+    //}
     private void AudioInstance()
     {
         bgmHolder = new GameObject("BGMHolder");
@@ -85,11 +76,23 @@ public class AudioManager : Singleton<AudioManager>
             bgmOriginVolumes[i] = bgms[i].volume;
         }
     }
-    public void MixerControl()
-    {
-        //매 업데이트에서 체크하고 싶지 않음
-        mixer.SetFloat(nameof(master), master);
+    //public void MixerControl()
+    //{        
+    //    mixer.SetFloat(nameof(master), master);
+    //    mixer.SetFloat(nameof(bgm), bgm);
+    //    mixer.SetFloat(nameof(se), se);
+    //    mixer.SetFloat(nameof(ambience), ambience);
+    //}
+    public void SetBGMVolume(float volume)
+    {   
+        bgm = volume;
         mixer.SetFloat(nameof(bgm), bgm);
+    }
+    public void SetSEVolume(float volume) 
+    {
+        se = volume;
+        ambience = volume;
+
         mixer.SetFloat(nameof(se), se);
         mixer.SetFloat(nameof(ambience), ambience);
     }
