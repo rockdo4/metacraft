@@ -187,20 +187,17 @@ public class BattleManager : MonoBehaviour
         SetStageEvent(ev);
         StartStage();
 
-        //if (!gm.playerData.isTutorial)
-        //{
-            switch (tree.CurNode.type)
-            {
-                case TreeNodeTypes.Root:
-                case TreeNodeTypes.Normal:
-                case TreeNodeTypes.Villain:
-                    for (int i = 0; i < useHeroes.Count; i++)
-                        Invoke(nameof(OnReady), 3f);
-                    break;
-                default:
-                    break;
-            }
-        //}
+        switch (tree.CurNode.type)
+        {
+            case TreeNodeTypes.Root:
+            case TreeNodeTypes.Normal:
+            case TreeNodeTypes.Villain:
+                for (int i = 0; i < useHeroes.Count; i++)
+                    Invoke(nameof(OnReady), 3f);
+                break;
+            default:
+                break;
+        }
     }
 
     private void SetStageEvent(MapEventEnum ev)
@@ -266,6 +263,7 @@ public class BattleManager : MonoBehaviour
             useHeroes[i].AddValueBuff(buff);
         }
     }
+
     private BuffInfo FindBuff(int id)
     {
         foreach (var buff in buffList)
@@ -489,8 +487,12 @@ public class BattleManager : MonoBehaviour
 
     private void Init()
     {
+        gm = GameManager.Instance;
         if (tree.CurNode == null)
-            tree.CreateTreeGraph();
+        {
+            int difficulty = (int) gm.currentSelectMission["Difficulty"];
+            tree.CreateTreeGraph(difficulty);
+        }
 
         for (int i = 0; i < choiceButtons.Count; i++)
         {
@@ -503,7 +505,6 @@ public class BattleManager : MonoBehaviour
             supplyButtonTexts.Add(text);
         }
 
-        gm = GameManager.Instance;
         eventInfoTable = gm.eventInfoList;
         supplyInfoTable = gm.supplyInfoList;
         currentSelectMissionTable = gm.currentSelectMission;

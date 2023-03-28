@@ -1,23 +1,22 @@
-using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class TreeNodeObject : MonoBehaviour, IComparable<TreeNodeObject>
+public class TreeNodeObject : MonoBehaviour //, IComparable<TreeNodeObject>
 {
     public TextMeshProUGUI nodeNameText;
     public Transform head;
     public Transform tail;
     public Button nodeButton;
 
-    public string data;
+    //public string data;
     public TreeNodeTypes type;
     public List<TreeNodeObject> childrens = new ();
 
-    public void SetInit(string data, TreeNodeTypes type = TreeNodeTypes.None)
+    public void SetNodeType(TreeNodeTypes type = TreeNodeTypes.None)
     {
-        this.data = data;
+        //this.data = data;
         this.type = type;
         string str = type switch
         {
@@ -40,8 +39,8 @@ public class TreeNodeObject : MonoBehaviour, IComparable<TreeNodeObject>
         childrens.Add(node);
     }
 
-    public int CompareTo(TreeNodeObject other)
-    {
-        return data.CompareTo(other.data);
-    }
+    //public int CompareTo(TreeNodeObject other)
+    //{
+    //    return data.CompareTo(other.data);
+    //}
 }
