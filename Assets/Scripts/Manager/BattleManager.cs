@@ -187,16 +187,19 @@ public class BattleManager : MonoBehaviour
         SetStageEvent(ev);
         StartStage();
 
-        switch (tree.CurNode.type)
+        if (!gm.playerData.isTutorial)
         {
-            case TreeNodeTypes.Root:
-            case TreeNodeTypes.Normal:
-            case TreeNodeTypes.Villain:
-                for (int i = 0; i < useHeroes.Count; i++)
-                    Invoke(nameof(OnReady), 3f);
-                break;
-            default:
-                break;
+            switch (tree.CurNode.type)
+            {
+                case TreeNodeTypes.Root:
+                case TreeNodeTypes.Normal:
+                case TreeNodeTypes.Villain:
+                    for (int i = 0; i < useHeroes.Count; i++)
+                        Invoke(nameof(OnReady), 3f);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 
@@ -309,9 +312,6 @@ public class BattleManager : MonoBehaviour
                 int randomEffectKey = Random.Range(1, effectCount);
                 int effectKey = (int)supplyInfoTable[index][$"Effect{randomEffectKey}"];
                 supplyEffectKey.Add(effectKey);
-
-
-
             }
         }
         else
@@ -1002,8 +1002,16 @@ public class BattleManager : MonoBehaviour
 
         if (tree.CurNode.type == TreeNodeTypes.Event)
         {
-            var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
-            StartNextStage((MapEventEnum)randomEvent);
+            if (gm.playerData.isTutorial)
+            {
+                // 길막! 이벤트
+                StartNextStage(MapEventEnum.Roadblock);
+            }
+            else
+            {
+                var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
+                StartNextStage((MapEventEnum)randomEvent);
+            }
             return true;
         }
         else if (tree.CurNode.type == TreeNodeTypes.Supply)
