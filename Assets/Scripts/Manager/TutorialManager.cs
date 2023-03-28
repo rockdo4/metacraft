@@ -14,6 +14,7 @@ public class TutorialManager : MonoBehaviour
     private int startChatSkipIndex = 2;
 
     public Button skipButton;
+    public TutorialMask tutorialMask;
 
     private void Start()
     {
