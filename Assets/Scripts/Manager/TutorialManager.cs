@@ -7,6 +7,7 @@ public class TutorialManager : MonoBehaviour
     private int currChatWindowIndex = 0;
     private int chatLine = 0;
     public BattleManager btMgr;
+    public TutorialMask tutorialMask;
 
     private void Start()
     {
