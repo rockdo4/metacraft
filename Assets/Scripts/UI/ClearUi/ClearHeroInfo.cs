@@ -17,50 +17,51 @@ public class ClearHeroInfo : MonoBehaviour
     private int lastExp = 0; //연산 후 남은 exp
     private bool isMove = false;
 
-    private Dictionary<int, int> ExpTable = new();
+    private Dictionary<int, int> expTable;
     private AttackableUnit thisHero;
 
     public void SetInfo(AttackableUnit hero)
     {
-        SetTestTable();
+        //SetTestTable();
+        expTable = GameManager.Instance.expRequirementTable;
         thisHero = hero;
         LiveData data = hero.GetUnitData().data;
         nowLevel = data.level;
         levelText.text = $"{nowLevel}";
 
         nowExp = data.exp;
-        expImage.fillAmount = (float)nowExp / ExpTable[nowLevel];
+        expImage.fillAmount = (float)nowExp / expTable[nowLevel];
         heroImage.sprite = GameManager.Instance.GetSpriteByAddress($"icon_{data.name}");
     }
 
-    public void SetTestTable()
-    {
-        for (int i = 1; i <= 20; i++)
-        {
-            ExpTable[i] = 100 * i;
-        }
-    }
+    //public void SetTestTable()
+    //{
+    //    for (int i = 1; i <= 20; i++)
+    //    {
+    //        ExpTable[i] = 100 * i;
+    //    }
+    //}
 
     public void Clear(int getExp)
     {
         expText.text = $"{getExp}";
         int nextLevel = nowLevel;
         int tempExp = nowExp;
-        int needExp = ExpTable[nextLevel] - tempExp; //레벨업에 필요한 경험치
+        int needExp = expTable[nextLevel] - tempExp; //레벨업에 필요한 경험치
 
         while (true)
         {
-            if (!ExpTable.ContainsKey(nextLevel + 1)) //최대레벨 이면 경험치 세팅 후 연산 끝
+            if (!expTable.ContainsKey(nextLevel)) //최대레벨 이면 경험치 세팅 후 연산 끝
             {
-                tempExp = Mathf.Min(tempExp + getExp, ExpTable[nextLevel]); // 경험치만 증가. 최대경험치 넘지 않게
+                tempExp = Mathf.Min(tempExp + getExp, expTable[nextLevel]); // 경험치만 증가. 최대경험치 넘지 않게
                 break;
             }
             else if (getExp >= needExp) //getExp 값이 레벨업에 필요 경험치보다 많을시에
             {
                 getExp -= needExp; //getExp 값을 줄여주고
-                needExp = ExpTable[nextLevel + 1]; //필요한 경험치는 다음레벨 경험치
-
                 nextLevel++;
+                needExp = expTable[nextLevel]; //필요한 경험치는 다음레벨 경험치
+
                 tempExp = 0; //레벨업 했으니, 현재 레벨의 잔여 경험치는 0
 
                 AudioManager.Instance.PlayUIAudio(3);
@@ -89,7 +90,7 @@ public class ClearHeroInfo : MonoBehaviour
         if (isMove)
         {
             expImage.fillAmount += Time.deltaTime;
-            var nowFill = (float)lastExp / ExpTable[nowLevel];
+            var nowFill = (float)lastExp / expTable[nowLevel];
             if (addLevel == 0 && expImage.fillAmount >= nowFill)
             {
                 addLevel = 0;
@@ -104,7 +105,7 @@ public class ClearHeroInfo : MonoBehaviour
 
                 var textLevel = (int.Parse(levelText.text) + 1);
 
-                if (ExpTable.ContainsKey(textLevel))
+                if (expTable.ContainsKey(textLevel))
                 {
                     levelText.text = (int.Parse(levelText.text) + 1).ToString();
                     expImage.fillAmount = 0;
