@@ -45,7 +45,7 @@ public class TutorialManager : MonoBehaviour
     }
 
     // 히어로들 ready 해주기
-    public void Test()
+    public void SetBattleSceneHeroesReady()
     {
         btMgr.SetHeroesReady();
     }
