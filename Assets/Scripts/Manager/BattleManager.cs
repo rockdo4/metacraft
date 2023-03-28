@@ -161,7 +161,7 @@ public class BattleManager : MonoBehaviour
                     if ((int)key != -1)
                         supplyList.Add(key);
                     else
-                        break;
+                        continue;
                 }
 
                 var choiceSupply = supplyList[Random.Range(0, supplyList.Count)];
@@ -194,6 +194,8 @@ public class BattleManager : MonoBehaviour
             case TreeNodeTypes.Villain:
                 for (int i = 0; i < useHeroes.Count; i++)
                     Invoke(nameof(OnReady), 3f);
+                break;
+            default:
                 break;
         }
     }
