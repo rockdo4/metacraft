@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -11,6 +12,8 @@ public class TutorialManager : MonoBehaviour
     private int chatLine = 0;
     public BattleManager btMgr;
     private int startChatSkipIndex = 2;
+
+    public Button skipButton;
 
     private void Start()
     {
@@ -53,6 +56,7 @@ public class TutorialManager : MonoBehaviour
 
     public void OnClickSkip()
     {
+        OffSkipButton();
         // 대사 줄 스킵 구간까지 이동
         // 다음에 출력하는 UI들 인덱스 설정
         chatLine = 0;
@@ -73,5 +77,14 @@ public class TutorialManager : MonoBehaviour
     public void SetBattleSceneHeroesReady()
     {
         btMgr.SetHeroesReady();
+    }
+
+    public void OnSkipButton()
+    {
+        skipButton.gameObject.SetActive(true);
+    }
+    public void OffSkipButton()
+    {
+        skipButton.gameObject.SetActive(false);
     }
 }

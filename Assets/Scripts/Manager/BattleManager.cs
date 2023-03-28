@@ -1339,7 +1339,7 @@ public class BattleManager : MonoBehaviour
                             int currPosEnemyCount = monValues[k];
                             int waveCount = btMapTriggers[i].enemySettingPositions[j].waveCount;
 
-                            //Logger.Debug($"Name : {enemyName} / MonCount : {currPosEnemyCount} / Trigger : {i}");
+                            Logger.Debug($"Name : {enemyName} / MonCount : {currPosEnemyCount} / Trigger : {i}");
 
                             for (int wave = 0; wave < waveCount; wave++)
                             {
@@ -1362,6 +1362,12 @@ public class BattleManager : MonoBehaviour
                                 btMapTriggers[i].enemySettingPositions[j].enemys.Add(new List<AttackableEnemy>());
                                 for (int s = 0; s < currPosEnemyCount; s++)
                                 {
+                                    if (enemyPrefabs[l] == null)
+                                    {
+                                        Logger.Debug($"{enemyPrefabs[l].name} / null");
+                                        break;
+                                    }
+
                                     var enemy = Instantiate(enemyPrefabs[l]);
                                     enemy.gameObject.SetActive(false);
                                     SetEnemyLiveData(enemyData, enemy);
