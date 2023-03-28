@@ -494,8 +494,8 @@ public class BattleManager : MonoBehaviour
             if (gm.playerData.isTutorial)
             {
                 tree.CreateTreeGraph();
-                autoButton.interactable = false;
-                speedButton.interactable = false;
+                //autoButton.interactable = false;
+                //speedButton.interactable = false;
             }
             else
             {
