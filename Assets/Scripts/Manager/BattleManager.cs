@@ -187,8 +187,8 @@ public class BattleManager : MonoBehaviour
         SetStageEvent(ev);
         StartStage();
 
-        if (!gm.playerData.isTutorial)
-        {
+        //if (!gm.playerData.isTutorial)
+        //{
             switch (tree.CurNode.type)
             {
                 case TreeNodeTypes.Root:
@@ -200,7 +200,7 @@ public class BattleManager : MonoBehaviour
                 default:
                     break;
             }
-        }
+        //}
     }
 
     private void SetStageEvent(MapEventEnum ev)
