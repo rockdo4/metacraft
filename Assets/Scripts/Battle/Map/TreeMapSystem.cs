@@ -13,7 +13,7 @@ public struct TreeInitSetting
     public int supplyCount;
     public int eventCount;
 
-    public TreeInitSetting(int height = 4, int width = 5,
+    public void InitSetting(int height = 4, int width = 5,
         int normalNodeCount = 0, int threatNodeCount = 0, int supplyNodeCount = 0, int eventNodeCount = 0)
     {
         this.height = height;
@@ -110,11 +110,11 @@ public class TreeMapSystem : MonoBehaviour
         StartCoroutine(CoLinkNodes());  // 라인렌더러 위치 조정
     }
 
-    public void CreateTreeGraph(int normalNodeCount = 0, int threatNodeCount = 0, int supplyNodeCount = 0, int eventNodeCount = 0)
+    public void CreateTreeGraph(int difficulty = 0)
     {
         nodeIndex = 0;
         DestroyAllObjs();
-        InitSettings(normalNodeCount, threatNodeCount, supplyNodeCount, eventNodeCount);       // 트리의 깊이 설정, 필요한 오브젝트 생성
+        InitSettings(difficulty);       // 트리의 깊이 설정, 필요한 오브젝트 생성
         CreateBlueprint();              // 설계도 생성
         CreateNodes();                  // 노드 생성
         CurNode = root;
@@ -333,12 +333,28 @@ public class TreeMapSystem : MonoBehaviour
         return instanceNode;
     }
 
-    public void InitSettings(int normalNodeCount = 0, int threatNodeCount = 0, int supplyNodeCount = 0, int eventNodeCount = 0)
+    public void InitSettings(int difficulty = 0)
     {
-        localNormalCount = normalNodeCount == 0 ? treeSettings.normalCount : normalNodeCount;
-        localThreatCount = threatNodeCount == 0 ? treeSettings.threatCount : threatNodeCount;
-        localSupplyCount = supplyNodeCount == 0 ? treeSettings.supplyCount : supplyNodeCount;
-        localEventCount = eventNodeCount == 0 ? treeSettings.eventCount : eventNodeCount;
+        switch (difficulty)
+        {
+            case 1:
+            case 2:
+                treeSettings.InitSetting(4);
+                break;
+            case 3:
+            case 4:
+                treeSettings.InitSetting(5);
+                break;
+            case 5:
+                treeSettings.InitSetting(6);
+                break;
+            default:
+                break;
+        }
+        localNormalCount = treeSettings.normalCount;
+        localThreatCount = treeSettings.threatCount;
+        localSupplyCount = treeSettings.supplyCount;
+        localEventCount = treeSettings.eventCount;
 
         for (int i = 0; i < treeSettings.height; i++)
         {

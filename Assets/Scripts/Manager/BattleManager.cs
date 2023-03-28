@@ -195,6 +195,8 @@ public class BattleManager : MonoBehaviour
                 for (int i = 0; i < useHeroes.Count; i++)
                     Invoke(nameof(OnReady), 3f);
                 break;
+            default:
+                break;
         }
     }
 
@@ -261,6 +263,7 @@ public class BattleManager : MonoBehaviour
             useHeroes[i].AddValueBuff(buff);
         }
     }
+
     private BuffInfo FindBuff(int id)
     {
         foreach (var buff in buffList)
