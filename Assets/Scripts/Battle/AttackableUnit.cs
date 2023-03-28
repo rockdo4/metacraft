@@ -815,7 +815,6 @@ public abstract class AttackableUnit : MonoBehaviour
         else
             buffDamage = (int)(buffDamage * bufferState.damageDecrease);
 
-
         return buffDamage;
     }
 

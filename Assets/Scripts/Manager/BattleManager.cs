@@ -95,6 +95,9 @@ public class BattleManager : MonoBehaviour
     private AttackableEnemy villain;
     private AttackableEnemy middleBoss;
 
+    public Button autoButton;
+    public Button speedButton;
+
     private void Start()
     {
         // 밸런스 테스트용 임시 코드
@@ -158,8 +161,9 @@ public class BattleManager : MonoBehaviour
                     if ((int)key != -1)
                         supplyList.Add(key);
                     else
-                        continue;
+                        break;
                 }
+
 
                 var choiceSupply = supplyList[Random.Range(0, supplyList.Count)];
                 ExecutionBuff((int)choiceSupply);
@@ -490,6 +494,8 @@ public class BattleManager : MonoBehaviour
             if (gm.playerData.isTutorial)
             {
                 tree.CreateTreeGraph();
+                autoButton.interactable = false;
+                speedButton.interactable = false;
             }
             else
             {
