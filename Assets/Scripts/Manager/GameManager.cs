@@ -231,12 +231,20 @@ public class GameManager : Singleton<GameManager>
 
     private void AppendStringTable(List<Dictionary<string, object>> rawData, string tableName)
     {
+        Logger.Debug(tableName);
         int count = rawData.Count;
         for (int i = 0; i < count; i++)
         {
             var copy = rawData[i];
+            Logger.Debug(i);
+            if ($"{rawData[i]["ID"]}".ToLower().Equals(null))
+                Logger.Debug("null");
+
+
+
             string id = $"{rawData[i]["ID"]}".ToLower();
-            copy.Remove("ID");
+
+            copy.Remove("ID");            
             if (stringTable.ContainsKey(id))
             {
                 Logger.Debug($"Áßº¹ Å° : {tableName}, {id}");
