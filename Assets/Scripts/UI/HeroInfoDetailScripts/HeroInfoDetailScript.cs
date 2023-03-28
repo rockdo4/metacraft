@@ -53,7 +53,7 @@ public class HeroInfoDetailScript : View
         stringBuilder.Append($"명중률 : {data.accuracy * 100:0}%\n");
         stringBuilder.Append($"회피율 : {data.evasion * 100:0}%\n");
         statDetail.text = stringBuilder.ToString();
-        expBar.maxValue = (int)gm.expRequirementTable[data.level]["NEEDEXP"];
+        expBar.maxValue = gm.expRequirementTable[data.level];
         expBar.value = data.exp;
         expBar.GetComponentInChildren<TextMeshProUGUI>().text = $"EXP {expBar.value:0} / {expBar.maxValue:0}";
 

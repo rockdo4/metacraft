@@ -566,7 +566,7 @@ public class BattleManager : MonoBehaviour
         DisabledAllMap();
 
         // 보스 ID 찾기
-        string villainID = $"{currentSelectMissionTable["VillainID"]}";        
+        string villainID = $"{currentSelectMissionTable["VillainID"]}";
         //villain
         for (int i = 0; i < villainPrefabs.Count; i++)
         {
@@ -594,7 +594,7 @@ public class BattleManager : MonoBehaviour
     private void PlayBGM(int index)
     {
         int bgmIndex = 0;
-        switch(index)
+        switch (index)
         {
             case 0:
                 bgmIndex = 6;
@@ -665,7 +665,7 @@ public class BattleManager : MonoBehaviour
         nodeIndex = index;
         TreeNodeObject prevNode = tree.CurNode;
         tree.CurNode = prevNode.childrens[index];
-        if(tree.CurNode.type.Equals(TreeNodeTypes.Villain))
+        if (tree.CurNode.type.Equals(TreeNodeTypes.Villain))
         {
             Invoke(nameof(PlayBossBGM), 3f);
         }
@@ -678,6 +678,7 @@ public class BattleManager : MonoBehaviour
         }
 
         SetHeroReturnPositioning(roads[nodeIndex].heroSettingPositions);
+        tree.ShowTree(false);
     }
     private void PlayBossBGM()
     {
@@ -943,7 +944,7 @@ public class BattleManager : MonoBehaviour
         {
             btMapTriggers[i].isTriggerEnter = false;
         }
-        
+
         if (tree.CurNode.type == TreeNodeTypes.Villain)
         {
             btMapTriggers.Last().isMissionEnd = true;
@@ -1001,7 +1002,7 @@ public class BattleManager : MonoBehaviour
     }
     private bool OnNextStage()
     {
-        tree.ShowTree(false);
+        //tree.ShowTree(false);
         stageReward.gameObject.SetActive(false);
 
         coFadeOut = StartCoroutine(CoFadeOut());
@@ -1180,7 +1181,7 @@ public class BattleManager : MonoBehaviour
 
         var rewardsCode = data[allItems[Random.Range(0, weight)]];
         AddReward(rewardsCode);
-        if(btMapTriggers[currTriggerIndex].isMissionEnd)
+        if (btMapTriggers[currTriggerIndex].isMissionEnd)
         {
             UIManager.Instance.ShowView(1);
             clearUi.nodeButton.gameObject.SetActive(false);
@@ -1363,7 +1364,7 @@ public class BattleManager : MonoBehaviour
                                 {
                                     if (job == (int)CharacterJob.villain)
                                         break;
-                                }    
+                                }
 
                                 btMapTriggers[i].enemySettingPositions[j].enemys.Add(new List<AttackableEnemy>());
                                 for (int s = 0; s < currPosEnemyCount; s++)

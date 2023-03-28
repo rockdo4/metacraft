@@ -2,11 +2,11 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class TutorialDialogue : MonoBehaviour
-{    
+{
+    private List<List<string>> tutorialDialouges;
 
-    private Dictionary<string, string> tutorialDialouges = new();
-
-    public int tutorialStartIndex = 126;
+    private string keyHead = "tutorial_string_";
+    public string[] keyTail;
 
     private void Start()
     {
@@ -15,13 +15,24 @@ public class TutorialDialogue : MonoBehaviour
 
     private void ParseEventTable()
     {
-        var eventTable = GameManager.Instance.eventInfoList;
+        GameManager gm = GameManager.Instance;
+        
+        tutorialDialouges = new(keyTail.Length);
 
-        for(int i = tutorialStartIndex - 2; i < eventTable.Count; i++)
+        for(int i = 0; i < tutorialDialouges.Capacity; i++)
         {
-            tutorialDialouges.Add((string)eventTable[i]["ID"], (string)eventTable[i]["Contents"]);
-        }
+            tutorialDialouges.Add(new (10));
+            int dialougeNum = 1;
+            while(dialougeNum < 100)
+            {
+                var key = $"{keyHead}{keyTail[i]}{dialougeNum}";
+                var dialouge = gm.GetStringByTable(key);
+                if (dialouge.Equals(key.ToLower()))
+                    break;
 
-        Logger.Debug(tutorialDialouges["tutorial_string_start1"]);
-    }
+                tutorialDialouges[i].Add(dialouge);
+                dialougeNum++;
+            }
+        }
+    }    
 }
