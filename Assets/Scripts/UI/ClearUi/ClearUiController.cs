@@ -37,12 +37,11 @@ public class ClearUiController : View
     public void SetData(bool isLast)
     {
         //플레이어 경험치 상승
-        int difficulty = (int)GameManager.Instance.currentSelectMission["Difficulty"];
-        GameManager.Instance.AddOfficeExperience(baseExp * difficulty);
+        GameManager.Instance.AddOfficeExperience(baseExp);
 
         foreach (var hero in heroes)
         {
-            int exp = baseExp * difficulty;
+            int exp = baseExp;
             hero.expText.text = $"+{exp}";
             hero.Clear(exp);
         }

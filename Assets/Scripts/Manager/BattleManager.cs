@@ -161,11 +161,16 @@ public class BattleManager : MonoBehaviour
                     if ((int)key != -1)
                         supplyList.Add(key);
                     else
-                        continue;
+                        break;
                 }
 
-                var choiceSupply = supplyList[Random.Range(0, supplyList.Count)];
-                ExecutionBuff((int)choiceSupply);
+                foreach (var item in supplyList)
+                {
+                    ExecutionBuff((int)item);
+                }
+
+                //var choiceSupply = supplyList[Random.Range(0, supplyList.Count)];
+                //ExecutionBuff((int)choiceSupply);
                 break;
             case 2:
                 stageReward.gameObject.SetActive(true);

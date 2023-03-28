@@ -44,6 +44,7 @@ public class TutorialMask : MonoBehaviour
 
         maskClickEvent.onClick.RemoveAllListeners();
         maskClickEvent.onClick.AddListener(() => btn.onClick.Invoke());
+        maskClickEvent.onClick.AddListener(() => gameObject.SetActive(false));
         maskClickEventRectTr.anchoredPosition = Vector3.zero;
         maskClickEventRectTr.sizeDelta = rectTr.sizeDelta;
     }
@@ -53,6 +54,7 @@ public class TutorialMask : MonoBehaviour
 
         maskClickEvent.onClick.RemoveAllListeners();
         maskClickEvent.onClick.AddListener(() => btn.onClick.Invoke());
+        maskClickEvent.onClick.AddListener(() => gameObject.SetActive(false));
         maskClickEventRectTr.anchoredPosition = Vector3.zero;
         maskClickEventRectTr.sizeDelta = rectTr.sizeDelta;
     }
