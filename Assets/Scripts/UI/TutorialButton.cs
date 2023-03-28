@@ -5,7 +5,7 @@ public class TutorialButton : MonoBehaviour
 {
     public GameObject outline;
     public GameObject chatWindow;
-    private TextMeshProUGUI textObject;
+    public TextMeshProUGUI textObject;
 
     public void SetText(string txt)
     {
