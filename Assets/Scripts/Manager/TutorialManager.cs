@@ -29,6 +29,7 @@ public class TutorialManager : MonoBehaviour
 
     public void OnChatWindow(int index)
     {
+        OffAllTutorialButton();
         currChatWindowIndex = index;
         tutorialButtonList[index].OnWindow();
     }
@@ -86,5 +87,12 @@ public class TutorialManager : MonoBehaviour
     public void OffSkipButton()
     {
         skipButton.gameObject.SetActive(false);
+    }
+    public void OffAllTutorialButton()
+    {
+        for (int i = 0; i < tutorialButtonList.Count; i++)
+        {
+            tutorialButtonList[i].OffWindow();
+        }
     }
 }
