@@ -133,17 +133,19 @@ public abstract class AttackableUnit : MonoBehaviour
     public Transform effectCreateTransform;
     public Transform hitEffectTransform;
 
-    private void Start()
+    private void Awake()
     {
-        var manager = FindObjectOfType<BattleManager>();
-        if (manager != null)
-            battleManager = manager;
-
         if (effectCreateTransform.Equals(null))
             effectCreateTransform = transform;
 
         if (hitEffectTransform.Equals(null))
             hitEffectTransform = transform;
+    }
+    private void Start()
+    {
+        var manager = FindObjectOfType<BattleManager>();
+        if (manager != null)
+            battleManager = manager;
     }
 
     protected void InitData()

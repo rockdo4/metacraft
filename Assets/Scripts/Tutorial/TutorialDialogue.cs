@@ -21,9 +21,9 @@ public class TutorialDialogue : MonoBehaviour
 
         for(int i = 0; i < tutorialDialouges.Capacity; i++)
         {
-            tutorialDialouges.Add(new List<string>(10));
+            tutorialDialouges.Add(new (10));
             int dialougeNum = 1;
-            while(true)
+            while(dialougeNum < 100)
             {
                 var key = $"{keyHead}{keyTail[i]}{dialougeNum}";
                 var dialouge = gm.GetStringByTable(key);
