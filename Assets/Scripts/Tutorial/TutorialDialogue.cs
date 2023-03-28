@@ -15,13 +15,13 @@ public class TutorialDialogue : MonoBehaviour
 
     private void ParseEventTable()
     {
-        var eventTable = GameManager.Instance.eventInfoList;
+    //    var eventTable = GameManager.Instance.eventInfoList;
 
-        for(int i = tutorialStartIndex - 2; i < eventTable.Count; i++)
-        {
-            tutorialDialouges.Add((string)eventTable[i]["ID"], (string)eventTable[i]["Contents"]);
-        }
+    //    for(int i = tutorialStartIndex - 2; i < eventTable.Count; i++)
+    //    {
+    //        tutorialDialouges.Add((string)eventTable[i]["ID"], (string)eventTable[i]["Contents"]);
+    //    }
 
-        Logger.Debug(tutorialDialouges["tutorial_string_start1"]);
+    //    Logger.Debug(tutorialDialouges["tutorial_string_start1"]);
     }
 }
