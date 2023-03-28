@@ -18,6 +18,7 @@ public class TutorialManager : MonoBehaviour
 
     private void Start()
     {
+        OffAllTutorialButton();
         if (!GameManager.Instance.playerData.isTutorial)
         {
             
@@ -94,6 +95,7 @@ public class TutorialManager : MonoBehaviour
         for (int i = 0; i < tutorialButtonList.Count; i++)
         {
             tutorialButtonList[i].OffWindow();
+            tutorialButtonList[i].OffOutline();
         }
     }
 }
