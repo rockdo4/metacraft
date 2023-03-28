@@ -224,7 +224,7 @@ public class BattleManager : MonoBehaviour
                 SetEventInfo(ev);
                 break;
             case TreeNodeTypes.Villain:
-                curMap = eventMaps[0];
+                curMap = eventMaps[3];
                 break;
         }
 
@@ -922,6 +922,11 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < btMapTriggers.Count; i++)
         {
             btMapTriggers[i].isTriggerEnter = false;
+        }
+        
+        if (tree.CurNode.type == TreeNodeTypes.Villain)
+        {
+            btMapTriggers.Last().isMissionEnd = true;
         }
 
         CreateRoad();
