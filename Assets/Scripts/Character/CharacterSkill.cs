@@ -127,7 +127,7 @@ public class CharacterSkill : ScriptableObject
                             if (buff.type == BuffType.Provoke
                                 || buff.type == BuffType.Stun
                                 || buff.type == BuffType.Silence)
-                                finalTargets[j].AddStateBuff(buff, unit);
+                                finalTargets[i].AddStateBuff(buff, unit);
                             else
                             {
                                 finalTargets[i].AddValueBuff(buff);
