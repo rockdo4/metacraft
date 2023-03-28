@@ -415,13 +415,6 @@ public class GameManager : Singleton<GameManager>
         return null;
     }
 
-    //요일 변경
-    //public void NextDay()
-    //{
-    //    playerData.currentDay = playerData.currentDay != DayOfWeek.일 ? playerData.currentDay + 1 : DayOfWeek.월;
-    //    playerData.cumulateGameDay++;
-    //}
-
     public void AddOfficeExperience(int exp)
     {
         playerData.officeExperience += exp;
@@ -446,7 +439,6 @@ public class GameManager : Singleton<GameManager>
         playerData.stamina = (int)officeInfoList[level]["Stamina"];
         playerData.inventoryCount = (int)officeInfoList[level]["InventoryCount"];
         playerData.officeImage = (string)officeInfoList[level]["OfficeImage"];
-        //Logger.Debug($"현재 레벨 : {playerData.officeLevel}");
     }
 
     // 작전 테이블 난이도 구분
