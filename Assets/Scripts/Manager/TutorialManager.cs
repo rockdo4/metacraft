@@ -80,7 +80,8 @@ public class TutorialManager : MonoBehaviour
 
         OnChatWindow(currChatWindowIndex);
         Logger.Debug($"{currChatWindowIndex} / {chatLine} / {tutorialDialouges[textIndex].Count}");
-        if (currChatWindowIndex >= 9 && currChatWindowIndex < 12)
+        if ((currChatWindowIndex >= 9 && currChatWindowIndex < 12) ||
+            (currChatWindowIndex >= 2 && currChatWindowIndex < 7))
             currChatWindowIndex++;
     }
 
