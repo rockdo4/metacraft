@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -62,30 +63,30 @@ public class TutorialManager : MonoBehaviour
         if (!gm.playerData.isTutorial)
             return;
 
-        Logger.Debug($"{currChatWindowIndex} / {chatLine} / {tutorialDialouges[textIndex].Count}");
-        if (chatLine == tutorialDialouges[textIndex].Count)
+        int count = tutorialDialouges[textIndex].Count;
+        if (chatLine >= count)
         {
             chatLine = 0;
             textIndex++;
             currChatWindowIndex++;
             OffChatWindow();
+            OffAllTutorialButton();
             return;
         }
 
         var chat = tutorialDialouges[textIndex][chatLine];
         tutorialButtonList[currChatWindowIndex].SetText(chat);
+        chatLine++;
 
         OnChatWindow(currChatWindowIndex);
-        chatLine++;
-        if (currChatWindowIndex == 9)
+        Logger.Debug($"{currChatWindowIndex} / {chatLine} / {tutorialDialouges[textIndex].Count}");
+        if (currChatWindowIndex >= 9 && currChatWindowIndex < 12)
             currChatWindowIndex++;
     }
 
     public void OnClickSkip()
     {
         OffSkipButton();
-        // 대사 줄 스킵 구간까지 이동
-        // 다음에 출력하는 UI들 인덱스 설정
         chatLine = 0;
         OffChatWindow();
         if (textIndex < startChatSkipIndex)
@@ -115,7 +116,6 @@ public class TutorialManager : MonoBehaviour
     }
     public void OffSkipButton()
     {
-        // temp
         if (skipButton != null)
             skipButton.gameObject.SetActive(false);
     }

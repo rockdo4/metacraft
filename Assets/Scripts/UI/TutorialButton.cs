@@ -12,10 +12,6 @@ public class TutorialButton : MonoBehaviour
     {
         textObject.text = txt;
     }
-    public void SetOutline()
-    {
-        // ?
-    }
     public void OnWindow()
     {
         chatWindow.SetActive(true);
