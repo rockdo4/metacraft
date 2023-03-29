@@ -21,7 +21,7 @@ public class Buff
         this.icon = icon;
         this.endEvent = endEvent;
         timer = buffInfo.duration;
-        if(!info.inf)
+        if(icon != null && !info.inf)
             icon.count.text = ((int)timer).ToString();
     }
     public void OnEffect()

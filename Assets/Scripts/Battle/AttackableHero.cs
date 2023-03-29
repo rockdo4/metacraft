@@ -172,6 +172,9 @@ public class AttackableHero : AttackableUnit
         }
     }
 
+    public Vector3[] tutorialPos;
+    public bool tutorialActive;
+
     protected void Awake()
     {
         // 어웨이크 에러땜에 임시로 추가함
@@ -303,7 +306,16 @@ public class AttackableHero : AttackableUnit
     }
 
     protected override void BattleUpdate()
-    {        
+    {
+        if (tutorialActive && BattleState != UnitBattleState.None && heroUI.heroSkill.IsCoolDown && !bufferState.silence)
+        {
+            characterData.activeSkill.targetPos = transform.position;
+            if (coOnAutoSkill == null)
+            {
+                coOnAutoSkill = StartCoroutine(heroUI.heroSkill.OnUpSkillActive(characterData.activeSkill));
+            }
+            tutorialActive = false;
+        }
         if (IsAuto && BattleState != UnitBattleState.None && heroUI.heroSkill.IsCoolDown && !bufferState.silence)
         {
             SearchActiveTarget();
@@ -398,7 +410,6 @@ public class AttackableHero : AttackableUnit
                 break;
         }
     }
-
     protected override void DieUpdate() { }
 
     protected override void MoveNextUpdate()
