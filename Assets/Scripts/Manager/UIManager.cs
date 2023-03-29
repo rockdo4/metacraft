@@ -46,19 +46,19 @@ public class UIManager : MonoBehaviour
     {
         ShowViewWithNoSound(index);
 
-        //AudioManager.Instance.PlayUIAudio(0);
+        AudioManager.Instance.PlayUIAudio(0);
     }
     public void ShowPopup(int index)
     {
         ShowPopupWithNoSound(index);
 
-        //AudioManager.Instance.PlayUIAudio(0);
+        AudioManager.Instance.PlayUIAudio(0);
     }
     public void ClearPopups()
     {
         ClearPopupsWithNoSound();
 
-        //AudioManager.Instance.PlayUIAudio(0);
+        AudioManager.Instance.PlayUIAudio(0);
     }
 
     public void ShowViewWithNoSound(int index)

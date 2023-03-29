@@ -3,6 +3,7 @@ using UnityEngine;
 public class TempHeroAnimatorTrigger : MonoBehaviour
 {
     public AttackableUnit unit;
+    public MakeWalkSound walkSound;
 
     private void Awake()
     {
@@ -23,5 +24,18 @@ public class TempHeroAnimatorTrigger : MonoBehaviour
     public void OnActiveSkill(AnimationEvent ev)
     {
         unit.OnActiveSkill();
-    }    
+    }
+    public void PlayNormalAttackSound()
+    {
+        unit.PlayNormalAttackSound();
+    }
+    public void PlayActiveSkillSound()
+    {
+        unit.PlayActiveSkillSound();
+    }
+    public void PlayFootStep()
+    {
+        if(!walkSound.Equals(null))
+            walkSound.PlayFootStep();
+    }
 }
