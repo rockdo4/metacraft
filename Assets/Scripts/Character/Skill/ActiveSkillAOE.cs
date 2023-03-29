@@ -238,7 +238,9 @@ public class ActiveSkillAOE : CharacterSkill
     public override void OnActiveSkill(AttackableUnit attackableUnit, List<AttackableUnit> enemies, List<AttackableUnit> heros)
     {
         if (isTutorial)
+        {
             indicatorTransform.position = targetPos;
+        }
         base.OnActiveSkill(attackableUnit,enemies, heros);
 
         if (hasDuration)
