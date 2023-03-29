@@ -55,9 +55,9 @@ public class TutorialMask : MonoBehaviour
         var prevParent = transform.parent;
         int prevParentIdx = transform.GetSiblingIndex();
 
-        transform.parent = button.transform;
+        transform.SetParent(button.transform);
         mask.anchoredPosition = Vector3.zero;
-        transform.parent = prevParent;
+        transform.SetParent(prevParent);
         transform.SetSiblingIndex(prevParentIdx);
 
         back.anchoredPosition = -mask.anchoredPosition;

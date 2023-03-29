@@ -27,6 +27,8 @@ public class TutorialManager : MonoBehaviour
 
     private GameManager gm;
 
+    public GameObject notTouchPaner;
+
     private void Start()
     {
         gm = GameManager.Instance;
@@ -70,6 +72,7 @@ public class TutorialManager : MonoBehaviour
         if (btMgr != null)
             Time.timeScale = 0;
 
+        notTouchPaner.SetActive(false);
         int count = tutorialDialouges[textIndex].Count;
         if (chatLine >= count)
         {
@@ -83,7 +86,21 @@ public class TutorialManager : MonoBehaviour
 
         var chat = tutorialDialouges[textIndex][chatLine];
         tutorialButtonList[currChatWindowIndex].SetText(chat);
-        if (tutorialButtonList[currChatWindowIndex].isMask)
+
+        int maskIdx = 0;
+        switch (currChatWindowIndex)
+        {
+            case 9 :
+                maskIdx = count - 1;
+                break;
+            case 13:
+                Logger.Debug(chatLine);
+                break;
+            default:
+                break;
+        }
+
+        if (tutorialButtonList[currChatWindowIndex].isMask && chatLine >= maskIdx)
         {
             if (tutorialButtonList[currChatWindowIndex].maskButton != null)
             {
@@ -97,6 +114,13 @@ public class TutorialManager : MonoBehaviour
                 tutorialMask.Setting(tutorialButtonList[currChatWindowIndex].maskButtonParent.GetComponentsInChildren<Button>()[0]);
                 tutorialMask.AddEvent(OnNextChatLine);
             }
+        }
+        else
+        {
+            notTouchPaner.SetActive(true);
+            notTouchPaner.transform.SetParent(tutorialButtonList[currChatWindowIndex].textObject.transform.parent);
+            notTouchPaner.transform.SetSiblingIndex(tutorialButtonList[currChatWindowIndex].textObject.transform.GetSiblingIndex());
+            Logger.Debug("NotTouch");
         }
         chatLine++;
 
