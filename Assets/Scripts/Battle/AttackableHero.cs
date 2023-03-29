@@ -172,17 +172,6 @@ public class AttackableHero : AttackableUnit
         }
     }
 
-    //protected override void Awake()
-    //{
-    //    base.Awake();
-    //    pathFind = transform.GetComponent<NavMeshAgent>();
-    //    characterData.InitSetting();
-    //    SetData();
-
-    //    unitState = UnitState.Idle;
-
-    //    lastNormalAttackTime = Time.time;
-    //}
     protected void Awake()
     {
         // 어웨이크 에러땜에 임시로 추가함
@@ -234,7 +223,6 @@ public class AttackableHero : AttackableUnit
     public virtual void SetUi(HeroUi _heroUI)
     {
         heroUI = _heroUI;
-        //BattleState = UnitBattleState.ActiveSkill;
         heroUI.heroSkill.
             Set(
             characterData.activeSkill.cooldown,
@@ -245,8 +233,6 @@ public class AttackableHero : AttackableUnit
             PlayActiveSkillAnimation,
             OffSkillAreaIndicator,
             SkillCancle);
-
-        //heroUI.SetAuto(ref isAuto);
     }
 
     public override void ResetData()
@@ -413,10 +399,7 @@ public class AttackableHero : AttackableUnit
         }
     }
 
-    protected override void DieUpdate()
-    {
-
-    }
+    protected override void DieUpdate() { }
 
     protected override void MoveNextUpdate()
     {

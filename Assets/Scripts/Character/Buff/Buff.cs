@@ -21,6 +21,8 @@ public class Buff
         this.icon = icon;
         this.endEvent = endEvent;
         timer = buffInfo.duration;
+        if(!info.inf)
+            icon.count.text = ((int)timer).ToString();
     }
     public void OnEffect()
     {
@@ -31,13 +33,13 @@ public class Buff
         if (buffInfo.inf)
             return;
 
-        timer -= Time.deltaTime;
         if (icon != null)
         {
             sec -= Time.deltaTime;
-            if (sec < 0)
+            if (sec <= 0)
             {
                 sec = 1f;
+                timer -= 1;
                 icon.count.text = ((int)timer).ToString();
                 icon.popUpBuff.count.text = icon.count.text;
             }
