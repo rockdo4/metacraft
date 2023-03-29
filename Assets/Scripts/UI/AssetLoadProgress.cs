@@ -161,7 +161,7 @@ public class AssetLoadProgress : MonoBehaviour
         gm.upgradeTable = CSVReader.SplitTextAsset(releaseHandles["UpgradeTable"].Result as TextAsset);
         //tutorialTextTable = CSVReader.SplitTextAsset(releasehandles["TutorialTextTable"].Result as TextAsset);
 
-        gm.LoadAllData();
+        bool saveFileExist = gm.LoadAllData();
         FixMissionTable(CSVReader.SplitTextAsset(releaseHandles["MissionInfoTable"].Result as TextAsset));
         AppendStringTable(CSVReader.SplitTextAsset(releaseHandles["StringTable_Desc"].Result as TextAsset, false), "StringTable_Desc");
         AppendStringTable(CSVReader.SplitTextAsset(releaseHandles["StringTable_Event"].Result as TextAsset, false), "StringTable_Event");
@@ -172,6 +172,9 @@ public class AssetLoadProgress : MonoBehaviour
         releaseHandles.Clear();
         gm.SetAssets(sprites, stringTable);
         CompleteProgress();
+
+        if (!saveFileExist)
+            gm.CreateNewHero("hero_egostick");
     }
 
     public void ReleaseAddressable(Dictionary<string, AsyncOperationHandle> handles)
