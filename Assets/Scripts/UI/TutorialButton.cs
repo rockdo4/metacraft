@@ -29,6 +29,7 @@ public class TutorialButton : MonoBehaviour
     }
     public void OffOutline()
     {
-        outline.SetActive(false);
+        if (outline != null)
+            outline.SetActive(false);
     }
 }
