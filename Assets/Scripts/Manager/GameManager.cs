@@ -139,10 +139,10 @@ public class GameManager : Singleton<GameManager>
         File.WriteAllText(GetSaveFilePath(), sb.ToString());
     }
 
-    public void LoadAllData()
+    public bool LoadAllData()
     {
         if (!File.Exists(GetSaveFilePath()))
-            return;
+            return false;
 
         var loadData = CSVReader.ReadByPath(GetSaveFilePath(), false);
         foreach (var item in loadData)
@@ -173,6 +173,7 @@ public class GameManager : Singleton<GameManager>
             }
         }
         SetHeroesActive(false);
+        return true;
     }
 
     public void SetHeroesActive(bool value)

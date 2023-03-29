@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System;
 using System.Linq;
 
 
@@ -59,6 +58,11 @@ public class CharacterSkill : ScriptableObject
 
     public int priority;
 
+    public AudioSource normalAttackSound;
+    public AudioSource[] normalAttackHitSounds;
+    public AudioSource activeSkillAttackSound;
+    public AudioSource[] activeSkillAttackHitSounds;
+
     public virtual void OnActive()
     {
     }
@@ -92,6 +96,11 @@ public class CharacterSkill : ScriptableObject
             return;
         
         EffectManager.Instance.Get(activeEffect, skillHolderTransform ?? actorTransform, actorTransform.rotation);
+
+        Logger.Debug(normalAttackHitSounds.Length);
+
+        if(normalAttackHitSounds.Length > 0)
+            normalAttackHitSounds[Random.Range(0, normalAttackHitSounds.Length)].Play();
     }
     //public void OnActiveSkilThroughToLastChild(AttackableUnit unit)
     //{

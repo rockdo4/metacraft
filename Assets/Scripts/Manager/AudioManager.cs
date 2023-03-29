@@ -1,6 +1,5 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 public class AudioManager : Singleton<AudioManager>
@@ -29,11 +28,9 @@ public class AudioManager : Singleton<AudioManager>
     Coroutine coBgmFadeCoroutine;
     private int currBgmIndex;    
 
-    public int awakeMusicIndex;
+    public int awakeMusicIndex = 0;
     private GameObject bgmHolder;
-    private GameObject uiHolder;
-
-    private Dictionary<string, AudioSource> bgmSources;
+    private GameObject uiSoundHolder;
 
     public override void Awake()
     {
@@ -42,29 +39,22 @@ public class AudioManager : Singleton<AudioManager>
         SaveBGMOriginVolumes();
         PlayBGM(awakeMusicIndex);
     }
-
-    //private void Update()
-    //{
-    //    MixerControl();
-    //}
     private void AudioInstance()
     {
         bgmHolder = new GameObject("BGMHolder");
         bgmHolder.transform.SetParent(transform);
 
-        uiHolder = new GameObject("UIHolder");
-        uiHolder.transform.SetParent(transform);
+        uiSoundHolder = new GameObject("UISoundHolder");
+        uiSoundHolder.transform.SetParent(transform);
 
         for (int i = 0; i < bgms.Length; i++)
         {
-            bgms[i] = Instantiate(bgms[i], bgmHolder.transform);
-            //DontDestroyOnLoad(bgms[i]);
+            bgms[i] = Instantiate(bgms[i], bgmHolder.transform);            
         }
 
         for (int i = 0; i < uiAudios.Length; i++)
         {
-            uiAudios[i] = Instantiate(uiAudios[i], uiHolder.transform);
-            //DontDestroyOnLoad(uiAudios[i]);
+            uiAudios[i] = Instantiate(uiAudios[i], uiSoundHolder.transform);            
         }
     }
     private void SaveBGMOriginVolumes()
@@ -76,6 +66,7 @@ public class AudioManager : Singleton<AudioManager>
             bgmOriginVolumes[i] = bgms[i].volume;
         }
     }
+
     //public void MixerControl()
     //{        
     //    mixer.SetFloat(nameof(master), master);
@@ -137,7 +128,7 @@ public class AudioManager : Singleton<AudioManager>
         float timer = 0f;
           
         float sourBgmVolume = bgms[currBgmIndex].volume;
-        float destBgmVolume = bgms[index].volume;
+        float destBgmVolume = bgmOriginVolumes[index];
 
         float divFadeTime = 1 / bgmFadeTime;
         bool destBgmStartPlay = false;

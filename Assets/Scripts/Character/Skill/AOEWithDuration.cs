@@ -29,6 +29,8 @@ public class AOEWithDuration : ActiveSkillAOE
 
         skillField.IsTrackTarget = isTrackTarget;
 
+        skillField.activeSkillAttackHitSounds = activeSkillAttackHitSounds;
+
         hasDuration = true;
 
         SetFieldScale();

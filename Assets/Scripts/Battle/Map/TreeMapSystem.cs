@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using TreeEditor;
 using UnityEngine;
 using UnityEngine.UI.Extensions;
 
@@ -16,7 +15,7 @@ public struct TreeInitSetting
     public int supplyCount;
     public int eventCount;
 
-    public void InitSetting(int height = 4, int width = 5, float branch2Prob = 0.25f, float branch3Prob = 0.25f,
+    public void InitSetting(int height = 4, int width = 5, float branch2Prob = 0.60f, float branch3Prob = 0.15f,
         int normalNodeCount = 0, int threatNodeCount = 0, int supplyNodeCount = 0, int eventNodeCount = 0)
     {
         this.height = height;
@@ -75,7 +74,6 @@ public class TreeMapSystem : MonoBehaviour
     private List<List<TreeBlueprintData>> blueprint = new();
     private List<GameObject> highlighters = new();
     private bool showFirst = true;
-    private int difficulty = 0;
 
     private struct TreeBlueprintData
     {
@@ -114,7 +112,6 @@ public class TreeMapSystem : MonoBehaviour
 
     public void CreateTreeGraph(int difficulty = 0)
     {
-        this.difficulty = difficulty;
         DestroyAllObjs();
         InitSettings(difficulty);       // 트리의 깊이 설정, 필요한 오브젝트 생성
         CreateBlueprint();              // 설계도 생성
