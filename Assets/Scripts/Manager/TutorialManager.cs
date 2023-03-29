@@ -12,7 +12,7 @@ public class TutorialManager : MonoBehaviour
     private int currChatWindowIndex = 0;
     private int chatLine = 0;
     public BattleManager btMgr;
-    private int startChatSkipIndex = 8;
+    private int startChatSkipIndex = 10;
 
     public Button skipButton;
     public TutorialMask tutorialMask;
