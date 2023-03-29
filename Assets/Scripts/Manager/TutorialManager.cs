@@ -19,8 +19,11 @@ public class TutorialManager : MonoBehaviour
     private string keyHead = "tutorial_string_";
     public string[] keyTail;
 
+    private GameManager gm;
+
     private void Start()
     {
+        gm = GameManager.Instance;
         currChatWindowIndex = 0;
         ParseEventTable();
         OffAllTutorialButton();
@@ -48,11 +51,14 @@ public class TutorialManager : MonoBehaviour
 
     public void OnNextChatLine()
     {
-        Logger.Debug(tutorialDialouges[textIndex].Count);
+        if (!gm.playerData.isTutorial)
+            return;
+
         if (chatLine == tutorialDialouges[textIndex].Count)
         {
             chatLine = 0;
             textIndex++;
+            currChatWindowIndex++;
             OffChatWindow();
             return;
         }
