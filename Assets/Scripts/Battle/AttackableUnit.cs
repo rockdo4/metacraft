@@ -290,6 +290,11 @@ public abstract class AttackableUnit : MonoBehaviour
         //}
     }
 
+    public virtual void PlayActiveSkillSound()
+    {
+        characterData.activeSkill.activeSkillAttackSound.Play();
+    }
+
     public virtual void NormalAttackOnDamage()
     {
         if (target == null)
