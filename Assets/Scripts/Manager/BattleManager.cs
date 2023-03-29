@@ -99,6 +99,7 @@ public class BattleManager : MonoBehaviour
     public Button speedButton;
 
     public TutorialManager tutorialManager;
+    public Transform[] tutorialSkillPos;
 
     private void Start()
     {
@@ -811,6 +812,8 @@ public class BattleManager : MonoBehaviour
                 if(gm.playerData.isTutorial)
                 {
                     tutorialManager.gameObject.SetActive(true);
+                    useHeroes[0].GetComponent<AttackableHero>().SetTutorialPos(tutorialSkillPos);
+                    useHeroes[0].GetComponent<AttackableHero>().Test1();
                 }
                 for (int i = 0; i < useHeroes.Count; i++)
                 {
