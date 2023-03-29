@@ -88,22 +88,6 @@ public class AssetLoadProgress : MonoBehaviour
             total++;
         }
 
-        // 임시코드
-        string[] villains =
-        {
-            "icon_enemy_demon_villain",
-            "icon_enemy_fanatic_villain",
-            "icon_enemy_jmc_villain",
-            //"icon_enemy_moonlight_boss",
-            //"icon_enemy_shintia_boss",
-        };
-
-        for (int i = 0; i < 3; i++)
-        {
-            unReleaseHandles.Add(LoadSprite(villains[i]));
-            total++;
-        }
-
         int spriteCount = spriteNames.Length;
         for (int i = 0; i < spriteCount; i++)
         {
