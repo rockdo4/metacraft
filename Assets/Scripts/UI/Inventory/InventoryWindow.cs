@@ -34,7 +34,7 @@ public class InventoryWindow : View
         foreach (var item in inventoryData)
         {
             var i = Instantiate(itemPrev, itemTr);
-            i.SetData(item.id, item.name, item.iconName, item.info,item.sort, item.dataID, item.count.ToString());
+            i.SetData(item.id, item.name, item.iconName, item.info, item.sort, item.dataID, item.count.ToString());
             items.Add(i);
             i.GetComponent<Button>().onClick.AddListener(() => SetInfo(i.data));
         }
