@@ -1,4 +1,6 @@
 using TMPro;
+using UnityEngine.UI;
+using static Cinemachine.DocumentationSortingAttribute;
 
 public class OfficeMainWindow : View
 {
@@ -6,7 +8,7 @@ public class OfficeMainWindow : View
     public TextMeshProUGUI officeLevel;
     public TextMeshProUGUI officeExp;
     public TextMeshProUGUI playerGold;
-    //public TextMeshProUGUI currentDay;
+    public Image expFillImage;
 
     private void OnEnable()
     {
@@ -18,9 +20,12 @@ public class OfficeMainWindow : View
         GameManager gm = GameManager.Instance;
         PlayerData pd = gm.playerData;
         playerName.text = pd.playerName;
-        officeLevel.text = pd.officeLevel.ToString();
-        officeExp.text = pd.officeExperience.ToString();
-        playerGold.text = pd.gold.ToString();
-        //currentDay.text = $"{pd.currentDay}ø‰¿œ";
+        int curLevel = pd.officeLevel;
+        int needExp = (int)gm.officeInfoList[curLevel - 1]["NeedExp"];
+        float expRatio = (float)pd.officeExperience / needExp;
+        officeLevel.text = $"{curLevel}";
+        officeExp.text = $"{expRatio * 100:0.00}%";
+        expFillImage.fillAmount = expRatio;
+        playerGold.text = $"{pd.gold}";
     }
 }
