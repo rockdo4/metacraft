@@ -7,12 +7,14 @@ using UnityEngine.UI;
 public class RewardItem : MonoBehaviour
 {
     public Item data;
+    public TextMeshProUGUI itemNameText;
     public TextMeshProUGUI itemCountText;
     public Image itemImage;
 
     public void SetData(Item item)
     {
         data = item;
+        itemNameText.text = GameManager.Instance.GetStringByTable(data.name);
         if (itemCountText != null)
             itemCountText.text = data.count.ToString();
         itemImage.sprite = GameManager.Instance.GetSpriteByAddress(data.iconName);
@@ -26,6 +28,7 @@ public class RewardItem : MonoBehaviour
         data.info = newData["Info"].ToString();
         data.sort = newData["Sort"].ToString();
         data.dataID = newData["DataID"].ToString();
+        itemNameText.text = GameManager.Instance.GetStringByTable(data.name);
         if (itemCountText != null)
             itemCountText.text = count.ToString();
         itemImage.sprite = GameManager.Instance.GetSpriteByAddress(data.iconName);
@@ -39,6 +42,8 @@ public class RewardItem : MonoBehaviour
         data.info = info;
         data.sort = sort;
         data.dataID = dataID;
+        if(itemNameText != null)
+            itemNameText.text = GameManager.Instance.GetStringByTable(itemName);
         if (itemCountText != null)
             itemCountText.text = itemCount;
         if (itemImage != null)
