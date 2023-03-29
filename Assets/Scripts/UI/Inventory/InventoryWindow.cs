@@ -9,7 +9,6 @@ public class InventoryWindow : View
     public Transform itemTr;
     public List<RewardItem> items;
     public TextMeshProUGUI info;
-    public TextMeshProUGUI itemname;
     public Item nowItem;
     public Button useButton;
     public UsePopup usePopup;
@@ -21,7 +20,6 @@ public class InventoryWindow : View
     private void Init() // Init으로 대체 예정
     {
         info.text = string.Empty;
-        itemname.text = string.Empty;
         useButton.interactable = false;
         nowItem = null;
 
@@ -45,7 +43,6 @@ public class InventoryWindow : View
     public void OnClickAllButton()
     {
         info.text = string.Empty;
-        itemname.text = string.Empty;
         useButton.interactable = false;
         nowItem = null;
         foreach (var item in items)
@@ -54,7 +51,6 @@ public class InventoryWindow : View
     public void OnClickSortButton(string sort)
     {
         info.text = string.Empty;
-        itemname.text = string.Empty;
         useButton.interactable = false;
         nowItem = null;
         foreach (var item in items)
@@ -81,7 +77,6 @@ public class InventoryWindow : View
     public void SetInfo(Item item)
     {
         info.text = GameManager.Instance.GetStringByTable(item.info);
-        itemname.text = GameManager.Instance.GetStringByTable(item.name);
         useButton.interactable = !item.dataID.Equals(string.Empty);
         nowItem = item;
     }
