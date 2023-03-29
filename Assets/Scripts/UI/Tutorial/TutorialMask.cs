@@ -13,13 +13,20 @@ public class TutorialMask : MonoBehaviour
     public Button maskClickEvent;
     public RectTransform maskClickEventRectTr;
 
+    public Button target;
+
     public void Setting(Button button)
     {
+        target = button;    
         gameObject.SetActive(true);
 
         ConnectEventToMask(button);
         SetManskPosition(button);
         SetMaskSize(button.GetComponent<RectTransform>().sizeDelta*1.5f, true);
+    }
+    public void AddEvent(Action action)
+    {
+        maskClickEvent.onClick.AddListener(() => action());
     }
 
     public void SetMaskSize(Vector3 size, bool isCircle)
@@ -39,6 +46,7 @@ public class TutorialMask : MonoBehaviour
 
         maskClickEvent.onClick.RemoveAllListeners();
         maskClickEvent.onClick.AddListener(() => btn.onClick.Invoke());
+        maskClickEvent.onClick.AddListener(SetActiveFalse);
         maskClickEvent.GetComponent<RectTransform>().sizeDelta = btnRectTr.sizeDelta;
     }
 
@@ -58,5 +66,10 @@ public class TutorialMask : MonoBehaviour
     public void SetActiveFalse()
     {
         gameObject.SetActive(false);
+    }
+
+    private void Update()
+    {
+        SetManskPosition(target);
     }
 }

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ManageHeroWindow : View
 {
@@ -20,6 +21,7 @@ public class ManageHeroWindow : View
         {
             GameObject obj = Instantiate(heroInfoPrefab, contents);
             HeroInfoButton info = obj.GetComponent<HeroInfoButton>();
+
             heroInfos.Add(info);
         }
     }
@@ -91,4 +93,5 @@ public class ManageHeroWindow : View
             heroInfos[index].gameObject.SetActive(false);
         }
     }
+
 }

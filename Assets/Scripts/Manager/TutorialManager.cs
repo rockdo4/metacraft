@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -86,7 +85,18 @@ public class TutorialManager : MonoBehaviour
         tutorialButtonList[currChatWindowIndex].SetText(chat);
         if (tutorialButtonList[currChatWindowIndex].isMask)
         {
-            tutorialMask.Setting(tutorialButtonList[currChatWindowIndex].GetComponent<Button>());
+            if (tutorialButtonList[currChatWindowIndex].maskButton != null)
+            {
+                tutorialMask.SetActiveFalse();
+                tutorialMask.Setting(tutorialButtonList[currChatWindowIndex].maskButton);
+                tutorialMask.AddEvent(OnNextChatLine);
+            }
+            else
+            {
+                tutorialMask.SetActiveFalse();
+                tutorialMask.Setting(tutorialButtonList[currChatWindowIndex].maskButtonParent.GetComponentsInChildren<Button>()[0]);
+                tutorialMask.AddEvent(OnNextChatLine);
+            }
         }
         chatLine++;
 
