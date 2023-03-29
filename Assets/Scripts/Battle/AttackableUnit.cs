@@ -755,9 +755,14 @@ public abstract class AttackableUnit : MonoBehaviour
             buffList.Add(buff);
             bufferState.Buffer(info.type, info);
 
+            if(buff.buffInfo.type == BuffType.Heal)
+            {
+                UnitHp += MaxHp * buff.buffInfo.buffValue;
+                UnitHp = UnitHp; // 현재 체력 갱신
+            }
             if (buff.buffInfo.type == BuffType.MaxHealthIncrease)
             {
-                SetMaxHp();
+                UnitHp = UnitHp; // 현재 체력 갱신
             }
         }
     }
