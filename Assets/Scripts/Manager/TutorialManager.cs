@@ -30,8 +30,8 @@ public class TutorialManager : MonoBehaviour
 
     private void Start()
     {
-        textIndex = 11;
-        currChatWindowIndex = 17;
+        //textIndex = 11;
+        //currChatWindowIndex = 17;
 
         gm = GameManager.Instance;
         ParseEventTable();
