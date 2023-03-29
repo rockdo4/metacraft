@@ -817,11 +817,19 @@ public class BattleManager : MonoBehaviour
             }
             else if (!btMapTriggers[currTriggerIndex].isLastTrigger)
             {
+                Logger.Debug(currTriggerIndex);
                 if(gm.playerData.isTutorial)
                 {
-                    tutorialManager.gameObject.SetActive(true);
-                    useHeroes[0].GetComponent<AttackableHero>().SetTutorialPos(tutorialSkillPos);
-                    useHeroes[0].GetComponent<AttackableHero>().Test1();
+                    if (currTriggerIndex == 1)
+                    {
+                        tutorialManager.gameObject.SetActive(true);
+                        useHeroes[0].GetComponent<AttackableHero>().SetTutorialPos(tutorialSkillPos);
+                        useHeroes[0].GetComponent<AttackableHero>().Test1();
+                    }
+                    if(currTriggerIndex == btMapTriggers.Count -1)
+                    {
+                        useHeroes[0].GetComponent<AttackableHero>().Test2();
+                    }
                 }
                 for (int i = 0; i < useHeroes.Count; i++)
                 {

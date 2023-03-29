@@ -76,6 +76,82 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 0.2
+--- !u!1 &1419892818484703195
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 751798968717463974}
+  - component: {fileID: 8695100462835223924}
+  - component: {fileID: 1790817918308697140}
+  m_Layer: 5
+  m_Name: TutorialNotTouchPanel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &751798968717463974
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419892818484703195}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0, y: 0, z: 0}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2844240934600152344}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: -1140, y: -540}
+  m_SizeDelta: {x: -2280, y: -1080}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &8695100462835223924
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419892818484703195}
+  m_CullTransparentMesh: 1
+--- !u!114 &1790817918308697140
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1419892818484703195}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 0}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 10907, guid: 0000000000000000f000000000000000, type: 0}
+  m_Type: 1
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
 --- !u!1 &2844240934559645337
 GameObject:
   m_ObjectHideFlags: 0
@@ -1422,6 +1498,7 @@ RectTransform:
   - {fileID: 2844240934826504800}
   - {fileID: 2844240935898694935}
   - {fileID: 2844240935398625565}
+  - {fileID: 751798968717463974}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3420,7 +3497,10 @@ MonoBehaviour:
   outline: {fileID: 2844240934972253397}
   chatWindow: {fileID: 2844240935684660575}
   textObject: {fileID: 2844240935683907472}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240934658126795
 GameObject:
   m_ObjectHideFlags: 0
@@ -4654,7 +4734,10 @@ MonoBehaviour:
   outline: {fileID: 2844240934925850886}
   chatWindow: {fileID: 2844240934687123773}
   textObject: {fileID: 2844240935291041898}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240934690713290
 GameObject:
   m_ObjectHideFlags: 0
@@ -8963,7 +9046,10 @@ MonoBehaviour:
   outline: {fileID: 2844240935519887308}
   chatWindow: {fileID: 2844240934779216509}
   textObject: {fileID: 2844240935558445168}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240934779596962
 GameObject:
   m_ObjectHideFlags: 0
@@ -10804,6 +10890,7 @@ MonoBehaviour:
   - gatchaclick
   - promo
   - promoinfo
+  notTouchPaner: {fileID: 0}
 --- !u!1 &2844240934832846109
 GameObject:
   m_ObjectHideFlags: 0
@@ -12152,7 +12239,10 @@ MonoBehaviour:
   outline: {fileID: 2844240935814263079}
   chatWindow: {fileID: 2844240936453460427}
   textObject: {fileID: 2844240935797321232}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240934896617284
 GameObject:
   m_ObjectHideFlags: 0
@@ -20738,7 +20828,10 @@ MonoBehaviour:
   outline: {fileID: 0}
   chatWindow: {fileID: 0}
   textObject: {fileID: 0}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240935149336457
 GameObject:
   m_ObjectHideFlags: 0
@@ -20890,7 +20983,10 @@ MonoBehaviour:
   outline: {fileID: 2844240936333404926}
   chatWindow: {fileID: 2844240934725034641}
   textObject: {fileID: 2844240935425146010}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240935151396756
 GameObject:
   m_ObjectHideFlags: 0
@@ -23921,7 +24017,10 @@ MonoBehaviour:
   outline: {fileID: 2844240934999896149}
   chatWindow: {fileID: 2844240934709035983}
   textObject: {fileID: 2844240934991042576}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240935240595033
 GameObject:
   m_ObjectHideFlags: 0
@@ -26767,6 +26866,7 @@ MonoBehaviour:
   mask: {fileID: 2844240935337626077}
   maskClickEvent: {fileID: 2844240935973363377}
   maskClickEventRectTr: {fileID: 2844240935973363021}
+  target: {fileID: 0}
 --- !u!114 &2844240935337626075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -29100,7 +29200,10 @@ MonoBehaviour:
   outline: {fileID: 2844240936548243064}
   chatWindow: {fileID: 2844240935398625562}
   textObject: {fileID: 2844240936560272453}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240935400044545
 GameObject:
   m_ObjectHideFlags: 0
@@ -33924,7 +34027,10 @@ MonoBehaviour:
   outline: {fileID: 0}
   chatWindow: {fileID: 2844240935544135069}
   textObject: {fileID: 2844240935592604345}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240935545790144
 GameObject:
   m_ObjectHideFlags: 0
@@ -39831,7 +39937,10 @@ MonoBehaviour:
   outline: {fileID: 2844240935611146480}
   chatWindow: {fileID: 2844240935951422698}
   textObject: {fileID: 2844240935904564286}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240935707510924
 GameObject:
   m_ObjectHideFlags: 0
@@ -40656,7 +40765,10 @@ MonoBehaviour:
   outline: {fileID: 2844240936201576151}
   chatWindow: {fileID: 2844240935569863524}
   textObject: {fileID: 2844240936085095297}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240935726254042
 GameObject:
   m_ObjectHideFlags: 0
@@ -44998,7 +45110,10 @@ MonoBehaviour:
   outline: {fileID: 2844240935400044545}
   chatWindow: {fileID: 2844240935868939708}
   textObject: {fileID: 2844240936166466302}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240935872126708
 GameObject:
   m_ObjectHideFlags: 0
@@ -45550,7 +45665,10 @@ MonoBehaviour:
   outline: {fileID: 2844240935662845435}
   chatWindow: {fileID: 2844240934725034641}
   textObject: {fileID: 2844240935425146010}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240935889869047
 GameObject:
   m_ObjectHideFlags: 0
@@ -45749,7 +45867,10 @@ MonoBehaviour:
   outline: {fileID: 2844240936664976087}
   chatWindow: {fileID: 2844240935898694932}
   textObject: {fileID: 2844240934652616732}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240935898899353
 GameObject:
   m_ObjectHideFlags: 0
@@ -46549,7 +46670,10 @@ MonoBehaviour:
   outline: {fileID: 2844240936035239785}
   chatWindow: {fileID: 2844240936066925734}
   textObject: {fileID: 2844240934848585118}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240935905602692
 GameObject:
   m_ObjectHideFlags: 0
@@ -47563,7 +47687,10 @@ MonoBehaviour:
   outline: {fileID: 0}
   chatWindow: {fileID: 2844240935934144919}
   textObject: {fileID: 2844240934796494195}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240935935230409
 GameObject:
   m_ObjectHideFlags: 0
@@ -49335,7 +49462,10 @@ MonoBehaviour:
   outline: {fileID: 0}
   chatWindow: {fileID: 2844240936453460427}
   textObject: {fileID: 2844240935797321232}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240935973363018
 GameObject:
   m_ObjectHideFlags: 0
@@ -49581,7 +49711,10 @@ MonoBehaviour:
   outline: {fileID: 2844240936212174222}
   chatWindow: {fileID: 2844240936198757398}
   textObject: {fileID: 2844240936030665775}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240935979324852
 GameObject:
   m_ObjectHideFlags: 0
@@ -52969,7 +53102,10 @@ MonoBehaviour:
   outline: {fileID: 2844240935697520622}
   chatWindow: {fileID: 2844240936198757398}
   textObject: {fileID: 2844240936030665775}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240936054307370
 GameObject:
   m_ObjectHideFlags: 0
@@ -53285,7 +53421,10 @@ MonoBehaviour:
   outline: {fileID: 2844240934908586136}
   chatWindow: {fileID: 2844240936487622892}
   textObject: {fileID: 2844240934559645336}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240936058484280
 GameObject:
   m_ObjectHideFlags: 0
@@ -57830,7 +57969,10 @@ MonoBehaviour:
   outline: {fileID: 2844240935963730015}
   chatWindow: {fileID: 2844240936453460427}
   textObject: {fileID: 2844240935797321232}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240936157427987
 GameObject:
   m_ObjectHideFlags: 0
@@ -59675,7 +59817,10 @@ MonoBehaviour:
   outline: {fileID: 2844240935970267595}
   chatWindow: {fileID: 2844240936198757398}
   textObject: {fileID: 2844240936030665775}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240936193595437
 GameObject:
   m_ObjectHideFlags: 0
@@ -61685,7 +61830,10 @@ MonoBehaviour:
   outline: {fileID: 2844240935355330766}
   chatWindow: {fileID: 2844240934725034641}
   textObject: {fileID: 2844240935425146010}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240936242198259
 GameObject:
   m_ObjectHideFlags: 0
@@ -63728,7 +63876,10 @@ MonoBehaviour:
   outline: {fileID: 2844240935162415445}
   chatWindow: {fileID: 2844240935685752919}
   textObject: {fileID: 2844240936093574381}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240936309405259
 GameObject:
   m_ObjectHideFlags: 0
@@ -66103,7 +66254,10 @@ MonoBehaviour:
   outline: {fileID: 2844240935588506090}
   chatWindow: {fileID: 2844240936453460427}
   textObject: {fileID: 2844240935797321232}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240936379444779
 GameObject:
   m_ObjectHideFlags: 0
@@ -66953,7 +67107,10 @@ MonoBehaviour:
   outline: {fileID: 2844240935371705685}
   chatWindow: {fileID: 2844240934725034641}
   textObject: {fileID: 2844240935425146010}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240936427149030
 GameObject:
   m_ObjectHideFlags: 0
@@ -70458,7 +70615,10 @@ MonoBehaviour:
   outline: {fileID: 0}
   chatWindow: {fileID: 2844240936323283335}
   textObject: {fileID: 2844240935510160963}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240936529024152
 GameObject:
   m_ObjectHideFlags: 0
@@ -72425,7 +72585,10 @@ MonoBehaviour:
   outline: {fileID: 1144790230}
   chatWindow: {fileID: 2844240936453460427}
   textObject: {fileID: 2844240935797321232}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240936579209994
 GameObject:
   m_ObjectHideFlags: 0
@@ -76375,7 +76538,10 @@ MonoBehaviour:
   outline: {fileID: 2844240936052264606}
   chatWindow: {fileID: 2844240936453460427}
   textObject: {fileID: 2844240935797321232}
+  tutorialMask: {fileID: 0}
   isMask: 0
+  maskButton: {fileID: 0}
+  maskButtonParent: {fileID: 0}
 --- !u!1 &2844240936664976087
 GameObject:
   m_ObjectHideFlags: 0
