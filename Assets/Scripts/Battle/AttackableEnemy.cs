@@ -25,23 +25,20 @@ public class AttackableEnemy : AttackableUnit
                     nowUpdate = null;
                     break;
                 case UnitState.Idle:
-                    //pathFind.isStopped = true;
-
                     animator.SetFloat("Speed", 0);
 
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.Battle:
-                    //pathFind.isStopped = false;
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.stoppingDistance = minAttackDis;
 
-                    // 매니저 못 찾아서 임시로 추가
                     {
                         var manager = FindObjectOfType<BattleManager>();
                         if (manager != null)
                             battleManager = manager;
                     }
+
                     battleManager.GetCurrBtMgr().GetEnemyList(ref enemyList);
                     battleManager.GetHeroList(ref heroList);
 
@@ -52,7 +49,6 @@ public class AttackableEnemy : AttackableUnit
                     OnPassiveSkill(enemyList, heroList);
                     break;
                 case UnitState.Die:
-                    //pathFind.enabled = false;
                     OnDead(this);
                     RemoveAllBuff();
                     BattleState = UnitBattleState.None;
@@ -86,7 +82,6 @@ public class AttackableEnemy : AttackableUnit
             switch (battleState)
             {
                 case UnitBattleState.MoveToTarget:
-                    //Logger.Debug(transform.parent.parent.parent.name);
                     pathFind.isStopped = false;
                     break;
                 case UnitBattleState.BattleIdle:
@@ -122,7 +117,6 @@ public class AttackableEnemy : AttackableUnit
         unitState = UnitState.Idle;
         ResetCoolDown();
 
-        //hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
         hpBarManager.SetLiveData(characterData.data);
     }
 
@@ -149,7 +143,6 @@ public class AttackableEnemy : AttackableUnit
         UnitState = UnitState.None;
         BattleState = UnitBattleState.None;
         UnitHp = characterData.data.healthPoint;
-        //hpBarManager.SetHp(UnitHp, characterData.data.healthPoint);
         hpBarManager.SetLiveData(characterData.data);
         lastNavTime = Time.time;
         ResetCoolDown();
@@ -228,14 +221,8 @@ public class AttackableEnemy : AttackableUnit
                 stateInfo = animator.GetCurrentAnimatorStateInfo(0);
                 if (stateInfo.IsName("NormalAttack") && stateInfo.normalizedTime >= 1.0f)
                 {
-                    //if (name.Contains("Test"))
-                    //{
-                    //    // Logger.Debug("anime name : "  + animator.GetCurrentAnimatorClipInfo(0)[0].clip.);
-                    //    Logger.Debug(nowAttack.name + " End");
-                    //}
                     NormalAttackEnd();
                     attackDelayTimer = 0f;
-                    //StartCoroutine(TestAttackEnd());
                 }
                 break;
             case UnitBattleState.Stun:
@@ -243,20 +230,11 @@ public class AttackableEnemy : AttackableUnit
         }
     }
 
-    protected override void DieUpdate()
-    {
+    protected override void DieUpdate() { }
 
-    }
+    protected override void MoveNextUpdate() { }
 
-    protected override void MoveNextUpdate()
-    {
-
-    }
-
-    protected override void ReturnPosUpdate()
-    {
-
-    }
+    protected override void ReturnPosUpdate() { }
 
     public override void ChangeUnitState(UnitState state)
     {

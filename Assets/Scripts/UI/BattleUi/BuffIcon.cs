@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class BuffIcon : MonoBehaviour
 {
     public BuffType buffType;
-    //public float duration; //총 지속시간
 
     public Action OnEnd;
     public PopUpBuffIcon popUpBuff;

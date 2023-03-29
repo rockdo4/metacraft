@@ -34,14 +34,6 @@ public class ClearHeroInfo : MonoBehaviour
         heroImage.sprite = GameManager.Instance.GetSpriteByAddress($"icon_{data.name}");
     }
 
-    //public void SetTestTable()
-    //{
-    //    for (int i = 1; i <= 20; i++)
-    //    {
-    //        ExpTable[i] = 100 * i;
-    //    }
-    //}
-
     public void Clear(int getExp)
     {
         expText.text = $"{getExp}";

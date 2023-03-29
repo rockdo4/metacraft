@@ -64,10 +64,6 @@ public class HeroUi : MonoBehaviour
             hpBar.value = (float)(nowHp / maxHp);
     }
 
-    //public void SetCurrHp()
-    //{
-    //    SetHp(heroData.data.currentHp, heroData.data.healthPoint);
-    //}
 
     public void SetDieImage()
     {
