@@ -1,6 +1,17 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+
+[Serializable]
+public class ButtonMask
+{
+    public int tIdx = 0;
+    public int cLine = 0;
+
+    public Button eventButton;
+    public Transform eventParentTr;
+}
 
 public class TutorialManager : MonoBehaviour
 {
@@ -12,6 +23,7 @@ public class TutorialManager : MonoBehaviour
     }
 
     public List<TutorialButton> tutorialButtonList = new();
+    public List<ButtonMask> buttonMasks = new();
     public static int currChatWindowIndex = 0;
     private int chatLine = 0;
     public BattleManager btMgr;
@@ -102,18 +114,23 @@ public class TutorialManager : MonoBehaviour
                 break;
         }
 
-        if (tutorialButtonList[currChatWindowIndex].isMask && chatLine >= maskIdx)
+        Logger.Debug("");
+        Logger.Debug(textIndex);
+        Logger.Debug(chatLine);
+        Logger.Debug("");
+        var findMask = buttonMasks.Find(t => ((t.tIdx == textIndex) && (t.cLine == chatLine)));
+        if (findMask != null)
         {
-            if (tutorialButtonList[currChatWindowIndex].maskButton != null)
+            if (findMask.eventButton != null)
             {
                 tutorialMask.SetActiveFalse();
-                tutorialMask.Setting(tutorialButtonList[currChatWindowIndex].maskButton);
+                tutorialMask.Setting(findMask.eventButton);
                 tutorialMask.AddEvent(OnNextChatLine);
             }
-            else
+            else if(findMask.eventParentTr != null)
             {
                 tutorialMask.SetActiveFalse();
-                tutorialMask.Setting(tutorialButtonList[currChatWindowIndex].maskButtonParent.GetComponentsInChildren<Button>()[0]);
+                tutorialMask.Setting(findMask.eventParentTr.GetComponentsInChildren<Button>()[0]);
                 tutorialMask.AddEvent(OnNextChatLine);
             }
         }
@@ -127,7 +144,7 @@ public class TutorialManager : MonoBehaviour
         chatLine++;
 
         OnChatWindow(currChatWindowIndex);
-        Logger.Debug($"{currChatWindowIndex} / {chatLine} / {tutorialDialouges[textIndex].Count}");
+    //    Logger.Debug($"{currChatWindowIndex} / {chatLine} / {tutorialDialouges[textIndex].Count}");
         if ((currChatWindowIndex >= 11 && currChatWindowIndex < 14) ||
             (currChatWindowIndex >= 2 && currChatWindowIndex < 7) ||
             currChatWindowIndex == 8 ||

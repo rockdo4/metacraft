@@ -1,5 +1,4 @@
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -11,8 +10,6 @@ public class TutorialButton : MonoBehaviour
     public TutorialMask tutorialMask;
 
     public bool isMask = false;
-    public Button maskButton;
-    public Transform maskButtonParent;
 
     public void SetText(string txt)
     {
