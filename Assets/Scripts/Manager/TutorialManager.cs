@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
-    private List<List<string>> tempTexts;
     private static int textIndex = 0;                               // 가져와야 하는 텍스트들 인덱스
 
     public List<TutorialButton> tutorialButtonList = new();
@@ -16,12 +15,18 @@ public class TutorialManager : MonoBehaviour
     public Button skipButton;
     public TutorialMask tutorialMask;
 
+    private List<List<string>> tutorialDialouges;
+    private string keyHead = "tutorial_string_";
+    public string[] keyTail;
+
     private void Start()
     {
+        currChatWindowIndex = 0;
+        ParseEventTable();
         OffAllTutorialButton();
-        if (!GameManager.Instance.playerData.isTutorial)
+        if (GameManager.Instance.playerData.isTutorial)
         {
-            
+            OnNextChatLine();
         }
         if (btMgr != null)
         {
@@ -43,8 +48,8 @@ public class TutorialManager : MonoBehaviour
 
     public void OnNextChatLine()
     {
-        chatLine++;
-        if (chatLine == tempTexts[textIndex].Count)
+        Logger.Debug(tutorialDialouges[textIndex].Count);
+        if (chatLine == tutorialDialouges[textIndex].Count)
         {
             chatLine = 0;
             textIndex++;
@@ -52,9 +57,10 @@ public class TutorialManager : MonoBehaviour
             return;
         }
 
-        var chat = tempTexts[textIndex][chatLine];
+        var chat = tutorialDialouges[textIndex][chatLine];
         tutorialButtonList[currChatWindowIndex].SetText(chat);
         OnChatWindow(currChatWindowIndex);
+        chatLine++;
     }
 
     public void OnClickSkip()
@@ -96,6 +102,28 @@ public class TutorialManager : MonoBehaviour
         {
             tutorialButtonList[i].OffWindow();
             tutorialButtonList[i].OffOutline();
+        }
+    }
+    private void ParseEventTable()
+    {
+        GameManager gm = GameManager.Instance;
+
+        tutorialDialouges = new(keyTail.Length);
+
+        for (int i = 0; i < tutorialDialouges.Capacity; i++)
+        {
+            tutorialDialouges.Add(new(10));
+            int dialougeNum = 1;
+            while (dialougeNum < 100)
+            {
+                var key = $"{keyHead}{keyTail[i]}{dialougeNum}";
+                var dialouge = gm.GetStringByTable(key);
+                if (dialouge.Equals(key.ToLower()))
+                    break;
+
+                tutorialDialouges[i].Add(dialouge);
+                dialougeNum++;
+            }
         }
     }
 }

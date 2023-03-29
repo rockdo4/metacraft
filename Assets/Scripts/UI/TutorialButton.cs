@@ -5,7 +5,7 @@ public class TutorialButton : MonoBehaviour
 {
     public GameObject outline;
     public GameObject chatWindow;
-    private TextMeshProUGUI textObject;
+    public TextMeshProUGUI textObject;
 
     public void SetText(string txt)
     {
@@ -29,6 +29,7 @@ public class TutorialButton : MonoBehaviour
     }
     public void OffOutline()
     {
-        outline.SetActive(false);
+        if (outline != null)
+            outline.SetActive(false);
     }
 }
