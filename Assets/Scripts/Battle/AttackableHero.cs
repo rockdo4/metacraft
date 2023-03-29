@@ -183,8 +183,9 @@ public class AttackableHero : AttackableUnit
 
     //    lastNormalAttackTime = Time.time;
     //}
-    protected void Awake()
+    protected override void Awake()
     {
+        base.Awake();
         // 어웨이크 에러땜에 임시로 추가함
         InitData();
         pathFind = transform.GetComponent<NavMeshAgent>();
@@ -193,7 +194,7 @@ public class AttackableHero : AttackableUnit
 
         unitState = UnitState.Idle;
 
-        ResetCoolDown();
+        ResetCoolDown();        
     }
     private void Start()
     {

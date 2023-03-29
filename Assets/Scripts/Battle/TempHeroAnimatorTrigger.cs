@@ -24,9 +24,18 @@ public class TempHeroAnimatorTrigger : MonoBehaviour
     public void OnActiveSkill(AnimationEvent ev)
     {
         unit.OnActiveSkill();
-    }    
+    }
+    public void PlayNormalAttackSound()
+    {
+        unit.PlayNormalAttackSound();
+    }
+    public void PlayActiveSkillSound()
+    {
+        unit.PlayActiveSkillSound();
+    }
     public void PlayFootStep()
     {
-        walkSound.PlayFootStep();
+        if(!walkSound.Equals(null))
+            walkSound.PlayFootStep();
     }
 }

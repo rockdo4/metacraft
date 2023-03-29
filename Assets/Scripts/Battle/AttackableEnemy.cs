@@ -110,8 +110,10 @@ public class AttackableEnemy : AttackableUnit
     float attackDelay = 1f;
     float attackDelayTimer = 0f;
 
-    private void Awake()
+    protected override void Awake()
     {
+        base.Awake();
+
         InitData();
         SetPathFind();
         characterData.InitSetting();

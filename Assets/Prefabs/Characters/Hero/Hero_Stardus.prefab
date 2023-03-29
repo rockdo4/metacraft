@@ -543,6 +543,37 @@ Transform:
   m_Father: {fileID: 208397283950056818}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1620645468190954931
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1883180535142679888}
+  m_Layer: 6
+  m_Name: audioSourcesHolder
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1883180535142679888
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1620645468190954931}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4579407432390113234}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1659698077191810203
 GameObject:
   m_ObjectHideFlags: 0
@@ -1178,6 +1209,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   unit: {fileID: 8953867006811067636}
+  walkSound: {fileID: 6063915547916571097}
 --- !u!1 &3813573454725501118
 GameObject:
   m_ObjectHideFlags: 0
@@ -1419,6 +1451,7 @@ GameObject:
   - component: {fileID: 5918631126053096587}
   - component: {fileID: 8953867006811067636}
   - component: {fileID: 8538773150672408196}
+  - component: {fileID: 6063915547916571097}
   m_Layer: 6
   m_Name: Hero_Stardus
   m_TagString: Hero
@@ -1439,6 +1472,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4257453218850702731}
+  - {fileID: 1883180535142679888}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
@@ -1514,6 +1548,7 @@ MonoBehaviour:
     job: 0
     tags: []
     level: 0
+    maxLevel: 0
     exp: 0
     likeability: 0
     baseDamage: 50
@@ -1576,11 +1611,13 @@ MonoBehaviour:
   citizenList: []
   unitState: -1
   battleState: -1
+  buffList: []
   isThereDamageUI: 1
   usingFloatingHpBar: 0
   isAlive: 0
   effectCreateTransform: {fileID: 7204565303482069588}
   hitEffectTransform: {fileID: 2488402996556349138}
+  audioSourcesHolder: {fileID: 1883180535142679888}
 --- !u!114 &8538773150672408196
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1594,6 +1631,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   heightAboveGround: 3
+--- !u!114 &6063915547916571097
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4579407432390113235}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a0674f2e5dfc814e8025688287b5fc3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioSources:
+  - {fileID: 2444514680447716200, guid: 6b9671d8ff769e04f9cd4d3fad2fde93, type: 3}
+  - {fileID: 92263492183434137, guid: 6b9cb66563d6bc143beeb198d0192228, type: 3}
+  - {fileID: 8281521502186056775, guid: bf93da51ca647334ca157ae0bf7fb9f4, type: 3}
+  - {fileID: 1073426634497028260, guid: ce4ff6dfffb47c940a3189654e2b26ed, type: 3}
+  - {fileID: 3490359974483337435, guid: 219d302969419f94c8146be03ed6cc3d, type: 3}
+  audioSourcesHolder: {fileID: 1883180535142679888}
 --- !u!1 &4588361104966258468
 GameObject:
   m_ObjectHideFlags: 0

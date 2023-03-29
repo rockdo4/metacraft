@@ -134,7 +134,7 @@ public abstract class AttackableUnit : MonoBehaviour
     public Transform hitEffectTransform;
     public Transform audioSourcesHolder;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         if (effectCreateTransform.Equals(null))
             effectCreateTransform = transform;
@@ -224,7 +224,7 @@ public abstract class AttackableUnit : MonoBehaviour
         data.currentHp = data.healthPoint;
     }
 
-    private void SetAudioSources()
+    protected void SetAudioSources()
     {
         if (audioSourcesHolder.Equals(null))
             return;
@@ -232,21 +232,27 @@ public abstract class AttackableUnit : MonoBehaviour
         for (int i = 0; i < characterData.attacks.Length; i++)
         {
             var skill = characterData.attacks[i];
-            skill.normalAttackSound = Instantiate(skill.normalAttackSound, audioSourcesHolder);
-            for(int j = 0; j < skill.normalAttackHitSounds.Length; j++)
+
+            if (!skill.normalAttackSound.Equals(null))
+                skill.normalAttackSound = Instantiate(skill.normalAttackSound, audioSourcesHolder);
+
+            for (int j = 0; j < skill.normalAttackHitSounds.Length; j++)
             {
-                skill.normalAttackHitSounds[j] = Instantiate(skill.normalAttackHitSounds[j], audioSourcesHolder);
+                if (!skill.normalAttackHitSounds[j].Equals(null))
+                    skill.normalAttackHitSounds[j] = Instantiate(skill.normalAttackHitSounds[j], audioSourcesHolder);
             }
         }
 
         var activeSkill = characterData.activeSkill;
-        activeSkill.activeSkillAttackSound = Instantiate(activeSkill.activeSkillAttackSound, audioSourcesHolder);
-        for(int i = 0; i < activeSkill.activeSkillAttackHitSounds.Length; i++)
-        {
-            activeSkill.activeSkillAttackHitSounds[i] = Instantiate(activeSkill.activeSkillAttackHitSounds[i], audioSourcesHolder);
-        }
+        if(!activeSkill.activeSkillAttackSound.Equals(null))
+            activeSkill.activeSkillAttackSound = Instantiate(activeSkill.activeSkillAttackSound, audioSourcesHolder);
 
-    }
+        for (int i = 0; i < activeSkill.activeSkillAttackHitSounds.Length; i++)
+        {
+            if (!activeSkill.activeSkillAttackHitSounds[i].Equals(null))
+                activeSkill.activeSkillAttackHitSounds[i] = Instantiate(activeSkill.activeSkillAttackHitSounds[i], audioSourcesHolder);
+        }
+    } 
 
     //public void LevelUpMultiplication(float multipleDamage, float multipleDefense, float multipleHealthPoint)
     //{
@@ -289,10 +295,13 @@ public abstract class AttackableUnit : MonoBehaviour
         //    }
         //}
     }
-
+    public virtual void PlayNormalAttackSound()
+    {
+        nowAttack.normalAttackSound?.Play();
+    }
     public virtual void PlayActiveSkillSound()
     {
-        characterData.activeSkill.activeSkillAttackSound.Play();
+        characterData.activeSkill.activeSkillAttackSound?.Play();
     }
 
     public virtual void NormalAttackOnDamage()

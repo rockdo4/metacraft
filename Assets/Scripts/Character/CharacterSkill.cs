@@ -94,8 +94,12 @@ public class CharacterSkill : ScriptableObject
         if (activeEffect.Equals(EffectEnum.None))
             return;
         
-        EffectManager.Instance.Get(activeEffect, skillHolderTransform ?? actorTransform, actorTransform.rotation);        
-        normalAttackHitSounds[Random.Range(0, normalAttackHitSounds.Length)].Play();
+        EffectManager.Instance.Get(activeEffect, skillHolderTransform ?? actorTransform, actorTransform.rotation);
+
+        Logger.Debug(normalAttackHitSounds.Length);
+
+        if(normalAttackHitSounds.Length > 0)
+            normalAttackHitSounds[Random.Range(0, normalAttackHitSounds.Length)].Play();
     }
     //public void OnActiveSkilThroughToLastChild(AttackableUnit unit)
     //{
