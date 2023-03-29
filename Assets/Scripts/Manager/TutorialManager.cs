@@ -44,12 +44,6 @@ public class TutorialManager : MonoBehaviour
 
     public void OnChatWindow(int index)
     {
-        //if (tutorialButtonList[index].chatWindow == tutorialButtonList[currChatWindowIndex])
-        //{
-        //    tutorialButtonList[index].OnOutline();
-        //    return;
-        //}
-
         OffAllTutorialButton();
         currChatWindowIndex = index;
         tutorialButtonList[index].OnWindow();
@@ -127,7 +121,7 @@ public class TutorialManager : MonoBehaviour
         chatLine++;
 
         OnChatWindow(currChatWindowIndex);
-        Logger.Debug($"{currChatWindowIndex} / {chatLine} / {tutorialDialouges[textIndex].Count}");
+        //Logger.Debug($"{textIndex} / {currChatWindowIndex} / {chatLine} / {tutorialDialouges[textIndex].Count}");
         if ((currChatWindowIndex >= 11 && currChatWindowIndex < 14) ||
             (currChatWindowIndex >= 2 && currChatWindowIndex < 7) ||
             (currChatWindowIndex >= 18 && currChatWindowIndex < 23) ||
