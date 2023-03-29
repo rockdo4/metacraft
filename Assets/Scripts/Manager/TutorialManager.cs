@@ -28,7 +28,7 @@ public class TutorialManager : MonoBehaviour
         gm = GameManager.Instance;
         currChatWindowIndex = 0;
         ParseEventTable();
-        OffAllTutorialButton();
+        //OffAllTutorialButton();
         if (GameManager.Instance.playerData.isTutorial)
         {
             OnNextChatLine();
@@ -80,7 +80,7 @@ public class TutorialManager : MonoBehaviour
 
         OnChatWindow(currChatWindowIndex);
         Logger.Debug($"{currChatWindowIndex} / {chatLine} / {tutorialDialouges[textIndex].Count}");
-        if ((currChatWindowIndex >= 9 && currChatWindowIndex < 12) ||
+        if ((currChatWindowIndex >= 10 && currChatWindowIndex < 13) ||
             (currChatWindowIndex >= 2 && currChatWindowIndex < 7))
             currChatWindowIndex++;
     }
