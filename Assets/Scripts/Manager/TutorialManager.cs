@@ -28,8 +28,8 @@ public class TutorialManager : MonoBehaviour
 
     private void Start()
     {
-        textIndex = 11;
-        currChatWindowIndex = 17;
+        //textIndex = 11;
+        //currChatWindowIndex = 17;
 
         gm = GameManager.Instance;
         ParseEventTable();
@@ -95,7 +95,6 @@ public class TutorialManager : MonoBehaviour
         Logger.Debug($"{currChatWindowIndex} / {chatLine} / {tutorialDialouges[textIndex].Count}");
         if ((currChatWindowIndex >= 11 && currChatWindowIndex < 14) ||
             (currChatWindowIndex >= 2 && currChatWindowIndex < 7) ||
-            currChatWindowIndex == 8 ||
             (currChatWindowIndex >= 18 && currChatWindowIndex < 23) ||
             currChatWindowIndex == 26)
             currChatWindowIndex++;
