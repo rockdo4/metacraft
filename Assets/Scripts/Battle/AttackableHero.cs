@@ -18,7 +18,6 @@ public class AttackableHero : AttackableUnit
         set {
             base.UnitHp = value;
             heroUI.SetHp(UnitHp, MaxHp);
-
         }
     }
 
@@ -171,9 +170,47 @@ public class AttackableHero : AttackableUnit
             }
         }
     }
+    public bool isTutorial;
 
-    public Vector3[] tutorialPos;
+    Vector3[] tutorialPos = new Vector3[2];
     public bool tutorialActive;
+
+
+    public void Test1()
+    {
+        Time.timeScale = 0;
+        tutorialPos[0] = transform.position;
+        tutorialPos[1] = transform.position + new Vector3(0, 0, 1);
+        characterData.activeSkill.targetPos = tutorialPos[0];
+
+        heroUI.heroSkill.isTutorialPos = true;
+        heroUI.heroSkill.tutorialPos = tutorialPos[0];
+        characterData.activeSkill.isTutorial = true;
+    }
+    public void Test2()
+    {
+        Time.timeScale = 0;
+        tutorialPos[0] = transform.position;
+        tutorialPos[1] = transform.position + new Vector3(0, 0, 1);
+        characterData.activeSkill.targetPos = tutorialPos[1];
+
+        heroUI.heroSkill.isTutorialPos = true;
+        heroUI.heroSkill.tutorialPos = tutorialPos[1];
+        characterData.activeSkill.isTutorial = true;
+    }
+
+    //test
+    public void FixedUpdate()
+    {
+        if(Input.GetKeyDown(KeyCode.Keypad0))
+        {
+            Test1();
+        }
+        if (Input.GetKeyDown(KeyCode.Keypad1))
+        {
+            Test2();
+        }
+    }
 
     protected void Awake()
     {
@@ -202,8 +239,6 @@ public class AttackableHero : AttackableUnit
         var manager = FindObjectOfType<BattleManager>();
         if (manager != null)
             battleManager = manager;
-
-
 
         for (int i = 0; i < characterData.activeSkill.buffInfos.Count; i++)
         {
@@ -251,6 +286,7 @@ public class AttackableHero : AttackableUnit
         target = null;
         animator.Rebind();
         UnitHp = characterData.data.currentHp;
+        isTutorial = GameManager.Instance.playerData.isTutorial;
 
         heroUI.heroSkill.SetCoolTime(characterData.activeSkill.preCooldown);
         base.ResetData();
@@ -307,24 +343,18 @@ public class AttackableHero : AttackableUnit
 
     protected override void BattleUpdate()
     {
-        if (tutorialActive && BattleState != UnitBattleState.None && heroUI.heroSkill.IsCoolDown && !bufferState.silence)
+        if (!isTutorial)
         {
-            characterData.activeSkill.targetPos = transform.position;
-            if (coOnAutoSkill == null)
+            if (IsAuto && BattleState != UnitBattleState.None && heroUI.heroSkill.IsCoolDown && !bufferState.silence)
             {
-                coOnAutoSkill = StartCoroutine(heroUI.heroSkill.OnUpSkillActive(characterData.activeSkill));
-            }
-            tutorialActive = false;
-        }
-        if (IsAuto && BattleState != UnitBattleState.None && heroUI.heroSkill.IsCoolDown && !bufferState.silence)
-        {
-            SearchActiveTarget();
-            if (activeTarget != null && InRangeActiveAttack)
-            {
-                characterData.activeSkill.targetPos = activeTarget.transform.position;
-                if (coOnAutoSkill == null)
+                SearchActiveTarget();
+                if (activeTarget != null && InRangeActiveAttack)
                 {
-                    coOnAutoSkill = StartCoroutine(heroUI.heroSkill.OnAutoSkillActive(characterData.activeSkill));
+                    characterData.activeSkill.targetPos = activeTarget.transform.position;
+                    if (coOnAutoSkill == null)
+                    {
+                        coOnAutoSkill = StartCoroutine(heroUI.heroSkill.OnAutoSkillActive(characterData.activeSkill));
+                    }
                 }
             }
         }
@@ -410,6 +440,7 @@ public class AttackableHero : AttackableUnit
                 break;
         }
     }
+
     protected override void DieUpdate() { }
 
     protected override void MoveNextUpdate()
@@ -511,6 +542,7 @@ public class AttackableHero : AttackableUnit
         pathFind.isStopped = false;
         pathFind.speed = characterData.data.moveSpeed;
         animator.SetTrigger("ActiveEnd");
+        characterData.activeSkill.isTutorial = false;
         //if (coOnAutoSkill != null)
         //    StopCoroutine(coOnAutoSkill);
         base.ActiveSkillEnd();
