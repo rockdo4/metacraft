@@ -1,12 +1,10 @@
-using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
-    private static int textIndex = 0;                               // 가져와야 하는 텍스트들 인덱스
+    public static int textIndex = 0;                               // 가져와야 하는 텍스트들 인덱스
     public int TestIndex {      //임시로 넣을게,
         set {
             textIndex = value;
@@ -14,7 +12,7 @@ public class TutorialManager : MonoBehaviour
     }
 
     public List<TutorialButton> tutorialButtonList = new();
-    private int currChatWindowIndex = 0;
+    public static int currChatWindowIndex = 0;
     private int chatLine = 0;
     public BattleManager btMgr;
     private int startChatSkipIndex = 10;
@@ -31,17 +29,17 @@ public class TutorialManager : MonoBehaviour
     private void Start()
     {
         gm = GameManager.Instance;
-        currChatWindowIndex = 0;
         ParseEventTable();
-        //OffAllTutorialButton();
+        OffAllTutorialButton();
         if (GameManager.Instance.playerData.isTutorial)
         {
             OnNextChatLine();
         }
-        if (btMgr != null)
-        {
-            textIndex = startChatSkipIndex + 1;
-        }
+        //if (btMgr != null)
+        //{
+        //    textIndex = startChatSkipIndex + 1;
+        //    //currChatWindowIndex = 0;
+        //}
     }
 
     public void OnChatWindow(int index)
@@ -65,6 +63,14 @@ public class TutorialManager : MonoBehaviour
 
     public void OnNextChatLine()
     {
+        //if (currChatWindowIndex == 24)
+        //    gm.playerData.isTutorial = false;
+        if (currChatWindowIndex == 25)
+        {
+            Logger.Debug("Tutorial Clear");
+            return;
+        }
+
         if (!gm.playerData.isTutorial)
             return;
 
@@ -92,9 +98,27 @@ public class TutorialManager : MonoBehaviour
 
         OnChatWindow(currChatWindowIndex);
         Logger.Debug($"{currChatWindowIndex} / {chatLine} / {tutorialDialouges[textIndex].Count}");
-        if ((currChatWindowIndex >= 10 && currChatWindowIndex < 13) ||
-            (currChatWindowIndex >= 2 && currChatWindowIndex < 7))
+        if ((currChatWindowIndex >= 11 && currChatWindowIndex < 14) ||
+            (currChatWindowIndex >= 2 && currChatWindowIndex < 7) ||
+            currChatWindowIndex == 8 ||
+            (currChatWindowIndex >= 18 && currChatWindowIndex < 21) ||
+            (currChatWindowIndex >= 22 && currChatWindowIndex < 24))
             currChatWindowIndex++;
+    }
+
+    public void MoveNextChatWindow()
+    {
+        chatLine = 0;
+        textIndex++;
+        currChatWindowIndex++;
+        OffChatWindow();
+        OffAllTutorialButton();
+    }
+
+    public void OnNextChat()
+    {
+        MoveNextChatWindow();
+        OnNextChatLine();
     }
 
     public void OnClickSkip()
@@ -168,6 +192,10 @@ public class TutorialManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.S))
         {
             OnClickSkip();
+        }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            OnNextChatLine();
         }
     }
 }

@@ -113,6 +113,11 @@ public class BattleManager : MonoBehaviour
         sendOfficePopUp.checkButton.onClick.AddListener(() => { SetHeroesReady(); });
 
         tutorialManager.TestIndex = 5;
+        if (gm.playerData.isTutorial)
+        {
+            TutorialManager.textIndex = 0;
+            TutorialManager.currChatWindowIndex = 0;
+        }
     }
 
     private void SetActiveUi(GameObject ui, bool set) => ui.SetActive(set);
@@ -711,10 +716,6 @@ public class BattleManager : MonoBehaviour
     }
     private void MissionClear()
     {
-        // 튜토리얼 테스트하기 위해서 주석처리
-        //if (gm.playerData.isTutorial)
-        //    gm.playerData.isTutorial = false;
-
         stageReward.gameObject.SetActive(true);
         UIManager.Instance.ShowView(1);
         clearUi.SetData(btMapTriggers[currTriggerIndex].isMissionEnd);
@@ -743,6 +744,13 @@ public class BattleManager : MonoBehaviour
     }
     public void ResetHeroes()
     {
+        if (gm.playerData.isTutorial)
+        {
+            TutorialManager.textIndex = 11;
+            TutorialManager.currChatWindowIndex = 17;
+            Logger.Debug($"{TutorialManager.textIndex} / {TutorialManager.currChatWindowIndex}");
+        }
+
         EffectManager.Instance.DisabledAllEffect();
 
         ResetThisHeroes(useHeroes);
