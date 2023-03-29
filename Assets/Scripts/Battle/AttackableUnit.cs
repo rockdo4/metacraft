@@ -254,15 +254,6 @@ public abstract class AttackableUnit : MonoBehaviour
         }
     } 
 
-    //public void LevelUpMultiplication(float multipleDamage, float multipleDefense, float multipleHealthPoint)
-    //{
-    //    LiveData data = GetUnitData().data;
-    //    LevelUpAdditional(
-    //        (int)(data.baseDamage * multipleDamage),
-    //        (int)(data.baseDefense * multipleDefense),
-    //        (int)(data.healthPoint * multipleHealthPoint));
-    //}
-
     protected void Update()
     {
         if (Time.timeScale == 0)
@@ -283,17 +274,6 @@ public abstract class AttackableUnit : MonoBehaviour
     public virtual void OnActiveSkill()
     {
         characterData.activeSkill.OnActiveSkill(this, enemyList, heroList);
-
-        //var units = characterData.activeSkill.SkillEffectedUnits;
-        //for (int i = 0; i < units.Count; i++)
-        //{
-        //    foreach (var buff in attackkbuffs)
-        //    {
-        //        bool isCritical = false;
-        //        var value = CalculDamage(characterData.activeSkill, ref isCritical);
-        //        units[i].AddValueBuff(buff, value, null);          
-        //    }
-        //}
     }
     public virtual void PlayNormalAttackSound()
     {
@@ -344,24 +324,6 @@ public abstract class AttackableUnit : MonoBehaviour
                 attackTargetList[i].OnDamage(this, nowAttack);
             }
         }
-
-        //if (nowAttack.searchType == SkillSearchType.Healer)
-        //{
-        //    BuffInfo heal = null;
-        //    foreach (var buff in nowAttack.buffInfos)
-        //    {
-        //        if (buff[nowAttack.skillLevel - 1].type == BuffType.Heal)
-        //        {
-        //            heal = buff[nowAttack.skillLevel - 1];
-        //            break;
-        //        }
-        //    }
-        //    var levelCorrection = 1 + Mathf.Clamp((characterData.data.level - characterData.data.level) / 100f, -0.4f, 0);
-        //    bool isCritical = false;
-        //    var dmg = (int)(CalculDamage(nowAttack, ref isCritical) * levelCorrection);
-        //    target.AddValueBuff(heal, dmg);
-
-        //}
     }
     protected void AssultSearch()
     {
@@ -518,10 +480,6 @@ public abstract class AttackableUnit : MonoBehaviour
 
         if (isFridendly)
             dmg = -(int)attackableUnit.CalculDamage(skill, ref isCritical);
-
-        //if ((unitType == UnitType.Hero && skill.targetType.Equals(SkillTargetType.Friendly))
-        //    || (unitType == UnitType.Enemy && skill.targetType.Equals(SkillTargetType.Enemy)))
-        //    dmg = -(int)attackableUnit.CalculDamage(skill, ref isCritical);
 
         UnitHp = Mathf.Max(UnitHp - dmg, 0);
         if (UnitHp <= 0)
@@ -796,9 +754,14 @@ public abstract class AttackableUnit : MonoBehaviour
             buffList.Add(buff);
             bufferState.Buffer(info.type, info);
 
+            if(buff.buffInfo.type == BuffType.Heal)
+            {
+                UnitHp += MaxHp * buff.buffInfo.buffValue;
+                UnitHp = UnitHp; // 현재 체력 갱신
+            }
             if (buff.buffInfo.type == BuffType.MaxHealthIncrease)
             {
-                SetMaxHp();
+                UnitHp = UnitHp; // 현재 체력 갱신
             }
         }
     }
@@ -891,7 +854,6 @@ public abstract class AttackableUnit : MonoBehaviour
                 return true;
             }
             idx++;
-
         }
 
         nowAttack = null;
