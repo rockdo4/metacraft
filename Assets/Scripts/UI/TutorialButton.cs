@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class TutorialButton : MonoBehaviour
@@ -7,6 +8,8 @@ public class TutorialButton : MonoBehaviour
     public GameObject outline;
     public GameObject chatWindow;
     public TextMeshProUGUI textObject;
+
+    public bool isMask = false;
 
     public void SetText(string txt)
     {

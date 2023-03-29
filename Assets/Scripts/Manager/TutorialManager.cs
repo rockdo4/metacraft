@@ -7,6 +7,11 @@ using UnityEngine.UI;
 public class TutorialManager : MonoBehaviour
 {
     private static int textIndex = 0;                               // 가져와야 하는 텍스트들 인덱스
+    public int TestIndex {      //임시로 넣을게,
+        set {
+            textIndex = value;
+        }
+    }
 
     public List<TutorialButton> tutorialButtonList = new();
     private int currChatWindowIndex = 0;
@@ -63,6 +68,9 @@ public class TutorialManager : MonoBehaviour
         if (!gm.playerData.isTutorial)
             return;
 
+        if (btMgr != null)
+            Time.timeScale = 0;
+
         int count = tutorialDialouges[textIndex].Count;
         if (chatLine >= count)
         {
@@ -76,6 +84,10 @@ public class TutorialManager : MonoBehaviour
 
         var chat = tutorialDialouges[textIndex][chatLine];
         tutorialButtonList[currChatWindowIndex].SetText(chat);
+        if (tutorialButtonList[currChatWindowIndex].isMask)
+        {
+            tutorialMask.Setting(tutorialButtonList[currChatWindowIndex].GetComponent<Button>());
+        }
         chatLine++;
 
         OnChatWindow(currChatWindowIndex);

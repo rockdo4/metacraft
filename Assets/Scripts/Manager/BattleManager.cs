@@ -98,6 +98,8 @@ public class BattleManager : MonoBehaviour
     public Button autoButton;
     public Button speedButton;
 
+    public TutorialManager tutorialManager;
+
     private void Start()
     {
         // 밸런스 테스트용 임시 코드
@@ -108,6 +110,8 @@ public class BattleManager : MonoBehaviour
         StartNextStage(curEvent);
 
         sendOfficePopUp.checkButton.onClick.AddListener(() => { SetHeroesReady(); });
+
+        tutorialManager.TestIndex = 5;
     }
 
     private void SetActiveUi(GameObject ui, bool set) => ui.SetActive(set);
@@ -804,6 +808,10 @@ public class BattleManager : MonoBehaviour
             }
             else if (!btMapTriggers[currTriggerIndex].isLastTrigger)
             {
+                if(gm.playerData.isTutorial)
+                {
+                    tutorialManager.gameObject.SetActive(true);
+                }
                 for (int i = 0; i < useHeroes.Count; i++)
                 {
                     useHeroes[i].ChangeUnitState(UnitState.Battle);
