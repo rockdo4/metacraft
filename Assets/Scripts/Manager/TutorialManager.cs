@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,7 @@ public class TutorialManager : MonoBehaviour
     private int currChatWindowIndex = 0;
     private int chatLine = 0;
     public BattleManager btMgr;
-    private int startChatSkipIndex = 2;
+    private int startChatSkipIndex = 8;
 
     public Button skipButton;
     public TutorialMask tutorialMask;
@@ -33,15 +34,22 @@ public class TutorialManager : MonoBehaviour
         }
         if (btMgr != null)
         {
-            textIndex = 3;
+            textIndex = startChatSkipIndex + 1;
         }
     }
 
     public void OnChatWindow(int index)
     {
+        if (tutorialButtonList[index].chatWindow == tutorialButtonList[currChatWindowIndex])
+        {
+            tutorialButtonList[index].OnOutline();
+            return;
+        }
+
         OffAllTutorialButton();
         currChatWindowIndex = index;
         tutorialButtonList[index].OnWindow();
+        tutorialButtonList[index].OnOutline();
     }
 
     public void OffChatWindow()
@@ -54,6 +62,7 @@ public class TutorialManager : MonoBehaviour
         if (!gm.playerData.isTutorial)
             return;
 
+        Logger.Debug($"{currChatWindowIndex} / {chatLine} / {tutorialDialouges[textIndex].Count}");
         if (chatLine == tutorialDialouges[textIndex].Count)
         {
             chatLine = 0;
@@ -65,8 +74,11 @@ public class TutorialManager : MonoBehaviour
 
         var chat = tutorialDialouges[textIndex][chatLine];
         tutorialButtonList[currChatWindowIndex].SetText(chat);
+
         OnChatWindow(currChatWindowIndex);
         chatLine++;
+        if (currChatWindowIndex == 9)
+            currChatWindowIndex++;
     }
 
     public void OnClickSkip()
@@ -75,13 +87,16 @@ public class TutorialManager : MonoBehaviour
         // 대사 줄 스킵 구간까지 이동
         // 다음에 출력하는 UI들 인덱스 설정
         chatLine = 0;
-
+        OffChatWindow();
         if (textIndex < startChatSkipIndex)
-            textIndex = startChatSkipIndex;
+            currChatWindowIndex = startChatSkipIndex;
+        else
+            currChatWindowIndex++;
+
+        if (textIndex < 4)
+            textIndex = 4;
         else
             textIndex++;
-
-        OffChatWindow();
     }
     public void SetDefaltTimeScale()
     {
@@ -100,7 +115,9 @@ public class TutorialManager : MonoBehaviour
     }
     public void OffSkipButton()
     {
-        skipButton.gameObject.SetActive(false);
+        // temp
+        if (skipButton != null)
+            skipButton.gameObject.SetActive(false);
     }
     public void OffAllTutorialButton()
     {
@@ -130,6 +147,14 @@ public class TutorialManager : MonoBehaviour
                 tutorialDialouges[i].Add(dialouge);
                 dialougeNum++;
             }
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.S))
+        {
+            OnClickSkip();
         }
     }
 }

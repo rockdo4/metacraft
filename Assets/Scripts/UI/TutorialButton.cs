@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -21,7 +22,8 @@ public class TutorialButton : MonoBehaviour
     }
     public void OnOutline()
     {
-        outline.SetActive(true);
+        if (outline != null)
+            outline.SetActive(true);
     }
     public void OffWindow()
     {
