@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TreeEditor;
 using UnityEngine;
 using UnityEngine.UI.Extensions;
 
@@ -8,16 +9,20 @@ public struct TreeInitSetting
 {
     public int height;
     public int width;
+    public float branch2Prob;
+    public float branch3Prob;
     public int normalCount;
     public int threatCount;
     public int supplyCount;
     public int eventCount;
 
-    public TreeInitSetting(int height = 4, int width = 5,
+    public void InitSetting(int height = 4, int width = 5, float branch2Prob = 0.25f, float branch3Prob = 0.25f,
         int normalNodeCount = 0, int threatNodeCount = 0, int supplyNodeCount = 0, int eventNodeCount = 0)
     {
         this.height = height;
         this.width = width;
+        this.branch2Prob = branch2Prob;
+        this.branch3Prob = branch3Prob;
         normalCount = normalNodeCount;
         threatCount = threatNodeCount;
         supplyCount = supplyNodeCount;
@@ -52,9 +57,6 @@ public class TreeMapSystem : MonoBehaviour
     private int localSupplyCount = 1;
     private int localEventCount = 1;
 
-    public float branch2Prob = 0.25f;
-    public float branch3Prob = 0.1f;
-
     public GameObject nodeBundlePrefab;
     public GameObject treeNodePrefab;
     public GameObject uiLineRendererPrefab;
@@ -72,8 +74,8 @@ public class TreeMapSystem : MonoBehaviour
     private List<UILineRenderer> lines = new();
     private List<List<TreeBlueprintData>> blueprint = new();
     private List<GameObject> highlighters = new();
-    private int nodeIndex = 0;
     private bool showFirst = true;
+    private int difficulty = 0;
 
     private struct TreeBlueprintData
     {
@@ -110,11 +112,11 @@ public class TreeMapSystem : MonoBehaviour
         StartCoroutine(CoLinkNodes());  // 라인렌더러 위치 조정
     }
 
-    public void CreateTreeGraph(int normalNodeCount = 0, int threatNodeCount = 0, int supplyNodeCount = 0, int eventNodeCount = 0)
+    public void CreateTreeGraph(int difficulty = 0)
     {
-        nodeIndex = 0;
+        this.difficulty = difficulty;
         DestroyAllObjs();
-        InitSettings(normalNodeCount, threatNodeCount, supplyNodeCount, eventNodeCount);       // 트리의 깊이 설정, 필요한 오브젝트 생성
+        InitSettings(difficulty);       // 트리의 깊이 설정, 필요한 오브젝트 생성
         CreateBlueprint();              // 설계도 생성
         CreateNodes();                  // 노드 생성
         CurNode = root;
@@ -124,6 +126,15 @@ public class TreeMapSystem : MonoBehaviour
             LinkNodes(i, nodes[i], nodes[i + 1]); // 노드끼리 연결
 
         CreateLineRenderer();           // 라인렌더러 생성
+        if (difficulty == 0) // 튜토리얼
+        {
+            TreeNodeObject upNode = CurNode.childrens[0];
+            TreeNodeObject downNode = CurNode.childrens[1];
+            upNode.SetNodeType(TreeNodeTypes.Threat);
+            downNode.SetNodeType(TreeNodeTypes.Event);
+            upNode.childrens[0].SetNodeType(TreeNodeTypes.Threat);
+            downNode.childrens[0].SetNodeType(TreeNodeTypes.Supply);
+        }
     }
 
     private void SetNodeHighlighter(TreeNodeObject node)
@@ -160,7 +171,7 @@ public class TreeMapSystem : MonoBehaviour
             if (i == 0) // Root
             {
                 branchWidth = 1;
-                branchCount = Random.Range(2, 4);
+                branchCount = (!treeSettings.branch3Prob.Equals(0f)) ? Random.Range(2, 4) : 2;
                 fixBranchCount = true;
                 type = TreeNodeTypes.Root;
             }
@@ -188,8 +199,8 @@ public class TreeMapSystem : MonoBehaviour
                 {
                     float randNum = Random.Range(0f, 1f);
                     branchCount =
-                        randNum < branch3Prob ? 3 :
-                        randNum < branch2Prob ? 2 : 1;
+                        randNum < treeSettings.branch3Prob ? 3 :
+                        randNum < treeSettings.branch2Prob ? 2 : 1;
                 }
                 TreeBlueprintData data = new(SelectType(type), branchCount, i, j);
                 blueprint[i].Add(data);
@@ -328,17 +339,36 @@ public class TreeMapSystem : MonoBehaviour
     {
         GameObject instanceNode = Instantiate(treeNodePrefab, target);
         TreeNodeObject node = instanceNode.GetComponent<TreeNodeObject>();
-        node.SetInit($"{data.nodeType}{nodeIndex++}", data.nodeType);
+        node.SetNodeType(data.nodeType);
         nodes[data.floor].Add(node);
         return instanceNode;
     }
 
-    public void InitSettings(int normalNodeCount = 0, int threatNodeCount = 0, int supplyNodeCount = 0, int eventNodeCount = 0)
+    public void InitSettings(int difficulty = 0)
     {
-        localNormalCount = normalNodeCount == 0 ? treeSettings.normalCount : normalNodeCount;
-        localThreatCount = threatNodeCount == 0 ? treeSettings.threatCount : threatNodeCount;
-        localSupplyCount = supplyNodeCount == 0 ? treeSettings.supplyCount : supplyNodeCount;
-        localEventCount = eventNodeCount == 0 ? treeSettings.eventCount : eventNodeCount;
+        switch (difficulty)
+        {
+            case 0: // difficulty = 0, 튜토리얼일때
+                treeSettings.InitSetting(4, 2, 0, 0);
+                break;
+            case 1:
+            case 2:
+                treeSettings.InitSetting(4);
+                break;
+            case 3:
+            case 4:
+                treeSettings.InitSetting(5);
+                break;
+            case 5:
+                treeSettings.InitSetting(6);
+                break;
+            default:
+                break;
+        }
+        localNormalCount = treeSettings.normalCount;
+        localThreatCount = treeSettings.threatCount;
+        localSupplyCount = treeSettings.supplyCount;
+        localEventCount = treeSettings.eventCount;
 
         for (int i = 0; i < treeSettings.height; i++)
         {

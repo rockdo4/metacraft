@@ -133,17 +133,19 @@ public abstract class AttackableUnit : MonoBehaviour
     public Transform effectCreateTransform;
     public Transform hitEffectTransform;
 
-    private void Start()
+    private void Awake()
     {
-        var manager = FindObjectOfType<BattleManager>();
-        if (manager != null)
-            battleManager = manager;
-
         if (effectCreateTransform.Equals(null))
             effectCreateTransform = transform;
 
         if (hitEffectTransform.Equals(null))
             hitEffectTransform = transform;
+    }
+    private void Start()
+    {
+        var manager = FindObjectOfType<BattleManager>();
+        if (manager != null)
+            battleManager = manager;
     }
 
     protected void InitData()
@@ -739,7 +741,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     // 여기에 State 초기화랑 트리거 모두 해제하는 코드 작성
 
-    public virtual void AddValueBuff(BuffInfo info, int anotherValue = 0, BuffIcon icon = null)
+    public virtual void AddValueBuff(BuffInfo info, BuffIcon icon = null)
     {
         if (UnitState == UnitState.Die)
         {
@@ -747,33 +749,15 @@ public abstract class AttackableUnit : MonoBehaviour
         }
         else
         {
-            if (info.fraction == 0)
-            {
-                switch (info.type)
-                {
-                    case BuffType.Heal:
-                        {
-                            UnitHp += (int)(characterData.data.healthPoint * info.buffValue);
-                            if (isThereDamageUI)
-                            {
-                                floatingDamageText.OnAttack(anotherValue, false, transform.position, DamageType.Heal);
-                            }
-                        }
-                        break;
-                }
-            }
-            else
-            {
-                Action endEvent = null;
+            Action endEvent = null;
 
-                Buff buff = new(info, this, RemoveBuff, icon, endEvent);
-                buffList.Add(buff);
-                bufferState.Buffer(info.type, info.buffValue);
+            Buff buff = new(info, this, RemoveBuff, icon, endEvent);
+            buffList.Add(buff);
+            bufferState.Buffer(info.type, info);
 
-                if (buff.buffInfo.type == BuffType.MaxHealthIncrease)
-                {
-                    SetMaxHp();
-                }
+            if (buff.buffInfo.type == BuffType.MaxHealthIncrease)
+            {
+                SetMaxHp();
             }
         }
     }
@@ -805,7 +789,7 @@ public abstract class AttackableUnit : MonoBehaviour
             }
             Buff buff = new Buff(info, this, RemoveBuff, icon, endEvent);
             buffList.Add(buff);
-            bufferState.Buffer(info.type, info.buffValue);
+            bufferState.Buffer(info.type, info);
         }
     }
     public void BuffDurationUpdate(int id, float dur) => buffList.Find(t => t.buffInfo.id == id).timer = dur;
@@ -813,7 +797,7 @@ public abstract class AttackableUnit : MonoBehaviour
     public virtual void RemoveBuff(Buff buff)
     {
         buffList.Remove(buff);
-        bufferState.RemoveBuffer(buff.buffInfo.type, buff.buffInfo.buffValue);
+        bufferState.RemoveBuffer(buff.buffInfo.type, buff.buffInfo);
         UnitHp = UnitHp;
     }
 
@@ -832,7 +816,6 @@ public abstract class AttackableUnit : MonoBehaviour
         }
         else
             buffDamage = (int)(buffDamage * bufferState.damageDecrease);
-
 
         return buffDamage;
     }

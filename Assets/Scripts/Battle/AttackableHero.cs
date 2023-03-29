@@ -210,6 +210,24 @@ public class AttackableHero : AttackableUnit
         var manager = FindObjectOfType<BattleManager>();
         if (manager != null)
             battleManager = manager;
+
+
+
+        for (int i = 0; i < characterData.activeSkill.buffInfos.Count; i++)
+        {
+            characterData.activeSkill.buffInfos[i].buffLevel = characterData.activeSkill.skillLevel;
+            characterData.activeSkill.buffInfos[i].addBuffState = characterData.activeSkill.addBuffState[i];
+        }
+        for (int i = 0; i < characterData.attacks[0].buffInfos.Count; i++)
+        {
+            characterData.attacks[0].buffInfos[i].buffLevel = characterData.attacks[0].skillLevel;
+            characterData.attacks[0].buffInfos[i].addBuffState = characterData.attacks[0].addBuffState[i];
+        }
+        for (int i = 0; i < characterData.passiveSkill.buffInfos.Count; i++)
+        {
+            characterData.passiveSkill.buffInfos[i].buffLevel = characterData.passiveSkill.skillLevel;
+            characterData.passiveSkill.buffInfos[i].addBuffState = characterData.passiveSkill.addBuffState[i];
+        }
     }
 
     // Ui와 연결, Ui에 스킬 쿨타임 연결
@@ -512,7 +530,7 @@ public class AttackableHero : AttackableUnit
             BattleState = UnitBattleState.BattleIdle;
         }
     }
-    public override void AddValueBuff(BuffInfo info, int anotherValue = 0, BuffIcon icon = null)
+    public override void AddValueBuff(BuffInfo info, BuffIcon icon = null)
     {
         int idx = 0;
         for (int i = buffList.Count - 1; i >= 0; i--)
@@ -540,7 +558,7 @@ public class AttackableHero : AttackableUnit
             {
                 icon = heroUI.AddIcon(info.type, info.duration, idx, GameManager.Instance.GetSpriteByAddress($"state{info.sort}"));
             }
-            base.AddValueBuff(info, anotherValue, icon);
+            base.AddValueBuff(info, icon);
         }
         else
         {

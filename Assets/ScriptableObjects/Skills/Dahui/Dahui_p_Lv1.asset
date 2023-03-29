@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1d19c22e4165b6c42be3c92365da44e5, type: 3}
   m_Name: Dahui_p_Lv1
   m_EditorClassIdentifier: 
-  skillLevel: 1
+  skillLevel: 5
   id: 0
   skillName: skill_Third_berserk
   preCooldown: 0
@@ -34,8 +34,11 @@ MonoBehaviour:
   skillDescription: skillinfo_third_p
   skillIcon: third_p_icon
   buffInfos:
-  - list:
-    - {fileID: 11400000, guid: 4ec7eb7976bf1ab4b8b77106ea50a143, type: 2}
+  - {fileID: 11400000, guid: 4ec7eb7976bf1ab4b8b77106ea50a143, type: 2}
+  - {fileID: 11400000, guid: deeecf080a59c6a4abe6b8b3432bf1f0, type: 2}
+  addBuffState:
+  - 0
+  - 2
   buffRadius: 0
   buffTargetType: 0
   buffTargetCnt: 0

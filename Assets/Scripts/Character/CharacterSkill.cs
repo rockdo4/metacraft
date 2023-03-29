@@ -4,16 +4,6 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 
-[Serializable]
-public class BuffLevel
-{
-    public List<BuffInfo> list;
-
-    public BuffInfo this[int index] {
-        get { return list[index]; }
-        set { list[index] = value; }
-    }
-}
 
 [CreateAssetMenu(fileName = "CharacterSkill", menuName = "Character/CharacterSkill")]
 public class CharacterSkill : ScriptableObject
@@ -59,7 +49,8 @@ public class CharacterSkill : ScriptableObject
     public string skillDescription;
     public string skillIcon;
 
-    public List<BuffLevel> buffInfos;
+    public List<BuffInfo> buffInfos;
+    public List<float> addBuffState;
     public int buffRadius;
     public BufferTargetType buffTargetType;
     public int buffTargetCnt;
@@ -113,14 +104,15 @@ public class CharacterSkill : ScriptableObject
             case BufferTargetType.None:
                 break;
             case BufferTargetType.Self:
-                foreach (var buff in buffInfos)
+                for (int i = 0; i < buffInfos.Count; i++)
                 {
-                    if (buff[0].type == BuffType.Provoke
-                        || buff[0].type == BuffType.Stun
-                        || buff[0].type == BuffType.Silence)
-                        unit.AddStateBuff(buff[0]);
+                    var buff = buffInfos[i];
+                    if (buff.type == BuffType.Provoke
+                        || buff.type == BuffType.Stun
+                        || buff.type == BuffType.Silence)
+                        unit.AddStateBuff(buff);
                     else
-                        unit.AddValueBuff(buff[0]);
+                        unit.AddValueBuff(buff);
                 }
                 break;
             case BufferTargetType.Friendly:
@@ -129,16 +121,16 @@ public class CharacterSkill : ScriptableObject
                     var finalTargets = FindTargetInArea(unit, buffTargetType, enemies, heros);
                     for (int i = 0; i < finalTargets.Count; i++)
                     {
-                        foreach (var buff in buffInfos)
+                        for (int j = 0; j < buffInfos.Count; j++)
                         {
-                            var nowBuff = buff[0];
-                            if (nowBuff.type == BuffType.Provoke
-                                || nowBuff.type == BuffType.Stun
-                                || nowBuff.type == BuffType.Silence)
-                                finalTargets[i].AddStateBuff(nowBuff, unit);
+                            var buff = buffInfos[j];
+                            if (buff.type == BuffType.Provoke
+                                || buff.type == BuffType.Stun
+                                || buff.type == BuffType.Silence)
+                                finalTargets[i].AddStateBuff(buff, unit);
                             else
                             {
-                                finalTargets[i].AddValueBuff(nowBuff);
+                                finalTargets[i].AddValueBuff(buff);
                             }
                         }
                     }

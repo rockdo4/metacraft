@@ -17,7 +17,7 @@ public class BattleManager : MonoBehaviour
     private List<Dictionary<string, object>> enemySpawnTable;           // 적 생성 테이블
     private Dictionary<string, object> currentSelectMissionTable;       // 작전 테이블
 
-    public MapEventEnum curEvent = MapEventEnum.None;
+    private MapEventEnum curEvent = MapEventEnum.None;
     private GameObject curMap;
 
     [Header("이벤트 Ui")]
@@ -46,10 +46,11 @@ public class BattleManager : MonoBehaviour
 
     // TestBattleManager
     public List<HeroUi> heroUiList;
-    public List<AttackableUnit> useHeroes = new();
-    public List<AttackableUnit> unuseHeroes = new();
+    private List<AttackableUnit> useHeroes = new();
+    private List<AttackableUnit> unuseHeroes = new();
     public StageEnemy enemyCountTxt;
     public ClearUiController clearUi;
+    public SendOfficePopUp sendOfficePopUp;
     public Image fadePanel;
     public TreeMapSystem tree;
     private int nodeIndex;
@@ -59,13 +60,13 @@ public class BattleManager : MonoBehaviour
     private Coroutine coFadeOut;
     private int readyCount;
     public List<GameObject> roadPrefab;
-    private List<ForkedRoad> roads = new();
+    private List<MapEventTrigger> roads = new();
     private GameObject road;
 
     // BeltScrollManager
     private GameObject platform;
     private float platformMoveSpeed = 7f;
-    public int currTriggerIndex = 0;
+    private int currTriggerIndex = 0;
     private float nextStageMoveTimer = 0f;
     private Coroutine coMovingMap;
     private Coroutine coResetMap;
@@ -78,8 +79,7 @@ public class BattleManager : MonoBehaviour
 
     public CinemachineVirtualCamera cinemachine;
     private int enemyTriggerIndex = 0;                          // 방어전에 쓰일것 (에너미 스폰하는 트리거)
-    private List<Light> lights = new();
-    public bool isMiddleBossAlive = true;
+    public bool isMiddleBossAlive;
     private GameManager gm;
 
     public Button eventExitButton;
@@ -94,7 +94,9 @@ public class BattleManager : MonoBehaviour
     public List<AttackableEnemy> villainPrefabs = new();
     private AttackableEnemy villain;
     private AttackableEnemy middleBoss;
-    public Dictionary<string, object> bossData = new();
+
+    public Button autoButton;
+    public Button speedButton;
 
     private void Start()
     {
@@ -104,6 +106,8 @@ public class BattleManager : MonoBehaviour
         gm.enemyInfoList = CSVReader.Read("EnemyInfoTest");
         Init();
         StartNextStage(curEvent);
+
+        sendOfficePopUp.checkButton.onClick.AddListener(() => { SetHeroesReady(); });
     }
 
     private void SetActiveUi(GameObject ui, bool set) => ui.SetActive(set);
@@ -135,8 +139,6 @@ public class BattleManager : MonoBehaviour
     }
     public void EndSupply(int idx)
     {
-        Logger.Debug("여기다가 보급 넣으면 됨");
-
         SetActiveUi(supplyUi, supplyButtons, false, supplyButtons.Count);
         for (int i = 0; i < heroUiList.Count; i++)
         {
@@ -162,11 +164,15 @@ public class BattleManager : MonoBehaviour
                         break;
                 }
 
+
                 var choiceSupply = supplyList[Random.Range(0, supplyList.Count)];
                 ExecutionBuff((int)choiceSupply);
                 break;
             case 2:
+                stageReward.gameObject.SetActive(true);
                 clearUi.rewards.SaveItems();
+                sendOfficePopUp.gameObject.SetActive(true);
+                sendOfficePopUp.SetItems(stageReward.rewards);
                 clearUi.ResetUi();
                 stageReward.ResetData();
                 break;
@@ -189,6 +195,8 @@ public class BattleManager : MonoBehaviour
             case TreeNodeTypes.Villain:
                 for (int i = 0; i < useHeroes.Count; i++)
                     Invoke(nameof(OnReady), 3f);
+                break;
+            default:
                 break;
         }
     }
@@ -223,7 +231,7 @@ public class BattleManager : MonoBehaviour
                 SetEventInfo(ev);
                 break;
             case TreeNodeTypes.Villain:
-                curMap = eventMaps[0];
+                curMap = eventMaps[3];
                 break;
         }
 
@@ -256,6 +264,7 @@ public class BattleManager : MonoBehaviour
             useHeroes[i].AddValueBuff(buff);
         }
     }
+
     private BuffInfo FindBuff(int id)
     {
         foreach (var buff in buffList)
@@ -302,9 +311,6 @@ public class BattleManager : MonoBehaviour
                 int randomEffectKey = Random.Range(1, effectCount);
                 int effectKey = (int)supplyInfoTable[index][$"Effect{randomEffectKey}"];
                 supplyEffectKey.Add(effectKey);
-
-
-
             }
         }
         else
@@ -482,8 +488,21 @@ public class BattleManager : MonoBehaviour
 
     private void Init()
     {
+        gm = GameManager.Instance;
         if (tree.CurNode == null)
-            tree.CreateTreeGraph();
+        {
+            if (gm.playerData.isTutorial)
+            {
+                tree.CreateTreeGraph();
+                //autoButton.interactable = false;
+                //speedButton.interactable = false;
+            }
+            else
+            {
+                int difficulty = (int)gm.currentSelectMission["Difficulty"];
+                tree.CreateTreeGraph(difficulty);
+            }
+        }
 
         for (int i = 0; i < choiceButtons.Count; i++)
         {
@@ -496,7 +515,6 @@ public class BattleManager : MonoBehaviour
             supplyButtonTexts.Add(text);
         }
 
-        gm = GameManager.Instance;
         eventInfoTable = gm.eventInfoList;
         supplyInfoTable = gm.supplyInfoList;
         currentSelectMissionTable = gm.currentSelectMission;
@@ -542,7 +560,7 @@ public class BattleManager : MonoBehaviour
             BattleMapInfo battleMap = eventMaps[i].GetComponent<BattleMapInfo>();
             Light battleMapLigth = battleMap.GetLight();
             battleMapLigth.color = gm.GetMapLightColor();
-            lights.Add(battleMapLigth);
+            //lights.Add(battleMapLigth);
         }
 
         DisabledAllMap();
@@ -659,7 +677,7 @@ public class BattleManager : MonoBehaviour
             prevNode.childrens[i].nodeButton.onClick.RemoveAllListeners();
         }
 
-        SetHeroReturnPositioning(roads[nodeIndex].fadeTrigger.heroSettingPositions);
+        SetHeroReturnPositioning(roads[nodeIndex].heroSettingPositions);
     }
     private void PlayBossBGM()
     {
@@ -688,6 +706,10 @@ public class BattleManager : MonoBehaviour
     }
     private void MissionClear()
     {
+        // 튜토리얼 테스트하기 위해서 주석처리
+        //if (gm.playerData.isTutorial)
+        //    gm.playerData.isTutorial = false;
+
         stageReward.gameObject.SetActive(true);
         UIManager.Instance.ShowView(1);
         clearUi.SetData(btMapTriggers[currTriggerIndex].isMissionEnd);
@@ -881,7 +903,9 @@ public class BattleManager : MonoBehaviour
 
         road = Instantiate(roadPrefab[tree.CurNode.childrens.Count - 1], platform.transform);
         road.transform.position = currBtMgr.GetRoadTr().transform.position;
-        roads = road.GetComponentsInChildren<ForkedRoad>().ToList();
+        road.transform.rotation = currBtMgr.roadTr.transform.rotation;
+        //roads = road.GetComponentsInChildren<ForkedRoad>().ToList();
+        roads = road.GetComponentsInChildren<MapEventTrigger>().ToList();
     }
     private void DestroyRoad()
     {
@@ -918,6 +942,11 @@ public class BattleManager : MonoBehaviour
         for (int i = 0; i < btMapTriggers.Count; i++)
         {
             btMapTriggers[i].isTriggerEnter = false;
+        }
+        
+        if (tree.CurNode.type == TreeNodeTypes.Villain)
+        {
+            btMapTriggers.Last().isMissionEnd = true;
         }
 
         CreateRoad();
@@ -962,9 +991,12 @@ public class BattleManager : MonoBehaviour
     }
     private void RemoveRoadTrigger()
     {
-        for (int i = 0; i < roads.Count; i++)
+        for (int i = 0; i < btMapTriggers.Count; i++)
         {
-            btMapTriggers.Remove(roads[i].fadeTrigger);
+            if (!btMapTriggers[i].isForkedRoad)
+                continue;
+
+            btMapTriggers.Remove(btMapTriggers[i]);
         }
     }
     private bool OnNextStage()
@@ -976,8 +1008,16 @@ public class BattleManager : MonoBehaviour
 
         if (tree.CurNode.type == TreeNodeTypes.Event)
         {
-            var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
-            StartNextStage((MapEventEnum)randomEvent);
+            if (gm.playerData.isTutorial)
+            {
+                // 길막! 이벤트
+                StartNextStage(MapEventEnum.Roadblock);
+            }
+            else
+            {
+                var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
+                StartNextStage((MapEventEnum)randomEvent);
+            }
             return true;
         }
         else if (tree.CurNode.type == TreeNodeTypes.Supply)
@@ -1001,7 +1041,7 @@ public class BattleManager : MonoBehaviour
 
         for (int i = 0; i < roads.Count; i++)
         {
-            btMapTriggers.Add(roads[i].fadeTrigger);
+            btMapTriggers.Add(roads[i]);
         }
     }
     public int GetCurrTriggerIndex()

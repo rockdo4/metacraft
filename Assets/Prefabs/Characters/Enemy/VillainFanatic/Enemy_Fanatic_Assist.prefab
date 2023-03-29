@@ -1640,7 +1640,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3644388837600894853}
-  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1671,7 +1671,7 @@ Transform:
   - {fileID: 270394894682115755}
   m_Father: {fileID: 8140470842622187795}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &4490671050741181350
 Animator:
   serializedVersion: 5
@@ -20852,7 +20852,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8140470842622187794}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1.5, y: 1.5, z: 1.5}
   m_ConstrainProportionsScale: 0
@@ -20860,7 +20860,7 @@ Transform:
   - {fileID: 4168267248205153599}
   m_Father: {fileID: 0}
   m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 180, z: 0}
 --- !u!114 &8140470842622187806
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -20873,7 +20873,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8666468cbdf1927409dca387dd261c38, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  originData: {fileID: 11400000, guid: 2dc4f093422b76644a4e0bc29379ef4a, type: 2}
+  originData: {fileID: 11400000, guid: b6b5672927937e44e8e3f2b128e72497, type: 2}
   data:
     name: 
     grade: 0
@@ -20881,6 +20881,7 @@ MonoBehaviour:
     job: 0
     tags: []
     level: 0
+    maxLevel: 0
     exp: 0
     likeability: 0
     baseDamage: 0
@@ -20893,7 +20894,7 @@ MonoBehaviour:
     evasion: 0
     accuracy: 0
   attacks:
-  - {fileID: 0}
+  - {fileID: 11400000, guid: b5b498abaadafaa4b811e665173ecacd, type: 2}
   activeSkill: {fileID: 0}
   passiveSkill: {fileID: 0}
 --- !u!136 &325419217164732668
