@@ -132,6 +132,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public Transform effectCreateTransform;
     public Transform hitEffectTransform;
+    public Transform audioSourcesHolder;
 
     private void Awake()
     {
@@ -140,6 +141,8 @@ public abstract class AttackableUnit : MonoBehaviour
 
         if (hitEffectTransform.Equals(null))
             hitEffectTransform = transform;
+
+        SetAudioSources();
     }
     private void Start()
     {
@@ -219,6 +222,30 @@ public abstract class AttackableUnit : MonoBehaviour
         data.baseDefense += (defCoeff < 0 ? characterData.originData.defenseLevelCoefficient * level : (float)defCoeff * level);
         data.healthPoint += (hpCoeff < 0 ? characterData.originData.healthPointLevelCoefficient * level : (float)hpCoeff * level);
         data.currentHp = data.healthPoint;
+    }
+
+    private void SetAudioSources()
+    {
+        if (audioSourcesHolder.Equals(null))
+            return;
+
+        for (int i = 0; i < characterData.attacks.Length; i++)
+        {
+            var skill = characterData.attacks[i];
+            skill.normalAttackSound = Instantiate(skill.normalAttackSound, audioSourcesHolder);
+            for(int j = 0; j < skill.normalAttackHitSounds.Length; j++)
+            {
+                skill.normalAttackHitSounds[j] = Instantiate(skill.normalAttackHitSounds[j], audioSourcesHolder);
+            }
+        }
+
+        var activeSkill = characterData.activeSkill;
+        activeSkill.activeSkillAttackSound = Instantiate(activeSkill.activeSkillAttackSound, audioSourcesHolder);
+        for(int i = 0; i < activeSkill.activeSkillAttackHitSounds.Length; i++)
+        {
+            activeSkill.activeSkillAttackHitSounds[i] = Instantiate(activeSkill.activeSkillAttackHitSounds[i], audioSourcesHolder);
+        }
+
     }
 
     //public void LevelUpMultiplication(float multipleDamage, float multipleDefense, float multipleHealthPoint)

@@ -35,6 +35,7 @@ public class SkillFieldWithDuration : MonoBehaviour
     private string tagName;
     private GameObject currParticle;
 
+    public AudioSource[] activeSkillAttackHitSounds;
 
     protected void OnEnable()
     {        
@@ -98,7 +99,7 @@ public class SkillFieldWithDuration : MonoBehaviour
         if (Time.time - lastHitTime < hitInterval)
             return;
 
-        lastHitTime = Time.time;
+        lastHitTime = Time.time;        
 
         foreach (Collider collider in colliders)
         {
@@ -109,6 +110,9 @@ public class SkillFieldWithDuration : MonoBehaviour
                     attackable.OnDamage(attackableUnit, skill);
             }
         }
+
+        if(colliders.Count > 0)
+            activeSkillAttackHitSounds[Random.Range(0, activeSkillAttackHitSounds.Length)].Play();
     }
     public virtual void SetScale(float x, float y, float z = 1f)
     {

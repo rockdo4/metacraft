@@ -256,7 +256,9 @@ public class ActiveSkillAOE : CharacterSkill
         }
 
         skillAreaIndicator.gameObject.SetActive(false);
-        skillAreaIndicator.isTriggerEnter = false;        
+        skillAreaIndicator.isTriggerEnter = false;
+
+        activeSkillAttackHitSounds[Random.Range(0, activeSkillAttackHitSounds.Length)].Play();
     }
     public void SetActiveIndicators(bool active)
     {

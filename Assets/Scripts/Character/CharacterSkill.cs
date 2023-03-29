@@ -57,6 +57,11 @@ public class CharacterSkill : ScriptableObject
 
     public int priority;
 
+    public AudioSource normalAttackSound;
+    public AudioSource[] normalAttackHitSounds;
+    public AudioSource activeSkillAttackSound;
+    public AudioSource[] activeSkillAttackHitSounds;
+
     public virtual void OnActive()
     {
     }
@@ -89,7 +94,8 @@ public class CharacterSkill : ScriptableObject
         if (activeEffect.Equals(EffectEnum.None))
             return;
         
-        EffectManager.Instance.Get(activeEffect, skillHolderTransform ?? actorTransform, actorTransform.rotation);
+        EffectManager.Instance.Get(activeEffect, skillHolderTransform ?? actorTransform, actorTransform.rotation);        
+        normalAttackHitSounds[Random.Range(0, normalAttackHitSounds.Length)].Play();
     }
     //public void OnActiveSkilThroughToLastChild(AttackableUnit unit)
     //{
