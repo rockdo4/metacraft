@@ -16,6 +16,7 @@ public class TutorialButton : MonoBehaviour
     }
     public void OnWindow()
     {
+        Logger.Debug(chatWindow.name);
         chatWindow.SetActive(true);
     }
     public void OnOutline()

@@ -28,6 +28,9 @@ public class TutorialManager : MonoBehaviour
 
     private void Start()
     {
+        textIndex = 11;
+        currChatWindowIndex = 17;
+
         gm = GameManager.Instance;
         ParseEventTable();
         OffAllTutorialButton();
@@ -35,20 +38,15 @@ public class TutorialManager : MonoBehaviour
         {
             OnNextChatLine();
         }
-        //if (btMgr != null)
-        //{
-        //    textIndex = startChatSkipIndex + 1;
-        //    //currChatWindowIndex = 0;
-        //}
     }
 
     public void OnChatWindow(int index)
     {
-        if (tutorialButtonList[index].chatWindow == tutorialButtonList[currChatWindowIndex])
-        {
-            tutorialButtonList[index].OnOutline();
-            return;
-        }
+        //if (tutorialButtonList[index].chatWindow == tutorialButtonList[currChatWindowIndex])
+        //{
+        //    tutorialButtonList[index].OnOutline();
+        //    return;
+        //}
 
         OffAllTutorialButton();
         currChatWindowIndex = index;
@@ -63,14 +61,6 @@ public class TutorialManager : MonoBehaviour
 
     public void OnNextChatLine()
     {
-        //if (currChatWindowIndex == 24)
-        //    gm.playerData.isTutorial = false;
-        if (currChatWindowIndex == 25)
-        {
-            Logger.Debug("Tutorial Clear");
-            return;
-        }
-
         if (!gm.playerData.isTutorial)
             return;
 
@@ -83,6 +73,11 @@ public class TutorialManager : MonoBehaviour
             chatLine = 0;
             textIndex++;
             currChatWindowIndex++;
+            if (currChatWindowIndex == 28)
+            {
+                Logger.Debug("Tutorial Clear");
+                //gm.playerData.isTutorial = false;
+            }
             OffChatWindow();
             OffAllTutorialButton();
             return;
@@ -101,8 +96,8 @@ public class TutorialManager : MonoBehaviour
         if ((currChatWindowIndex >= 11 && currChatWindowIndex < 14) ||
             (currChatWindowIndex >= 2 && currChatWindowIndex < 7) ||
             currChatWindowIndex == 8 ||
-            (currChatWindowIndex >= 18 && currChatWindowIndex < 21) ||
-            (currChatWindowIndex >= 22 && currChatWindowIndex < 24))
+            (currChatWindowIndex >= 18 && currChatWindowIndex < 23) ||
+            currChatWindowIndex == 26)
             currChatWindowIndex++;
     }
 
