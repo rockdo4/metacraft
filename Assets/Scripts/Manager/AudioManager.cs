@@ -210,15 +210,17 @@ public class AudioManager : Singleton<AudioManager>
     {
         return currBgmIndex;
     }
+  
     public Transform GetAudioResourcesHolder(string name)
     {
-        if(audioResourcesHolders.ContainsKey(name))
+        if (audioResourcesHolders.ContainsKey(name))
         {
             return audioResourcesHolders[name].transform;
         }
         else
         {
-            var value = Instantiate(new GameObject(name), transform);            
+            var value = new GameObject(name);
+            value.transform.parent = transform;
             audioResourcesHolders.Add(name, value );
             return value.transform;   
         }
