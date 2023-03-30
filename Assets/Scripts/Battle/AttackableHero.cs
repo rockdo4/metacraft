@@ -286,7 +286,7 @@ public class AttackableHero : AttackableUnit
         target = null;
         animator.Rebind();
         UnitHp = characterData.data.currentHp;
-        isTutorial = GameManager.Instance.playerData.isTutorial;
+        //isTutorial = GameManager.Instance.playerData.isTutorial;
 
         heroUI.heroSkill.SetCoolTime(characterData.activeSkill.preCooldown);
         base.ResetData();
