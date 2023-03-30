@@ -218,8 +218,7 @@ public class AudioManager : Singleton<AudioManager>
         }
         else
         {
-            var value = new GameObject(name);
-            value.transform.parent = transform;
+            var value = Instantiate(new GameObject(name), transform);            
             audioResourcesHolders.Add(name, value );
             return value.transform;   
         }
