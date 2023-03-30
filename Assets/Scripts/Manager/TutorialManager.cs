@@ -1,18 +1,33 @@
 using System;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
+[Serializable]
+public class ButtonMask
+{
+    public int tIdx = 0;
+    public int cLine = 0;
+
+    public Button eventButton;
+    public Transform eventParentTr;
+}
+
 public class TutorialManager : MonoBehaviour
 {
-    private static int textIndex = 0;                               // 가져와야 하는 텍스트들 인덱스
+    public static int textIndex = 0;                               // 가져와야 하는 텍스트들 인덱스
+    public int TestIndex {      //임시로 넣을게,
+        set {
+            textIndex = value;
+        }
+    }
 
     public List<TutorialButton> tutorialButtonList = new();
-    private int currChatWindowIndex = 0;
+    public List<ButtonMask> buttonMasks = new();
+    public static int currChatWindowIndex = 0;
     private int chatLine = 0;
     public BattleManager btMgr;
-    private int startChatSkipIndex = 8;
+    private int startChatSkipIndex = 10;
 
     public Button skipButton;
     public TutorialMask tutorialMask;
@@ -23,30 +38,24 @@ public class TutorialManager : MonoBehaviour
 
     private GameManager gm;
 
+    public GameObject notTouchPaner;
+
     private void Start()
     {
+        //textIndex = 11;
+        //currChatWindowIndex = 17;
+
         gm = GameManager.Instance;
-        currChatWindowIndex = 0;
         ParseEventTable();
         OffAllTutorialButton();
         if (GameManager.Instance.playerData.isTutorial)
         {
             OnNextChatLine();
         }
-        if (btMgr != null)
-        {
-            textIndex = startChatSkipIndex + 1;
-        }
     }
 
     public void OnChatWindow(int index)
     {
-        if (tutorialButtonList[index].chatWindow == tutorialButtonList[currChatWindowIndex])
-        {
-            tutorialButtonList[index].OnOutline();
-            return;
-        }
-
         OffAllTutorialButton();
         currChatWindowIndex = index;
         tutorialButtonList[index].OnWindow();
@@ -63,12 +72,21 @@ public class TutorialManager : MonoBehaviour
         if (!gm.playerData.isTutorial)
             return;
 
+        if (btMgr != null)
+            Time.timeScale = 0;
+
+        notTouchPaner.SetActive(false);
         int count = tutorialDialouges[textIndex].Count;
         if (chatLine >= count)
         {
             chatLine = 0;
             textIndex++;
             currChatWindowIndex++;
+            if (currChatWindowIndex == 28)
+            {
+                Logger.Debug("Tutorial Clear");
+                //gm.playerData.isTutorial = false;
+            }
             OffChatWindow();
             OffAllTutorialButton();
             return;
@@ -76,13 +94,56 @@ public class TutorialManager : MonoBehaviour
 
         var chat = tutorialDialouges[textIndex][chatLine];
         tutorialButtonList[currChatWindowIndex].SetText(chat);
+
+        Logger.Debug("");
+        Logger.Debug(textIndex);
+        Logger.Debug(chatLine);
+        Logger.Debug("");
+        var findMask = buttonMasks.Find(t => ((t.tIdx == textIndex) && (t.cLine == chatLine)));
+        //if (findMask != null)
+        //{
+        //    if (findMask.eventButton != null)
+        //    {
+        //        tutorialMask.SetActiveFalse();
+        //        tutorialMask.Setting(findMask.eventButton);
+        //    }
+        //    else if(findMask.eventParentTr != null)
+        //    {
+        //        tutorialMask.SetActiveFalse();
+        //        tutorialMask.Setting(findMask.eventParentTr.GetComponentsInChildren<Button>()[0]);
+        //    }
+        //}
+        //else
+        //{
+        //    notTouchPaner.SetActive(true);
+        //    notTouchPaner.transform.SetParent(tutorialButtonList[currChatWindowIndex].textObject.transform.parent);
+        //    notTouchPaner.transform.SetSiblingIndex(tutorialButtonList[currChatWindowIndex].textObject.transform.GetSiblingIndex());
+        //    Logger.Debug("NotTouch");
+        //}
         chatLine++;
 
         OnChatWindow(currChatWindowIndex);
-        Logger.Debug($"{currChatWindowIndex} / {chatLine} / {tutorialDialouges[textIndex].Count}");
-        if ((currChatWindowIndex >= 9 && currChatWindowIndex < 12) ||
-            (currChatWindowIndex >= 2 && currChatWindowIndex < 7))
+
+        if ((currChatWindowIndex >= 11 && currChatWindowIndex < 14) ||
+            (currChatWindowIndex >= 2 && currChatWindowIndex < 7) ||
+            (currChatWindowIndex >= 18 && currChatWindowIndex < 23) ||
+            currChatWindowIndex == 26)
             currChatWindowIndex++;
+    }
+
+    public void MoveNextChatWindow()
+    {
+        chatLine = 0;
+        textIndex++;
+        currChatWindowIndex++;
+        OffChatWindow();
+        OffAllTutorialButton();
+    }
+
+    public void OnNextChat()
+    {
+        MoveNextChatWindow();
+        OnNextChatLine();
     }
 
     public void OnClickSkip()
@@ -156,6 +217,10 @@ public class TutorialManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.S))
         {
             OnClickSkip();
+        }
+        if (Input.GetKeyDown(KeyCode.N))
+        {
+            OnNextChatLine();
         }
     }
 }

@@ -172,31 +172,30 @@ public class AttackableHero : AttackableUnit
     }
     public bool isTutorial;
 
-    Vector3[] tutorialPos = new Vector3[2];
+    private Transform[] tutorialPos = new Transform[2];
+    public void SetTutorialPos(Transform[] tutorialPos) => this.tutorialPos = tutorialPos;
     public bool tutorialActive;
 
 
     public void Test1()
     {
         Time.timeScale = 0;
-        tutorialPos[0] = transform.position;
-        tutorialPos[1] = transform.position + new Vector3(0, 0, 1);
-        characterData.activeSkill.targetPos = tutorialPos[0];
+        characterData.activeSkill.targetPos = tutorialPos[0].localPosition;
 
         heroUI.heroSkill.isTutorialPos = true;
         heroUI.heroSkill.tutorialPos = tutorialPos[0];
         characterData.activeSkill.isTutorial = true;
+        tutorialPos[0].gameObject.SetActive(true);
     }
     public void Test2()
     {
         Time.timeScale = 0;
-        tutorialPos[0] = transform.position;
-        tutorialPos[1] = transform.position + new Vector3(0, 0, 1);
-        characterData.activeSkill.targetPos = tutorialPos[1];
+        characterData.activeSkill.targetPos = tutorialPos[1].localPosition;
 
         heroUI.heroSkill.isTutorialPos = true;
         heroUI.heroSkill.tutorialPos = tutorialPos[1];
         characterData.activeSkill.isTutorial = true;
+        tutorialPos[1].gameObject.SetActive(true);
     }
 
     //test

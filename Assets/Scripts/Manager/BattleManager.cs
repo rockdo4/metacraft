@@ -98,6 +98,9 @@ public class BattleManager : MonoBehaviour
     public Button autoButton;
     public Button speedButton;
 
+    public TutorialManager tutorialManager;
+    public Transform[] tutorialSkillPos;
+
     private void Start()
     {
         // 밸런스 테스트용 임시 코드
@@ -108,6 +111,13 @@ public class BattleManager : MonoBehaviour
         StartNextStage(curEvent);
 
         sendOfficePopUp.checkButton.onClick.AddListener(() => { SetHeroesReady(); });
+
+        tutorialManager.TestIndex = 5;
+        if (gm.playerData.isTutorial)
+        {
+            TutorialManager.textIndex = 0;
+            TutorialManager.currChatWindowIndex = 0;
+        }
     }
 
     private void SetActiveUi(GameObject ui, bool set) => ui.SetActive(set);
@@ -706,10 +716,6 @@ public class BattleManager : MonoBehaviour
     }
     private void MissionClear()
     {
-        // 튜토리얼 테스트하기 위해서 주석처리
-        //if (gm.playerData.isTutorial)
-        //    gm.playerData.isTutorial = false;
-
         stageReward.gameObject.SetActive(true);
         UIManager.Instance.ShowView(1);
         clearUi.SetData(btMapTriggers[currTriggerIndex].isMissionEnd);
@@ -738,6 +744,13 @@ public class BattleManager : MonoBehaviour
     }
     public void ResetHeroes()
     {
+        if (gm.playerData.isTutorial)
+        {
+            TutorialManager.textIndex = 11;
+            TutorialManager.currChatWindowIndex = 17;
+            Logger.Debug($"{TutorialManager.textIndex} / {TutorialManager.currChatWindowIndex}");
+        }
+
         EffectManager.Instance.DisabledAllEffect();
 
         ResetThisHeroes(useHeroes);
@@ -804,6 +817,20 @@ public class BattleManager : MonoBehaviour
             }
             else if (!btMapTriggers[currTriggerIndex].isLastTrigger)
             {
+                Logger.Debug(currTriggerIndex);
+                if(gm.playerData.isTutorial)
+                {
+                    if (currTriggerIndex == 1)
+                    {
+                        tutorialManager.gameObject.SetActive(true);
+                        useHeroes[0].GetComponent<AttackableHero>().SetTutorialPos(tutorialSkillPos);
+                        useHeroes[0].GetComponent<AttackableHero>().Test1();
+                    }
+                    if(currTriggerIndex == btMapTriggers.Count -1)
+                    {
+                        useHeroes[0].GetComponent<AttackableHero>().Test2();
+                    }
+                }
                 for (int i = 0; i < useHeroes.Count; i++)
                 {
                     useHeroes[i].ChangeUnitState(UnitState.Battle);

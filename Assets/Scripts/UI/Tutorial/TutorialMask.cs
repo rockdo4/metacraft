@@ -11,30 +11,24 @@ public class TutorialMask : MonoBehaviour
     public RectTransform mask;
 
     public Button maskClickEvent;
-    private RectTransform maskClickEventRectTr;
+    public RectTransform maskClickEventRectTr;
 
-    private void Awake()
-    {
-        maskClickEventRectTr = maskClickEvent.GetComponent<RectTransform>();
-    }
+    public Button target;
 
     public void Setting(Button button)
     {
+        target = button;    
+        gameObject.SetActive(true);
+
+        ConnectEventToMask(button);
+        SetManskPosition(button);
         SetMaskSize(button.GetComponent<RectTransform>().sizeDelta*1.5f, true);
-        ConnectEventToMask(button);
-        SetManskPosition(button.GetComponent<RectTransform>().anchoredPosition);
-
-        gameObject.SetActive(true);
     }
-
-    public void Setting(Button button, Vector3 size)
+    public void AddEvent(Action action)
     {
-        SetMaskSize(size, true);
-        ConnectEventToMask(button);
-        SetManskPosition(button.GetComponent<RectTransform>().anchoredPosition);
-
-        gameObject.SetActive(true);
+        maskClickEvent.onClick.AddListener(() => action());
     }
+
     public void SetMaskSize(Vector3 size, bool isCircle)
     {
         if (isCircle)
@@ -48,18 +42,34 @@ public class TutorialMask : MonoBehaviour
     }
     public void ConnectEventToMask(Button btn)
     {
-        var rectTr = btn.GetComponent<RectTransform>();
+        var btnRectTr = btn.GetComponent<RectTransform>();
 
         maskClickEvent.onClick.RemoveAllListeners();
         maskClickEvent.onClick.AddListener(() => btn.onClick.Invoke());
-        maskClickEvent.onClick.AddListener(() => gameObject.SetActive(false));
-        maskClickEventRectTr.anchoredPosition = Vector3.zero;
-        maskClickEventRectTr.sizeDelta = rectTr.sizeDelta;
+        maskClickEvent.onClick.AddListener(SetActiveFalse);
+        maskClickEvent.GetComponent<RectTransform>().sizeDelta = btnRectTr.sizeDelta;
     }
 
-    public void SetManskPosition(Vector3 pos)
+    public void SetManskPosition(Button button)
     {
-        mask.localPosition = pos;
-        back.localPosition = -mask.localPosition;
+        var prevParent = transform.parent;
+        int prevParentIdx = transform.GetSiblingIndex();
+
+        transform.SetParent(button.transform);
+        mask.anchoredPosition = Vector3.zero;
+        transform.SetParent(prevParent);
+        transform.SetSiblingIndex(prevParentIdx);
+
+        back.anchoredPosition = -mask.anchoredPosition;
+    }
+
+    public void SetActiveFalse()
+    {
+        gameObject.SetActive(false);
+    }
+
+    private void Update()
+    {
+        SetManskPosition(target);
     }
 }
