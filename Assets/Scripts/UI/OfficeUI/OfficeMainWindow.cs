@@ -15,23 +15,33 @@ public class OfficeMainWindow : View
     public TextMeshProUGUI setPortraitText;
     public Image portrait;
     private List<GameObject> icons = new ();
+    private GameManager gm;
+
+    private void Awake()
+    {
+        if (gm == null)
+            gm = GameManager.Instance;
+    }
 
     private void OnEnable()
     {
+        if (gm == null)
+            gm = GameManager.Instance;
+
+        SetPortrait(gm.playerData.portraitKey);
         SetOfficeDatas();
         DestroyAllIcons();
         CreateIcons();
-        setPortraitText.text = GameManager.Instance.GetStringByTable("set_portrait_title");
+        setPortraitText.text = gm.GetStringByTable("set_portrait_title");
     }
 
     public void SetPortrait(string spriteKey)
     {
-        portrait.sprite = GameManager.Instance.GetSpriteByAddress(spriteKey);
+        portrait.sprite = gm.GetSpriteByAddress(spriteKey);
     }
 
     private void SetOfficeDatas()
     {
-        GameManager gm = GameManager.Instance;
         PlayerData pd = gm.playerData;
         playerName.text = pd.playerName;
         int curLevel = pd.officeLevel;
