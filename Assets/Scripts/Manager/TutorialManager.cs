@@ -56,12 +56,6 @@ public class TutorialManager : MonoBehaviour
 
     public void OnChatWindow(int index)
     {
-        //if (tutorialButtonList[index].chatWindow == tutorialButtonList[currChatWindowIndex])
-        //{
-        //    tutorialButtonList[index].OnOutline();
-        //    return;
-        //}
-
         OffAllTutorialButton();
         currChatWindowIndex = index;
         tutorialButtonList[index].OnWindow();
@@ -101,53 +95,37 @@ public class TutorialManager : MonoBehaviour
         var chat = tutorialDialouges[textIndex][chatLine];
         tutorialButtonList[currChatWindowIndex].SetText(chat);
 
-        int maskIdx = 0;
-        switch (currChatWindowIndex)
-        {
-            case 9 :
-                maskIdx = count - 1;
-                break;
-            case 13:
-                Logger.Debug(chatLine);
-                break;
-            default:
-                break;
-        }
-
         Logger.Debug("");
         Logger.Debug(textIndex);
         Logger.Debug(chatLine);
         Logger.Debug("");
         var findMask = buttonMasks.Find(t => ((t.tIdx == textIndex) && (t.cLine == chatLine)));
-        if (findMask != null)
-        {
-            if (findMask.eventButton != null)
-            {
-                tutorialMask.SetActiveFalse();
-                tutorialMask.Setting(findMask.eventButton);
-                tutorialMask.AddEvent(OnNextChatLine);
-            }
-            else if(findMask.eventParentTr != null)
-            {
-                tutorialMask.SetActiveFalse();
-                tutorialMask.Setting(findMask.eventParentTr.GetComponentsInChildren<Button>()[0]);
-                tutorialMask.AddEvent(OnNextChatLine);
-            }
-        }
-        else
-        {
-            notTouchPaner.SetActive(true);
-            notTouchPaner.transform.SetParent(tutorialButtonList[currChatWindowIndex].textObject.transform.parent);
-            notTouchPaner.transform.SetSiblingIndex(tutorialButtonList[currChatWindowIndex].textObject.transform.GetSiblingIndex());
-            Logger.Debug("NotTouch");
-        }
+        //if (findMask != null)
+        //{
+        //    if (findMask.eventButton != null)
+        //    {
+        //        tutorialMask.SetActiveFalse();
+        //        tutorialMask.Setting(findMask.eventButton);
+        //    }
+        //    else if(findMask.eventParentTr != null)
+        //    {
+        //        tutorialMask.SetActiveFalse();
+        //        tutorialMask.Setting(findMask.eventParentTr.GetComponentsInChildren<Button>()[0]);
+        //    }
+        //}
+        //else
+        //{
+        //    notTouchPaner.SetActive(true);
+        //    notTouchPaner.transform.SetParent(tutorialButtonList[currChatWindowIndex].textObject.transform.parent);
+        //    notTouchPaner.transform.SetSiblingIndex(tutorialButtonList[currChatWindowIndex].textObject.transform.GetSiblingIndex());
+        //    Logger.Debug("NotTouch");
+        //}
         chatLine++;
 
         OnChatWindow(currChatWindowIndex);
-    //    Logger.Debug($"{currChatWindowIndex} / {chatLine} / {tutorialDialouges[textIndex].Count}");
+
         if ((currChatWindowIndex >= 11 && currChatWindowIndex < 14) ||
             (currChatWindowIndex >= 2 && currChatWindowIndex < 7) ||
-            currChatWindowIndex == 8 ||
             (currChatWindowIndex >= 18 && currChatWindowIndex < 23) ||
             currChatWindowIndex == 26)
             currChatWindowIndex++;
