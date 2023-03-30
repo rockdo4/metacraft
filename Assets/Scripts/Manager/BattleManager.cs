@@ -98,8 +98,8 @@ public class BattleManager : MonoBehaviour
     public Button autoButton;
     public Button speedButton;
 
-    public TutorialManager tutorialManager;
-    public Transform[] tutorialSkillPos;
+    //public TutorialManager tutorialManager;
+    //public Transform[] tutorialSkillPos;
 
     private void Start()
     {
@@ -817,12 +817,12 @@ public class BattleManager : MonoBehaviour
             }
             else if (!btMapTriggers[currTriggerIndex].isLastTrigger)
             {
-                Logger.Debug(currTriggerIndex);
+                //Logger.Debug(currTriggerIndex);
                 //if(gm.playerData.isTutorial)
                 //{
                 //    if (currTriggerIndex == 1)
                 //    {
-                //        tutorialManager.gameObject.SetActive(true);
+                //        //tutorialManager.gameObject.SetActive(true);
                 //        useHeroes[0].GetComponent<AttackableHero>().SetTutorialPos(tutorialSkillPos);
                 //        useHeroes[0].GetComponent<AttackableHero>().Test1();
                 //    }
