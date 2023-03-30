@@ -11,7 +11,7 @@ public class SkillFieldWithDuraiontSector : SkillFieldWithDuration
     public int maxColliders = 32;
     private void Start()
     {
-        bool isTargetEnemy = targetType == SkillTargetType.Enemy;
+        bool isTargetEnemy = targetType.Equals(SkillTargetType.Enemy);
         int enemyLayerMask = 1 << LayerMask.NameToLayer("Enemy");
         int heroLayerMask = 1 << LayerMask.NameToLayer("Hero");
         layerMask = isTargetEnemy ? enemyLayerMask : heroLayerMask;
