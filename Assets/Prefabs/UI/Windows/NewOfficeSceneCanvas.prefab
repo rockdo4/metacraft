@@ -6488,7 +6488,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 2844240934826504801}
         m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
-        m_MethodName: OnNextChatLine
+        m_MethodName: OnNextChat
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -9024,7 +9024,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 2844240934826504801}
         m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
-        m_MethodName: OnNextChatLine
+        m_MethodName: OnNextChat
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -11328,7 +11328,27 @@ MonoBehaviour:
   - {fileID: 2844240934779216511}
   - {fileID: 2844240935700246270}
   - {fileID: 2844240936058263729}
-  buttonMasks: []
+  buttonMasks:
+  - tIdx: 0
+    cLine: 0
+    eventButton: {fileID: 2844240936340743633}
+    eventParentTr: {fileID: 0}
+  - tIdx: 1
+    cLine: 0
+    eventButton: {fileID: 0}
+    eventParentTr: {fileID: 2844240935905602695}
+  - tIdx: 2
+    cLine: 5
+    eventButton: {fileID: 2844240935956035527}
+    eventParentTr: {fileID: 0}
+  - tIdx: 3
+    cLine: 1
+    eventButton: {fileID: 2844240935560816235}
+    eventParentTr: {fileID: 0}
+  - tIdx: 4
+    cLine: 3
+    eventButton: {fileID: 2844240935284972592}
+    eventParentTr: {fileID: 0}
   btMgr: {fileID: 0}
   skipButton: {fileID: 0}
   tutorialMask: {fileID: 2844240935337626073}
@@ -25836,7 +25856,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 2844240934826504801}
         m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
-        m_MethodName: OnNextChatLine
+        m_MethodName: OnNextChat
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -27399,7 +27419,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 5}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -34279,7 +34299,7 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: -0.5930023, y: -16.964966}
   m_SizeDelta: {x: -38.653, y: 103.637}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -35096,7 +35116,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 2844240934826504801}
         m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
-        m_MethodName: OnNextChatLine
+        m_MethodName: OnNextChat
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -37540,7 +37560,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 2844240934826504801}
         m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
-        m_MethodName: OnNextChatLine
+        m_MethodName: OnNextChat
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -49060,7 +49080,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 2844240934826504801}
         m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
-        m_MethodName: OnNextChatLine
+        m_MethodName: OnNextChat
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -49930,7 +49950,6 @@ GameObject:
   - component: {fileID: 2844240935973363022}
   - component: {fileID: 2844240935973363023}
   - component: {fileID: 2844240935973363377}
-  - component: {fileID: 2844240935973363020}
   m_Layer: 5
   m_Name: Event
   m_TagString: Untagged
@@ -50040,35 +50059,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2844240935973363020
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2844240935973363018}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0b148fe25e99eb48b9724523833bab1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Delegates:
-  - eventID: 2
-    callback:
-      m_PersistentCalls:
-        m_Calls:
-        - m_Target: {fileID: 2844240935337626073}
-          m_TargetAssemblyTypeName: TutorialMask, Assembly-CSharp
-          m_MethodName: SetActiveFalse
-          m_Mode: 1
-          m_Arguments:
-            m_ObjectArgument: {fileID: 0}
-            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-            m_IntArgument: 0
-            m_FloatArgument: 0
-            m_StringArgument: 
-            m_BoolArgument: 0
-          m_CallState: 2
 --- !u!1 &2844240935977708134
 GameObject:
   m_ObjectHideFlags: 0
@@ -57778,7 +57768,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 2844240934826504801}
         m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
-        m_MethodName: OnNextChatLine
+        m_MethodName: OnNextChat
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -58989,7 +58979,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 2844240934826504801}
         m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
-        m_MethodName: OnNextChatLine
+        m_MethodName: OnNextChat
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -60260,7 +60250,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 2844240934826504801}
         m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
-        m_MethodName: OnNextChatLine
+        m_MethodName: OnNextChat
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -65314,7 +65304,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 2844240934826504801}
         m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
-        m_MethodName: OnNextChatLine
+        m_MethodName: OnNextChat
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -69602,7 +69592,7 @@ MonoBehaviour:
         m_CallState: 2
       - m_Target: {fileID: 2844240934826504801}
         m_TargetAssemblyTypeName: TutorialManager, Assembly-CSharp
-        m_MethodName: OnNextChatLine
+        m_MethodName: OnNextChat
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
