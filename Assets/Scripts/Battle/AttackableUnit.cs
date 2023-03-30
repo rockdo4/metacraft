@@ -132,7 +132,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public Transform effectCreateTransform;
     public Transform hitEffectTransform;
-    public Transform audioSourcesHolder;
+    public bool useAudio = false;
 
     protected virtual void Awake()
     {
@@ -226,15 +226,17 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected void SetAudioSources()
     {
-        if (audioSourcesHolder.Equals(null))
+        if (!useAudio)
             return;
+
+        var audioSourcesHolder = AudioManager.Instance.GetAudioResourcesHolder(name);        
 
         for (int i = 0; i < characterData.attacks.Length; i++)
         {
             var skill = characterData.attacks[i];
 
             if (!skill.normalAttackSound.Equals(null))
-                skill.normalAttackSound = Instantiate(skill.normalAttackSound, audioSourcesHolder);
+                skill.normalAttackSound = Instantiate(skill.normalAttackSound, audioSourcesHolder.transform);
 
             for (int j = 0; j < skill.normalAttackHitSounds.Length; j++)
             {
@@ -276,8 +278,8 @@ public abstract class AttackableUnit : MonoBehaviour
         characterData.activeSkill.OnActiveSkill(this, enemyList, heroList);
     }
     public virtual void PlayNormalAttackSound()
-    {
-        nowAttack.normalAttackSound?.Play();
+    {        
+        nowAttack.normalAttackSound?.Play();        
     }
     public virtual void PlayActiveSkillSound()
     {

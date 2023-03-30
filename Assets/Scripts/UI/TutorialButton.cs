@@ -1,6 +1,5 @@
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TutorialButton : MonoBehaviour
 {
@@ -17,7 +16,8 @@ public class TutorialButton : MonoBehaviour
     }
     public void OnWindow()
     {
-        chatWindow.SetActive(true);
+        if (chatWindow != null)
+            chatWindow.SetActive(true);
     }
     public void OnOutline()
     {
@@ -28,7 +28,8 @@ public class TutorialButton : MonoBehaviour
     }
     public void OffWindow()
     {
-        chatWindow.SetActive(false);
+        if (chatWindow != null)
+            chatWindow.SetActive(false);
     }
     public void OffOutline()
     {

@@ -26,10 +26,13 @@ public class CharacterDataBundle : MonoBehaviour, IComparable<CharacterDataBundl
             passiveSkill = Instantiate(passiveSkill);
 
 
-        for (int i = 0; i < activeSkill.buffInfos.Count; i++)
+        if (activeSkill != null)
         {
-            activeSkill.buffInfos[i].buffLevel = activeSkill.skillLevel;
-            activeSkill.buffInfos[i].addBuffState = activeSkill.addBuffState[i];
+            for (int i = 0; i < activeSkill.buffInfos.Count; i++)
+            {
+                activeSkill.buffInfos[i].buffLevel = activeSkill.skillLevel;
+                activeSkill.buffInfos[i].addBuffState = activeSkill.addBuffState[i];
+            }
         }
 
         foreach (var attack in attacks)
@@ -41,10 +44,13 @@ public class CharacterDataBundle : MonoBehaviour, IComparable<CharacterDataBundl
             }
         }
 
-        for (int i = 0; i < passiveSkill.buffInfos.Count; i++)
+        if (passiveSkill != null)
         {
-            passiveSkill.buffInfos[i].buffLevel = passiveSkill.skillLevel;
-            passiveSkill.buffInfos[i].addBuffState = passiveSkill.addBuffState[i];
+            for (int i = 0; i < passiveSkill.buffInfos.Count; i++)
+            {
+                passiveSkill.buffInfos[i].buffLevel = passiveSkill.skillLevel;
+                passiveSkill.buffInfos[i].addBuffState = passiveSkill.addBuffState[i];
+            }
         }
     }
 
