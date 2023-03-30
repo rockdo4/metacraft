@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657874, g: 0.49641275, b: 0.5748172, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -284,6 +284,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tutorialButtonList:
   - {fileID: 1266438334}
+  buttonMasks: []
   btMgr: {fileID: 911248487}
   skipButton: {fileID: 0}
   tutorialMask: {fileID: 966284175}
@@ -299,6 +300,7 @@ MonoBehaviour:
   - inven
   - gatcha
   - promo
+  notTouchPaner: {fileID: 0}
 --- !u!4 &124932417
 Transform:
   m_ObjectHideFlags: 0
@@ -1225,11 +1227,61 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1875392853582858018, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875392853643544490, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875392853643544490, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875392853964280741, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875392853964280741, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875392854145163177, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 624.84
+      objectReference: {fileID: 0}
     - target: {fileID: 1875392854256195903, guid: 60031cb1182094245a60912d595fa24f,
         type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 911248487}
+    - target: {fileID: 1875392854256195904, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875392854515481115, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875392854515481115, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1875392854515481115, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2148160403856294487, guid: 60031cb1182094245a60912d595fa24f,
         type: 3}
       propertyPath: m_AnchorMax.y
