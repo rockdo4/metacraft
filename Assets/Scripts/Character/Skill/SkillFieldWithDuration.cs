@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class SkillFieldWithDuration : MonoBehaviour
@@ -99,19 +100,25 @@ public class SkillFieldWithDuration : MonoBehaviour
         if (Time.time - lastHitTime < hitInterval)
             return;
 
-        lastHitTime = Time.time;        
-
-        foreach (Collider collider in colliders)
+        lastHitTime = Time.time;    
+  
+        for(int i = colliders.Count - 1; i >= 0; --i)
         {
-            if (collider != null && collider.gameObject.activeSelf)
+            var value = colliders.ElementAt(i);
+
+            if(value.Equals(null) || !value.gameObject.activeSelf)
             {
-                var attackable = collider.GetComponent<AttackableUnit>();
-                if(attackable.GetUnitState() == UnitState.Battle)
+                colliders.Remove(value);
+            }
+            else
+            {
+                var attackable = value.GetComponent<AttackableUnit>();
+                if (attackable.GetUnitState() == UnitState.Battle)
                     attackable.OnDamage(attackableUnit, skill);
             }
         }
-
-        if(colliders.Count > 0)
+        
+        if (colliders.Count > 0 && activeSkillAttackHitSounds.Length > 0)
             activeSkillAttackHitSounds[Random.Range(0, activeSkillAttackHitSounds.Length)].Play();
     }
     public virtual void SetScale(float x, float y, float z = 1f)
