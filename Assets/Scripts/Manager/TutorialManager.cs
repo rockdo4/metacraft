@@ -104,6 +104,8 @@ public class TutorialManager : MonoBehaviour
             }
             //OffChatWindow();
             //OffAllTutorialButton();
+            if((textIndex == 6 )&& (chatLine == 5))
+                OnNextChat();
             return;
         }
 
