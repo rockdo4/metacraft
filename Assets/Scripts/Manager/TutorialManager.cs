@@ -46,12 +46,23 @@ public class TutorialManager : MonoBehaviour
         //currChatWindowIndex = 17;
 
         gm = GameManager.Instance;
+        if (!gm.playerData.isTutorial)
+        {
+            int count = tutorialButtonList.Count;
+            for (int i = 0; i < count; i++)
+            {
+                if (tutorialButtonList[i].chatWindow != null)
+                    Destroy(tutorialButtonList[i].chatWindow);
+            }
+
+            Destroy(tutorialMask);
+            Destroy(notTouchPaner);
+            return;
+        }
+
         ParseEventTable();
         OffAllTutorialButton();
-        if (GameManager.Instance.playerData.isTutorial)
-        {
-            OnNextChatLine();
-        }
+        OnNextChatLine();
     }
 
     public void OnChatWindow(int index)
@@ -75,6 +86,10 @@ public class TutorialManager : MonoBehaviour
         if (btMgr != null)
             Time.timeScale = 0;
 
+        Logger.Debug("");
+        Logger.Debug(textIndex);
+        Logger.Debug(chatLine);
+        Logger.Debug("");
         notTouchPaner.SetActive(false);
         int count = tutorialDialouges[textIndex].Count;
         if (chatLine >= count)
@@ -89,37 +104,36 @@ public class TutorialManager : MonoBehaviour
             }
             //OffChatWindow();
             //OffAllTutorialButton();
+            if((textIndex == 6 )&& (chatLine == 5))
+                OnNextChat();
             return;
         }
 
         var chat = tutorialDialouges[textIndex][chatLine];
         tutorialButtonList[currChatWindowIndex].SetText(chat);
 
-        Logger.Debug("");
-        Logger.Debug(textIndex);
-        Logger.Debug(chatLine);
-        Logger.Debug("");
         var findMask = buttonMasks.Find(t => ((t.tIdx == textIndex) && (t.cLine == chatLine)));
-        //if (findMask != null)
-        //{
-        //    if (findMask.eventButton != null)
-        //    {
-        //        tutorialMask.SetActiveFalse();
-        //        tutorialMask.Setting(findMask.eventButton);
-        //    }
-        //    else if(findMask.eventParentTr != null)
-        //    {
-        //        tutorialMask.SetActiveFalse();
-        //        tutorialMask.Setting(findMask.eventParentTr.GetComponentsInChildren<Button>()[0]);
-        //    }
-        //}
-        //else
-        //{
-        //    notTouchPaner.SetActive(true);
-        //    notTouchPaner.transform.SetParent(tutorialButtonList[currChatWindowIndex].textObject.transform.parent);
-        //    notTouchPaner.transform.SetSiblingIndex(tutorialButtonList[currChatWindowIndex].textObject.transform.GetSiblingIndex());
-        //    Logger.Debug("NotTouch");
-        //}
+        if (findMask != null)
+        {
+            if (findMask.eventButton != null)
+            {
+                tutorialMask.SetActiveFalse();
+                tutorialMask.Setting(findMask.eventButton);
+            }
+            else if (findMask.eventParentTr != null)
+            {
+                tutorialMask.SetActiveFalse();
+                tutorialMask.Setting(findMask.eventParentTr.GetComponentsInChildren<Button>()[0]);
+            }
+        }
+        else
+        {
+            tutorialMask.gameObject.SetActive(false);
+            notTouchPaner.SetActive(true);
+            notTouchPaner.transform.SetParent(tutorialButtonList[currChatWindowIndex].textObject.transform.parent);
+            notTouchPaner.transform.SetSiblingIndex(tutorialButtonList[currChatWindowIndex].textObject.transform.GetSiblingIndex());
+            Logger.Debug("NotTouch");
+        }
         chatLine++;
 
         OnChatWindow(currChatWindowIndex);
@@ -142,6 +156,9 @@ public class TutorialManager : MonoBehaviour
 
     public void OnNextChat()
     {
+        if (gm.playerData.isTutorial)
+            return;
+
         MoveNextChatWindow();
         OnNextChatLine();
     }

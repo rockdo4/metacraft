@@ -22,7 +22,7 @@ public class RecruitmentClick : MonoBehaviour
                         if (GameManager.Instance.playerData.isTutorial)
                         {
                             var tutoMgr = FindAnyObjectByType<TutorialManager>();
-                            tutoMgr.OnNextChatLine();
+                            tutoMgr.OnNextChat();
                         }
                     }
                 }

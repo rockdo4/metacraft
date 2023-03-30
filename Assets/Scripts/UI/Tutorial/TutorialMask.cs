@@ -46,7 +46,6 @@ public class TutorialMask : MonoBehaviour
 
         maskClickEvent.onClick.RemoveAllListeners();
         maskClickEvent.onClick.AddListener(() => btn.onClick.Invoke());
-        maskClickEvent.onClick.AddListener(SetActiveFalse);
         maskClickEvent.GetComponent<RectTransform>().sizeDelta = btnRectTr.sizeDelta;
     }
 
