@@ -4,15 +4,15 @@ using UnityEngine;
 public class TypeColor : ScriptableObject
 {
     [SerializeField]
-    private Color assultColor;
+    private Color assultColor = Color.green;
     [SerializeField]
-    private Color defenceColor;
+    private Color defenceColor = new Color32(143, 0, 254, 255);
     [SerializeField]
-    private Color shooterColor;
+    private Color shooterColor = Color.red;
     [SerializeField]
-    private Color assassinColor;
+    private Color assassinColor = Color.gray;
     [SerializeField]
-    private Color assistColor;
+    private Color assistColor = Color.cyan;
     public Color GetTypeColor(CharacterJob job)
     {
         switch (job)
