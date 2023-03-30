@@ -97,8 +97,6 @@ public class CharacterSkill : ScriptableObject
         
         EffectManager.Instance.Get(activeEffect, skillHolderTransform ?? actorTransform, actorTransform.rotation);
 
-        Logger.Debug(normalAttackHitSounds.Length);
-
         if(normalAttackHitSounds.Length > 0)
             normalAttackHitSounds[Random.Range(0, normalAttackHitSounds.Length)].Play();
     }
