@@ -24,12 +24,12 @@ public class HeroInfoButton : MonoBehaviour
     public virtual void OnClick()
     {
         GameManager.Instance.currentSelectObject = bundle.gameObject;
-        if (GameManager.Instance.playerData.isTutorial)
-        {
-            var tutoMgr = FindObjectOfType<TutorialManager>();
+        //if (GameManager.Instance.playerData.isTutorial)
+        //{
+        //    var tutoMgr = FindObjectOfType<TutorialManager>();
 
-            if (tutoMgr != null)
-                tutoMgr.OnNextChat();
-        }
+        //    //if (tutoMgr != null)
+        //    //    tutoMgr.OnNextChat();
+        //}
     }
 }

@@ -112,12 +112,12 @@ public class BattleManager : MonoBehaviour
 
         sendOfficePopUp.checkButton.onClick.AddListener(() => { SetHeroesReady(); });
 
-        tutorialManager.TestIndex = 5;
-        if (gm.playerData.isTutorial)
-        {
-            TutorialManager.textIndex = 0;
-            TutorialManager.currChatWindowIndex = 0;
-        }
+        //tutorialManager.TestIndex = 5;
+        //if (gm.playerData.isTutorial)
+        //{
+        //    TutorialManager.textIndex = 0;
+        //    TutorialManager.currChatWindowIndex = 0;
+        //}
     }
 
     private void SetActiveUi(GameObject ui, bool set) => ui.SetActive(set);
@@ -501,17 +501,17 @@ public class BattleManager : MonoBehaviour
         gm = GameManager.Instance;
         if (tree.CurNode == null)
         {
-            if (gm.playerData.isTutorial)
-            {
-                tree.CreateTreeGraph();
-                //autoButton.interactable = false;
-                //speedButton.interactable = false;
-            }
-            else
-            {
+            //if (gm.playerData.isTutorial)
+            //{
+            //    tree.CreateTreeGraph();
+            //    //autoButton.interactable = false;
+            //    //speedButton.interactable = false;
+            //}
+            //else
+            //{
                 int difficulty = (int)gm.currentSelectMission["Difficulty"];
                 tree.CreateTreeGraph(difficulty);
-            }
+            //}
         }
 
         for (int i = 0; i < choiceButtons.Count; i++)
@@ -744,12 +744,12 @@ public class BattleManager : MonoBehaviour
     }
     public void ResetHeroes()
     {
-        if (gm.playerData.isTutorial)
-        {
-            TutorialManager.textIndex = 11;
-            TutorialManager.currChatWindowIndex = 17;
-            Logger.Debug($"{TutorialManager.textIndex} / {TutorialManager.currChatWindowIndex}");
-        }
+        //if (gm.playerData.isTutorial)
+        //{
+        //    TutorialManager.textIndex = 11;
+        //    TutorialManager.currChatWindowIndex = 17;
+        //    Logger.Debug($"{TutorialManager.textIndex} / {TutorialManager.currChatWindowIndex}");
+        //}
 
         EffectManager.Instance.DisabledAllEffect();
 
@@ -818,19 +818,19 @@ public class BattleManager : MonoBehaviour
             else if (!btMapTriggers[currTriggerIndex].isLastTrigger)
             {
                 Logger.Debug(currTriggerIndex);
-                if(gm.playerData.isTutorial)
-                {
-                    if (currTriggerIndex == 1)
-                    {
-                        tutorialManager.gameObject.SetActive(true);
-                        useHeroes[0].GetComponent<AttackableHero>().SetTutorialPos(tutorialSkillPos);
-                        useHeroes[0].GetComponent<AttackableHero>().Test1();
-                    }
-                    if(currTriggerIndex == btMapTriggers.Count -1)
-                    {
-                        useHeroes[0].GetComponent<AttackableHero>().Test2();
-                    }
-                }
+                //if(gm.playerData.isTutorial)
+                //{
+                //    if (currTriggerIndex == 1)
+                //    {
+                //        tutorialManager.gameObject.SetActive(true);
+                //        useHeroes[0].GetComponent<AttackableHero>().SetTutorialPos(tutorialSkillPos);
+                //        useHeroes[0].GetComponent<AttackableHero>().Test1();
+                //    }
+                //    if(currTriggerIndex == btMapTriggers.Count -1)
+                //    {
+                //        useHeroes[0].GetComponent<AttackableHero>().Test2();
+                //    }
+                //}
                 for (int i = 0; i < useHeroes.Count; i++)
                 {
                     useHeroes[i].ChangeUnitState(UnitState.Battle);
@@ -1035,16 +1035,16 @@ public class BattleManager : MonoBehaviour
 
         if (tree.CurNode.type == TreeNodeTypes.Event)
         {
-            if (gm.playerData.isTutorial)
-            {
-                // 길막! 이벤트
-                StartNextStage(MapEventEnum.Roadblock);
-            }
-            else
-            {
+            //if (gm.playerData.isTutorial)
+            //{
+            //    // 길막! 이벤트
+            //    StartNextStage(MapEventEnum.Roadblock);
+            //}
+            //else
+            //{
                 var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
                 StartNextStage((MapEventEnum)randomEvent);
-            }
+            //}
             return true;
         }
         else if (tree.CurNode.type == TreeNodeTypes.Supply)

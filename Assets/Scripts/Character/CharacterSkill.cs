@@ -43,7 +43,7 @@ public class CharacterSkill : ScriptableObject
 
     public bool isCriticalPossible;
     public bool isAuto;
-    public bool isTutorial;
+   // public bool isTutorial;
     public virtual bool IsAutoStart { get; }
     public Vector3 targetPos;
     public string skillDescription;
