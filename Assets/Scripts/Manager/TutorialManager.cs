@@ -79,16 +79,16 @@ public class TutorialManager : MonoBehaviour
         int count = tutorialDialouges[textIndex].Count;
         if (chatLine >= count)
         {
-            chatLine = 0;
-            textIndex++;
-            currChatWindowIndex++;
+            //chatLine = 0;
+            //textIndex++;
+            //currChatWindowIndex++;
             if (currChatWindowIndex == 28)
             {
                 Logger.Debug("Tutorial Clear");
                 //gm.playerData.isTutorial = false;
             }
-            OffChatWindow();
-            OffAllTutorialButton();
+            //OffChatWindow();
+            //OffAllTutorialButton();
             return;
         }
 

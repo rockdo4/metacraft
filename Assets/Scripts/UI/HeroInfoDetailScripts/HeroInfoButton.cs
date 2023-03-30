@@ -29,9 +29,7 @@ public class HeroInfoButton : MonoBehaviour
             var tutoMgr = FindObjectOfType<TutorialManager>();
 
             if (tutoMgr != null)
-                tutoMgr.OnNextChatLine();
-            else
-                Logger.Debug("Null");
+                tutoMgr.OnNextChat();
         }
     }
 }
