@@ -46,12 +46,23 @@ public class TutorialManager : MonoBehaviour
         //currChatWindowIndex = 17;
 
         gm = GameManager.Instance;
+        if (!gm.playerData.isTutorial)
+        {
+            int count = tutorialButtonList.Count;
+            for (int i = 0; i < count; i++)
+            {
+                if (tutorialButtonList[i].chatWindow != null)
+                    Destroy(tutorialButtonList[i].chatWindow);
+            }
+
+            Destroy(tutorialMask);
+            Destroy(notTouchPaner);
+            return;
+        }
+
         ParseEventTable();
         OffAllTutorialButton();
-        if (GameManager.Instance.playerData.isTutorial)
-        {
-            OnNextChatLine();
-        }
+        OnNextChatLine();
     }
 
     public void OnChatWindow(int index)
@@ -143,6 +154,9 @@ public class TutorialManager : MonoBehaviour
 
     public void OnNextChat()
     {
+        if (gm.playerData.isTutorial)
+            return;
+
         MoveNextChatWindow();
         OnNextChatLine();
     }
