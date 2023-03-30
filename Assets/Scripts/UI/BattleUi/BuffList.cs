@@ -37,7 +37,6 @@ public class BuffList : MonoBehaviour
         popUpBuff.iconImage.sprite = sprite;
 
         viewBuff.buffType = type;
-        //viewBuff.duration = duration;
 
         viewBuff.popUpBuff = popUpBuff;
         uiBuffList.Add(viewBuff); 

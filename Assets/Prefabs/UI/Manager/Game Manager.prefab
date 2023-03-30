@@ -12,12 +12,12 @@ GameObject:
   - component: {fileID: 1236649398177242248}
   - component: {fileID: 2032998947856177395}
   m_Layer: 5
-  m_Name: Text (TMP)
+  m_Name: LoadingText
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2881213376686333534
 RectTransform:
   m_ObjectHideFlags: 0
@@ -189,13 +189,6 @@ MonoBehaviour:
     gold: 0
     officeLevel: 1
     officeExperience: 0
-    missionDifficulty: 0
-    isTrainingOpen: 0
-    isDispatchOpen: 0
-    trainingLevel: 0
-    dispatchLevel: 0
-    stamina: 0
-    inventoryCount: 5
     officeImage: Container
     battleSpeed: 1
     isAuto: 0
@@ -218,6 +211,7 @@ MonoBehaviour:
   - {fileID: 8036657308341320703, guid: d1263b6e804cfce4993e511a74eedbef, type: 3}
   fadeEffect: {fileID: 6709655152531558333}
   loadText: {fileID: 2032998947856177395}
+  sceneLoadFadeDuration: 3
   currMapColor: {r: 1, g: 1, b: 1, a: 1}
   mapLigthColors:
   - {r: 0.99607843, g: 0.99607843, b: 0.99607843, a: 1}
@@ -235,12 +229,12 @@ GameObject:
   - component: {fileID: 7912088554668892556}
   - component: {fileID: 6709655152531558333}
   m_Layer: 5
-  m_Name: Image
+  m_Name: FadeEffectImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1748001256906438881
 RectTransform:
   m_ObjectHideFlags: 0
@@ -259,7 +253,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_SizeDelta: {x: 50, y: 50}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &7912088554668892556
 CanvasRenderer:

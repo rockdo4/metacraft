@@ -119,7 +119,7 @@ public class ActiveSkillAOE : CharacterSkill
             else
                 WhenTrackTarget(hit);
         }
-        else if(isAuto)
+        else if (isAuto)
         {
             var nowHit = new RaycastHit();
             nowHit.point = targetPos;
@@ -169,6 +169,7 @@ public class ActiveSkillAOE : CharacterSkill
     private void IndicatorPosTrackEnemy(RaycastHit hit)
     {
         var target = isAuto ? targetPos : hit.point;
+
 
         maxColliders = Physics.OverlapSphereNonAlloc(actorTransform.position, castRangeLimit, colliders, targetMaskWhenManualSkill);
         
@@ -236,6 +237,8 @@ public class ActiveSkillAOE : CharacterSkill
 
     public override void OnActiveSkill(AttackableUnit attackableUnit, List<AttackableUnit> enemies, List<AttackableUnit> heros)
     {
+        if (isTutorial)
+            indicatorTransform.position = targetPos;
         base.OnActiveSkill(attackableUnit,enemies, heros);
 
         if (hasDuration)
@@ -271,6 +274,8 @@ public class ActiveSkillAOE : CharacterSkill
     }
     public void ReadyEffectUntillOnActiveSkill()
     {
+        if (isTutorial)
+            indicatorTransform.position = targetPos;
         EffectManager.Instance.Get(readyEffect, indicatorTransform);
         skillAreaIndicator.Renderer.enabled = false;
         castRangeIndicator.SetActive(false);

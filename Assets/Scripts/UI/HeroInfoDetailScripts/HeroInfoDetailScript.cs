@@ -57,11 +57,11 @@ public class HeroInfoDetailScript : View
         expBar.value = data.exp;
         expBar.GetComponentInChildren<TextMeshProUGUI>().text = $"EXP {expBar.value:0} / {expBar.maxValue:0}";
 
-        //skillIcons[0].sprite = 
+        skillIcons[0].sprite = gm.GetSpriteByAddress($"{cdb.attacks[0].skillIcon}");
         skillInfo[0].text = $"{gm.GetStringByTable(cdb.attacks[0].skillName)}\n{gm.GetStringByTable(cdb.attacks[0].skillDescription)}";
-        //skillIcons[1].sprite = 
+        skillIcons[1].sprite = gm.GetSpriteByAddress($"{cdb.passiveSkill.skillIcon}");
         skillInfo[1].text = $"{gm.GetStringByTable(cdb.passiveSkill.skillName)}\n{gm.GetStringByTable(cdb.passiveSkill.skillDescription)}";
-        //skillIcons[2].sprite = 
+        skillIcons[2].sprite = gm.GetSpriteByAddress($"{cdb.activeSkill.skillIcon}");
         skillInfo[2].text = $"{gm.GetStringByTable(cdb.activeSkill.skillName)}\n{gm.GetStringByTable(cdb.activeSkill.skillDescription)}";
     }
 }

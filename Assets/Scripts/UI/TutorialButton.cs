@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 
@@ -5,15 +6,11 @@ public class TutorialButton : MonoBehaviour
 {
     public GameObject outline;
     public GameObject chatWindow;
-    private TextMeshProUGUI textObject;
+    public TextMeshProUGUI textObject;
 
     public void SetText(string txt)
     {
         textObject.text = txt;
-    }
-    public void SetOutline()
-    {
-        // ?
     }
     public void OnWindow()
     {
@@ -21,7 +18,8 @@ public class TutorialButton : MonoBehaviour
     }
     public void OnOutline()
     {
-        outline.SetActive(true);
+        if (outline != null)
+            outline.SetActive(true);
     }
     public void OffWindow()
     {
@@ -29,6 +27,7 @@ public class TutorialButton : MonoBehaviour
     }
     public void OffOutline()
     {
-        outline.SetActive(false);
+        if (outline != null)
+            outline.SetActive(false);
     }
 }
