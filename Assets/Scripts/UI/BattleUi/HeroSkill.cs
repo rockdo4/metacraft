@@ -16,7 +16,7 @@ public class HeroSkill : MonoBehaviour
 
     public bool isAuto;
     public bool isTutorialPos;
-    public Vector3 tutorialPos;
+    public Transform tutorialPos;
 
     private bool isPointerInSkillActivePanel;
     private float CoolDownFill {
@@ -80,14 +80,16 @@ public class HeroSkill : MonoBehaviour
             SetActiveSkillGUIs(true);
             isPointerInSkillActivePanel = false;
 
-            Time.timeScale = 0.25f;
+            if(!isTutorialPos)
+                Time.timeScale = 0.25f;
         }
     }
     public void CancleSkill()
     {
         cancle();
         SetActiveSkillGUIs(false);
-        Time.timeScale = BattleSpeed.Instance.GetSpeed;
+        if (!isTutorialPos)
+            Time.timeScale = BattleSpeed.Instance.GetSpeed;
     }
 
 
@@ -97,7 +99,7 @@ public class HeroSkill : MonoBehaviour
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             Physics.Raycast(ray, out RaycastHit hit, 100.0f, LayerMask.GetMask("Floor"));
-            if (Vector3.Distance(tutorialPos, hit.point) > 3f)
+            if (Vector3.Distance(tutorialPos.localPosition, hit.point) > 3f)
             {
                 CancleSkill();
                 return;
@@ -117,7 +119,15 @@ public class HeroSkill : MonoBehaviour
         Time.timeScale = BattleSpeed.Instance.GetSpeed;
         CoolDownFill = 1;
         coolDownTimer = coolDown;
-        isTutorialPos  = false;
+        if (isTutorialPos)
+        {
+            if (tutorialPos != null)
+            {
+                tutorialPos.gameObject.SetActive(false);
+                tutorialPos = null;
+            }
+            isTutorialPos = false;
+        }
     }
     public IEnumerator OnAutoSkillActive(CharacterSkill skill)
     {

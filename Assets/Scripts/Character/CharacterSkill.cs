@@ -74,7 +74,7 @@ public class CharacterSkill : ScriptableObject
     //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)									
     public virtual int CreateDamageResult(LiveData data, BufferState status)
     {
-        var currCoefficient = coefficient + skillLevel * addCoefficient;
+        var currCoefficient = coefficient + (skillLevel-1) * addCoefficient;
 
         switch (coefficientType)
         {
