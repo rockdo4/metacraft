@@ -14,5 +14,6 @@ public class PlayerPortrait : MonoBehaviour
     public void SetPortraitImage(Image refImage, string iconKey)
     {
         refImage.sprite = GameManager.Instance.GetSpriteByAddress(iconKey);
+        GameManager.Instance.playerData.portraitKey = iconKey;
     }
 }
