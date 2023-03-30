@@ -6,7 +6,6 @@ public class BattleUi : View
     public StageEnemy stageEnemy;
     public BattleMenu battleMenu;
     public Transform popUp;
-    //private bool mapFlag = false;
 
     public void SetEnemyCount(int c) => stageEnemy.Count = c;
 
@@ -25,6 +24,5 @@ public class BattleUi : View
     public void ResetGame()
     {
         GameManager.Instance.ClearBattleGroups();
-        //mapFlag = false;
     }
 }

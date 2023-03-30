@@ -132,14 +132,17 @@ public abstract class AttackableUnit : MonoBehaviour
 
     public Transform effectCreateTransform;
     public Transform hitEffectTransform;
+    public Transform audioSourcesHolder;
 
-    private void Awake()
+    protected virtual void Awake()
     {
         if (effectCreateTransform.Equals(null))
             effectCreateTransform = transform;
 
         if (hitEffectTransform.Equals(null))
             hitEffectTransform = transform;
+
+        SetAudioSources();
     }
     private void Start()
     {
@@ -221,14 +224,35 @@ public abstract class AttackableUnit : MonoBehaviour
         data.currentHp = data.healthPoint;
     }
 
-    //public void LevelUpMultiplication(float multipleDamage, float multipleDefense, float multipleHealthPoint)
-    //{
-    //    LiveData data = GetUnitData().data;
-    //    LevelUpAdditional(
-    //        (int)(data.baseDamage * multipleDamage),
-    //        (int)(data.baseDefense * multipleDefense),
-    //        (int)(data.healthPoint * multipleHealthPoint));
-    //}
+    protected void SetAudioSources()
+    {
+        if (audioSourcesHolder.Equals(null))
+            return;
+
+        for (int i = 0; i < characterData.attacks.Length; i++)
+        {
+            var skill = characterData.attacks[i];
+
+            if (!skill.normalAttackSound.Equals(null))
+                skill.normalAttackSound = Instantiate(skill.normalAttackSound, audioSourcesHolder);
+
+            for (int j = 0; j < skill.normalAttackHitSounds.Length; j++)
+            {
+                if (!skill.normalAttackHitSounds[j].Equals(null))
+                    skill.normalAttackHitSounds[j] = Instantiate(skill.normalAttackHitSounds[j], audioSourcesHolder);
+            }
+        }
+
+        var activeSkill = characterData.activeSkill;
+        if(!activeSkill.activeSkillAttackSound.Equals(null))
+            activeSkill.activeSkillAttackSound = Instantiate(activeSkill.activeSkillAttackSound, audioSourcesHolder);
+
+        for (int i = 0; i < activeSkill.activeSkillAttackHitSounds.Length; i++)
+        {
+            if (!activeSkill.activeSkillAttackHitSounds[i].Equals(null))
+                activeSkill.activeSkillAttackHitSounds[i] = Instantiate(activeSkill.activeSkillAttackHitSounds[i], audioSourcesHolder);
+        }
+    } 
 
     protected void Update()
     {
@@ -250,17 +274,14 @@ public abstract class AttackableUnit : MonoBehaviour
     public virtual void OnActiveSkill()
     {
         characterData.activeSkill.OnActiveSkill(this, enemyList, heroList);
-
-        //var units = characterData.activeSkill.SkillEffectedUnits;
-        //for (int i = 0; i < units.Count; i++)
-        //{
-        //    foreach (var buff in attackkbuffs)
-        //    {
-        //        bool isCritical = false;
-        //        var value = CalculDamage(characterData.activeSkill, ref isCritical);
-        //        units[i].AddValueBuff(buff, value, null);          
-        //    }
-        //}
+    }
+    public virtual void PlayNormalAttackSound()
+    {
+        nowAttack.normalAttackSound?.Play();
+    }
+    public virtual void PlayActiveSkillSound()
+    {
+        characterData.activeSkill.activeSkillAttackSound?.Play();
     }
 
     public virtual void NormalAttackOnDamage()
@@ -303,24 +324,6 @@ public abstract class AttackableUnit : MonoBehaviour
                 attackTargetList[i].OnDamage(this, nowAttack);
             }
         }
-
-        //if (nowAttack.searchType == SkillSearchType.Healer)
-        //{
-        //    BuffInfo heal = null;
-        //    foreach (var buff in nowAttack.buffInfos)
-        //    {
-        //        if (buff[nowAttack.skillLevel - 1].type == BuffType.Heal)
-        //        {
-        //            heal = buff[nowAttack.skillLevel - 1];
-        //            break;
-        //        }
-        //    }
-        //    var levelCorrection = 1 + Mathf.Clamp((characterData.data.level - characterData.data.level) / 100f, -0.4f, 0);
-        //    bool isCritical = false;
-        //    var dmg = (int)(CalculDamage(nowAttack, ref isCritical) * levelCorrection);
-        //    target.AddValueBuff(heal, dmg);
-
-        //}
     }
     protected void AssultSearch()
     {
@@ -477,10 +480,6 @@ public abstract class AttackableUnit : MonoBehaviour
 
         if (isFridendly)
             dmg = -(int)attackableUnit.CalculDamage(skill, ref isCritical);
-
-        //if ((unitType == UnitType.Hero && skill.targetType.Equals(SkillTargetType.Friendly))
-        //    || (unitType == UnitType.Enemy && skill.targetType.Equals(SkillTargetType.Enemy)))
-        //    dmg = -(int)attackableUnit.CalculDamage(skill, ref isCritical);
 
         UnitHp = Mathf.Max(UnitHp - dmg, 0);
         if (UnitHp <= 0)
@@ -755,9 +754,14 @@ public abstract class AttackableUnit : MonoBehaviour
             buffList.Add(buff);
             bufferState.Buffer(info.type, info);
 
+            if(buff.buffInfo.type == BuffType.Heal)
+            {
+                UnitHp += MaxHp * buff.buffInfo.buffValue;
+                UnitHp = UnitHp; // 현재 체력 갱신
+            }
             if (buff.buffInfo.type == BuffType.MaxHealthIncrease)
             {
-                SetMaxHp();
+                UnitHp = UnitHp; // 현재 체력 갱신
             }
         }
     }
@@ -850,7 +854,6 @@ public abstract class AttackableUnit : MonoBehaviour
                 return true;
             }
             idx++;
-
         }
 
         nowAttack = null;

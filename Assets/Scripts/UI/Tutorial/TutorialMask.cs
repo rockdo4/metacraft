@@ -11,21 +11,24 @@ public class TutorialMask : MonoBehaviour
     public RectTransform mask;
 
     public Button maskClickEvent;
-    RectTransform maskClickEventRectTr;
+    public RectTransform maskClickEventRectTr;
 
-    public Button TestEvent;
-    private void Awake()
+    public Button target;
+
+    public void Setting(Button button)
     {
-        maskClickEventRectTr = maskClickEvent.GetComponent<RectTransform>();
-        Setting();
+        target = button;    
+        gameObject.SetActive(true);
+
+        ConnectEventToMask(button);
+        SetManskPosition(button);
+        SetMaskSize(button.GetComponent<RectTransform>().sizeDelta*1.5f, true);
     }
-    [ContextMenu("Setting")]
-    private void Setting()
+    public void AddEvent(Action action)
     {
-        SetMaskSize(TestEvent.GetComponent<RectTransform>().sizeDelta*1.5f, true);
-        ConnectEventToMask(TestEvent);
-        SetManskPosition(TestEvent.GetComponent<RectTransform>().anchoredPosition);
+        maskClickEvent.onClick.AddListener(() => action());
     }
+
     public void SetMaskSize(Vector3 size, bool isCircle)
     {
         if (isCircle)
@@ -37,46 +40,36 @@ public class TutorialMask : MonoBehaviour
 
         mask.sizeDelta = size;
     }
-    public void ConnectEventToMask(GameObject gameObject)
-    {
-        var btn = gameObject.GetComponent<Button>();
-        var rectTr = btn.GetComponent<RectTransform>();
-
-        maskClickEvent.onClick.RemoveAllListeners();
-        maskClickEvent.onClick.AddListener(() => btn.onClick.Invoke());
-        maskClickEvent.onClick.AddListener(() => gameObject.SetActive(false));
-        maskClickEventRectTr.anchoredPosition = Vector3.zero;
-        maskClickEventRectTr.sizeDelta = rectTr.sizeDelta;
-    }
     public void ConnectEventToMask(Button btn)
     {
-        var rectTr = btn.GetComponent<RectTransform>();
+        var btnRectTr = btn.GetComponent<RectTransform>();
 
         maskClickEvent.onClick.RemoveAllListeners();
         maskClickEvent.onClick.AddListener(() => btn.onClick.Invoke());
-        maskClickEvent.onClick.AddListener(() => gameObject.SetActive(false));
-        maskClickEventRectTr.anchoredPosition = Vector3.zero;
-        maskClickEventRectTr.sizeDelta = rectTr.sizeDelta;
+        maskClickEvent.onClick.AddListener(SetActiveFalse);
+        maskClickEvent.GetComponent<RectTransform>().sizeDelta = btnRectTr.sizeDelta;
     }
 
-    public void SetManskPosition(Vector3 pos)
+    public void SetManskPosition(Button button)
     {
-        mask.localPosition = pos;
-        back.localPosition = -mask.localPosition;
+        var prevParent = transform.parent;
+        int prevParentIdx = transform.GetSiblingIndex();
+
+        transform.SetParent(button.transform);
+        mask.anchoredPosition = Vector3.zero;
+        transform.SetParent(prevParent);
+        transform.SetSiblingIndex(prevParentIdx);
+
+        back.anchoredPosition = -mask.anchoredPosition;
     }
+
+    public void SetActiveFalse()
+    {
+        gameObject.SetActive(false);
+    }
+
     private void Update()
     {
-        back.localPosition = -mask.localPosition;
-    }
-
-    [ContextMenu("test1")]
-    public void Test1()
-    {
-        SetManskPosition(Vector3.zero);
-    }
-    [ContextMenu("test2")]
-    public void Test2()
-    {
-        SetManskPosition(new Vector3(100, 100, 0));
+        SetManskPosition(target);
     }
 }

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -52,6 +53,8 @@ public class GameManager : Singleton<GameManager>
     // Origin Database - Set Prefab & Scriptable Objects
     public List<GameObject> heroDatabase = new();
     public Image fadeEffect;
+    public TextMeshProUGUI loadText;
+    public float sceneLoadFadeDuration = 3f;
 
     public Color currMapColor;
     public List<Color> mapLigthColors;
@@ -136,10 +139,10 @@ public class GameManager : Singleton<GameManager>
         File.WriteAllText(GetSaveFilePath(), sb.ToString());
     }
 
-    public void LoadAllData()
+    public bool LoadAllData()
     {
         if (!File.Exists(GetSaveFilePath()))
-            return;
+            return false;
 
         var loadData = CSVReader.ReadByPath(GetSaveFilePath(), false);
         foreach (var item in loadData)
@@ -170,6 +173,7 @@ public class GameManager : Singleton<GameManager>
             }
         }
         SetHeroesActive(false);
+        return true;
     }
 
     public void SetHeroesActive(bool value)
@@ -204,7 +208,7 @@ public class GameManager : Singleton<GameManager>
 
     public void LoadScene(int sceneIdx)
     {
-        StartCoroutine(ChangeSceneFadeEffect(sceneIdx, 3f));
+        StartCoroutine(ChangeSceneFadeEffect(sceneIdx, sceneLoadFadeDuration));
     }
 
     private IEnumerator ChangeSceneFadeEffect(int sceneIdx, float duration)
@@ -214,15 +218,30 @@ public class GameManager : Singleton<GameManager>
         float halfDuration = duration * 0.5f;
         Color fadeIn = new (0, 0, 0, 0);
         Color fadeOut = new (0, 0, 0, 1);
+        string loadString = "Loading";
+        StringBuilder dots = new();
+
         while (timer < halfDuration)
         {
             fadeEffect.color = Color.Lerp(fadeIn, fadeOut, timer / halfDuration);
             yield return null;
             timer += Time.deltaTime;
         }
-
-        SceneManager.LoadScene(sceneIdx);
+        AsyncOperation loadSceneHandle = SceneManager.LoadSceneAsync(sceneIdx);
+        loadText.gameObject.SetActive(true);
+        //SceneManager.LoadScene(sceneIdx);
         currentScene = (SceneIndex)sceneIdx;
+        WaitForSeconds wfs = new (duration * 0.1f);
+        while (!loadSceneHandle.isDone)
+        {
+            loadText.text = $"{loadString}{dots}";
+            yield return wfs;
+            if (dots.Length < 3)
+                dots.Append(".");
+            else
+                dots.Clear();
+        }
+        loadText.gameObject.SetActive(false);
 
         while (timer < duration)
         {
@@ -279,27 +298,21 @@ public class GameManager : Singleton<GameManager>
     public void AddOfficeExperience(int exp)
     {
         playerData.officeExperience += exp;
-        for (int i = 1; i < officeInfoList.Count; i++)
-        {
-            if (playerData.officeExperience <= (int)officeInfoList[i]["NeedExp"])
-            {
-                PlayerInfoUpdate(i);
-                break;
-            }
-        }
+        PlayerInfoUpdate(playerData.officeLevel);
     }
 
     private void PlayerInfoUpdate(int level)
     {
-        playerData.officeLevel = (int)officeInfoList[level]["OfficeLevel"];
-        playerData.missionDifficulty = (int)officeInfoList[level]["MissionDifficulty"];
-        playerData.isTrainingOpen = (int)officeInfoList[level]["IsTrainingOpen"];
-        playerData.isDispatchOpen = (int)officeInfoList[level]["IsDispatchOpen"];
-        playerData.trainingLevel = (int)officeInfoList[level]["TrainingLevel"];
-        playerData.dispatchLevel = (int)officeInfoList[level]["DispatchLevel"];
-        playerData.stamina = (int)officeInfoList[level]["Stamina"];
-        playerData.inventoryCount = (int)officeInfoList[level]["InventoryCount"];
-        playerData.officeImage = (string)officeInfoList[level]["OfficeImage"];
+        int needExp = (int)officeInfoList[level - 1]["NeedExp"];
+
+        // Level up
+        if (playerData.officeExperience >= needExp)
+        {
+            playerData.officeExperience -= needExp;
+            playerData.officeLevel++;
+
+            playerData.officeImage = (string)officeInfoList[level - 1]["OfficeImage"];
+        }
     }
 
     /************************************* Minu *******************************************/

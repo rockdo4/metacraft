@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System;
 using System.Linq;
 
 
@@ -44,6 +43,7 @@ public class CharacterSkill : ScriptableObject
 
     public bool isCriticalPossible;
     public bool isAuto;
+    public bool isTutorial;
     public virtual bool IsAutoStart { get; }
     public Vector3 targetPos;
     public string skillDescription;
@@ -58,6 +58,11 @@ public class CharacterSkill : ScriptableObject
 
     public int priority;
 
+    public AudioSource normalAttackSound;
+    public AudioSource[] normalAttackHitSounds;
+    public AudioSource activeSkillAttackSound;
+    public AudioSource[] activeSkillAttackHitSounds;
+
     public virtual void OnActive()
     {
     }
@@ -69,7 +74,7 @@ public class CharacterSkill : ScriptableObject
     //대미지 = (공격자 공격력*스킬계수) * (100/100+방어력) * (1 + 레벨보정)									
     public virtual int CreateDamageResult(LiveData data, BufferState status)
     {
-        var currCoefficient = coefficient + skillLevel * addCoefficient;
+        var currCoefficient = coefficient + (skillLevel-1) * addCoefficient;
 
         switch (coefficientType)
         {
@@ -91,6 +96,11 @@ public class CharacterSkill : ScriptableObject
             return;
         
         EffectManager.Instance.Get(activeEffect, skillHolderTransform ?? actorTransform, actorTransform.rotation);
+
+        Logger.Debug(normalAttackHitSounds.Length);
+
+        if(normalAttackHitSounds.Length > 0)
+            normalAttackHitSounds[Random.Range(0, normalAttackHitSounds.Length)].Play();
     }
     //public void OnActiveSkilThroughToLastChild(AttackableUnit unit)
     //{

@@ -1,13 +1,16 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ManageHeroWindow : View
 {
     public GameObject heroInfoPrefab;
+    public GameObject emptyPrefab;
     public Transform contents;
     public List<HeroInfoButton> heroInfos = new ();
     private List<CharacterDataBundle> copyCharacterTable = new ();
+    private List<GameObject> emptyObjects = new ();
 
     private void Awake()
     {
@@ -18,6 +21,7 @@ public class ManageHeroWindow : View
         {
             GameObject obj = Instantiate(heroInfoPrefab, contents);
             HeroInfoButton info = obj.GetComponent<HeroInfoButton>();
+
             heroInfos.Add(info);
         }
     }
@@ -30,6 +34,9 @@ public class ManageHeroWindow : View
         {
             copyCharacterTable.Add(character.Value.GetComponent<CharacterDataBundle>());
         }
+        foreach (var obj in emptyObjects)
+            Destroy(obj);
+        emptyObjects.Clear();
     }
 
     private void OnEnable()
@@ -67,15 +74,24 @@ public class ManageHeroWindow : View
         int count = 0;
         foreach (var character in copyCharacterTable)
         {
-            heroInfos[count].SetData(character);
             heroInfos[count].gameObject.SetActive(true);
+            heroInfos[count].SetData(character);
             count++;
         }
 
+        int emptyCount = 0;
+        while (count < 4)
+        {
+            emptyObjects.Add(Instantiate(emptyPrefab, contents));
+            count++;
+            emptyCount++;
+        }
+
         int max = GameManager.Instance.heroDatabase.Count;
-        for (int index = count; index < max; index++)
+        for (int index = count - emptyCount; index < max; index++)
         {
             heroInfos[index].gameObject.SetActive(false);
         }
     }
+
 }

@@ -14,10 +14,7 @@ public class ClearUiController : View
 
 
     private List<ClearHeroInfo> heroes = new();
-    private void OnEnable()
-    {        
-        //AudioManager.Instance.ChageBGMOnlyFadeOut(9);
-    }
+
     public void ResetUi()
     {
         baseExp = 0;
