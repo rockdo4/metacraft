@@ -170,46 +170,46 @@ public class AttackableHero : AttackableUnit
             }
         }
     }
-    public bool isTutorial;
+    //public bool isTutorial;
 
-    private Transform[] tutorialPos = new Transform[2];
-    public void SetTutorialPos(Transform[] tutorialPos) => this.tutorialPos = tutorialPos;
-    public bool tutorialActive;
+    //private Transform[] tutorialPos = new Transform[2];
+    //public void SetTutorialPos(Transform[] tutorialPos) => this.tutorialPos = tutorialPos;
+    //public bool tutorialActive;
 
 
-    public void Test1()
-    {
-        Time.timeScale = 0;
-        characterData.activeSkill.targetPos = tutorialPos[0].localPosition;
+    //public void Test1()
+    //{
+    //    Time.timeScale = 0;
+    //    characterData.activeSkill.targetPos = tutorialPos[0].localPosition;
 
-        heroUI.heroSkill.isTutorialPos = true;
-        heroUI.heroSkill.tutorialPos = tutorialPos[0];
-        characterData.activeSkill.isTutorial = true;
-        tutorialPos[0].gameObject.SetActive(true);
-    }
-    public void Test2()
-    {
-        Time.timeScale = 0;
-        characterData.activeSkill.targetPos = tutorialPos[1].localPosition;
+    //    heroUI.heroSkill.isTutorialPos = true;
+    //    heroUI.heroSkill.tutorialPos = tutorialPos[0];
+    //    characterData.activeSkill.isTutorial = true;
+    //    tutorialPos[0].gameObject.SetActive(true);
+    //}
+    //public void Test2()
+    //{
+    //    Time.timeScale = 0;
+    //    characterData.activeSkill.targetPos = tutorialPos[1].localPosition;
 
-        heroUI.heroSkill.isTutorialPos = true;
-        heroUI.heroSkill.tutorialPos = tutorialPos[1];
-        characterData.activeSkill.isTutorial = true;
-        tutorialPos[1].gameObject.SetActive(true);
-    }
+    //    heroUI.heroSkill.isTutorialPos = true;
+    //    heroUI.heroSkill.tutorialPos = tutorialPos[1];
+    //    characterData.activeSkill.isTutorial = true;
+    //    tutorialPos[1].gameObject.SetActive(true);
+    //}
 
     //test
-    public void FixedUpdate()
-    {
-        if(Input.GetKeyDown(KeyCode.Keypad0))
-        {
-            Test1();
-        }
-        if (Input.GetKeyDown(KeyCode.Keypad1))
-        {
-            Test2();
-        }
-    }
+    //public void FixedUpdate()
+    //{
+    //    if(Input.GetKeyDown(KeyCode.Keypad0))
+    //    {
+    //        Test1();
+    //    }
+    //    if (Input.GetKeyDown(KeyCode.Keypad1))
+    //    {
+    //        Test2();
+    //    }
+    //}
 
     protected override void Awake()
     {
@@ -286,7 +286,7 @@ public class AttackableHero : AttackableUnit
         target = null;
         animator.Rebind();
         UnitHp = characterData.data.currentHp;
-        isTutorial = GameManager.Instance.playerData.isTutorial;
+        //isTutorial = GameManager.Instance.playerData.isTutorial;
 
         heroUI.heroSkill.SetCoolTime(characterData.activeSkill.preCooldown);
         base.ResetData();
@@ -343,8 +343,8 @@ public class AttackableHero : AttackableUnit
 
     protected override void BattleUpdate()
     {
-        if (!isTutorial)
-        {
+        //if (!isTutorial)
+        //{
             if (IsAuto && BattleState != UnitBattleState.None && heroUI.heroSkill.IsCoolDown && !bufferState.silence)
             {
                 SearchActiveTarget();
@@ -357,7 +357,7 @@ public class AttackableHero : AttackableUnit
                     }
                 }
             }
-        }
+        //}
         //타겟이 없을때 타겟을 찾으면 타겟으로 가기
         switch (BattleState)
         {
@@ -542,7 +542,7 @@ public class AttackableHero : AttackableUnit
         pathFind.isStopped = false;
         pathFind.speed = characterData.data.moveSpeed;
         animator.SetTrigger("ActiveEnd");
-        characterData.activeSkill.isTutorial = false;
+        //characterData.activeSkill.isTutorial = false;
         //if (coOnAutoSkill != null)
         //    StopCoroutine(coOnAutoSkill);
         base.ActiveSkillEnd();
