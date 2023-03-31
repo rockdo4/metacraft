@@ -3,16 +3,25 @@ using UnityEngine;
 
 public class IcicleActive : SkillFieldWithDuration
 {
-    public float startDelay = 0.5f;
+    public float startDelay = 0.6f;
     public float startDelayCheckTimer = 0f;
     protected override void OnEnable()
     {
+        startDelayCheckTimer = 0f;
         Invoke(offSkillFieldFuncName, duration + startDelay);
+
+        if (IsInit)
+        {
+            currParticle = EffectManager.Instance.Get(effect, transform).transform.GetChild(0).gameObject;
+        }
     }
 
     protected override void Update()
     {
         startDelayCheckTimer += Time.deltaTime;
+
+        if (startDelayCheckTimer < startDelay)
+            return;
 
         OnDamage();
     }

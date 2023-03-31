@@ -7,7 +7,7 @@ public class HeroInfoDetailScript : View
     public Image portrait;
     public TextMeshProUGUI gradeInfoInLeftPanel;
     public TextMeshProUGUI levelInfoInLeftPanel;
-    public TextMeshProUGUI typeInfoInLeftPanel;
+    public Image typeInfoInLeftPanel;
     public TextMeshProUGUI statDetail;
     public Toggle[] firstToggleTabs;
 
@@ -41,7 +41,7 @@ public class HeroInfoDetailScript : View
 
         gradeInfoInLeftPanel.text = $"{(CharacterGrade)data.grade}";
         levelInfoInLeftPanel.text = data.level.ToString();
-        typeInfoInLeftPanel.text = $"{gm.GetStringByTable($"herotype_{(CharacterJob)data.job}")}\n";
+        typeInfoInLeftPanel.sprite = gm.GetSpriteByAddress($"icon_type_{(CharacterJob)data.job}");
         StringBuilder stringBuilder = new();
         stringBuilder.Append($"히어로 명 : {gm.GetStringByTable(data.name)}\n");
         stringBuilder.Append($"공격력 : {data.baseDamage:0.00}\n");

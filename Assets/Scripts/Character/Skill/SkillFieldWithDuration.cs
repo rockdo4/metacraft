@@ -34,7 +34,7 @@ public class SkillFieldWithDuration : MonoBehaviour
 
     private HashSet<Collider> colliders = new HashSet<Collider>();
     private string tagName;
-    private GameObject currParticle;
+    protected GameObject currParticle;
 
     public AudioSource[] activeSkillAttackHitSounds;
 
