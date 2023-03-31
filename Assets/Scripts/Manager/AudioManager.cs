@@ -70,18 +70,34 @@ public class AudioManager : Singleton<AudioManager>
             bgmOriginVolumes[i] = bgms[i].volume;
         }
     }
+
+    public void OnOffSound(bool onOff)
+    {
+        master = onOff ? 0 : -80;
+        mixer.SetFloat(nameof(master), master);
+    }
+    public void SetMasterVolume(float volume)
+    {
+        SetVolumes(volume, ref master, nameof(master));
+    }
+
     public void SetBGMVolume(float volume)
-    {   
-        bgm = volume;
-        mixer.SetFloat(nameof(bgm), bgm);
+    {
+        SetVolumes(volume, ref bgm, nameof(bgm));
     }
     public void SetSEVolume(float volume) 
     {
-        se = volume;
-        ambience = volume;
+        SetVolumes(volume, ref se, nameof(se));
+        SetVolumes(volume, ref ambience, nameof(ambience));
+    }
+    private void SetVolumes(float volume, ref float mixerGroup, string groupName)
+    {
+        mixerGroup = 20.0f * Mathf.Log10(volume);
 
-        mixer.SetFloat(nameof(se), se);
-        mixer.SetFloat(nameof(ambience), ambience);
+        if (volume <= 0)
+            mixerGroup = -80;
+
+        mixer.SetFloat(groupName, mixerGroup);
     }
     public void PlayUIAudio(int index)
     {        
