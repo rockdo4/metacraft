@@ -1,6 +1,6 @@
 using TMPro;
 using UnityEngine.UI;
-using static UnityEditor.Progress;
+using UnityEngine;
 
 public class HeroUpgradeDetailWindow : View
 {
@@ -23,6 +23,7 @@ public class HeroUpgradeDetailWindow : View
     public Button upgradeButton;
 
     //Popup
+    public Image resultPopup;
     public Image resultHeroIcon;
     public TextMeshProUGUI resultHeroText;
 
@@ -49,6 +50,9 @@ public class HeroUpgradeDetailWindow : View
         CharacterDataBundle cdb = gm.currentSelectObject.GetComponent<AttackableUnit>().GetUnitData();
         LiveData data = cdb.data;
 
+        Sprite heroIcon = gm.GetSpriteByAddress($"icon_{data.name}");
+        string gradeText = string.Empty;
+
         heroName.text = gm.GetStringByTable(data.name);
         CharacterGrade curGrade = (CharacterGrade)data.grade;
         if (curGrade != CharacterGrade.SS)
@@ -58,8 +62,7 @@ public class HeroUpgradeDetailWindow : View
                 $"{gm.maxLevelTable[data.grade - 1]["MaxLevel"]} >" +
                 $"{gm.maxLevelTable[data.grade]["MaxLevel"]}";
 
-            resultHeroIcon.sprite = gm.GetSpriteByAddress($"icon_{data.name}");
-            resultHeroText.text = $"승급 심사 통과를 축하합니다!\n{(CharacterGrade)(data.grade + 1)}등급 히어로로 승급하였습니다!";
+            gradeText = $"승급 심사 통과를 축하합니다!\n{(CharacterGrade)(data.grade)}등급 히어로로 승급하였습니다!";
         }
         else
         {
@@ -67,10 +70,11 @@ public class HeroUpgradeDetailWindow : View
             heroMaxLevel.text =
                 $"{gm.maxLevelTable[data.grade - 1]["MaxLevel"]}";
 
-            resultHeroIcon.sprite = gm.GetSpriteByAddress($"icon_{data.name}");
-            resultHeroText.text = $"이미 {(CharacterGrade)(data.grade)}등급입니다";
+            gradeText = $"이미 {(CharacterGrade)(data.grade)}등급입니다";
+            return;
         }
 
+        SetResultInfo(heroIcon, gradeText);
         heroPortrait.sprite = gm.GetSpriteByAddress($"icon_{data.name}");
         prevSkillIcons[0].sprite = gm.GetSpriteByAddress($"{cdb.passiveSkill.skillIcon}");
         prevSkillIcons[1].sprite = gm.GetSpriteByAddress($"{cdb.attacks[0].skillIcon}");
@@ -141,7 +145,8 @@ public class HeroUpgradeDetailWindow : View
         if (currGold < needGold ||
             upgradeItemCount < needItemCount)
         {
-            Logger.Debug("Upgrade Fail");
+            resultHeroText.text = "승급에 실패하였습니다.";
+            ShowOnResultPopup();
             return;
         }
 
@@ -159,7 +164,23 @@ public class HeroUpgradeDetailWindow : View
         var inven = gm.inventoryData;
         inven.FindItem(currItemID).count -= needItemCount;
 
+        ShowOnResultPopup();
         SetHeroInfo();
         FindUpgradeMaterial(data.name, data.grade);
+    }
+
+    private void ShowOnResultPopup()
+    {
+        resultPopup.gameObject.SetActive(true);
+    }
+    public void ShowOutResultPopup()
+    {
+        resultPopup.gameObject.SetActive(false);
+    }
+
+    private void SetResultInfo(Sprite heroSprite, string grade)
+    {
+        resultHeroIcon.sprite = heroSprite;
+        resultHeroText.text = grade;
     }
 }
