@@ -133,6 +133,7 @@ public abstract class AttackableUnit : MonoBehaviour
     public Transform effectCreateTransform;
     public Transform hitEffectTransform;
     public bool useAudio = false;
+    public AttackableUnit Target { get { return target; } }
 
     protected virtual void Awake()
     {
