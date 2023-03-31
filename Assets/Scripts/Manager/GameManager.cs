@@ -129,13 +129,13 @@ public class GameManager : Singleton<GameManager>
         StringBuilder sb = new();
         sb.AppendLine("ID;Contents");
         sb.AppendLine($"PlayerData;{JsonUtility.ToJson(playerData)}");
-        sb.AppendLine($"Inventory;{JsonUtility.ToJson(inventoryData)}");
 
         foreach (var hero in myHeroes)
         {
             LiveData data = hero.Value.GetComponent<CharacterDataBundle>().data;
             sb.AppendLine($"Hero_{data.name};{JsonUtility.ToJson(data)}");
         }
+        sb.AppendLine($"Inventory;{JsonUtility.ToJson(inventoryData)}");
         File.WriteAllText(GetSaveFilePath(), sb.ToString());
     }
 

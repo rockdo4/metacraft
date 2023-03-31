@@ -15,8 +15,8 @@ public class HeroSkill : MonoBehaviour
     //private TextMeshProUGUI skillDescriptionText;
 
     public bool isAuto;
-    public bool isTutorialPos;
-    public Transform tutorialPos;
+    //public bool isTutorialPos;
+   // public Transform tutorialPos;
 
     private bool isPointerInSkillActivePanel;
     private float CoolDownFill {
@@ -80,31 +80,31 @@ public class HeroSkill : MonoBehaviour
             SetActiveSkillGUIs(true);
             isPointerInSkillActivePanel = false;
 
-            if(!isTutorialPos)
-                Time.timeScale = 0.25f;
+            //if(!isTutorialPos)
+            Time.timeScale = 0.25f;
         }
     }
     public void CancleSkill()
     {
         cancle();
         SetActiveSkillGUIs(false);
-        if (!isTutorialPos)
-            Time.timeScale = BattleSpeed.Instance.GetSpeed;
+        //if (!isTutorialPos)
+        Time.timeScale = BattleSpeed.Instance.GetSpeed;
     }
 
 
     public void OnUpSkillActive()
     {
-        if(isTutorialPos)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            Physics.Raycast(ray, out RaycastHit hit, 100.0f, LayerMask.GetMask("Floor"));
-            if (Vector3.Distance(tutorialPos.localPosition, hit.point) > 3f)
-            {
-                CancleSkill();
-                return;
-            }
-        }
+        //if(isTutorialPos)
+        //{
+        //    Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        //    Physics.Raycast(ray, out RaycastHit hit, 100.0f, LayerMask.GetMask("Floor"));
+        //    if (Vector3.Distance(tutorialPos.localPosition, hit.point) > 3f)
+        //    {
+        //        CancleSkill();
+        //        return;
+        //    }
+        //}
         if (!skillActivedHighlight.activeSelf)
             return;
         
@@ -119,15 +119,15 @@ public class HeroSkill : MonoBehaviour
         Time.timeScale = BattleSpeed.Instance.GetSpeed;
         CoolDownFill = 1;
         coolDownTimer = coolDown;
-        if (isTutorialPos)
-        {
-            if (tutorialPos != null)
-            {
-                tutorialPos.gameObject.SetActive(false);
-                tutorialPos = null;
-            }
-            isTutorialPos = false;
-        }
+        //if (isTutorialPos)
+        //{
+        //    if (tutorialPos != null)
+        //    {
+        //        tutorialPos.gameObject.SetActive(false);
+        //        tutorialPos = null;
+        //    }
+        //    isTutorialPos = false;
+        //}
     }
     public IEnumerator OnAutoSkillActive(CharacterSkill skill)
     {

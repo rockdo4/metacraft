@@ -19,11 +19,11 @@ public class RecruitmentClick : MonoBehaviour
                     if (hit.collider.gameObject == gameObject)
                     {
                         uiMgr.ShowView(7);
-                        if (GameManager.Instance.playerData.isTutorial)
-                        {
-                            var tutoMgr = FindAnyObjectByType<TutorialManager>();
-                            tutoMgr.OnNextChatLine();
-                        }
+                        //if (GameManager.Instance.playerData.isTutorial)
+                        //{
+                        //    var tutoMgr = FindAnyObjectByType<TutorialManager>();
+                        //    tutoMgr.OnNextChat();
+                        //}
                     }
                 }
             }

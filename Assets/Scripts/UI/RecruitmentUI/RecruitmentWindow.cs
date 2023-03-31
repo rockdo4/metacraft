@@ -186,6 +186,8 @@ public class RecruitmentWindow : MonoBehaviour
             Destroy(result.gameObject);
         }
         resultRecruitmentList.Clear();
+
+        ratePopup = false;
     }
 
     private void OnRateInfo()

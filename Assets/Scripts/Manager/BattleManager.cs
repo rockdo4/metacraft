@@ -98,8 +98,8 @@ public class BattleManager : MonoBehaviour
     public Button autoButton;
     public Button speedButton;
 
-    public TutorialManager tutorialManager;
-    public Transform[] tutorialSkillPos;
+    //public TutorialManager tutorialManager;
+    //public Transform[] tutorialSkillPos;
 
     private void Start()
     {
@@ -112,12 +112,12 @@ public class BattleManager : MonoBehaviour
 
         sendOfficePopUp.checkButton.onClick.AddListener(() => { SetHeroesReady(); });
 
-        tutorialManager.TestIndex = 5;
-        if (gm.playerData.isTutorial)
-        {
-            TutorialManager.textIndex = 0;
-            TutorialManager.currChatWindowIndex = 0;
-        }
+        //tutorialManager.TestIndex = 5;
+        //if (gm.playerData.isTutorial)
+        //{
+        //    TutorialManager.textIndex = 0;
+        //    TutorialManager.currChatWindowIndex = 0;
+        //}
     }
 
     private void SetActiveUi(GameObject ui, bool set) => ui.SetActive(set);
@@ -501,17 +501,17 @@ public class BattleManager : MonoBehaviour
         gm = GameManager.Instance;
         if (tree.CurNode == null)
         {
-            if (gm.playerData.isTutorial)
-            {
-                tree.CreateTreeGraph();
-                //autoButton.interactable = false;
-                //speedButton.interactable = false;
-            }
-            else
-            {
-                int difficulty = (int)gm.currentSelectMission["Difficulty"];
-                tree.CreateTreeGraph(difficulty);
-            }
+            //if (gm.playerData.isTutorial)
+            //{
+            //    tree.CreateTreeGraph();
+            //    //autoButton.interactable = false;
+            //    //speedButton.interactable = false;
+            //}
+            //else
+            //{
+            int difficulty = (int)gm.currentSelectMission["Difficulty"];
+            tree.CreateTreeGraph(difficulty);
+            //}
         }
 
         for (int i = 0; i < choiceButtons.Count; i++)
@@ -576,7 +576,7 @@ public class BattleManager : MonoBehaviour
         DisabledAllMap();
 
         // 보스 ID 찾기
-        string villainID = $"{currentSelectMissionTable["VillainID"]}";        
+        string villainID = $"{currentSelectMissionTable["VillainID"]}";
         //villain
         for (int i = 0; i < villainPrefabs.Count; i++)
         {
@@ -604,7 +604,7 @@ public class BattleManager : MonoBehaviour
     private void PlayBGM(int index)
     {
         int bgmIndex = 0;
-        switch(index)
+        switch (index)
         {
             case 0:
                 bgmIndex = 6;
@@ -675,7 +675,7 @@ public class BattleManager : MonoBehaviour
         nodeIndex = index;
         TreeNodeObject prevNode = tree.CurNode;
         tree.CurNode = prevNode.childrens[index];
-        if(tree.CurNode.type.Equals(TreeNodeTypes.Villain))
+        if (tree.CurNode.type.Equals(TreeNodeTypes.Villain))
         {
             Invoke(nameof(PlayBossBGM), 3f);
         }
@@ -686,6 +686,7 @@ public class BattleManager : MonoBehaviour
         {
             prevNode.childrens[i].nodeButton.onClick.RemoveAllListeners();
         }
+        tree.ShowTree(false); ;
 
         SetHeroReturnPositioning(roads[nodeIndex].heroSettingPositions);
     }
@@ -744,12 +745,12 @@ public class BattleManager : MonoBehaviour
     }
     public void ResetHeroes()
     {
-        if (gm.playerData.isTutorial)
-        {
-            TutorialManager.textIndex = 11;
-            TutorialManager.currChatWindowIndex = 17;
-            Logger.Debug($"{TutorialManager.textIndex} / {TutorialManager.currChatWindowIndex}");
-        }
+        //if (gm.playerData.isTutorial)
+        //{
+        //    TutorialManager.textIndex = 11;
+        //    TutorialManager.currChatWindowIndex = 17;
+        //    Logger.Debug($"{TutorialManager.textIndex} / {TutorialManager.currChatWindowIndex}");
+        //}
 
         EffectManager.Instance.DisabledAllEffect();
 
@@ -817,20 +818,20 @@ public class BattleManager : MonoBehaviour
             }
             else if (!btMapTriggers[currTriggerIndex].isLastTrigger)
             {
-                Logger.Debug(currTriggerIndex);
-                if(gm.playerData.isTutorial)
-                {
-                    if (currTriggerIndex == 1)
-                    {
-                        tutorialManager.gameObject.SetActive(true);
-                        useHeroes[0].GetComponent<AttackableHero>().SetTutorialPos(tutorialSkillPos);
-                        useHeroes[0].GetComponent<AttackableHero>().Test1();
-                    }
-                    if(currTriggerIndex == btMapTriggers.Count -1)
-                    {
-                        useHeroes[0].GetComponent<AttackableHero>().Test2();
-                    }
-                }
+                //Logger.Debug(currTriggerIndex);
+                //if(gm.playerData.isTutorial)
+                //{
+                //    if (currTriggerIndex == 1)
+                //    {
+                //        //tutorialManager.gameObject.SetActive(true);
+                //        useHeroes[0].GetComponent<AttackableHero>().SetTutorialPos(tutorialSkillPos);
+                //        useHeroes[0].GetComponent<AttackableHero>().Test1();
+                //    }
+                //    if(currTriggerIndex == btMapTriggers.Count -1)
+                //    {
+                //        useHeroes[0].GetComponent<AttackableHero>().Test2();
+                //    }
+                //}
                 for (int i = 0; i < useHeroes.Count; i++)
                 {
                     useHeroes[i].ChangeUnitState(UnitState.Battle);
@@ -970,7 +971,7 @@ public class BattleManager : MonoBehaviour
         {
             btMapTriggers[i].isTriggerEnter = false;
         }
-        
+
         if (tree.CurNode.type == TreeNodeTypes.Villain)
         {
             btMapTriggers.Last().isMissionEnd = true;
@@ -1028,23 +1029,23 @@ public class BattleManager : MonoBehaviour
     }
     private bool OnNextStage()
     {
-        tree.ShowTree(false);
+        // tree.ShowTree(false);
         stageReward.gameObject.SetActive(false);
 
         coFadeOut = StartCoroutine(CoFadeOut());
 
         if (tree.CurNode.type == TreeNodeTypes.Event)
         {
-            if (gm.playerData.isTutorial)
-            {
-                // 길막! 이벤트
-                StartNextStage(MapEventEnum.Roadblock);
-            }
-            else
-            {
-                var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
-                StartNextStage((MapEventEnum)randomEvent);
-            }
+            //if (gm.playerData.isTutorial)
+            //{
+            //    // 길막! 이벤트
+            //    StartNextStage(MapEventEnum.Roadblock);
+            //}
+            //else
+            //{
+            var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
+            StartNextStage((MapEventEnum)randomEvent);
+            //}
             return true;
         }
         else if (tree.CurNode.type == TreeNodeTypes.Supply)
@@ -1207,7 +1208,7 @@ public class BattleManager : MonoBehaviour
 
         var rewardsCode = data[allItems[Random.Range(0, weight)]];
         AddReward(rewardsCode);
-        if(btMapTriggers[currTriggerIndex].isMissionEnd)
+        if (btMapTriggers[currTriggerIndex].isMissionEnd)
         {
             UIManager.Instance.ShowView(1);
             clearUi.nodeButton.gameObject.SetActive(false);
@@ -1390,7 +1391,7 @@ public class BattleManager : MonoBehaviour
                                 {
                                     if (job == (int)CharacterJob.villain)
                                         break;
-                                }    
+                                }
 
                                 btMapTriggers[i].enemySettingPositions[j].enemys.Add(new List<AttackableEnemy>());
                                 for (int s = 0; s < currPosEnemyCount; s++)

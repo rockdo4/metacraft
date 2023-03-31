@@ -3,11 +3,12 @@ using UnityEngine;
 public class TempHeroAnimatorTrigger : MonoBehaviour
 {
     public AttackableUnit unit;
-    public MakeWalkSound walkSound;
+    private MakeWalkSound walkSound;
 
     private void Awake()
     {
         unit = transform.GetComponentInParent<AttackableUnit>();
+        walkSound = transform.GetComponentInParent<MakeWalkSound>();
     }
     public void NormalAttackOnDamage(AnimationEvent ev)
     {

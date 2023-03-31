@@ -72,7 +72,7 @@ public class ActiveSkillAOE : CharacterSkill
             skillAreaIndicator.IsTrackTarget = true;
         }
 
-        if(isTransActor)
+        if (isTransActor)
         {          
             skillAreaIndicator.ActorTransform = actorTransform;
         }
@@ -237,10 +237,10 @@ public class ActiveSkillAOE : CharacterSkill
 
     public override void OnActiveSkill(AttackableUnit attackableUnit, List<AttackableUnit> enemies, List<AttackableUnit> heros)
     {
-        if (isTutorial)
-        {
-            indicatorTransform.position = targetPos;
-        }
+        //if (isTutorial)
+        //{
+        //    indicatorTransform.position = targetPos;
+        //}
         base.OnActiveSkill(attackableUnit,enemies, heros);
 
         if (hasDuration)
@@ -263,7 +263,9 @@ public class ActiveSkillAOE : CharacterSkill
         skillAreaIndicator.gameObject.SetActive(false);
         skillAreaIndicator.isTriggerEnter = false;
 
-        activeSkillAttackHitSounds[Random.Range(0, activeSkillAttackHitSounds.Length)].Play();
+        if(activeSkillAttackHitSounds.Length > 0)
+            activeSkillAttackHitSounds[Random.Range(0, activeSkillAttackHitSounds.Length)].Play();
+
     }
     public void SetActiveIndicators(bool active)
     {
@@ -276,8 +278,8 @@ public class ActiveSkillAOE : CharacterSkill
     }
     public void ReadyEffectUntillOnActiveSkill()
     {
-        if (isTutorial)
-            indicatorTransform.position = targetPos;
+        //if (isTutorial)
+        //    indicatorTransform.position = targetPos;
         EffectManager.Instance.Get(readyEffect, indicatorTransform);
         skillAreaIndicator.Renderer.enabled = false;
         castRangeIndicator.SetActive(false);

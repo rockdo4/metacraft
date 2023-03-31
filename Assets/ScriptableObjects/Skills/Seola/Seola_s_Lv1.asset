@@ -15,14 +15,14 @@ MonoBehaviour:
   skillLevel: 1
   id: 7033002
   skillName: skill_Icicle_iceprison
-  preCooldown: 4
-  cooldown: 20
-  distance: 10
+  preCooldown: 5
+  cooldown: 25
+  distance: 20
   targetNumLimit: 5
   angle: 0
   coefficientType: 0
-  coefficient: 3.08
-  addCoefficient: 0.44
+  coefficient: 2.28
+  addCoefficient: 0.19
   targetType: 1
   searchType: 0
   readyEffect: 3
@@ -30,6 +30,7 @@ MonoBehaviour:
   hitEffect: 10
   isCriticalPossible: 1
   isAuto: 0
+  isTutorial: 0
   targetPos: {x: 0, y: 0, z: 0}
   skillDescription: skillinfo_icicle_s
   skillIcon: icicle_s_icon
@@ -41,6 +42,15 @@ MonoBehaviour:
   buffTargetType: 2
   buffTargetCnt: 5
   priority: 0
+  normalAttackSound: {fileID: 0}
+  normalAttackHitSounds: []
+  activeSkillAttackSound: {fileID: 7788947154200315877, guid: fd75e276a2629ac46b435b962f75c913,
+    type: 3}
+  activeSkillAttackHitSounds:
+  - {fileID: 3513099321023903016, guid: d7c9be34ade3f1a47b2e74b4a5e91d07, type: 3}
+  - {fileID: 3513099321023903016, guid: 93b7ad923aea4c8449cb4473ddfc67a2, type: 3}
+  - {fileID: 3513099321023903016, guid: 336efedaf2fd6e8418a8c11eb8c64b57, type: 3}
+  - {fileID: 3513099321023903016, guid: 358da38bb44453148859eff7aa57acde, type: 3}
   skillAreaIndicatorPrefab: {fileID: 6672067328229480615, guid: 0da645c26f09e074abad419ddc09fafb,
     type: 3}
   layerM:

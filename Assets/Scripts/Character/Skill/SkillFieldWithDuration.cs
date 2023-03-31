@@ -113,7 +113,7 @@ public class SkillFieldWithDuration : MonoBehaviour
             else
             {
                 var attackable = value.GetComponent<AttackableUnit>();
-                if (attackable.GetUnitState() == UnitState.Battle)
+                if (attackable.GetUnitState().Equals(UnitState.Battle))
                     attackable.OnDamage(attackableUnit, skill);
             }
         }

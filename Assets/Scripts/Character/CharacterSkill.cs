@@ -43,7 +43,7 @@ public class CharacterSkill : ScriptableObject
 
     public bool isCriticalPossible;
     public bool isAuto;
-    public bool isTutorial;
+   // public bool isTutorial;
     public virtual bool IsAutoStart { get; }
     public Vector3 targetPos;
     public string skillDescription;
@@ -96,8 +96,6 @@ public class CharacterSkill : ScriptableObject
             return;
         
         EffectManager.Instance.Get(activeEffect, skillHolderTransform ?? actorTransform, actorTransform.rotation);
-
-        Logger.Debug(normalAttackHitSounds.Length);
 
         if(normalAttackHitSounds.Length > 0)
             normalAttackHitSounds[Random.Range(0, normalAttackHitSounds.Length)].Play();

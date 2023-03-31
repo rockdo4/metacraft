@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
 public class AudioManager : Singleton<AudioManager>
@@ -32,12 +33,15 @@ public class AudioManager : Singleton<AudioManager>
     private GameObject bgmHolder;
     private GameObject uiSoundHolder;
 
+    private Dictionary<string, GameObject> audioResourcesHolders;
+
     public override void Awake()
     {
         base.Awake();
         AudioInstance();
         SaveBGMOriginVolumes();
         PlayBGM(awakeMusicIndex);
+        audioResourcesHolders = new Dictionary<string, GameObject>();
     }
     private void AudioInstance()
     {
@@ -66,14 +70,6 @@ public class AudioManager : Singleton<AudioManager>
             bgmOriginVolumes[i] = bgms[i].volume;
         }
     }
-
-    //public void MixerControl()
-    //{        
-    //    mixer.SetFloat(nameof(master), master);
-    //    mixer.SetFloat(nameof(bgm), bgm);
-    //    mixer.SetFloat(nameof(se), se);
-    //    mixer.SetFloat(nameof(ambience), ambience);
-    //}
     public void SetBGMVolume(float volume)
     {   
         bgm = volume;
@@ -210,9 +206,23 @@ public class AudioManager : Singleton<AudioManager>
             bgm.Stop();            
         }
     }
-
     public int GetCurrBGMIndex()
     {
         return currBgmIndex;
+    }
+  
+    public Transform GetAudioResourcesHolder(string name)
+    {
+        if (audioResourcesHolders.ContainsKey(name))
+        {
+            return audioResourcesHolders[name].transform;
+        }
+        else
+        {
+            var value = new GameObject(name);
+            value.transform.parent = transform;
+            audioResourcesHolders.Add(name, value );
+            return value.transform;   
+        }
     }
 }
