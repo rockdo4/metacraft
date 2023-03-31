@@ -145,7 +145,7 @@ public class HeroUpgradeDetailWindow : View
         if (currGold < needGold ||
             upgradeItemCount < needItemCount)
         {
-            resultHeroText.text = "승급에 실패하였습니다.";
+            resultHeroText.text = "재료가 부족합니다.";
             ShowOnResultPopup();
             return;
         }

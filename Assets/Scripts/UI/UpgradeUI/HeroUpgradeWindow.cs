@@ -18,7 +18,9 @@ public class HeroUpgradeWindow : View
         {
             GameObject obj = Instantiate(heroInfoPrefab, contents);
             HeroInfoButton info = obj.GetComponent<HeroInfoButton>();
-            heroInfos.Add(info);
+
+            if ((CharacterGrade)info.data.grade != CharacterGrade.SS)
+                heroInfos.Add(info);
         }
     }
 
@@ -67,6 +69,14 @@ public class HeroUpgradeWindow : View
         int count = 0;
         foreach (var character in copyCharacterTable)
         {
+            if ((CharacterGrade)heroInfos[count].data.grade == CharacterGrade.SS)
+            {
+                heroInfos[count].gameObject.SetActive(false);
+                heroInfos.Remove(heroInfos[count]);
+                count++;
+                continue;
+            }
+
             heroInfos[count].SetData(character);
             heroInfos[count].gameObject.SetActive(true);
             count++;
