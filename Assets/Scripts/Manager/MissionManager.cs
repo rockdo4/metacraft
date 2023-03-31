@@ -5,10 +5,11 @@ using UnityEngine.UI;
 
 public class MissionManager : View
 {
-    public TextMeshProUGUI dayOfweek;
+    //public TextMeshProUGUI dayOfweek;
     // public Slider apGauge;
 
     public Image portrait;  //Boss portrait
+    public TextMeshProUGUI missionNameText;
     public TextMeshProUGUI explanation;  // Mission explanation
 
     public TextMeshProUGUI ExpectedCost;
@@ -92,6 +93,7 @@ public class MissionManager : View
         gm.currentSelectMission = selectMission;
 
         portrait.sprite = gm.GetSpriteByAddress($"icon_{selectMission["VillainID"]}");
+        missionNameText.text = gm.GetStringByTable($"{selectMission["NameString"]}");
         explanation.text = gm.GetStringByTable($"{selectMission["TooltipID"]}");
         gm.ClearBattleGroups();
         for (int i = 0; i < heroSlots.Length; i++)
