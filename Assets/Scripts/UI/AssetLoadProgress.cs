@@ -25,7 +25,7 @@ public class AssetLoadProgress : MonoBehaviour
 
     public void StartGame()
     {
-        if (gm.playerData.playerName.Equals("default name"))
+        if (gm.playerData.playerName.Equals(string.Empty))
             setNicknamePopup.SetActive(true);
         else
             LoadOfficeScene();
@@ -39,7 +39,7 @@ public class AssetLoadProgress : MonoBehaviour
 
     public void ChangeNickname(string str)
     {
-        gm.playerData.playerName = str;
+        gm.playerData.playerName = str.Equals(string.Empty) ? "egostick" : str;
     }
 
     private IEnumerator LoadAllResources()

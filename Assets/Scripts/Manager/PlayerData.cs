@@ -4,8 +4,7 @@ using UnityEngine;
 [Serializable]
 public class PlayerData
 {
-    public string playerId = "000001";
-    public string playerName = "default name";
+    public string playerName = string.Empty;
     public string portraitKey = "icon_hero_egostick";
     public int gold = 0;
 
@@ -17,5 +16,4 @@ public class PlayerData
     [Range(1, 4)]
     public int battleSpeed = 1;
     public bool isAuto = false;
-    //public bool isTutorial = true;
 }
