@@ -23,10 +23,6 @@ public class HeroUpgradeWindow : View
             {
                 heroInfos.Add(info);
             }
-            else
-            {
-                Logger.Debug("SS 삭제");
-            }
         }
     }
 
@@ -88,7 +84,6 @@ public class HeroUpgradeWindow : View
             {
                 heroInfos[count].gameObject.SetActive(false);
                 heroInfos.Remove(heroInfos[count]);
-                Logger.Debug("SS 삭제");
                 count++;
                 continue;
             }
