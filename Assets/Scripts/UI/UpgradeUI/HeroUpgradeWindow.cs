@@ -20,7 +20,13 @@ public class HeroUpgradeWindow : View
             HeroInfoButton info = obj.GetComponent<HeroInfoButton>();
 
             if ((CharacterGrade)info.data.grade != CharacterGrade.SS)
+            {
                 heroInfos.Add(info);
+            }
+            else
+            {
+                Logger.Debug("SS 삭제");
+            }
         }
     }
 
@@ -31,6 +37,15 @@ public class HeroUpgradeWindow : View
         foreach (var character in list)
         {
             copyCharacterTable.Add(character.Value.GetComponent<CharacterDataBundle>());
+        }
+
+        int count = copyCharacterTable.Count - 1;
+        for (int i = count; i >= 0; i--)
+        {
+            if ((CharacterGrade)copyCharacterTable[i].data.grade == CharacterGrade.SS)
+            {
+                copyCharacterTable.Remove(copyCharacterTable[i]);
+            }
         }
     }
 
@@ -73,6 +88,7 @@ public class HeroUpgradeWindow : View
             {
                 heroInfos[count].gameObject.SetActive(false);
                 heroInfos.Remove(heroInfos[count]);
+                Logger.Debug("SS 삭제");
                 count++;
                 continue;
             }
@@ -82,7 +98,8 @@ public class HeroUpgradeWindow : View
             count++;
         }
 
-        int max = GameManager.Instance.heroDatabase.Count;
+        //int max = GameManager.Instance.heroDatabase.Count;
+        int max = heroInfos.Count;
         for (int index = count; index < max; index++)
         {
             heroInfos[index].gameObject.SetActive(false);
