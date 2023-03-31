@@ -5,9 +5,6 @@ using UnityEngine.UI;
 
 public class MissionManager : View
 {
-    //public TextMeshProUGUI dayOfweek;
-    // public Slider apGauge;
-
     public Image portrait;  //Boss portrait
     public TextMeshProUGUI missionNameText;
     public TextMeshProUGUI explanation;  // Mission explanation
@@ -16,9 +13,6 @@ public class MissionManager : View
     public Image[] heroSlots;
     private int heroSlotsIndex;
     public TextMeshProUGUI[] fitProperties;
-
-    //public TextMeshProUGUI deductionAP;
-    //public TextMeshProUGUI ProperCombatPower;
 
     public Slider difficultyAdjustment;
 
@@ -200,6 +194,10 @@ public class MissionManager : View
         if (count > 0)
         {
             gm.LoadScene((int)SceneIndex.Battle);
+        }
+        else
+        {
+            UIManager.Instance.ShowPopup(0);
         }
     }
 

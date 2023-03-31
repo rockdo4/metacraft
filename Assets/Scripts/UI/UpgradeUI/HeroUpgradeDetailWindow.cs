@@ -41,6 +41,7 @@ public class HeroUpgradeDetailWindow : View
     private void OnEnable()
     {
         SetHeroInfo();
+        ShowOutResultPopup();
     }
 
     private void SetHeroInfo()
@@ -98,8 +99,8 @@ public class HeroUpgradeDetailWindow : View
         var ut = gm.upgradeTable;
         var inven = gm.inventoryData;
         var items = gm.itemInfoList;
-        int mmaterialAmount = 0;
-        int itemCount = 0;
+        int mmaterialAmount;
+        int itemCount;
 
         for (int i = 0; i < ut.Count; i++)
         {
