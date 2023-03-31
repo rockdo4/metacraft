@@ -119,22 +119,12 @@ public class RecruitmentWindow : MonoBehaviour
         }
         else
         {
-            // 중복. 임시코드. 아이템으로 대체하도록 함
+            string stoneId = GameManager.Instance.recruitmentReplacementTable.
+            Find(t => t["Name"].ToString().CompareTo(herobundle.originData.name) == 0)["Replacement"].ToString();
 
-            try
-            {
-                string stoneId = GameManager.Instance.recruitmentReplacementTable.
-                Find(t => t["Name"].ToString().CompareTo(herobundle.originData.name) == 0)["Replacement"].ToString();
-
-                info.SetStoneData((CharacterGrade)herobundle.originData.grade,
-                    itemInfoList.Find(t => t["ID"].ToString().CompareTo(stoneId) == 0));
-                GameManager.Instance.inventoryData.AddItem(stoneId);
-            }
-            catch
-            {
-                Logger.Debug("this");
-            }
-            //info.icon.color = Color.gray;
+            info.SetStoneData((CharacterGrade)herobundle.originData.grade,
+                itemInfoList.Find(t => t["ID"].ToString().CompareTo(stoneId) == 0));
+            GameManager.Instance.inventoryData.AddItem(stoneId);
         }
 
 
