@@ -16,7 +16,7 @@ public struct TreeInitSetting
     public int eventCount;
 
     public void InitSetting(int height = 4, int width = 5, float branch2Prob = 0.60f, float branch3Prob = 0.15f,
-        int normalNodeCount = 0, int threatNodeCount = 0, int supplyNodeCount = 0, int eventNodeCount = 0)
+        int normalNodeCount = 2, int threatNodeCount = 2, int supplyNodeCount = 2, int eventNodeCount = 2)
     {
         this.height = height;
         this.width = width;
@@ -51,10 +51,10 @@ public class TreeMapSystem : MonoBehaviour
     public TreeInitSetting treeSettings;
 
     // 내부에서 타입을 정해줄때 사용
-    private int localNormalCount = 1;
-    private int localThreatCount = 1;
-    private int localSupplyCount = 1;
-    private int localEventCount = 1;
+    private int localNormalCount = 0;
+    private int localThreatCount = 0;
+    private int localSupplyCount = 0;
+    private int localEventCount = 0;
 
     public GameObject nodeBundlePrefab;
     public GameObject treeNodePrefab;
