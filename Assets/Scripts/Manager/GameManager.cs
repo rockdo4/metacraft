@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -15,7 +16,7 @@ public class GameManager : Singleton<GameManager>
 
     // MyData - Craft, Load & Save to this data
     public Dictionary<string, GameObject> myHeroes = new();
-    public Transform heroSpawnTransform;    
+    public Transform heroSpawnTransform;
 
     // Resources - Sprites, TextAsset
     private Dictionary<string, Sprite> sprites = new();
@@ -126,17 +127,25 @@ public class GameManager : Singleton<GameManager>
 
     public void SaveAllData()
     {
-        StringBuilder sb = new();
-        sb.AppendLine("ID;Contents");
-        sb.AppendLine($"PlayerData;{JsonUtility.ToJson(playerData)}");
-
-        foreach (var hero in myHeroes)
+        try
         {
-            LiveData data = hero.Value.GetComponent<CharacterDataBundle>().data;
-            sb.AppendLine($"Hero_{data.name};{JsonUtility.ToJson(data)}");
+            StringBuilder sb = new();
+            sb.AppendLine("ID;Contents");
+            sb.AppendLine($"PlayerData;{JsonUtility.ToJson(playerData)}");
+
+            foreach (var hero in myHeroes)
+            {
+                LiveData data = hero.Value.GetComponent<CharacterDataBundle>().data;
+                sb.AppendLine($"Hero_{data.name};{JsonUtility.ToJson(data)}");
+            }
+            sb.AppendLine($"Inventory;{JsonUtility.ToJson(inventoryData)}");
+            File.WriteAllText(GetSaveFilePath(), sb.ToString());
+            Logger.Debug("Save Success");
         }
-        sb.AppendLine($"Inventory;{JsonUtility.ToJson(inventoryData)}");
-        File.WriteAllText(GetSaveFilePath(), sb.ToString());
+        catch (Exception e)
+        {
+            Logger.Debug($"File save error {e}");
+        }
     }
 
     public bool LoadAllData()
@@ -167,7 +176,7 @@ public class GameManager : Singleton<GameManager>
                     Logger.Debug($"Load failed {heroName}");
                 }
             }
-            else if(id.Contains("Inventory"))
+            else if (id.Contains("Inventory"))
             {
                 inventoryData = JsonUtility.FromJson<InventoryData>(contents);
             }
@@ -216,8 +225,8 @@ public class GameManager : Singleton<GameManager>
         fadeEffect.gameObject.SetActive(true);
         float timer = 0f;
         float halfDuration = duration * 0.5f;
-        Color fadeIn = new (0, 0, 0, 0);
-        Color fadeOut = new (0, 0, 0, 1);
+        Color fadeIn = new(0, 0, 0, 0);
+        Color fadeOut = new(0, 0, 0, 1);
         string loadString = "Loading";
         StringBuilder dots = new();
 
@@ -232,7 +241,7 @@ public class GameManager : Singleton<GameManager>
         loadText.gameObject.SetActive(true);
         //SceneManager.LoadScene(sceneIdx);
         currentScene = (SceneIndex)sceneIdx;
-        WaitForSeconds wfs = new (duration * 0.1f);
+        WaitForSeconds wfs = new(duration * 0.1f);
         while (!loadSceneHandle.isDone)
         {
             loadText.text = $"{loadString}{dots}";
@@ -292,7 +301,7 @@ public class GameManager : Singleton<GameManager>
         {
             return sprites[lower];
         }
-        
+
         Logger.Debug($"Load sprite fail. address: {address}");
         return null;
     }
