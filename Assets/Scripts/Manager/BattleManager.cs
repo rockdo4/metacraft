@@ -5,6 +5,7 @@ using TMPro;
 using System.Collections;
 using System.Linq;
 using Cinemachine;
+using System.IO;
 
 public class BattleManager : MonoBehaviour
 {
@@ -105,8 +106,17 @@ public class BattleManager : MonoBehaviour
     {
         // 밸런스 테스트용 임시 코드
         GameManager gm = GameManager.Instance;
-        gm.enemySpawnList = CSVReader.Read("EnemySpawnTest");
-        gm.enemyInfoList = CSVReader.Read("EnemyInfoTest");
+        string resourcesPath = $"{Application.dataPath}/Resources/";
+        string testEnemySpawnTestFileName = "EnemySpawnTest";
+        string testEnemyInfoTestFileName = "EnemyInfoTest";
+        if (File.Exists($"{resourcesPath}/{testEnemySpawnTestFileName}"))
+            gm.enemySpawnList = CSVReader.Read("EnemySpawnTest");
+        else
+            Logger.Debug("enemy spawn doesn't exist");
+        if (File.Exists($"{resourcesPath}/{testEnemyInfoTestFileName}"))
+            gm.enemyInfoList = CSVReader.Read("EnemyInfoTest");
+        else
+            Logger.Debug("enemy info doesn't exist");
         Init();
         StartNextStage(curEvent);
 
