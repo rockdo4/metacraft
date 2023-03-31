@@ -4,6 +4,8 @@ using UnityEngine.UI;
 
 public class OptionController : MonoBehaviour
 {
+    public Toggle soundOnOff;    
+
     public Slider bgmSlider;
     public Slider seSlider;
 
@@ -33,6 +35,11 @@ public class OptionController : MonoBehaviour
     public void SetSEVolume(float volume)
     {
         AudioManager.Instance.SetSEVolume(volume);
+    }
+
+    public void OnOffSound(bool onOff)
+    {
+        Camera.main.GetComponent<AudioListener>().enabled = onOff;
     }
     public void ChangeLanguage()
     {
