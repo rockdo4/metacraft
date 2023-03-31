@@ -111,7 +111,7 @@ public class ActiveSkillAOE : CharacterSkill
     }
     protected virtual void MoveSkillAreaIndicator()
     {
-        Ray ray = cam.ScreenPointToRay(Input.mousePosition);
+        Ray ray = cam.ScreenPointToRay(Input.mousePosition);        
         if (Physics.Raycast(ray, out RaycastHit hit, 100.0f, layerM))
         {
             if (!isTrackTarget)
@@ -237,10 +237,6 @@ public class ActiveSkillAOE : CharacterSkill
 
     public override void OnActiveSkill(AttackableUnit attackableUnit, List<AttackableUnit> enemies, List<AttackableUnit> heros)
     {
-        //if (isTutorial)
-        //{
-        //    indicatorTransform.position = targetPos;
-        //}
         base.OnActiveSkill(attackableUnit,enemies, heros);
 
         if (hasDuration)
@@ -278,8 +274,6 @@ public class ActiveSkillAOE : CharacterSkill
     }
     public void ReadyEffectUntillOnActiveSkill()
     {
-        //if (isTutorial)
-        //    indicatorTransform.position = targetPos;
         EffectManager.Instance.Get(readyEffect, indicatorTransform);
         skillAreaIndicator.Renderer.enabled = false;
         castRangeIndicator.SetActive(false);

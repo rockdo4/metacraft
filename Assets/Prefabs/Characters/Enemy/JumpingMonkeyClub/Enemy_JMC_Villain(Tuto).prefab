@@ -1860,6 +1860,7 @@ MonoBehaviour:
     job: 0
     tags: []
     level: 0
+    maxLevel: 0
     exp: 0
     likeability: 0
     baseDamage: 50
@@ -1914,7 +1915,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 8162887647791456887}
   m_Enabled: 0
   m_AgentTypeID: 0
-  m_Radius: 0.2
+  m_Radius: 0.7
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -2004,8 +2005,11 @@ MonoBehaviour:
   citizenList: []
   unitState: 0
   battleState: 0
+  buffList: []
   isThereDamageUI: 1
   usingFloatingHpBar: 1
   isAlive: 0
   effectCreateTransform: {fileID: 1854313664894639445}
+  hitEffectTransform: {fileID: 0}
+  useAudio: 0
   isMapTriggerEnter: 0

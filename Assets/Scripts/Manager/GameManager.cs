@@ -227,6 +227,7 @@ public class GameManager : Singleton<GameManager>
             yield return null;
             timer += Time.deltaTime;
         }
+        fadeEffect.color = fadeOut;
         AsyncOperation loadSceneHandle = SceneManager.LoadSceneAsync(sceneIdx);
         loadText.gameObject.SetActive(true);
         //SceneManager.LoadScene(sceneIdx);
@@ -249,6 +250,7 @@ public class GameManager : Singleton<GameManager>
             yield return null;
             timer += Time.deltaTime;
         }
+        fadeEffect.color = fadeIn;
         fadeEffect.gameObject.SetActive(false);
     }
 

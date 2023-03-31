@@ -38,7 +38,7 @@ public class SkillFieldWithDuration : MonoBehaviour
 
     public AudioSource[] activeSkillAttackHitSounds;
 
-    protected void OnEnable()
+    protected virtual void OnEnable()
     {        
         Invoke(offSkillFieldFuncName, duration);
         if(IsInit)
@@ -81,21 +81,21 @@ public class SkillFieldWithDuration : MonoBehaviour
         }
     }
 
-    private void Update()
+    protected virtual void Update()
     {
         if(isTrackTarget)
             currParticle.transform.position = transform.position;
         TryTrackTarget();
         OnDamage();
     }
-    private void TryTrackTarget()
+    protected void TryTrackTarget()
     {
         if(!isTrackTarget) 
             return;
 
         transform.position = trackTransform.position;
     }
-    private void OnDamage()
+    protected void OnDamage()
     {
         if (Time.time - lastHitTime < hitInterval)
             return;
@@ -125,7 +125,7 @@ public class SkillFieldWithDuration : MonoBehaviour
     {
         transform.localScale = new Vector3(x, y, z);
     }
-    private void OffSkillField()
+    protected virtual void OffSkillField()
     {
         gameObject.SetActive(false);
     }

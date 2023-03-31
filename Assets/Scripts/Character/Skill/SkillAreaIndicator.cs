@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
 
 public class SkillAreaIndicator : MonoBehaviour
 {
@@ -71,10 +70,7 @@ public class SkillAreaIndicator : MonoBehaviour
         transform.localScale = new Vector3(x, y, z);        
     }
     private void OnEnable()
-    {
-        //if(meshRenderer == null)
-        //    meshRenderer = GetComponent<MeshRenderer>();
-
+    { 
         Renderer.enabled = true;
     }
     protected virtual void OnTriggerEnter(Collider other)

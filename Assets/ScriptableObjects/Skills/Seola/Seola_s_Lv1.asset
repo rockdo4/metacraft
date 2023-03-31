@@ -9,48 +9,40 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c267fa0414501eb408668a75a7c3b73f, type: 3}
+  m_Script: {fileID: 11500000, guid: 8ea31b1afcf37fb47b0432c9ffa1a68d, type: 3}
   m_Name: Seola_s_Lv1
   m_EditorClassIdentifier: 
   skillLevel: 1
-  id: 7033002
+  id: 70300231
   skillName: skill_Icicle_iceprison
   preCooldown: 5
   cooldown: 25
-  distance: 10
-  targetNumLimit: 5
+  distance: 20
+  targetNumLimit: 9999
   angle: 0
   coefficientType: 0
-  coefficient: 2.28
-  addCoefficient: 0.19
+  coefficient: 0.57
+  addCoefficient: 0
   targetType: 1
   searchType: 0
-  readyEffect: 3
+  readyEffect: -1
   activeEffect: 32
   hitEffect: 10
   isCriticalPossible: 1
   isAuto: 0
-  isTutorial: 0
   targetPos: {x: 0, y: 0, z: 0}
   skillDescription: skillinfo_icicle_s
   skillIcon: icicle_s_icon
-  buffInfos:
-  - {fileID: 11400000, guid: 19546f123ab8c8c4fbfed10b18e6b387, type: 2}
-  addBuffState:
-  - 0
-  buffRadius: 15
-  buffTargetType: 2
-  buffTargetCnt: 5
+  buffInfos: []
+  addBuffState: []
+  buffRadius: 0
+  buffTargetType: 0
+  buffTargetCnt: 0
   priority: 0
   normalAttackSound: {fileID: 0}
   normalAttackHitSounds: []
-  activeSkillAttackSound: {fileID: 7788947154200315877, guid: fd75e276a2629ac46b435b962f75c913,
-    type: 3}
-  activeSkillAttackHitSounds:
-  - {fileID: 3513099321023903016, guid: d7c9be34ade3f1a47b2e74b4a5e91d07, type: 3}
-  - {fileID: 3513099321023903016, guid: 93b7ad923aea4c8449cb4473ddfc67a2, type: 3}
-  - {fileID: 3513099321023903016, guid: 336efedaf2fd6e8418a8c11eb8c64b57, type: 3}
-  - {fileID: 3513099321023903016, guid: 358da38bb44453148859eff7aa57acde, type: 3}
+  activeSkillAttackSound: {fileID: 0}
+  activeSkillAttackHitSounds: []
   skillAreaIndicatorPrefab: {fileID: 6672067328229480615, guid: 0da645c26f09e074abad419ddc09fafb,
     type: 3}
   layerM:
@@ -68,4 +60,8 @@ MonoBehaviour:
   widthX: -1
   castRangeLimit: 20
   maxColliders: 32
-  hasDuration: 0
+  hasDuration: 1
+  duration: 2
+  hitInterval: 0.5
+  skillFieldPrefab: {fileID: 3682801926524696948, guid: c469a7224c2ee24408d5ee3d648151f3,
+    type: 3}

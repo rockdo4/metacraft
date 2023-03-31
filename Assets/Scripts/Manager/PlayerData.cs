@@ -6,6 +6,7 @@ public class PlayerData
 {
     public string playerId = "000001";
     public string playerName = "default name";
+    public string portraitKey = "icon_hero_egostick";
     public int gold = 0;
 
     [Range(1, 30)]
