@@ -70,6 +70,19 @@ public class AudioManager : Singleton<AudioManager>
             bgmOriginVolumes[i] = bgms[i].volume;
         }
     }
+
+    public void SetMasterVolume(float volume)
+    {
+        master = volume;
+        mixer.SetFloat(nameof(master), master);
+    }
+
+    public void OnOffSound(bool onOff)
+    {
+        master = onOff ? 0 : -80;
+        mixer.SetFloat(nameof(master), master);
+    }
+
     public void SetBGMVolume(float volume)
     {   
         bgm = volume;

@@ -39,7 +39,7 @@ public class OptionController : MonoBehaviour
 
     public void OnOffSound(bool onOff)
     {
-        Camera.main.GetComponent<AudioListener>().enabled = onOff;
+        AudioManager.Instance.OnOffSound(onOff);
     }
     public void ChangeLanguage()
     {
