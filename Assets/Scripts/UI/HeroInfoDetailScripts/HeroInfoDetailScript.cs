@@ -11,8 +11,6 @@ public class HeroInfoDetailScript : View
     public TextMeshProUGUI statDetail;
     public Toggle[] firstToggleTabs;
 
-    public Button[] trainingPlusButtons;
-
     public Slider expBar;
 
     public Image[] skillIcons;
