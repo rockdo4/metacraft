@@ -397,7 +397,7 @@ namespace GAP_ParticleSystemController
                 }
                 if (!SaveParticleSystemScript.CheckExistingFile(gameObject))
                 {
-                    SaveParticleSystemScript.SaveVFX(gameObject, psOriginalSettingsList);
+                    //SaveParticleSystemScript.SaveVFX(gameObject, psOriginalSettingsList);
                 }
 #if UNITY_2018_3_OR_NEWER
                 else

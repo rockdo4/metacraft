@@ -57,5 +57,6 @@ public enum EffectEnum
     top_down_beam_circle_green,
     skillAttack,
     Misses,
+    MuzzleFlash1,
     Count,
 }
