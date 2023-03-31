@@ -18,7 +18,9 @@ public class HeroUpgradeWindow : View
         {
             GameObject obj = Instantiate(heroInfoPrefab, contents);
             HeroInfoButton info = obj.GetComponent<HeroInfoButton>();
-            heroInfos.Add(info);
+
+            if ((CharacterGrade)info.data.grade != CharacterGrade.SS)
+                heroInfos.Add(info);
         }
     }
 
