@@ -278,14 +278,22 @@ public abstract class AttackableUnit : MonoBehaviour
         characterData.activeSkill.OnActiveSkill(this, enemyList, heroList);
     }
     public virtual void PlayNormalAttackSound()
-    {        
-        nowAttack.normalAttackSound?.Play();        
+    {
+        var normalsound = nowAttack.normalAttackSound;
+
+        if (normalsound.Equals(null))
+            return;
+
+        normalsound.Play();        
     }
     public virtual void PlayActiveSkillSound()
     {
         var activeSound = characterData.activeSkill.activeSkillAttackSound;
-        if(!activeSound.Equals(null))
-            activeSound.Play();
+        
+        if (activeSound.Equals(null))
+            return;
+
+        activeSound.Play();
     }
 
     public virtual void NormalAttackOnDamage()
