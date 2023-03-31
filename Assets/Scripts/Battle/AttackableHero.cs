@@ -226,7 +226,7 @@ public class AttackableHero : AttackableUnit
     }
     private void Start()
     {
-        if (effectCreateTransform.Equals(null))
+        if (effectCreateTransform == null)
             effectCreateTransform = transform;
 
         foreach (var attack in characterData.attacks)

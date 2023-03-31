@@ -114,7 +114,6 @@ public class AttackableEnemy : AttackableUnit
         characterData.InitSetting();
         SetData();
 
-        unitState = UnitState.Idle;
         ResetCoolDown();
 
         hpBarManager.SetLiveData(characterData.data);
@@ -122,7 +121,17 @@ public class AttackableEnemy : AttackableUnit
 
     private void Start()
     {
-        if (effectCreateTransform.Equals(null))
+        if (battleManager.tree.CurNode.type == TreeNodeTypes.Threat)
+        {
+            SetEnabledPathFind(true);
+            unitState = UnitState.Battle;
+        }
+        else
+        {
+            unitState = UnitState.Idle;
+        }
+
+        if (effectCreateTransform == null)
             effectCreateTransform = transform;
 
         foreach (var attack in characterData.attacks)
@@ -132,10 +141,6 @@ public class AttackableEnemy : AttackableUnit
         }
         if (characterData.activeSkill != null)
             characterData.activeSkill.ActorTransform = transform;
-
-        var manager = FindObjectOfType<BattleManager>();
-        if (manager != null)
-            battleManager = manager;
     }
 
     public override void ResetData()
