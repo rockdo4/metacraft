@@ -51,10 +51,10 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.14896014
-  m_Height: 1.1344666
+  m_Radius: 0.5
+  m_Height: 1.5380733
   m_Direction: 1
-  m_Center: {x: -0.0017444938, y: 0.54196286, z: -0.01791361}
+  m_Center: {x: -0.0017445087, y: 0.7577132, z: -0.017913628}
 --- !u!54 &4576357654039833039
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -80,7 +80,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 2267308064769617490}
   m_Enabled: 0
   m_AgentTypeID: 0
-  m_Radius: 0.2
+  m_Radius: 0.5
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -127,7 +127,7 @@ MonoBehaviour:
     accuracy: 0.5
   attacks:
   - {fileID: 11400000, guid: 5991a4a3f84d0ae44ba55b74d9c8e7cf, type: 2}
-  activeSkill: {fileID: 11400000, guid: 12d14e97f68231b42b13e6affbe6f6a7, type: 2}
+  activeSkill: {fileID: 11400000, guid: 39a4030f073410f4fb31b4b53b509d0d, type: 2}
   passiveSkill: {fileID: 11400000, guid: 8fbce8a86b540de42ad10e04f1e64b06, type: 2}
 --- !u!114 &1298548128481952343
 MonoBehaviour:
@@ -184,8 +184,6 @@ MonoBehaviour:
   effectCreateTransform: {fileID: 1568212922210820386}
   hitEffectTransform: {fileID: 852524307216197432}
   useAudio: 1
-  isTutorial: 0
-  tutorialActive: 0
 --- !u!114 &4371563829749626744
 MonoBehaviour:
   m_ObjectHideFlags: 0

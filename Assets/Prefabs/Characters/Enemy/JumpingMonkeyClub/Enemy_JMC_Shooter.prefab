@@ -60,6 +60,7 @@ MonoBehaviour:
     job: 0
     tags: []
     level: 0
+    maxLevel: 0
     exp: 0
     likeability: 0
     baseDamage: 0
@@ -85,7 +86,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 0.49082834
+  m_Radius: 0.7
   m_Height: 2.0499868
   m_Direction: 1
   m_Center: {x: -0.015165806, y: 0.9035442, z: 0.064696014}
@@ -114,7 +115,7 @@ NavMeshAgent:
   m_GameObject: {fileID: 119712573433271651}
   m_Enabled: 0
   m_AgentTypeID: 0
-  m_Radius: 0.2
+  m_Radius: 0.7
   m_Speed: 3.5
   m_Acceleration: 8
   avoidancePriority: 50
@@ -204,11 +205,13 @@ MonoBehaviour:
   citizenList: []
   unitState: 0
   battleState: 0
+  buffList: []
   isThereDamageUI: 1
   usingFloatingHpBar: 1
   isAlive: 0
   effectCreateTransform: {fileID: 7591646851042470465}
   hitEffectTransform: {fileID: 4154032768275242482}
+  useAudio: 0
   isMapTriggerEnter: 0
 --- !u!1 &3875931855908864222
 GameObject:

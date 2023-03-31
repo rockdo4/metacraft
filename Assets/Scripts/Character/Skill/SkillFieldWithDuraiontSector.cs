@@ -17,7 +17,7 @@ public class SkillFieldWithDuraiontSector : SkillFieldWithDuration
         layerMask = isTargetEnemy ? enemyLayerMask : heroLayerMask;
         colliders = new Collider[maxColliders];
     }
-    private void Update()
+    protected override void Update()
     {
         if (Time.time - lastHitTime < hitInterval)
             return;
