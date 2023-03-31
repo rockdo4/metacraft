@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine.UI;
+using static UnityEditor.Progress;
 
 public class HeroUpgradeDetailWindow : View
 {
@@ -26,6 +27,10 @@ public class HeroUpgradeDetailWindow : View
     public TextMeshProUGUI resultHeroText;
 
     private GameManager gm;
+    private int needGold = 0;
+    private int needItemCount = 0;
+    private int upgradeItemCount = 0;
+    private string currItemID = string.Empty;
 
     private void Awake()
     {
@@ -89,6 +94,8 @@ public class HeroUpgradeDetailWindow : View
         var ut = gm.upgradeTable;
         var inven = gm.inventoryData;
         var items = gm.itemInfoList;
+        int mmaterialAmount = 0;
+        int itemCount = 0;
 
         for (int i = 0; i < ut.Count; i++)
         {
@@ -103,15 +110,24 @@ public class HeroUpgradeDetailWindow : View
                         break;
                     }
                 }
+
+                mmaterialAmount = (int)ut[i]["Mmaterial1Amount"];
                 if (inven.IsItem(itemID))
                 {
-                    meterialInfo[0].text = $"{inven.FindItem(itemID).count}/{(int)ut[i]["Mmaterial1Amount"]}";
+                    currItemID = itemID;
+                    itemCount = inven.FindItem(itemID).count;
+                    meterialInfo[0].text = $"{itemCount}/{mmaterialAmount}";
                 }
                 else
                 {
-                    meterialInfo[0].text = $"{0}/{(int)ut[i]["Mmaterial1Amount"]}";
+                    meterialInfo[0].text = $"{0}/{mmaterialAmount}";
+                    itemCount = 0;
                 }
-                gold.text = $"{gm.playerData.gold}/{(int)ut[i]["NeedGold"]}";
+
+                upgradeItemCount = itemCount;
+                needItemCount = mmaterialAmount;
+                needGold = (int)ut[i]["NeedGold"];
+                gold.text = $"{gm.playerData.gold}/{needGold}";
             }            
         }
     }
@@ -120,8 +136,17 @@ public class HeroUpgradeDetailWindow : View
     {
         CharacterDataBundle cdb = gm.currentSelectObject.GetComponent<AttackableUnit>().GetUnitData();
         LiveData data = cdb.data;
-        if (data.grade == (int)CharacterGrade.SS)
+
+        int currGold = gm.playerData.gold;
+        if (currGold < needGold ||
+            upgradeItemCount < needItemCount)
+        {
+            Logger.Debug("Upgrade Fail");
             return;
+        }
+
+        if (data.grade == (int)CharacterGrade.SS)
+        return;
 
         data.maxLevel = (int)gm.maxLevelTable[data.grade]["MaxLevel"];
         data.grade += 1;
@@ -130,5 +155,11 @@ public class HeroUpgradeDetailWindow : View
         cdb.activeSkill.skillLevel += 1;
 
         //아이템 소모, 골드 소모
+        gm.playerData.gold -= needGold;
+        var inven = gm.inventoryData;
+        inven.FindItem(currItemID).count -= needItemCount;
+
+        SetHeroInfo();
+        FindUpgradeMaterial(data.name, data.grade);
     }
 }

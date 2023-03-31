@@ -175,7 +175,7 @@ public class MissionManager : View
                     if (job.Equals(fitProperties[i].text))
                     {
                         fitProperties[i].fontStyle = FontStyles.Bold;
-                        fitProperties[i].color = Color.red;
+                        fitProperties[i].color = Color.green;
                         gm.fitPropertyFlags[i] = true;
                         break;
                     }
