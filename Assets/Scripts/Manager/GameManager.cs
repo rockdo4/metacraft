@@ -120,10 +120,10 @@ public class GameManager : Singleton<GameManager>
         }
     }
 
-    //public void OnApplicationQuit()
-    //{
-    //    //SaveAllData();
-    //}
+    public void OnApplicationQuit()
+    {
+        SaveAllData();
+    }
 
     public void SaveAllData()
     {
