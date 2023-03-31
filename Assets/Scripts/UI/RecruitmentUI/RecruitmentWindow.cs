@@ -72,6 +72,7 @@ public class RecruitmentWindow : MonoBehaviour
         ClearResult();
         GameObject hero = heroDatabase[Gacha(probs)];
         GachaProcess(hero, 0);
+        GameManager.Instance.SaveAllData();
     }
 
     private void GachaProcess(GameObject hero, int i)
@@ -151,6 +152,7 @@ public class RecruitmentWindow : MonoBehaviour
         {
             GachaProcess(getGacha[i], i);
         }
+        GameManager.Instance.SaveAllData();
     }
 
     private int Gacha(float[] probs)

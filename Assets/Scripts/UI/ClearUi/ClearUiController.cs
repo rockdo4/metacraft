@@ -44,5 +44,6 @@ public class ClearUiController : View
         }
 
         rewards.SetReward(isLast);
+        GameManager.Instance.SaveAllData();
     }
 }
