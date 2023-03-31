@@ -106,7 +106,7 @@ public class SkillFieldWithDuration : MonoBehaviour
         {
             var value = colliders.ElementAt(i);
 
-            if(value.Equals(null) || !value.gameObject.activeSelf)
+            if(value == null || !value.gameObject.activeSelf)
             {
                 colliders.Remove(value);
             }

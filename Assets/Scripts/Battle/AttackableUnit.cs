@@ -136,19 +136,23 @@ public abstract class AttackableUnit : MonoBehaviour
 
     protected virtual void Awake()
     {
-        if (effectCreateTransform.Equals(null))
+        var manager = FindObjectOfType<BattleManager>();
+        if (manager != null)
+            battleManager = manager;
+
+        if (effectCreateTransform == null)
             effectCreateTransform = transform;
 
-        if (hitEffectTransform.Equals(null))
+        if (hitEffectTransform == null)
             hitEffectTransform = transform;
 
         SetAudioSources();
     }
     private void Start()
     {
-        var manager = FindObjectOfType<BattleManager>();
-        if (manager != null)
-            battleManager = manager;
+        //var manager = FindObjectOfType<BattleManager>();
+        //if (manager != null)
+        //    battleManager = manager;
     }
 
     protected void InitData()
@@ -235,23 +239,23 @@ public abstract class AttackableUnit : MonoBehaviour
         {
             var skill = characterData.attacks[i];
 
-            if (!skill.normalAttackSound.Equals(null))
+            if (skill.normalAttackSound != null)
                 skill.normalAttackSound = Instantiate(skill.normalAttackSound, audioSourcesHolder.transform);
 
             for (int j = 0; j < skill.normalAttackHitSounds.Length; j++)
             {
-                if (!skill.normalAttackHitSounds[j].Equals(null))
+                if (skill.normalAttackHitSounds[j] != null)
                     skill.normalAttackHitSounds[j] = Instantiate(skill.normalAttackHitSounds[j], audioSourcesHolder);
             }
         }
 
         var activeSkill = characterData.activeSkill;
-        if(!activeSkill.activeSkillAttackSound.Equals(null))
+        if(activeSkill.activeSkillAttackSound != null)
             activeSkill.activeSkillAttackSound = Instantiate(activeSkill.activeSkillAttackSound, audioSourcesHolder);
 
         for (int i = 0; i < activeSkill.activeSkillAttackHitSounds.Length; i++)
         {
-            if (!activeSkill.activeSkillAttackHitSounds[i].Equals(null))
+            if (activeSkill.activeSkillAttackHitSounds[i] != null)
                 activeSkill.activeSkillAttackHitSounds[i] = Instantiate(activeSkill.activeSkillAttackHitSounds[i], audioSourcesHolder);
         }
     } 
@@ -281,7 +285,7 @@ public abstract class AttackableUnit : MonoBehaviour
     {
         var normalsound = nowAttack.normalAttackSound;
 
-        if (normalsound.Equals(null))
+        if (normalsound == null)
             return;
 
         normalsound.Play();        
@@ -289,8 +293,8 @@ public abstract class AttackableUnit : MonoBehaviour
     public virtual void PlayActiveSkillSound()
     {
         var activeSound = characterData.activeSkill.activeSkillAttackSound;
-        
-        if (activeSound.Equals(null))
+
+        if (activeSound == null)
             return;
 
         activeSound.Play();

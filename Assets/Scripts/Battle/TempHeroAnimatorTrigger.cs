@@ -36,7 +36,7 @@ public class TempHeroAnimatorTrigger : MonoBehaviour
     }
     public void PlayFootStep()
     {
-        if(!walkSound.Equals(null))
+        if(walkSound != null)
             walkSound.PlayFootStep();
     }
 }

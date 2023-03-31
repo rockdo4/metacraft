@@ -1417,8 +1417,8 @@ public class BattleManager : MonoBehaviour
                                     {
                                         middleBoss = enemy;
                                         saveWave = 0;
-                                        enemy.SetEnabledPathFind(true);
-                                        enemy.ChangeUnitState(UnitState.Battle);
+                                        //enemy.SetEnabledPathFind(true);
+                                        //enemy.ChangeUnitState(UnitState.Battle);
                                         btMapTriggers[i].enemySettingPositions[j].isMiddleBoss = true;
                                         btMapTriggers[i].enemySettingPositions[j].middleBoss = enemy;
 
