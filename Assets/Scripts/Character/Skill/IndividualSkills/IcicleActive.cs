@@ -12,7 +12,7 @@ public class IcicleActive : SkillFieldWithDuration
 
         if (IsInit)
         {
-            currParticle = EffectManager.Instance.Get(effect, transform).transform.GetChild(0).gameObject;
+            EffectManager.Instance.Get(effect, transform);
         }
     }
 
