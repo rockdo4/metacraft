@@ -143,7 +143,7 @@ public class AssetLoadProgress : MonoBehaviour
         gm.expRequirementTable = FixExpTable(CSVReader.SplitTextAsset(releaseHandles["ExpRequirementTable"].Result as TextAsset));
         gm.maxLevelTable = CSVReader.SplitTextAsset(releaseHandles["MaxLevelTable"].Result as TextAsset);
         gm.upgradeTable = CSVReader.SplitTextAsset(releaseHandles["UpgradeTable"].Result as TextAsset);
-        //tutorialTextTable = CSVReader.SplitTextAsset(releasehandles["TutorialTextTable"].Result as TextAsset);
+        gm.tutorialTable = CSVReader.SplitTextAsset(releaseHandles["TutorialTable"].Result as TextAsset);
 
         bool saveFileExist = gm.LoadAllData();
         FixMissionTable(CSVReader.SplitTextAsset(releaseHandles["MissionInfoTable"].Result as TextAsset));
@@ -151,6 +151,7 @@ public class AssetLoadProgress : MonoBehaviour
         AppendStringTable(CSVReader.SplitTextAsset(releaseHandles["StringTable_Event"].Result as TextAsset, false), "StringTable_Event");
         AppendStringTable(CSVReader.SplitTextAsset(releaseHandles["StringTable_Proper"].Result as TextAsset, false), "StringTable_Proper");
         AppendStringTable(CSVReader.SplitTextAsset(releaseHandles["StringTable_UI"].Result as TextAsset, false), "StringTable_UI");
+        AppendStringTable(CSVReader.SplitTextAsset(releaseHandles["StringTable_Tutorial"].Result as TextAsset, false), "StringTable_Tutorial");
 
         ReleaseAddressable(releaseHandles);
         releaseHandles.Clear();
