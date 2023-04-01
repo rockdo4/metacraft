@@ -107,8 +107,8 @@ public class BattleManager : MonoBehaviour
         // 밸런스 테스트용 임시 코드
         GameManager gm = GameManager.Instance;
         string resourcesPath = $"{Application.dataPath}/Resources/";
-        string testEnemySpawnTestFileName = "EnemySpawnTest";
-        string testEnemyInfoTestFileName = "EnemyInfoTest";
+        string testEnemySpawnTestFileName = "EnemySpawnTest.csv";
+        string testEnemyInfoTestFileName = "EnemyInfoTest.csv";
         if (File.Exists($"{resourcesPath}/{testEnemySpawnTestFileName}"))
             gm.enemySpawnList = CSVReader.Read("EnemySpawnTest");
         else

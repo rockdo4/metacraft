@@ -1,22 +1,68 @@
+using System.Collections;
 using UnityEngine;
 
 public class SouthSilverNormalAttack : MonoBehaviour
 {
-    public Transform droneTransform;
-    public Transform muzzle1;
-    public Transform muzzle2;
-    public Transform muzzle3;
-    public Transform muzzle4;
+    public Transform droneTransform;    
 
-    public AttackableUnit unitData;
+    public Transform[] muzzles;
 
-    public void NormalAttackOnDamage()
+    public AttackableUnit unit;
+
+    public float hitInterval = 0.1f;
+
+    private Coroutine droneAttack;
+
+    float timerWhenMoving;
+    Quaternion worldForward = Quaternion.LookRotation(Vector3.forward);
+
+    private void Update()
     {
-        droneTransform.LookAt(unitData.Target.transform.position);
+        if (unit.GetUnitState() != UnitState.MoveNext)
+        {
+            timerWhenMoving = 0f;
+            return;
+        }
+
+        timerWhenMoving += Time.deltaTime;
+        droneTransform.rotation = Quaternion.Lerp(droneTransform.rotation, worldForward, timerWhenMoving);
     }
 
-    private void DroneAttack()
+    public void NormalAttackOnDamage()
+    {        
+        droneAttack = StartCoroutine(DroneAttack());
+    }
+    private IEnumerator DroneAttack()
     {
-        unitData.NormalAttackOnDamage();
+        float timer = 0f;
+        float duration = hitInterval * 3;
+        float angleVelocity = 2f;
+
+        bool[] fired = new bool[3];
+
+        Quaternion targetRotation = Quaternion.LookRotation(unit.Target.transform.position - transform.position);
+
+        foreach (Transform muzzle in muzzles)
+        {
+            EffectManager.Instance.Get(EffectEnum.MuzzleFlash1, muzzle, muzzle.localRotation);
+        }
+
+        while (timer < duration)
+        {
+            timer += Time.deltaTime;
+
+            droneTransform.rotation = Quaternion.Lerp(droneTransform.rotation, targetRotation, timer * angleVelocity);
+
+            for (int i = 0; i < fired.Length; i++)
+            {
+                if (!fired[i] && timer > hitInterval * (i + 1))
+                {
+                    unit.NormalAttackOnDamage();
+                    fired[i] = true;
+                }
+            }
+
+            yield return null;
+        }
     }
 }
