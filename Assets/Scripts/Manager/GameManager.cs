@@ -60,10 +60,10 @@ public class GameManager : Singleton<GameManager>
     public Color currMapColor;
     public List<Color> mapLigthColors;
 
-    public override void Awake()
-    {
-        base.Awake();
-    }
+    //public override void Awake()
+    //{
+    //    base.Awake();
+    //}
 
     public void SetHeroesOrigin()
     {

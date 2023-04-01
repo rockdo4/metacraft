@@ -62,11 +62,6 @@ public class AssetLoadProgress : MonoBehaviour
             {
                 AsyncOperationHandle<TextAsset> tas = Addressables.LoadAssetAsync<TextAsset>(key);
                 releaseHandles.Add(key, tas);
-                //tas.Completed +=
-                //    (AsyncOperationHandle<TextAsset> obj) =>
-                //    {
-                //        //Logger.Debug($"{key} load success");
-                //    };
                 total++;
             }
         }
@@ -79,13 +74,6 @@ public class AssetLoadProgress : MonoBehaviour
             unReleaseHandles.Add(LoadSprite($"icon_{address}"));
             unReleaseHandles.Add(LoadSprite($"illu_{address}"));
             total += 2;
-        }
-
-        count = 29; //임시. 나중에 버프 테이블 불러오게 수정할 예정
-        for (int i = 1; i <= count; i++)
-        {
-            unReleaseHandles.Add(LoadSprite($"state{i}"));
-            total++;
         }
 
         int spriteCount = spriteNames.Length;
@@ -158,7 +146,7 @@ public class AssetLoadProgress : MonoBehaviour
         gm.SetAssets(sprites, stringTable);
         CompleteProgress();
 
-        if (!saveFileExist)
+        if (!saveFileExist || gm.myHeroes.Count == 0)
             gm.CreateNewHero("hero_egostick");
     }
 
@@ -217,31 +205,15 @@ public class AssetLoadProgress : MonoBehaviour
     // 작전 테이블 난이도 구분
     private void FixMissionTable(List<Dictionary<string, object>> missionInfoList)
     {
-        gm.missionInfoDifficulty = new Dictionary<int, List<Dictionary<string, object>>>();
+        gm.missionInfoDifficulty = new ();
         for (int i = 1; i < 6; i++)
+            gm.missionInfoDifficulty.Add(i, new ());
+
+        int count = missionInfoList.Count;
+        for (int i = 0; i < count; i++)
         {
-            gm.missionInfoDifficulty.Add(i, new List<Dictionary<string, object>>());
-        }
-        for (int i = 0; i < missionInfoList.Count; i++)
-        {
-            switch ((int)missionInfoList[i]["Difficulty"])
-            {
-                case 1:
-                    gm.missionInfoDifficulty[1].Add(missionInfoList[i]);
-                    break;
-                case 2:
-                    gm.missionInfoDifficulty[2].Add(missionInfoList[i]);
-                    break;
-                case 3:
-                    gm.missionInfoDifficulty[3].Add(missionInfoList[i]);
-                    break;
-                case 4:
-                    gm.missionInfoDifficulty[4].Add(missionInfoList[i]);
-                    break;
-                case 5:
-                    gm.missionInfoDifficulty[5].Add(missionInfoList[i]);
-                    break;
-            }
+            int diff = (int)missionInfoList[i]["Difficulty"];
+            gm.missionInfoDifficulty[diff].Add(missionInfoList[i]);
         }
     }
 
@@ -251,9 +223,7 @@ public class AssetLoadProgress : MonoBehaviour
 
         int count = expTable.Count;
         for (int i = 0; i < count; i++)
-        {
             result.Add((int)expTable[i]["LEVEL"], (int)expTable[i]["NEEDEXP"]);
-        }
         
         return result;
     }
