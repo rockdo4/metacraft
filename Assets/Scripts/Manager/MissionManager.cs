@@ -87,7 +87,8 @@ public class MissionManager : View
         gm.currentSelectMission = selectMission;
 
         portrait.sprite = gm.GetSpriteByAddress($"icon_{selectMission["VillainID"]}");
-        missionNameText.text = gm.GetStringByTable($"{selectMission["NameString"]}");
+        string missionName = $"LV. {selectMission["Level"]} {gm.GetStringByTable($"{selectMission["NameString"]}")}";
+        missionNameText.text = missionName;
         explanation.text = gm.GetStringByTable($"{selectMission["TooltipID"]}");
         gm.ClearBattleGroups();
         for (int i = 0; i < heroSlots.Length; i++)
