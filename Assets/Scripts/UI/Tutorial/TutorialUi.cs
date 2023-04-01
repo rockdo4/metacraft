@@ -19,10 +19,16 @@ public class TutorialUi : MonoBehaviour
     int idx; 
     public List<Dictionary<string, object>> tutorialTable; // 튜토리얼 대사 테이블
 
-    private void Awake()
+    private void Start()
     {
-        idx = 0;
-        Init();
+        if (!GameManager.Instance.playerData.isTutorial)
+        {
+            gameObject.SetActive(false);
+        }
+        else
+        {
+            GameManager.Instance.playerData.isTutorial = false;
+        }
     }
     public void Init()
     {
@@ -70,4 +76,14 @@ public class TutorialUi : MonoBehaviour
         text.text = string.Join("\n", pages[idx].lines);
     }
 
+    public void OnClickExit()
+    {
+        UIManager.Instance.ClearPopups();
+    }
+
+    private void OnEnable()
+    {
+        idx = 0;
+        Init();
+    }
 }
