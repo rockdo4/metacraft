@@ -365,7 +365,7 @@ public abstract class AttackableUnit : MonoBehaviour
             target = minTarget;
         else
         {
-            if(target == null)
+            if(!IsAlive(target))
                 SearchMaxHealthTarget(targetList); //체력이 가장 많은 타겟 추적
         }
     }

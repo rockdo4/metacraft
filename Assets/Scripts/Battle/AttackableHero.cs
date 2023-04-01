@@ -27,6 +27,8 @@ public class AttackableHero : AttackableUnit
         }
         set {
 
+            Logger.Debug(value);
+
             if (unitState == value)
                 return;
 

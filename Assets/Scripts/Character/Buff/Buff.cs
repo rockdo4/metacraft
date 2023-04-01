@@ -33,17 +33,18 @@ public class Buff
         if (buffInfo.inf)
             return;
 
-        if (icon != null)
+        sec -= Time.deltaTime;
+        if (sec <= 0)
         {
-            sec -= Time.deltaTime;
-            if (sec <= 0)
+            sec = 1f;
+            timer -= 1;
+            if (icon != null)
             {
-                sec = 1f;
-                timer -= 1;
                 icon.count.text = ((int)timer).ToString();
                 icon.popUpBuff.count.text = icon.count.text;
             }
         }
+
 
         if (timer <= 0)
         {
