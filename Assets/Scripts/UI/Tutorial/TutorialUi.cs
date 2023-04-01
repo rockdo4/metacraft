@@ -70,4 +70,8 @@ public class TutorialUi : MonoBehaviour
         text.text = string.Join("\n", pages[idx].lines);
     }
 
+    public void OnClickExit()
+    {
+        UIManager.Instance.ClearPopups();
+    }
 }
