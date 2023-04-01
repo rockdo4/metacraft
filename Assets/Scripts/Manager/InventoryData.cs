@@ -153,13 +153,13 @@ public class Item
     }
     public Item(Dictionary<string, object> data)
     {
-        this.id = data["ID"].ToString();
-        this.name = data["Item_Name"].ToString();
-        this.count = 0;
-        this.info = data["Info"].ToString();
-        this.iconName = data["Icon_Name"].ToString();
-        this.sort = data["Sort"].ToString();
-        this.dataID = data["DataID"].ToString();
+        id = data["ID"].ToString();
+        name = data["Item_Name"].ToString();
+        count = 0;
+        info = data["Info"].ToString();
+        iconName = data["Icon_Name"].ToString();
+        sort = data["Sort"].ToString();
+        dataID = data["DataID"].ToString();
     }
     public void AddCount(int cnt)
     {

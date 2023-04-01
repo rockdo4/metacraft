@@ -117,7 +117,7 @@ public class AssetLoadProgress : MonoBehaviour
             yield return null;
         }
 
-        gm.dispatchInfoList = CSVReader.SplitTextAsset(releaseHandles["DispatchInfoTable"].Result as TextAsset);
+        //gm.dispatchInfoList = CSVReader.SplitTextAsset(releaseHandles["DispatchInfoTable"].Result as TextAsset);
         gm.officeInfoList = CSVReader.SplitTextAsset(releaseHandles["OfficeTable"].Result as TextAsset);
         gm.eventInfoList = CSVReader.SplitTextAsset(releaseHandles["EventTable"].Result as TextAsset);
         gm.compensationInfoList = CSVReader.SplitTextAsset(releaseHandles["CompensationTable"].Result as TextAsset);

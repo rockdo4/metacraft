@@ -11,13 +11,6 @@ public class BattleManager : MonoBehaviour
 {
     [Header("사용할 맵들")]
     public List<GameObject> eventMaps;
-    //private List<Dictionary<string, object>> eventInfoTable;            // 이벤트 테이블
-    //private List<Dictionary<string, object>> supplyInfoTable;           // 보급 테이블
-    private List<Dictionary<string, object>> eventEffectInfoTable;      // 이벤트 이펙트 테이블
-    private List<Dictionary<string, object>> enemyInfoTable;            // 적 스탯 테이블
-    private List<Dictionary<string, object>> enemySpawnTable;           // 적 생성 테이블
-    private Dictionary<string, object> currentSelectMission;            // 작전 테이블
-
     private MapEventEnum curEvent = MapEventEnum.None;
     private GameObject curMap;
 
@@ -172,7 +165,7 @@ public class BattleManager : MonoBehaviour
                 break;
             case 1:
                 List<object> supplyList = new();
-                string supplyId = $"{currentSelectMission["SupplyID"]}";
+                string supplyId = $"{gm.currentSelectMission["SupplyID"]}";
                 var data = GameManager.Instance.supplyInfoList.Find(t => t["ID"].ToString().CompareTo(supplyId) == 0);
 
                 for (int i = 0; i < 20; i++)
@@ -300,7 +293,7 @@ public class BattleManager : MonoBehaviour
         if (tree.CurNode.type == TreeNodeTypes.Supply)
         {
             // 작전 테이블에서 보급 id 찾기
-            string supplyId = $"{currentSelectMission["SupplyID"]}";
+            string supplyId = $"{gm.currentSelectMission["SupplyID"]}";
 
             // 보급 테이블에서 같은 ID 찾아서 해당 줄의 인덱스 저장
             int index = 0;
@@ -368,15 +361,15 @@ public class BattleManager : MonoBehaviour
     // 이벤트 노드 노멀 선택지 보상
     private void GetNormalEventEffect(ref string valueKey, ref int rewardKey, int effectColumn)
     {
-        string normalV1Text = $"{eventEffectInfoTable[effectColumn]["Normalvalue1"]}";
-        string normalV2Text = $"{eventEffectInfoTable[effectColumn]["Normalvalue2"]}";
+        string normalV1Text = $"{gm.eventEffectInfoList[effectColumn]["Normalvalue1"]}";
+        string normalV2Text = $"{gm.eventEffectInfoList[effectColumn]["Normalvalue2"]}";
         float normalValue1 = float.Parse(normalV1Text);
         float normalValue2 = float.Parse(normalV2Text);
 
-        string value1Text = $"{eventEffectInfoTable[effectColumn]["NormalvalueText1"]}";
-        string value2Text = $"{eventEffectInfoTable[effectColumn]["NormalvalueText2"]}";
-        int normalReward1 = (int)eventEffectInfoTable[effectColumn]["NormalReward1"];
-        int normalReward2 = (int)eventEffectInfoTable[effectColumn]["NormalReward2"];
+        string value1Text = $"{gm.eventEffectInfoList[effectColumn]["NormalvalueText1"]}";
+        string value2Text = $"{gm.eventEffectInfoList[effectColumn]["NormalvalueText2"]}";
+        int normalReward1 = (int)gm.eventEffectInfoList[effectColumn]["NormalReward1"];
+        int normalReward2 = (int)gm.eventEffectInfoList[effectColumn]["NormalReward2"];
 
         if (normalValue1.Equals(1f))
         {
@@ -417,9 +410,9 @@ public class BattleManager : MonoBehaviour
                     if (heroTag[j].Equals(tags[k]))
                     {
                         // PriorityRewardType
-                        valueKey = $"{eventEffectInfoTable[effectColumn][$"PriorityText{k + 1}"]}";
-                        rewardKey = (int)eventEffectInfoTable[effectColumn][$"PriorityReward{k + 1}"];
-                        rewardType = (int)eventEffectInfoTable[effectColumn][$"PriorityRewardType{k + 1}"];
+                        valueKey = $"{gm.eventEffectInfoList[effectColumn][$"PriorityText{k + 1}"]}";
+                        rewardKey = (int)gm.eventEffectInfoList[effectColumn][$"PriorityReward{k + 1}"];
+                        rewardType = (int)gm.eventEffectInfoList[effectColumn][$"PriorityRewardType{k + 1}"];
                         Logger.Debug($"Get! [value : {valueKey}, reward : {rewardKey}]");
                         return;
                     }
@@ -437,11 +430,11 @@ public class BattleManager : MonoBehaviour
         Logger.Debug("stageReward.nowRewards.Clear");
         string textEffect = $"{gm.eventInfoList[column][$"TextEffect{index}"]}";
 
-        // eventEffectInfoList 는 eventEffectTagInfoList로 변경됨. 상운과 논의 후 연결해서 쓸 것
         int effectColumn = 0;
-        for (int i = 0; i < eventEffectInfoTable.Count; i++)
+        int count = gm.eventEffectInfoList.Count;
+        for (int i = 0; i < count; i++)
         {
-            if (eventEffectInfoTable[i]["ID"].Equals(textEffect))
+            if (gm.eventEffectInfoList[i]["ID"].Equals(textEffect))
             {
                 effectColumn = i;
                 break;
@@ -454,10 +447,10 @@ public class BattleManager : MonoBehaviour
 
         List<string> tags = new();
 
-        int tagCount = (int)eventEffectInfoTable[effectColumn]["PriorityTagCount"];
+        int tagCount = (int)gm.eventEffectInfoList[effectColumn]["PriorityTagCount"];
         for (int i = 0; i < tagCount; i++)
         {
-            string tag = $"{eventEffectInfoTable[effectColumn][$"PriorityTag{i + 1}"]}";
+            string tag = $"{gm.eventEffectInfoList[effectColumn][$"PriorityTag{i + 1}"]}";
 
             if (tag == string.Empty)
             {
@@ -537,13 +530,6 @@ public class BattleManager : MonoBehaviour
             supplyButtonTexts.Add(text);
         }
 
-        //eventInfoTable = gm.eventInfoList;
-        //supplyInfoTable = gm.supplyInfoList;
-        currentSelectMission = gm.currentSelectMission;
-        eventEffectInfoTable = gm.eventEffectInfoList;
-        enemyInfoTable = gm.enemyInfoList;
-        enemySpawnTable = gm.enemySpawnList;
-
         var selectedHeroes = gm.GetSelectedHeroes();
         int count = selectedHeroes.Count;
 
@@ -589,7 +575,7 @@ public class BattleManager : MonoBehaviour
         DisabledAllMap();
 
         // 보스 ID 찾기
-        string villainID = $"{currentSelectMission["VillainID"]}";
+        string villainID = $"{gm.currentSelectMission["VillainID"]}";
         //villain
         for (int i = 0; i < villainPrefabs.Count; i++)
         {
@@ -605,7 +591,7 @@ public class BattleManager : MonoBehaviour
         {
             if (gm.fitPropertyFlags[i])
             {
-                var buff = FindBuff((int)(currentSelectMission[$"BonusID{i + 1}"]));
+                var buff = FindBuff((int)gm.currentSelectMission[$"BonusID{i + 1}"]);
                 foreach (var hero in useHeroes)
                 {
                     hero.AddValueBuff(buff);
@@ -616,19 +602,13 @@ public class BattleManager : MonoBehaviour
 
     private void PlayBGM(int index)
     {
-        int bgmIndex = 0;
-        switch (index)
+        int bgmIndex = index switch
         {
-            case 0:
-                bgmIndex = 6;
-                break;
-            case 1:
-                bgmIndex = 4;
-                break;
-            case 2:
-                bgmIndex = 5;
-                break;
-        }
+            0 => 6,
+            1 => 4,
+            2 => 5,
+            _ => 0,
+        };
         AudioManager.Instance.PlayBGM(bgmIndex);
     }
 
@@ -703,23 +683,20 @@ public class BattleManager : MonoBehaviour
 
         SetHeroReturnPositioning(roads[nodeIndex].heroSettingPositions);
     }
+
     private void PlayBossBGM()
     {
-        int index = 0;
-        switch (AudioManager.Instance.GetCurrBGMIndex())
+        int audioIndex = AudioManager.Instance.GetCurrBGMIndex();
+        var index = audioIndex switch
         {
-            case 6:
-                index = 7;
-                break;
-            case 4:
-                index = 8;
-                break;
-            case 5:
-                index = 13;
-                break;
-        }
+            6 => 7,
+            4 => 8,
+            5 => 13,
+            _ => 0,
+        };
         AudioManager.Instance.ChageBGMOnlyFadeOut(index);
     }
+
     private void SetHeroReturnPositioning(List<Transform> pos)
     {
         for (int i = 0; i < useHeroes.Count; i++)
@@ -752,10 +729,12 @@ public class BattleManager : MonoBehaviour
         Time.timeScale = 0;
         UIManager.Instance.ShowView(2);
     }
+
     private void OnDestroy()
     {
         Time.timeScale = 1;
     }
+
     public void ResetHeroes()
     {
         //if (gm.playerData.isTutorial)
@@ -790,6 +769,7 @@ public class BattleManager : MonoBehaviour
         coFadeIn = StartCoroutine(CoFadeIn());
         coResetMap = StartCoroutine(CoResetMap(timer));
     }
+
     private IEnumerator CoMovingMap()
     {
         yield return new WaitForSeconds(nextStageMoveTimer);
@@ -929,18 +909,6 @@ public class BattleManager : MonoBehaviour
             childs[i].nodeButton.onClick.AddListener(() => AudioManager.Instance.PlayUIAudio(0));
         }
     }
-
-    //private void ChoiceNextStage()
-    //{
-    //    TreeNodeObject thisNode = tree.CurNode;
-    //    int count = thisNode.childrens.Count;
-    //    for (int i = 0; i < count; i++)
-    //    {
-    //        choiceButtonTexts[i].text = $"{thisNode.childrens[i].type}";
-    //        choiceButtons[i].gameObject.SetActive(true);
-    //        //roadChoiceButtons[i].choiceIndex = i;
-    //    }
-    //}
 
     private void CreateRoad()
     {
@@ -1220,14 +1188,14 @@ public class BattleManager : MonoBehaviour
         {
             string itemWeight = $"{collomWeight}{i}";
             string itemKey = $"{colomId}{i}";
-            var value = (int)currentSelectMission[itemWeight];
+            var value = (int)gm.currentSelectMission[itemWeight];
             if (value == -1)
                 continue;
             allItems.AddRange(Enumerable.Repeat(itemKey, value));
             weight += value;
         }
 
-        var rewardsCode = currentSelectMission[allItems[Random.Range(0, weight)]];
+        var rewardsCode = gm.currentSelectMission[allItems[Random.Range(0, weight)]];
         AddReward(rewardsCode);
         if (btMapTriggers[currTriggerIndex].isMissionEnd)
         {
@@ -1241,7 +1209,7 @@ public class BattleManager : MonoBehaviour
     {
         var rewardData = gm.compensationInfoList.Find(t => t["ID"].Equals(key));
 
-        int maxItemCount = 10;
+        int maxItemCount = 6;
         string keyItem = "Item";
         string keyValue = "Value";
         for (int i = 1; i < maxItemCount + 1; i++)
@@ -1324,22 +1292,22 @@ public class BattleManager : MonoBehaviour
 
             if (tree.CurNode.type == TreeNodeTypes.Threat)
             {
-                int hMonCount = (int)currentSelectMission["HMonCount"];
+                int hMonCount = (int)gm.currentSelectMission["HMonCount"];
                 int randomHEnemyCount = Random.Range(1, hMonCount + 1);
-                string threatEnemysKey = $"{currentSelectMission[$"HMon{randomHEnemyCount}"]}";
+                string threatEnemysKey = $"{gm.currentSelectMission[$"HMon{randomHEnemyCount}"]}";
                 SetEnemySpawnTable(ref spawnTableHardEnemys, threatEnemysKey);
             }
             else
             {
                 // 미션 테이블에서 노멀 몬스터들 담겨있는 키 랜덤 뽑기
-                int nMonCount = (int)currentSelectMission["NMonCount"];
+                int nMonCount = (int)gm.currentSelectMission["NMonCount"];
                 int randomEnemyCount = Random.Range(1, nMonCount + 1);
-                string normalEnemysKey = $"{currentSelectMission[$"NMon{randomEnemyCount}"]}";
+                string normalEnemysKey = $"{gm.currentSelectMission[$"NMon{randomEnemyCount}"]}";
                 SetEnemySpawnTable(ref spawnTableNormalEnemys, normalEnemysKey);
 
                 if (tree.CurNode.type == TreeNodeTypes.Villain && i == bossTriggerIndex)
                 {
-                    string villainEnemysKey = $"{currentSelectMission["Villain"]}";
+                    string villainEnemysKey = $"{gm.currentSelectMission["Villain"]}";
                     SetEnemySpawnTable(ref spawnTableNormalEnemys, villainEnemysKey);
 
                     //Logger.Debug($"Normal Key : {normalEnemysKey} / Boss Key : {villainEnemysKey}");
@@ -1364,12 +1332,12 @@ public class BattleManager : MonoBehaviour
             List<Dictionary<string, object>> enemyData = new();
             for (int j = 0; j < monIds.Count; j++)
             {
-                for (int k = 0; k < enemyInfoTable.Count; k++)
+                for (int k = 0; k < gm.enemyInfoList.Count; k++)
                 {
-                    string id = $"{enemyInfoTable[k]["ID"]}";
+                    string id = $"{gm.enemyInfoList[k]["ID"]}";
                     if (id.Equals(monIds[j]))
                     {
-                        enemyData.Add(enemyInfoTable[k]);
+                        enemyData.Add(gm.enemyInfoList[k]);
                     }
                 }
             }
@@ -1378,74 +1346,70 @@ public class BattleManager : MonoBehaviour
             int posCount = btMapTriggers[i].enemySettingPositions.Count;
             for (int j = 0; j < posCount; j++)
             {
-                // 프리펩 내부 순회
-                for (int l = 0; l < enemyPrefabs.Count; l++)
+                // 데이터 내부 순회
+                int edc = enemyData.Count;
+                for (int k = 0; k < edc; k++)
                 {
-                    // 데이터 내부 순회
-                    for (int k = 0; k < enemyData.Count; k++)
+                    // 내부에서 이름 찾기
+                    string enemyName = $"{enemyData[k]["NAME"]}";
+                    int job = (int)enemyData[k]["JOB"];
+                    // 찾음
+                    var targetPrefab = enemyPrefabs.Find(t => t.gameObject.name.Equals(enemyName));
+
+                    // 생성해야하는 wave(리스폰할 횟수)당 해당 위치에 테이블의 마릿수만큼 소환
+                    int currPosEnemyCount = monValues[k];
+                    int waveCount = btMapTriggers[i].enemySettingPositions[j].waveCount;
+
+                    //Logger.Debug($"Name : {enemyName} / MonCount : {currPosEnemyCount} / Trigger : {i}");
+
+                    for (int wave = 0; wave < waveCount; wave++)
                     {
-                        // 내부에서 이름 찾기
-                        string enemyName = $"{enemyData[k]["NAME"]}";
-                        int job = (int)enemyData[k]["JOB"];
-                        // 찾음
-                        if (enemyPrefabs[l].gameObject.name.Equals(enemyName))
+                        if (tree.CurNode.type == TreeNodeTypes.Threat)
                         {
-                            // 생성해야하는 wave(리스폰할 횟수)당 해당 위치에 테이블의 마릿수만큼 소환
-                            int currPosEnemyCount = monValues[k];
-                            int waveCount = btMapTriggers[i].enemySettingPositions[j].waveCount;
+                            if (job == (int)CharacterJob.elite && middleBoss != null)
+                                break;
+                        }
+                        else if (tree.CurNode.type == TreeNodeTypes.Villain)
+                        {
+                            if (job == (int)CharacterJob.villain && villain != null)
+                                break;
+                        }
+                        else
+                        {
+                            if (job == (int)CharacterJob.villain)
+                                break;
+                        }
 
-                            //Logger.Debug($"Name : {enemyName} / MonCount : {currPosEnemyCount} / Trigger : {i}");
+                        btMapTriggers[i].enemySettingPositions[j].enemys.Add(new List<AttackableEnemy>());
+                        for (int s = 0; s < currPosEnemyCount; s++)
+                        {
+                            var enemy = Instantiate(targetPrefab);
+                            enemy.gameObject.SetActive(false);
+                            SetEnemyLiveData(enemyData, enemy);
 
-                            for (int wave = 0; wave < waveCount; wave++)
+                            int saveWave = wave;
+                            int saveI = i;
+                            int saveJ = j;
+                            if (tree.CurNode.type == TreeNodeTypes.Threat && job == (int)CharacterJob.elite)
                             {
-                                if (tree.CurNode.type == TreeNodeTypes.Threat)
-                                {
-                                    if (job == (int)CharacterJob.elite && middleBoss != null)
-                                        break;
-                                }
-                                else if (tree.CurNode.type == TreeNodeTypes.Villain)
-                                {
-                                    if (job == (int)CharacterJob.villain && villain != null)
-                                        break;
-                                }
-                                else
-                                {
-                                    if (job == (int)CharacterJob.villain)
-                                        break;
-                                }
+                                middleBoss = enemy;
+                                saveWave = 0;
+                                btMapTriggers[i].enemySettingPositions[j].isMiddleBoss = true;
+                                btMapTriggers[i].enemySettingPositions[j].middleBoss = enemy;
 
-                                btMapTriggers[i].enemySettingPositions[j].enemys.Add(new List<AttackableEnemy>());
-                                for (int s = 0; s < currPosEnemyCount; s++)
-                                {
-                                    var enemy = Instantiate(enemyPrefabs[l]);
-                                    enemy.gameObject.SetActive(false);
-                                    SetEnemyLiveData(enemyData, enemy);
-
-                                    int saveWave = wave;
-                                    int saveI = i;
-                                    int saveJ = j;
-                                    if (tree.CurNode.type == TreeNodeTypes.Threat && job == (int)CharacterJob.elite)
-                                    {
-                                        middleBoss = enemy;
-                                        saveWave = 0;
-                                        btMapTriggers[i].enemySettingPositions[j].isMiddleBoss = true;
-                                        btMapTriggers[i].enemySettingPositions[j].middleBoss = enemy;
-
-                                        currPosEnemyCount = 0;
-                                    }
-                                    else if (tree.CurNode.type == TreeNodeTypes.Villain && job == (int)CharacterJob.villain)
-                                    {
-                                        villain = enemy;
-                                        saveI = bossTriggerIndex;
-                                        saveJ = 0;
-                                        saveWave = 0;
-                                        currPosEnemyCount = 0;
-                                        btMapTriggers[saveI].enemySettingPositions[saveJ].enemys.Add(new List<AttackableEnemy>());
-                                    }
-
-                                    btMapTriggers[saveI].enemySettingPositions[saveJ].SpawnAllEnemy(ref btMapTriggers[saveI].enemys, enemy, saveWave);
-                                }
+                                currPosEnemyCount = 0;
                             }
+                            else if (tree.CurNode.type == TreeNodeTypes.Villain && job == (int)CharacterJob.villain)
+                            {
+                                villain = enemy;
+                                saveI = bossTriggerIndex;
+                                saveJ = 0;
+                                saveWave = 0;
+                                currPosEnemyCount = 0;
+                                btMapTriggers[saveI].enemySettingPositions[saveJ].enemys.Add(new List<AttackableEnemy>());
+                            }
+
+                            btMapTriggers[saveI].enemySettingPositions[saveJ].SpawnAllEnemy(ref btMapTriggers[saveI].enemys, enemy, saveWave);
                         }
                     }
                 }
@@ -1455,7 +1419,6 @@ public class BattleManager : MonoBehaviour
 
     private void SetEnemyLiveData(List<Dictionary<string, object>> enemyData, AttackableEnemy enemy)
     {
-        // 밸런스 테스트용 코드
         string key = enemy.GetUnitData().originData.name;
         int eiCount = enemyData.Count;
         for (int idx = 0; idx < eiCount; idx++)
@@ -1471,14 +1434,12 @@ public class BattleManager : MonoBehaviour
 
             ld.level = (int)gm.currentSelectMission["Level"];
 
-            ld.baseDamage = float.Parse(enemyData[idx]["ATK"].ToString());     // 일반 공격 데미지
-            ld.baseDefense = float.Parse(enemyData[idx]["DEF"].ToString());     // 방어력
-            ld.healthPoint = float.Parse(enemyData[idx]["HP"].ToString());   // 최대 체력
-            ld.moveSpeed = float.Parse(enemyData[idx]["MOVESPEED"].ToString());       // 이동 속도. 범위, 초기값 설정 필요
-            ld.critical = float.Parse(enemyData[idx]["CRITICAL"].ToString());     // 크리티컬 확률
-            ld.criticalDmg = float.Parse(enemyData[idx]["CRITICALDAMAGE"].ToString());  // 크리티컬 데미지 배율
-            //ld.accuracy = float.Parse(enemyData[idx]["ACCURACY"].ToString());     // 명중률
-            //ld.evasion = float.Parse(enemyData[idx]["EVADE"].ToString());      // 회피율
+            ld.baseDamage = float.Parse(enemyData[idx]["ATK"].ToString());
+            ld.baseDefense = float.Parse(enemyData[idx]["DEF"].ToString());
+            ld.healthPoint = float.Parse(enemyData[idx]["HP"].ToString());
+            ld.moveSpeed = float.Parse(enemyData[idx]["MOVESPEED"].ToString());
+            ld.critical = float.Parse(enemyData[idx]["CRITICAL"].ToString());
+            ld.criticalDmg = float.Parse(enemyData[idx]["CRITICALDAMAGE"].ToString());
 
             enemy.LevelupStats(ld.level - 1,
                 float.Parse(enemyData[idx]["Levelup_Atk"].ToString()),
@@ -1506,11 +1467,11 @@ public class BattleManager : MonoBehaviour
 
     private void SetEnemySpawnTable(ref Dictionary<string, object> spawnTable, string nameKey)
     {
-        for (int j = 0; j < enemySpawnTable.Count; j++)
+        for (int j = 0; j < gm.enemySpawnList.Count; j++)
         {
-            if ($"{enemySpawnTable[j]["ID"]}".Equals(nameKey))
+            if ($"{gm.enemySpawnList[j]["ID"]}".Equals(nameKey))
             {
-                spawnTable = enemySpawnTable[j];
+                spawnTable = gm.enemySpawnList[j];
                 break;
             }
         }

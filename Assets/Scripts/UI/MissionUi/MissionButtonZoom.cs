@@ -25,10 +25,10 @@ public class MissionButtonZoom : MonoBehaviour
         StartCoroutine(ZoomInCoroutine(pos));
     }
 
-    private void OnDisable()
-    {
-        ZoomOutImmediatelyButtonClicked();
-    }
+    //private void OnDisable()
+    //{
+    //    ZoomOutImmediatelyButtonClicked();
+    //}
 
     private IEnumerator ZoomInCoroutine(Vector3 pos)
     {
