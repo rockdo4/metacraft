@@ -1179,12 +1179,12 @@ public class BattleManager : MonoBehaviour
             case TreeNodeTypes.Root:
                 colomId = "WinReward";
                 collomWeight = "Weight";
-                itemCount = 8;
+                itemCount = 5; //8;
                 break;
             case TreeNodeTypes.Normal:
                 colomId = "WinReward";
                 collomWeight = "Weight";
-                itemCount = 8;
+                itemCount = 5; //8;
                 break;
             case TreeNodeTypes.Threat:
                 colomId = "HardReward";
@@ -1472,8 +1472,8 @@ public class BattleManager : MonoBehaviour
             ld.moveSpeed = float.Parse(enemyData[idx]["MOVESPEED"].ToString());       // 이동 속도. 범위, 초기값 설정 필요
             ld.critical = float.Parse(enemyData[idx]["CRITICAL"].ToString());     // 크리티컬 확률
             ld.criticalDmg = float.Parse(enemyData[idx]["CRITICALDAMAGE"].ToString());  // 크리티컬 데미지 배율
-            ld.accuracy = float.Parse(enemyData[idx]["ACCURACY"].ToString());     // 명중률
-            ld.evasion = float.Parse(enemyData[idx]["EVADE"].ToString());      // 회피율
+            //ld.accuracy = float.Parse(enemyData[idx]["ACCURACY"].ToString());     // 명중률
+            //ld.evasion = float.Parse(enemyData[idx]["EVADE"].ToString());      // 회피율
 
             enemy.LevelupStats(ld.level - 1,
                 float.Parse(enemyData[idx]["Levelup_Atk"].ToString()),

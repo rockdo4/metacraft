@@ -26,8 +26,8 @@ public class LiveData : IComparable<LiveData>
     public float moveSpeed = 3;       // 이동 속도. 범위, 초기값 설정 필요
     public float critical = 0f;     // 크리티컬 확률
     public float criticalDmg = 2f;  // 크리티컬 데미지 배율
-    public float evasion = 0f;      // 회피율
-    public float accuracy = 1f;     // 명중률
+    //public float evasion = 0f;      // 회피율
+    //public float accuracy = 1f;     // 명중률
 
     public int CompareTo(LiveData other)
     {
@@ -52,8 +52,8 @@ public class LiveData : IComparable<LiveData>
         moveSpeed = originData.moveSpeed;
         critical = originData.critical;
         criticalDmg = originData.criticalDmg;
-        evasion = originData.evasion;
-        accuracy = originData.accuracy;
+        //evasion = originData.evasion;
+        //accuracy = originData.accuracy;
 
         tags = originData.tags;
     }
@@ -78,7 +78,7 @@ public class LiveData : IComparable<LiveData>
         moveSpeed = parseData.moveSpeed;
         critical = parseData.critical;
         criticalDmg = parseData.criticalDmg;
-        evasion = parseData.evasion;
-        accuracy = parseData.accuracy;
+        //evasion = parseData.evasion;
+        //accuracy = parseData.accuracy;
     }
 }
