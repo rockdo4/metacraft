@@ -294,6 +294,7 @@ public class AttackableHero : AttackableUnit
         base.ResetData();
     }
 
+
     public override void ReadyActiveSkill()
     {
         coOnIndicator = StartCoroutine(characterData.activeSkill.SkillCoroutine());

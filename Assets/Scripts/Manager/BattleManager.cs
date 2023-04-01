@@ -553,6 +553,7 @@ public class BattleManager : MonoBehaviour
                 attackableHero.SetBattleManager(this);
                 attackableHero.SetUi(heroUiList[i]);
                 attackableHero.ResetData();
+                attackableHero.SetMaxHp();
                 heroUiList[i].SetHeroInfo(attackableHero.GetUnitData());
                 heroUiList[i].gameObject.SetActive(true);
                 var coll = attackableHero.GetComponent<CapsuleCollider>();
@@ -773,9 +774,9 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 0; i < heroes.Count; i++)
         {
+            heroes[i].SetMaxHp();
             heroes[i].ResetData();
             heroes[i].RemoveAllBuff();
-            heroes[i].SetMaxHp();
             heroes[i].SetEnabledPathFind(false);
             Utils.CopyPositionAndRotation(heroes[i].gameObject, gm.heroSpawnTransform);
         }
