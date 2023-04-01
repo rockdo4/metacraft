@@ -90,7 +90,7 @@ public abstract class AttackableUnit : MonoBehaviour
 
     [SerializeField, Header("메인 상태패턴")]
     protected UnitState unitState;
-    protected virtual UnitState UnitState { get; set; }
+    protected virtual UnitState UnitState { get; set; }    
 
     [SerializeField, Header("전투 상태패턴")]
     protected UnitBattleState battleState;
@@ -308,6 +308,9 @@ public abstract class AttackableUnit : MonoBehaviour
 
         if (BattleState == UnitBattleState.ActiveSkill)
             return;
+
+        if (nowAttack == null && unitType.Equals(UnitType.Hero))
+            nowAttack = characterData.attacks[0];
 
         nowAttack.NormalAttackOnDamage();
 
