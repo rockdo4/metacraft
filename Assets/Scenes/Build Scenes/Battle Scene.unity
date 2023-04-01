@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44402242, g: 0.49316543, b: 0.5722324, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -227,6 +227,27 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 5253436415374884623}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &378527515 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7535703494725124501, guid: 60031cb1182094245a60912d595fa24f,
+    type: 3}
+  m_PrefabInstance: {fileID: 5253436415374884623}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &378527516
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 378527515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_EffectColor: {r: 0.33962262, g: 0.2354639, b: 0.14866498, a: 1}
+  m_EffectDistance: {x: 10, y: 10}
+  m_UseGraphicAlpha: 0
 --- !u!1 &382656824
 GameObject:
   m_ObjectHideFlags: 0
@@ -1385,6 +1406,32 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6740286306049016107, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: m_Type
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740286306049016107, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: m_Sprite
+      value: 
+      objectReference: {fileID: 21300000, guid: f43eac988ef126044a4a0a793874d778,
+        type: 3}
+    - target: {fileID: 6740286306049016107, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.6886792
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740286306049016107, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.6886792
+      objectReference: {fileID: 0}
+    - target: {fileID: 6740286306049016107, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.6886792
+      objectReference: {fileID: 0}
     - target: {fileID: 7473300428877230500, guid: 60031cb1182094245a60912d595fa24f,
         type: 3}
       propertyPath: m_AnchorMax.x
@@ -1443,6 +1490,11 @@ PrefabInstance:
     - target: {fileID: 7473300430388315844, guid: 60031cb1182094245a60912d595fa24f,
         type: 3}
       propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7535703494725124501, guid: 60031cb1182094245a60912d595fa24f,
+        type: 3}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8063687392441482428, guid: 60031cb1182094245a60912d595fa24f,
