@@ -1,4 +1,3 @@
-using System.Net.Sockets;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -354,10 +353,7 @@ public class AttackableHero : AttackableUnit
                 if (activeTarget != null && InRangeActiveAttack)
                 {
                     characterData.activeSkill.targetPos = activeTarget.transform.position;
-                    if (coOnAutoSkill == null)
-                    {
-                        coOnAutoSkill = StartCoroutine(heroUI.heroSkill.OnAutoSkillActive(characterData.activeSkill));
-                    }
+                    coOnAutoSkill ??= StartCoroutine(heroUI.heroSkill.OnAutoSkillActive(characterData.activeSkill));
                 }
             }
         //}
@@ -386,14 +382,7 @@ public class AttackableHero : AttackableUnit
                 {
                     SearchAi();
                     if (IsAlive(target))
-                    {
-                        if (FindNowAttack())
-                        {
-                            BattleState = UnitBattleState.NormalAttack;
-                        }
-                        else
-                            BattleState = UnitBattleState.MoveToTarget;
-                    }
+                        BattleState = FindNowAttack() ? UnitBattleState.NormalAttack : UnitBattleState.MoveToTarget;
                     else
                         return;
                 }

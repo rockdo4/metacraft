@@ -91,9 +91,7 @@ public class StageReward : MonoBehaviour
             {
                 if (rewards[i].data.id.CompareTo(rewards[j].data.id) < 0)
                 {
-                    var temp = rewards[i];
-                    rewards[i] = rewards[j];
-                    rewards[j] = temp;
+                    (rewards[j], rewards[i]) = (rewards[i], rewards[j]);
                 }
             }
         }

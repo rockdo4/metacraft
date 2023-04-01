@@ -299,7 +299,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &9083896354306454486
 RectTransform:
   m_ObjectHideFlags: 0
@@ -332,7 +332,6 @@ GameObject:
   - component: {fileID: 2712347024403666815}
   - component: {fileID: 2712347024403666784}
   - component: {fileID: 8414017902394831959}
-  - component: {fileID: 4795201774221533030}
   m_Layer: 5
   m_Name: HeroUpgradeDetailWindow
   m_TagString: Untagged
@@ -420,26 +419,9 @@ MonoBehaviour:
   - {fileID: 2712347026411230860}
   gold: {fileID: 2712347024538648123}
   upgradeButton: {fileID: 8213535571266799301}
-  resultPopup: {fileID: 0}
+  resultPopup: {fileID: 5989274291038768455}
   resultHeroIcon: {fileID: 1146551787}
   resultHeroText: {fileID: 552194587}
---- !u!114 &4795201774221533030
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2712347024403666814}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05cc786db59a0014f83afb5e2730a5d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outline: {fileID: 0}
-  chatWindow: {fileID: 0}
-  textObject: {fileID: 0}
-  tutorialMask: {fileID: 0}
-  isMask: 0
 --- !u!1 &2712347024489789215
 GameObject:
   m_ObjectHideFlags: 0
@@ -478,7 +460,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1140, y: 0}
+  m_AnchoredPosition: {x: 1110, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2712347024489789186
@@ -635,7 +617,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 458.2, y: 0}
+  m_AnchoredPosition: {x: 433.2, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2712347024518273948
@@ -1063,7 +1045,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 70}
+  m_SizeDelta: {x: 400, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2712347024673515425
 CanvasRenderer:
@@ -1272,9 +1254,9 @@ RectTransform:
   m_Father: {fileID: 2712347025094192076}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 463.065, y: -270}
   m_SizeDelta: {x: 926.13, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2712347024717124507
@@ -1364,7 +1346,6 @@ GameObject:
   - component: {fileID: 2712347024720492644}
   - component: {fileID: 2712347024720492646}
   - component: {fileID: 2712347024720492645}
-  - component: {fileID: 3523582441714609821}
   m_Layer: 5
   m_Name: Meterials
   m_TagString: Untagged
@@ -1397,7 +1378,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1140, y: 0}
+  m_AnchoredPosition: {x: 1110, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2712347024720492646
@@ -1440,23 +1421,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 2
   m_VerticalFit: 2
---- !u!114 &3523582441714609821
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2712347024720492643}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 05cc786db59a0014f83afb5e2730a5d9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  outline: {fileID: 0}
-  chatWindow: {fileID: 0}
-  textObject: {fileID: 0}
-  tutorialMask: {fileID: 0}
-  isMask: 0
 --- !u!1 &2712347024724114344
 GameObject:
   m_ObjectHideFlags: 0
@@ -2377,7 +2341,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2712347025094192076
 RectTransform:
   m_ObjectHideFlags: 0
@@ -2396,10 +2360,10 @@ RectTransform:
   m_Father: {fileID: 2712347024489789184}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1765.0206, y: 0}
-  m_SizeDelta: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1765.0206, y: -272.11}
+  m_SizeDelta: {x: 1007.3623, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2712347025094192078
 MonoBehaviour:
@@ -3432,7 +3396,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1140, y: 0}
+  m_AnchoredPosition: {x: 1110, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2712347025521328696
@@ -3511,7 +3475,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 1300, y: 150}
+  m_SizeDelta: {x: 1300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2712347025531427534
 CanvasRenderer:
@@ -3860,7 +3824,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 70}
+  m_SizeDelta: {x: 400, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2712347025700969138
 CanvasRenderer:
@@ -4270,7 +4234,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &2712347025944809827
 RectTransform:
   m_ObjectHideFlags: 0
@@ -4286,9 +4250,9 @@ RectTransform:
   m_Father: {fileID: 2712347024489789184}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 1186.3395, y: -272.11}
   m_SizeDelta: {x: 150, y: 540}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2712347025944809829
@@ -4828,7 +4792,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 200, y: 200}
+  m_SizeDelta: {x: 250, y: 250}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2712347026197766966
 CanvasRenderer:
@@ -4900,9 +4864,9 @@ RectTransform:
   m_Father: {fileID: 2712347025094192076}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 503.68115, y: -450}
   m_SizeDelta: {x: 1007.3623, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2712347026329683241
@@ -4937,9 +4901,9 @@ RectTransform:
   m_Father: {fileID: 2712347025094192076}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0}
+  m_AnchorMin: {x: 0, y: 1}
+  m_AnchorMax: {x: 0, y: 1}
+  m_AnchoredPosition: {x: 463.065, y: -90}
   m_SizeDelta: {x: 926.13, y: 180}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &2712347026341336802
@@ -5348,7 +5312,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 70}
+  m_SizeDelta: {x: 400, y: 70}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2712347026427569150
 CanvasRenderer:
@@ -5840,30 +5804,6 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: ShowPopup
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: ShowPanelInteractable
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 8414017902394831959}
         m_TargetAssemblyTypeName: HeroUpgradeDetailWindow, Assembly-CSharp
         m_MethodName: OnClickUpgradeButton
@@ -6135,26 +6075,14 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: ClearPopups
+      - m_Target: {fileID: 8414017902394831959}
+        m_TargetAssemblyTypeName: HeroUpgradeDetailWindow, Assembly-CSharp
+        m_MethodName: ShowOutResultPopup
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: ShowView
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 5
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
