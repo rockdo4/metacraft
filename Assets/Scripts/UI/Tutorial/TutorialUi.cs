@@ -50,7 +50,18 @@ public class TutorialUi : MonoBehaviour
 
             for (int j = 0; j < count; j++)
             {
-                page.lines.Add(gm.GetStringByTable($"{id}_{j}"));
+                var text = gm.GetStringByTable($"{id}_{j}");
+
+                if(text.Equals(string.Empty))
+                {
+                    pages.Add(page);
+                    page = new TutorialPage();
+                    page.id = id;
+                    page.title = title;
+                    page.image_name = id;
+                    continue;
+                }
+                page.lines.Add(text);
             }
             pages.Add(page);
         }
@@ -60,12 +71,12 @@ public class TutorialUi : MonoBehaviour
 
     public void OnLeft()
     {
-        idx = (idx + 1 + pages.Count) % pages.Count;
+        idx = (idx - 1 + pages.Count) % pages.Count;
         SetPage();
     }
     public void OnRight()
     {
-        idx = (idx - 1 + pages.Count) % pages.Count;
+        idx = (idx + 1 + pages.Count) % pages.Count;
         SetPage();
     }
 
