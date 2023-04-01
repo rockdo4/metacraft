@@ -698,11 +698,6 @@ public class BattleManager : MonoBehaviour
         }
         tree.ShowTree(false);
 
-        for (int i = 0; i < roads[nodeIndex].heroSettingPositions.Count; i++)
-        {
-            Logger.Debug(roads[nodeIndex].heroSettingPositions[i].gameObject.transform.position);
-        }
-
         SetHeroReturnPositioning(roads[nodeIndex].heroSettingPositions);
     }
     private void PlayBossBGM()
