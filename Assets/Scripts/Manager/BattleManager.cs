@@ -696,7 +696,12 @@ public class BattleManager : MonoBehaviour
         {
             prevNode.childrens[i].nodeButton.onClick.RemoveAllListeners();
         }
-        tree.ShowTree(false); ;
+        tree.ShowTree(false);
+
+        for (int i = 0; i < roads[nodeIndex].heroSettingPositions.Count; i++)
+        {
+            Logger.Debug(roads[nodeIndex].heroSettingPositions[i].gameObject.transform.position);
+        }
 
         SetHeroReturnPositioning(roads[nodeIndex].heroSettingPositions);
     }
@@ -802,11 +807,17 @@ public class BattleManager : MonoBehaviour
         }
 
         float nextMaxZPos = btMapTriggers[currTriggerIndex].heroSettingPositions.Max(transform => transform.position.z);
-        while (!btMapTriggers[currTriggerIndex].isTriggerEnter)
-        {
-            if (viewPoint.transform.position.z <= nextMaxZPos)
-                viewPoint.transform.Translate(platformMoveSpeed * Time.deltaTime * platform.transform.forward);
+        //while (!btMapTriggers[currTriggerIndex].isTriggerEnter)
+        //{
+        //    if (viewPoint.transform.position.z <= nextMaxZPos)
+        //        viewPoint.transform.Translate(platformMoveSpeed * Time.deltaTime * platform.transform.forward);
 
+        //    yield return null;
+        //}
+
+        while (viewPoint.transform.position.z < nextMaxZPos)
+        {
+            viewPoint.transform.Translate(platformMoveSpeed * Time.deltaTime * platform.transform.forward);
             yield return null;
         }
 
@@ -1417,8 +1428,6 @@ public class BattleManager : MonoBehaviour
                                     {
                                         middleBoss = enemy;
                                         saveWave = 0;
-                                        //enemy.SetEnabledPathFind(true);
-                                        //enemy.ChangeUnitState(UnitState.Battle);
                                         btMapTriggers[i].enemySettingPositions[j].isMiddleBoss = true;
                                         btMapTriggers[i].enemySettingPositions[j].middleBoss = enemy;
 
