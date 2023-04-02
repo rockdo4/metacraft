@@ -41,7 +41,7 @@ public class SkillFieldWithDuration : MonoBehaviour
     protected virtual void OnEnable()
     {        
         Invoke(offSkillFieldFuncName, duration);
-        if(IsInit)
+        if(IsInit && effect != EffectEnum.None)
         {
             currParticle = EffectManager.Instance.Get(effect, transform).transform.GetChild(0).gameObject;            
         }

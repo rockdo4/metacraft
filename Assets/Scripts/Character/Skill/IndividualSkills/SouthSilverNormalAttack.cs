@@ -25,6 +25,10 @@ public class SouthSilverNormalAttack : MonoBehaviour
         }
 
         timerWhenMoving += Time.deltaTime;
+
+        if (timerWhenMoving > 1f)
+            return;
+
         droneTransform.rotation = Quaternion.Lerp(droneTransform.rotation, worldForward, timerWhenMoving);
     }
 
