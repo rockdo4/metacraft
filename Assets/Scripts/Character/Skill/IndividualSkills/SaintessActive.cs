@@ -7,5 +7,10 @@ public class SaintessActive : MonoBehaviour
     public void OnActiveSkill()
     {
         var heros = unit.HeroList;
+        
+        foreach(var hero in heros)
+        {
+            
+        }
     }
 }
