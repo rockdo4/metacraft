@@ -16,7 +16,7 @@ public class SouthSilverNormalAttack : MonoBehaviour
     public AudioSource[] bulletAudios;
 
     float timerWhenMoving;
-    Quaternion worldForward = Quaternion.LookRotation(Vector3.forward);
+    Quaternion originRot = Quaternion.Euler(Vector3.zero);
 
     private void Awake()
     {
@@ -24,7 +24,7 @@ public class SouthSilverNormalAttack : MonoBehaviour
         for(int i = 0; i < bulletAudios.Length; i++)
         {
             bulletAudios[i] = Instantiate(bulletAudios[i], audioSourcesHolder);
-        }
+        }        
     }
 
     private void Update()
@@ -40,7 +40,7 @@ public class SouthSilverNormalAttack : MonoBehaviour
         if (timerWhenMoving > 1f)
             return;
 
-        droneTransform.rotation = Quaternion.Lerp(droneTransform.rotation, worldForward, timerWhenMoving);
+        droneTransform.rotation = Quaternion.Lerp(droneTransform.rotation, originRot, timerWhenMoving);
     }
 
     public void NormalAttackOnDamage()
