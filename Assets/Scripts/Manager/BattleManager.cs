@@ -359,7 +359,7 @@ public class BattleManager : MonoBehaviour
     }
 
     // 이벤트 노드 노멀 선택지 보상
-    private void GetNormalEventEffect(ref string valueKey, ref int rewardKey, int effectColumn)
+    private void GetNormalEventEffect(ref string valueKey, ref int rewardKey, int effectColumn, ref int rewardType)
     {
         string normalV1Text = $"{gm.eventEffectInfoList[effectColumn]["Normalvalue1"]}";
         string normalV2Text = $"{gm.eventEffectInfoList[effectColumn]["Normalvalue2"]}";
@@ -370,28 +370,36 @@ public class BattleManager : MonoBehaviour
         string value2Text = $"{gm.eventEffectInfoList[effectColumn]["NormalvalueText2"]}";
         int normalReward1 = (int)gm.eventEffectInfoList[effectColumn]["NormalReward1"];
         int normalReward2 = (int)gm.eventEffectInfoList[effectColumn]["NormalReward2"];
+        int normalRewardType1 = (int)gm.eventEffectInfoList[effectColumn]["NormalRewardType1"];
+        int normalRewardType2 = (int)gm.eventEffectInfoList[effectColumn]["NormalRewardType2"];
 
         if (normalValue1.Equals(1f))
         {
             valueKey = value1Text;
             rewardKey = normalReward1;
+            rewardType = normalRewardType1;
         }
         else if (normalValue2.Equals(1f))
         {
             valueKey = value2Text;
             rewardKey = normalReward2;
+            rewardType = normalRewardType2;
         }
         else if (normalValue1.Equals(normalValue2))
         {
             float randomValue = Random.Range(0f, 1f);
             valueKey = randomValue >= 0.5f ? value1Text : value2Text;
             rewardKey = valueKey.Equals(value1Text) ? normalReward1 : normalReward2;
+            rewardType = valueKey.Equals(value1Text) ? normalRewardType1 : normalRewardType2;
         }
         else
         {
             valueKey = normalValue1 > normalValue2 ? value1Text : value2Text;
             rewardKey = valueKey.Equals(value1Text) ? normalReward1 : normalReward2;
+            rewardType = valueKey.Equals(value1Text) ? normalRewardType1 : normalRewardType2;
         }
+
+        Logger.Debug($"Get Type : {rewardType}");
     }
 
     private void GetPriorityTagEventEffect
@@ -421,7 +429,7 @@ public class BattleManager : MonoBehaviour
         }
 
         // 못 찾았으면 노멀 이펙트로 이동해서 찾기
-        GetNormalEventEffect(ref valueKey, ref rewardKey, effectColumn);
+        GetNormalEventEffect(ref valueKey, ref rewardKey, effectColumn, ref rewardType);
     }
 
     private void SetEventEffectReward(int column, int index, TextMeshProUGUI contentText)
@@ -443,7 +451,7 @@ public class BattleManager : MonoBehaviour
 
         string valueKey = string.Empty;
         int rewardKey = 0;
-        int priorityRewardType = 0;
+        int rewardType = 0;
 
         List<string> tags = new();
 
@@ -463,11 +471,11 @@ public class BattleManager : MonoBehaviour
         // 테이블에 태그와 연관된 이벤트가 없을 때는 연산하지 않고 바로 노멀 이펙트로 이동
         if (tags.Count == 0)
         {
-            GetNormalEventEffect(ref valueKey, ref rewardKey, effectColumn);
+            GetNormalEventEffect(ref valueKey, ref rewardKey, effectColumn, ref rewardType);
         }
         else
         {
-            GetPriorityTagEventEffect(ref valueKey, ref rewardKey, effectColumn, tags, ref priorityRewardType);
+            GetPriorityTagEventEffect(ref valueKey, ref rewardKey, effectColumn, tags, ref rewardType);
         }
 
         Logger.Debug($"{valueKey}");
@@ -478,7 +486,7 @@ public class BattleManager : MonoBehaviour
             return;
         }
 
-        switch (priorityRewardType)
+        switch (rewardType)
         {
             case 0:
                 object stringTableRewardKey = rewardKey;
