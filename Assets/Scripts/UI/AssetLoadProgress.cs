@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -74,6 +75,15 @@ public class AssetLoadProgress : MonoBehaviour
             unReleaseHandles.Add(LoadSprite($"icon_{address}"));
             unReleaseHandles.Add(LoadSprite($"illu_{address}"));
             total += 2;
+        }
+
+        for (int i = 1; i < (int)BuffType.Count; i++)
+        {
+            if (Enum.IsDefined(typeof(BuffType), i))
+            {
+                unReleaseHandles.Add(LoadSprite($"state{i}"));
+                total++;
+            }
         }
 
         int spriteCount = spriteNames.Length;
