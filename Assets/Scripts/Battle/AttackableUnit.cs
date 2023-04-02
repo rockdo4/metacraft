@@ -69,6 +69,8 @@ public abstract class AttackableUnit : MonoBehaviour
         }
     }
 
+    public List<AttackableUnit> HeroList { get { return heroList; } }
+
     protected Dictionary<CharacterSkill, float> lastNormalAttackTime = new();
     protected float lastActiveSkillTime;
 
