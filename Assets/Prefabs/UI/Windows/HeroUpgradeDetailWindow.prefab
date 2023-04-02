@@ -332,6 +332,7 @@ GameObject:
   - component: {fileID: 2712347024403666815}
   - component: {fileID: 2712347024403666784}
   - component: {fileID: 8414017902394831959}
+  - component: {fileID: 3189568938618519003}
   m_Layer: 5
   m_Name: HeroUpgradeDetailWindow
   m_TagString: Untagged
@@ -399,14 +400,6 @@ MonoBehaviour:
   - {fileID: 2712347024965909167}
   - {fileID: 2712347024879109780}
   - {fileID: 2712347025730458216}
-  nextSkillIcons:
-  - {fileID: 2712347026002498541}
-  - {fileID: 2712347026046199959}
-  - {fileID: 2712347026341336804}
-  nextSkillInfo:
-  - {fileID: 2712347026086782046}
-  - {fileID: 2712347026488451870}
-  - {fileID: 2712347024541701049}
   meterialIcons:
   - {fileID: 2712347025516109760}
   - {fileID: 2712347025202145710}
@@ -422,6 +415,18 @@ MonoBehaviour:
   resultPopup: {fileID: 5989274291038768455}
   resultHeroIcon: {fileID: 1146551787}
   resultHeroText: {fileID: 552194587}
+--- !u!114 &3189568938618519003
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2712347024403666814}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0266323f7b0a8964c934f46339e937f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2712347024489789215
 GameObject:
   m_ObjectHideFlags: 0
@@ -460,7 +465,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1110, y: 0}
+  m_AnchoredPosition: {x: 553.5, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2712347024489789186
@@ -1378,7 +1383,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1110, y: 0}
+  m_AnchoredPosition: {x: 553.5, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2712347024720492646
@@ -3396,7 +3401,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 1110, y: 0}
+  m_AnchoredPosition: {x: 553.5, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &2712347025521328696
@@ -5816,6 +5821,18 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
+      - m_Target: {fileID: 3189568938618519003}
+        m_TargetAssemblyTypeName: GetAudioManagerFunc, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 3
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!1 &5581693297263706104
 GameObject:
   m_ObjectHideFlags: 0
@@ -6079,6 +6096,18 @@ MonoBehaviour:
         m_TargetAssemblyTypeName: HeroUpgradeDetailWindow, Assembly-CSharp
         m_MethodName: ShowOutResultPopup
         m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 3189568938618519003}
+        m_TargetAssemblyTypeName: GetAudioManagerFunc, Assembly-CSharp
+        m_MethodName: PlayUI
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
