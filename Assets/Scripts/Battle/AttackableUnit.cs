@@ -69,6 +69,8 @@ public abstract class AttackableUnit : MonoBehaviour
         }
     }
 
+    public List<AttackableUnit> HeroList { get { return heroList; } }
+
     protected Dictionary<CharacterSkill, float> lastNormalAttackTime = new();
     protected float lastActiveSkillTime;
 
@@ -149,12 +151,13 @@ public abstract class AttackableUnit : MonoBehaviour
 
         SetAudioSources();
     }
-    private void Start()
-    {
-        //var manager = FindObjectOfType<BattleManager>();
-        //if (manager != null)
-        //    battleManager = manager;
-    }
+
+    //private void Start()
+    //{
+    //    //var manager = FindObjectOfType<BattleManager>();
+    //    //if (manager != null)
+    //    //    battleManager = manager;
+    //}
 
     protected void InitData()
     {

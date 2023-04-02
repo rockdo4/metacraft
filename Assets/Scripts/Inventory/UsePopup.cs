@@ -13,7 +13,7 @@ public class UsePopup : MonoBehaviour
     public Item useItem;
     public List<RewardItem> items = new();
     public Button useButton;
-    
+
 
     public void OnClickCancle()
     {
@@ -48,13 +48,15 @@ public class UsePopup : MonoBehaviour
         string id = "ItemID ";
         string value = "ItemValue ";
         
-        for(int i =0; i<100; i++)
+        // for (int i = 0; i < 100; i++)
         {
-            var nowItemID = data[$"{id}{i + 1}"];
-            if (nowItemID.Equals(string.Empty))
-                break;
+            //var nowItemID = data[$"{id}{i + 1}"];
+            //if (nowItemID.Equals(string.Empty))
+            //    break;
 
-            var nowItemValue = data[$"{value}{i + 1}"];
+            //var nowItemValue = data[$"{value}{i + 1}"];
+            var nowItemID = data[$"{id}1"];
+            var nowItemValue = data[$"{value}1"];
 
             var addItem = Instantiate(itemPrev, itemTr);
             var addItemData = itemData.Find(t => t["ID"].ToString().Equals(nowItemID.ToString()));

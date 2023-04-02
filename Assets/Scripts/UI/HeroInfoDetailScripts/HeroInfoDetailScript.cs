@@ -48,8 +48,8 @@ public class HeroInfoDetailScript : View
         stringBuilder.Append($"이동 속도 : {data.moveSpeed}\n");
         stringBuilder.Append($"크리티컬 확률 : {data.critical * 100:0}%\n");
         stringBuilder.Append($"크리티컬 배율 : {data.criticalDmg * 100:0}%\n");
-        stringBuilder.Append($"명중률 : {data.accuracy * 100:0}%\n");
-        stringBuilder.Append($"회피율 : {data.evasion * 100:0}%\n");
+        //stringBuilder.Append($"명중률 : {data.accuracy * 100:0}%\n");
+        //stringBuilder.Append($"회피율 : {data.evasion * 100:0}%\n");
         statDetail.text = stringBuilder.ToString();
         expBar.maxValue = gm.expRequirementTable[data.level];
         expBar.value = data.exp;

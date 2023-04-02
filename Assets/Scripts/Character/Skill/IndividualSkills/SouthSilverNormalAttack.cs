@@ -13,8 +13,19 @@ public class SouthSilverNormalAttack : MonoBehaviour
 
     private Coroutine droneAttack;
 
+    public AudioSource[] bulletAudios;
+
     float timerWhenMoving;
-    Quaternion worldForward = Quaternion.LookRotation(Vector3.forward);
+    Quaternion originRot = Quaternion.Euler(Vector3.zero);
+
+    private void Awake()
+    {
+        var audioSourcesHolder = AudioManager.Instance.GetAudioResourcesHolder(transform.parent.name);
+        for(int i = 0; i < bulletAudios.Length; i++)
+        {
+            bulletAudios[i] = Instantiate(bulletAudios[i], audioSourcesHolder);
+        }        
+    }
 
     private void Update()
     {
@@ -25,7 +36,11 @@ public class SouthSilverNormalAttack : MonoBehaviour
         }
 
         timerWhenMoving += Time.deltaTime;
-        droneTransform.rotation = Quaternion.Lerp(droneTransform.rotation, worldForward, timerWhenMoving);
+
+        if (timerWhenMoving > 1f)
+            return;
+
+        droneTransform.rotation = Quaternion.Lerp(droneTransform.rotation, originRot, timerWhenMoving);
     }
 
     public void NormalAttackOnDamage()
@@ -40,8 +55,12 @@ public class SouthSilverNormalAttack : MonoBehaviour
 
         bool[] fired = new bool[3];
 
+        if (unit.Target == null)
+            yield break;
+
         Quaternion targetRotation = Quaternion.LookRotation(unit.Target.transform.position - transform.position);
 
+        bulletAudios[3].Play();
         foreach (Transform muzzle in muzzles)
         {
             EffectManager.Instance.Get(EffectEnum.MuzzleFlash1, muzzle, muzzle.localRotation);
@@ -58,6 +77,7 @@ public class SouthSilverNormalAttack : MonoBehaviour
                 if (!fired[i] && timer > hitInterval * (i + 1))
                 {
                     unit.NormalAttackOnDamage();
+                    bulletAudios[i].Play();
                     fired[i] = true;
                 }
             }

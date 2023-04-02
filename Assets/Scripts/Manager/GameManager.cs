@@ -22,14 +22,12 @@ public class GameManager : Singleton<GameManager>
     private Dictionary<string, Sprite> sprites = new();
     private Dictionary<string, Dictionary<string, object>> stringTable = new();
     public Dictionary<int, List<Dictionary<string, object>>> missionInfoDifficulty; // 작전 정보 난이도 키 추가
-    public List<Dictionary<string, object>> dispatchInfoList; // 파견 정보
+    //public List<Dictionary<string, object>> dispatchInfoList; // 파견 정보
     public List<Dictionary<string, object>> officeInfoList;  // 사무소 레벨별 정보
     public List<Dictionary<string, object>> eventInfoList; // 이벤트 노드 정보
-    public List<Dictionary<string, object>> eventEffectInfoList;  // 이벤트 노드 일반보상만 연결해놓기 위해 임시로 살림, 태그 검사 추가 시 추후 삭제 예정
+    public List<Dictionary<string, object>> eventEffectInfoList;  // 이벤트 노드
     public List<Dictionary<string, object>> enemyInfoList;
     public List<Dictionary<string, object>> enemySpawnList;
-    public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectTagInfoList;
-    public Dictionary<string, List<Dictionary<string, List<string>>>> eventEffectNoTagInfoList;
     private int languageIndex = 0; // kor    
     public int LanguageIndex { get { return languageIndex; } }
 
@@ -60,10 +58,10 @@ public class GameManager : Singleton<GameManager>
     public Color currMapColor;
     public List<Color> mapLigthColors;
 
-    public override void Awake()
-    {
-        base.Awake();
-    }
+    //public override void Awake()
+    //{
+    //    base.Awake();
+    //}
 
     public void SetHeroesOrigin()
     {
@@ -122,7 +120,8 @@ public class GameManager : Singleton<GameManager>
 
     public void OnApplicationQuit()
     {
-        SaveAllData();
+        if (currentScene != SceneIndex.Title)
+            SaveAllData();
     }
 
     public void SaveAllData()

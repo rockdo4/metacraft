@@ -25,10 +25,10 @@ public class CharacterData : ScriptableObject, IComparable<CharacterData>
     [Range(1f, 10f)]
     public float        criticalDmg = 2f;   // 크리티컬 데미지 배율
     public float          moveSpeed = 3;      // 이동 속도. 범위, 초기값 설정 필요
-    [Range(0f, 1f)]
-    public float        accuracy = 1f;      // 명중률
-    [Range(0f, 1f)]
-    public float        evasion = 0f;       // 회피율
+    //[Range(0f, 1f)]
+    //public float        accuracy = 1f;      // 명중률
+    //[Range(0f, 1f)]
+    //public float        evasion = 0f;       // 회피율
     public List<string> tags;               // 태그(특성)
 
     public int CompareTo(CharacterData other)

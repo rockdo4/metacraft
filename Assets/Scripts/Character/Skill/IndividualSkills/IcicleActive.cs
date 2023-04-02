@@ -4,14 +4,14 @@ using UnityEngine;
 public class IcicleActive : SkillFieldWithDuration
 {
     public float startDelay = 0.6f;
-    public float startDelayCheckTimer = 0f;
+    private float startDelayCheckTimer = 0f;
     protected override void OnEnable()
     {
-        startDelayCheckTimer = 0f;
-        Invoke(offSkillFieldFuncName, duration + startDelay);
-
+        startDelayCheckTimer = 0f;        
+        
         if (IsInit)
         {
+            Invoke(offSkillFieldFuncName, duration + startDelay);
             EffectManager.Instance.Get(effect, transform);
         }
     }
@@ -27,7 +27,7 @@ public class IcicleActive : SkillFieldWithDuration
     }
 
     protected override void OffSkillField()
-    {
+    {        
         gameObject.SetActive(false);
     }
 }

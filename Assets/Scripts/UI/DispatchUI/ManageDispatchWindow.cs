@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -15,7 +14,7 @@ public class ManageDispatchWindow : View
 
     private void Start()
     {
-        dispatchInfoTable = GameManager.Instance.dispatchInfoList;
+        //dispatchInfoTable = GameManager.Instance.dispatchInfoList;
         for (int i = 2; i < dispatchInfoTable.Count; i++)
         {
             switch (dispatchInfoTable[i]["Type"])

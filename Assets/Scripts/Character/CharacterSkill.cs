@@ -1,7 +1,6 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 
 [CreateAssetMenu(fileName = "CharacterSkill", menuName = "Character/CharacterSkill")]
@@ -155,10 +154,10 @@ public class CharacterSkill : ScriptableObject
 
     public List<AttackableUnit> FindTargetInArea(AttackableUnit unit, BufferTargetType b_targetType, List<AttackableUnit> enemies, List<AttackableUnit> heros)
     {
-        List<AttackableUnit> closeTargets = new List<AttackableUnit>();
+        List<AttackableUnit> closeTargets = new ();
 
         var searchTarget = b_targetType == BufferTargetType.Friendly ? UnitType.Hero : UnitType.Enemy;
-        List<AttackableUnit> targets = (searchTarget == UnitType.Hero ? heros : enemies).ToList();
+        List<AttackableUnit> targets = searchTarget == UnitType.Hero ? heros : enemies; //.ToList();
 
         foreach (var target in targets)
         {
@@ -180,15 +179,13 @@ public class CharacterSkill : ScriptableObject
 
                 if (distance2 < distance1)
                 {
-                    AttackableUnit temp = closeTargets[i];
-                    closeTargets[i] = closeTargets[j];
-                    closeTargets[j] = temp;
+                    (closeTargets[j], closeTargets[i]) = (closeTargets[i], closeTargets[j]);
                 }
             }
         }
 
         // 최대 maxTargets 개수까지의 대상만 선택합니다.
-        List<AttackableUnit> finalTargets = new List<AttackableUnit>();
+        List<AttackableUnit> finalTargets = new ();
         var finalTargetCount = Mathf.Min(closeTargets.Count, buffTargetCnt);
         for (int i = 0; i < finalTargetCount; i++)
         {

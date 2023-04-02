@@ -58,5 +58,6 @@ public enum EffectEnum
     skillAttack,
     Misses,
     MuzzleFlash1,
+    top_down_lightning_dot,
     Count,
 }
