@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -81,11 +82,13 @@ public class AssetLoadProgress : MonoBehaviour
             total += 2;
         }
 
-        count = 29; //임시. 나중에 버프 테이블 불러오게 수정할 예정
-        for (int i = 1; i <= count; i++)
+        for (int i = 1; i < (int)BuffType.Count; i++)
         {
-            unReleaseHandles.Add(LoadSprite($"state{i}"));
-            total++;
+            if (Enum.IsDefined(typeof(BuffType), i))
+            {
+                unReleaseHandles.Add(LoadSprite($"state{i}"));
+                total++;
+            }
         }
 
         int spriteCount = spriteNames.Length;
