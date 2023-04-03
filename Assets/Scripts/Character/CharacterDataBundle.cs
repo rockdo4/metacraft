@@ -35,12 +35,15 @@ public class CharacterDataBundle : MonoBehaviour, IComparable<CharacterDataBundl
             }
         }
 
-        foreach (var attack in attacks)
+        if (attacks != null)
         {
-            for (int i = 0; i < attack.buffInfos.Count; i++)
+            foreach (var attack in attacks)
             {
-                attack.buffInfos[i].buffLevel = attack.skillLevel;
-                attack.buffInfos[i].addBuffState = attack.addBuffState[i];
+                for (int i = 0; i < attack.buffInfos.Count; i++)
+                {
+                    attack.buffInfos[i].buffLevel = attack.skillLevel;
+                    attack.buffInfos[i].addBuffState = attack.addBuffState[i];
+                }
             }
         }
 
