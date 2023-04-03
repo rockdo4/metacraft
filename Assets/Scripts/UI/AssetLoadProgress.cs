@@ -157,7 +157,11 @@ public class AssetLoadProgress : MonoBehaviour
         CompleteProgress();
 
         if (!saveFileExist || gm.myHeroes.Count == 0)
+        {
             gm.CreateNewHero("hero_egostick");
+            gm.CreateNewHero("hero_forth");
+            gm.CreateNewHero("hero_third");
+        }
     }
 
     public void ReleaseAddressable(Dictionary<string, AsyncOperationHandle> handles)
