@@ -69,10 +69,19 @@ public class RecruitmentWindow : MonoBehaviour
 
     public void OneTimeGacha()
     {
-        ClearResult();
-        GameObject hero = heroDatabase[Gacha(probs)];
-        GachaProcess(hero, 0);
-        GameManager.Instance.SaveAllData();
+        if (GameManager.Instance.inventoryData.IsItem("60300003", 1))
+        {
+            ClearResult();
+            GameObject hero = heroDatabase[Gacha(probs)];
+            GachaProcess(hero, 0);
+            GameManager.Instance.SaveAllData();
+            GameManager.Instance.inventoryData.UseItem("60300003", 1);
+            UIManager.Instance.ShowPopup(0);
+        }
+        else
+        {
+            UIManager.Instance.ShowPopup(2);
+        }
     }
 
     private void GachaProcess(GameObject hero, int i)
@@ -133,16 +142,25 @@ public class RecruitmentWindow : MonoBehaviour
 
     public void TenTimesGacha()
     {
-        ClearResult();
-        for (int i = 0; i < 10; i++)
+        if (GameManager.Instance.inventoryData.IsItem("60300003", 10))
         {
-            getGacha.Add(heroDatabase[Gacha(probs)]);
+            ClearResult();
+            for (int i = 0; i < 10; i++)
+            {
+                getGacha.Add(heroDatabase[Gacha(probs)]);
+            }
+            for (int i = 0; i < 10; i++)
+            {
+                GachaProcess(getGacha[i], i);
+            }
+            GameManager.Instance.SaveAllData();
+            GameManager.Instance.inventoryData.UseItem("60300003", 10);
+            UIManager.Instance.ShowPopup(0);
         }
-        for (int i = 0; i < 10; i++)
+        else
         {
-            GachaProcess(getGacha[i], i);
+            UIManager.Instance.ShowPopup(2);
         }
-        GameManager.Instance.SaveAllData();
     }
 
     private int Gacha(float[] probs)
