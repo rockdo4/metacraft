@@ -1207,7 +1207,7 @@ public class BattleManager : MonoBehaviour
         AddReward(rewardsCode);
         if (btMapTriggers[currTriggerIndex].isMissionEnd)
         {
-            AudioManager.Instance.ChageBGMOnlyFadeOut(9);
+            AudioManager.Instance.PlayBGM(9);
             UIManager.Instance.ShowView(1);
             clearUi.nodeButton.gameObject.SetActive(false);
             clearUi.lastNodeButton.gameObject.SetActive(true);
