@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,6 +10,12 @@ public class MissionSpawner : MonoBehaviour
 
     private void Awake()
     {
+        if(GameManager.Instance.playerData.isTutorial)
+        {
+            CreateMission(1);
+            return;
+        }
+
         foreach (GameObject go in prefebs)
         {
             go.GetComponent<MissionMarkData>().OnOffMark(false);

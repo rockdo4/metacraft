@@ -159,8 +159,6 @@ public class AssetLoadProgress : MonoBehaviour
         if (!saveFileExist || gm.myHeroes.Count == 0)
         {
             gm.CreateNewHero("hero_egostick");
-            gm.CreateNewHero("hero_forth");
-            gm.CreateNewHero("hero_third");
         }
     }
 
@@ -220,7 +218,7 @@ public class AssetLoadProgress : MonoBehaviour
     private void FixMissionTable(List<Dictionary<string, object>> missionInfoList)
     {
         gm.missionInfoDifficulty = new ();
-        for (int i = 1; i < 6; i++)
+        for (int i = 0; i < 6; i++)
             gm.missionInfoDifficulty.Add(i, new ());
 
         int count = missionInfoList.Count;
