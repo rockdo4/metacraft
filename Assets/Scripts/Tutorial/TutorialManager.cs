@@ -22,6 +22,13 @@ public class TutorialManager : MonoBehaviour
             bool skipSection = (bool)tutorialDic[i]["IsSkipStop"];
             if (skipSection)
             {
+                if (i == 15)
+                {
+                    gm.ClearBattleGroups();
+                    gm.battleGroups[0] = 0;
+                    gm.LoadScene((int)SceneIndex.Battle);
+                    return;
+                }
                 currEv = i;
                 OnEvent();
                 break;
