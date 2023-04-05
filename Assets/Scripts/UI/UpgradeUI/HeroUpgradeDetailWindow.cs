@@ -56,6 +56,7 @@ public class HeroUpgradeDetailWindow : View
 
         heroName.text = gm.GetStringByTable(data.name);
         CharacterGrade curGrade = (CharacterGrade)data.grade;
+
         if (curGrade != CharacterGrade.SS)
         {
             heroGrade.text = $"{curGrade}등급 > {curGrade + 1}등급";
@@ -71,11 +72,16 @@ public class HeroUpgradeDetailWindow : View
             heroMaxLevel.text =
                 $"{gm.maxLevelTable[data.grade - 1]["MaxLevel"]}";
 
-            gradeText = $"이미 {(CharacterGrade)(data.grade)}등급입니다";
-            return;
+            gradeText = $"승급 심사 통과를 축하합니다!\n{(CharacterGrade)(data.grade)}등급 히어로로 승급하였습니다!";
+            //gradeText = $"이미 {(CharacterGrade)(data.grade)}등급입니다";
         }
 
         SetResultInfo(heroIcon, gradeText);
+        if (curGrade == CharacterGrade.SS)
+        {
+            return;
+        }
+
         heroPortrait.sprite = gm.GetSpriteByAddress($"icon_{data.name}");
         prevSkillIcons[0].sprite = gm.GetSpriteByAddress($"{cdb.passiveSkill.skillIcon}");
         prevSkillIcons[1].sprite = gm.GetSpriteByAddress($"{cdb.attacks[0].skillIcon}");
