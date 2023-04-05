@@ -514,17 +514,17 @@ public class BattleManager : MonoBehaviour
         gm = GameManager.Instance;
         if (tree.CurNode == null)
         {
-            //if (gm.playerData.isTutorial)
-            //{
-            //    tree.CreateTreeGraph();
-            //    //autoButton.interactable = false;
-            //    //speedButton.interactable = false;
-            //}
-            //else
-            //{
-            int difficulty = (int)gm.currentSelectMission["Difficulty"];
-            tree.CreateTreeGraph(difficulty);
-            //}
+            if (gm.playerData.isTutorial)
+            {
+                tree.CreateTreeGraph();
+                //autoButton.interactable = false;
+                //speedButton.interactable = false;
+            }
+            else
+            {
+                int difficulty = (int)gm.currentSelectMission["Difficulty"];
+                tree.CreateTreeGraph(difficulty);
+            }
         }
 
         for (int i = 0; i < choiceButtons.Count; i++)
@@ -1032,16 +1032,12 @@ public class BattleManager : MonoBehaviour
 
         if (tree.CurNode.type == TreeNodeTypes.Event)
         {
-            //if (gm.playerData.isTutorial)
-            //{
-            //    // 길막! 이벤트
-            //    StartNextStage(MapEventEnum.Roadblock);
-            //}
-            //else
-            //{
             var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
-            StartNextStage((MapEventEnum)randomEvent);
-            //}
+
+            if (gm.playerData.isTutorial)
+                StartNextStage(MapEventEnum.Roadblock); // 길막! 이벤트
+            else
+                StartNextStage((MapEventEnum)randomEvent);
             return true;
         }
         else if (tree.CurNode.type == TreeNodeTypes.Supply)
