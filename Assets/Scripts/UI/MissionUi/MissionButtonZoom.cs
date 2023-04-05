@@ -4,13 +4,14 @@ using UnityEngine;
 public class MissionButtonZoom : MonoBehaviour
 {
     public RectTransform mapImageRectTransform;
-    public float zoomAmount = 2f;
+    public float zoomAmount = 4f;
     public float zoomDuration = 1f;
     private float zoomDurationInverse;
     private Vector2 originalPivot;
     private Vector2 originalAnchoredPosition;
     private Vector3 originalScale;
     public MissionMarkData[] marks;
+    public RectTransform canvas;
 
     private void Start()
     {
@@ -34,7 +35,8 @@ public class MissionButtonZoom : MonoBehaviour
     {
         Vector3 targetPivot = Camera.main.ScreenToViewportPoint(pos);
         Vector3 targetScale = originalScale * zoomAmount;
-        Vector3 targetAnchoredPosition = new Vector2(0, 0);
+        Vector2 canvasSize = canvas.sizeDelta;
+        Vector3 targetAnchoredPosition = new Vector2(-canvasSize.x*0.25f, 0);
 
         foreach (var mark in marks)
         {
