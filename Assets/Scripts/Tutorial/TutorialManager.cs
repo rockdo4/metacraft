@@ -34,30 +34,30 @@ public class TutorialManager : MonoBehaviour
         int scriptNumber = (int)tutorialDic[currEv]["ScriptNumber"];
         string currEvText = (string)tutorialDic[currEv]["StringCode"];
 
-        OnCurrOutline(outlineNumber);
+        OnCurrOutline();
         string text = gm.GetStringByTable(currEvText);
-        OnCurrTextBox(scriptNumber, text);
+        OnCurrTextBox(text);
     }
 
-    private void OnCurrTextBox(int index, string text)
+    private void OnCurrTextBox(string text)
     {
         for (int i = 0; i < textBoxes.Count; i++)
         {
             textBoxes[i].gameObject.SetActive(false);
         }
 
-        textBoxes[index].gameObject.SetActive(true);
-        textBoxes[index].textBox.text = text;
+        textBoxes[currEv].gameObject.SetActive(true);
+        textBoxes[currEv].textBox.text = text;
     }
 
-    private void OnCurrOutline(int index)
+    private void OnCurrOutline()
     {
         for (int i = 0; i < textBoxes.Count; i++)
         {
             outlines[i].SetActive(false);
         }
 
-        outlines[index].SetActive(true);
+        outlines[currEv].SetActive(true);
         //outlines[index].rectTr.position = outlines[index].button.rect.center;
     }
 
