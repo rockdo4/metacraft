@@ -20,12 +20,9 @@ public enum EffectEnum
     FX_splash_thorn_01_floor,
     backlight_health_drop,
     Area_generic_orange,
-    SpikesAttack,
-    Effect_68_EnergyArrowShot,
+    SpikesAttack,    
     Effect_75_EnergyWave,
-    CFX3_ResurrectionLight_Circle,
-    Effect_13_SpearHit,
-    Effect_72_SpineMake,
+    CFX3_ResurrectionLight_Circle,        
     Projectile11,
     SwordSlash3,
     Orbs_fire,
@@ -59,5 +56,6 @@ public enum EffectEnum
     Misses,
     MuzzleFlash1,
     top_down_lightning_dot,
+
     Count,
 }
