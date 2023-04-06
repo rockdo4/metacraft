@@ -12,4 +12,9 @@ public class SetTutorialBlockPanels : MonoBehaviour
     {
         TutorialBlockPanels.Instance.SetPanelsSurroundTarget(image);
     }
+
+    private void OnDisable()
+    {
+        TutorialBlockPanels.Instance.gameObject.SetActive(false);
+    }
 }

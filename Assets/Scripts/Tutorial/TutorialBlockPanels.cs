@@ -1,62 +1,48 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.UI.Extensions;
+
 public class TutorialBlockPanels : MonoBehaviour
-{
-    private static TutorialBlockPanels _instance;
-
-    public static TutorialBlockPanels Instance
-    {
-        get
-        {
-            if (_instance == null)
-            {
-                _instance = FindObjectOfType<TutorialBlockPanels>();
-
-                if (_instance == null)
-                {
-                    GameObject obj = new()
-                    {
-                        name = typeof(TutorialBlockPanels).Name
-                    };
-                    _instance = obj.AddComponent<TutorialBlockPanels>();
-                }
-            }
-
-            return _instance;
-        }
-    }
-
-    public virtual void Awake()
-    {
-        if (_instance == null)
-        {
-            _instance = this;
-        }
-    }
+{   
+    public static TutorialBlockPanels Instance { get; private set; }
     public Color panelColor;
 
     public RawImage bottom;
     public RawImage left;
     public RawImage top;
     public RawImage right;
+    public virtual void Awake()
+    {
+        Instance = this; 
+        
+        bottom.color = panelColor;
+        left.color = panelColor;
+        top.color = panelColor;
+        right.color = panelColor;
+    }
     public void SetPanelsSurroundTarget(Image targetImage)
     {
+        gameObject.SetActive(true);
+
         RectTransform targetRectTransform = targetImage.rectTransform;
-        Vector3[] targetCorners = new Vector3[4];
-        targetRectTransform.GetWorldCorners(targetCorners);
-        
-        bottom.rectTransform.sizeDelta = new(bottom.rectTransform.sizeDelta.x, targetCorners[0].y);
+        var canvasRect = GetComponent<RectTransform>().GetParentCanvas().GetComponent<RectTransform>();
+        Vector2 canvasCenter = canvasRect.sizeDelta * 0.5f;
 
-        SetSidePanelOffsets(left.rectTransform, targetCorners[0].y, targetCorners[1].y);
+        float leftOffSet = canvasCenter.x + targetRectTransform.offsetMin.x;
+        float rightOffSet = canvasCenter.x - targetRectTransform.offsetMax.x;
+        float bottomOffSet = canvasCenter.y + targetRectTransform.offsetMin.y;
+        float topOffSet = canvasCenter.y - targetRectTransform.offsetMax.y;
 
-        top.rectTransform.sizeDelta = new(top.rectTransform.sizeDelta.x, targetCorners[1].y);
+        bottom.rectTransform.sizeDelta = new(bottom.rectTransform.sizeDelta.x, bottomOffSet);
+        top.rectTransform.sizeDelta = new(top.rectTransform.sizeDelta.x, topOffSet);
 
-        SetSidePanelOffsets(right.rectTransform, targetCorners[0].y, targetCorners[1].y);
-    }
+        float height = canvasRect.sizeDelta.y - bottomOffSet - topOffSet;
+        float posYadjust = (bottomOffSet - topOffSet) * 0.5f;
 
-    private void SetSidePanelOffsets(RectTransform rectTransform, float bottom, float top)
-    {   
-        rectTransform.offsetMin = new Vector2(rectTransform.offsetMin.x, bottom);
-        rectTransform.offsetMax = new Vector2(rectTransform.offsetMax.x, top);
+        left.rectTransform.sizeDelta = new(leftOffSet, height);
+        left.rectTransform.localPosition = new(left.rectTransform.localPosition.x, posYadjust);
+
+        right.rectTransform.sizeDelta = new(rightOffSet, height);
+        right.rectTransform.localPosition = new(right.rectTransform.localPosition.x, posYadjust);
     }
 }
