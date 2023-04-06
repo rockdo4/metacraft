@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -17,6 +18,10 @@ public class TutorialManager : MonoBehaviour
         if (!gm.playerData.isTutorial)
         {
             Destroy(gameObject);
+        }
+        else
+        {
+            OnEvent();
         }
     }
 
@@ -46,12 +51,12 @@ public class TutorialManager : MonoBehaviour
         int scriptNumber = (int)tutorialDic[currEv]["ScriptNumber"];
         string currEvText = (string)tutorialDic[currEv]["StringCode"];
 
-        OnCurrOutline();
         string text = gm.GetStringByTable(currEvText);
-        OnCurrTextBox(text);
+        OnTextBox(scriptNumber, text);
+        OnOutline(outlineNumber);
     }
 
-    private void OnCurrTextBox(string text)
+    private void OnTextBox(int index, string text)
     {
         for (int i = 0; i < textBoxes.Count; i++)
         {
@@ -62,14 +67,14 @@ public class TutorialManager : MonoBehaviour
         textBoxes[currEv].textBox.text = text;
     }
 
-    private void OnCurrOutline()
+    private void OnOutline(int index)
     {
         for (int i = 0; i < textBoxes.Count; i++)
         {
             outlines[i].SetActive(false);
         }
 
-        outlines[currEv].SetActive(true);
+        outlines[index].SetActive(true);
         //outlines[index].rectTr.position = outlines[index].button.rect.center;
     }
 
@@ -93,6 +98,11 @@ public class TutorialManager : MonoBehaviour
             return;
         }
 
-        OnEvent();
+        //GameObject asd = new();
+        //var trigger = asd.GetComponent<EventTrigger>();
+
+        //EventTrigger.Entry entry = new() { eventID = EventTriggerType.PointerUp };
+        //entry.callback.AddListener((eventData) => { OnEvent(); });
+        //trigger.triggers.Add(entry);
     }
 }
