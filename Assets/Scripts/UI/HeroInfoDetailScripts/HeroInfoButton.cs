@@ -29,11 +29,10 @@ public class HeroInfoButton : MonoBehaviour
         if (GameManager.Instance.playerData.isTutorial)
         {
             var tutoMgr = FindObjectOfType<TutorialManager>();
-            var button = GetComponent<Button>();
 
             if (tutoMgr != null)
             {
-                tutoMgr.SetOutlineButton(button);
+                tutoMgr.SetOutlineButton(gameObject);
             }
         }
     }

@@ -109,19 +109,17 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    public void SetOutlineButton(Button button)
+    public void SetOutlineButton(GameObject button)
     {
-
-        var originalButton = outlines[outLineNumber].originalButton.GetComponent<Button>();
-        if (originalButton != null)
+        if (outlines[outLineNumber].originalButton == null)
         {
-            originalButton = button;
+            outlines[outLineNumber].originalButton = button;
         }
-        outlines[outLineNumber].AddEventOriginalButton(OnNextTutorialEvent);
-        outlines[outLineNumber].AddEventOriginalButton(OnEvent);
 
         // 위치 설정
         var rect = outlines[outLineNumber].originalButton.GetComponent<RectTransform>();
         outlines[outLineNumber].SetRectTrPos(rect.anchoredPosition);
+        outlines[outLineNumber].AddEventOriginalButton(OnNextTutorialEvent);
+        outlines[outLineNumber].AddEventOriginalButton(OnEvent);
     }
 }

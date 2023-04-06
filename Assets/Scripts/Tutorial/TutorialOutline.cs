@@ -59,7 +59,6 @@ public class TutorialOutline : MonoBehaviour
     {
         if (!isRed || originalButton == null)
             return;
-       
 
         if (originalButton.TryGetComponent(out Button button))
             button.onClick.AddListener(action);
