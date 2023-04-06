@@ -19,6 +19,10 @@ public class TutorialManager : MonoBehaviour
         {
             OnEvent();
         }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
 
     private void Update()
