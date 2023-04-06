@@ -14,6 +14,7 @@ public class TutorialNoneBlockPanels : TutorialBlockPanels
     }
     public void OnNextTutorialEvent()
     {
-        tutorialManager.OnNextTutorialEvent();        
+        tutorialManager.OnNextTutorialEvent();
+        tutorialManager.OnEvent();
     }
 }
