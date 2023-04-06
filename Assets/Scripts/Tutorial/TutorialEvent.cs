@@ -5,7 +5,7 @@ public class TutorialEvent : MonoBehaviour
 {
     public TextMeshProUGUI textBox;
 
-    private void Start()
+    private void Awake()
     {
         textBox = GetComponentInChildren<TextMeshProUGUI>();
     }

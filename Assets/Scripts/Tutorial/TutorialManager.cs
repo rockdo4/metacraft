@@ -13,6 +13,11 @@ public class TutorialManager : MonoBehaviour
     private void Start()
     {
         gm = GameManager.Instance;
+
+        if (!gm.playerData.isTutorial)
+        {
+            Destroy(gameObject);
+        }
     }
 
     public void OnClickSkip()
