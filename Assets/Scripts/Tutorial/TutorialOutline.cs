@@ -15,7 +15,7 @@ public class TutorialOutline : MonoBehaviour
         RectTransform originalRectTr = originalButton.GetComponent<RectTransform>();
 
         rectTr = GetComponent<RectTransform>();
-        rectTr.localPosition = originalRectTr.rect.center;
+        rectTr.anchoredPosition = originalRectTr.anchoredPosition;
     }
 
     public void SetActiveOutline(bool active)
@@ -36,5 +36,9 @@ public class TutorialOutline : MonoBehaviour
             return;
 
         originalButton.onClick.RemoveListener(action);
+    }
+    public void SetRectTrPos(Vector2 anchoredPosition)
+    {
+        rectTr.anchoredPosition = anchoredPosition;
     }
 }
