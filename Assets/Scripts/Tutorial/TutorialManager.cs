@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class TutorialManager : MonoBehaviour
@@ -13,6 +14,19 @@ public class TutorialManager : MonoBehaviour
     private void Start()
     {
         gm = GameManager.Instance;
+        tutorialDic = gm.tutorialIndexTable;
+        if(gm.playerData.isTutorial)
+        {
+            OnEvent();
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.O))
+        {
+            OnNextTutorialEvent();
+        }
     }
 
     public void OnClickSkip()
@@ -37,34 +51,41 @@ public class TutorialManager : MonoBehaviour
     }
     public void OnEvent()
     {
-        int outlineNumber = (int)tutorialDic[currEv]["OutLineNumber"];
+        int outLineNumber = (int)tutorialDic[currEv]["OutLineNumber"];
         int scriptNumber = (int)tutorialDic[currEv]["ScriptNumber"];
         string currEvText = (string)tutorialDic[currEv]["StringCode"];
 
-        OnCurrOutline();
+        if(outLineNumber!=-1)
+        {
+            OnCurrOutline(outLineNumber);
+        }
+        else
+        {
+           outlines[currEv-1].SetActive(false);
+        }
         string text = gm.GetStringByTable(currEvText);
-        OnCurrTextBox(text);
+        OnCurrTextBox(scriptNumber,text);
     }
 
-    private void OnCurrTextBox(string text)
+    private void OnCurrTextBox(int index, string text)
     {
         for (int i = 0; i < textBoxes.Count; i++)
         {
             textBoxes[i].gameObject.SetActive(false);
         }
 
-        textBoxes[currEv].gameObject.SetActive(true);
-        textBoxes[currEv].textBox.text = text;
+        textBoxes[index].gameObject.SetActive(true);
+        textBoxes[index].textBox.text = text;
     }
 
-    private void OnCurrOutline()
+    private void OnCurrOutline(int index)
     {
         for (int i = 0; i < textBoxes.Count; i++)
         {
             outlines[i].SetActive(false);
         }
 
-        outlines[currEv].SetActive(true);
+        outlines[index].SetActive(true);
         //outlines[index].rectTr.position = outlines[index].button.rect.center;
     }
 
