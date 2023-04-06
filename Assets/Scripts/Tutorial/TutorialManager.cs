@@ -1,5 +1,7 @@
 using System.Collections.Generic;
+using System.Numerics;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -9,6 +11,7 @@ public class TutorialManager : MonoBehaviour
     public List<TutorialOutline> outlines;
 
     private static int currEv = 0;
+    private int outLineNumber = 0;
 
     private void Start()
     {
@@ -55,20 +58,19 @@ public class TutorialManager : MonoBehaviour
     }
     public void OnEvent()
     {
-        int outLineNumber = (int)tutorialDic[currEv]["OutLineNumber"];
+        outLineNumber = (int)tutorialDic[currEv]["OutLineNumber"];
         int scriptNumber = (int)tutorialDic[currEv]["ScriptNumber"];
         string currEvText = (string)tutorialDic[currEv]["StringCode"];
 
         if (outLineNumber != -1)
         {
             OnOutline(outLineNumber);
+            outlines[outLineNumber].AddEventOriginalButton(OnNextTutorialEvent);
+            outlines[outLineNumber].AddEventOriginalButton(OnEvent);
         }
 
         string text = gm.GetStringByTable(currEvText);
         OnTextBox(scriptNumber, text);
-
-        outlines[currEv].AddEventOriginalButton(OnNextTutorialEvent);
-        outlines[currEv].AddEventOriginalButton(OnEvent);
     }
 
     private void OnTextBox(int index, string text)
@@ -93,14 +95,33 @@ public class TutorialManager : MonoBehaviour
 
     public void OnNextTutorialEvent()
     {
-        Logger.Debug("next event");
-        outlines[currEv].RemoveEventOriginalButton(OnEvent);
-        outlines[currEv].RemoveEventOriginalButton(OnNextTutorialEvent);
-        outlines[currEv].SetActiveOutline(false);
+        if (outLineNumber != 0)
+        {
+            outlines[outLineNumber].RemoveEventOriginalButton(OnEvent);
+            outlines[outLineNumber].RemoveEventOriginalButton(OnNextTutorialEvent);
+            outlines[outLineNumber].SetActiveOutline(false);
+        }
+
         currEv++;
         if (currEv >= tutorialDic.Count)
         {
             return;
         }
+    }
+
+    public void SetOutlineButton(Button button)
+    {
+
+        var originalButton = outlines[outLineNumber].originalButton.GetComponent<Button>();
+        if (originalButton != null)
+        {
+            originalButton = button;
+        }
+        outlines[outLineNumber].AddEventOriginalButton(OnNextTutorialEvent);
+        outlines[outLineNumber].AddEventOriginalButton(OnEvent);
+
+        // 위치 설정
+        var rect = outlines[outLineNumber].originalButton.GetComponent<RectTransform>();
+        outlines[outLineNumber].SetRectTrPos(rect.anchoredPosition);
     }
 }

@@ -13,6 +13,7 @@ public class TutorialOutline : MonoBehaviour
     private void Awake()
     {
         image = GetComponent<Image>();
+        rectTr = GetComponent<RectTransform>();
     }
     private void AdjustOutlinePos()
     {
@@ -20,14 +21,16 @@ public class TutorialOutline : MonoBehaviour
             return;
 
         RectTransform originalRectTr = originalButton.GetComponent<RectTransform>();
-        Vector2 pivotOffset = new Vector2(originalRectTr.rect.width * (0.5f - originalRectTr.pivot.x), originalRectTr.rect.height * (0.5f - originalRectTr.pivot.y));
-        Vector3 worldPos = originalRectTr.position + new Vector3(pivotOffset.x, pivotOffset.y, 0);
-        Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(originalRectTr.parent.GetComponent<RectTransform>(), screenPos, Camera.main, out Vector2 localPos);
-        Vector2 center = localPos + originalRectTr.rect.center;
+        //Vector2 pivotOffset = new Vector2(originalRectTr.rect.width * (0.5f - originalRectTr.pivot.x), originalRectTr.rect.height * (0.5f - originalRectTr.pivot.y));
+        //Vector3 worldPos = originalRectTr.position + new Vector3(pivotOffset.x, pivotOffset.y, 0);
+        //Vector3 screenPos = Camera.main.WorldToScreenPoint(worldPos);
+        //RectTransformUtility.ScreenPointToLocalPointInRectangle(originalRectTr.parent.GetComponent<RectTransform>(), screenPos, Camera.main, out Vector2 localPos);
+        //Vector2 center = localPos + originalRectTr.rect.center;
 
-        rectTr = GetComponent<RectTransform>();
-        rectTr.localPosition = center;
+        //rectTr = GetComponent<RectTransform>();
+
+        //rectTr.localPosition = center;
+        rectTr.anchoredPosition = originalRectTr.anchoredPosition;
     }
 
     private void OnEnable()
@@ -56,16 +59,21 @@ public class TutorialOutline : MonoBehaviour
     {
         if (!isRed || originalButton == null)
             return;
+       
 
-        Button button = originalButton.GetComponent<Button>();
-        button.onClick.AddListener(action);
+        if (originalButton.TryGetComponent(out Button button))
+            button.onClick.AddListener(action);
     }
     public void RemoveEventOriginalButton(UnityAction action)
     {
         if (!isRed || originalButton == null)
             return;
 
-        Button button = originalButton.GetComponent<Button>();
-        button.onClick.RemoveListener(action);
+        if (originalButton.TryGetComponent(out Button button))
+            button.onClick.RemoveListener(action);
+    }
+    public void SetRectTrPos(Vector2 anchoredPosition)
+    {
+        rectTr.anchoredPosition = anchoredPosition;
     }
 }
