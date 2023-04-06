@@ -95,13 +95,12 @@ public class TutorialManager : MonoBehaviour
 
     public void OnNextTutorialEvent()
     {
-        if (outLineNumber != 0)
+        if (outLineNumber != -1)
         {
             outlines[outLineNumber].RemoveEventOriginalButton(OnEvent);
             outlines[outLineNumber].RemoveEventOriginalButton(OnNextTutorialEvent);
             outlines[outLineNumber].SetActiveOutline(false);
         }
-
         currEv++;
         if (currEv >= tutorialDic.Count)
         {
