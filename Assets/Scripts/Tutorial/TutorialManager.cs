@@ -1,18 +1,36 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
     private GameManager gm;
     private List<Dictionary<string, object>> tutorialDic; 
     public List<TutorialEvent> textBoxes;
-    public List<GameObject> outlines;
+    public List<TutorialOutline> outlines;
 
     private static int currEv = 0;
 
     private void Start()
     {
         gm = GameManager.Instance;
+        tutorialDic = gm.tutorialIndexTable;
+        if(gm.playerData.isTutorial)
+        {
+            OnEvent();
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.O))
+        {
+            OnNextTutorialEvent();
+        }
     }
 
     public void OnClickSkip()
@@ -37,57 +55,53 @@ public class TutorialManager : MonoBehaviour
     }
     public void OnEvent()
     {
-        int outlineNumber = (int)tutorialDic[currEv]["OutLineNumber"];
+        int outLineNumber = (int)tutorialDic[currEv]["OutLineNumber"];
         int scriptNumber = (int)tutorialDic[currEv]["ScriptNumber"];
         string currEvText = (string)tutorialDic[currEv]["StringCode"];
 
-        OnCurrOutline();
+        if (outLineNumber != -1)
+        {
+            OnOutline(outLineNumber);
+        }
+        //else
+        //{
+        //    outlines[currEv - 1].SetActive(false);
+        //}
+
         string text = gm.GetStringByTable(currEvText);
-        OnCurrTextBox(text);
+        OnTextBox(scriptNumber, text);
+
+        outlines[currEv].AddEventOriginalButton(OnEvent);
     }
 
-    private void OnCurrTextBox(string text)
-    {
+    private void OnTextBox(int index, string text)
+    { 
         for (int i = 0; i < textBoxes.Count; i++)
         {
             textBoxes[i].gameObject.SetActive(false);
         }
 
-        textBoxes[currEv].gameObject.SetActive(true);
-        textBoxes[currEv].textBox.text = text;
+        textBoxes[index].gameObject.SetActive(true);
+        textBoxes[index].textBox.text = text;
     }
-
-    private void OnCurrOutline()
+    private void OnOutline(int index)
     {
         for (int i = 0; i < textBoxes.Count; i++)
         {
-            outlines[i].SetActive(false);
+            outlines[i].SetActiveOutline(false);
         }
 
-        outlines[currEv].SetActive(true);
-        //outlines[index].rectTr.position = outlines[index].button.rect.center;
+        outlines[index].SetActiveOutline(true);
     }
 
     public void OnNextTutorialEvent()
     {
-        //bool scriptClick = (bool)tutorialDic[currEv]["ScriptClick"];
-        //bool outlineClick = (bool)tutorialDic[currEv]["OutlineClick"];
-
-        //if (scriptClick)
-        //{
-
-        //}
-        //else if (outlineClick)
-        //{
-
-        //}
-
+        outlines[currEv].RemoveEventOriginalButton(OnEvent);
+        outlines[currEv].SetActiveOutline(false);
         currEv++;
         if (currEv >= tutorialDic.Count)
         {
             return;
         }
-
-        OnEvent();
     }
 }

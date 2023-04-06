@@ -42,6 +42,7 @@ public class GameManager : Singleton<GameManager>
     public List<Dictionary<string, object>> maxLevelTable; // 최대 레벨 테이블
     public List<Dictionary<string, object>> upgradeTable; // 승급 테이블
     public List<Dictionary<string, object>> tutorialTable; // 튜토리얼 대사 테이블
+    public List<Dictionary<string, object>> tutorialIndexTable;
 
     // Office Select
     public GameObject currentSelectObject; // Hero Info
