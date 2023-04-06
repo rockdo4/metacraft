@@ -91,6 +91,7 @@ public class TutorialManager : MonoBehaviour
 
     public void OnNextTutorialEvent()
     {
+        Logger.Debug("next event");
         outlines[currEv].RemoveEventOriginalButton(OnEvent);
         outlines[currEv].SetActiveOutline(false);
         currEv++;
