@@ -67,6 +67,7 @@ public class TutorialManager : MonoBehaviour
         string text = gm.GetStringByTable(currEvText);
         OnTextBox(scriptNumber, text);
 
+        outlines[currEv].AddEventOriginalButton(OnNextTutorialEvent);
         outlines[currEv].AddEventOriginalButton(OnEvent);
     }
 
@@ -94,6 +95,7 @@ public class TutorialManager : MonoBehaviour
     {
         Logger.Debug("next event");
         outlines[currEv].RemoveEventOriginalButton(OnEvent);
+        outlines[currEv].RemoveEventOriginalButton(OnNextTutorialEvent);
         outlines[currEv].SetActiveOutline(false);
         currEv++;
         if (currEv >= tutorialDic.Count)
