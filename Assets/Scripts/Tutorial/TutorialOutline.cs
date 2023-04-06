@@ -9,6 +9,9 @@ public class TutorialOutline : MonoBehaviour
 
     private void Start()
     {
+        if (originalButton == null)
+            return;
+
         RectTransform originalRectTr = originalButton.GetComponent<RectTransform>();
 
         rectTr = GetComponent<RectTransform>();
@@ -22,10 +25,16 @@ public class TutorialOutline : MonoBehaviour
 
     public void AddEventOriginalButton(UnityAction action)
     {
+        if (originalButton == null)
+            return;
+
         originalButton.onClick.AddListener(action);
     }
     public void RemoveEventOriginalButton(UnityAction action)
     {
+        if (originalButton == null)
+            return;
+
         originalButton.onClick.RemoveListener(action);
     }
 }

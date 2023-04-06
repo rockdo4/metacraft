@@ -29,6 +29,7 @@ public class TutorialManager : MonoBehaviour
         if (Input.GetKeyUp(KeyCode.O))
         {
             OnNextTutorialEvent();
+            OnEvent();
         }
     }
 
