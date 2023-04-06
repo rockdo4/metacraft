@@ -1,12 +1,13 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
     private GameManager gm;
     private List<Dictionary<string, object>> tutorialDic; 
     public List<TutorialEvent> textBoxes;
-    public List<GameObject> outlines;
+    public List<TutorialOutline> outlines;
 
     private static int currEv = 0;
 
@@ -69,6 +70,8 @@ public class TutorialManager : MonoBehaviour
 
         string text = gm.GetStringByTable(currEvText);
         OnTextBox(scriptNumber, text);
+
+        outlines[currEv].AddEventOriginalButton(OnEvent);
     }
 
     private void OnTextBox(int index, string text)
@@ -85,26 +88,20 @@ public class TutorialManager : MonoBehaviour
     {
         for (int i = 0; i < textBoxes.Count; i++)
         {
-            outlines[i].SetActive(false);
+            outlines[i].SetActiveOutline(false);
         }
 
-        outlines[index].SetActive(true);
+        outlines[index].SetActiveOutline(true);
     }
 
     public void OnNextTutorialEvent()
     {
-        outlines[currEv].SetActive(false);
+        outlines[currEv].RemoveEventOriginalButton(OnEvent);
+        outlines[currEv].SetActiveOutline(false);
         currEv++;
         if (currEv >= tutorialDic.Count)
         {
             return;
         }
-
-        //GameObject asd = new();
-        //var trigger = asd.GetComponent<EventTrigger>();
-
-        //EventTrigger.Entry entry = new() { eventID = EventTriggerType.PointerUp };
-        //entry.callback.AddListener((eventData) => { OnEvent(); });
-        //trigger.triggers.Add(entry);
     }
 }
