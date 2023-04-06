@@ -21,11 +21,7 @@ public class HeroInfoButton : MonoBehaviour
         typeIcon.color = colorInfo.GetTypeColor((CharacterJob)data.job);
         levelText.text = $"{data.level}";
         icon.sprite = GameManager.Instance.GetSpriteByAddress($"icon_{data.name}");
-    }   
 
-    public virtual void OnClick()
-    {
-        GameManager.Instance.currentSelectObject = bundle.gameObject;
         if (GameManager.Instance.playerData.isTutorial)
         {
             var tutoMgr = FindObjectOfType<TutorialManager>();
@@ -35,5 +31,10 @@ public class HeroInfoButton : MonoBehaviour
                 tutoMgr.SetOutlineButton(gameObject);
             }
         }
+    }   
+
+    public virtual void OnClick()
+    {
+        GameManager.Instance.currentSelectObject = bundle.gameObject;
     }
 }
