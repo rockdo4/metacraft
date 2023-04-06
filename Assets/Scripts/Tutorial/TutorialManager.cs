@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -63,10 +62,6 @@ public class TutorialManager : MonoBehaviour
         {
             OnOutline(outLineNumber);
         }
-        //else
-        //{
-        //    outlines[currEv - 1].SetActive(false);
-        //}
 
         string text = gm.GetStringByTable(currEvText);
         OnTextBox(scriptNumber, text);
@@ -86,7 +81,7 @@ public class TutorialManager : MonoBehaviour
     }
     private void OnOutline(int index)
     {
-        for (int i = 0; i < textBoxes.Count; i++)
+        for (int i = 0; i < outlines.Count; i++)
         {
             outlines[i].SetActiveOutline(false);
         }

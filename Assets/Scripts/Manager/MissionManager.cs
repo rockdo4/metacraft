@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
@@ -46,8 +47,8 @@ public class MissionManager : View
     private void Start()
     {
         missionInfoTable = gm.missionInfoDifficulty;
-
         heroSlotsIndex = 0;
+
         nums = new List<List<int>>();
         for (int i = 0; i < 5; i++)
         {
@@ -65,13 +66,26 @@ public class MissionManager : View
         {
             if (marks[j].GetComponent<MissionMarkData>().isMarkOn)
             {
-                int index = k++;
-                var missionName = missionInfoTable[difficulty][nums[difficulty - 1][index]]["NameString"];
-                marks[j].GetComponentInChildren<TextMeshProUGUI>().text = gm.GetStringByTable($"{missionName}");
-                var buttons = marks[j].GetComponentsInChildren<Button>();
-                foreach (var button in buttons)
+                if (gm.playerData.isTutorial)
                 {
-                    button.onClick.AddListener(() => UpdateMissionInfo(difficulty, nums[difficulty - 1][index]));
+                    var missionName = missionInfoTable[0][0]["NameString"];
+                    marks[1].GetComponentInChildren<TextMeshProUGUI>().text = gm.GetStringByTable($"{missionName}");
+                    var buttons = marks[1].GetComponentsInChildren<Button>();
+                    foreach (var button in buttons)
+                    {
+                        button.onClick.AddListener(() => UpdateMissionInfo(0, 0));
+                    }
+                }
+                else
+                {
+                    int index = k++;
+                    var missionName = missionInfoTable[difficulty][nums[difficulty - 1][index]]["NameString"];
+                    marks[j].GetComponentInChildren<TextMeshProUGUI>().text = gm.GetStringByTable($"{missionName}");
+                    var buttons = marks[j].GetComponentsInChildren<Button>();
+                    foreach (var button in buttons)
+                    {
+                        button.onClick.AddListener(() => UpdateMissionInfo(difficulty, nums[difficulty - 1][index]));
+                    }
                 }
             }
             else
