@@ -142,6 +142,7 @@ public class AssetLoadProgress : MonoBehaviour
         gm.maxLevelTable = CSVReader.SplitTextAsset(releaseHandles["MaxLevelTable"].Result as TextAsset);
         gm.upgradeTable = CSVReader.SplitTextAsset(releaseHandles["UpgradeTable"].Result as TextAsset);
         gm.tutorialTable = CSVReader.SplitTextAsset(releaseHandles["TutorialTable"].Result as TextAsset);
+        gm.tutorialIndexTable = CSVReader.SplitTextAsset(releaseHandles["TutorialIndexTable"].Result as TextAsset);
 
         bool saveFileExist = gm.LoadAllData();
         FixMissionTable(CSVReader.SplitTextAsset(releaseHandles["MissionInfoTable"].Result as TextAsset));

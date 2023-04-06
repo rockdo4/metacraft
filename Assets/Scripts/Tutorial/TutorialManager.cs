@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.EventSystems;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -14,14 +13,22 @@ public class TutorialManager : MonoBehaviour
     private void Start()
     {
         gm = GameManager.Instance;
-
-        if (!gm.playerData.isTutorial)
+        tutorialDic = gm.tutorialIndexTable;
+        if(gm.playerData.isTutorial)
         {
-            Destroy(gameObject);
+            OnEvent();
         }
         else
         {
-            OnEvent();
+            Destroy(gameObject);
+        }
+    }
+
+    private void Update()
+    {
+        if (Input.GetKeyUp(KeyCode.O))
+        {
+            OnNextTutorialEvent();
         }
     }
 
@@ -47,26 +54,33 @@ public class TutorialManager : MonoBehaviour
     }
     public void OnEvent()
     {
-        int outlineNumber = (int)tutorialDic[currEv]["OutLineNumber"];
+        int outLineNumber = (int)tutorialDic[currEv]["OutLineNumber"];
         int scriptNumber = (int)tutorialDic[currEv]["ScriptNumber"];
         string currEvText = (string)tutorialDic[currEv]["StringCode"];
 
+        if (outLineNumber != -1)
+        {
+            OnOutline(outLineNumber);
+        }
+        //else
+        //{
+        //    outlines[currEv - 1].SetActive(false);
+        //}
+
         string text = gm.GetStringByTable(currEvText);
         OnTextBox(scriptNumber, text);
-        OnOutline(outlineNumber);
     }
 
     private void OnTextBox(int index, string text)
-    {
+    { 
         for (int i = 0; i < textBoxes.Count; i++)
         {
             textBoxes[i].gameObject.SetActive(false);
         }
 
-        textBoxes[currEv].gameObject.SetActive(true);
-        textBoxes[currEv].textBox.text = text;
+        textBoxes[index].gameObject.SetActive(true);
+        textBoxes[index].textBox.text = text;
     }
-
     private void OnOutline(int index)
     {
         for (int i = 0; i < textBoxes.Count; i++)
@@ -75,23 +89,11 @@ public class TutorialManager : MonoBehaviour
         }
 
         outlines[index].SetActive(true);
-        //outlines[index].rectTr.position = outlines[index].button.rect.center;
     }
 
     public void OnNextTutorialEvent()
     {
-        //bool scriptClick = (bool)tutorialDic[currEv]["ScriptClick"];
-        //bool outlineClick = (bool)tutorialDic[currEv]["OutlineClick"];
-
-        //if (scriptClick)
-        //{
-
-        //}
-        //else if (outlineClick)
-        //{
-
-        //}
-
+        outlines[currEv].SetActive(false);
         currEv++;
         if (currEv >= tutorialDic.Count)
         {
