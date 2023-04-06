@@ -65,7 +65,10 @@ public class TutorialManager : MonoBehaviour
         }
         else
         {
-           outlines[currEv-1].SetActive(false);
+            for (int i = 0; i < textBoxes.Count; i++)
+            {
+                outlines[i].SetActive(false);
+            }
         }
         string text = gm.GetStringByTable(currEvText);
         OnCurrTextBox(scriptNumber,text);
@@ -84,7 +87,7 @@ public class TutorialManager : MonoBehaviour
 
     private void OnCurrOutline(int index)
     {
-        for (int i = 0; i < textBoxes.Count; i++)
+        for (int i = 0; i < outlines.Count; i++)
         {
             outlines[i].SetActive(false);
         }
