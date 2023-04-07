@@ -7,6 +7,7 @@ public class TutorialManager : MonoBehaviour
     private List<Dictionary<string, object>> tutorialDic; 
     public List<TutorialEvent> textBoxes;
     public List<TutorialOutline> outlines;
+    public GameObject dialoguePanel;
 
     public static int currEv = 0;
     private int outLineNumber = 0;
@@ -61,6 +62,9 @@ public class TutorialManager : MonoBehaviour
         int scriptNumber = (int)tutorialDic[currEv]["ScriptNumber"];
         string currEvText = (string)tutorialDic[currEv]["StringCode"];
 
+        string text = gm.GetStringByTable(currEvText);
+        OnTextBox(scriptNumber, text);
+
         if (outLineNumber != -1)
         {
             OnOutline(outLineNumber);
@@ -71,9 +75,10 @@ public class TutorialManager : MonoBehaviour
             //else
             //    return;
         }
-
-        string text = gm.GetStringByTable(currEvText);
-        OnTextBox(scriptNumber, text);
+        else
+        {
+            dialoguePanel.SetActive(true);
+        }
     }
 
     private void OnTextBox(int index, string text)
