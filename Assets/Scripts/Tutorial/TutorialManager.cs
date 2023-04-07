@@ -126,7 +126,5 @@ public class TutorialManager : MonoBehaviour
         }
 
         outlines[tempOutLineNumber].NeedAdjustPos = needAdjust;
-        outlines[tempOutLineNumber].AddEventOriginalButton(OnNextTutorialEvent);
-        outlines[tempOutLineNumber].AddEventOriginalButton(OnEvent);
     }
 }

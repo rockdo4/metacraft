@@ -46,7 +46,7 @@ public class TutorialOutline : MonoBehaviour
 
     public void AddEventOriginalButton(UnityAction action)
     {
-        Logger.Debug(name + "Add");
+        Debug.Log(name + "Add");
         if (!isRed || originalButton == null)
         {
             return;
