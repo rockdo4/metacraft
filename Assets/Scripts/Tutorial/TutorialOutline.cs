@@ -27,6 +27,11 @@ public class TutorialOutline : MonoBehaviour
         //transform.position = originalButton.transform.position;
     }
 
+    private void Awake()
+    {
+        Logger.Debug(NeedAdjustPos);
+    }
+
     private void OnEnable()
     {
         AdjustOutlinePos();

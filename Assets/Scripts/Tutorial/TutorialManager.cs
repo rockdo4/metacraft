@@ -152,9 +152,8 @@ public class TutorialManager : MonoBehaviour
         if (outlines[tempOutLineNumber].originalButton == null)
         {
             outlines[tempOutLineNumber].originalButton = button;
+            outlines[tempOutLineNumber].NeedAdjustPos = needAdjust;
         }
-
-        outlines[tempOutLineNumber].NeedAdjustPos = needAdjust;
     }
 
     public void SetTextBoxActive()
