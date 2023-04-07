@@ -116,7 +116,7 @@ public class TutorialManager : MonoBehaviour
         }
     }
 
-    public void SetOutlineButton(GameObject button)
+    public void SetOutlineButton(GameObject button, bool needAdjust = true)
     {
         int tempOutLineNumber = (int)tutorialDic[currEv + 1]["OutLineNumber"];
 
@@ -125,6 +125,7 @@ public class TutorialManager : MonoBehaviour
             outlines[tempOutLineNumber].originalButton = button;
         }
 
+        outlines[tempOutLineNumber].NeedAdjustPos = needAdjust;
         outlines[tempOutLineNumber].AddEventOriginalButton(OnNextTutorialEvent);
         outlines[tempOutLineNumber].AddEventOriginalButton(OnEvent);
     }
