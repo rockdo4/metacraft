@@ -1,10 +1,11 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class TutorialManager : MonoBehaviour
 {
     private GameManager gm;
-    private List<Dictionary<string, object>> tutorialDic; 
+    private List<Dictionary<string, object>> tutorialDic;
     public List<TutorialEvent> textBoxes;
     public List<TutorialOutline> outlines;
     public GameObject dialoguePanel;
@@ -13,13 +14,17 @@ public class TutorialManager : MonoBehaviour
     private int outLineNumber = 0;
     public bool btEnd = false;
 
+    private static bool isOfficeTutorialComplete = false;
+    private static bool isBattleTutorialComplete = false;
+
     private void Start()
     {
         gm = GameManager.Instance;
         tutorialDic = gm.tutorialIndexTable;
-        if(gm.playerData.isTutorial)
+        if (gm.playerData.isTutorial)
         {
-            OnEvent();
+            if (currEv != 14)
+                OnEvent();
         }
         else
         {
@@ -40,22 +45,27 @@ public class TutorialManager : MonoBehaviour
     {
         for (int i = currEv; i < tutorialDic.Count; i++)
         {
-            bool skipSection = (bool)tutorialDic[i]["IsSkipStop"];
-            if (skipSection)
+            bool skipSection = Convert.ToBoolean(tutorialDic[i]["IsSkipStop"]);
+            if (i == 14 && !isOfficeTutorialComplete && skipSection)
             {
-                if (i == 15)
-                {
                     gm.ClearBattleGroups();
                     gm.battleGroups[0] = 0;
+                    gm.currentSelectMission = gm.missionInfoDifficulty[0][0];
                     gm.LoadScene((int)SceneIndex.Battle);
-                    return;
-                }
+                    isOfficeTutorialComplete = true;
+                    currEv = i;
+                    break;
+            }
+            else if (i == 33 && !isBattleTutorialComplete && skipSection)
+            {
+                gm.LoadScene((int)SceneIndex.Office);
+                isBattleTutorialComplete = true;
                 currEv = i;
-                OnEvent();
                 break;
             }
         }
     }
+
     public void OnEvent()
     {
         outLineNumber = (int)tutorialDic[currEv]["OutLineNumber"];
@@ -82,7 +92,7 @@ public class TutorialManager : MonoBehaviour
     }
 
     private void OnTextBox(int index, string text)
-    { 
+    {
         for (int i = 0; i < textBoxes.Count; i++)
         {
             textBoxes[i].gameObject.SetActive(false);
