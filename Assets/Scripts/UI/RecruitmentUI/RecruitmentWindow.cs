@@ -30,7 +30,6 @@ public class RecruitmentWindow : MonoBehaviour
 
         foreach (var hero in heroDatabase)
         {
-
             int grade = hero.GetComponent<CharacterDataBundle>().originData.grade;
 
             if (gradeCounts.ContainsKey(grade))
@@ -69,6 +68,20 @@ public class RecruitmentWindow : MonoBehaviour
 
     public void OneTimeGacha()
     {
+        //Æ©Åä¸®¾ó
+        if (GameManager.Instance.playerData.isTutorial)
+        {
+            GameObject obj = Instantiate(gachaPrefeb, showGacha);
+            RecruitmentInfo info = obj.GetComponent<RecruitmentInfo>();
+            ClearResult();
+            string heroName = heroDatabase[6].GetComponent<CharacterDataBundle>().originData.name;
+            GameObject newHero = GameManager.Instance.CreateNewHero(heroName);
+            getGacha.Add(newHero);
+
+            info.SetData(getGacha[0].GetComponent<CharacterDataBundle>());
+            GameManager.Instance.SaveAllData();
+        }
+
         if (GameManager.Instance.inventoryData.IsItem("60300003", 1))
         {
             ClearResult();
