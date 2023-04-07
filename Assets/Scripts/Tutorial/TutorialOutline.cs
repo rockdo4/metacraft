@@ -6,7 +6,11 @@ public class TutorialOutline : MonoBehaviour
 {   
     public GameObject originalButton;
 
+    public Transform cumtomPosHolder;
+
     public bool isRed;
+
+    public bool useCustomPos;
     public bool NeedAdjustPos { get; set; } = true;
 
     public void AdjustOutlinePos()
@@ -17,7 +21,15 @@ public class TutorialOutline : MonoBehaviour
         var buttonCenter = originalButton.GetComponent<RectTransform>().rect.center;
         transform.position = originalButton.transform.TransformPoint(buttonCenter);
 
+        if (useCustomPos)
+            transform.position = cumtomPosHolder.position;
+
         //transform.position = originalButton.transform.position;
+    }
+
+    private void Awake()
+    {
+        Logger.Debug(NeedAdjustPos);
     }
 
     private void OnEnable()

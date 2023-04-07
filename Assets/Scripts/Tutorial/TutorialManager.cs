@@ -12,10 +12,12 @@ public class TutorialManager : MonoBehaviour
 
     public static int currEv = 0;
     private int outLineNumber = 0;
+    private int textBoxNumber = 0;
     public bool btEnd = false;
 
     private static bool isOfficeTutorialComplete = false;
     private static bool isBattleTutorialComplete = false;
+    private bool isAlready16 = false;
 
     private void Start()
     {
@@ -69,7 +71,7 @@ public class TutorialManager : MonoBehaviour
     public void OnEvent()
     {
         outLineNumber = (int)tutorialDic[currEv]["OutLineNumber"];
-        int scriptNumber = (int)tutorialDic[currEv]["ScriptNumber"];
+        textBoxNumber = (int)tutorialDic[currEv]["ScriptNumber"];
         string currEvText = (string)tutorialDic[currEv]["StringCode"];
 
         if (scriptNumber == 14)
@@ -78,12 +80,21 @@ public class TutorialManager : MonoBehaviour
             return;
 
         string text = gm.GetStringByTable(currEvText);
-        OnTextBox(scriptNumber, text);
+        OnTextBox(textBoxNumber, text);
 
         if (outLineNumber != -1)
         {
             OnOutline(outLineNumber);
-            outlines[outLineNumber].AddEventOriginalButton(OnNextTutorialEvent);
+
+            if (currEv != 15)
+                outlines[outLineNumber].AddEventOriginalButton(OnNextTutorialEvent);
+            else
+            {
+                outlines[outLineNumber].AddEventOriginalButton(SetTextBoxActive);
+                outlines[outLineNumber].AddEventOriginalButton(SetOutlineActive);
+                return;
+            }
+
             outlines[outLineNumber].AddEventOriginalButton(OnEvent);
         }
         else
@@ -121,8 +132,11 @@ public class TutorialManager : MonoBehaviour
             outlines[outLineNumber].SetActiveOutline(false);
         }
 
-        if (currEv == 9999)
-            return;
+        //if (currEv == 16&& !isAlready16)
+        //{
+        //    isAlready16 = true;
+        //    return;
+        //}
 
         Debug.Log("++");
         currEv++;
@@ -139,8 +153,16 @@ public class TutorialManager : MonoBehaviour
         if (outlines[tempOutLineNumber].originalButton == null)
         {
             outlines[tempOutLineNumber].originalButton = button;
+            outlines[tempOutLineNumber].NeedAdjustPos = needAdjust;
         }
+    }
 
-        outlines[tempOutLineNumber].NeedAdjustPos = needAdjust;
+    public void SetTextBoxActive()
+    {
+        textBoxes[textBoxNumber].gameObject.SetActive(false);
+    }
+    public void SetOutlineActive()
+    {
+        outlines[outLineNumber].gameObject.SetActive(false);
     }
 }
