@@ -21,7 +21,8 @@ public class TutorialManager : MonoBehaviour
         tutorialDic = gm.tutorialIndexTable;
         if (gm.playerData.isTutorial)
         {
-            OnEvent();
+            if (currEv != 14)
+                OnEvent();
         }
         else
         {
@@ -51,7 +52,6 @@ public class TutorialManager : MonoBehaviour
                     gm.LoadScene((int)SceneIndex.Battle);
                     isOfficeTutorialComplete = true;
                     currEv = i;
-                    OnEvent();
                     break;
             }
             else if (i == 33 && !isBattleTutorialComplete && skipSection)
@@ -59,7 +59,6 @@ public class TutorialManager : MonoBehaviour
                 gm.LoadScene((int)SceneIndex.Office);
                 isBattleTutorialComplete = true;
                 currEv = i;
-                OnEvent();
                 break;
             }
         }
