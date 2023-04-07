@@ -76,7 +76,10 @@ public class TutorialManager : MonoBehaviour
         string currEvText = (string)tutorialDic[currEv]["StringCode"];
 
         if (isOfficeTutorialComplete && gm.currentScene == SceneIndex.Office)
+        {
+            isOfficeTutorialComplete = false;
             return;
+        }
 
         string text = gm.GetStringByTable(currEvText);
         OnTextBox(textBoxNumber, text);

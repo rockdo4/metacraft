@@ -1055,7 +1055,7 @@ public class BattleManager : MonoBehaviour
             var randomEvent = Random.Range((int)MapEventEnum.CivilianRescue, (int)MapEventEnum.Count);
 
             if (gm.playerData.isTutorial)
-                StartNextStage(MapEventEnum.Roadblock); // 길막! 이벤트
+                StartNextStage(MapEventEnum.BlockDoor); // 길막! 이벤트
             else
                 StartNextStage((MapEventEnum)randomEvent);
             return true;

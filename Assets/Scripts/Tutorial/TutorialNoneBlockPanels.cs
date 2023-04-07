@@ -1,3 +1,5 @@
+using UnityEngine;
+
 public class TutorialNoneBlockPanels : TutorialBlockPanels
 {
     public static new TutorialNoneBlockPanels Instance;
@@ -14,6 +16,14 @@ public class TutorialNoneBlockPanels : TutorialBlockPanels
     }
     public void OnNextTutorialEvent()
     {
+        if (TutorialManager.currEv == 15)
+        {
+            tutorialManager.SetTextBoxActive();
+            tutorialManager.SetOutlineActive();
+            Time.timeScale = 2f;
+            return;
+        }
+
         tutorialManager.OnNextTutorialEvent();
         tutorialManager.OnEvent();
     }
