@@ -108,6 +108,7 @@ public class TutorialManager : MonoBehaviour
         if (currEv == 9999)
             return;
 
+        Debug.Log("++");
         currEv++;
         if (currEv >= tutorialDic.Count)
         {
@@ -123,8 +124,6 @@ public class TutorialManager : MonoBehaviour
         {
             outlines[tempOutLineNumber].originalButton = button;
         }
-
-        // 위치 설정
 
         //outlines[tempOutLineNumber].AdjustOutlinePos();
         outlines[tempOutLineNumber].NeedAdjustPos = needAdjust;

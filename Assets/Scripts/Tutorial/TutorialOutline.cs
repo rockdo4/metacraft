@@ -54,13 +54,15 @@ public class TutorialOutline : MonoBehaviour
 
         if (originalButton.TryGetComponent(out Button button))
         {
+            if (originalButton.name == "ExitButton")
+                return;
+
             button.onClick.AddListener(action);
             Logger.Debug(name + "Add Success");
         }
     }
     public void RemoveEventOriginalButton(UnityAction action)
     {
-        Logger.Debug(name + "Remove");
         if (!isRed || originalButton == null)
         {
             return;
@@ -69,7 +71,6 @@ public class TutorialOutline : MonoBehaviour
         if (originalButton.TryGetComponent(out Button button))
         {
             button.onClick.RemoveListener(action);
-            Logger.Debug(name + "Remove Success");
         }
     }
 }
