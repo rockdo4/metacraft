@@ -75,6 +75,15 @@ public class ManageHeroWindow : View
         {
             heroInfos[count].gameObject.SetActive(true);
             heroInfos[count].SetData(character);
+            if (GameManager.Instance.playerData.isTutorial)
+            {
+                var tutoMgr = FindObjectOfType<TutorialManager>();
+
+                if (tutoMgr != null)
+                {
+                    tutoMgr.SetOutlineButton(heroInfos[count].gameObject);
+                }
+            }
             count++;
         }
 
