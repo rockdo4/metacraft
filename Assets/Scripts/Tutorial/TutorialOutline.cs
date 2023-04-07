@@ -57,22 +57,41 @@ public class TutorialOutline : MonoBehaviour
 
     public void AddEventOriginalButton(UnityAction action)
     {
+        Logger.Debug(name + "Add");
         if (!isRed || originalButton == null)
             return;
 
         if (originalButton.TryGetComponent(out Button button))
+        {
             button.onClick.AddListener(action);
+            Logger.Debug(name + "Add Success");
+        }
     }
     public void RemoveEventOriginalButton(UnityAction action)
     {
+        Logger.Debug(name + "Remove");
         if (!isRed || originalButton == null)
             return;
 
         if (originalButton.TryGetComponent(out Button button))
+        {
             button.onClick.RemoveListener(action);
+            Logger.Debug(name + "Remove Success");
+        }
     }
-    public void SetRectTrPos(Vector2 anchoredPosition)
+    public void SetRectTrPos(RectTransform rect)
     {
-        rectTr.anchoredPosition = anchoredPosition;
+        rectTr = GetComponent<RectTransform>();
+        //rectTr.anchoredPosition = rect.anchoredPosition;
+        //rectTr.pivot = rect.pivot;
+
+        //rectTr.anchoredPosition = rect.anchoredPosition;
+        //rectTr.anchorMin = rect.anchorMin;
+        //rectTr.anchorMax = rect.anchorMax;
+        //rectTr.pivot = rect.pivot;
+
+        //Vector3 localPos = rectTr.localPosition;
+        //localPos += rect.localPosition - rectTr.localPosition;
+        //rectTr.localPosition = localPos;
     }
 }

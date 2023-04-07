@@ -811,6 +811,17 @@ public class BattleManager : MonoBehaviour
         {
             if (btMapTriggers[currTriggerIndex].isLastTrigger)
             {
+                if (gm.playerData.isTutorial)
+                {
+                    var tutoMgr = FindObjectOfType<TutorialManager>();
+                    if (tutoMgr != null && !tutoMgr.btEnd)
+                    {
+                        tutoMgr.btEnd = true;
+                        TutorialManager.currEv++;
+                        tutoMgr.OnEvent();
+                    }
+                }
+
                 ChoiceNextStageByNode();
             }
             else if (tree.CurNode.type == TreeNodeTypes.Threat)

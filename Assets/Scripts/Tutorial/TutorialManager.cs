@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Numerics;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -10,8 +8,9 @@ public class TutorialManager : MonoBehaviour
     public List<TutorialEvent> textBoxes;
     public List<TutorialOutline> outlines;
 
-    private static int currEv = 0;
+    public static int currEv = 0;
     private int outLineNumber = 0;
+    public bool btEnd = false;
 
     private void Start()
     {
@@ -67,6 +66,10 @@ public class TutorialManager : MonoBehaviour
             OnOutline(outLineNumber);
             outlines[outLineNumber].AddEventOriginalButton(OnNextTutorialEvent);
             outlines[outLineNumber].AddEventOriginalButton(OnEvent);
+            //if (currEv != 9999)
+            //    outlines[outLineNumber].AddEventOriginalButton(OnEvent);
+            //else
+            //    return;
         }
 
         string text = gm.GetStringByTable(currEvText);
@@ -102,6 +105,9 @@ public class TutorialManager : MonoBehaviour
             outlines[outLineNumber].SetActiveOutline(false);
         }
 
+        if (currEv == 9999)
+            return;
+
         currEv++;
         if (currEv >= tutorialDic.Count)
         {
@@ -111,15 +117,17 @@ public class TutorialManager : MonoBehaviour
 
     public void SetOutlineButton(GameObject button)
     {
-        if (outlines[outLineNumber].originalButton == null)
+        int tempOutLineNumber = (int)tutorialDic[currEv + 1]["OutLineNumber"];
+
+        if (outlines[tempOutLineNumber].originalButton == null)
         {
-            outlines[outLineNumber].originalButton = button;
+            outlines[tempOutLineNumber].originalButton = button;
         }
 
         // 위치 설정
-        var rect = outlines[outLineNumber].originalButton.GetComponent<RectTransform>();
-        outlines[outLineNumber].SetRectTrPos(rect.anchoredPosition);
-        outlines[outLineNumber].AddEventOriginalButton(OnNextTutorialEvent);
-        outlines[outLineNumber].AddEventOriginalButton(OnEvent);
+        var rect = outlines[tempOutLineNumber].originalButton.GetComponent<RectTransform>();
+        outlines[tempOutLineNumber].SetRectTrPos(rect);
+        outlines[tempOutLineNumber].AddEventOriginalButton(OnNextTutorialEvent);
+        outlines[tempOutLineNumber].AddEventOriginalButton(OnEvent);
     }
 }
