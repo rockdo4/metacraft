@@ -75,15 +75,6 @@ public class ManageHeroWindow : View
         {
             heroInfos[count].gameObject.SetActive(true);
             heroInfos[count].SetData(character);
-            if (GameManager.Instance.playerData.isTutorial)
-            {
-                var tutoMgr = FindObjectOfType<TutorialManager>();
-
-                if (tutoMgr != null)
-                {
-                    tutoMgr.SetOutlineButton(heroInfos[count].gameObject);
-                }
-            }
             count++;
         }
 
@@ -91,6 +82,14 @@ public class ManageHeroWindow : View
         while (count < 4)
         {
             emptyObjects.Add(Instantiate(emptyPrefab, contents));
+            if (emptyCount == 0 && GameManager.Instance.playerData.isTutorial)
+            {
+                var tutoMgr = FindObjectOfType<TutorialManager>();
+                if (tutoMgr != null)
+                {
+                    tutoMgr.SetOutlineButton(heroInfos[0].gameObject, false);
+                }
+            }
             count++;
             emptyCount++;
         }
