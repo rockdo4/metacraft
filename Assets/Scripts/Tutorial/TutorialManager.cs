@@ -17,7 +17,6 @@ public class TutorialManager : MonoBehaviour
 
     private static bool isOfficeTutorialComplete = false;
     private static bool isBattleTutorialComplete = false;
-    private bool isAlready16 = false;
 
     private void Start()
     {
@@ -74,9 +73,7 @@ public class TutorialManager : MonoBehaviour
         textBoxNumber = (int)tutorialDic[currEv]["ScriptNumber"];
         string currEvText = (string)tutorialDic[currEv]["StringCode"];
 
-        if (scriptNumber == 14)
-            isOfficeTutorialComplete = true;
-        if (isOfficeTutorialComplete)
+        if (isOfficeTutorialComplete && gm.currentScene == SceneIndex.Office)
             return;
 
         string text = gm.GetStringByTable(currEvText);
@@ -132,14 +129,12 @@ public class TutorialManager : MonoBehaviour
             outlines[outLineNumber].SetActiveOutline(false);
         }
 
-        //if (currEv == 16&& !isAlready16)
-        //{
-        //    isAlready16 = true;
-        //    return;
-        //}
-
         Debug.Log("++");
         currEv++;
+
+        if (currEv == 14 && gm.currentScene == SceneIndex.Office)
+            isOfficeTutorialComplete = true;
+
         if (currEv >= tutorialDic.Count)
         {
             return;
