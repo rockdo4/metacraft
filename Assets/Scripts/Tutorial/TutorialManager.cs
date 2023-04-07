@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -61,6 +63,9 @@ public class TutorialManager : MonoBehaviour
         int scriptNumber = (int)tutorialDic[currEv]["ScriptNumber"];
         string currEvText = (string)tutorialDic[currEv]["StringCode"];
 
+        string text = gm.GetStringByTable(currEvText);
+        OnTextBox(scriptNumber, text);
+
         if (outLineNumber != -1)
         {
             OnOutline(outLineNumber);
@@ -71,9 +76,11 @@ public class TutorialManager : MonoBehaviour
             //else
             //    return;
         }
-
-        string text = gm.GetStringByTable(currEvText);
-        OnTextBox(scriptNumber, text);
+        //else
+        //{
+        //    var iamge = textBoxes[scriptNumber].GetComponent<RawImage>();
+        //    TutorialNoneBlockPanels.Instance.SetPanelsSurroundTarget(iamge);
+        //}
     }
 
     private void OnTextBox(int index, string text)
