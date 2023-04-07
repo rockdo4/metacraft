@@ -51,13 +51,13 @@ public class TutorialManager : MonoBehaviour
             bool skipSection = Convert.ToBoolean(tutorialDic[i]["IsSkipStop"]);
             if (i == 14 && !isOfficeTutorialComplete && skipSection)
             {
-                    gm.ClearBattleGroups();
-                    gm.battleGroups[0] = 0;
-                    gm.currentSelectMission = gm.missionInfoDifficulty[0][0];
-                    gm.LoadScene((int)SceneIndex.Battle);
-                    isOfficeTutorialComplete = true;
-                    currEv = i;
-                    break;
+                gm.ClearBattleGroups();
+                gm.battleGroups[0] = 0;
+                gm.currentSelectMission = gm.missionInfoDifficulty[0][0];
+                gm.LoadScene((int)SceneIndex.Battle);
+                isOfficeTutorialComplete = true;
+                currEv = i;
+                break;
             }
             else if (i == 33 && !isBattleTutorialComplete && skipSection)
             {
@@ -74,6 +74,9 @@ public class TutorialManager : MonoBehaviour
         outLineNumber = (int)tutorialDic[currEv]["OutLineNumber"];
         textBoxNumber = (int)tutorialDic[currEv]["ScriptNumber"];
         string currEvText = (string)tutorialDic[currEv]["StringCode"];
+
+        if (isOfficeTutorialComplete && gm.currentScene == SceneIndex.Office)
+            return;
 
         string text = gm.GetStringByTable(currEvText);
         OnTextBox(textBoxNumber, text);
@@ -130,6 +133,10 @@ public class TutorialManager : MonoBehaviour
 
         Debug.Log("++");
         currEv++;
+
+        if (currEv == 14 && gm.currentScene == SceneIndex.Office)
+            isOfficeTutorialComplete = true;
+
         if (currEv >= tutorialDic.Count)
         {
             return;
