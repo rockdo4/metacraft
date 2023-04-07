@@ -22,14 +22,7 @@ public class TutorialOutline : MonoBehaviour
         transform.position = originalButton.transform.TransformPoint(buttonCenter);
 
         if (useCustomPos)
-            transform.position = cumtomPosHolder.position;
-
-        //transform.position = originalButton.transform.position;
-    }
-
-    private void Awake()
-    {
-        Logger.Debug(NeedAdjustPos);
+            transform.position = cumtomPosHolder.position;        
     }
 
     private void OnEnable()
