@@ -4,16 +4,11 @@ using UnityEngine.UI;
 
 public class TutorialOutline : MonoBehaviour
 {   
-    private RectTransform rectTr;
     public GameObject originalButton;
 
     public bool isRed;
     
-    private void Awake()
-    {   
-        rectTr = GetComponent<RectTransform>();        
-    }
-    private void AdjustOutlinePos()
+    public void AdjustOutlinePos()
     {
         if (originalButton == null)
             return;
@@ -73,20 +68,5 @@ public class TutorialOutline : MonoBehaviour
             button.onClick.RemoveListener(action);
             Logger.Debug(name + "Remove Success");
         }
-    }
-    public void SetRectTrPos(RectTransform rect)
-    {
-        rectTr = GetComponent<RectTransform>();
-        //rectTr.anchoredPosition = rect.anchoredPosition;
-        //rectTr.pivot = rect.pivot;
-
-        //rectTr.anchoredPosition = rect.anchoredPosition;
-        //rectTr.anchorMin = rect.anchorMin;
-        //rectTr.anchorMax = rect.anchorMax;
-        //rectTr.pivot = rect.pivot;
-
-        //Vector3 localPos = rectTr.localPosition;
-        //localPos += rect.localPosition - rectTr.localPosition;
-        //rectTr.localPosition = localPos;
     }
 }

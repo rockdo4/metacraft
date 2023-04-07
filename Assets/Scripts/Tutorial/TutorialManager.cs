@@ -125,8 +125,8 @@ public class TutorialManager : MonoBehaviour
         }
 
         // 위치 설정
-        var rect = outlines[tempOutLineNumber].originalButton.GetComponent<RectTransform>();
-        outlines[tempOutLineNumber].SetRectTrPos(rect);
+
+        outlines[tempOutLineNumber].AdjustOutlinePos();
         outlines[tempOutLineNumber].AddEventOriginalButton(OnNextTutorialEvent);
         outlines[tempOutLineNumber].AddEventOriginalButton(OnEvent);
     }
