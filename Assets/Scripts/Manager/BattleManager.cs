@@ -92,7 +92,7 @@ public class BattleManager : MonoBehaviour
     public Button autoButton;
     public Button speedButton;
 
-    //public TutorialManager tutorialManager;
+    private TutorialManager tutorialManager;
     //public Transform[] tutorialSkillPos;
 
     private void Start()
@@ -606,6 +606,15 @@ public class BattleManager : MonoBehaviour
                 }
             }
         }
+
+        if (gm.playerData.isTutorial)
+        {
+            var tutoMgr = FindObjectOfType<TutorialManager>();
+            if (tutoMgr != null)
+            {
+                tutorialManager = tutoMgr;
+            }
+        }
     }
 
     private void PlayBGM(int index)
@@ -793,13 +802,6 @@ public class BattleManager : MonoBehaviour
         }
 
         float nextMaxZPos = btMapTriggers[currTriggerIndex].heroSettingPositions.Max(transform => transform.position.z);
-        //while (!btMapTriggers[currTriggerIndex].isTriggerEnter)
-        //{
-        //    if (viewPoint.transform.position.z <= nextMaxZPos)
-        //        viewPoint.transform.Translate(platformMoveSpeed * Time.deltaTime * platform.transform.forward);
-
-        //    yield return null;
-        //}
 
         while (viewPoint.transform.position.z < nextMaxZPos)
         {
@@ -850,9 +852,16 @@ public class BattleManager : MonoBehaviour
                 //        useHeroes[0].GetComponent<AttackableHero>().Test2();
                 //    }
                 //}
+
                 for (int i = 0; i < useHeroes.Count; i++)
                 {
                     useHeroes[i].ChangeUnitState(UnitState.Battle);
+                }
+
+                if (gm.playerData.isTutorial && currTriggerIndex == 1)
+                {
+                    tutorialManager.OnEvent();
+                    Time.timeScale = 0f;
                 }
             }
         }
