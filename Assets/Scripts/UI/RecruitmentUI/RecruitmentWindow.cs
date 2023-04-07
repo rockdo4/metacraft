@@ -80,6 +80,9 @@ public class RecruitmentWindow : MonoBehaviour
 
             info.SetData(getGacha[0].GetComponent<CharacterDataBundle>());
             GameManager.Instance.SaveAllData();
+            GameManager.Instance.inventoryData.UseItem("60300003", 1);
+            UIManager.Instance.ShowPopup(0);
+            return;
         }
 
         if (GameManager.Instance.inventoryData.IsItem("60300003", 1))

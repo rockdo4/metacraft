@@ -17,11 +17,12 @@ public class TutorialManager : MonoBehaviour
 
     private static bool isOfficeTutorialComplete = false;
     private static bool isBattleTutorialComplete = false;
-    private bool isAlready16 = false;
 
     private void Start()
     {
+
         gm = GameManager.Instance;
+        gm.inventoryData.AddItem("60300003",1);
         tutorialDic = gm.tutorialIndexTable;
         if (gm.playerData.isTutorial)
         {
@@ -91,10 +92,6 @@ public class TutorialManager : MonoBehaviour
             }
 
             outlines[outLineNumber].AddEventOriginalButton(OnEvent);
-            //if (currEv != 9999)
-            //    outlines[outLineNumber].AddEventOriginalButton(OnEvent);
-            //else
-            //    return;
         }
         else
         {
@@ -130,12 +127,6 @@ public class TutorialManager : MonoBehaviour
             outlines[outLineNumber].RemoveEventOriginalButton(OnNextTutorialEvent);
             outlines[outLineNumber].SetActiveOutline(false);
         }
-
-        //if (currEv == 16&& !isAlready16)
-        //{
-        //    isAlready16 = true;
-        //    return;
-        //}
 
         Debug.Log("++");
         currEv++;
