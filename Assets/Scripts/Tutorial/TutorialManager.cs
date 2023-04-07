@@ -48,13 +48,13 @@ public class TutorialManager : MonoBehaviour
             bool skipSection = Convert.ToBoolean(tutorialDic[i]["IsSkipStop"]);
             if (i == 14 && !isOfficeTutorialComplete && skipSection)
             {
-                    gm.ClearBattleGroups();
-                    gm.battleGroups[0] = 0;
-                    gm.currentSelectMission = gm.missionInfoDifficulty[0][0];
-                    gm.LoadScene((int)SceneIndex.Battle);
-                    isOfficeTutorialComplete = true;
-                    currEv = i;
-                    break;
+                gm.ClearBattleGroups();
+                gm.battleGroups[0] = 0;
+                gm.currentSelectMission = gm.missionInfoDifficulty[0][0];
+                gm.LoadScene((int)SceneIndex.Battle);
+                isOfficeTutorialComplete = true;
+                currEv = i;
+                break;
             }
             else if (i == 33 && !isBattleTutorialComplete && skipSection)
             {
@@ -72,6 +72,11 @@ public class TutorialManager : MonoBehaviour
         int scriptNumber = (int)tutorialDic[currEv]["ScriptNumber"];
         string currEvText = (string)tutorialDic[currEv]["StringCode"];
 
+        if (scriptNumber == 14)
+            isOfficeTutorialComplete = true;
+        if (isOfficeTutorialComplete)
+            return;
+
         string text = gm.GetStringByTable(currEvText);
         OnTextBox(scriptNumber, text);
 
@@ -80,10 +85,6 @@ public class TutorialManager : MonoBehaviour
             OnOutline(outLineNumber);
             outlines[outLineNumber].AddEventOriginalButton(OnNextTutorialEvent);
             outlines[outLineNumber].AddEventOriginalButton(OnEvent);
-            //if (currEv != 9999)
-            //    outlines[outLineNumber].AddEventOriginalButton(OnEvent);
-            //else
-            //    return;
         }
         else
         {
