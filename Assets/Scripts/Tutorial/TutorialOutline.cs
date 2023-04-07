@@ -7,14 +7,17 @@ public class TutorialOutline : MonoBehaviour
     public GameObject originalButton;
 
     public bool isRed;
-    
+    public bool NeedAdjustPos { get; set; } = true;
+
     public void AdjustOutlinePos()
     {
-        if (originalButton == null)
+        if (originalButton == null || !NeedAdjustPos)
             return;
-
+        
         var buttonCenter = originalButton.GetComponent<RectTransform>().rect.center;
         transform.position = originalButton.transform.TransformPoint(buttonCenter);
+
+        //transform.position = originalButton.transform.position;
     }
 
     private void OnEnable()

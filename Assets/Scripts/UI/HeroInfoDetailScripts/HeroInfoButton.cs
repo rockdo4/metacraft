@@ -28,7 +28,7 @@ public class HeroInfoButton : MonoBehaviour
 
             if (tutoMgr != null)
             {
-                tutoMgr.SetOutlineButton(gameObject);
+                tutoMgr.SetOutlineButton(gameObject, false);
             }
         }
     }   
