@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -9,6 +7,7 @@ public class TutorialManager : MonoBehaviour
     private List<Dictionary<string, object>> tutorialDic; 
     public List<TutorialEvent> textBoxes;
     public List<TutorialOutline> outlines;
+    public GameObject dialoguePanel;
 
     public static int currEv = 0;
     private int outLineNumber = 0;
@@ -76,11 +75,10 @@ public class TutorialManager : MonoBehaviour
             //else
             //    return;
         }
-        //else
-        //{
-        //    var iamge = textBoxes[scriptNumber].GetComponent<RawImage>();
-        //    TutorialNoneBlockPanels.Instance.SetPanelsSurroundTarget(iamge);
-        //}
+        else
+        {
+            dialoguePanel.SetActive(true);
+        }
     }
 
     private void OnTextBox(int index, string text)
