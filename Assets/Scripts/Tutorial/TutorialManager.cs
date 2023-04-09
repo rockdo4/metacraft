@@ -17,6 +17,9 @@ public class TutorialManager : MonoBehaviour
 
     private static bool isOfficeTutorialComplete = false;
     private static bool isBattleTutorialComplete = false;
+    private bool isFirstOfficeTutorial = false;
+    private bool isEventNodeTutorial = false;
+    private bool isSupplyNodeTutorial = false;
 
     private void Start()
     {
@@ -75,10 +78,24 @@ public class TutorialManager : MonoBehaviour
         textBoxNumber = (int)tutorialDic[currEv]["ScriptNumber"];
         string currEvText = (string)tutorialDic[currEv]["StringCode"];
 
-        if (isOfficeTutorialComplete && gm.currentScene == SceneIndex.Office)
+        if (isFirstOfficeTutorial && gm.currentScene == SceneIndex.Office)
         {
-            isOfficeTutorialComplete = false;
+            isFirstOfficeTutorial = false;
             return;
+        }
+
+        if (gm.currentScene == SceneIndex.Battle)
+        {
+            if (isEventNodeTutorial)
+            {
+                isEventNodeTutorial = false;
+                return;
+            }
+            else if (isSupplyNodeTutorial)
+            {
+                isSupplyNodeTutorial = false;
+                return;
+            }
         }
 
         string text = gm.GetStringByTable(currEvText);
@@ -138,7 +155,15 @@ public class TutorialManager : MonoBehaviour
         currEv++;
 
         if (currEv == 14 && gm.currentScene == SceneIndex.Office)
-            isOfficeTutorialComplete = true;
+            isFirstOfficeTutorial = true;
+
+        if (gm.currentScene == SceneIndex.Battle)
+        { 
+            if (currEv == 21)
+                isEventNodeTutorial = true;
+            else if (currEv == 31)
+                isSupplyNodeTutorial = true;
+        }
 
         if (currEv >= tutorialDic.Count)
         {
