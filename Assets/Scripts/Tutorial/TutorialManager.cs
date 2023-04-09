@@ -24,6 +24,9 @@ public class TutorialManager : MonoBehaviour
 
         gm = GameManager.Instance;
         gm.inventoryData.AddItem("60300003",1);
+        gm.inventoryData.AddItem("60300022",30);
+        gm.inventoryData.AddItem("60300001", 50000);
+        
         tutorialDic = gm.tutorialIndexTable;
         if (gm.playerData.isTutorial)
         {
