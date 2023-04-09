@@ -30,6 +30,7 @@ public class TutorialOutline : MonoBehaviour
 
     private void OnEnable()
     {
+        Debug.Log(1);
         AdjustOutlinePos();
 
         var image = GetComponent<Image>();
