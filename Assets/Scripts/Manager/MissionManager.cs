@@ -48,6 +48,14 @@ public class MissionManager : View
     {
         missionInfoTable = gm.missionInfoDifficulty;
         heroSlotsIndex = 0;
+        if(gm.playerData.isTutorial)
+        {
+            difficultyAdjustment.interactable = false;
+        }
+        else
+        {
+            difficultyAdjustment.interactable = true;
+        }
 
         nums = new List<List<int>>();
         for (int i = 0; i < 5; i++)
