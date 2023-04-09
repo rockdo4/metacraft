@@ -159,9 +159,9 @@ public class TutorialManager : MonoBehaviour
 
         if (gm.currentScene == SceneIndex.Battle)
         { 
-            if (currEv == 21)
+            if (currEv == 22)
                 isEventNodeTutorial = true;
-            else if (currEv == 31)
+            else if (currEv == 32)
                 isSupplyNodeTutorial = true;
         }
 
