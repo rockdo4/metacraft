@@ -18,8 +18,7 @@ public class TutorialManager : MonoBehaviour
     private static bool isOfficeTutorialComplete = false;
     private static bool isBattleTutorialComplete = false;
     private bool isFirstOfficeTutorial = false;
-    private bool isEventNodeTutorial = false;
-    private bool isSupplyNodeTutorial = false;
+    private bool isStop = false;
 
     private void Start()
     {
@@ -86,14 +85,13 @@ public class TutorialManager : MonoBehaviour
 
         if (gm.currentScene == SceneIndex.Battle)
         {
-            if (isEventNodeTutorial)
+            if (isStop)
             {
-                isEventNodeTutorial = false;
+                isStop = false;
                 return;
             }
-            else if (isSupplyNodeTutorial)
+            if (currEv == 33)
             {
-                isSupplyNodeTutorial = false;
                 return;
             }
         }
@@ -151,19 +149,23 @@ public class TutorialManager : MonoBehaviour
             outlines[outLineNumber].SetActiveOutline(false);
         }
 
-        Debug.Log("++");
+        if (gm.currentScene == SceneIndex.Battle)
+        {
+            if (currEv == 18 ||
+                currEv == 21 ||
+                currEv == 23 ||
+                currEv == 29 ||
+                currEv == 30)
+            {
+                isStop = true;
+                return;
+            }
+        }
+        
         currEv++;
 
         if (currEv == 14 && gm.currentScene == SceneIndex.Office)
             isFirstOfficeTutorial = true;
-
-        if (gm.currentScene == SceneIndex.Battle)
-        { 
-            if (currEv == 22)
-                isEventNodeTutorial = true;
-            else if (currEv == 32)
-                isSupplyNodeTutorial = true;
-        }
 
         if (currEv >= tutorialDic.Count)
         {
