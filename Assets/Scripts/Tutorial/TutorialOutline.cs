@@ -15,14 +15,17 @@ public class TutorialOutline : MonoBehaviour
 
     public void AdjustOutlinePos()
     {
+        if (useCustomPos)
+        {
+            transform.position = cumtomPosHolder.position;
+            return;
+        }
+
         if (originalButton == null || !NeedAdjustPos)
             return;
         
         var buttonCenter = originalButton.GetComponent<RectTransform>().rect.center;
         transform.position = originalButton.transform.TransformPoint(buttonCenter);
-
-        if (useCustomPos)
-            transform.position = cumtomPosHolder.position;        
     }
 
     private void OnEnable()
