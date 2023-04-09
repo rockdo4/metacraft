@@ -8,6 +8,7 @@ public class TutorialManager : MonoBehaviour
     private List<Dictionary<string, object>> tutorialDic;
     public List<TutorialEvent> textBoxes;
     public List<TutorialOutline> outlines;
+    public GameObject skipButton;
     public GameObject dialoguePanel;
 
     public static int currEv = 0;
@@ -75,6 +76,11 @@ public class TutorialManager : MonoBehaviour
         textBoxNumber = (int)tutorialDic[currEv]["ScriptNumber"];
         string currEvText = (string)tutorialDic[currEv]["StringCode"];
 
+        if(tutorialDic.Count.Equals(currEv+1))
+        {
+            gm.playerData.isTutorial = false;
+        }
+
         if (isOfficeTutorialComplete && gm.currentScene == SceneIndex.Office)
         {
             isOfficeTutorialComplete = false;
@@ -83,6 +89,8 @@ public class TutorialManager : MonoBehaviour
 
         string text = gm.GetStringByTable(currEvText);
         OnTextBox(textBoxNumber, text);
+        OnSkipBox();
+
 
         if (outLineNumber != -1)
         {
@@ -115,6 +123,19 @@ public class TutorialManager : MonoBehaviour
         textBoxes[index].gameObject.SetActive(true);
         textBoxes[index].textBox.text = text;
     }
+
+    private void OnSkipBox()
+    {
+        if(currEv <33)
+        {
+            skipButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            skipButton.gameObject.SetActive(false);
+        }
+    }
+
     private void OnOutline(int index)
     {
         for (int i = 0; i < outlines.Count; i++)
