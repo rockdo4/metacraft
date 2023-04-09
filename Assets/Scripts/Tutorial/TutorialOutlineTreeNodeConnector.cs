@@ -12,6 +12,7 @@ public class TutorialOutlineTreeNodeConnector : MonoBehaviour
     {
         tutorialOutline = GetComponent<TutorialOutline>();
         ConnectOutlineToTreeNode();
+        tutorialOutline.AdjustOutlinePos();
     }
 
     private void ConnectOutlineToTreeNode()
