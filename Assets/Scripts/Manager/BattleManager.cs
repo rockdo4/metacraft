@@ -212,6 +212,24 @@ public class BattleManager : MonoBehaviour
             default:
                 break;
         }
+
+        if (gm.playerData.isTutorial)
+        {
+            switch (tree.CurNode.type)
+            {
+                case TreeNodeTypes.Supply:
+                case TreeNodeTypes.Event:
+                case TreeNodeTypes.Villain:
+                    if (tutorialManager != null)
+                    {
+                        TutorialManager.currEv++;
+                        tutorialManager.OnEvent();
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     private void SetStageEvent(MapEventEnum ev)
@@ -809,21 +827,19 @@ public class BattleManager : MonoBehaviour
             yield return null;
         }
 
+        if (gm.playerData.isTutorial && btMapTriggers[currTriggerIndex].isLastTrigger)
+        {
+            if (tutorialManager != null)
+            {
+                TutorialManager.currEv++;
+                tutorialManager.OnEvent();
+            }
+        }
+
         if (!btMapTriggers[currTriggerIndex].isMissionEnd)
         {
             if (btMapTriggers[currTriggerIndex].isLastTrigger)
             {
-                if (gm.playerData.isTutorial)
-                {
-                    var tutoMgr = FindObjectOfType<TutorialManager>();
-                    if (tutoMgr != null && !tutoMgr.btEnd)
-                    {
-                        tutoMgr.btEnd = true;
-                        TutorialManager.currEv++;
-                        tutoMgr.OnEvent();
-                    }
-                }
-
                 ChoiceNextStageByNode();
             }
             else if (tree.CurNode.type == TreeNodeTypes.Threat)
@@ -838,27 +854,12 @@ public class BattleManager : MonoBehaviour
             }
             else if (!btMapTriggers[currTriggerIndex].isLastTrigger)
             {
-                //Logger.Debug(currTriggerIndex);
-                //if(gm.playerData.isTutorial)
-                //{
-                //    if (currTriggerIndex == 1)
-                //    {
-                //        //tutorialManager.gameObject.SetActive(true);
-                //        useHeroes[0].GetComponent<AttackableHero>().SetTutorialPos(tutorialSkillPos);
-                //        useHeroes[0].GetComponent<AttackableHero>().Test1();
-                //    }
-                //    if(currTriggerIndex == btMapTriggers.Count -1)
-                //    {
-                //        useHeroes[0].GetComponent<AttackableHero>().Test2();
-                //    }
-                //}
-
                 for (int i = 0; i < useHeroes.Count; i++)
                 {
                     useHeroes[i].ChangeUnitState(UnitState.Battle);
                 }
 
-                if (gm.playerData.isTutorial && currTriggerIndex == 1)
+                if (gm.playerData.isTutorial && tree.CurNode.type == TreeNodeTypes.Root && currTriggerIndex == 1)
                 {
                     tutorialManager.OnEvent();
                     Time.timeScale = 0f;

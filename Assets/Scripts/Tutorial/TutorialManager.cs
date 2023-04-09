@@ -18,6 +18,8 @@ public class TutorialManager : MonoBehaviour
 
     private static bool isOfficeTutorialComplete = false;
     private static bool isBattleTutorialComplete = false;
+    private bool isFirstOfficeTutorial = false;
+    private bool isStop = false;
 
     private void Start()
     {
@@ -84,10 +86,23 @@ public class TutorialManager : MonoBehaviour
             gm.playerData.isTutorial = false;
         }
 
-        if (isOfficeTutorialComplete && gm.currentScene == SceneIndex.Office)
+        if (isFirstOfficeTutorial && gm.currentScene == SceneIndex.Office)
         {
-            isOfficeTutorialComplete = false;
+            isFirstOfficeTutorial = false;
             return;
+        }
+
+        if (gm.currentScene == SceneIndex.Battle)
+        {
+            if (isStop)
+            {
+                isStop = false;
+                return;
+            }
+            if (currEv == 33)
+            {
+                return;
+            }
         }
 
         string text = gm.GetStringByTable(currEvText);
@@ -158,11 +173,23 @@ public class TutorialManager : MonoBehaviour
             outlines[outLineNumber].SetActiveOutline(false);
         }
 
-        Debug.Log("++");
+        if (gm.currentScene == SceneIndex.Battle)
+        {
+            if (currEv == 18 ||
+                currEv == 21 ||
+                currEv == 23 ||
+                currEv == 29 ||
+                currEv == 30)
+            {
+                isStop = true;
+                return;
+            }
+        }
+        
         currEv++;
 
         if (currEv == 14 && gm.currentScene == SceneIndex.Office)
-            isOfficeTutorialComplete = true;
+            isFirstOfficeTutorial = true;
 
         if (currEv >= tutorialDic.Count)
         {

@@ -54,7 +54,6 @@ public class TutorialOutline : MonoBehaviour
 
     public void AddEventOriginalButton(UnityAction action)
     {
-        Debug.Log(name + "Add");
         if (!isRed || originalButton == null)
         {
             return;
@@ -66,7 +65,6 @@ public class TutorialOutline : MonoBehaviour
                 return;
 
             button.onClick.AddListener(action);
-            Logger.Debug(name + "Add Success");
         }
     }
     public void RemoveEventOriginalButton(UnityAction action)
