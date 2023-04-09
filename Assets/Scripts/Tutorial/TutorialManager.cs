@@ -127,7 +127,8 @@ public class TutorialManager : MonoBehaviour
         }
         else
         {
-            dialoguePanel.SetActive(true);
+            if (currEv != 31)
+                dialoguePanel.SetActive(true);
         }
     }
 
@@ -144,13 +145,13 @@ public class TutorialManager : MonoBehaviour
 
     private void OnSkipBox()
     {
-        if(currEv <33)
+        if(currEv < 33)
         {
-            skipButton.gameObject.SetActive(true);
+            skipButton.SetActive(true);
         }
         else
         {
-            skipButton.gameObject.SetActive(false);
+            skipButton.SetActive(false);
         }
     }
 
