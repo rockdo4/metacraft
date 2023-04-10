@@ -167,9 +167,9 @@ public class HeroUpgradeDetailWindow : View
         cdb.activeSkill.skillLevel += 1;
 
         //아이템 소모, 골드 소모
-        gm.playerData.gold -= needGold;
+        gm.playerData.gold -= needGold;        
         var inven = gm.inventoryData;
-        inven.FindItem(currItemID).count -= needItemCount;
+        inven.UseItem(currItemID, needItemCount);
 
         ShowOnResultPopup();
         SetHeroInfo();
