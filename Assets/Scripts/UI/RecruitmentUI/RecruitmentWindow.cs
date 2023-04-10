@@ -277,11 +277,20 @@ public class RecruitmentWindow : MonoBehaviour
             UIManager.Instance.ClearPopups();
     }
 
-    private void SetGachaCount()
+    public void SetGachaCount()
     {
-        var ticketCount = GameManager.Instance.inventoryData.FindItem("60300003").count;
-        oneTimeGachaCount.text = $"{ticketCount}/1";
-        tenTimesGachaCount.text = $"{ticketCount}/10";
+        var ticket = GameManager.Instance.inventoryData.FindItem("60300003");
+
+        if (ticket != null)
+        {
+            oneTimeGachaCount.text = $"{ticket.count}/1";
+            tenTimesGachaCount.text = $"{ticket.count}/10";
+        }
+        else
+        {
+            oneTimeGachaCount.text = "0/1";
+            tenTimesGachaCount.text = "0/10";
+        }
     }
 
     private void OnDisable()
