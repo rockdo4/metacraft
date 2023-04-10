@@ -33,7 +33,7 @@ public class TutorialManager : MonoBehaviour
 
             if (currEv == 0)
             {
-                gm.inventoryData.AddItem("60300003", 1);
+                gm.inventoryData.AddItem("60300003", 2000);
                 gm.inventoryData.AddItem("60300022", 30);
                 gm.inventoryData.AddItem("60300001", 50000);
             }
