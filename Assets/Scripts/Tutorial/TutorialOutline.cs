@@ -12,6 +12,7 @@ public class TutorialOutline : MonoBehaviour
 
     public bool useCustomPos;
     public bool NeedAdjustPos { get; set; } = true;
+    
     public void AdjustOutlinePos()
     {
         if (useCustomPos)
@@ -25,8 +26,21 @@ public class TutorialOutline : MonoBehaviour
 
         var buttonCenter = originalButton.GetComponent<RectTransform>().rect.center;
         transform.position = originalButton.transform.TransformPoint(buttonCenter);
+    }    
+    private void OnEnable()
+    {
+        UpdatePosAndPanels();
     }
-    private void Update()
+
+    private void OnDisable()
+    {
+        if (isRed)
+            TutorialBlockPanels.Instance.gameObject.SetActive(false);
+        else
+            TutorialNoneBlockPanels.Instance.gameObject.SetActive(false);
+    }
+
+    public void UpdatePosAndPanels()
     {
         AdjustOutlinePos();
 
@@ -36,14 +50,6 @@ public class TutorialOutline : MonoBehaviour
             TutorialBlockPanels.Instance.SetPanelsSurroundTarget(image);
         else
             TutorialNoneBlockPanels.Instance.SetPanelsSurroundTarget(image);
-    }
-
-    private void OnDisable()
-    {
-        if (isRed)
-            TutorialBlockPanels.Instance.gameObject.SetActive(false);
-        else
-            TutorialNoneBlockPanels.Instance.gameObject.SetActive(false);
     }
 
     public void SetActiveOutline(bool active)
