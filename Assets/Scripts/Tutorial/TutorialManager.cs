@@ -25,10 +25,13 @@ public class TutorialManager : MonoBehaviour
     {
 
         gm = GameManager.Instance;
-        gm.inventoryData.AddItem("60300003",1);
-        gm.inventoryData.AddItem("60300022",30);
-        gm.inventoryData.AddItem("60300001", 50000);
-        
+        if (currEv == 0)
+        {
+            gm.inventoryData.AddItem("60300003", 1);
+            gm.inventoryData.AddItem("60300022", 30);
+            gm.inventoryData.AddItem("60300001", 50000);
+        }
+
         tutorialDic = gm.tutorialIndexTable;
         if (gm.playerData.isTutorial)
         {
@@ -145,7 +148,7 @@ public class TutorialManager : MonoBehaviour
 
     private void OnSkipBox()
     {
-        if(currEv < 33)
+        if (currEv < 33)
         {
             skipButton.SetActive(true);
         }
@@ -199,6 +202,7 @@ public class TutorialManager : MonoBehaviour
                 outlines[i].SetActiveOutline(false);
             }
             gm.playerData.isTutorial = false;
+            gm.SaveAllData();
             return;
         }
 
