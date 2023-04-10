@@ -31,11 +31,12 @@ public class TutorialManager : MonoBehaviour
             if (currEv != 14)
                 OnEvent();
 
-            if (currEv == 0)
+            if (!gm.playerData.isTutorialFirstEntry)
             {
                 gm.inventoryData.AddItem("60300003", 2000);
                 gm.inventoryData.AddItem("60300022", 30);
                 gm.inventoryData.AddItem("60300001", 50000);
+                gm.playerData.isTutorialFirstEntry = true;
             }
         }
         else

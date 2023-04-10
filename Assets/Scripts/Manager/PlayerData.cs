@@ -18,4 +18,5 @@ public class PlayerData
     public bool isAuto = false;
     public bool isTutorial = true;
     public int currentMissionDifficulty = 1;
+    public bool isTutorialFirstEntry = false;
 }
