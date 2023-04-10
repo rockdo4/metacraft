@@ -77,7 +77,9 @@ public class MissionManager : View
                 if (gm.playerData.isTutorial)
                 {
                     var missionName = missionInfoTable[0][0]["NameString"];
-                    marks[1].GetComponentInChildren<TextMeshProUGUI>().text = gm.GetStringByTable($"{missionName}");
+                    var missionDifficulty = missionInfoTable[0][0]["Level"];
+                    string mission = $"Lv.{missionDifficulty}\n{gm.GetStringByTable($"{missionName}")}";
+                    marks[1].GetComponentInChildren<TextMeshProUGUI>().text = mission;
                     var buttons = marks[1].GetComponentsInChildren<Button>();
                     foreach (var button in buttons)
                     {
@@ -88,7 +90,9 @@ public class MissionManager : View
                 {
                     int index = k++;
                     var missionName = missionInfoTable[difficulty][nums[difficulty - 1][index]]["NameString"];
-                    marks[j].GetComponentInChildren<TextMeshProUGUI>().text = gm.GetStringByTable($"{missionName}");
+                    var missionDifficulty = missionInfoTable[difficulty][nums[difficulty - 1][index]]["Level"];
+                    string mission = $"Lv.{missionDifficulty}\n{gm.GetStringByTable($"{missionName}")}";
+                    marks[j].GetComponentInChildren<TextMeshProUGUI>().text = mission;
                     var buttons = marks[j].GetComponentsInChildren<Button>();
                     foreach (var button in buttons)
                     {
