@@ -3,7 +3,7 @@ using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class TutorialOutline : MonoBehaviour
-{   
+{
     public GameObject originalButton;
 
     public Transform cumtomPosHolder;
@@ -12,7 +12,6 @@ public class TutorialOutline : MonoBehaviour
 
     public bool useCustomPos;
     public bool NeedAdjustPos { get; set; } = true;
-
     public void AdjustOutlinePos()
     {
         if (useCustomPos)
@@ -23,26 +22,25 @@ public class TutorialOutline : MonoBehaviour
 
         if (originalButton == null || !NeedAdjustPos)
             return;
-        
+
         var buttonCenter = originalButton.GetComponent<RectTransform>().rect.center;
         transform.position = originalButton.transform.TransformPoint(buttonCenter);
     }
-
-    private void OnEnable()
+    private void Update()
     {
-        Debug.Log(1);
         AdjustOutlinePos();
 
         var image = GetComponent<Image>();
 
-        if(isRed)
+        if (isRed)
             TutorialBlockPanels.Instance.SetPanelsSurroundTarget(image);
         else
             TutorialNoneBlockPanels.Instance.SetPanelsSurroundTarget(image);
     }
+
     private void OnDisable()
-    {        
-        if(isRed)
+    {
+        if (isRed)
             TutorialBlockPanels.Instance.gameObject.SetActive(false);
         else
             TutorialNoneBlockPanels.Instance.gameObject.SetActive(false);
