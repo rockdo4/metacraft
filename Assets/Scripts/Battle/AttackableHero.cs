@@ -43,14 +43,12 @@ public class AttackableHero : AttackableUnit
                     nowUpdate = null;
                     break;
                 case UnitState.Idle:
-                    if (pathFind.enabled)
-                        pathFind.isStopped = true;
+                    pathFind.isStopped = true;
                     animator.SetFloat("Speed", 0);
                     nowUpdate = IdleUpdate;
                     break;
                 case UnitState.ReturnPosition: // 재배치
-                    if (pathFind.enabled)
-                        pathFind.isStopped = false;
+                    pathFind.isStopped = false;
                     pathFind.stoppingDistance = 0; //가까이 가기
                     pathFind.SetDestination(returnPos.position); //재배치 위치 설정
                     animator.Rebind();
@@ -67,16 +65,14 @@ public class AttackableHero : AttackableUnit
                     }
                     break;
                 case UnitState.MoveNext:
-                    if (pathFind.enabled)
-                        pathFind.isStopped = false;
+                    pathFind.isStopped = false;
                     lateReturn = false;
                     pathFind.SetDestination(transform.position);
                     nowUpdate = MoveNextUpdate;
                     break;
                 case UnitState.Battle:
                     coOnAutoSkill = null;
-                    if (pathFind.enabled)
-                        pathFind.isStopped = false;
+                    pathFind.isStopped = false;
                     pathFind.speed = characterData.data.moveSpeed;
                     pathFind.stoppingDistance = minAttackDis;
 
@@ -659,5 +655,9 @@ public class AttackableHero : AttackableUnit
         {
             heroUI.IsSilence = false;
         }
+    }
+    public void SetHp(float hp)
+    {
+        UnitHp = hp;
     }
 }

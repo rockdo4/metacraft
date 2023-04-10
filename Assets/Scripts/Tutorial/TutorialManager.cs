@@ -70,6 +70,12 @@ public class TutorialManager : MonoBehaviour
             }
             else if (i == 33 && !isBattleTutorialComplete && skipSection)
             {
+                var btMgr = FindObjectOfType<BattleManager>();
+                if (btMgr != null)
+                {
+                    btMgr.ResetHeroes();
+                }
+
                 gm.LoadScene((int)SceneIndex.Office);
                 isBattleTutorialComplete = true;
                 currEv = i;
@@ -202,6 +208,10 @@ public class TutorialManager : MonoBehaviour
                 outlines[i].SetActiveOutline(false);
             }
             gm.playerData.isTutorial = false;
+
+            var attackableHero = gm.heroDatabase[0].GetComponent<AttackableHero>();
+            attackableHero.GetUnitData().data.level = 1;
+
             gm.SaveAllData();
             return;
         }
