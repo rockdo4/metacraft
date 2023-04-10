@@ -77,14 +77,14 @@ public class TutorialManager : MonoBehaviour
 
     public void OnEvent()
     {
+        if (!gm.playerData.isTutorial)
+        {
+            return;
+        }
+
         outLineNumber = (int)tutorialDic[currEv]["OutLineNumber"];
         textBoxNumber = (int)tutorialDic[currEv]["ScriptNumber"];
         string currEvText = (string)tutorialDic[currEv]["StringCode"];
-
-        if(tutorialDic.Count.Equals(currEv+1))
-        {
-            gm.playerData.isTutorial = false;
-        }
 
         if (isFirstOfficeTutorial && gm.currentScene == SceneIndex.Office)
         {
@@ -186,16 +186,24 @@ public class TutorialManager : MonoBehaviour
                 return;
             }
         }
-        
+
         currEv++;
+        if (currEv >= tutorialDic.Count)
+        {
+            for (int i = 0; i < textBoxes.Count; i++)
+            {
+                textBoxes[i].gameObject.SetActive(false);
+            }
+            for (int i = 0; i < outlines.Count; i++)
+            {
+                outlines[i].SetActiveOutline(false);
+            }
+            gm.playerData.isTutorial = false;
+            return;
+        }
 
         if (currEv == 14 && gm.currentScene == SceneIndex.Office)
             isFirstOfficeTutorial = true;
-
-        if (currEv >= tutorialDic.Count)
-        {
-            return;
-        }
     }
 
     public void SetOutlineButton(GameObject button, bool needAdjust = true)
