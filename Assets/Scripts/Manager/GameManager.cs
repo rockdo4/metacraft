@@ -222,6 +222,8 @@ public class GameManager : Singleton<GameManager>
 
     private IEnumerator ChangeSceneFadeEffect(int sceneIdx, float duration)
     {
+        Time.timeScale = 1f;
+
         fadeEffect.gameObject.SetActive(true);
         float timer = 0f;
         float halfDuration = duration * 0.5f;

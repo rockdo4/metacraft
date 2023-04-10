@@ -93,7 +93,6 @@ public class BattleManager : MonoBehaviour
     public Button speedButton;
 
     private TutorialManager tutorialManager;
-    //public Transform[] tutorialSkillPos;
 
     private void Start()
     {
@@ -114,13 +113,6 @@ public class BattleManager : MonoBehaviour
         StartNextStage(curEvent);
 
         sendOfficePopUp.checkButton.onClick.AddListener(() => { SetHeroesReady(); });
-
-        //tutorialManager.TestIndex = 5;
-        //if (gm.playerData.isTutorial)
-        //{
-        //    TutorialManager.textIndex = 0;
-        //    TutorialManager.currChatWindowIndex = 0;
-        //}
     }
 
     private void SetActiveUi(GameObject ui, bool set) => ui.SetActive(set);
@@ -289,7 +281,6 @@ public class BattleManager : MonoBehaviour
     private void ExecutionBuff(int id)
     {
         var buff = FindBuff(id);
-
         for (int i = 0; i < useHeroes.Count; i++)
         {
             useHeroes[i].AddValueBuff(buff);
@@ -567,11 +558,16 @@ public class BattleManager : MonoBehaviour
                 attackableHero.SetBattleManager(this);
                 attackableHero.SetUi(heroUiList[i]);
                 attackableHero.ResetData();
+                if (gm.playerData.isTutorial)
+                {
+                    attackableHero.AddValueBuff(FindBuff(99999999));
+                }
                 attackableHero.SetMaxHp();
                 heroUiList[i].SetHeroInfo(attackableHero.GetUnitData());
                 heroUiList[i].gameObject.SetActive(true);
                 var coll = attackableHero.GetComponent<CapsuleCollider>();
                 coll.enabled = true;
+
                 useHeroes.Add(attackableHero);
 
                 supplyEventHeroImages[i].SetHeroInfo(attackableHero.GetUnitData());
@@ -595,7 +591,6 @@ public class BattleManager : MonoBehaviour
             BattleMapInfo battleMap = eventMaps[i].GetComponent<BattleMapInfo>();
             Light battleMapLigth = battleMap.GetLight();
             battleMapLigth.color = gm.GetMapLightColor();
-            //lights.Add(battleMapLigth);
         }
 
         DisabledAllMap();
@@ -772,15 +767,7 @@ public class BattleManager : MonoBehaviour
 
     public void ResetHeroes()
     {
-        //if (gm.playerData.isTutorial)
-        //{
-        //    TutorialManager.textIndex = 11;
-        //    TutorialManager.currChatWindowIndex = 17;
-        //    Logger.Debug($"{TutorialManager.textIndex} / {TutorialManager.currChatWindowIndex}");
-        //}
-
         EffectManager.Instance.DisabledAllEffect();
-
         ResetThisHeroes(useHeroes);
         ResetThisHeroes(unuseHeroes);
         gm.SetHeroesActive(false);
