@@ -23,20 +23,20 @@ public class TutorialManager : MonoBehaviour
 
     private void Start()
     {
-
         gm = GameManager.Instance;
-        if (currEv == 0)
-        {
-            gm.inventoryData.AddItem("60300003", 1);
-            gm.inventoryData.AddItem("60300022", 30);
-            gm.inventoryData.AddItem("60300001", 50000);
-        }
 
         tutorialDic = gm.tutorialIndexTable;
         if (gm.playerData.isTutorial)
         {
             if (currEv != 14)
                 OnEvent();
+
+            if (currEv == 0)
+            {
+                gm.inventoryData.AddItem("60300003", 1);
+                gm.inventoryData.AddItem("60300022", 30);
+                gm.inventoryData.AddItem("60300001", 50000);
+            }
         }
         else
         {
