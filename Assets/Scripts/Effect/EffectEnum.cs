@@ -56,6 +56,5 @@ public enum EffectEnum
     Misses,
     MuzzleFlash1,
     top_down_lightning_dot,
-
     Count,
 }
