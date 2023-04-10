@@ -1,9 +1,13 @@
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine;
+using UnityEditor;
 
 public class HeroUpgradeDetailWindow : View
 {
+    public ContentSizeFitter heroInfo;
+    public ContentSizeFitter skillUpgrade;
+    public ContentSizeFitter meterials;
     //top
     public TextMeshProUGUI heroName;
     public TextMeshProUGUI heroGrade;
@@ -17,6 +21,7 @@ public class HeroUpgradeDetailWindow : View
     //public TextMeshProUGUI[] nextSkillInfo;
 
     //bottom
+    //public GameObject meterials;
     public Image[] meterialIcons;
     public TextMeshProUGUI[] meterialInfo;
     public TextMeshProUGUI gold;
@@ -98,6 +103,14 @@ public class HeroUpgradeDetailWindow : View
         //nextSkillInfo[2].text = gm.GetStringByTable($"{cdb.activeSkill.skillDescription}");
 
         FindUpgradeMaterial(data.name, data.grade);
+        //meterials.SetActive(true);
+        heroInfo.gameObject.SetActive(true);
+        skillUpgrade.gameObject.SetActive(true);
+        meterials.gameObject.SetActive(true);
+        LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)heroInfo.transform);
+        LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)skillUpgrade.transform);
+        LayoutRebuilder.ForceRebuildLayoutImmediate((RectTransform)meterials.transform);
+
     }
 
     private void FindUpgradeMaterial(string name, int grade)
