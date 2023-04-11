@@ -84,4 +84,8 @@ public class TutorialOutline : MonoBehaviour
             button.onClick.RemoveListener(action);
         }
     }
+    public void OnNextTutorialEvent()
+    {        
+        TutorialNoneBlockPanels.Instance.OnNextTutorialEvent();
+    }
 }
