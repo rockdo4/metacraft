@@ -3,7 +3,7 @@ using System.Text;
 using TMPro;
 using UnityEngine;
 
-public class RecruitmentWindow : MonoBehaviour
+public class RecruitmentWindow : View
 {
     //public Image pageImage;
     public RecruitmentData type; //영입 타입
@@ -17,7 +17,6 @@ public class RecruitmentWindow : MonoBehaviour
     public TextMeshProUGUI rateInfo;
     public TextMeshProUGUI oneTimeGachaCount;
     public TextMeshProUGUI tenTimesGachaCount;
-    private bool ratePopup = false;
 
     public List<Dictionary<string, object>> itemInfoList; // 아이템 정보
 
@@ -66,7 +65,6 @@ public class RecruitmentWindow : MonoBehaviour
         SetGachaCount();
 
         itemInfoList = GameManager.Instance.itemInfoList;
-        ratePopup = false;
     }
 
     public void OneTimeGacha()
@@ -207,8 +205,6 @@ public class RecruitmentWindow : MonoBehaviour
             Destroy(result.gameObject);
         }
         resultRecruitmentList.Clear();
-
-        ratePopup = false;
     }
 
     private void OnRateInfo()
@@ -265,18 +261,6 @@ public class RecruitmentWindow : MonoBehaviour
         rateInfo.text = sb.ToString();
     }
 
-    public void SetRatePopup()
-    {
-        SetRatePopupMode(!ratePopup);
-    }
-
-    private void SetRatePopupMode(bool value)
-    {
-        ratePopup = value;
-        if (!ratePopup)
-            UIManager.Instance.ClearPopups();
-    }
-
     public void SetGachaCount()
     {
         var ticket = GameManager.Instance.inventoryData.FindItem("60300003");
@@ -291,10 +275,5 @@ public class RecruitmentWindow : MonoBehaviour
             oneTimeGachaCount.text = "0/1";
             tenTimesGachaCount.text = "0/10";
         }
-    }
-
-    private void OnDisable()
-    {
-        SetRatePopupMode(false);
     }
 }
