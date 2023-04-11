@@ -21,6 +21,7 @@ public class AnimationClipOverrides : List<KeyValuePair<AnimationClip, Animation
 
 public abstract class AttackableUnit : MonoBehaviour
 {
+    public int selectedIdx = 0;
     protected BattleManager battleManager;
 
     [SerializeField, Header("캐릭터 데이터")]
@@ -775,6 +776,8 @@ public abstract class AttackableUnit : MonoBehaviour
 
             Buff buff = new(info, this, RemoveBuff, icon, endEvent);
             buffList.Add(buff);
+
+            var prevHpScael = UnitHpScale;
             bufferState.Buffer(info.type, info);
 
             if(buff.buffInfo.type == BuffType.Heal)
@@ -784,7 +787,7 @@ public abstract class AttackableUnit : MonoBehaviour
             }
             if (buff.buffInfo.type == BuffType.MaxHealthIncrease)
             {
-                UnitHp = UnitHp; // 현재 체력 갱신
+                UnitHp = MaxHp * prevHpScael;
             }
         }
     }

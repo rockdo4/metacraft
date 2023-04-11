@@ -14,6 +14,7 @@ public class HeroUi : MonoBehaviour
     public UnitState heroState;
 
     public CharacterDataBundle heroData;
+    public float unitHpScale;
     public bool isAuto;
     public void SetAuto(ref bool state) => isAuto = state;
     public bool isSilence;
@@ -25,12 +26,12 @@ public class HeroUi : MonoBehaviour
         }
     }
 
-    public void SetHeroInfo(CharacterDataBundle data)
+    public void SetHeroInfo(AttackableHero data)
     {
-        heroData = data;
+        heroData = data.GetUnitData();
         string key = $"icon_{heroData.data.name}";
         heroImage.sprite = GameManager.Instance.GetSpriteByAddress(key);
-        SetHp();
+        SetHp(data.UnitHpScale);
     }
 
     public BuffIcon AddIcon(BuffType type, float duration, int idx, Sprite sprite)
@@ -56,14 +57,14 @@ public class HeroUi : MonoBehaviour
         viewBuffList.OnClickPopUp();
     }
 
-    public void SetHp(float? nowHp = null, float? maxHp = null)
+    public void SetHp(float nowHp, float maxHp)
     {
-        if (nowHp == null || maxHp == null)
-            hpBar.value = heroData.data.currentHp / heroData.data.healthPoint;
-        else
-            hpBar.value = (float)(nowHp / maxHp);
+        hpBar.value = (float)(nowHp / maxHp);
     }
-
+    public void SetHp(float value)
+    {
+        hpBar.value = value;
+    }
 
     public void SetDieImage()
     {
