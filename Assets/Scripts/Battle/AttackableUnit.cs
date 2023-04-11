@@ -21,6 +21,7 @@ public class AnimationClipOverrides : List<KeyValuePair<AnimationClip, Animation
 
 public abstract class AttackableUnit : MonoBehaviour
 {
+    public int selectedIdx = 0;
     protected BattleManager battleManager;
 
     [SerializeField, Header("캐릭터 데이터")]
