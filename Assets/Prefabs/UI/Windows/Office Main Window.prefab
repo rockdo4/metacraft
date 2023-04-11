@@ -120,31 +120,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 6656154185513123554}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: ShowView
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 6
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 8269663971358400008}
-        m_TargetAssemblyTypeName: GetAudioManagerFunc, Assembly-CSharp
-        m_MethodName: PlayUI
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 1
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!1 &1123717805177797549
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,12 +244,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: ShowView
+        m_MethodName: ShowViewWithNoSound
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 9
+          m_IntArgument: 8
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -454,7 +430,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: ShowView
+        m_MethodName: ShowViewWithNoSound
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -598,13 +574,13 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: 
-        m_MethodName: 
-        m_Mode: 1
+        m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
+        m_MethodName: ShowPopup
+        m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: 
-          m_IntArgument: 0
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 4
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -716,7 +692,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\uC784\uBB34 \uC2DC\uC791"
+  m_text: "\uC791\uC804 \uC2DC\uC791"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 7fc15d96a5a16a3439271f340ad4b3a2, type: 2}
   m_sharedMaterial: {fileID: 3959532190699698459, guid: 7fc15d96a5a16a3439271f340ad4b3a2,
@@ -1032,10 +1008,10 @@ RectTransform:
   m_Father: {fileID: 8798705031133934725}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 450, y: -114.942505}
-  m_SizeDelta: {x: 900, y: 229.88501}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8798705030803663866
 CanvasRenderer:
@@ -1781,10 +1757,10 @@ RectTransform:
   m_Father: {fileID: 8798705031874511926}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 650, y: -45.0575}
-  m_SizeDelta: {x: 300, y: 90.115}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8798705031859219790
 CanvasRenderer:
@@ -1915,10 +1891,10 @@ RectTransform:
   m_Father: {fileID: 8798705031874511926}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 250, y: -45.0575}
-  m_SizeDelta: {x: 300, y: 90.115}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &8798705031089858972
 CanvasRenderer:
@@ -2196,10 +2172,10 @@ RectTransform:
   m_Father: {fileID: 8798705031133934725}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
-  m_AnchoredPosition: {x: 450, y: -289.9425}
-  m_SizeDelta: {x: 900, y: 120.115}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 0, y: 0}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &8798705031874511927
 MonoBehaviour:
@@ -2438,7 +2414,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: ShowView
+        m_MethodName: ShowViewWithNoSound
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -2583,12 +2559,12 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: UIManager, Assembly-CSharp
-        m_MethodName: ShowView
+        m_MethodName: ShowViewWithNoSound
         m_Mode: 3
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 7
+          m_IntArgument: 6
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2601,6 +2577,18 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 1
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 0}
+        m_TargetAssemblyTypeName: RecruitmentWindow, Assembly-CSharp
+        m_MethodName: SetGachaCount
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
@@ -2620,17 +2608,17 @@ PrefabInstance:
     - target: {fileID: 685127688969476538, guid: b5f276e7e64ccf6429eb93b9a78babef,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 685127688969476538, guid: b5f276e7e64ccf6429eb93b9a78babef,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 685127688969476538, guid: b5f276e7e64ccf6429eb93b9a78babef,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: -17
       objectReference: {fileID: 0}
     - target: {fileID: 1029799400899660745, guid: b5f276e7e64ccf6429eb93b9a78babef,
         type: 3}
@@ -2640,12 +2628,27 @@ PrefabInstance:
     - target: {fileID: 2471558767295732359, guid: b5f276e7e64ccf6429eb93b9a78babef,
         type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2471558767295732359, guid: b5f276e7e64ccf6429eb93b9a78babef,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2687789210357191227, guid: b5f276e7e64ccf6429eb93b9a78babef,
+        type: 3}
+      propertyPath: m_SizeDelta.y
+      value: -160
+      objectReference: {fileID: 0}
+    - target: {fileID: 2687789210357191227, guid: b5f276e7e64ccf6429eb93b9a78babef,
+        type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 2687789210357191227, guid: b5f276e7e64ccf6429eb93b9a78babef,
+        type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -70
       objectReference: {fileID: 0}
     - target: {fileID: 4475739052109040144, guid: b5f276e7e64ccf6429eb93b9a78babef,
         type: 3}
@@ -2662,6 +2665,21 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 4475739052109040144, guid: b5f276e7e64ccf6429eb93b9a78babef,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: ClearPopups
+      objectReference: {fileID: 0}
+    - target: {fileID: 4475739052109040144, guid: b5f276e7e64ccf6429eb93b9a78babef,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: UIManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 4475739052109040144, guid: b5f276e7e64ccf6429eb93b9a78babef,
+        type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 5048420526562566984, guid: b5f276e7e64ccf6429eb93b9a78babef,
         type: 3}
       propertyPath: m_Color.a
@@ -2670,7 +2688,7 @@ PrefabInstance:
     - target: {fileID: 8355244891451677283, guid: b5f276e7e64ccf6429eb93b9a78babef,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: 0
+      value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 8355244891451677283, guid: b5f276e7e64ccf6429eb93b9a78babef,
         type: 3}
@@ -2745,7 +2763,7 @@ PrefabInstance:
     - target: {fileID: 8540335157711854723, guid: b5f276e7e64ccf6429eb93b9a78babef,
         type: 3}
       propertyPath: m_SizeDelta.x
-      value: -200
+      value: -1000
       objectReference: {fileID: 0}
     - target: {fileID: 8540335157711854723, guid: b5f276e7e64ccf6429eb93b9a78babef,
         type: 3}
@@ -2790,7 +2808,7 @@ PrefabInstance:
     - target: {fileID: 8540335157711854723, guid: b5f276e7e64ccf6429eb93b9a78babef,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 0
+      value: -400
       objectReference: {fileID: 0}
     - target: {fileID: 8540335157711854723, guid: b5f276e7e64ccf6429eb93b9a78babef,
         type: 3}
@@ -3781,12 +3799,50 @@ PrefabInstance:
       propertyPath: m_Name
       value: CustomUserInfo
       objectReference: {fileID: 0}
+    - target: {fileID: 7921462290600269143, guid: 5814abfa71aa8e943ac0c87fe8d88ae0,
+        type: 3}
+      propertyPath: m_fontStyle
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7950790272034432511, guid: 5814abfa71aa8e943ac0c87fe8d88ae0,
         type: 3}
       propertyPath: m_text
-      value: '1
-
-'
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 7950790272034432511, guid: 5814abfa71aa8e943ac0c87fe8d88ae0,
+        type: 3}
+      propertyPath: m_fontSize
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7950790272034432511, guid: 5814abfa71aa8e943ac0c87fe8d88ae0,
+        type: 3}
+      propertyPath: m_fontStyle
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 7950790272034432511, guid: 5814abfa71aa8e943ac0c87fe8d88ae0,
+        type: 3}
+      propertyPath: m_fontColor.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7950790272034432511, guid: 5814abfa71aa8e943ac0c87fe8d88ae0,
+        type: 3}
+      propertyPath: m_fontColor.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7950790272034432511, guid: 5814abfa71aa8e943ac0c87fe8d88ae0,
+        type: 3}
+      propertyPath: m_fontColor.r
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7950790272034432511, guid: 5814abfa71aa8e943ac0c87fe8d88ae0,
+        type: 3}
+      propertyPath: m_fontSizeBase
+      value: 20
+      objectReference: {fileID: 0}
+    - target: {fileID: 7950790272034432511, guid: 5814abfa71aa8e943ac0c87fe8d88ae0,
+        type: 3}
+      propertyPath: m_fontColor32.rgba
+      value: 4278190080
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6520610911488862890, guid: 5814abfa71aa8e943ac0c87fe8d88ae0, type: 3}

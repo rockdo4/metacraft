@@ -19,6 +19,7 @@ public class OptionController : MonoBehaviour
 
     private void Awake()
     {
+        soundOnOff.isOn = !AudioManager.Instance.OnOff;
         bgmSlider.value = Mathf.Pow(10.0f, (AudioManager.Instance.bgm / 20.0f));
         seSlider.value = Mathf.Pow(10.0f, (AudioManager.Instance.se / 20.0f));
         SetLanguage(GameManager.Instance.LanguageIndex);

@@ -38,11 +38,6 @@ public class AssetLoadProgress : MonoBehaviour
         gm.LoadScene((int)SceneIndex.Office);
     }
 
-    public void ChangeNickname(string str)
-    {
-        gm.playerData.playerName = str.Equals(string.Empty) ? "egostick" : str;
-    }
-
     private IEnumerator LoadAllResources()
     {
         Dictionary<string, AsyncOperationHandle> releaseHandles = new();
