@@ -52,6 +52,7 @@ public class RewardItem : MonoBehaviour
     public void AddCount(string count)
     {
         int nowCount = int.Parse(itemCountText.text);
+        data.count += int.Parse(count);
         itemCountText.text = (nowCount + int.Parse(count)).ToString();
     }
 }

@@ -15,6 +15,8 @@ public class RecruitmentWindow : MonoBehaviour
     public Transform showGacha; // 영입 결과 프리팹 생성위치
     private List<RecruitmentInfo> resultRecruitmentList = new(); // 영입 결과 프리팹 생성 및 정보 불러온 리스트
     public TextMeshProUGUI rateInfo;
+    public TextMeshProUGUI oneTimeGachaCount;
+    public TextMeshProUGUI tenTimesGachaCount;
     private bool ratePopup = false;
 
     public List<Dictionary<string, object>> itemInfoList; // 아이템 정보
@@ -61,6 +63,7 @@ public class RecruitmentWindow : MonoBehaviour
         }
 
         OnRateInfo();
+        SetGachaCount();
 
         itemInfoList = GameManager.Instance.itemInfoList;
         ratePopup = false;
@@ -68,27 +71,18 @@ public class RecruitmentWindow : MonoBehaviour
 
     public void OneTimeGacha()
     {
-        //튜토리얼
-        if (GameManager.Instance.playerData.isTutorial)
-        {
-            GameObject obj = Instantiate(gachaPrefeb, showGacha);
-            RecruitmentInfo info = obj.GetComponent<RecruitmentInfo>();
-            ClearResult();
-            string heroName = heroDatabase[6].GetComponent<CharacterDataBundle>().originData.name;
-            GameObject newHero = GameManager.Instance.CreateNewHero(heroName);
-            getGacha.Add(newHero);
-
-            info.SetData(getGacha[0].GetComponent<CharacterDataBundle>());
-            GameManager.Instance.SaveAllData();
-            GameManager.Instance.inventoryData.UseItem("60300003", 1);
-            UIManager.Instance.ShowPopup(0);
-            return;
-        }
-
         if (GameManager.Instance.inventoryData.IsItem("60300003", 1))
         {
             ClearResult();
-            GameObject hero = heroDatabase[Gacha(probs)];
+            GameObject hero = null;
+            if (GameManager.Instance.playerData.isTutorial)
+            {
+                hero = heroDatabase[6];
+            }
+            else
+            {
+                hero = heroDatabase[Gacha(probs)];
+            }
             GachaProcess(hero, 0);
             GameManager.Instance.SaveAllData();
             GameManager.Instance.inventoryData.UseItem("60300003", 1);
@@ -98,6 +92,7 @@ public class RecruitmentWindow : MonoBehaviour
         {
             UIManager.Instance.ShowPopup(2);
         }
+        SetGachaCount();
     }
 
     private void GachaProcess(GameObject hero, int i)
@@ -152,7 +147,6 @@ public class RecruitmentWindow : MonoBehaviour
             GameManager.Instance.inventoryData.AddItem(stoneId);
         }
 
-
         resultRecruitmentList.Add(info);
     }
 
@@ -177,6 +171,7 @@ public class RecruitmentWindow : MonoBehaviour
         {
             UIManager.Instance.ShowPopup(2);
         }
+        SetGachaCount();
     }
 
     private int Gacha(float[] probs)
@@ -280,6 +275,22 @@ public class RecruitmentWindow : MonoBehaviour
         ratePopup = value;
         if (!ratePopup)
             UIManager.Instance.ClearPopups();
+    }
+
+    public void SetGachaCount()
+    {
+        var ticket = GameManager.Instance.inventoryData.FindItem("60300003");
+
+        if (ticket != null)
+        {
+            oneTimeGachaCount.text = $"{ticket.count}/1";
+            tenTimesGachaCount.text = $"{ticket.count}/10";
+        }
+        else
+        {
+            oneTimeGachaCount.text = "0/1";
+            tenTimesGachaCount.text = "0/10";
+        }
     }
 
     private void OnDisable()

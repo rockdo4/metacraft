@@ -39,11 +39,6 @@ public class MissionManager : View
         marks = GetComponentInChildren<MissionSpawner>().prefebs;
     }
 
-    //private void OnEnable()
-    //{
-    //    UpdateMissionDay();
-    //}
-
     private void Start()
     {
         missionInfoTable = gm.missionInfoDifficulty;
@@ -63,8 +58,9 @@ public class MissionManager : View
             var num = Utils.DistinctRandomNumbers(missionInfoTable[i + 1].Count, markCount);
             nums.Add(num);
         }
-        difficulty = 1;
-        UpdateMissionNameText();
+        difficulty = gm.playerData.currentMissionDifficulty;
+        difficultyAdjustment.value = difficulty;
+        OnAdjustmentDifficulty();
     }
 
     private void UpdateMissionNameText()
@@ -77,7 +73,9 @@ public class MissionManager : View
                 if (gm.playerData.isTutorial)
                 {
                     var missionName = missionInfoTable[0][0]["NameString"];
-                    marks[1].GetComponentInChildren<TextMeshProUGUI>().text = gm.GetStringByTable($"{missionName}");
+                    var missionDifficulty = missionInfoTable[0][0]["Level"];
+                    string mission = $"Lv.{missionDifficulty}\n{gm.GetStringByTable($"{missionName}")}";
+                    marks[1].GetComponentInChildren<TextMeshProUGUI>().text = mission;
                     var buttons = marks[1].GetComponentsInChildren<Button>();
                     foreach (var button in buttons)
                     {
@@ -88,7 +86,9 @@ public class MissionManager : View
                 {
                     int index = k++;
                     var missionName = missionInfoTable[difficulty][nums[difficulty - 1][index]]["NameString"];
-                    marks[j].GetComponentInChildren<TextMeshProUGUI>().text = gm.GetStringByTable($"{missionName}");
+                    var missionDifficulty = missionInfoTable[difficulty][nums[difficulty - 1][index]]["Level"];
+                    string mission = $"Lv.{missionDifficulty}\n{gm.GetStringByTable($"{missionName}")}";
+                    marks[j].GetComponentInChildren<TextMeshProUGUI>().text = mission;
                     var buttons = marks[j].GetComponentsInChildren<Button>();
                     foreach (var button in buttons)
                     {
@@ -125,20 +125,6 @@ public class MissionManager : View
             fitProperties[i].fontStyle = FontStyles.Normal;
             fitProperties[i].color = Color.white;
         }
-        //deductionAP.text = $"AP -{dic["ConsumptionBehavior"]}";
-        //ProperCombatPower.text = $"0/{dic["ProperCombatPower"]}";
-        //ProperCombatPower.color = Color.white;
-
-        ////보상 테이블 연결 필요
-        //int erCount = expectedRewards.Count;
-        //for (int i = 0; i < erCount; i++)
-        //{
-        //    RewardItem ri = expectedRewards[i].GetComponent<RewardItem>();
-        //    if (i == 0)
-        //        ri.SetData("골드", $"{dic["Compensation"]}");
-        //    else
-        //        ri.SetData($"아이템{i}");
-        //}
     }
 
     // Mission Hero Info Button 에서 호출
@@ -170,7 +156,6 @@ public class MissionManager : View
         }
 
         PropertyMatchingCheck();
-        //TotalPowerCheck(); 삭제 예정
     }
 
     // Hero Slot 에서 Index 전달
@@ -228,6 +213,7 @@ public class MissionManager : View
     {
         difficulty = (int)difficultyAdjustment.value;
         difficultyAdjustment.GetComponentInChildren<TextMeshProUGUI>().text = $"{difficulty}";
+        gm.playerData.currentMissionDifficulty = difficulty;
         UpdateMissionNameText();
     }
 }

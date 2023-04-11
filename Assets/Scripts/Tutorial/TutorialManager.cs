@@ -31,11 +31,12 @@ public class TutorialManager : MonoBehaviour
             if (currEv != 14)
                 OnEvent();
 
-            if (currEv == 0)
+            if (!gm.playerData.isTutorialFirstEntry)
             {
-                gm.inventoryData.AddItem("60300003", 1);
+                gm.inventoryData.AddItem("60300003", 2000);
                 gm.inventoryData.AddItem("60300022", 30);
                 gm.inventoryData.AddItem("60300001", 50000);
+                gm.playerData.isTutorialFirstEntry = true;
             }
         }
         else
@@ -70,6 +71,12 @@ public class TutorialManager : MonoBehaviour
             }
             else if (i == 33 && !isBattleTutorialComplete && skipSection)
             {
+                var btMgr = FindObjectOfType<BattleManager>();
+                if (btMgr != null)
+                {
+                    btMgr.ResetHeroes();
+                }
+
                 gm.LoadScene((int)SceneIndex.Office);
                 isBattleTutorialComplete = true;
                 currEv = i;
@@ -202,6 +209,10 @@ public class TutorialManager : MonoBehaviour
                 outlines[i].SetActiveOutline(false);
             }
             gm.playerData.isTutorial = false;
+
+            var attackableHero = gm.heroDatabase[0].GetComponent<AttackableHero>();
+            attackableHero.GetUnitData().data.level = 1;
+
             gm.SaveAllData();
             return;
         }
