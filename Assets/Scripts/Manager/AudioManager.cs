@@ -19,6 +19,8 @@ public class AudioManager : Singleton<AudioManager>
     [Range(-80, 0)]
     public float ambience = 0;
 
+    public bool OnOff { get; set; } = true;
+
     public AudioSource[] uiAudios;
     public AudioSource[] bgms;
     private float[] bgmOriginVolumes;
@@ -73,6 +75,7 @@ public class AudioManager : Singleton<AudioManager>
 
     public void OnOffSound(bool onOff)
     {
+        OnOff = onOff;
         master = onOff ? 0 : -80;
         mixer.SetFloat(nameof(master), master);
     }
