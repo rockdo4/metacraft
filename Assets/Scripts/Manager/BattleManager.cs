@@ -567,6 +567,7 @@ public class BattleManager : MonoBehaviour
                 var coll = attackableHero.GetComponent<CapsuleCollider>();
                 coll.enabled = true;
 
+                attackableHero.selectedIdx = i;
                 useHeroes.Add(attackableHero);
 
                 supplyEventHeroImages[i].SetHeroInfo(attackableHero);
@@ -730,7 +731,9 @@ public class BattleManager : MonoBehaviour
     {
         for (int i = 0; i < useHeroes.Count; i++)
         {
-            ((AttackableHero)useHeroes[i]).SetReturnPos(pos[i]);
+            int idx = useHeroes[i].selectedIdx;
+
+            ((AttackableHero)useHeroes[i]).SetReturnPos(pos[idx]);
             useHeroes[i].ChangeUnitState(UnitState.ReturnPosition);
         }
     }
@@ -800,7 +803,8 @@ public class BattleManager : MonoBehaviour
         currTriggerIndex++;
         for (int i = 0; i < useHeroes.Count; i++)
         {
-            var pos = btMapTriggers[currTriggerIndex].heroSettingPositions[i];
+            int idx = useHeroes[i].selectedIdx;
+            var pos = btMapTriggers[currTriggerIndex].heroSettingPositions[idx];
             useHeroes[i].MoveNext(pos.transform.position);
             useHeroes[i].SetMoveSpeed(platformMoveSpeed);
         }
@@ -986,8 +990,10 @@ public class BattleManager : MonoBehaviour
         List<Transform> startPositions = currBtMgr.GetStartPosition();
         for (int i = 0; i < useHeroes.Count; i++)
         {
+            int idx = useHeroes[i].selectedIdx;
+
             useHeroes[i].gameObject.SetActive(true);
-            Utils.CopyPositionAndRotation(useHeroes[i].gameObject, startPositions[i]);
+            Utils.CopyPositionAndRotation(useHeroes[i].gameObject, startPositions[idx]);
             useHeroes[i].SetEnabledPathFind(true);
         }
 
