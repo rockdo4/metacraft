@@ -61,11 +61,22 @@ public class HeroInfoDetailScript : View
             $"{data.baseDefense:0.00}",
             $"{data.healthPoint:0}",
             $"{data.moveSpeed}",
-            $"{data.critical * 100:0}",
-            $"{data.criticalDmg * 100:0}"
+            $"{data.critical * 100:0}%",
+            $"{data.criticalDmg * 100:0}%"
         };
         SetInfoText(statDetailNames, infoNames);
         SetInfoText(statDetailTexts, infos);
+        //StringBuilder stringBuilder = new();
+        //stringBuilder.Append($"히어로 명     :     {gm.GetStringByTable(data.name)}\n");
+        //stringBuilder.Append($"공격력        :     {data.baseDamage:0.00}\n");
+        //stringBuilder.Append($"방어력        :     {data.baseDefense:0.00}\n");
+        //stringBuilder.Append($"체력          :     {data.healthPoint:0}\n");
+        //stringBuilder.Append($"이동 속도     :     {data.moveSpeed}\n");
+        //stringBuilder.Append($"크리티컬 확률 :     {data.critical * 100:0}%\n");
+        //stringBuilder.Append($"크리티컬 배율 :     {data.criticalDmg * 100:0}%\n");
+        ////stringBuilder.Append($"명중률 : {data.accuracy * 100:0}%\n");
+        ////stringBuilder.Append($"회피율 : {data.evasion * 100:0}%\n");
+        //statDetail.text = stringBuilder.ToString();
         expBar.maxValue = gm.expRequirementTable[data.level];
         expBar.value = data.exp;
         expBar.GetComponentInChildren<TextMeshProUGUI>().text = $"EXP {expBar.value:0} / {expBar.maxValue:0}";
