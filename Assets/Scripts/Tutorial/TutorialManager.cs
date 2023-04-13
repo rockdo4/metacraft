@@ -10,11 +10,11 @@ public class TutorialManager : MonoBehaviour
     public List<TutorialOutline> outlines;
     public GameObject skipButton;
     public GameObject dialoguePanel;
+    public GameObject exitButton;
 
     public static int currEv = 0;
     private int outLineNumber = 0;
     private int textBoxNumber = 0;
-    public bool btEnd = false;
 
     private static bool isOfficeTutorialComplete = false;
     private static bool isBattleTutorialComplete = false;
@@ -38,6 +38,9 @@ public class TutorialManager : MonoBehaviour
                 gm.inventoryData.AddItem("60300001", 50000);
                 gm.playerData.isTutorialFirstEntry = true;
             }
+
+            if (gm.currentScene == SceneIndex.Battle)
+                exitButton.SetActive(false);
         }
         else
         {
