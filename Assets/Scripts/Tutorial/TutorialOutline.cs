@@ -21,7 +21,7 @@ public class TutorialOutline : MonoBehaviour
             return;
         }
 
-        if (originalButton == null || !NeedAdjustPos)
+        if (originalButton == null)
             return;
 
         var buttonCenter = originalButton.GetComponent<RectTransform>().rect.center;
@@ -85,8 +85,7 @@ public class TutorialOutline : MonoBehaviour
         }
     }
     public void OnNextTutorialEvent()
-    {
-        Logger.Debug("nextEv");
+    {        
         TutorialNoneBlockPanels.Instance.OnNextTutorialEvent();
     }
 }
