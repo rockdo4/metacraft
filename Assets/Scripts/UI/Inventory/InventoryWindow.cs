@@ -14,11 +14,14 @@ public class InventoryWindow : View
     public Button useButton;
     public UsePopup usePopup;
 
+    public string nowSort = string.Empty;
+
     private void OnEnable()
     {
-        Init();
+        nowSort = string.Empty;
+        InvnetoryClear();
     }
-    private void Init() // Init으로 대체 예정
+    private void InvnetoryClear() 
     {
         itemname.text = string.Empty;
         info.text = string.Empty;
@@ -44,6 +47,7 @@ public class InventoryWindow : View
 
     public void OnClickAllButton()
     {
+        nowSort = string.Empty;
         itemname.text = string.Empty;
         info.text = string.Empty;
         useButton.interactable = false;
@@ -53,6 +57,7 @@ public class InventoryWindow : View
     }
     public void OnClickSortButton(string sort)
     {
+        nowSort = sort;
         itemname.text = string.Empty;
         info.text = string.Empty;
         useButton.interactable = false;
@@ -96,6 +101,11 @@ public class InventoryWindow : View
     {
         usePopup.getPopUp.OnClickCancle();
         usePopup.OnClickCancle();
-        Init();
+        InvnetoryClear();
+
+        if (nowSort == string.Empty)
+            OnClickAllButton();
+        else
+            OnClickSortButton(nowSort);
     }
 }
