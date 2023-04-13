@@ -44,7 +44,7 @@ public class BuffList : MonoBehaviour
         viewBuff.OnEnd += () => uiBuffList.Remove(viewBuff);
         viewBuff.OnEnd += BuffButtonCheck;
 
-        if (uiBuffList.Count >= 3)
+        if (uiBuffList.Count > 3)
         {
             plusImage.gameObject.SetActive(true);
         }
