@@ -59,6 +59,7 @@ public class UsePopup : MonoBehaviour
             var nowItemValue = data[$"{value}1"];
 
             var addItem = Instantiate(itemPrev, itemTr);
+            addItem.transform.SetSiblingIndex(addItem.transform.GetSiblingIndex() - 5);
             var addItemData = itemData.Find(t => t["ID"].ToString().Equals(nowItemID.ToString()));
 
             addItem.GetComponent<Button>().onClick.AddListener(() => SetInfo(addItem.data));
