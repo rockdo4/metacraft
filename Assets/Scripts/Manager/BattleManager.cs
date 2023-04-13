@@ -571,6 +571,10 @@ public class BattleManager : MonoBehaviour
 
                 supplyEventHeroImages[i].SetHeroInfo(attackableHero);
             }
+            else
+            {
+                supplyEventHeroImages[i].gameObject.SetActive(false);
+            }
         }
 
         for (int i = 0; i < choiceButtons.Count; i++)
