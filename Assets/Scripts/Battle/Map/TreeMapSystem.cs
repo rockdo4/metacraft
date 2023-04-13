@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using UnityEngine.UI.Extensions;
 
 [System.Serializable]
@@ -61,6 +62,7 @@ public class TreeMapSystem : MonoBehaviour
     public GameObject uiLineRendererPrefab;
     public GameObject movableHighlighterPrefab;
 
+    public Image nonTouchPanel;
     public GameObject background;
     public Transform nodeTarget;
     public Transform lineRendererTarget;
@@ -99,6 +101,7 @@ public class TreeMapSystem : MonoBehaviour
             showFirst = false;
         }
 
+        nonTouchPanel.enabled = value;
         background.SetActive(value);
         nodeTarget.gameObject.SetActive(value);
         lineRendererTarget.gameObject.SetActive(value);
