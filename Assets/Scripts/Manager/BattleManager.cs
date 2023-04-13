@@ -174,7 +174,6 @@ public class BattleManager : MonoBehaviour
                 ExecutionBuff((int)choiceSupply);
                 break;
             case 2:
-                stageReward.gameObject.SetActive(true);
                 clearUi.rewards.SaveItems();
                 sendOfficePopUp.gameObject.SetActive(true);
                 sendOfficePopUp.SetItems(stageReward.rewards);
@@ -890,9 +889,8 @@ public class BattleManager : MonoBehaviour
 
     private void ChoiceNextStageByNode()
     {
-        if (tree.CurNode.type != TreeNodeTypes.Supply)
-            stageReward.gameObject.SetActive(true);
-        else
+        stageReward.gameObject.SetActive(true);
+        if(tree.CurNode.type == TreeNodeTypes.Supply)
         {
             for (int i = 0; i < useHeroes.Count; i++)
             {
