@@ -29,7 +29,12 @@ public class AssetLoadProgress : MonoBehaviour
         if (gm.playerData.playerName.Equals(string.Empty))
             setNicknamePopup.SetActive(true);
         else
-            LoadOfficeScene();
+        {
+            if (!setNicknamePopup.gameObject.activeSelf)
+            { 
+                LoadOfficeScene();
+            }
+        }
     }
 
     public void LoadOfficeScene()
@@ -213,9 +218,9 @@ public class AssetLoadProgress : MonoBehaviour
     // 작전 테이블 난이도 구분
     private void FixMissionTable(List<Dictionary<string, object>> missionInfoList)
     {
-        gm.missionInfoDifficulty = new ();
+        gm.missionInfoDifficulty = new();
         for (int i = 0; i < 6; i++)
-            gm.missionInfoDifficulty.Add(i, new ());
+            gm.missionInfoDifficulty.Add(i, new());
 
         int count = missionInfoList.Count;
         for (int i = 0; i < count; i++)
@@ -227,12 +232,12 @@ public class AssetLoadProgress : MonoBehaviour
 
     private Dictionary<int, int> FixExpTable(List<Dictionary<string, object>> expTable)
     {
-        Dictionary<int, int> result = new ();
+        Dictionary<int, int> result = new();
 
         int count = expTable.Count;
         for (int i = 0; i < count; i++)
             result.Add((int)expTable[i]["LEVEL"], (int)expTable[i]["NEEDEXP"]);
-        
+
         return result;
     }
 }
