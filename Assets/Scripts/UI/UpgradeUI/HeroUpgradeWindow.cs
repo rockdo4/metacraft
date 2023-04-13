@@ -9,6 +9,8 @@ public class HeroUpgradeWindow : View
     public List<HeroInfoButton> heroInfos = new ();
     private List<CharacterDataBundle> copyCharacterTable = new ();
 
+    private int value;
+
     private void Awake()
     {
         SetList();
@@ -48,11 +50,13 @@ public class HeroUpgradeWindow : View
     private void OnEnable()
     {
         SetList();
-        SelectSortType(0);
+        SelectSortType(value);
     }
 
     public void SelectSortType(Int32 value)
     {
+        this.value = value;
+
         switch (value)
         {
             case 0:

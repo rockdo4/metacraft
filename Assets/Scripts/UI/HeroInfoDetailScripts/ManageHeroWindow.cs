@@ -11,6 +11,8 @@ public class ManageHeroWindow : View
     private List<CharacterDataBundle> copyCharacterTable = new ();
     private List<GameObject> emptyObjects = new ();
 
+    private int value;
+
     private void Awake()
     {
         SetList();
@@ -41,11 +43,13 @@ public class ManageHeroWindow : View
     private void OnEnable()
     {
         SetList();
-        SelectSortType(0);
+        SelectSortType(value);
     }
 
     public void SelectSortType(Int32 value)
     {
+        this.value = value;
+
         switch (value)
         {
             case 0:
