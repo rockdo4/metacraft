@@ -775,7 +775,8 @@ public abstract class AttackableUnit : MonoBehaviour
             Action endEvent = null;
 
             Buff buff = new(info, this, RemoveBuff, icon, endEvent);
-            buffList.Add(buff);
+            if (buff.buffInfo.type != BuffType.Heal)
+                buffList.Add(buff);
 
             var prevHpScael = UnitHpScale;
             bufferState.Buffer(info.type, info);

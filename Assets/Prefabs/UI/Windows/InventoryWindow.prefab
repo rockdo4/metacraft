@@ -722,10 +722,10 @@ RectTransform:
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 1}
-  m_AnchorMax: {x: 0, y: 1}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
-  m_Pivot: {x: 0, y: 1}
+  m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &2553096146316931279
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -739,16 +739,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Padding:
-    m_Left: 50
-    m_Right: 50
-    m_Top: 50
+    m_Left: 0
+    m_Right: 0
+    m_Top: 0
     m_Bottom: 0
   m_ChildAlignment: 0
   m_StartCorner: 0
   m_StartAxis: 0
   m_CellSize: {x: 200, y: 200}
-  m_Spacing: {x: 20, y: 0}
-  m_Constraint: 1
+  m_Spacing: {x: 0, y: 0}
+  m_Constraint: 0
   m_ConstraintCount: 5
 --- !u!114 &2553096146316931276
 MonoBehaviour:
@@ -762,8 +762,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3245ec927659c4140ac4f8d17403cc18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_HorizontalFit: 1
-  m_VerticalFit: 2
+  m_HorizontalFit: 0
+  m_VerticalFit: 1
 --- !u!1 &2553096147153036622
 GameObject:
   m_ObjectHideFlags: 0
@@ -1122,6 +1122,7 @@ MonoBehaviour:
     dataID: 
   useButton: {fileID: 1143679646887857251}
   usePopup: {fileID: 3693067111621629853}
+  nowSort: 
 --- !u!114 &8523353344721575042
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3139,7 +3140,7 @@ PrefabInstance:
     - target: {fileID: 6219551938812522295, guid: bcb9f0506346ac04d85f8015b0e5fe52,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7911240795435831557, guid: bcb9f0506346ac04d85f8015b0e5fe52,
         type: 3}
@@ -3149,12 +3150,17 @@ PrefabInstance:
     - target: {fileID: 8674977850913539683, guid: bcb9f0506346ac04d85f8015b0e5fe52,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8917329351966369968, guid: bcb9f0506346ac04d85f8015b0e5fe52,
         type: 3}
       propertyPath: m_Name
       value: GetPopUp
+      objectReference: {fileID: 0}
+    - target: {fileID: 8917329351966369968, guid: bcb9f0506346ac04d85f8015b0e5fe52,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bcb9f0506346ac04d85f8015b0e5fe52, type: 3}
