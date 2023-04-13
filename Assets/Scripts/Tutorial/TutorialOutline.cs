@@ -85,7 +85,8 @@ public class TutorialOutline : MonoBehaviour
         }
     }
     public void OnNextTutorialEvent()
-    {        
+    {
+        Logger.Debug("nextEv");
         TutorialNoneBlockPanels.Instance.OnNextTutorialEvent();
     }
 }
