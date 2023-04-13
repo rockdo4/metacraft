@@ -62,7 +62,8 @@ public class TutorialManager : MonoBehaviour
         for (int i = currEv; i < tutorialDic.Count; i++)
         {
             bool skipSection = Convert.ToBoolean(tutorialDic[i]["IsSkipStop"]);
-            if (i == 14 && !isOfficeTutorialComplete && skipSection)
+
+            if (gm.currentScene == SceneIndex.Office && !isOfficeTutorialComplete && skipSection)
             {
                 gm.ClearBattleGroups();
                 gm.battleGroups[0] = 0;
@@ -72,7 +73,7 @@ public class TutorialManager : MonoBehaviour
                 currEv = i;
                 break;
             }
-            else if (i == 33 && !isBattleTutorialComplete && skipSection)
+            else if (gm.currentScene == SceneIndex.Battle && i == 33 && !isBattleTutorialComplete && skipSection)
             {
                 var btMgr = FindObjectOfType<BattleManager>();
                 if (btMgr != null)
