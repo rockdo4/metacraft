@@ -20,5 +20,6 @@ public class SetNickname : MonoBehaviour
     {
         confirmButton.interactable = (value.Length == 0) ? false : true;
         GameManager.Instance.playerData.playerName = value;
+        GameManager.Instance.SaveAllData();
     }
 }

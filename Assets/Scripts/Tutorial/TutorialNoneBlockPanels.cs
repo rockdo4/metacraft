@@ -8,7 +8,14 @@ public class TutorialNoneBlockPanels : TutorialBlockPanels
     public override void Awake()
     {
         Instance = this;
-
+        if (!GameManager.Instance.playerData.isTutorial)
+        {
+            bottom.gameObject.SetActive(false);
+            left.gameObject.SetActive(false);
+            top.gameObject.SetActive(false);
+            right.gameObject.SetActive(false);
+            return;
+        }
         bottom.color = panelColor;
         left.color = panelColor;
         top.color = panelColor;
