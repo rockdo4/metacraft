@@ -16,6 +16,7 @@ public class HeroUpgradeDetailWindow : View
 
     //mid
     public Image[] prevSkillIcons;
+    public TextMeshProUGUI[] prevSkillNames;
     public TextMeshProUGUI[] prevSkillInfo;
     //public Image[] nextSkillIcons;
     //public TextMeshProUGUI[] nextSkillInfo;
@@ -74,8 +75,7 @@ public class HeroUpgradeDetailWindow : View
         else
         {
             heroGrade.text = $"{curGrade}등급";
-            heroMaxLevel.text =
-                $"{gm.maxLevelTable[data.grade - 1]["MaxLevel"]}";
+            heroMaxLevel.text = $"{gm.maxLevelTable[data.grade - 1]["MaxLevel"]}";
 
             gradeText = $"승급 심사 통과를 축하합니다!\n{(CharacterGrade)(data.grade)}등급 히어로로 승급하였습니다!";
             //gradeText = $"이미 {(CharacterGrade)(data.grade)}등급입니다";
@@ -91,6 +91,9 @@ public class HeroUpgradeDetailWindow : View
         prevSkillIcons[0].sprite = gm.GetSpriteByAddress($"{cdb.passiveSkill.skillIcon}");
         prevSkillIcons[1].sprite = gm.GetSpriteByAddress($"{cdb.attacks[0].skillIcon}");
         prevSkillIcons[2].sprite = gm.GetSpriteByAddress($"{cdb.activeSkill.skillIcon}");
+        prevSkillNames[0].text = gm.GetStringByTable($"{cdb.passiveSkill.skillName}");
+        prevSkillNames[1].text = gm.GetStringByTable($"{cdb.attacks[0].skillName}");
+        prevSkillNames[2].text = gm.GetStringByTable($"{cdb.activeSkill.skillName}");
         prevSkillInfo[0].text = gm.GetStringByTable($"{cdb.passiveSkill.skillDescription}");
         prevSkillInfo[1].text = gm.GetStringByTable($"{cdb.attacks[0].skillDescription}");
         prevSkillInfo[2].text = gm.GetStringByTable($"{cdb.activeSkill.skillDescription}");
